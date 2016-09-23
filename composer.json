@@ -1,0 +1,34 @@
+{
+    "name": "SplashSync/Srestashop",
+    "description": "Splash Module for Prestashop",
+
+    "license": "GPL",
+
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    
+    "config": {
+        "vendor-dir": "modules/splashsync/Resources"
+    },
+    
+    "repositories": [
+        {
+            "type":"package",
+            "package": 
+            {
+                "name": "Splash",
+                "version": "master",
+                "source": 
+                {
+                    "url": "https://github.com/SplashSync/Php-Core.git",
+                    "type": "git",
+                    "reference":"master"
+                }
+            }
+        }
+    ],
+    "require": {
+        "Splash": "master"
+    } 
+    
+}
