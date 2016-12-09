@@ -8,27 +8,27 @@
     "prefer-stable": true,
     
     "config": {
-        "vendor-dir": "modules/splashsync/Resources"
+        "vendor-dir": "modules/splashsync/vendor"
     },
     
-    "repositories": [
-        {
-            "type":"package",
-            "package": 
-            {
-                "name": "Splash",
-                "version": "master",
-                "source": 
-                {
-                    "url": "https://github.com/SplashSync/Php-Core.git",
-                    "type": "git",
-                    "reference":"master"
-                }
-            }
-        }
-    ],
+    "autoload": {
+        "psr-4": { "Splash\\Local\\": "modules/splashsync/src" },
+        "exclude-from-classmap": [
+            "/Tests/"
+        ]
+    },
+    
     "require": {
-        "Splash": "master"
-    } 
+        "php":              "^5.6",
+        "splash/phpcore":   "*"
+    },
+    
+    "require-dev": {
+        "phpunit/phpunit":  "*"
+    },
+    
+    "autoload-dev": {
+        "psr-4": { "Splash\\Tests\\": "Tests/" }
+    }
     
 }

@@ -22,6 +22,8 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
+use Splash\Client\Splash;
+
 class SplashSync extends Module
 {
     
@@ -67,14 +69,10 @@ class SplashSync extends Module
             // WebService 
             //====================================================================//
             if (!class_exists("Splash")) {
-                    //====================================================================//
-                    // Includes Splash Class
-                    require_once( dirname(__FILE__) . '/Resources/Splash/splash.php'); 
+                //====================================================================//
+                // Splash Module & Dependecies Autoloader
+                require_once( dirname(__FILE__) . "/vendor/autoload.php");
             }
-            else 
-            {
-                 Splash::Log()->Deb("SplashSync Library Already Loaded");
-            }        
             //====================================================================//
             // INIT Context VAriables
             self::_InitContext();  
@@ -300,7 +298,7 @@ class SplashSync extends Module
                     'required' => true
                 );
 
-        if ( SPLASH_DEBUG ) {
+        if ( defined ("SPLASH_DEBUG") ) {
             //====================================================================//
             // Server Host Url
             $Fields[] = array(
@@ -1141,7 +1139,7 @@ class SplashSync extends Module
     {
         //====================================================================//
         // When Library is called in server mode, no Hook Flags
-//        if ( OSWS_SERVER_MODE ) { return; }        
+//        if ( SPLASH_SERVER_MODE ) { return; }        
         //====================================================================//
         // Safety Check
         if ( empty($ObjectType) || empty($Id)  || empty($Action)) { 
