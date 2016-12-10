@@ -181,7 +181,7 @@ class Order extends ObjectBase
         $sql->select("o.`reference`     as reference");     // Order Internal Reference 
         $sql->select("c.`firstname`     as firstname");     // Customer Firstname 
         $sql->select("c.`lastname`      as lastname");      // Customer Lastname 
-        $sql->select("o.`date_add`      as date_add");      // Order D 
+        $sql->select("o.`date_add`      as order_date");     // Order Date 
 //        $sql->select("a.`city` as city");               // Customer Address City 
 //        $sql->select("c.`name` as country");         // Customer Address Country
 //        $sql->select("a.`date_upd` as modified");       // Customer Last Modification Date 
@@ -278,7 +278,8 @@ class Order extends ObjectBase
         //====================================================================//
         // Run Through All Requested Fields
         //====================================================================//
-        foreach ($this->In as $Key => $FieldName) {
+        $Fields = is_a($this->In, "ArrayObject") ? $this->In->getArrayCopy() : $this->In;
+        foreach ($Fields as $Key => $FieldName) {
             //====================================================================//
             // Read Requested Fields            
             $this->getCoreFields($Key,$FieldName);

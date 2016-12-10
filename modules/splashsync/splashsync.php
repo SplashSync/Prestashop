@@ -46,7 +46,8 @@ class SplashSync extends Module
             $this->version = '0.1.0';
             $this->author = 'www.SplashSync.com';
             $this->need_instance = 0;
-            $this->ps_versions_compliancy = array('min' => '1.5', 'max' => '1.6'); 
+//            $this->ps_versions_compliancy = array('min' => '1.5', 'max' => '1.6'); 
+            $this->ps_versions_compliancy = array('min' => '1.5', 'max' => '1.7'); 
             
             //====================================================================//
             // Activate BootStarp 
@@ -573,6 +574,15 @@ class SplashSync extends Module
         } else {
             return Splash::Log()->Err("Splash Hook Error : Wrong Id List Given => " . print_r($_Id,1));
         }
+        
+        //====================================================================//
+        // Check if Object is in Remote Create Mode
+        if ( Splash::Object($_Type)->isLocked() && ($_Action == SPL_A_UPDATE) ) {
+            //====================================================================//
+            // Overide Action For Create
+            $_Action = SPL_A_CREATE;
+        } 
+        
         
 //        Splash::Log()->www("Splash Commit => " , $_Id);     
         //====================================================================//

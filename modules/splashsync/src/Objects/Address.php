@@ -267,7 +267,8 @@ class Address extends ObjectBase
         //====================================================================//
         // Run Through All Requested Fields
         //====================================================================//
-        foreach ($this->In as $Key => $FieldName) {
+        $Fields = is_a($this->In, "ArrayObject") ? $this->In->getArrayCopy() : $this->In;
+        foreach ($Fields as $Key => $FieldName) {
             //====================================================================//
             // Read Requested Fields
             $this->getCoreFields($Key,$FieldName);
@@ -324,7 +325,8 @@ class Address extends ObjectBase
         //====================================================================//
         // Run Throw All Requested Fields
         //====================================================================//
-        foreach ($this->In as $FieldName => $Data) {
+        $Fields = is_a($this->In, "ArrayObject") ? $this->In->getArrayCopy() : $this->In;
+        foreach ($Fields as $FieldName => $Data) {
             //====================================================================//
             // Write Requested Fields
             $this->setCoreFields($FieldName,$Data);
@@ -804,8 +806,6 @@ class Address extends ObjectBase
             case 'postcode':
             case 'city':
             case 'country':
-            case 'phone':
-            case 'phone_mobile':
                 if ( $this->Object->$FieldName  != $Data ) {
                     $this->Object->$FieldName  = $Data;
                     $this->update = True;

@@ -16,11 +16,9 @@ namespace Splash\Local;
 
 use Splash\Core\SplashCore      as Splash;
 
-use Configuration;
-use Validate;
-use Context;
+use Db, DbQuery, Configuration, Validate, Context, Language;
 use Employee;
-use Language;
+
 
 /**
  * @abstract    Splash Local Core Class - Head of Module's Local Integration 
@@ -264,6 +262,42 @@ class Local
         $Response->serverurl        =   Configuration::get('PS_SHOP_DOMAIN') . __PS_BASE_URI__;
         
         return $Response;
+    }    
+    
+//====================================================================//
+// *******************************************************************//
+//  OPTIONNAl CORE MODULE LOCAL FUNCTIONS
+// *******************************************************************//
+//====================================================================//
+    
+    /**
+     *      @abstract       Return Local Server Test Parameters as Aarray
+     *                      
+     *      THIS FUNCTION IS OPTIONNAL - USE IT ONLY IF REQUIRED
+     * 
+     *      This function called on each initialisation of module's tests sequences.
+     *      It's aim is to overide general Tests settings to be adjusted to local system.
+     * 
+     *      Result must be an array including parameters as strings or array.
+     * 
+     *      @see Splash\Tests\Tools\ObjectsCase::settings for objects tests settings
+     * 
+     *      @return         array       $parameters
+     */
+    public static function TestParameters()
+    {
+        //====================================================================//
+        // Init Parameters Array
+        $Parameters       =     array();
+
+        //====================================================================//
+        // Server Actives Languages List
+        $Parameters["Langs"] = array();
+        foreach ( Language::getLanguages() as $Language ) {
+            $Parameters["Langs"][] =   self::Lang_Encode($Language["language_code"]);
+        }
+        
+        return $Parameters;
     }    
     
 //====================================================================//

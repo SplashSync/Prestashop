@@ -19,7 +19,8 @@ use Splash\Core\SplashCore      as Splash;
 
 //====================================================================//
 // Prestashop Static Classes	
-use Shop, Configuration, Currency, Combination, Language, Image, Context;
+use Shop, Configuration, Currency, Combination, Language, Context;
+use Image, ImageType, ImageManager, StockAvailable;
 use DbQuery, Db, Tools;
 
 /**
@@ -372,7 +373,8 @@ class Product extends ObjectBase
         //====================================================================//
         // Run Through All Requested Fields
         //====================================================================//
-        foreach ($this->In as $Key => $FieldName) {
+        $Fields = is_a($this->In, "ArrayObject") ? $this->In->getArrayCopy() : $this->In;
+        foreach ($Fields as $Key => $FieldName) {
             //====================================================================//
             // Read Requested Fields            
             $this->getCoreFields($Key,$FieldName);
@@ -430,7 +432,8 @@ class Product extends ObjectBase
         //====================================================================//
         // Run Throw All Requested Fields
         //====================================================================//
-        foreach ($this->In as $FieldName => $Data) {
+        $Fields = is_a($this->In, "ArrayObject") ? $this->In->getArrayCopy() : $this->In;
+        foreach ($Fields as $FieldName => $Data) {
             //====================================================================//
             // Write Requested Fields
             $this->setCoreFields($FieldName,$Data);
@@ -1233,7 +1236,8 @@ class Product extends ObjectBase
             case 'weight':
                 //====================================================================//
                 // If product as attributes
-                $CurrentWeight = $this->Object->$FieldName + $this->Attribute->$FieldName;
+                $CurrentWeight  =   $this->Object->$FieldName;
+                $CurrentWeight +=   isset($this->Attribute->$FieldName) ? $this->Attribute->$FieldName : 0;
                 if ( $this->AttributeId && !$this->Float_Compare($CurrentWeight , $Data) ) {
                     $this->Attribute->$FieldName    = $Data - $this->Object->$FieldName;
                     $this->AttributeUpdate          = True;
@@ -1390,7 +1394,7 @@ class Product extends ObjectBase
         
         //====================================================================//
         // Clear Cache
-        Product::flushPriceCache();          
+        \Product::flushPriceCache();          
         
         return True;
     }
@@ -1537,12 +1541,14 @@ class Product extends ObjectBase
         //====================================================================//  
         if ( isset ($this->NewPrice) )   {        
             $this->setSavePrice();
+            unset($this->NewPrice);
         }
         //====================================================================//
         // UPDATE/CREATE PRODUCT IMAGES
         //====================================================================//  
-        if ( isset ($this->NewImagesArray) )   {        
+        if ( isset ($this->NewImagesArray) )   {  
             $this->setImgArray($this->NewImagesArray);
+            unset($this->NewImagesArray);
         }
         //====================================================================//
         // INIT PRODUCT STOCK 
@@ -1553,6 +1559,7 @@ class Product extends ObjectBase
             // Product Just Created => Setup Product Stock
             StockAvailable::setQuantity($this->ProductId, $this->AttributeId, $this->NewStock);
             $this->update = True;
+            unset($this->NewStock);
         }
         
         //====================================================================//
@@ -1646,27 +1653,27 @@ class Product extends ObjectBase
         // Create Images List
         foreach ($ObjectImagesList as $key => $ImageArray) {
             
-                //====================================================================//
-                // Fetch Images Object
-                $ObjectImage = new Image($ImageArray["id_image"],  $this->LangId);
- 
-                //====================================================================//
-                // Insert Image in Output List
-                $Image = $this->Img_Encode(
-                        $ObjectImage->legend?$ObjectImage->legend:$ObjectImage->id . "." . $ObjectImage->image_format, 
-                        $ObjectImage->id . "." . $ObjectImage->image_format, 
-                        $this->Object->image_folder . $ObjectImage->getImgFolder(), 
-                        $link->getImageLink($this->Object->link_rewrite, $ImageArray["id_image"]) );
+            //====================================================================//
+            // Fetch Images Object
+            $ObjectImage = new Image($ImageArray["id_image"],  $this->LangId);
 
-                //====================================================================//
-                // Init Image List Item
-                if ( !isset($this->Out["images"][$key]) ) {
-                    $this->Out["images"][$key] = array();
-                }
-        
-                $this->Out["images"][$key]["image"] = $Image;
-                
+            //====================================================================//
+            // Insert Image in Output List
+            $Image = $this->Img_Encode(
+                    $ObjectImage->legend?$ObjectImage->legend:$ObjectImage->id . "." . $ObjectImage->image_format, 
+                    $ObjectImage->id . "." . $ObjectImage->image_format, 
+                    $this->Object->image_folder . $ObjectImage->getImgFolder(), 
+                    $link->getImageLink($this->Object->link_rewrite, $ImageArray["id_image"]) );
+
+            //====================================================================//
+            // Init Image List Item
+            if ( !isset($this->Out["images"][$key]) ) {
+                $this->Out["images"][$key] = array();
             }
+
+            $this->Out["images"][$key]["image"] = $Image;
+                
+        }
         return True;
     }
          
@@ -1691,7 +1698,6 @@ class Product extends ObjectBase
                 $this->LangId,
                 $this->Object->id,  
                 $this->AttributeId);
-        
         //====================================================================//
         // UPDATE IMAGES LIST
         //====================================================================//
@@ -1699,7 +1705,7 @@ class Product extends ObjectBase
         $this->ImgPosition = 0;
         //====================================================================//
         // Given List Is Not Empty
-        foreach ($Data as $Position => $InValue) {
+        foreach ($Data as $InValue) {
             if ( !isset($InValue["image"]) || empty ($InValue["image"]) ) {
                 continue;
             }
@@ -1728,7 +1734,7 @@ class Product extends ObjectBase
                 //====================================================================//
                 // If Object Found, Unset from Current List
                 unset ($ObjectImagesList[$key]);
-                $ImageFound = 1;
+                $ImageFound = True;
                 //====================================================================//
                 // Update Image Position in List
                 if ( !$this->AttributeId && ( $this->ImgPosition != $ObjectImage->position) ){
@@ -1788,8 +1794,8 @@ class Product extends ObjectBase
     {
         //====================================================================//
         // If Not found, Add this object to list
-        $NewImageFile    =   Splash::ReadFile($ImgArray["file"],$ImgArray["md5"]);
-            
+        $NewImageFile    =   Splash::File()->getFile($ImgArray["filename"],$ImgArray["md5"]);
+        
         //====================================================================//
         // File Imported => Write it Here
         if ( $NewImageFile == False ) {
@@ -1800,7 +1806,7 @@ class Product extends ObjectBase
         //====================================================================//
         // Create New Image Object
         $ObjectImage                = new Image();
-        $ObjectImage->label         = $NewImageFile["name"];
+        $ObjectImage->label         = isset($NewImageFile["name"]) ? $NewImageFile["name"] : $NewImageFile["filename"];
         $ObjectImage->id_product    = $this->ProductId;
         $ObjectImage->position      = $this->ImgPosition;
 
@@ -1813,6 +1819,8 @@ class Product extends ObjectBase
         $Path       = dirname($ObjectImage->getPathForCreation());
         $Filename   = "/" . $ObjectImage->id . "." . $ObjectImage->image_format;
         Splash::File()->WriteFile($Path,$Filename,$NewImageFile["md5"],$NewImageFile["raw"]); 
+//        \Cache::getInstance()->Flush();
+        
     }    
     
     /**
@@ -1880,8 +1888,5 @@ class Product extends ObjectBase
         } 
         return $Data;
     }
-    
-    
 
-    
 }
