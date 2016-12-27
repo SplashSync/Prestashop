@@ -34,7 +34,4 @@ upload/
 
 # Composer content
 /composer.lock
-/modules/splashsync/Resources/Splash/
-/modules/splashsync/Resources/splash/
-/modules/splashsync/Resources/composer/
-/modules/splashsync/Resources/autoload.php
+/modules/splashsync/vendor/
