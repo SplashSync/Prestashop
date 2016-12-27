@@ -204,9 +204,11 @@ class Order extends ObjectBase
         }    
         //====================================================================//
         // Setup sortorder
-        $sortfield = empty($params["sortfield"])?"id":$params["sortfield"];
+        $SortField = empty($params["sortfield"])    ?   "order_date":  $params["sortfield"];
+        $SortOrder = empty($params["sortorder"])    ?   "DESC"      :   $params["sortorder"];
         // Build ORDER BY
-        $sql->orderBy('`' . $sortfield . '` ' . $params["sortorder"] );
+        $sql->orderBy('`' . $SortField . '` ' . $SortOrder );
+        
         //====================================================================//
         // Execute count request
         Db::getInstance()->executeS($sql);

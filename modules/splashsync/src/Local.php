@@ -117,7 +117,7 @@ class Local
         {
             //====================================================================//
             // Force no Debug Mode
-            define('_PS_MODE_DEV_', true);
+            define('_PS_MODE_DEV_', false);
 
             //====================================================================//
             // Load Admin Folder Path

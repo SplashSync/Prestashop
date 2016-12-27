@@ -225,9 +225,11 @@ class Product extends ObjectBase
         }  
         //====================================================================//
         // Setup sortorder
-        $sortfield = empty($params["sortfield"])?"ref":$params["sortfield"];
+        $SortField = empty($params["sortfield"])    ?   "ref"  :   $params["sortfield"];
+        $SortOrder = empty($params["sortorder"])    ?   "ASC"  :   $params["sortorder"];
         // Build ORDER BY
-        $sql->orderBy('`' . $sortfield . '` ' . $params["sortorder"] );
+        $sql->orderBy('`' . $SortField . '` ' . $SortOrder );
+        
         //====================================================================//
         // Execute final request
         Db::getInstance()->executeS($sql);

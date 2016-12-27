@@ -111,7 +111,7 @@ class ThirdParty extends ObjectBase
         //====================================================================//
         //  Load Local Translation File
         Splash::Translator()->Load("objects@local");          
-        
+       
         //====================================================================//
         // Load Splash Module
         $this->spl = Splash::Local()->getLocalModule();
@@ -198,9 +198,10 @@ class ThirdParty extends ObjectBase
         
         //====================================================================//
         // Setup sortorder
-        $sortfield = empty($params["sortfield"])?"lastname":$params["sortfield"];
+        $SortField = empty($params["sortfield"])    ?   "lastname"  :   $params["sortfield"];
+        $SortOrder = empty($params["sortorder"])    ?   "ASC"       :   $params["sortorder"];
         // Build ORDER BY
-        $sql->orderBy('`' . $sortfield . '` ' . $params["sortorder"] );
+        $sql->orderBy('`' . $SortField . '` ' . $SortOrder );
         //====================================================================//
         // Execute count request
         Db::getInstance()->executeS($sql);
@@ -213,7 +214,9 @@ class ThirdParty extends ObjectBase
         $total      = Db::getInstance()->NumRows();
         //====================================================================//
         // Build LIMIT
-        $sql->limit($params["max"],$params["offset"]);
+        $Max    = empty($params["max"])     ?   0   :   $params["max"];
+        $Offset = empty($params["offset"])  ?   0   :   $params["offset"];
+        $sql->limit($Max,$Offset);
         //====================================================================//
         // Execute final request
         $result = Db::getInstance()->executeS($sql);   
@@ -233,8 +236,8 @@ class ThirdParty extends ObjectBase
         }
         //====================================================================//
         // Prepare List result meta infos
-        $Data["meta"]["current"]    =   count($Data);  // Store Current Number of results
-        $Data["meta"]["total"]      =   $total;  // Store Total Number of results
+        $Data["meta"]["current"]    =   count($Data);       // Store Current Number of results
+        $Data["meta"]["total"]      =   $total;             // Store Total Number of results
         Splash::Log()->Deb("MsgLocalTpl",__CLASS__,__FUNCTION__,(count($Data)-1)." Customers Found.");
         return $Data;
     }
@@ -413,6 +416,9 @@ class ThirdParty extends ObjectBase
     */
     private function buildMainFields()
     {
+        
+        $GroupMeta  =   $this->spl->l("Meta tags");
+
         //====================================================================//
         // Firstname
         $this->FieldsFactory()->Create(SPL_T_VARCHAR)
@@ -446,9 +452,11 @@ class ThirdParty extends ObjectBase
         $desc = $this->spl->l("Social title") . " ; 0 => Male // 1 => Female // 2 => Neutral";
         $this->FieldsFactory()->Create(SPL_T_INT)
                 ->Identifier("gender_type")
-                ->Name($this->spl->l("Social title"))
+                ->Name($this->spl->l("Social title") . " (ID)")
                 ->MicroData("http://schema.org/Person","gender")
                 ->Description($desc)
+                ->Group($GroupMeta)
+                ->AddChoices([ "0" => "Male", "1" => "female"])
                 ->NotTested();       
 
         //====================================================================//
@@ -465,6 +473,7 @@ class ThirdParty extends ObjectBase
                 ->Identifier("siret")
                 ->Name($this->spl->l("Company ID Number"))
                 ->MicroData("http://schema.org/Organization","taxID")
+                ->Group("ID")
                 ->NotTested();
         
         //====================================================================//
@@ -473,6 +482,7 @@ class ThirdParty extends ObjectBase
                 ->Identifier("ape")
                 ->Name($this->spl->l("Company APE Code"))
                 ->MicroData("http://schema.org/Organization","naics")
+                ->Group("ID")
                 ->NotTested();
         
         //====================================================================//
@@ -480,6 +490,7 @@ class ThirdParty extends ObjectBase
         $this->FieldsFactory()->Create(SPL_T_VARCHAR)
                 ->Identifier("website")
                 ->Name($this->spl->l("Website"))
+                ->Group($GroupMeta)
                 ->MicroData("http://schema.org/Organization","url");
         
         //====================================================================//
@@ -489,6 +500,7 @@ class ThirdParty extends ObjectBase
                 ->InList("contacts")
                 ->Name($this->spl->l("Address"))
                 ->MicroData("http://schema.org/Organization","address")
+                ->Group($this->spl->l("Address"))
                 ->ReadOnly();
         
     }    
@@ -498,6 +510,7 @@ class ThirdParty extends ObjectBase
     */
     private function buildPrimaryAddressFields()
     {
+        $GroupName  =   $this->spl->l("Address");
 
         //====================================================================//
         // Addess
@@ -505,6 +518,7 @@ class ThirdParty extends ObjectBase
                 ->Identifier("address1")
                 ->Name($this->spl->l("Address"))
                 ->MicroData("http://schema.org/PostalAddress","streetAddress")
+                ->Group($GroupName)
                 ->ReadOnly();
 
         //====================================================================//
@@ -513,6 +527,7 @@ class ThirdParty extends ObjectBase
                 ->Identifier("address2")
                 ->Name($this->spl->l("Address"))
                 ->MicroData("http://schema.org/PostalAddress","postOfficeBoxNumber")
+                ->Group($GroupName)
                 ->ReadOnly();
         
         //====================================================================//
@@ -521,6 +536,7 @@ class ThirdParty extends ObjectBase
                 ->Identifier("postcode")
                 ->Name($this->spl->l("Zip/Postal Code","AdminAddresses"))
                 ->MicroData("http://schema.org/PostalAddress","postalCode")
+                ->Group($GroupName)
                 ->ReadOnly();
         
         //====================================================================//
@@ -529,6 +545,7 @@ class ThirdParty extends ObjectBase
                 ->Identifier("city")
                 ->Name($this->spl->l("City"))
                 ->MicroData("http://schema.org/PostalAddress","addressLocality")
+                ->Group($GroupName)
                 ->ReadOnly();
         
         //====================================================================//
@@ -537,6 +554,7 @@ class ThirdParty extends ObjectBase
                 ->Identifier("state")
                 ->Name($this->spl->l("State"))
                 ->MicroData("http://schema.org/PostalAddress","addressRegion")
+                ->Group($GroupName)
                 ->ReadOnly();
         
         //====================================================================//
@@ -545,6 +563,7 @@ class ThirdParty extends ObjectBase
                 ->Identifier("id_state")
                 ->Name($this->spl->l("StateCode"))
                 ->MicroData("http://schema.org/PostalAddress","addressRegion")
+                ->Group($GroupName)
                 ->ReadOnly();
         
         //====================================================================//
@@ -553,6 +572,7 @@ class ThirdParty extends ObjectBase
                 ->Identifier("country")
                 ->Name($this->spl->l("Country"))
                 ->MicroData("http://schema.org/PostalAddress","addressCountry")
+                ->Group($GroupName)
                 ->ReadOnly();
         
         //====================================================================//
@@ -561,7 +581,10 @@ class ThirdParty extends ObjectBase
                 ->Identifier("id_country")
                 ->Name($this->spl->l("CountryCode"))
                 ->MicroData("http://schema.org/PostalAddress","addressCountry")
+                ->Group($GroupName)
                 ->ReadOnly();
+        
+        $GroupMeta  =   $this->spl->l("Meta tags");
                 
         //====================================================================//
         // Phone
@@ -569,6 +592,7 @@ class ThirdParty extends ObjectBase
                 ->Identifier("phone")
                 ->Name($this->spl->l("Home phone"))
                 ->MicroData("http://schema.org/PostalAddress","telephone")
+                ->Group($GroupMeta)
                 ->ReadOnly();
         
         //====================================================================//
@@ -577,6 +601,7 @@ class ThirdParty extends ObjectBase
                 ->Identifier("phone_mobile")
                 ->Name($this->spl->l("Mobile phone"))
                 ->MicroData("http://schema.org/Person","telephone")
+                ->Group($GroupMeta)
                 ->ReadOnly();
 
     }
@@ -972,7 +997,6 @@ class ThirdParty extends ObjectBase
                     $this->Object->id_gender = $gendertype->id_gender;
                     $this->update = True;
                 }
-                unset($this->In[$FieldName]);
                 break;                     
 
             default:

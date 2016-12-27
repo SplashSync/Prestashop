@@ -193,9 +193,11 @@ class Address extends ObjectBase
         }  
         //====================================================================//
         // Setup sortorder
-        $sortfield = empty($params["sortfield"])?"lastname":$params["sortfield"];
+        $SortField = empty($params["sortfield"])    ?   "lastname"  :   $params["sortfield"];
+        $SortOrder = empty($params["sortorder"])    ?   "ASC"      :   $params["sortorder"];
         // Build ORDER BY
-        $sql->orderBy('`' . $sortfield . '` ' . $params["sortorder"] );
+        $sql->orderBy('`' . $SortField . '` ' . $SortOrder );
+        
         //====================================================================//
         // Execute count request
         Db::getInstance()->executeS($sql);
@@ -443,6 +445,7 @@ class Address extends ObjectBase
     */
     private function buildMainFields()
     {
+        $GroupName  =   $this->spl->l("Address");
         
         //====================================================================//
         // Addess
@@ -450,6 +453,7 @@ class Address extends ObjectBase
                 ->Identifier("address1")
                 ->Name($this->spl->l("Address"))
                 ->MicroData("http://schema.org/PostalAddress","streetAddress")
+                ->Group($GroupName)
                 ->isRequired();
 
         //====================================================================//
@@ -457,6 +461,7 @@ class Address extends ObjectBase
         $this->FieldsFactory()->Create(SPL_T_VARCHAR)
                 ->Identifier("address2")
                 ->Name($this->spl->l("Address"))
+                ->Group($GroupName)
                 ->MicroData("http://schema.org/PostalAddress","postOfficeBoxNumber");
         
         //====================================================================//
@@ -465,6 +470,7 @@ class Address extends ObjectBase
                 ->Identifier("postcode")
                 ->Name($this->spl->l("Zip/Postal Code","AdminAddresses"))
                 ->MicroData("http://schema.org/PostalAddress","postalCode")
+                ->Group($GroupName)
                 ->isRequired();
         
         //====================================================================//
@@ -473,6 +479,7 @@ class Address extends ObjectBase
                 ->Identifier("city")
                 ->Name($this->spl->l("City"))
                 ->MicroData("http://schema.org/PostalAddress","addressLocality")
+                ->Group($GroupName)
                 ->isRequired()
                 ->isListed();
         
@@ -481,6 +488,7 @@ class Address extends ObjectBase
         $this->FieldsFactory()->Create(SPL_T_VARCHAR)
                 ->Identifier("state")
                 ->Name($this->spl->l("State"))
+                ->Group($GroupName)
                 ->ReadOnly();
         
         //====================================================================//
@@ -488,6 +496,7 @@ class Address extends ObjectBase
         $this->FieldsFactory()->Create(SPL_T_STATE)
                 ->Identifier("id_state")
                 ->Name($this->spl->l("StateCode"))
+                ->Group($GroupName)
                 ->MicroData("http://schema.org/PostalAddress","addressRegion");
         
         //====================================================================//
@@ -495,6 +504,7 @@ class Address extends ObjectBase
         $this->FieldsFactory()->Create(SPL_T_VARCHAR)
                 ->Identifier("country")
                 ->Name($this->spl->l("Country"))
+                ->Group($GroupName)
                 ->ReadOnly()
                 ->isListed();
         
@@ -504,6 +514,7 @@ class Address extends ObjectBase
                 ->Identifier("id_country")
                 ->Name($this->spl->l("CountryCode"))
                 ->MicroData("http://schema.org/PostalAddress","addressCountry")
+                ->Group($GroupName)
                 ->isRequired();
     }
             
@@ -533,6 +544,7 @@ class Address extends ObjectBase
                 ->Identifier("dni")
                 ->Name($this->spl->l("Company ID Number"))
                 ->MicroData("http://schema.org/Organization","taxID")
+                ->Group("ID")
                 ->NotTested();
         
         //====================================================================//
@@ -541,6 +553,7 @@ class Address extends ObjectBase
                 ->Identifier("vat_number")
                 ->Name($this->spl->l("VAT number"))
                 ->MicroData("http://schema.org/Organization","vatID")
+                ->Group("ID")
                 ->NotTested();
         
         //====================================================================//
@@ -548,7 +561,8 @@ class Address extends ObjectBase
         $this->FieldsFactory()->Create(SPL_T_VARCHAR)
                 ->Identifier("other")
                 ->Name($this->spl->l("Note"))
-                ->MicroData("http://schema.org/PostalAddress","description");      
+                ->MicroData("http://schema.org/PostalAddress","description")      
+                ->Group("Notes");
         
         //====================================================================//
         // TRACEABILITY INFORMATIONS
@@ -890,6 +904,7 @@ class Address extends ObjectBase
         //====================================================================//
         // Update Link
         $this->Object->id_customer = $Id;
+        $this->update = True;
         return True;
     }   
     
