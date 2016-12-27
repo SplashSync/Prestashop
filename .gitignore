@@ -34,4 +34,4 @@ upload/
 
 # Composer content
 /composer.lock
-/modules/splashsync/vendor/
+#/modules/splashsync/vendor/
