@@ -265,6 +265,7 @@ class SplashSync extends Module
         // Load current value
         $helper->fields_value['SPLASH_WS_ID']       = Configuration::get('SPLASH_WS_ID');
         $helper->fields_value['SPLASH_WS_KEY']      = Configuration::get('SPLASH_WS_KEY');
+        $helper->fields_value['SPLASH_WS_EXPERT']   = Configuration::get('SPLASH_WS_EXPERT');
         $helper->fields_value['SPLASH_WS_HOST']     = Configuration::get('SPLASH_WS_HOST');
         $helper->fields_value['SPLASH_LANG_ID']     = Configuration::get('SPLASH_LANG_ID');
         $helper->fields_value['SPLASH_USER_ID']     = Configuration::get('SPLASH_USER_ID');
@@ -298,8 +299,26 @@ class SplashSync extends Module
                     'size' => 60,
                     'required' => true
                 );
+        //====================================================================//
+        // Expert Mode
+        $Fields[] = array(
+                    'type' => 'checkbox',
+                    'name' => 'SPLASH_WS',
+                    'label' => $this->l('Enable Expert Mode'),
+                    'values' => array(
+                        'query' => array(
+                            array(
+                                'id' => 'EXPERT',
+                                'name' => $this->l('Yes'),
+                                'val' => '1'
+                            ),
+                        ),
+                        'id' => 'id',
+                        'name' => 'name'
+                    )
+            );       
 
-        if ( defined ("SPLASH_DEBUG") ) {
+        if ( Configuration::get('SPLASH_WS_EXPERT') ) {
             //====================================================================//
             // Server Host Url
             $Fields[] = array(
@@ -427,8 +446,17 @@ class SplashSync extends Module
                 $output .= $this->displayError( $this->l('Invalid User') );
             }
             
+            //====================================================================//
+            // Verify Expert Mode           
+            $expert = strval(Tools::getValue('SPLASH_WS_EXPERT'));
+            if ( !$expert ) {
+                $host = "";
+            }
+
+            
             if ( $output == null )
             {
+                Configuration::updateValue('SPLASH_WS_EXPERT',  $expert);
                 Configuration::updateValue('SPLASH_WS_HOST',    $host);
                 Configuration::updateValue('SPLASH_WS_ID',      $ServerId);
                 Configuration::updateValue('SPLASH_WS_KEY',     $UserKey);
