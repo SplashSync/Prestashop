@@ -73,6 +73,9 @@ class SplashSync extends Module
                 //====================================================================//
                 // Splash Module & Dependecies Autoloader
                 require_once( dirname(__FILE__) . "/vendor/autoload.php");
+                //====================================================================//
+                // Init Splash Module
+                Splash::Core();
             }
             //====================================================================//
             // INIT Context VAriables
