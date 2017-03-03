@@ -390,7 +390,7 @@ class Product extends ObjectBase
         //====================================================================//
         // Verify Requested Fields List is now Empty => All Fields Read Successfully
         if ( count($this->In) ) {
-            foreach ($this->In as $FieldName) {
+            foreach (clone $this->In as $FieldName) {
                 Splash::Log()->Err("ErrLocalWrongField",__CLASS__,__FUNCTION__, $FieldName);
             }
             return False;
@@ -454,7 +454,7 @@ class Product extends ObjectBase
         //====================================================================//
         // Verify Requested Fields List is now Empty => All Fields Read Successfully
         if ( count($this->In) ) {
-            foreach ($this->In as $FieldName => $Data) {
+            foreach (clone $this->In as $FieldName => $Data) {
                 Splash::Log()->Err("ErrLocalWrongField",__CLASS__,__FUNCTION__, $FieldName);
             }
             return False;
@@ -1127,7 +1127,7 @@ class Product extends ObjectBase
         //====================================================================//
         // Init Product Link Rewrite Url
         if ( empty($this->In["link_rewrite"]) ) {
-            foreach ($this->In["name"] as $key => $value) {
+            foreach (clone $this->In["name"] as $key => $value) {
                 $this->In["link_rewrite"][$key] = Tools::link_rewrite($value);
             }
         }

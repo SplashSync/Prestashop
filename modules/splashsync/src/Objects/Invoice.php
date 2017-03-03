@@ -297,7 +297,7 @@ class Invoice extends ObjectBase
         //====================================================================//
         // Verify Requested Fields List is now Empty => All Fields Read Successfully
         if ( count($this->In) ) {
-            foreach ($this->In as $FieldName) {
+            foreach (clone $this->In as $FieldName) {
                 Splash::Log()->War("ErrLocalWrongField",__CLASS__,__FUNCTION__, $FieldName);
             }
             return False;
