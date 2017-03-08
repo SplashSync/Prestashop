@@ -136,6 +136,7 @@ class SplashSync extends Module
                 !$this->registerHook('actionProductAdd') ||
                 !$this->registerHook('actionObjectProductAddAfter') ||
                 !$this->registerHook('actionObjectProductUpdateAfter') ||
+                !$this->registerHook('actionUpdateQuantity') ||
                 !$this->registerHook('actionProductUpdate') ||
                 !$this->registerHook('actionProductDelete')) {
             return false;
@@ -677,19 +678,22 @@ class SplashSync extends Module
 // *******************************************************************//
 //====================================================================//
 
+
     /**
     *   @abstract       This hook is called after a customer is created
     */
     public function hookactionObjectProductAddAfter($params)
     {
         return $this->hookactionProduct($params["object"],SPL_A_CREATE,$this->l('Product Created on Prestashop'));
-    }           
+    }        
         
     /**
     *   @abstract       This hook is called after a customer is created
     */
     public function hookactionObjectProductUpdateAfter($params)
     {
+        ddd($params);
+        exit;        
         return $this->hookactionProduct($params["object"],SPL_A_UPDATE,$this->l('Product Updated on Prestashop'));
     }         
     
@@ -757,6 +761,8 @@ class SplashSync extends Module
     */
     public function hookactionObjectCombinationUpdateAfter($params)
     {
+        ddd($params);  
+        exit;
         return $this->hookactionCombination($params["object"],SPL_A_UPDATE,$this->l('Product Attribute Updated on Prestashop'));
     }         
     
@@ -768,6 +774,33 @@ class SplashSync extends Module
         return $this->hookactionCombination($params["object"],SPL_A_DELETE,$this->l('Product Attribute Deleted on Prestashop'));
     }      
         
+    /**
+    *   @abstract       This hook is called after a customer effectively places their order
+    */
+    public function hookactionUpdateQuantity($params)
+    {
+        //====================================================================//
+        // Get Products from Cart      
+        $Products = $params["cart"]->getProducts();
+        //====================================================================//
+        // Init Products Id Array
+        $UnikId = array();
+        //====================================================================//
+        // Walk on Products
+        foreach ($Products as $Product) {
+            if (isset($Product["id_product_attribute"])) {
+                //====================================================================//
+                // Generate Unik Product Id                
+                $UnikId[]       =   (int) Splash::Object("Product")->getUnikId($Product["id_product"],$Product["id_product_attribute"]);
+            } else {
+                $UnikId[]       =   (int) $Product["id_product"];
+            }
+        }
+        //====================================================================//
+        // Commit Update For Product               
+        $this->_Commit("Product",$UnikId,SPL_A_UPDATE,$this->l('Product Stock Updated on Prestashop'));        
+    }    
+    
     /**
      *      @abstract   This function is called after each action on a Combination object
      *      @param      object   $combination          Prestashop Combination Object
@@ -1095,7 +1128,7 @@ class SplashSync extends Module
             Splash::Log()->Err("ErrLocalTpl","Invoice",__FUNCTION__,"Unable to Read Order Invoice Id.");
         } 
         //====================================================================//
-        // Commit Update For Product                
+        // Commit Update For Invoice                
         return $this->_Commit("Invoice",$id,$action,$comment);
 
     }     
