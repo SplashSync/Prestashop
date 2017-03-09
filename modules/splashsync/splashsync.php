@@ -692,8 +692,6 @@ class SplashSync extends Module
     */
     public function hookactionObjectProductUpdateAfter($params)
     {
-        ddd($params);
-        exit;        
         return $this->hookactionProduct($params["object"],SPL_A_UPDATE,$this->l('Product Updated on Prestashop'));
     }         
     
@@ -761,8 +759,6 @@ class SplashSync extends Module
     */
     public function hookactionObjectCombinationUpdateAfter($params)
     {
-        ddd($params);  
-        exit;
         return $this->hookactionCombination($params["object"],SPL_A_UPDATE,$this->l('Product Attribute Updated on Prestashop'));
     }         
     
@@ -780,6 +776,21 @@ class SplashSync extends Module
     public function hookactionUpdateQuantity($params)
     {
         //====================================================================//
+        // On Product Admin Page stock Update      
+        if (!isset($params["cart"])) {
+            if (isset($params["id_product_attribute"]) && !empty($params["id_product_attribute"])) {
+                //====================================================================//
+                // Generate Unik Product Id                
+                $UnikId     =   (int) Splash::Object("Product")->getUnikId($params["id_product"],$params["id_product_attribute"]);
+            } else {
+                $UnikId     =   (int) $params["id_product"];
+            }            
+            //====================================================================//
+            // Commit Update For Product               
+            $this->_Commit("Product",$UnikId,SPL_A_UPDATE,$this->l('Product Stock Updated on Prestashop'));  
+            return;
+        }
+        //====================================================================//
         // Get Products from Cart      
         $Products = $params["cart"]->getProducts();
         //====================================================================//
@@ -788,7 +799,7 @@ class SplashSync extends Module
         //====================================================================//
         // Walk on Products
         foreach ($Products as $Product) {
-            if (isset($Product["id_product_attribute"])) {
+            if (isset($Product["id_product_attribute"]) && !empty($Product["id_product_attribute"])) {
                 //====================================================================//
                 // Generate Unik Product Id                
                 $UnikId[]       =   (int) Splash::Object("Product")->getUnikId($Product["id_product"],$Product["id_product_attribute"]);

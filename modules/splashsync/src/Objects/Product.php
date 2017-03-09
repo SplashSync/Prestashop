@@ -1127,7 +1127,7 @@ class Product extends ObjectBase
         //====================================================================//
         // Init Product Link Rewrite Url
         if ( empty($this->In["link_rewrite"]) ) {
-            foreach (clone $this->In["name"] as $key => $value) {
+            foreach ($this->In["name"] as $key => $value) {
                 $this->In["link_rewrite"][$key] = Tools::link_rewrite($value);
             }
         }
