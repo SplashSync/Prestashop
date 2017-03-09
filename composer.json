@@ -8,7 +8,8 @@
     "prefer-stable": true,
     
     "config": {
-        "vendor-dir": "modules/splashsync/vendor"
+        "vendor-dir":                   "modules/splashsync/vendor",
+        "preferred-install":            "dist"
     },
     
     "autoload": {
@@ -29,9 +30,6 @@
     
     "autoload-dev": {
         "psr-4": { "Splash\\Tests\\": "Tests/" }
-    },
+    }
     
-    "config": {
-        "preferred-install":                        "dist"
-    }    
 }

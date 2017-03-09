@@ -903,7 +903,7 @@ class Invoice extends ObjectBase
                 //====================================================================//
                 // Detect Payment Method is Credit Card Like Method
                 if ( !empty($OrderPayment->card_brand) ) {
-                    $Method = "CreditCard";
+                    $Method = "DirectDebit";
                 } else {
                     $Method = "Unknown";
                 }

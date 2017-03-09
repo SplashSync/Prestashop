@@ -288,7 +288,7 @@ class ThirdParty extends ObjectBase
         //====================================================================//
         // Verify Requested Fields List is now Empty => All Fields Read Successfully
         if ( count($this->In) ) {
-            foreach (clone $this->In as $FieldName) {
+            foreach ($this->In as $FieldName) {
                 Splash::Log()->Err("ErrLocalWrongField",__CLASS__,__FUNCTION__, $FieldName);
             }
             return False;
@@ -342,7 +342,7 @@ class ThirdParty extends ObjectBase
         //====================================================================//
         // Verify Requested Fields List is now Empty => All Fields Read Successfully
         if ( count($this->In) ) {
-            foreach (clone $this->In as $FieldName => $Data) {
+            foreach ($this->In as $FieldName => $Data) {
                 Splash::Log()->Err("ErrLocalWrongField",__CLASS__,__FUNCTION__, $FieldName);
             }
             return False;
