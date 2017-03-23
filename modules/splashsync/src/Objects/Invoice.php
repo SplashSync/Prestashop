@@ -19,7 +19,7 @@ use Splash\Core\SplashCore      as Splash;
 
 //====================================================================//
 // Prestashop Static Classes	
-use Shop, Configuration, Currency;
+use Shop, Configuration, Currency, Translate;
 use DbQuery, Db, Tools, OrderInvoice;
 
 /**
@@ -358,7 +358,7 @@ class Invoice extends ObjectBase
         // Customer Object
         $this->FieldsFactory()->Create(self::ObjectId_Encode( "ThirdParty" , SPL_T_ID))
                 ->Identifier("id_customer")
-                ->Name($this->spl->l('Customer'))
+                ->Name(Translate::getAdminTranslation("Customer ID", "AdminCustomerThreads"))
                 ->MicroData("http://schema.org/Invoice","customer")
                 ->isRequired();  
         
@@ -374,7 +374,7 @@ class Invoice extends ObjectBase
         // Invoice Reference
         $this->FieldsFactory()->Create(SPL_T_VARCHAR)
                 ->Identifier("number")
-                ->Name($this->spl->l('Number'))
+                ->Name(Translate::getAdminTranslation("Invoice number", "AdminInvoices"))
                 ->MicroData("http://schema.org/Invoice","confirmationNumber")       
                 ->ReadOnly()
                 ->IsListed();
@@ -383,17 +383,16 @@ class Invoice extends ObjectBase
         // Order Reference
         $this->FieldsFactory()->Create(SPL_T_VARCHAR)
                 ->Identifier("reference")
-                ->Name($this->spl->l('Reference'))
+                ->Name(Translate::getAdminTranslation("Reference", "AdminOrders"))
                 ->MicroData("http://schema.org/Order","orderNumber")       
                 ->ReadOnly()
                 ->IsListed();
-
         
         //====================================================================//
         // Order Date 
         $this->FieldsFactory()->Create(SPL_T_DATE)
                 ->Identifier("date_add")
-                ->Name($this->spl->l("Date"))
+                ->Name(Translate::getAdminTranslation("Creation", "AdminSupplyOrders"))
                 ->MicroData("http://schema.org/Order","orderDate")
                 ->ReadOnly()
                 ->isRequired()
@@ -417,11 +416,13 @@ class Invoice extends ObjectBase
         // PRICES INFORMATIONS
         //====================================================================//
         
+        $CurrencySuffix = " (" . $this->Currency->sign . ")";
+        
         //====================================================================//
         // Order Total Price HT
         $this->FieldsFactory()->Create(SPL_T_DOUBLE)
                 ->Identifier("total_paid_tax_incl")
-                ->Name($this->spl->l("Total (tax excl.)") . " (" . $this->Currency->sign . ")")
+                ->Name(Translate::getAdminTranslation("Total (Tax excl.)", "AdminOrders") . $CurrencySuffix)
                 ->MicroData("http://schema.org/Invoice","totalPaymentDue")
                 ->isListed()
                 ->ReadOnly();
@@ -430,7 +431,7 @@ class Invoice extends ObjectBase
         // Order Total Price TTC
         $this->FieldsFactory()->Create(SPL_T_DOUBLE)
                 ->Identifier("total_paid_tax_excl")
-                ->Name($this->spl->l("Total (tax incl.)") . " (" . $this->Currency->sign . ")")
+                ->Name(Translate::getAdminTranslation("Total (Tax incl.)", "AdminOrders") . $CurrencySuffix)
                 ->MicroData("http://schema.org/Invoice","totalPaymentDueTaxIncluded")
                 ->isListed()
                 ->ReadOnly();        
@@ -439,7 +440,7 @@ class Invoice extends ObjectBase
         // Order Current Status
         $this->FieldsFactory()->Create(SPL_T_VARCHAR)
                 ->Identifier("status")
-                ->Name($this->spl->l("Status"))
+                ->Name(Translate::getAdminTranslation("Status", "AdminOrders"))
                 ->MicroData("http://schema.org/Invoice","paymentStatus")
                 ->ReadOnly()
                 ->NotTested();
@@ -448,33 +449,38 @@ class Invoice extends ObjectBase
         // INVOICE STATUS FLAGS
         //====================================================================//        
         
+        $Prefix = Translate::getAdminTranslation("Status", "AdminOrders") . " ";
+        
         //====================================================================//
         // Is Canceled
         // => There is no Diffrence Between a Draft & Canceled Order on Prestashop. 
         //      Any Non Validated Order is considered as Canceled
         $this->FieldsFactory()->Create(SPL_T_BOOL)
                 ->Identifier("isCanceled")
-                ->Name($this->spl->l("Invoice") . " : " . $this->spl->l("Canceled"))
+                ->Name($Prefix . $this->spl->l("Canceled"))
                 ->MicroData("http://schema.org/PaymentStatusType","PaymentDeclined")
                 ->Association( "isCanceled","isValidated")
+                ->Group(Translate::getAdminTranslation("Meta", "AdminThemes"))
                 ->ReadOnly();     
         
         //====================================================================//
         // Is Validated
         $this->FieldsFactory()->Create(SPL_T_BOOL)
                 ->Identifier("isValidated")
-                ->Name($this->spl->l("Invoice") . " : " . $this->spl->l("Valid"))
+                ->Name($Prefix . Translate::getAdminTranslation("Valid", "AdminCartRules"))
                 ->MicroData("http://schema.org/PaymentStatusType","PaymentDue")
                 ->Association( "isCanceled","isValidated")
+                ->Group(Translate::getAdminTranslation("Meta", "AdminThemes"))
                 ->ReadOnly();
 
         //====================================================================//
         // Is Paid
         $this->FieldsFactory()->Create(SPL_T_BOOL)
                 ->Identifier("isPaid")
-                ->Name($this->spl->l("Invoice") . " : " . $this->spl->l("Paid"))
+                ->Name($Prefix . $this->spl->l("Paid"))
                 ->MicroData("http://schema.org/PaymentStatusType","PaymentComplete")
                 ->ReadOnly()
+                ->Group(Translate::getAdminTranslation("Meta", "AdminThemes"))
                 ->NotTested();
         
         return;
@@ -485,24 +491,14 @@ class Invoice extends ObjectBase
     */
     private function buildProductsLineFields() {
         
-        $ListName = $this->spl->l("Cart") . " => " ;
-        
-        //====================================================================//
-        // Order Line Label
-//        $this->FieldsFactory()->Create(SPL_T_VARCHAR)
-//                ->Identifier("label")
-//                ->InList("lines")
-//                ->Name( $ListName . $langs->trans("Label"))
-//                ->MicroData("http://schema.org/partOfInvoice","name")
-//                ->Association("description@lines","qty@lines","price@lines");        
-        
         //====================================================================//
         // Order Line Description
         $this->FieldsFactory()->Create(SPL_T_VARCHAR)
                 ->Identifier("product_name")
                 ->InList("lines")
-                ->Name( $ListName . $this->spl->l("Description"))
+                ->Name(Translate::getAdminTranslation("Short description", "AdminProducts"))
                 ->MicroData("http://schema.org/partOfInvoice","description")        
+                ->Group(Translate::getAdminTranslation("Products", "AdminOrders"))
                 ->Association("product_name@lines","product_quantity@lines","unit_price@lines");        
 
         //====================================================================//
@@ -510,18 +506,19 @@ class Invoice extends ObjectBase
         $this->FieldsFactory()->Create(self::ObjectId_Encode( "Product" , SPL_T_ID))        
                 ->Identifier("product_id")
                 ->InList("lines")
-                ->Name( $ListName . $this->spl->l("Product"))
+                ->Name(Translate::getAdminTranslation("Product ID", "AdminImport"))
                 ->MicroData("http://schema.org/Product","productID")
+                ->Group(Translate::getAdminTranslation("Products", "AdminOrders"))
                 ->Association("product_name@lines","product_quantity@lines","unit_price@lines");        
-//                ->NotTested();        
 
         //====================================================================//
         // Order Line Quantity
         $this->FieldsFactory()->Create(SPL_T_INT)        
                 ->Identifier("product_quantity")
                 ->InList("lines")
-                ->Name( $ListName . $this->spl->l("Quantity"))
+                ->Name(Translate::getAdminTranslation("Quantity", "AdminOrders"))
                 ->MicroData("http://schema.org/QuantitativeValue","value")        
+                ->Group(Translate::getAdminTranslation("Products", "AdminOrders"))
                 ->Association("product_name@lines","product_quantity@lines","unit_price@lines");        
 
         //====================================================================//
@@ -529,8 +526,9 @@ class Invoice extends ObjectBase
         $this->FieldsFactory()->Create(SPL_T_DOUBLE)        
                 ->Identifier("reduction_percent")
                 ->InList("lines")
-                ->Name( $ListName . $this->spl->l("Discount (%)"))
+                ->Name(Translate::getAdminTranslation("Discount (%)", "AdminGroups"))
                 ->MicroData("http://schema.org/Order","discount")
+                ->Group(Translate::getAdminTranslation("Products", "AdminOrders"))
                 ->Association("product_name@lines","product_quantity@lines","unit_price@lines");        
 
         //====================================================================//
@@ -538,8 +536,9 @@ class Invoice extends ObjectBase
         $this->FieldsFactory()->Create(SPL_T_PRICE)        
                 ->Identifier("unit_price")
                 ->InList("lines")
-                ->Name( $ListName . $this->spl->l("Price"))
+                ->Name(Translate::getAdminTranslation("Price", "AdminOrders"))
                 ->MicroData("http://schema.org/PriceSpecification","price")        
+                ->Group(Translate::getAdminTranslation("Products", "AdminOrders"))
                 ->Association("product_name@lines","product_quantity@lines","unit_price@lines");        
 
     }
@@ -549,16 +548,14 @@ class Invoice extends ObjectBase
     */
     private function buildPaymentLineFields() {
         
-//        $ListName =  $this->spl->l"Payment") . " => " ;
-        $ListName = "" ;
-        
         //====================================================================//
         // Payment Line Payment Method 
         $this->FieldsFactory()->Create(SPL_T_VARCHAR)
                 ->Identifier("mode")
                 ->InList("payments")
-                ->Name( $ListName .  $this->spl->l("PaymentMode"))
+                ->Name(Translate::getAdminTranslation("Payment method", "AdminOrders"))
                 ->MicroData("http://schema.org/Invoice","PaymentMethod")
+                ->Group(Translate::getAdminTranslation("Payment", "AdminPayment"))
                 ->NotTested();        
 
         //====================================================================//
@@ -566,9 +563,10 @@ class Invoice extends ObjectBase
         $this->FieldsFactory()->Create(SPL_T_DATE)        
                 ->Identifier("date")
                 ->InList("payments")
-                ->Name( $ListName .  $this->spl->l("Date"))
+                ->Name(Translate::getAdminTranslation("Date", "AdminProducts"))
                 ->MicroData("http://schema.org/PaymentChargeSpecification","validFrom")
 //                ->Association("date@payments","mode@payments","amount@payments");        
+                ->Group(Translate::getAdminTranslation("Payment", "AdminPayment"))
                 ->NotTested();        
 
         //====================================================================//
@@ -576,9 +574,10 @@ class Invoice extends ObjectBase
         $this->FieldsFactory()->Create(SPL_T_VARCHAR)        
                 ->Identifier("number")
                 ->InList("payments")
-                ->Name( $ListName .  $this->spl->l('Number'))
+                ->Name(Translate::getAdminTranslation("Transaction ID", "AdminOrders"))                
                 ->MicroData("http://schema.org/Invoice","paymentMethodId")        
 //                ->Association("date@payments","mode@payments","amount@payments");        
+                ->Group(Translate::getAdminTranslation("Payment", "AdminPayment"))
                 ->NotTested();        
 
         //====================================================================//
@@ -586,20 +585,11 @@ class Invoice extends ObjectBase
         $this->FieldsFactory()->Create(SPL_T_DOUBLE)        
                 ->Identifier("amount")
                 ->InList("payments")
-                ->Name( $ListName .  $this->spl->l("Amount"))
+                ->Name(Translate::getAdminTranslation("Amount", "AdminOrders"))                
                 ->MicroData("http://schema.org/PaymentChargeSpecification","price")
+                ->Group(Translate::getAdminTranslation("Payment", "AdminPayment"))
                 ->NotTested();        
 
-//        //====================================================================//
-//        // Invoice Line Product Identifier
-//        $this->FieldsFactory()->Create(self::ObjectId_Encode( "BankAccount" , SPL_T_ID))        
-//                ->Identifier("accountid")
-//                ->InList("payments")
-//                ->Name( $ListName . $langs->trans("AccountToDebit"))
-//                ->MicroData("http://schema.org/Invoice","accountId");
-//                ->Association("desc@lines","qty@lines","price@lines");        
-//                ->NotTested();             
-        
     }
     
     //====================================================================//

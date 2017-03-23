@@ -19,7 +19,7 @@ use Splash\Core\SplashCore      as Splash;
 
 //====================================================================//
 // Prestashop Static Classes	
-use Address, Gender, Context, State, Country;
+use Address, Gender, Context, State, Country, Translate, Validate;
 use DbQuery, Db, Customer, Tools;
 
 /**
@@ -403,7 +403,7 @@ class ThirdParty extends ObjectBase
         // Email
         $this->FieldsFactory()->Create(SPL_T_EMAIL)
                 ->Identifier("email")
-                ->Name($this->spl->l("Email address"))
+                ->Name(Translate::getAdminTranslation("Email address", "AdminCustomers"))
                 ->MicroData("http://schema.org/ContactPoint","email")
                 ->Association("firstname","lastname")
                 ->isRequired()
@@ -417,13 +417,11 @@ class ThirdParty extends ObjectBase
     private function buildMainFields()
     {
         
-        $GroupMeta  =   $this->spl->l("Meta tags");
-
         //====================================================================//
         // Firstname
         $this->FieldsFactory()->Create(SPL_T_VARCHAR)
                 ->Identifier("firstname")
-                ->Name($this->spl->l("First name"))
+                ->Name(Translate::getAdminTranslation("First name", "AdminCustomers"))
                 ->MicroData("http://schema.org/Person","familyName")
                 ->Association("firstname","lastname")        
                 ->isRequired()
@@ -433,7 +431,7 @@ class ThirdParty extends ObjectBase
         // Lastname
         $this->FieldsFactory()->Create(SPL_T_VARCHAR)
                 ->Identifier("lastname")
-                ->Name($this->spl->l("Last name"))
+                ->Name(Translate::getAdminTranslation("Last name", "AdminCustomers"))
                 ->MicroData("http://schema.org/Person","givenName")
                 ->Association("firstname","lastname")            
                 ->isRequired()
@@ -443,19 +441,19 @@ class ThirdParty extends ObjectBase
         // Gender Name
         $this->FieldsFactory()->Create(SPL_T_VARCHAR)
                 ->Identifier("gender_name")
-                ->Name($this->spl->l("Social title"))
+                ->Name(Translate::getAdminTranslation("Social title", "AdminCustomers"))
                 ->MicroData("http://schema.org/Person","honorificPrefix")
                 ->ReadOnly();       
 
         //====================================================================//
         // Gender Type
-        $desc = $this->spl->l("Social title") . " ; 0 => Male // 1 => Female // 2 => Neutral";
+        $desc = Translate::getAdminTranslation("Social title", "AdminCustomers") . " ; 0 => Male // 1 => Female // 2 => Neutral";
         $this->FieldsFactory()->Create(SPL_T_INT)
                 ->Identifier("gender_type")
-                ->Name($this->spl->l("Social title") . " (ID)")
+                ->Name(Translate::getAdminTranslation("Social title", "AdminCustomers") . " (ID)")
                 ->MicroData("http://schema.org/Person","gender")
                 ->Description($desc)
-                ->Group($GroupMeta)
+                ->Group(Translate::getAdminTranslation("Meta", "AdminThemes"))
                 ->AddChoices([ "0" => "Male", "1" => "female"])
                 ->NotTested();       
 
@@ -463,7 +461,7 @@ class ThirdParty extends ObjectBase
         // Company
         $this->FieldsFactory()->Create(SPL_T_VARCHAR)
                 ->Identifier("company")
-                ->Name($this->spl->l("Company"))
+                ->Name(Translate::getAdminTranslation("Company", "AdminCustomers"))
                 ->MicroData("http://schema.org/Organization","legalName")
                 ->isListed();
         
@@ -471,7 +469,7 @@ class ThirdParty extends ObjectBase
         // SIRET
         $this->FieldsFactory()->Create(SPL_T_VARCHAR)
                 ->Identifier("siret")
-                ->Name($this->spl->l("Company ID Number"))
+                ->Name(Translate::getAdminTranslation("SIRET", "AdminCustomers"))
                 ->MicroData("http://schema.org/Organization","taxID")
                 ->Group("ID")
                 ->NotTested();
@@ -480,7 +478,7 @@ class ThirdParty extends ObjectBase
         // APE
         $this->FieldsFactory()->Create(SPL_T_VARCHAR)
                 ->Identifier("ape")
-                ->Name($this->spl->l("Company APE Code"))
+                ->Name(Translate::getAdminTranslation("APE", "AdminCustomers"))
                 ->MicroData("http://schema.org/Organization","naics")
                 ->Group("ID")
                 ->NotTested();
@@ -489,8 +487,8 @@ class ThirdParty extends ObjectBase
         // WebSite
         $this->FieldsFactory()->Create(SPL_T_VARCHAR)
                 ->Identifier("website")
-                ->Name($this->spl->l("Website"))
-                ->Group($GroupMeta)
+                ->Name(Translate::getAdminTranslation("Website", "AdminCustomers"))
+                ->Group(Translate::getAdminTranslation("Address", "AdminCustomers"))
                 ->MicroData("http://schema.org/Organization","url");
         
         //====================================================================//
@@ -498,9 +496,9 @@ class ThirdParty extends ObjectBase
         $this->FieldsFactory()->Create(self::ObjectId_Encode( "Address" , SPL_T_ID))
                 ->Identifier("address")
                 ->InList("contacts")
-                ->Name($this->spl->l("Address"))
+                ->Name(Translate::getAdminTranslation("Address", "AdminCustomers"))
                 ->MicroData("http://schema.org/Organization","address")
-                ->Group($this->spl->l("Address"))
+                ->Group(Translate::getAdminTranslation("Addresses", "AdminCustomers"))
                 ->ReadOnly();
         
     }    
@@ -510,13 +508,13 @@ class ThirdParty extends ObjectBase
     */
     private function buildPrimaryAddressFields()
     {
-        $GroupName  =   $this->spl->l("Address");
+        $GroupName  =   Translate::getAdminTranslation("Address", "AdminCustomers");
 
         //====================================================================//
         // Addess
         $this->FieldsFactory()->Create(SPL_T_VARCHAR)
                 ->Identifier("address1")
-                ->Name($this->spl->l("Address"))
+                ->Name($GroupName)
                 ->MicroData("http://schema.org/PostalAddress","streetAddress")
                 ->Group($GroupName)
                 ->ReadOnly();
@@ -525,7 +523,7 @@ class ThirdParty extends ObjectBase
         // Addess Complement
         $this->FieldsFactory()->Create(SPL_T_VARCHAR)
                 ->Identifier("address2")
-                ->Name($this->spl->l("Address"))
+                ->Name($GroupName . " (2)")
                 ->MicroData("http://schema.org/PostalAddress","postOfficeBoxNumber")
                 ->Group($GroupName)
                 ->ReadOnly();
@@ -534,7 +532,7 @@ class ThirdParty extends ObjectBase
         // Zip Code
         $this->FieldsFactory()->Create(SPL_T_VARCHAR)
                 ->Identifier("postcode")
-                ->Name($this->spl->l("Zip/Postal Code","AdminAddresses"))
+                ->Name(Translate::getAdminTranslation("Zip/Postal Code", "AdminAddresses"))
                 ->MicroData("http://schema.org/PostalAddress","postalCode")
                 ->Group($GroupName)
                 ->ReadOnly();
@@ -543,7 +541,7 @@ class ThirdParty extends ObjectBase
         // City Name
         $this->FieldsFactory()->Create(SPL_T_VARCHAR)
                 ->Identifier("city")
-                ->Name($this->spl->l("City"))
+                ->Name(Translate::getAdminTranslation("City", "AdminAddresses"))
                 ->MicroData("http://schema.org/PostalAddress","addressLocality")
                 ->Group($GroupName)
                 ->ReadOnly();
@@ -552,7 +550,7 @@ class ThirdParty extends ObjectBase
         // State Name
         $this->FieldsFactory()->Create(SPL_T_VARCHAR)
                 ->Identifier("state")
-                ->Name($this->spl->l("State"))
+                ->Name(Translate::getAdminTranslation("State", "AdminAddresses"))
                 ->MicroData("http://schema.org/PostalAddress","addressRegion")
                 ->Group($GroupName)
                 ->ReadOnly();
@@ -561,7 +559,7 @@ class ThirdParty extends ObjectBase
         // State code
         $this->FieldsFactory()->Create(SPL_T_STATE)
                 ->Identifier("id_state")
-                ->Name($this->spl->l("StateCode"))
+                ->Name(Translate::getAdminTranslation("State", "AdminAddresses") . " (Code)")
                 ->MicroData("http://schema.org/PostalAddress","addressRegion")
                 ->Group($GroupName)
                 ->ReadOnly();
@@ -570,7 +568,7 @@ class ThirdParty extends ObjectBase
         // Country Name
         $this->FieldsFactory()->Create(SPL_T_VARCHAR)
                 ->Identifier("country")
-                ->Name($this->spl->l("Country"))
+                ->Name(Translate::getAdminTranslation("Country", "AdminAddresses"))
                 ->MicroData("http://schema.org/PostalAddress","addressCountry")
                 ->Group($GroupName)
                 ->ReadOnly();
@@ -579,29 +577,27 @@ class ThirdParty extends ObjectBase
         // Country ISO Code
         $this->FieldsFactory()->Create(SPL_T_COUNTRY)
                 ->Identifier("id_country")
-                ->Name($this->spl->l("CountryCode"))
+                ->Name(Translate::getAdminTranslation("Country", "AdminAddresses") . " (Code)")
                 ->MicroData("http://schema.org/PostalAddress","addressCountry")
                 ->Group($GroupName)
                 ->ReadOnly();
         
-        $GroupMeta  =   $this->spl->l("Meta tags");
-                
         //====================================================================//
         // Phone
         $this->FieldsFactory()->Create(SPL_T_PHONE)
                 ->Identifier("phone")
-                ->Name($this->spl->l("Home phone"))
+                ->Name(Translate::getAdminTranslation("Home phone", "AdminAddresses"))
                 ->MicroData("http://schema.org/PostalAddress","telephone")
-                ->Group($GroupMeta)
+                ->Group($GroupName)
                 ->ReadOnly();
         
         //====================================================================//
         // Mobile Phone
         $this->FieldsFactory()->Create(SPL_T_PHONE)
                 ->Identifier("phone_mobile")
-                ->Name($this->spl->l("Mobile phone"))
+                ->Name(Translate::getAdminTranslation("Mobile phone", "AdminAddresses"))
                 ->MicroData("http://schema.org/Person","telephone")
-                ->Group($GroupMeta)
+                ->Group($GroupName)
                 ->ReadOnly();
 
     }
@@ -620,7 +616,7 @@ class ThirdParty extends ObjectBase
         // Active
         $this->FieldsFactory()->Create(SPL_T_BOOL)
                 ->Identifier("active")
-                ->Name($this->spl->l("Enabled"))
+                ->Name(Translate::getAdminTranslation("Enabled", "AdminCustomers"))
                 ->MicroData("http://schema.org/Organization","active")
                 ->IsListed();
         
@@ -628,14 +624,16 @@ class ThirdParty extends ObjectBase
         // Newsletter
         $this->FieldsFactory()->Create(SPL_T_BOOL)
                 ->Identifier("newsletter")
-                ->Name($this->spl->l("Newletter"))
+                ->Name(Translate::getAdminTranslation("Newsletter", "AdminCustomers"))
+                ->Group(Translate::getAdminTranslation("Meta", "AdminThemes"))
                 ->MicroData("http://schema.org/Organization","newsletter");
         
         //====================================================================//
         // Adverstising
         $this->FieldsFactory()->Create(SPL_T_BOOL)
                 ->Identifier("optin")
-                ->Name($this->spl->l("Advertising"))
+                ->Name(Translate::getAdminTranslation("Opt-in", "AdminCustomers"))
+                ->Group(Translate::getAdminTranslation("Meta", "AdminThemes"))
                 ->MicroData("http://schema.org/Organization","advertising");
         
         //====================================================================//
@@ -643,18 +641,20 @@ class ThirdParty extends ObjectBase
         //====================================================================//
 
         //====================================================================//
-        // TMS - Last Change Date 
+        // Creation Date 
         $this->FieldsFactory()->Create(SPL_T_DATETIME)
-                ->Identifier("date_upd")
-                ->Name($this->spl->l("Registration"))
+                ->Identifier("date_add")
+                ->Name(Translate::getAdminTranslation("Creation", "AdminSupplyOrders"))
+                ->Group(Translate::getAdminTranslation("Meta", "AdminThemes"))
                 ->MicroData("http://schema.org/DataFeedItem","dateCreated")
                 ->ReadOnly();
         
         //====================================================================//
-        // datec - Creation Date 
+        // Last Change Date 
         $this->FieldsFactory()->Create(SPL_T_DATETIME)
-                ->Identifier("date_add")
-                ->Name($this->spl->l("Last update"))
+                ->Identifier("date_upd")
+                ->Name(Translate::getAdminTranslation("Last modification", "AdminSupplyOrders"))
+                ->Group(Translate::getAdminTranslation("Meta", "AdminThemes"))
                 ->MicroData("http://schema.org/DataFeedItem","dateCreated")
                 ->ReadOnly();
      
@@ -961,8 +961,6 @@ class ThirdParty extends ObjectBase
             case 'firstname':
             case 'lastname':
             case 'passwd':
-            case 'siret':
-            case 'ape':
             case 'website':
                 $this->setSingleField($FieldName, $Data);
                 break;
@@ -973,7 +971,27 @@ class ThirdParty extends ObjectBase
                 } 
                 $this->setSingleField($FieldName, $Data);
                 break;
+
+            //====================================================================//
+            // Write SIRET With Verification
+            case 'siret':
+                if ( !Validate::isSiret($Data) ) {
+                    Splash::Log()->War("MsgLocalTpl",__CLASS__,__FUNCTION__,"Given SIRET Number is Invalid. Skipped");
+                    break;
+                }
+                $this->setSingleField($FieldName, $Data);
+                break;
                 
+            //====================================================================//
+            // Write APE With Verification
+            case 'ape':
+                if ( !Validate::isApe($Data) ) {
+                    Splash::Log()->War("MsgLocalTpl",__CLASS__,__FUNCTION__,"Given APE Code is Invalid. Skipped");
+                    break;
+                }
+                $this->setSingleField($FieldName, $Data);
+                break;
+                                        
             //====================================================================//
             // Gender Type
             case 'gender_type':

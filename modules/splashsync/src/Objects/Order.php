@@ -19,7 +19,7 @@ use Splash\Core\SplashCore      as Splash;
 
 //====================================================================//
 // Prestashop Static Classes	
-use Shop, Configuration, Currency;
+use Shop, Configuration, Currency, Translate;
 use DbQuery, Db, Tools;
 
 /**
@@ -386,7 +386,7 @@ class Order extends ObjectBase
         // Customer Object
         $this->FieldsFactory()->Create(self::ObjectId_Encode( "ThirdParty" , SPL_T_ID))
                 ->Identifier("id_customer")
-                ->Name($this->spl->l('Customer'))
+                ->Name(Translate::getAdminTranslation("Customer ID", "AdminCustomerThreads"))
                 ->MicroData("http://schema.org/Organization","ID")
                 ->isRequired();  
         
@@ -394,7 +394,7 @@ class Order extends ObjectBase
         // Reference
         $this->FieldsFactory()->Create(SPL_T_VARCHAR)
                 ->Identifier("reference")
-                ->Name($this->spl->l('Reference'))
+                ->Name(Translate::getAdminTranslation("Reference", "AdminOrders"))
                 ->MicroData("http://schema.org/Order","orderNumber")       
                 ->ReadOnly()
                 ->IsListed();
@@ -403,7 +403,7 @@ class Order extends ObjectBase
         // Order Date 
         $this->FieldsFactory()->Create(SPL_T_DATE)
                 ->Identifier("order_date")
-                ->Name($this->spl->l("Date"))
+                ->Name(Translate::getAdminTranslation("Date", "AdminProducts"))
                 ->MicroData("http://schema.org/Order","orderDate")
                 ->ReadOnly()
                 ->IsListed();
@@ -426,11 +426,13 @@ class Order extends ObjectBase
         // PRICES INFORMATIONS
         //====================================================================//
         
+        $CurrencySuffix = " (" . $this->Currency->sign . ")";
+                
         //====================================================================//
         // Order Total Price HT
         $this->FieldsFactory()->Create(SPL_T_DOUBLE)
                 ->Identifier("total_paid_tax_incl")
-                ->Name($this->spl->l("Total (tax excl.)") . " (" . $this->Currency->sign . ")")
+                ->Name(Translate::getAdminTranslation("Total (Tax excl.)", "AdminOrders") . $CurrencySuffix)
                 ->MicroData("http://schema.org/Invoice","totalPaymentDue")
                 ->isListed()
                 ->ReadOnly();
@@ -439,7 +441,7 @@ class Order extends ObjectBase
         // Order Total Price TTC
         $this->FieldsFactory()->Create(SPL_T_DOUBLE)
                 ->Identifier("total_paid_tax_excl")
-                ->Name($this->spl->l("Total (tax incl.)") . " (" . $this->Currency->sign . ")")
+                ->Name(Translate::getAdminTranslation("Total (Tax incl.)", "AdminOrders") . $CurrencySuffix)
                 ->MicroData("http://schema.org/Invoice","totalPaymentDueTaxIncluded")
                 ->isListed()
                 ->ReadOnly();        
@@ -452,7 +454,8 @@ class Order extends ObjectBase
         // Order Current Status
         $this->FieldsFactory()->Create(SPL_T_VARCHAR)
                 ->Identifier("status")
-                ->Name($this->spl->l("Status"))
+                ->Name(Translate::getAdminTranslation("Order status", "AdminStatuses"))
+                ->Description(Translate::getAdminTranslation("Status of the order", "AdminSupplyOrdersChangeState"))
                 ->MicroData("http://schema.org/Order","orderStatus")
                 ->ReadOnly();      
 
@@ -460,14 +463,17 @@ class Order extends ObjectBase
         // ORDER STATUS FLAGS
         //====================================================================//        
         
+        $Prefix = Translate::getAdminTranslation("Order status", "AdminOrders") . " ";
+        
         //====================================================================//
         // Is Canceled
         // => There is no Diffrence Between a Draft & Canceled Order on Prestashop. 
         //      Any Non Validated Order is considered as Canceled
         $this->FieldsFactory()->Create(SPL_T_BOOL)
                 ->Identifier("isCanceled")
-                ->Name($this->spl->l("Order") . " : " . $this->spl->l("Canceled"))
+                ->Name($Prefix . $this->spl->l("Canceled"))
                 ->MicroData("http://schema.org/OrderStatus","OrderCancelled")
+                ->Group(Translate::getAdminTranslation("Meta", "AdminThemes"))
                 ->Association( "isCanceled","isValidated","isClosed")
                 ->ReadOnly();     
         
@@ -475,8 +481,9 @@ class Order extends ObjectBase
         // Is Validated
         $this->FieldsFactory()->Create(SPL_T_BOOL)
                 ->Identifier("isValidated")
-                ->Name($this->spl->l("Order") . " : " . $this->spl->l("Valid"))
+                ->Name($Prefix . Translate::getAdminTranslation("Valid", "AdminCartRules"))
                 ->MicroData("http://schema.org/OrderStatus","OrderProcessing")
+                ->Group(Translate::getAdminTranslation("Meta", "AdminThemes"))
                 ->Association( "isCanceled","isValidated","isClosed")
                 ->ReadOnly();
         
@@ -484,8 +491,9 @@ class Order extends ObjectBase
         // Is Closed
         $this->FieldsFactory()->Create(SPL_T_BOOL)
                 ->Identifier("isClosed")
-                ->Name($this->spl->l("Order") . " : " . $this->spl->l("Closed"))
+                ->Name($Prefix . Translate::getAdminTranslation("Closed", "AdminCustomers"))
                 ->MicroData("http://schema.org/OrderStatus","OrderDelivered")
+                ->Group(Translate::getAdminTranslation("Meta", "AdminThemes"))
                 ->Association( "isCanceled","isValidated","isClosed")
                 ->ReadOnly();
 
@@ -493,7 +501,8 @@ class Order extends ObjectBase
         // Is Paid
         $this->FieldsFactory()->Create(SPL_T_BOOL)
                 ->Identifier("isPaid")
-                ->Name($this->spl->l("Order") . " : " . $this->spl->l("Paid"))
+                ->Name($Prefix . $this->spl->l("Paid"))
+                ->Group(Translate::getAdminTranslation("Meta", "AdminThemes"))
                 ->MicroData("http://schema.org/OrderStatus","OrderPaid")
                 ->NotTested();
         
@@ -505,24 +514,14 @@ class Order extends ObjectBase
     */
     private function buildProductsLineFields() {
         
-        $ListName = $this->spl->l("Cart") . " => " ;
-        
-        //====================================================================//
-        // Order Line Label
-//        $this->FieldsFactory()->Create(SPL_T_VARCHAR)
-//                ->Identifier("label")
-//                ->InList("lines")
-//                ->Name( $ListName . $langs->trans("Label"))
-//                ->MicroData("http://schema.org/partOfInvoice","name")
-//                ->Association("description@lines","qty@lines","price@lines");        
-        
         //====================================================================//
         // Order Line Description
         $this->FieldsFactory()->Create(SPL_T_VARCHAR)
                 ->Identifier("product_name")
                 ->InList("lines")
-                ->Name( $ListName . $this->spl->l("Description"))
-                ->MicroData("http://schema.org/partOfInvoice","description")        
+                ->Name(Translate::getAdminTranslation("Short description", "AdminProducts"))
+                ->MicroData("http://schema.org/partOfInvoice","description")       
+                ->Group(Translate::getAdminTranslation("Products", "AdminOrders"))
                 ->Association("product_name@lines","product_quantity@lines","unit_price@lines");        
 
         //====================================================================//
@@ -530,8 +529,9 @@ class Order extends ObjectBase
         $this->FieldsFactory()->Create(self::ObjectId_Encode( "Product" , SPL_T_ID))        
                 ->Identifier("product_id")
                 ->InList("lines")
-                ->Name( $ListName . $this->spl->l("Product"))
+                ->Name(Translate::getAdminTranslation("Product ID", "AdminImport"))
                 ->MicroData("http://schema.org/Product","productID")
+                ->Group(Translate::getAdminTranslation("Products", "AdminOrders"))
                 ->Association("product_name@lines","product_quantity@lines","unit_price@lines");        
 //                ->NotTested();        
 
@@ -540,8 +540,9 @@ class Order extends ObjectBase
         $this->FieldsFactory()->Create(SPL_T_INT)        
                 ->Identifier("product_quantity")
                 ->InList("lines")
-                ->Name( $ListName . $this->spl->l("Quantity"))
+                ->Name(Translate::getAdminTranslation("Quantity", "AdminOrders"))
                 ->MicroData("http://schema.org/QuantitativeValue","value")        
+                ->Group(Translate::getAdminTranslation("Products", "AdminOrders"))
                 ->Association("product_name@lines","product_quantity@lines","unit_price@lines");        
 
         //====================================================================//
@@ -549,8 +550,9 @@ class Order extends ObjectBase
         $this->FieldsFactory()->Create(SPL_T_DOUBLE)        
                 ->Identifier("reduction_percent")
                 ->InList("lines")
-                ->Name( $ListName . $this->spl->l("Discount (%)"))
+                ->Name(Translate::getAdminTranslation("Discount (%)", "AdminGroups"))
                 ->MicroData("http://schema.org/Order","discount")
+                ->Group(Translate::getAdminTranslation("Products", "AdminOrders"))
                 ->Association("product_name@lines","product_quantity@lines","unit_price@lines");        
 
         //====================================================================//
@@ -558,8 +560,9 @@ class Order extends ObjectBase
         $this->FieldsFactory()->Create(SPL_T_PRICE)        
                 ->Identifier("unit_price")
                 ->InList("lines")
-                ->Name( $ListName . $this->spl->l("Price"))
+                ->Name(Translate::getAdminTranslation("Price", "AdminOrders"))
                 ->MicroData("http://schema.org/PriceSpecification","price")        
+                ->Group(Translate::getAdminTranslation("Products", "AdminOrders"))
                 ->Association("product_name@lines","product_quantity@lines","unit_price@lines");        
 
     }
@@ -569,87 +572,29 @@ class Order extends ObjectBase
     */
     private function buildMetaFields() {
 
-        
-        //====================================================================//
-        // STRUCTURAL INFORMATIONS
-        //====================================================================//
-
-//        //====================================================================//
-//        // Order Generic Status
-//        $this->FieldsFactory()->Create(SPL_T_BOOL)
-//                ->Identifier("status")
-//                ->Name($langs->trans("Active"))
-//                ->MicroData("http://schema.org/Organization","active")
-//                ->IsListed();        
-//        
-//        if ( Splash::Local()->DolVersionCmp("3.6.0") >= 0 ) {
-//            //====================================================================//
-//            // isProspect
-//            $this->FieldsFactory()->Create(SPL_T_BOOL)
-//                    ->Identifier("prospect")
-//                    ->Name($langs->trans("Prospect"))
-//                    ->MicroData("http://schema.org/Organization","prospect");        
-//        }
-
         //====================================================================//
         // TRACEABILITY INFORMATIONS
         //====================================================================//        
         
         //====================================================================//
-        // TMS - Last Change Date 
+        // Creation Date 
         $this->FieldsFactory()->Create(SPL_T_DATETIME)
-                ->Identifier("date_upd")
-                ->Name($this->spl->l("Registration"))
+                ->Identifier("date_add")
+                ->Name(Translate::getAdminTranslation("Creation", "AdminSupplyOrders"))
+                ->Group(Translate::getAdminTranslation("Meta", "AdminThemes"))
                 ->MicroData("http://schema.org/DataFeedItem","dateCreated")
                 ->ReadOnly();
         
         //====================================================================//
-        // datec - Creation Date 
+        // Last Change Date 
         $this->FieldsFactory()->Create(SPL_T_DATETIME)
-                ->Identifier("date_add")
-                ->Name($this->spl->l("Last update"))
+                ->Identifier("date_upd")
+                ->Name(Translate::getAdminTranslation("Last modification", "AdminSupplyOrders"))
+                ->Group(Translate::getAdminTranslation("Meta", "AdminThemes"))
                 ->MicroData("http://schema.org/DataFeedItem","dateCreated")
-                ->ReadOnly();      
+                ->ReadOnly();
         
-    }   
-
-    /**
-    *   @abstract     Build PostCreation Update Fields using FieldFactory
-    */
-    private function buildPostCreateFields()   {
-        global $langs;
-        
-        //====================================================================//
-        // Customer Reference
-        $this->FieldsFactory()->Create(SPL_T_VARCHAR)
-                ->Identifier("ref_client")
-                ->Name($langs->trans("RefCustomerOrder"))
-                ->MicroData("http://schema.org/Order","description");
-        
-        //====================================================================//
-        // Internal Reference
-        $this->FieldsFactory()->Create(SPL_T_VARCHAR)
-                ->Identifier("ref_int")
-                ->Name($langs->trans("InternalRef"))
-                ->MicroData("http://schema.org/Order","name");
-                
-        //====================================================================//
-        // External Reference
-        $this->FieldsFactory()->Create(SPL_T_VARCHAR)
-                ->Identifier("ref_ext")
-                ->Name($langs->trans("RefExt"))
-                ->IsListed()
-                ->MicroData("http://schema.org/Order","alternateName");
-        
-        //====================================================================//
-        // Order Current Status
-        $this->FieldsFactory()->Create(SPL_T_VARCHAR)
-                ->Identifier("status")
-                ->Name($langs->trans("Status"))
-                ->MicroData("http://schema.org/Order","orderStatus")
-                ->NotTested();
-
-    }    
+    }
     
     //====================================================================//
     // Fields Reading Functions

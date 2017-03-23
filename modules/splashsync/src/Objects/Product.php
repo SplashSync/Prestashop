@@ -19,7 +19,7 @@ use Splash\Core\SplashCore      as Splash;
 
 //====================================================================//
 // Prestashop Static Classes	
-use Shop, Configuration, Currency, Combination, Language, Context;
+use Shop, Configuration, Currency, Combination, Language, Context, Translate;
 use Image, ImageType, ImageManager, StockAvailable;
 use DbQuery, Db, Tools;
 
@@ -520,8 +520,8 @@ class Product extends ObjectBase
         // Reference
         $this->FieldsFactory()->Create(SPL_T_VARCHAR)
                 ->Identifier("ref")
-                ->Name($this->spl->l('Reference'))
-                ->Description($this->spl->l('Internal Reference'))
+                ->Name(Translate::getAdminTranslation("Reference", "AdminProducts"))
+                ->Description(Translate::getAdminTranslation('Your internal reference code for this product.', "AdminProducts"))
                 ->IsListed()
                 ->MicroData("http://schema.org/Product","model")
                 ->isRequired();
@@ -530,8 +530,8 @@ class Product extends ObjectBase
         // Product Type Id
         $this->FieldsFactory()->Create(SPL_T_INT)
                 ->Identifier("type-id")
-                ->Name($this->spl->l('Type Identifier'))
-                ->Description($this->spl->l('Product Type Identifier'))
+                ->Name(Translate::getAdminTranslation("Type", "AdminProducts"))
+                ->Description(Translate::getAdminTranslation("Type", "AdminProducts"))
                 ->MicroData("http://schema.org/Product","type")
                 ->ReadOnly();
         
@@ -550,6 +550,9 @@ class Product extends ObjectBase
     */
     private function buildDescFields()   {
         
+        $GroupName  = Translate::getAdminTranslation("Information", "AdminProducts");
+        $GroupName2 = Translate::getAdminTranslation("SEO", "AdminProducts");
+        
         //====================================================================//
         // PRODUCT DESCRIPTIONS
         //====================================================================//
@@ -561,6 +564,7 @@ class Product extends ObjectBase
                 ->Name($this->spl->l("Product Name without Options"))
                 ->IsListed()
                 ->MicroData("http://schema.org/Product","alternateName")
+                ->Group($GroupName)
                 ->isRequired();
 
         //====================================================================//
@@ -569,49 +573,60 @@ class Product extends ObjectBase
                 ->Identifier("fullname")
                 ->Name($this->spl->l("Product Name with Options"))
                 ->ReadOnly()
+                ->Group($GroupName)
                 ->MicroData("http://schema.org/Product","name");
 
         //====================================================================//
         // Long Description
         $this->FieldsFactory()->Create(SPL_T_MTEXT)
                 ->Identifier("description")
-                ->Name($this->spl->l("Description"))
+                ->Name(Translate::getAdminTranslation("Short description", "AdminProducts"))                
+                ->Group($GroupName)
                 ->MicroData("http://schema.org/Article","articleBody");
         
         //====================================================================//
         // Short Description
         $this->FieldsFactory()->Create(SPL_T_MVARCHAR)
                 ->Identifier("description_short")
-                ->Name($this->spl->l("Short Description"))
+                ->Name(Translate::getAdminTranslation("Description", "AdminProducts"))                
+                ->Group($GroupName)
                 ->MicroData("http://schema.org/Product","description");
 
         //====================================================================//
         // Meta Description
         $this->FieldsFactory()->Create(SPL_T_MVARCHAR)
                 ->Identifier("meta_description")
-                ->Name($this->spl->l("SEO") . " " . $this->spl->l("Meta description"))
+                ->Name(Translate::getAdminTranslation("Meta description", "AdminProducts"))
+                ->Description($GroupName2 . " " . Translate::getAdminTranslation("Meta description", "AdminProducts"))
+                ->Group($GroupName2)
                 ->MicroData("http://schema.org/Article","headline");
 
         //====================================================================//
         // Meta Title
         $this->FieldsFactory()->Create(SPL_T_MVARCHAR)
                 ->Identifier("meta_title")
-                ->Name($this->spl->l("SEO") . " " . $this->spl->l("Meta title"))
+                ->Name(Translate::getAdminTranslation("Meta title", "AdminProducts"))
+                ->Description($GroupName2 . " " . Translate::getAdminTranslation("Meta title", "AdminProducts"))
+                ->Group($GroupName2)
                 ->MicroData("http://schema.org/Article","name");
         
         //====================================================================//
         // Meta KeyWords
         $this->FieldsFactory()->Create(SPL_T_MVARCHAR)
                 ->Identifier("meta_keywords")
-                ->Name($this->spl->l("SEO") . " " . $this->spl->l("Meta keywords"))
+                ->Name(Translate::getAdminTranslation("Meta keywords", "AdminProducts"))
+                ->Description($GroupName2 . " " . Translate::getAdminTranslation("Meta keywords", "AdminProducts"))
                 ->MicroData("http://schema.org/Article","keywords")
+                ->Group($GroupName2)
                 ->ReadOnly();
 
         //====================================================================//
         // Meta KeyWords
         $this->FieldsFactory()->Create(SPL_T_MVARCHAR)
                 ->Identifier("link_rewrite")
-                ->Name($this->spl->l("SEO") . " " . $this->spl->l("Friendly URL:"))
+                ->Name(Translate::getAdminTranslation("Friendly URL", "AdminProducts"))
+                ->Description($GroupName2 . " " . Translate::getAdminTranslation("Friendly URL", "AdminProducts"))
+                ->Group($GroupName2)
                 ->MicroData("http://schema.org/Product","urlRewrite");
         
     }    
@@ -620,6 +635,11 @@ class Product extends ObjectBase
     *   @abstract     Build Address Fields using FieldFactory
     */
     private function buildMainFields() {
+        
+        $GroupName  = Translate::getAdminTranslation("Shipping", "AdminProducts");
+        $GroupName2 = Translate::getAdminTranslation("Prices", "AdminProducts");
+        $GroupName3 = Translate::getAdminTranslation("Images", "AdminProducts");
+        
         //====================================================================//
         // PRODUCT SPECIFICATIONS
         //====================================================================//
@@ -628,28 +648,32 @@ class Product extends ObjectBase
         // Weight
         $this->FieldsFactory()->Create(SPL_T_DOUBLE)
                 ->Identifier("weight")
-                ->Name($this->spl->l("Weight"))
+                ->Name(Translate::getAdminTranslation("Package weight", "AdminProducts"))
+                ->Group($GroupName)
                 ->MicroData("http://schema.org/Product","weight");
         
         //====================================================================//
         // Height
         $this->FieldsFactory()->Create(SPL_T_DOUBLE)
                 ->Identifier("height")
-                ->Name($this->spl->l("Height"))
+                ->Name(Translate::getAdminTranslation("Package height", "AdminProducts"))
+                ->Group($GroupName)
                 ->MicroData("http://schema.org/Product","height");
         
         //====================================================================//
         // Depth
         $this->FieldsFactory()->Create(SPL_T_DOUBLE)
                 ->Identifier("depth")
-                ->Name($this->spl->l("Depth"))
+                ->Name(Translate::getAdminTranslation("Package depth", "AdminProducts"))
+                ->Group($GroupName)
                 ->MicroData("http://schema.org/Product","depth");
         
         //====================================================================//
         // Width
         $this->FieldsFactory()->Create(SPL_T_DOUBLE)
                 ->Identifier("width")
-                ->Name($this->spl->l("Width"))
+                ->Name(Translate::getAdminTranslation("Package width", "AdminProducts"))
+                ->Group($GroupName)
                 ->MicroData("http://schema.org/Product","width");
         
         //====================================================================//
@@ -661,6 +685,7 @@ class Product extends ObjectBase
         $this->FieldsFactory()->Create(SPL_T_DOUBLE)
                 ->Identifier("surface")
                 ->Name($this->spl->l("Surface"))
+                ->Group($GroupName)
                 ->MicroData("http://schema.org/Product","surface")
                 ->ReadOnly();
         
@@ -669,6 +694,7 @@ class Product extends ObjectBase
         $this->FieldsFactory()->Create(SPL_T_DOUBLE)
                 ->Identifier("volume")
                 ->Name($this->spl->l("Volume"))
+                ->Group($GroupName)
                 ->MicroData("http://schema.org/Product","volume")
                 ->ReadOnly();
         
@@ -680,15 +706,26 @@ class Product extends ObjectBase
         // Product Selling Price
         $this->FieldsFactory()->Create(SPL_T_PRICE)
                 ->Identifier("price")
-                ->Name($this->spl->l("Selling Price HT") . " (" . $this->Currency->sign . ")")
+                ->Name(Translate::getAdminTranslation("Price (tax excl.)", "AdminProducts") . " (" . $this->Currency->sign . ")")
                 ->MicroData("http://schema.org/Product","price")
+                ->Group($GroupName2)
+                ->isListed();
+        
+        //====================================================================//
+        // Product Selling Base Price
+        $this->FieldsFactory()->Create(SPL_T_PRICE)
+                ->Identifier("price-base")
+                ->Name(Translate::getAdminTranslation("Price (tax excl.)", "AdminProducts") . " Base (" . $this->Currency->sign . ")")
+                ->MicroData("http://schema.org/Product","basePrice")
+                ->Group($GroupName2)
                 ->isListed();
         
         //====================================================================//
         // WholeSale Price
         $this->FieldsFactory()->Create(SPL_T_PRICE)
                 ->Identifier("price-wholesale")
-                ->Name($this->spl->l("Supplier Price") . " (" . $this->Currency->sign . ")")
+                ->Name(Translate::getAdminTranslation("Wholesale price", "AdminProducts") . " Base (" . $this->Currency->sign . ")")
+                ->Group($GroupName2)
                 ->MicroData("http://schema.org/Product","wholesalePrice");
         
         //====================================================================//
@@ -699,7 +736,7 @@ class Product extends ObjectBase
         // Product Cover Image Position
         $this->FieldsFactory()->Create(SPL_T_INT)
                 ->Identifier("cover_image")
-                ->Name($this->spl->l("Cover"))
+                ->Name(Translate::getAdminTranslation("Cover", "AdminProducts"))
                 ->MicroData("http://schema.org/Product","coverImage")
                 ->NotTested();
         
@@ -708,7 +745,8 @@ class Product extends ObjectBase
         $this->FieldsFactory()->Create(SPL_T_IMG)
                 ->Identifier("image")
                 ->InList("images")
-                ->Name($this->spl->l("Images"))
+                ->Name(Translate::getAdminTranslation("Images", "AdminProducts"))
+                ->Group($GroupName3)
                 ->MicroData("http://schema.org/Product","image");
         
         return;
@@ -719,6 +757,8 @@ class Product extends ObjectBase
     */
     private function buildStockFields() {
         
+        $GroupName  = Translate::getAdminTranslation("Quantities", "AdminProducts");
+        
         //====================================================================//
         // PRODUCT STOCKS
         //====================================================================//
@@ -727,23 +767,27 @@ class Product extends ObjectBase
         // Stock Reel
         $this->FieldsFactory()->Create(SPL_T_INT)
                 ->Identifier("stock")
-                ->Name($this->spl->l("Stock"))
+                ->Name(Translate::getAdminTranslation("Stock", "AdminProducts"))
                 ->MicroData("http://schema.org/Offer","inventoryLevel")
+                ->Group($GroupName)
                 ->isListed();
 
         //====================================================================//
         // Out of Stock Flag
         $this->FieldsFactory()->Create(SPL_T_BOOL)
                 ->Identifier("outofstock")
-                ->Name($this->spl->l('Out of stock'))
+                ->Name(Translate::getAdminTranslation("This product is out of stock", "AdminOrders"))
                 ->MicroData("http://schema.org/ItemAvailability","OutOfStock")
+                ->Group($GroupName)
                 ->ReadOnly();
                 
         //====================================================================//
         // Minimum Order Quantity
         $this->FieldsFactory()->Create(SPL_T_INT)
                 ->Identifier("minimal_quantity")
-                ->Name($this->spl->l('Min. Order Quantity'))
+                ->Name(Translate::getAdminTranslation("Minimum quantity", "AdminProducts"))
+                ->Description(Translate::getAdminTranslation("The minimum quantity to buy this product (set to 1 to disable this feature).", "AdminProducts"))
+                ->Group($GroupName)
                 ->MicroData("http://schema.org/Offer","eligibleTransactionVolume");
         
         return;
@@ -761,14 +805,14 @@ class Product extends ObjectBase
         // Active => Product Is Enables & Visible
         $this->FieldsFactory()->Create(SPL_T_BOOL)
                 ->Identifier("active")
-                ->Name($this->spl->l("Enabled"))
+                ->Name(Translate::getAdminTranslation("Enabled", "AdminProducts"))                
                 ->MicroData("http://schema.org/Product","active");        
         
         //====================================================================//
         // Active => Product Is available_for_order
         $this->FieldsFactory()->Create(SPL_T_BOOL)
                 ->Identifier("available_for_order")
-                ->Name($this->spl->l("Available for order"))
+                ->Name(Translate::getAdminTranslation("Available for order", "AdminProducts"))
                 ->MicroData("http://schema.org/Product","offered")
                 ->isListed();
         
@@ -784,20 +828,22 @@ class Product extends ObjectBase
         //====================================================================//        
         
         //====================================================================//
-        // TMS - Last Change Date 
+        // Creation Date 
         $this->FieldsFactory()->Create(SPL_T_DATETIME)
-                ->Identifier("date_upd")
-                ->Name($this->spl->l("Last Modification Date"))
-                ->MicroData("http://schema.org/DataFeedItem","dateModified")
+                ->Identifier("date_add")
+                ->Name(Translate::getAdminTranslation("Creation", "AdminSupplyOrders"))
+                ->Group(Translate::getAdminTranslation("Meta", "AdminThemes"))
+                ->MicroData("http://schema.org/DataFeedItem","dateCreated")
                 ->ReadOnly();
         
         //====================================================================//
-        // datec - Creation Date 
+        // Last Change Date 
         $this->FieldsFactory()->Create(SPL_T_DATETIME)
-                ->Identifier("date_add")
-                ->Name($this->spl->l("Creation Date"))
+                ->Identifier("date_upd")
+                ->Name(Translate::getAdminTranslation("Last modification", "AdminSupplyOrders"))
+                ->Group(Translate::getAdminTranslation("Meta", "AdminThemes"))
                 ->MicroData("http://schema.org/DataFeedItem","dateCreated")
-                ->ReadOnly();             
+                ->ReadOnly();
         
     }   
 
@@ -948,10 +994,23 @@ class Product extends ObjectBase
                             $this->Currency->sign,
                             $this->Currency->name);
                     break;
+                case 'price-base':
+                    //====================================================================//
+                    // Read Price
+                    $PriceHT    = (double)  Tools::convertPrice($this->Object->price,  $this->Currency);
+                    $Tax        = (double)  $this->Object->getTaxesRate();
+                    //====================================================================//
+                    // Build Price Array
+                    $this->Out[$FieldName] = self::Price_Encode(
+                            $PriceHT,$Tax,Null,
+                            $this->Currency->iso_code,
+                            $this->Currency->sign,
+                            $this->Currency->name);
+                    break;                
                 case 'price-wholesale':
                     //====================================================================//
                     // Read Price
-                    if ( $this->AttributeId && $this->Attribute->wholesale_price ) {
+                    if ( $this->AttributeId && ($this->Attribute->wholesale_price > 0) ) {
                         $PriceHT = (double) Tools::convertPrice($this->Attribute->wholesale_price,  $this->Currency);
                     } else {
                         $PriceHT = (double) Tools::convertPrice($this->Object->wholesale_price,  $this->Currency);  
@@ -964,6 +1023,7 @@ class Product extends ObjectBase
                             $this->Currency->iso_code,
                             $this->Currency->sign,
                             $this->Currency->name);
+                    
                     break;
                     
                 //====================================================================//
@@ -1271,6 +1331,20 @@ class Product extends ObjectBase
                 }
                 
                 break;    
+                
+            case 'price-base':
+                //====================================================================//
+                // Read Current Product Price (Via Out Buffer)
+                $this->getMainFields(Null,"price");
+
+                //====================================================================//
+                // Compare Prices
+                if ( !$this->Price_Compare($this->Out["price"],$Data) ) {
+                    $this->Object->price = $Data["ht"];
+                    $this->update   = True;
+                }
+                
+                break;                  
                 
             case 'price-wholesale':
                 //====================================================================//

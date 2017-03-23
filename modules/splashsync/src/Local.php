@@ -209,6 +209,15 @@ class Local
         if ( !Configuration::hasKey('SPLASH_USER_ID') || empty(Configuration::get('SPLASH_USER_ID')) ) {
             return Splash::Log()->Err("ErrSelfTestNoUser");
         }        
+
+        //====================================================================//
+        //  Verify - Languages Codes Are in Valid Format
+        foreach (Language::getLanguages() as $Language) {
+            $Tmp = explode ( "-" , $Language["language_code"]);
+            if ( count($Tmp) != 2 ) {
+                return Splash::Log()->Err("ErrSelfTestLangCode");
+            }
+        }
         
 //        //====================================================================//
 //        //  Verify - Stock Selected

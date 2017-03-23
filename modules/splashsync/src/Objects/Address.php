@@ -19,7 +19,7 @@ use Splash\Core\SplashCore      as Splash;
 
 //====================================================================//
 // Prestashop Static Classes	
-use Country, Customer, State;
+use Country, Customer, State, Translate;
 use DbQuery, Db, Context;
 
 
@@ -400,14 +400,15 @@ class Address extends ObjectBase
         // Alias
         $this->FieldsFactory()->Create(SPL_T_VARCHAR)
                 ->Identifier("alias")
-                ->Name($this->spl->l("Alias"))
+                ->Name($this->spl->l("Address alias"))
+                ->Name(Translate::getAdminTranslation("Address alias", "AdminAddresses"))
                 ->MicroData("http://schema.org/PostalAddress","name");
         
         //====================================================================//
         // Customer
         $this->FieldsFactory()->Create(self::ObjectId_Encode( "ThirdParty" , SPL_T_ID))
                 ->Identifier("id_customer")
-                ->Name($this->spl->l("Customer"))
+                ->Name(Translate::getAdminTranslation("Customer ID", "AdminCustomerThreads"))
                 ->MicroData("http://schema.org/Organization","ID")
                 ->isRequired();
         
@@ -415,7 +416,7 @@ class Address extends ObjectBase
         // Company
         $this->FieldsFactory()->Create(SPL_T_VARCHAR)
                 ->Identifier("company")
-                ->Name($this->spl->l("Company"))
+                ->Name(Translate::getAdminTranslation("Company", "AdminCustomers"))
                 ->MicroData("http://schema.org/Organization","legalName")
                 ->isListed();
         
@@ -423,7 +424,7 @@ class Address extends ObjectBase
         // Firstname
         $this->FieldsFactory()->Create(SPL_T_VARCHAR)
                 ->Identifier("firstname")
-                ->Name($this->spl->l("First name"))
+                ->Name(Translate::getAdminTranslation("First name", "AdminCustomers"))
                 ->MicroData("http://schema.org/Person","familyName")
                 ->Association("firstname","lastname")        
                 ->isRequired()
@@ -433,7 +434,7 @@ class Address extends ObjectBase
         // Lastname
         $this->FieldsFactory()->Create(SPL_T_VARCHAR)
                 ->Identifier("lastname")
-                ->Name($this->spl->l("Last name"))
+                ->Name(Translate::getAdminTranslation("Last name", "AdminCustomers"))
                 ->MicroData("http://schema.org/Person","givenName")
                 ->Association("firstname","lastname")            
                 ->isRequired()
@@ -445,13 +446,13 @@ class Address extends ObjectBase
     */
     private function buildMainFields()
     {
-        $GroupName  =   $this->spl->l("Address");
-        
+        $GroupName  =   Translate::getAdminTranslation("Address", "AdminCustomers");
+
         //====================================================================//
         // Addess
         $this->FieldsFactory()->Create(SPL_T_VARCHAR)
                 ->Identifier("address1")
-                ->Name($this->spl->l("Address"))
+                ->Name($GroupName)
                 ->MicroData("http://schema.org/PostalAddress","streetAddress")
                 ->Group($GroupName)
                 ->isRequired();
@@ -460,7 +461,7 @@ class Address extends ObjectBase
         // Addess Complement
         $this->FieldsFactory()->Create(SPL_T_VARCHAR)
                 ->Identifier("address2")
-                ->Name($this->spl->l("Address"))
+                ->Name($GroupName . " (2)")
                 ->Group($GroupName)
                 ->MicroData("http://schema.org/PostalAddress","postOfficeBoxNumber");
         
@@ -468,7 +469,7 @@ class Address extends ObjectBase
         // Zip Code
         $this->FieldsFactory()->Create(SPL_T_VARCHAR)
                 ->Identifier("postcode")
-                ->Name($this->spl->l("Zip/Postal Code","AdminAddresses"))
+                ->Name(Translate::getAdminTranslation("Zip/Postal Code", "AdminAddresses"))
                 ->MicroData("http://schema.org/PostalAddress","postalCode")
                 ->Group($GroupName)
                 ->isRequired();
@@ -477,7 +478,7 @@ class Address extends ObjectBase
         // City Name
         $this->FieldsFactory()->Create(SPL_T_VARCHAR)
                 ->Identifier("city")
-                ->Name($this->spl->l("City"))
+                ->Name(Translate::getAdminTranslation("City", "AdminAddresses"))
                 ->MicroData("http://schema.org/PostalAddress","addressLocality")
                 ->Group($GroupName)
                 ->isRequired()
@@ -487,7 +488,7 @@ class Address extends ObjectBase
         // State Name
         $this->FieldsFactory()->Create(SPL_T_VARCHAR)
                 ->Identifier("state")
-                ->Name($this->spl->l("State"))
+                ->Name(Translate::getAdminTranslation("State", "AdminAddresses"))
                 ->Group($GroupName)
                 ->ReadOnly();
         
@@ -495,7 +496,7 @@ class Address extends ObjectBase
         // State code
         $this->FieldsFactory()->Create(SPL_T_STATE)
                 ->Identifier("id_state")
-                ->Name($this->spl->l("StateCode"))
+                ->Name(Translate::getAdminTranslation("State", "AdminAddresses") . " (Code)")
                 ->Group($GroupName)
                 ->MicroData("http://schema.org/PostalAddress","addressRegion");
         
@@ -503,7 +504,7 @@ class Address extends ObjectBase
         // Country Name
         $this->FieldsFactory()->Create(SPL_T_VARCHAR)
                 ->Identifier("country")
-                ->Name($this->spl->l("Country"))
+                ->Name(Translate::getAdminTranslation("Country", "AdminAddresses"))
                 ->Group($GroupName)
                 ->ReadOnly()
                 ->isListed();
@@ -512,7 +513,7 @@ class Address extends ObjectBase
         // Country ISO Code
         $this->FieldsFactory()->Create(SPL_T_COUNTRY)
                 ->Identifier("id_country")
-                ->Name($this->spl->l("CountryCode"))
+                ->Name(Translate::getAdminTranslation("Country", "AdminAddresses") . " (Code)")
                 ->MicroData("http://schema.org/PostalAddress","addressCountry")
                 ->Group($GroupName)
                 ->isRequired();
@@ -528,14 +529,14 @@ class Address extends ObjectBase
         // Phone
         $this->FieldsFactory()->Create(SPL_T_PHONE)
                 ->Identifier("phone")
-                ->Name($this->spl->l("Home phone"))
+                ->Name(Translate::getAdminTranslation("Home phone", "AdminAddresses"))
                 ->MicroData("http://schema.org/PostalAddress","telephone");
         
         //====================================================================//
         // Mobile Phone
         $this->FieldsFactory()->Create(SPL_T_PHONE)
                 ->Identifier("phone_mobile")
-                ->Name($this->spl->l("Mobile phone"))
+                ->Name(Translate::getAdminTranslation("Mobile phone", "AdminAddresses"))
                 ->MicroData("http://schema.org/Person","telephone");
 
         //====================================================================//
@@ -569,21 +570,22 @@ class Address extends ObjectBase
         //====================================================================//
 
         //====================================================================//
-        // TMS - Last Change Date 
+        // Creation Date 
         $this->FieldsFactory()->Create(SPL_T_DATETIME)
-                ->Identifier("date_upd")
-                ->Name($this->spl->l("Registration"))
+                ->Identifier("date_add")
+                ->Name(Translate::getAdminTranslation("Creation", "AdminSupplyOrders"))
+                ->Group(Translate::getAdminTranslation("Meta", "AdminThemes"))
                 ->MicroData("http://schema.org/DataFeedItem","dateCreated")
                 ->ReadOnly();
         
         //====================================================================//
-        // datec - Creation Date 
+        // Last Change Date 
         $this->FieldsFactory()->Create(SPL_T_DATETIME)
-                ->Identifier("date_add")
-                ->Name($this->spl->l("Last update"))
+                ->Identifier("date_upd")
+                ->Name(Translate::getAdminTranslation("Last modification", "AdminSupplyOrders"))
+                ->Group(Translate::getAdminTranslation("Meta", "AdminThemes"))
                 ->MicroData("http://schema.org/DataFeedItem","dateCreated")
                 ->ReadOnly();
-        
     }    
      
     //====================================================================//
