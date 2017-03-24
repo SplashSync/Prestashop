@@ -733,14 +733,6 @@ class Product extends ObjectBase
         //====================================================================//
         
         //====================================================================//
-        // Product Cover Image Position
-        $this->FieldsFactory()->Create(SPL_T_INT)
-                ->Identifier("cover_image")
-                ->Name(Translate::getAdminTranslation("Cover", "AdminProducts"))
-                ->MicroData("http://schema.org/Product","coverImage")
-                ->NotTested();
-        
-        //====================================================================//
         // Product Images List
         $this->FieldsFactory()->Create(SPL_T_IMG)
                 ->Identifier("image")
@@ -749,6 +741,15 @@ class Product extends ObjectBase
                 ->Group($GroupName3)
                 ->MicroData("http://schema.org/Product","image");
         
+        //====================================================================//
+        // Product Images => Is Cover
+        $this->FieldsFactory()->Create(SPL_T_BOOL)
+                ->Identifier("cover")
+                ->InList("images")
+                ->Name(Translate::getAdminTranslation("Cover", "AdminProducts"))
+                ->MicroData("http://schema.org/Product","isCover")
+                ->Group($GroupName3)
+                ->NotTested();        
         return;
     }
 
@@ -1030,11 +1031,8 @@ class Product extends ObjectBase
                 // PRODUCT IMAGES
                 //====================================================================//
                 case 'image@images':     
+                case 'cover@images':     
                     $this->getImgArray();
-                    break;
-                case 'cover_image':
-                    $CoverImage             = Image::getCover((int) $this->ProductId);
-                    $this->Out[$FieldName]  = isset($CoverImage["position"])?$CoverImage["position"]:0;
                     break;
                 
             default:
@@ -1376,41 +1374,12 @@ class Product extends ObjectBase
             case 'images':
                 if ( $this->Object->id ) {
                     $this->setImgArray($Data);
+                    $this->setImgArray($Data);
                 } else {
                     $this->NewImagesArray = $Data;
                 }
                 break;
-            case 'cover_image':
-                //====================================================================//
-                // Read Product Images List
-                $ObjectImagesList   =   Image::getImages($this->LangId,$this->ProductId);
-                //====================================================================//
-                // Disable Wrong Images Cover
-                foreach ($ObjectImagesList as $ImageArray) {
-                    //====================================================================//
-                    // Is Cover Image but shall not
-                    if ($ImageArray["cover"] && ($ImageArray["position"] != $Data) ) {
-                        $ObjectImage = new Image($ImageArray["id_image"],  $this->LangId);
-                        $ObjectImage->cover     =   0;
-                        $this->update           =   True;
-                        $ObjectImage->update();
-                    }
-                }
-                //====================================================================//
-                // Enable New Image Cover
-                foreach ($ObjectImagesList as $ImageArray) {
-                    //====================================================================//
-                    // Is Cover Image but shall not
-                    if (!$ImageArray["cover"] && ($ImageArray["position"] == $Data) ) {
-                        $ObjectImage = new Image($ImageArray["id_image"],  $this->LangId);
-                        $ObjectImage->cover     =   1;
-                        $this->update           =   True;
-                        $ObjectImage->update();
-                    }
-                }
-                break;
 
-                
             default:
                 return;
         }
@@ -1746,8 +1715,8 @@ class Product extends ObjectBase
             if ( !isset($this->Out["images"][$key]) ) {
                 $this->Out["images"][$key] = array();
             }
-
             $this->Out["images"][$key]["image"] = $Image;
+            $this->Out["images"][$key]["cover"] = (bool) $ObjectImage->cover;
                 
         }
         return True;
@@ -1787,6 +1756,7 @@ class Product extends ObjectBase
             }
             $this->ImgPosition++;
             $InImage = $InValue["image"];
+            $IsCover = $InValue["cover"];
             
             //====================================================================//
             // Search For Image In Current List
@@ -1816,6 +1786,13 @@ class Product extends ObjectBase
                 if ( !$this->AttributeId && ( $this->ImgPosition != $ObjectImage->position) ){
                     $ObjectImage->updatePosition( $this->ImgPosition < $ObjectImage->position ,$this->ImgPosition);
                 } 
+                //====================================================================//
+                // Update Image is Cover Flag
+                if ( ((bool) $ObjectImage->cover) !==  ((bool) $IsCover) ){
+                    $ObjectImage->cover = $IsCover;
+                    $ObjectImage->update();
+                    $this->update = True;
+                } 
                 break;
             }
             //====================================================================//
@@ -1825,7 +1802,7 @@ class Product extends ObjectBase
             }
             //====================================================================//
             // If Not found, Add this object to list
-            $this->setImg($InImage);
+            $this->setImg($InImage,$IsCover);
         }
         
         //====================================================================//
@@ -1866,11 +1843,11 @@ class Product extends ObjectBase
     *   @abstract     Import a Product Image from Server Data
     *   @param        array   $ImgArray             Splash Image Definition Array    
     */
-    public function setImg($ImgArray) 
+    public function setImg($ImgArray,$IsCover) 
     {
         //====================================================================//
         // If Not found, Add this object to list
-        $NewImageFile    =   Splash::File()->getFile($ImgArray["filename"],$ImgArray["md5"]);
+        $NewImageFile    =   Splash::File()->getFile($ImgArray["file"],$ImgArray["md5"]);
         
         //====================================================================//
         // File Imported => Write it Here
@@ -1885,7 +1862,8 @@ class Product extends ObjectBase
         $ObjectImage->label         = isset($NewImageFile["name"]) ? $NewImageFile["name"] : $NewImageFile["filename"];
         $ObjectImage->id_product    = $this->ProductId;
         $ObjectImage->position      = $this->ImgPosition;
-
+        $ObjectImage->cover         = $IsCover;
+        
         if ( !$ObjectImage->add() ) {
             return False;
         }

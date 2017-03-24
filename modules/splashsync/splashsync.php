@@ -17,12 +17,9 @@
  * @abstract    Splash Sync Prestahop Module - Noty Notifications
  * @author      B. Paquier <contact@splashsync.com>
  */
-
 if (!defined('_PS_VERSION_')) {
     exit;
 }
-
-use Splash\Client\Splash;
 
 class SplashSync extends Module
 {
@@ -75,7 +72,7 @@ class SplashSync extends Module
                 require_once( dirname(__FILE__) . "/vendor/autoload.php");
                 //====================================================================//
                 // Init Splash Module
-                Splash::Core();
+                Splash\Client\Splash::Core();
             }
             //====================================================================//
             // INIT Context VAriables
@@ -506,16 +503,16 @@ class SplashSync extends Module
         //====================================================================//
         // Execute Module SelfTests
         //====================================================================//
-        Splash::SelfTest();
+        Splash\Client\Splash::SelfTest();
         //====================================================================//
         // Post Splash Messages
-        $this->_importMessages(Splash::Log());
+        $this->_importMessages(Splash\Client\Splash::Log());
         
         //====================================================================//
         // List Objects
         //====================================================================//
-        $ObjectsList    = count(Splash::Objects()) . ' (';
-        foreach (Splash::Objects() as $value) {
+        $ObjectsList    = count(Splash\Client\Splash::Objects()) . ' (';
+        foreach (Splash\Client\Splash::Objects() as $value) {
             $ObjectsList    .= $value . ", ";
         }
         $ObjectsList    .= ")";
@@ -528,12 +525,12 @@ class SplashSync extends Module
         );
         //====================================================================//
         // Post Splash Messages
-        $this->_importMessages(Splash::Log());
+        $this->_importMessages(Splash\Client\Splash::Log());
         
         //====================================================================//
         // Splash Server Ping
         //====================================================================//
-        if ( Splash::Ping() ) {
+        if ( Splash\Client\Splash::Ping() ) {
             $Result = $this->l('Passed');
         } else {
             $Result = $this->l('Fail');
@@ -547,12 +544,12 @@ class SplashSync extends Module
         );
         //====================================================================//
         // Post Splash Messages
-        $this->_importMessages(Splash::Log());
+        $this->_importMessages(Splash\Client\Splash::Log());
         
         //====================================================================//
         // Splash Server Connect
         //====================================================================//
-        if ( Splash::Connect() ) {
+        if ( Splash\Client\Splash::Connect() ) {
             $Result = $this->l('Passed');
         } else {
             $Result = $this->l('Fail');
@@ -566,7 +563,7 @@ class SplashSync extends Module
         );
         //====================================================================//
         // Post Splash Messages
-        $this->_importMessages(Splash::Log());
+        $this->_importMessages(Splash\Client\Splash::Log());
         
         //====================================================================//
         // Build Html Results List
@@ -606,25 +603,25 @@ class SplashSync extends Module
         //====================================================================//
         // Safety Checks
         if (is_numeric($_Id)) {
-            Splash::Log()->Deb("Splash Commit => Type = " . $_Type . " Action = " . $_Action . " Id = " . $_Id);     
+            Splash\Client\Splash::Log()->Deb("Splash Commit => Type = " . $_Type . " Action = " . $_Action . " Id = " . $_Id);     
         } else if (is_array($_Id) && empty($_Id)) {
-            return Splash::Log()->War("Splash Commit => Empty Array");
+            return Splash\Client\Splash::Log()->War("Splash Commit => Empty Array");
         } else if (is_array($_Id)) {
-            Splash::Log()->Deb("Splash Commit => Type = " . $_Type . " Action = " . $_Action . " Multiple Id (x" . count($_Id) . ")");     
+            Splash\Client\Splash::Log()->Deb("Splash Commit => Type = " . $_Type . " Action = " . $_Action . " Multiple Id (x" . count($_Id) . ")");     
         } else {
-            return Splash::Log()->Err("Splash Hook Error : Wrong Id List Given => " . print_r($_Id,1));
+            return Splash\Client\Splash::Log()->Err("Splash Hook Error : Wrong Id List Given => " . print_r($_Id,1));
         }
         
         //====================================================================//
         // Check if Object is in Remote Create Mode
-        if ( Splash::Object($_Type)->isLocked() && ($_Action == SPL_A_UPDATE) ) {
+        if ( Splash\Client\Splash::Object($_Type)->isLocked() && ($_Action == SPL_A_UPDATE) ) {
             //====================================================================//
             // Overide Action For Create
             $_Action = SPL_A_CREATE;
         } 
         
         
-//        Splash::Log()->www("Splash Commit => " , $_Id);     
+//        Splash\Client\Splash::Log()->www("Splash Commit => " , $_Id);     
         //====================================================================//
         // Prepare User Name for Logging
         if ( !empty(Context::getContext()->employee) ) {
@@ -636,10 +633,10 @@ class SplashSync extends Module
         }
         //====================================================================//
         // Commit Action on remotes nodes (Master & Slaves)
-        $result = Splash::Commit($_Type,$_Id,$_Action,$UserName,$_Comment);        
+        $result = Splash\Client\Splash::Commit($_Type,$_Id,$_Action,$UserName,$_Comment);        
         //====================================================================//
         // Post Splash Messages
-        $this->_importMessages(Splash::Log());
+        $this->_importMessages(Splash\Client\Splash::Log());
         return $result;
     }
     
@@ -733,7 +730,7 @@ class SplashSync extends Module
         //====================================================================//
         // Safety Check
         if (empty($id_product)) {
-            Splash::Log()->Err("ErrLocalTpl","Product",__FUNCTION__,"Unable to Read Product Id.");
+            Splash\Client\Splash::Log()->Err("ErrLocalTpl","Product",__FUNCTION__,"Unable to Read Product Id.");
         } 
         //====================================================================//
         // Add Base Product Commit Update List
@@ -746,7 +743,7 @@ class SplashSync extends Module
             foreach ($AttrList as $key => $Attr) {
                 //====================================================================//
                 // Add Attribute Product Commit Update List
-                $IdList[] =   (int) Splash::Object("Product")->getUnikId($id_product,$Attr["id_product_attribute"]);
+                $IdList[] =   (int) Splash\Client\Splash::Object("Product")->getUnikId($id_product,$Attr["id_product_attribute"]);
             }
         }
         //====================================================================//
@@ -789,7 +786,7 @@ class SplashSync extends Module
             if (isset($params["id_product_attribute"]) && !empty($params["id_product_attribute"])) {
                 //====================================================================//
                 // Generate Unik Product Id                
-                $UnikId     =   (int) Splash::Object("Product")->getUnikId($params["id_product"],$params["id_product_attribute"]);
+                $UnikId     =   (int) Splash\Client\Splash::Object("Product")->getUnikId($params["id_product"],$params["id_product_attribute"]);
             } else {
                 $UnikId     =   (int) $params["id_product"];
             }            
@@ -810,7 +807,7 @@ class SplashSync extends Module
             if (isset($Product["id_product_attribute"]) && !empty($Product["id_product_attribute"])) {
                 //====================================================================//
                 // Generate Unik Product Id                
-                $UnikId[]       =   (int) Splash::Object("Product")->getUnikId($Product["id_product"],$Product["id_product_attribute"]);
+                $UnikId[]       =   (int) Splash\Client\Splash::Object("Product")->getUnikId($Product["id_product"],$Product["id_product_attribute"]);
             } else {
                 $UnikId[]       =   (int) $Product["id_product"];
             }
@@ -841,14 +838,14 @@ class SplashSync extends Module
         //====================================================================//
         // Safety Check
         if (empty($id_combination)) {
-            return Splash::Log()->Err("ErrLocalTpl","Combination",__FUNCTION__,"Unable to Read Product Attribute Id.");
+            return Splash\Client\Splash::Log()->Err("ErrLocalTpl","Combination",__FUNCTION__,"Unable to Read Product Attribute Id.");
         } 
         if (empty($combination->id_product)) {
-            return Splash::Log()->Err("ErrLocalTpl","Combination",__FUNCTION__,"Unable to Read Product Id.");
+            return Splash\Client\Splash::Log()->Err("ErrLocalTpl","Combination",__FUNCTION__,"Unable to Read Product Id.");
         } 
         //====================================================================//
         // Generate Unik Product Id                
-        $UnikId       =   (int) Splash::Object("Product")->getUnikId($combination->id_product,$id_combination);
+        $UnikId       =   (int) Splash\Client\Splash::Object("Product")->getUnikId($combination->id_product,$id_combination);
         //====================================================================//
         // Commit Update For Product Attribute               
         return $this->_Commit("Product",$UnikId,$action,$comment);
@@ -869,7 +866,7 @@ class SplashSync extends Module
         //====================================================================//
         // Check Hook Trigger
         if ( $this->_getFlag(SPL_O_PRODCAT, $params["category"]->id) ) {
-            Splash::Log()->Deb("Category Already Added");
+            Splash\Client\Splash::Log()->Deb("Category Already Added");
             return true;
         }
         //====================================================================//
@@ -894,7 +891,7 @@ class SplashSync extends Module
         //====================================================================//
         // Check Hook Trigger
         if ( $this->_getFlag(SPL_O_PRODCAT, $params["category"]->id)) {
-            Splash::Log()->Deb("Category Already Updated");
+            Splash\Client\Splash::Log()->Deb("Category Already Updated");
             return true;
         }
 
@@ -919,7 +916,7 @@ class SplashSync extends Module
         //====================================================================//
         // Check Hook Trigger
         if ( $this->_getFlag(SPL_O_PRODCAT, $params["category"]->id) ) {
-            Splash::Log()->Deb("Category Already Deleted");
+            Splash\Client\Splash::Log()->Deb("Category Already Deleted");
             return true;
         }
         //====================================================================//
@@ -986,7 +983,7 @@ class SplashSync extends Module
         //====================================================================//
         // Safety Check
         if (empty($id_customer)) {
-            Splash::Log()->Err("ErrLocalTpl",__CLASS__,__FUNCTION__,"Unable to Read Customer Id.");
+            Splash\Client\Splash::Log()->Err("ErrLocalTpl",__CLASS__,__FUNCTION__,"Unable to Read Customer Id.");
         } 
         //====================================================================//
         // Commit Update For Product                
@@ -1075,7 +1072,7 @@ class SplashSync extends Module
         //====================================================================//
         // Safety Check
         if (empty($id_order)) {
-            Splash::Log()->Err("ErrLocalTpl","Order",__FUNCTION__,"Unable to Read Order Id.");
+            Splash\Client\Splash::Log()->Err("ErrLocalTpl","Order",__FUNCTION__,"Unable to Read Order Id.");
         } 
         //====================================================================//
         // Commit Update For Order                
@@ -1144,7 +1141,7 @@ class SplashSync extends Module
         //====================================================================//
         // Safety Check
         if (empty($id)) {
-            Splash::Log()->Err("ErrLocalTpl","Invoice",__FUNCTION__,"Unable to Read Order Invoice Id.");
+            Splash\Client\Splash::Log()->Err("ErrLocalTpl","Invoice",__FUNCTION__,"Unable to Read Order Invoice Id.");
         } 
         //====================================================================//
         // Commit Update For Invoice                
@@ -1186,11 +1183,11 @@ class SplashSync extends Module
         
         //====================================================================//
         // Merge Cookie With Log
-        Splash::Log()->Merge(json_decode($RawNotifications,True));
+        Splash\Client\Splash::Log()->Merge(json_decode($RawNotifications,True));
 
         //====================================================================//
         // Encode & Compare
-        $NewRaw = json_encode( Splash::Log()  );
+        $NewRaw = json_encode( Splash\Client\Splash::Log()  );
         if (strcmp($RawNotifications, $NewRaw) != 0 ) {
             //====================================================================//
             // Save new Cookie String
@@ -1207,9 +1204,9 @@ class SplashSync extends Module
     private function _debHook($name,$Id,$Other=NUll)
     {
         if (_PS_MODE_DEV_ == true ) {
-            Splash::Log()->War("Hook => " . $name . " => Id " . $Id );
+            Splash\Client\Splash::Log()->War("Hook => " . $name . " => Id " . $Id );
             if ( !empty($Other) ) {
-                Splash::Log()->War("Raw => " . print_r($Other,1) );
+                Splash\Client\Splash::Log()->War("Raw => " . print_r($Other,1) );
             }
             return true;
         }
@@ -1236,7 +1233,7 @@ class SplashSync extends Module
         //====================================================================//
         // Safety Check
         if ( empty($ObjectType) || empty($Id)  || empty($Action)) { 
-            Splash::Log()->War("SetFlags => Empty Data Given ObjectType => " . $ObjectType . " Id => " . $Id . " Action => " . $Action);            
+            Splash\Client\Splash::Log()->War("SetFlags => Empty Data Given ObjectType => " . $ObjectType . " Id => " . $Id . " Action => " . $Action);            
             return false; 
         }
         //====================================================================//
@@ -1266,7 +1263,7 @@ class SplashSync extends Module
         //====================================================================//
         // Safety Check
         if ( empty($ObjectType) || empty($Id) || empty($Action) ) { 
-            Splash::Log()->War("GetFlags => Empty Data Given ObjectType => " . $ObjectType . " Id => " . $Id . " Action => " . $Action);            
+            Splash\Client\Splash::Log()->War("GetFlags => Empty Data Given ObjectType => " . $ObjectType . " Id => " . $Id . " Action => " . $Action);            
             return false; 
         }        
         //====================================================================//
@@ -1277,7 +1274,7 @@ class SplashSync extends Module
         if ( !is_array($flags))  { return false; }
 
         if ( isset($flags[$ObjectType . "__" . $Id . "__" . $Action]) && ($flags[$ObjectType . "__" . $Id . "__" . $Action] == True) ) {
-            Splash::Log()->War("GetFlags => Object Locked ObjectType => " . $ObjectType . " Id => " . $Id . " Action => " . $Action);   
+            Splash\Client\Splash::Log()->War("GetFlags => Object Locked ObjectType => " . $ObjectType . " Id => " . $Id . " Action => " . $Action);   
             return true;
         }
         return false;
