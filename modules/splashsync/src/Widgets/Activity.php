@@ -131,8 +131,7 @@ class Activity extends WidgetBase
         
         //====================================================================//
         // Init Dates
-        $From = $Inputs["DateStart"];
-        $To = $Inputs["DateEnd"];
+        $this->importDates($Inputs);
         
         //====================================================================//
         // Load Default Currency
@@ -147,8 +146,8 @@ class Activity extends WidgetBase
 
         //====================================================================//
         // Build data Array
-        $RawData                =   $this->getData($From, $To);
-        $RefineData             =   $this->refineData($From, $To, $RawData);
+        $RawData                =   $this->getData($this->DateStart, $this->DateEnd);
+        $RefineData             =   $this->refineData($this->DateStart, $this->DateEnd, $RawData);
         $ActivityData           =   $this->addupData($RefineData);
 
         //====================================================================//
@@ -156,8 +155,6 @@ class Activity extends WidgetBase
         //====================================================================//
         $this->SparkOptions = array(
             "AllowHtml"         =>  True,
-            "Separator"         =>  True,
-//            "Width"             =>  "col-lg-2"
             "Width"             =>  self::SIZE_XS
         );
             
@@ -169,28 +166,24 @@ class Activity extends WidgetBase
                     "title"     =>      $this->spl->l('Sales'),   
                     "fa_icon"   =>      "line-chart",
                     "value"     =>      \Tools::displayPrice($ActivityData["sales"], $this->currency),
-                    "chart"     =>      ["1","2","3","4","5","6","7","8"]
                     ), $this->SparkOptions )
 
                 ->addSparkInfoBlock(array(
                     "title"     =>      $this->spl->l('Orders'),   
                     "fa_icon"   =>      "shopping-cart ",
                     "value"     =>      $ActivityData["orders"],   
-                    "chart"     =>      ["1","2","3","4","5","6","7","8"]
                     ), $this->SparkOptions )
                 
                 ->addSparkInfoBlock(array(
                     "title"     =>      $this->spl->l('Average Cart Value'),   
                     "fa_icon"   =>      "shopping-cart ",
                     "value"     =>      $ActivityData["average_cart_value"],   
-                    "chart"     =>      ["1","2","3","4","5","6","7","8"]
                     ), $this->SparkOptions )
                 
                 ->addSparkInfoBlock(array(
                     "title"     =>      $this->spl->l('Net Profit'),   
                     "fa_icon"   =>      "money",
                     "value"     =>      \Tools::displayPrice($ActivityData["net_profits"], $this->currency),   
-                    "chart"     =>      ["1","2","3","4","5","6","7","8"]
                     ), $this->SparkOptions )
                 ;
 
