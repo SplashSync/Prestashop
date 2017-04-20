@@ -262,8 +262,8 @@ class Local
         //====================================================================//
         // Server Logo & Images
         $Response->icoraw           = Splash::File()->ReadFileContents(_PS_IMG_DIR_ . "favicon.ico");
-        $Response->logourl          = "http://" . Configuration::get('PS_SHOP_DOMAIN') . __PS_BASE_URI__ . "img/logo.jpg";
-        $Response->logoraw          = Splash::File()->ReadFileContents(_PS_IMG_DIR_ . "logo.jpg");
+        $Response->logourl          = "http://" . Configuration::get('PS_SHOP_DOMAIN') . __PS_BASE_URI__ . "img/" . Configuration::get('PS_LOGO');
+        $Response->logoraw          = Splash::File()->ReadFileContents(_PS_IMG_DIR_ . Configuration::get('PS_LOGO'));
         
         //====================================================================//
         // Server Informations
