@@ -229,7 +229,7 @@ class Activity extends WidgetBase
 		$to = min(time(), strtotime($date_to));
 		for ($date = $from; $date <= $to; $date = strtotime('+1 day', $date))
 		{
-                    Splash::Log()->www("Date" , $date );
+//                    Splash::Log()->www("Date" , $date );
 			$refined_data['sales'][$date] = 0;
 			if (isset($gross_data['total_paid_tax_excl'][$date]))
 				$refined_data['sales'][$date] += $gross_data['total_paid_tax_excl'][$date];
