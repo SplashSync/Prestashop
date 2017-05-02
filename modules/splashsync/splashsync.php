@@ -40,10 +40,9 @@ class SplashSync extends Module
             // Init Module Main Information Fields
             $this->name = 'splashsync';
             $this->tab = 'administration';
-            $this->version = '0.9.0';
+            $this->version = '1.0.0';
             $this->author = 'www.SplashSync.com';
             $this->need_instance = 0;
-//            $this->ps_versions_compliancy = array('min' => '1.5', 'max' => '1.6'); 
             $this->ps_versions_compliancy = array('min' => '1.5', 'max' => '1.7'); 
             
             //====================================================================//

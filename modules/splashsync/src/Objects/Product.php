@@ -286,16 +286,18 @@ class Product extends ObjectBase
                 $DataBuffer["name"]                 =   $Product["name"];
                 $DataBuffer["weight"]               =   $Product["weight"] . Configuration::get('PS_WEIGHT_UNIT');
                 $DataBuffer["stock"]                =   $p->getQuantity($Product["id"]);
-                $DataBuffer["price"]                =   $p->getPrice(False);
+                $DataBuffer["price"]                =   $p->getPrice(False, Null, 3);
+                $DataBuffer["price-base"]           =   $p->getPrice(False, Null, 3);
             //====================================================================//
             // Fill Product Combination Data to Buffer
             } else {
-                $DataBuffer["id"]       =   (int) $this->getUnikId($Product["id"],$Product["id_attribute"]);
-                $DataBuffer["ref"]      =   empty($Product["ref_attribute"])?$Product["ref"]  . "-" . $Product["id_attribute"]:$Product["ref_attribute"];
-                $DataBuffer["name"]     =   $Product["name"];
-                $DataBuffer["weight"]   =   ($Product["weight"] + $Product["weight_attribute"]) . Configuration::get('PS_WEIGHT_UNIT');
-                $DataBuffer["price"]    =   $p->getPrice(false, $Product["id_attribute"] ,3);
-                $DataBuffer["stock"]    =   $p->getQuantity($Product["id"],$Product["id_attribute"]);
+                $DataBuffer["id"]           =   (int) $this->getUnikId($Product["id"],$Product["id_attribute"]);
+                $DataBuffer["ref"]          =   empty($Product["ref_attribute"])?$Product["ref"]  . "-" . $Product["id_attribute"]:$Product["ref_attribute"];
+                $DataBuffer["name"]         =   $Product["name"];
+                $DataBuffer["weight"]       =   ($Product["weight"] + $Product["weight_attribute"]) . Configuration::get('PS_WEIGHT_UNIT');
+                $DataBuffer["price"]        =   $p->getPrice(false, $Product["id_attribute"] ,3);
+                $DataBuffer["price-base"]   =   $p->getPrice(False, Null, 3);
+                $DataBuffer["stock"]        =   $p->getQuantity($Product["id"],$Product["id_attribute"]);
             }
             array_push($Data , $DataBuffer);
         }
@@ -1333,13 +1335,16 @@ class Product extends ObjectBase
             case 'price-base':
                 //====================================================================//
                 // Read Current Product Price (Via Out Buffer)
-                $this->getMainFields(Null,"price");
-
+                $this->getMainFields(Null,"price-base");
+                
                 //====================================================================//
                 // Compare Prices
-                if ( !$this->Price_Compare($this->Out["price"],$Data) ) {
+                if ( !$this->Price_Compare($this->Out["price-base"],$Data) ) {
                     $this->Object->price = $Data["ht"];
                     $this->update   = True;
+                    //====================================================================//
+                    // Clear Cache
+                    \Product::flushPriceCache();   
                 }
                 
                 break;                  
@@ -1398,7 +1403,7 @@ class Product extends ObjectBase
         if ( empty($this->NewPrice) ) {
             return True;
         }
-        
+
         //====================================================================//
         // Update product Price with Attribute
         if ( $this->Attribute ) {
@@ -1756,7 +1761,7 @@ class Product extends ObjectBase
             }
             $this->ImgPosition++;
             $InImage = $InValue["image"];
-            $IsCover = $InValue["cover"];
+            $IsCover = isset($InValue["cover"]) ? $InValue["cover"] : Null;
             
             //====================================================================//
             // Search For Image In Current List
@@ -1788,7 +1793,7 @@ class Product extends ObjectBase
                 } 
                 //====================================================================//
                 // Update Image is Cover Flag
-                if ( ((bool) $ObjectImage->cover) !==  ((bool) $IsCover) ){
+                if ( !is_null($IsCover) && ((bool) $ObjectImage->cover) !==  ((bool) $IsCover) ){
                     $ObjectImage->cover = $IsCover;
                     $ObjectImage->update();
                     $this->update = True;
@@ -1846,7 +1851,7 @@ class Product extends ObjectBase
     public function setImg($ImgArray,$IsCover) 
     {
         //====================================================================//
-        // If Not found, Add this object to list
+        // Read File from Splash Server
         $NewImageFile    =   Splash::File()->getFile($ImgArray["file"],$ImgArray["md5"]);
         
         //====================================================================//
