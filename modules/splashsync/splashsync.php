@@ -40,7 +40,7 @@ class SplashSync extends Module
             // Init Module Main Information Fields
             $this->name = 'splashsync';
             $this->tab = 'administration';
-            $this->version = '1.0.0';
+            $this->version = '1.0.1';
             $this->author = 'www.SplashSync.com';
             $this->need_instance = 0;
             $this->ps_versions_compliancy = array('min' => '1.5', 'max' => '1.7'); 
@@ -530,9 +530,11 @@ class SplashSync extends Module
         // Splash Server Ping
         //====================================================================//
         if ( Splash\Client\Splash::Ping() ) {
-            $Result = $this->l('Passed');
+            $Result =   $this->l('Passed');
+            $Ping   =   True;
         } else {
-            $Result = $this->l('Fail');
+            $Result =   $this->l('Fail');
+            $Ping   =   False;
         }        
         
         $this->data_list[] = Array(
@@ -548,7 +550,7 @@ class SplashSync extends Module
         //====================================================================//
         // Splash Server Connect
         //====================================================================//
-        if ( Splash\Client\Splash::Connect() ) {
+        if ( $Ping && Splash\Client\Splash::Connect() ) {
             $Result = $this->l('Passed');
         } else {
             $Result = $this->l('Fail');
@@ -652,9 +654,9 @@ class SplashSync extends Module
     {
         //====================================================================//
         // Register Module JS
-        $this->context->controller->addJS($this->_path.'js/splash.js');
-        $this->context->controller->addJS($this->_path.'js/jquery.min.js');
-        $this->context->controller->addJS($this->_path.'js/noty/packaged/jquery.noty.packaged.min.js');
+        $this->context->controller->addJS($this->_path.'views/js/splash.js');
+        $this->context->controller->addJS($this->_path.'views/js/jquery.min.js');
+        $this->context->controller->addJS($this->_path.'views/js/jquery.noty.packaged.min.js');
     }
 
     /**

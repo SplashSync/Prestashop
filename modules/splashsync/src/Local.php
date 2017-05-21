@@ -17,7 +17,7 @@ namespace Splash\Local;
 use Splash\Core\SplashCore      as Splash;
 
 use Db, DbQuery, Configuration, Validate, Context, Language;
-use Employee;
+use Employee, Tools;
 
 
 /**
@@ -400,7 +400,7 @@ class Local
         if ( count($Tmp) != 2 ) {
             $Out = $In;
         } else {
-            $Out = $Tmp[0] . "_" . strtoupper ( $Tmp[1] );
+            $Out = $Tmp[0] . "_" . Tools::strtoupper ( $Tmp[1] );
         } 
         return $Out;
     }  
@@ -418,7 +418,7 @@ class Local
         if ( count($Tmp) != 2 ) {
             return $In;
         } else {
-            return $Tmp[0] . "-" . strtolower ( $Tmp[1] );
+            return $Tmp[0] . "-" . Tools::strtolower ( $Tmp[1] );
         } 
     }      
     
@@ -658,7 +658,7 @@ class Local
             }
             //====================================================================//        
             // Verify Data Lenght
-            if ( $MaxLength &&  ( strlen($Content) > $MaxLength) ) {             
+            if ( $MaxLength &&  ( Tools::strlen($Content) > $MaxLength) ) {             
                 Splash::Log()->War("MsgLocalTpl",__CLASS__,__FUNCTION__,"Text is too long for filed " . $key . ", modification skipped.");
                 continue;
             }

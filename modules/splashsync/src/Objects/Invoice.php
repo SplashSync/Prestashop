@@ -90,7 +90,7 @@ class Invoice extends ObjectBase
      *      @abstract       Class Constructor (Used only if localy necessary)
      *      @return         int                     0 if KO, >0 if OK
      */
-    function __construct()
+    public function __construct()
     {
         //====================================================================//
         // Set Module Context To All Shops
@@ -253,7 +253,6 @@ class Invoice extends ObjectBase
     */
     public function Get($id=NULL,$list=0)
     {
-        global $db;
         //====================================================================//
         // Stack Trace
         Splash::Log()->Trace(__CLASS__,__FUNCTION__);  

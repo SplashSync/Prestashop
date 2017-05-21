@@ -454,7 +454,7 @@ class ThirdParty extends ObjectBase
                 ->MicroData("http://schema.org/Person","gender")
                 ->Description($desc)
                 ->Group(Translate::getAdminTranslation("Meta", "AdminThemes"))
-                ->AddChoices([ "0" => "Male", "1" => "female"])
+                ->AddChoices(array("0" => "Male", "1" => "female"))
                 ->NotTested();       
 
         //====================================================================//

@@ -87,7 +87,7 @@ class Order extends ObjectBase
      *      @abstract       Class Constructor (Used only if localy necessary)
      *      @return         int                     0 if KO, >0 if OK
      */
-    function __construct()
+    public function __construct()
     {
         //====================================================================//
         // Set Module Context To All Shops
@@ -254,7 +254,6 @@ class Order extends ObjectBase
     */
     public function Get($id=NULL,$list=0)
     {
-        global $db;
         //====================================================================//
         // Stack Trace
         Splash::Log()->Trace(__CLASS__,__FUNCTION__);  
@@ -334,7 +333,7 @@ class Order extends ObjectBase
             //====================================================================//
             // Write Requested Fields
             $this->setCoreFields($FieldName,$Data);
-            $this->setMainFields($FieldName,$Data);
+//            $this->setMainFields($FieldName,$Data);
             $this->setMetaFields($FieldName,$Data);
         }
         
@@ -903,27 +902,7 @@ class Order extends ObjectBase
         //====================================================================//
         // READ Fields
         switch ($FieldName)
-        {
-            //====================================================================//
-            // STRUCTURAL INFORMATIONS
-            //====================================================================//
-
-//            case 'status':
-//            case 'tva_assuj':
-//            case 'fournisseur':
-//                $this->getSingleBoolField($FieldName);
-//                break;                
-//
-//            case 'client':
-//                $this->Out[$FieldName] = (bool) $this->Bitwise_Read($this->Object->client, 0);
-//                break;                
-//
-//            case 'prospect':
-//                $this->Out[$FieldName] = (bool) $this->Bitwise_Read($this->Object->client, 1);
-//                break;                
-
-
-
+        {            
             //====================================================================//
             // TRACEABILITY INFORMATIONS
             //====================================================================//
@@ -950,18 +929,10 @@ class Order extends ObjectBase
      */
     private function getPostCreateFields($Key,$FieldName)
     {
-        global $conf;
         //====================================================================//
         // READ Fields
         switch ($FieldName)
         {
-            //====================================================================//
-            // Direct Readings
-            case 'ref_client':
-            case 'ref_int':
-            case 'ref_ext':
-                $this->getSingleField($FieldName);
-                break;
             
             //====================================================================//
             // ORDER STATUS
@@ -1033,7 +1004,6 @@ class Order extends ObjectBase
      */
     private function setCoreFields($FieldName,$Data) 
     {
-        global $user;
         //====================================================================//
         // WRITE Field
         switch ($FieldName)
@@ -1042,25 +1012,7 @@ class Order extends ObjectBase
             // Direct Readings
             case 'ref':
                 $this->setSingleField($FieldName,$Data);
-                break;
-            
-            //====================================================================//
-            // Order Official Date
-            case 'date':
-                if (dol_print_date($this->Object->$FieldName, 'standard') === $Data) {
-                    break;
-                }
-                //====================================================================//
-                // Order Update Mode
-                if ( $this->Object->id > 0) {
-                    $this->Object->set_date($user, $Data);
-                //====================================================================//
-                // Order Create Mode
-                } else {
-                    $this->setSingleField($FieldName,$Data);
-                }
-                $this->update = True;
-                break;     
+                break;   
                     
             //====================================================================//
             // Order Company Id 
@@ -1068,56 +1020,6 @@ class Order extends ObjectBase
                 $SocId = self::ObjectId_DecodeId( $Data );
                 $this->setSingleField($FieldName,$SocId);
                 break;                 
-            default:
-                return;
-        }
-        unset($this->In[$FieldName]);
-    }
-    
-    /**
-     *  @abstract     Write Given Fields
-     * 
-     *  @param        string    $FieldName              Field Identifier / Name
-     *  @param        mixed     $Data                   Field Data
-     * 
-     *  @return         none
-     */
-    private function setMainFields($FieldName,$Data) 
-    {
-        global $conf,$langs,$user; 
-        
-        //====================================================================//
-        // WRITE Field
-        switch ($FieldName)
-        {
-            //====================================================================//
-            // Order Official Date
-            case 'date_livraison':
-                if (dol_print_date($this->Object->$FieldName, 'standard') === $Data) {
-                    break;
-                }
-                //====================================================================//
-                // Order Update Mode
-                if ( $this->Object->id > 0) {
-                    $this->Object->set_date_livraison($user, $Data);
-                //====================================================================//
-                // Order Create Mode
-                } else {
-                    $this->setSingleField($FieldName,$Data);
-                }
-                $this->update = True;
-                break;   
-               
-        //====================================================================//
-        // ORDER INVOCE
-        //====================================================================//        
-        case 'facturee':
-            if ($Data) {
-                $this->Object->classifyBilled();
-            }
-            break;            
-                
-                
             default:
                 return;
         }
@@ -1324,22 +1226,7 @@ class Order extends ObjectBase
         //====================================================================//
         // WRITE Field
         switch ($FieldName)
-        {
-            //====================================================================//
-            // Direct Readings
-            case 'ref_client':
-            case 'ref_int':
-            case 'ref_ext':
-                //====================================================================//
-                //  Compare Field Data
-                if ( $this->Object->$FieldName != $Data ) {
-                    //====================================================================//
-                    //  Update Field Data
-                    $this->Object->setValueFrom($FieldName,$Data);
-                    $this->update = True;
-                }  
-                break;
-            
+        {            
             //====================================================================//
             // ORDER STATUS
             //====================================================================//        
@@ -1358,7 +1245,7 @@ class Order extends ObjectBase
      */
     private function setSaveObject() 
     {
-        global $db,$user,$langs,$user,$conf;
+//        global $db,$user,$langs,$user,$conf;
         
         //====================================================================//
         // If NO Id Given = > Create Object
@@ -1428,7 +1315,8 @@ class Order extends ObjectBase
      *   @return     bool 
      */
     private function setOrderStatus($Status) {
-        global $conf,$langs,$user;
+//        global $conf,$langs,$user;
+        
         $langs->load("stocks");
         //====================================================================//
         // Safety Check

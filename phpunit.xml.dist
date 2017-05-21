@@ -51,7 +51,7 @@
     </filter>
     
     <php>
-        <server name="SERVER_NAME" value="http://localhost/PrestaShop/Ps-1.6"/>
+        <server name="SERVER_NAME" value="http://localhost/PrestaShop/Ps-1.7"/>
         <const  name="SPLASH_DEBUG" value="true" />
     </php>
 </phpunit>

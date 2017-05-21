@@ -86,7 +86,7 @@ class Address extends ObjectBase
      *      @abstract       Class Constructor (Used only if localy necessary)
      *      @return         int                     0 if KO, >0 if OK
      */
-    function __construct()
+    public function __construct()
     {
         //====================================================================//
         // Place Here Any SPECIFIC Initialisation Code

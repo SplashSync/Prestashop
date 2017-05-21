@@ -92,7 +92,7 @@ class Product extends ObjectBase
      *      @abstract       Class Constructor (Used only if localy necessary)
      *      @return         int                     0 if KO, >0 if OK
      */
-    function __construct()
+    public function __construct()
     {
         //====================================================================//
         // Set Module Context To All Shops
@@ -275,7 +275,6 @@ class Product extends ObjectBase
             $DataBuffer["available_for_order"]  =   $Product["available_for_order"];
             $DataBuffer["created"]              =   $Product["created"];
             $DataBuffer["modified"]             =   $Product["modified"];
-            $ProductCombinations                =   $p->getAttributesResume($this->LangId);
             
             //====================================================================//
             // Fill Simple Product Data to Buffer
@@ -353,10 +352,6 @@ class Product extends ObjectBase
             //====================================================================//
             // Setup Images Variables
             $this->Object->image_folder   = _PS_PROD_IMG_DIR_;
-            $this->Object->image_thumb    = empty($this->conf["thumb"])?"small_default":$this->conf["thumb"];
-//            //====================================================================//
-//            // Setup Images Variables
-//            $Object->getFeatures();
         }
         
         //====================================================================//
@@ -1834,7 +1829,7 @@ class Product extends ObjectBase
                 continue;
             }
             foreach (ImageType::getImagesTypes("products") as $imageType)  {
-                $ImageThumb = _PS_PROD_IMG_DIR_.$imageObj->getExistingImgPath().'-'.stripslashes($imageType['name']).'.jpg';
+                $ImageThumb = _PS_PROD_IMG_DIR_.$imageObj->getExistingImgPath().'-'.Tools::stripslashes($imageType['name']).'.jpg';
                 if (!file_exists($ImageThumb)) {
                     ImageManager::resize($imagePath.'.jpg', $ImageThumb, (int)($imageType['width']), (int)($imageType['height']));
                 }
@@ -1899,6 +1894,7 @@ class Product extends ObjectBase
         
         //====================================================================//        
         // For Each Available Language
+        $Data = array();
         foreach ($Languages as $Lang) {
             //====================================================================//        
             // Encode Language Code From Splash Format to Prestashop Format (fr_FR => fr-fr)
@@ -1934,6 +1930,7 @@ class Product extends ObjectBase
         
         //====================================================================//        
         // For Each Available Language
+        $Data = array();
         foreach ($Languages as $Lang) {
             //====================================================================//        
             // Encode Language Code From Splash Format to Prestashop Format (fr_FR => fr-fr)
