@@ -44,6 +44,7 @@ class SplashSync extends Module
             $this->author = 'www.SplashSync.com';
             $this->need_instance = 0;
             $this->ps_versions_compliancy = array('min' => '1.5', 'max' => '1.7'); 
+            $this->module_key = '48032a9ff6cc3a4a43a0ea2acf7ccf10';
             
             //====================================================================//
             // Activate BootStarp 
