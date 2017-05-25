@@ -226,7 +226,7 @@ class Local
 //        }        
         
 //        Splash::Log()->War("WarSelfTestSkipped");
-        Splash::Log()->Msg("MsgSelfTestOk");
+//        Splash::Log()->Msg("MsgSelfTestOk");
         return True;
     }       
     
