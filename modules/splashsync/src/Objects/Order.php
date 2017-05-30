@@ -1036,7 +1036,7 @@ class Order extends ObjectBase
      */
     private function setOrderLineFields($FieldName,$Data) 
     {
-        global $db,$langs;
+//        global $db,$langs;
 //Splash::Log()->www("setOrderLine", $Data);            
         //====================================================================//
         // Safety Check

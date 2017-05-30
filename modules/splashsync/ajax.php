@@ -26,13 +26,13 @@ include_once('../../init.php');
 $cookie = new Cookie('psAdmin'); // Use "psAdmin" to read an employee's cookie.
 //====================================================================//
 //  Validate Ajax Token 
-if ($_GET['token'] !== Tools::getAdminToken('AdminModules'.(int)Tab::getIdFromClassName('AdminModules').(int)$cookie->__get("id_employee"))) {
+if (Tools::getValue("token") !== Tools::getAdminToken('AdminModules'.(int)Tab::getIdFromClassName('AdminModules').(int)$cookie->__get("id_employee"))) {
     // Ooops! Token is not valid!
     die('[Splash] Token is not valid, hack stop');
 }    
 //====================================================================//
 //  Clear Notifications in Cookies 
-if ($_GET['ClearNotifications']){
+if (Tools::getValue("ClearNotifications")){
     //====================================================================//
     //  Delete Cookie Notifications 
     $cookie->__unset("spl_notify");
