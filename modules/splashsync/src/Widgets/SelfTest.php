@@ -1,22 +1,19 @@
 <?php
-/*
- * Copyright (C) 2011-2014  Bernard Paquier       <bernard.paquier@gmail.com>
- * 
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or
- * (at your option) any later version.
+/**
+ * This file is part of SplashSync Project.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
- *
-*/
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ * 
+ *  @author    Splash Sync <www.splashsync.com>
+ *  @copyright 2015-2017 Splash Sync
+ *  @license   GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007
+ * 
+ **/
 
 namespace   Splash\Local\Widgets;
 

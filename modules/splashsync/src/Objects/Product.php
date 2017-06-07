@@ -1,8 +1,6 @@
 <?php
-/*
+/**
  * This file is part of SplashSync Project.
- *
- * Copyright (C) Splash Sync <www.splashsync.com>
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -10,7 +8,12 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- */
+ * 
+ *  @author    Splash Sync <www.splashsync.com>
+ *  @copyright 2015-2017 Splash Sync
+ *  @license   GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007
+ * 
+ **/
 
 namespace   Splash\Local\Objects;
 
@@ -258,7 +261,7 @@ class Product extends ObjectBase
         } 
         //====================================================================//
         // For each result, read information and add to $Data
-        foreach ($Result as $key => $Product)
+        foreach ($Result as $Product)
         {
             //====================================================================//
             // Init Buffer Array
@@ -747,7 +750,7 @@ class Product extends ObjectBase
                 ->MicroData("http://schema.org/Product","isCover")
                 ->Group($GroupName3)
                 ->NotTested();        
-        return;
+        
     }
 
     /**
@@ -788,7 +791,6 @@ class Product extends ObjectBase
                 ->Group($GroupName)
                 ->MicroData("http://schema.org/Offer","eligibleTransactionVolume");
         
-        return;
     }
     
     /**
@@ -842,6 +844,18 @@ class Product extends ObjectBase
                 ->Group(Translate::getAdminTranslation("Meta", "AdminThemes"))
                 ->MicroData("http://schema.org/DataFeedItem","dateCreated")
                 ->ReadOnly();
+        
+        //====================================================================//
+        // SPLASH RESERVED INFORMATIONS
+        //====================================================================//
+
+        //====================================================================//
+        // Splash Unique Object Id
+        $this->FieldsFactory()->Create(SPL_T_VARCHAR)
+                ->Identifier("splash_id")
+                ->Name("Splash Id")
+                ->Group("Meta")
+                ->MicroData("http://splashync.com/schemas","ObjectId");        
         
     }   
 
@@ -1110,7 +1124,13 @@ class Product extends ObjectBase
             case 'date_upd':
             case 'date_add':
                 $this->getSingleField($FieldName);
-                break;            
+                break;     
+            //====================================================================//
+            // SPLASH RESERVED INFORMATIONS
+            //====================================================================//
+            case 'splash_id':
+                $this->Out[$FieldName] = Splash::Local()->getSplashId( "Product" , $this->getUnikId());    
+                break;     
             default:
                 return;
         }
@@ -1532,7 +1552,16 @@ class Product extends ObjectBase
             case 'on_sale':
                 $this->setSingleField($FieldName, $Data);
                 break; 
-                
+            //====================================================================//
+            // SPLASH RESERVED INFORMATIONS
+            //====================================================================//
+            case 'splash_id':
+                if ($this->getUnikId()) {
+                    Splash::Local()->setSplashId( "Product" , $this->getUnikId(), $Data);    
+                } else {
+                    $this->NewSplashId = $Data;
+                }
+                break;                    
             default:
                 return;
         }
@@ -1548,7 +1577,7 @@ class Product extends ObjectBase
         //====================================================================//
         // Verify Update Is requiered
         if ( !$this->update && !$this->AttributeUpdate ) {
-            Splash::Log()->War("MsgLocalNoUpdateReq",__CLASS__,__FUNCTION__);
+            Splash::Log()->Deb("MsgLocalNoUpdateReq",__CLASS__,__FUNCTION__);
             return True;
         }
 
@@ -1594,6 +1623,13 @@ class Product extends ObjectBase
         if ( isset ($this->NewImagesArray) )   {  
             $this->setImgArray($this->NewImagesArray);
             unset($this->NewImagesArray);
+        }
+        //====================================================================//
+        // UPDATE/CREATE SPLASH ID
+        //====================================================================//  
+        if ( isset ($this->NewSplashId) )   {  
+            Splash::Local()->setSplashId( "Product" , $this->getUnikId(), $this->NewSplashId);    
+            unset($this->NewSplashId);
         }
         //====================================================================//
         // INIT PRODUCT STOCK 
@@ -1879,11 +1915,12 @@ class Product extends ObjectBase
     
     /**
      *      @abstract       Read Multilangual Fields of an Object
+     * 
      *      @param          object      $Object     Pointer to Prestashop Object
-     *      @param          array       $key        Id of a Multilangual Contents
+     * 
      *      @return         int                     0 if KO, 1 if OK
      */
-    public function getMultilangFullName(&$Object=Null,$key=Null)
+    public function getMultilangFullName(&$Object=Null)
     {
         //====================================================================//        
         // Native Multilangs Descriptions
@@ -1915,11 +1952,12 @@ class Product extends ObjectBase
     
     /**
      *      @abstract       Read Multilangual Fields of an Object
+     * 
      *      @param          object      $Object     Pointer to Prestashop Object
-     *      @param          array       $key        Id of a Multilangual Contents
+     * 
      *      @return         int                     0 if KO, 1 if OK
      */
-    public function getMultilangTags(&$Object=Null,$key=Null)
+    public function getMultilangTags(&$Object=Null)
     {
         //====================================================================//        
         // Native Multilangs Descriptions

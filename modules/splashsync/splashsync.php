@@ -1,8 +1,6 @@
 <?php 
-/*
+/**
  * This file is part of SplashSync Project.
- *
- * Copyright (C) Splash Sync <www.splashsync.com>
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -10,12 +8,15 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- */
-
+ * 
+ *  @author    Splash Sync <www.splashsync.com>
+ *  @copyright 2015-2017 Splash Sync
+ *  @license   GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007
+ * 
+ **/
 
 /**
  * @abstract    Splash Sync Prestahop Module - Noty Notifications
- * @author      B. Paquier <contact@splashsync.com>
  */
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -40,7 +41,7 @@ class SplashSync extends Module
             // Init Module Main Information Fields
             $this->name = 'splashsync';
             $this->tab = 'administration';
-            $this->version = '1.0.1';
+            $this->version = '1.0.2';
             $this->author = 'www.SplashSync.com';
             $this->need_instance = 0;
             $this->ps_versions_compliancy = array('min' => '1.5', 'max' => '1.7'); 
@@ -100,6 +101,10 @@ class SplashSync extends Module
         // Install Parent Module
         if (!parent::install() )            {  return false;    }
 
+        //====================================================================//
+        // Create Splash Linking Table
+        \Splash\Client\Splash::Local()->createSplashIdTable();
+        
         //====================================================================//
         // Register Module Customers Hooks
         if (    !$this->registerHook('actionObjectCustomerAddAfter') ||
@@ -414,42 +419,42 @@ class SplashSync extends Module
         {
             //====================================================================//
             // Verify Server Host Url            
-            $host = strval(Tools::getValue('SPLASH_WS_HOST'));
+            $host       = Tools::getValue('SPLASH_WS_HOST');
             if ( !empty($host) && !Validate::isUrlOrEmpty($host) ) {
                 $output .= $this->displayError( $this->l('Invalid Server Url!') );
             }
  
             //====================================================================//
             // Verify USER ID         
-            $ServerId     = strval(Tools::getValue('SPLASH_WS_ID'));
+            $ServerId   = Tools::getValue('SPLASH_WS_ID');
             if ( empty($ServerId) || !Validate::isString($ServerId) ) {
                 $output .= $this->displayError( $this->l('Invalid User Identifier') );
             }
             
             //====================================================================//
             // Verify USER KEY         
-            $UserKey    = strval(Tools::getValue('SPLASH_WS_KEY'));
+            $UserKey    = Tools::getValue('SPLASH_WS_KEY');
             if ( empty($UserKey) || !Validate::isString($UserKey) ) {
                 $output .= $this->displayError( $this->l('Invalid User Encryption Key') );
             }
 
             //====================================================================//
             // Verify Language Id         
-            $LangId    = strval(Tools::getValue('SPLASH_LANG_ID'));
+            $LangId     = Tools::getValue('SPLASH_LANG_ID');
             if ( empty($LangId) || !Validate::isLanguageCode($LangId) || !Language::getLanguageByIETFCode($LangId) ) {
                 $output .= $this->displayError( $this->l('Invalid Language') );
             }
             
             //====================================================================//
             // Verify User Id         
-            $UserId    = strval(Tools::getValue('SPLASH_USER_ID'));
+            $UserId    = Tools::getValue('SPLASH_USER_ID');
             if ( empty($UserId) || !Validate::isInt($UserId) ) {
                 $output .= $this->displayError( $this->l('Invalid User') );
             }
             
             //====================================================================//
             // Verify Expert Mode           
-            $expert = strval(Tools::getValue('SPLASH_WS_EXPERT'));
+            $expert = Tools::getValue('SPLASH_WS_EXPERT');
             if ( !$expert ) {
                 $host = "";
             }
@@ -506,7 +511,7 @@ class SplashSync extends Module
         Splash\Client\Splash::SelfTest();
         //====================================================================//
         // Post Splash Messages
-        $this->_importMessages(Splash\Client\Splash::Log());
+        $this->_importMessages();
         
         //====================================================================//
         // List Objects
@@ -525,7 +530,7 @@ class SplashSync extends Module
         );
         //====================================================================//
         // Post Splash Messages
-        $this->_importMessages(Splash\Client\Splash::Log());
+        $this->_importMessages();
         
         //====================================================================//
         // Splash Server Ping
@@ -546,7 +551,7 @@ class SplashSync extends Module
         );
         //====================================================================//
         // Post Splash Messages
-        $this->_importMessages(Splash\Client\Splash::Log());
+        $this->_importMessages();
         
         //====================================================================//
         // Splash Server Connect
@@ -565,7 +570,7 @@ class SplashSync extends Module
         );
         //====================================================================//
         // Post Splash Messages
-        $this->_importMessages(Splash\Client\Splash::Log());
+        $this->_importMessages();
         
         //====================================================================//
         // Build Html Results List
@@ -638,7 +643,7 @@ class SplashSync extends Module
         $result = Splash\Client\Splash::Commit($_Type,$_Id,$_Action,$UserName,$_Comment);        
         //====================================================================//
         // Post Splash Messages
-        $this->_importMessages(Splash\Client\Splash::Log());
+        $this->_importMessages();
         return $result;
     }
     
@@ -671,7 +676,7 @@ class SplashSync extends Module
 
         //====================================================================//
         // Assign Smarty Variables
-        $this->context->smarty->assign('notifications', json_decode( base64_decode($Notifications), True) );
+        $this->context->smarty->assign('notifications', json_decode( $Notifications, True) );
         $this->context->smarty->assign('url', "http://" . Configuration::get('PS_SHOP_DOMAIN') . __PS_BASE_URI__ );
 
         //====================================================================//
@@ -866,17 +871,9 @@ class SplashSync extends Module
     {
         $this->_debHook(__FUNCTION__,$params["category"]->id);
         //====================================================================//
-        // Check Hook Trigger
-        if ( $this->_getFlag(SPL_O_PRODCAT, $params["category"]->id) ) {
-            Splash\Client\Splash::Log()->Deb("Category Already Added");
-            return true;
-        }
-        //====================================================================//
         // Commit Update For Base Product
+        $error =    0;
         $error += 1 - $this->_Commit(SPL_O_PRODCAT,$params["category"]->id,SPL_A_CREATE,$this->l('Category Added on Prestashop'));
-        //====================================================================//
-        // Set Hook Trigger
-        $this->_setFlag(SPL_O_PRODCAT, $params["product"]->id);
         if ($error) {
             return false;
         }
@@ -889,20 +886,13 @@ class SplashSync extends Module
     public function hookactionCategoryUpdate($params)
     {
         $this->_debHook(__FUNCTION__,$params["category"]->id,$params);
-        if (!isset ($params["category"])) return false;
-        //====================================================================//
-        // Check Hook Trigger
-        if ( $this->_getFlag(SPL_O_PRODCAT, $params["category"]->id)) {
-            Splash\Client\Splash::Log()->Deb("Category Already Updated");
-            return true;
+        if (!isset ($params["category"])) {
+            return false;
         }
-
         //====================================================================//
         // Commit Update For Base Product
+        $error =    0;
         $error += 1 - $this->_Commit(SPL_O_PRODCAT,$params["category"]->id,SPL_A_UPDATE,$this->l('Category Updated on Prestashop'));
-        //====================================================================//
-        // Set Hook Trigger
-        $this->_setFlag(SPL_O_PRODCAT, $params["category"]->id);
         if ($error) {
             return false;
         }
@@ -916,17 +906,9 @@ class SplashSync extends Module
     {
         $this->_debHook(__FUNCTION__,$params["category"]->id,$params);
         //====================================================================//
-        // Check Hook Trigger
-        if ( $this->_getFlag(SPL_O_PRODCAT, $params["category"]->id) ) {
-            Splash\Client\Splash::Log()->Deb("Category Already Deleted");
-            return true;
-        }
-        //====================================================================//
         // Commit Update For Base Product
+        $error =    0;
         $error += 1 - $this->_Commit(SPL_O_PRODCAT,$params["category"]->id,SPL_A_DELETE,$this->l('Category Deleted on Prestashop'));
-        //====================================================================//
-        // Set Hook Trigger
-        $this->_setFlag(SPL_O_PRODCAT, $params["category"]->id);
         if ($error) {
             return false;
         }
@@ -1171,14 +1153,8 @@ class SplashSync extends Module
     *  @param       OsWs_Log    			Input OsWs Log Class
     *  @return      None
     */
-    private function _importMessages($log)
+    private function _importMessages()
     {
-        //====================================================================//
-        // When Library is called in server mode, no Message Storage
-//        if ( SPLASH_SERVER_MODE ) { 
-//            return True; 
-//        }
-
         //====================================================================//
         // Read Current Cookie String
         $RawNotifications = Context::getContext()->cookie->__get("spl_notify");
@@ -1193,7 +1169,7 @@ class SplashSync extends Module
         if (strcmp($RawNotifications, $NewRaw) != 0 ) {
             //====================================================================//
             // Save new Cookie String
-            Context::getContext()->cookie->__set("spl_notify", base64_encode($NewRaw) );
+            Context::getContext()->cookie->__set("spl_notify", $NewRaw );
             Context::getContext()->cookie->write(); 
         }
         
@@ -1214,83 +1190,6 @@ class SplashSync extends Module
         }
         return true;
     }  
-    
-//====================================================================//
-// *******************************************************************//
-//  MODULE VARIOUS FUNCTIONS
-// *******************************************************************//
-//====================================================================//
-       
-    /**
-     *      @abstract   Set Update Flag on Objects to prevent multiple updates
-     *      @param      string    $ObjectType OsWs Object Type Name. 
-     *      @param      int       $Id       Object Id
-     *      @param      string    $Action   Performed Action     
-     */ 
-    private function _setFlag($ObjectType,$Id,$Action)
-    {
-        //====================================================================//
-        // When Library is called in server mode, no Hook Flags
-//        if ( SPLASH_SERVER_MODE ) { return; }        
-        //====================================================================//
-        // Safety Check
-        if ( empty($ObjectType) || empty($Id)  || empty($Action)) { 
-            Splash\Client\Splash::Log()->War("SetFlags => Empty Data Given ObjectType => " . $ObjectType . " Id => " . $Id . " Action => " . $Action);            
-            return false; 
-        }
-        //====================================================================//
-        // Flag Storage
-        $flags    = unserialize( Context::getContext()->cookie->__get("spl_flags") );
-        //====================================================================//
-        // Init Array If Needed
-        if ( empty($flags))  {
-            $flags = array();
-        }
-        $flags[$ObjectType . "__" . $Id . "__" . $Action] = True;
-         
-        Context::getContext()->cookie->__set("spl_flags",serialize ($flags) );
-        Context::getContext()->cookie->write();
-        return true;
-    }      
-    
-    /**
-     *      @abstract   Set Update Flag on Objects to prevent multiple updates
-     *      @param      string    $ObjectType OsWs Object Type Name. 
-     *      @param      int       $Id       Object Id
-     *      @param      string    $Action   Performed Action     
-     */ 
-    private static function _getFlag($ObjectType,$Id,$Action)
-    {
-        return false;
-        //====================================================================//
-        // Safety Check
-        if ( empty($ObjectType) || empty($Id) || empty($Action) ) { 
-            Splash\Client\Splash::Log()->War("GetFlags => Empty Data Given ObjectType => " . $ObjectType . " Id => " . $Id . " Action => " . $Action);            
-            return false; 
-        }        
-        //====================================================================//
-        // Flag Storage
-        $flags    = unserialize( Context::getContext()->cookie->__get("spl_flags") );
-        //====================================================================//
-        // Init Array If Needed
-        if ( !is_array($flags))  { return false; }
-
-        if ( isset($flags[$ObjectType . "__" . $Id . "__" . $Action]) && ($flags[$ObjectType . "__" . $Id . "__" . $Action] == True) ) {
-            Splash\Client\Splash::Log()->War("GetFlags => Object Locked ObjectType => " . $ObjectType . " Id => " . $Id . " Action => " . $Action);   
-            return true;
-        }
-        return false;
-    }          
-    
-    /**
-     *      @abstract   Clear Update Flag on Objects to prevent multiple updates
-     */ 
-    private static function _clearFlag()
-    {
-        Context::getContext()->cookie->__set("spl_flags",Null );
-        Context::getContext()->cookie->write();
-        return true;
-    }      
     
 }
 

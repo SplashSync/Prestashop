@@ -1,8 +1,6 @@
 <?php
-/*
+/**
  * This file is part of SplashSync Project.
- *
- * Copyright (C) Splash Sync <www.splashsync.com>
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -10,7 +8,12 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- */
+ * 
+ *  @author    Splash Sync <www.splashsync.com>
+ *  @copyright 2015-2017 Splash Sync
+ *  @license   GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007
+ * 
+ **/
 
 namespace   Splash\Local\Objects;
 
@@ -586,6 +589,18 @@ class Address extends ObjectBase
                 ->Group(Translate::getAdminTranslation("Meta", "AdminThemes"))
                 ->MicroData("http://schema.org/DataFeedItem","dateCreated")
                 ->ReadOnly();
+        
+        //====================================================================//
+        // SPLASH RESERVED INFORMATIONS
+        //====================================================================//
+
+        //====================================================================//
+        // Splash Unique Object Id
+        $this->FieldsFactory()->Create(SPL_T_VARCHAR)
+                ->Identifier("splash_id")
+                ->Name("Splash Id")
+                ->Group("Meta")
+                ->MicroData("http://splashync.com/schemas","ObjectId");            
     }    
      
     //====================================================================//
@@ -698,9 +713,18 @@ class Address extends ObjectBase
             case 'date_add':
             case 'date_upd':                    
                 $this->Out[$FieldName] = $this->Object->$FieldName;
-                unset($this->In[$Key]);
                 break;
+            //====================================================================//
+            // SPLASH RESERVED INFORMATIONS
+            //====================================================================//
+            case 'splash_id':
+                $this->Out[$FieldName] = Splash::Local()->getSplashId( "Address" , $this->Object->id);    
+                break;              
+            default:
+                return;
         }
+        
+        unset($this->In[$Key]);
     }    
     
     //====================================================================//
@@ -874,9 +898,22 @@ class Address extends ObjectBase
                     $this->Object->$FieldName  = $Data;
                     $this->update = True;
                 }               
-                unset($this->In[$FieldName]);
                 break;
+            //====================================================================//
+            // SPLASH RESERVED INFORMATIONS
+            //====================================================================//
+            case 'splash_id':
+                if ($this->Object->id) {
+                    Splash::Local()->setSplashId( "Address" , $this->Object->id , $Data);    
+                } else {
+                    $this->NewSplashId = $Data;               
+                }
+                break;                 
+            default:
+                return;
         }
+        
+        unset($this->In[$FieldName]);
     }
 
     /**
@@ -953,6 +990,15 @@ class Address extends ObjectBase
             return Splash::Log()->Err("ErrLocalTpl",__CLASS__,__FUNCTION__,"Unable to create new \Address. ");
         }
         Splash::Log()->Deb("MsgLocalTpl",__CLASS__,__FUNCTION__,"Address Created");
+        
+        //====================================================================//
+        // UPDATE/CREATE SPLASH ID
+        //====================================================================//  
+        if ( isset ($this->NewSplashId) )   {  
+            Splash::Local()->setSplashId( "Address" , $this->Object->id, $this->NewSplashId);    
+            unset($this->NewSplashId);
+        }
+        
         $this->update = False;
         return $this->Object->id;        
     }

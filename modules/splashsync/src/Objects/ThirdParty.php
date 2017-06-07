@@ -1,8 +1,6 @@
 <?php
-/*
+/**
  * This file is part of SplashSync Project.
- *
- * Copyright (C) Splash Sync <www.splashsync.com>
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -10,7 +8,12 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- */
+ * 
+ *  @author    Splash Sync <www.splashsync.com>
+ *  @copyright 2015-2017 Splash Sync
+ *  @license   GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007
+ * 
+ **/
 
 namespace   Splash\Local\Objects;
 
@@ -72,28 +75,7 @@ class ThirdParty extends ObjectBase
     protected static    $ENABLE_PULL_CREATED       =  TRUE;         // Enable Import Of New Local Objects 
     protected static    $ENABLE_PULL_UPDATED       =  TRUE;         // Enable Import of Updates of Local Objects when Modified Localy
     protected static    $ENABLE_PULL_DELETED       =  TRUE;         // Enable Delete Of Remotes Objects when Deleted Localy 
-    
-    //====================================================================//
-    // General Class Variables	
-    //====================================================================//
-
-    //====================================================================//
-    // Class Constructor
-    //====================================================================//
         
-    /**
-     *      @abstract       Class Constructor (Used only if localy necessary)
-     *      @return         int                     0 if KO, >0 if OK
-     */
-    function __construct()
-    {
-        //====================================================================//
-        // Place Here Any SPECIFIC Initialisation Code
-        //====================================================================//
-        
-        return True;
-    }    
-    
     //====================================================================//
     // Class Main Functions
     //====================================================================//
@@ -657,7 +639,18 @@ class ThirdParty extends ObjectBase
                 ->Group(Translate::getAdminTranslation("Meta", "AdminThemes"))
                 ->MicroData("http://schema.org/DataFeedItem","dateCreated")
                 ->ReadOnly();
-     
+        
+        //====================================================================//
+        // SPLASH RESERVED INFORMATIONS
+        //====================================================================//
+
+        //====================================================================//
+        // Splash Unique Object Id
+        $this->FieldsFactory()->Create(SPL_T_VARCHAR)
+                ->Identifier("splash_id")
+                ->Name("Splash Id")
+                ->Group("Meta")
+                ->MicroData("http://splashync.com/schemas","ObjectId");      
     }    
      
     //====================================================================//
@@ -869,9 +862,18 @@ class ThirdParty extends ObjectBase
             case 'date_add':
             case 'date_upd':
                 $this->Out[$FieldName] = $this->Object->$FieldName;
-                unset($this->In[$Key]);
                 break;
+            //====================================================================//
+            // SPLASH RESERVED INFORMATIONS
+            //====================================================================//
+            case 'splash_id':
+                $this->Out[$FieldName] = Splash::Local()->getSplashId( "ThirdParty" , $this->Object->id);    
+                break;              
+            default:
+                return;
         }
+        
+        unset($this->In[$Key]);
     }    
     
     
@@ -1043,13 +1045,25 @@ class ThirdParty extends ObjectBase
                     $this->Object->$FieldName = $Data;
                     $this->update = True;
                 }  
-                unset($this->In[$FieldName]);
                 break;
+            //====================================================================//
+            // SPLASH RESERVED INFORMATIONS
+            //====================================================================//
+            case 'splash_id':
+                if ($this->Object->id) {
+                    Splash::Local()->setSplashId( "ThirdParty" , $this->Object->id , $Data);    
+                } else {
+                    $this->NewSplashId = $Data;                   
+                }
+                break;                  
+            default:
+                return;
         }
+        unset($this->In[$FieldName]);
     }    
     
     /**
-     *  @abstract     Save Object after Writting Fields
+     *  @abstract     Save Object after Writing Fields
      */
     private function setSaveObject() {
     
@@ -1086,12 +1100,19 @@ class ThirdParty extends ObjectBase
 
         //====================================================================//
         // Create Object In Database
-        
-Splash::Log()->www("New ThirdParty",  $this->Object->getFields());
         if ( ($Result = $this->Object->add(True, True))  != True) {    
             return Splash::Log()->Err("ErrLocalTpl",__CLASS__,__FUNCTION__,"Unable to create. ");
         }
         Splash::Log()->Deb("MsgLocalTpl",__CLASS__,__FUNCTION__,"Customer Created");
+        
+        //====================================================================//
+        // UPDATE/CREATE SPLASH ID
+        //====================================================================//  
+        if ( isset ($this->NewSplashId) )   {  
+            Splash::Local()->setSplashId( "ThirdParty" , $this->Object->id, $this->NewSplashId);    
+            unset($this->NewSplashId);
+        }
+        
         $this->update = False;
         return $this->Object->id;        
     }

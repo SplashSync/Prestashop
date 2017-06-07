@@ -1,8 +1,6 @@
 <?php
-/*
+/**
  * This file is part of SplashSync Project.
- *
- * Copyright (C) Splash Sync <www.splashsync.com>
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -10,7 +8,12 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- */
+ * 
+ *  @author    Splash Sync <www.splashsync.com>
+ *  @copyright 2015-2017 Splash Sync
+ *  @license   GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007
+ * 
+ **/
 
 namespace Splash\Local;
 
@@ -19,6 +22,7 @@ use Splash\Core\SplashCore      as Splash;
 use Db, DbQuery, Configuration, Validate, Context, Language;
 use Employee, Tools;
 
+use Splash\Local\Traits\SplashIdTrait;
 
 /**
  * @abstract    Splash Local Core Class - Head of Module's Local Integration 
@@ -27,20 +31,9 @@ use Employee, Tools;
 
 class Local 
 {
-
-    //====================================================================//
-    // Class Constructor
-    //====================================================================//
-        
-    /**
-     *      @abstract       Class Constructor (Used only if localy necessary)
-     *      @return         bool
-     */
-    function __construct()
-    {
-        return True;
-    }
-
+    
+    use SplashIdTrait;
+    
 //====================================================================//
 // *******************************************************************//
 //  MANDATORY CORE MODULE LOCAL FUNCTIONS
@@ -48,15 +41,16 @@ class Local
 //====================================================================//
     
     /**
-     *      @abstract       Return Local Server Parameters as Aarray
+     *      @abstract       Return Local Server Parameters as Array
      *                      
      *      THIS FUNCTION IS MANDATORY 
      * 
-     *      This function called on each initialisation of the module
+     *      This function called on each initialization of the module
      * 
      *      Result must be an array including mandatory parameters as strings
-     *         ["DefaultLanguage"]   =>>  Name of Module Default Language
-     *         =>>  An Osws_Local_MyObject Class with standard access functions
+     *         ["WsIdentifier"]         =>>  Name of Module Default Language
+     *         ["WsEncryptionKey"]      =>>  Name of Module Default Language
+     *         ["DefaultLanguage"]      =>>  Name of Module Default Language
      * 
      *      @return         array       $parameters
      */
@@ -218,15 +212,18 @@ class Local
                 return Splash::Log()->Err("ErrSelfTestLangCode");
             }
         }
-        
-//        //====================================================================//
-//        //  Verify - Stock Selected
-//        if ( !isset($conf->global->SPLASH_STOCK) || empty($conf->global->SPLASH_STOCK) ) {
-//            return Splash::Log()->Err("ErrSelfTestNoStock");
-//        }        
-        
-//        Splash::Log()->War("WarSelfTestSkipped");
-//        Splash::Log()->Msg("MsgSelfTestOk");
+                
+        //====================================================================//
+        //  Verify - Splash Link Table is Valid
+        if ( !self::checkSplashIdTable() ) {
+            // Create Table
+            self::createSplashIdTable();
+            // Check Again
+            if ( !self::checkSplashIdTable() ) {
+                return Splash::Log()->Err("ErrSelfTestNoTable");
+            }
+        }   
+
         return True;
     }       
     
@@ -486,7 +483,7 @@ class Local
     {
         //====================================================================//
         // Compute Prestashop Home Folder Address
-        return dirname(dirname(dirname(__DIR__)));          
+        return dirname(dirname(dirname(dirname(__FILE__))));                 
     }    
  
     /**
@@ -580,11 +577,10 @@ class Local
         if ( empty($Languages)) {   
             return "";  
         }
-
         //====================================================================//        
         // Read Multilangual Contents
-        $Contents = $Object->$key;
-        
+        $Contents   =   $Object->$key;
+        $Data       =   array();
         //====================================================================//        
         // For Each Available Language
         foreach ($Languages as $Lang) {

@@ -1,8 +1,6 @@
 <?php
-/*
+/**
  * This file is part of SplashSync Project.
- *
- * Copyright (C) Splash Sync <www.splashsync.com>
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -10,7 +8,12 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- */
+ * 
+ *  @author    Splash Sync <www.splashsync.com>
+ *  @copyright 2015-2017 Splash Sync
+ *  @license   GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007
+ * 
+ **/
 
 namespace   Splash\Local\Objects;
 
@@ -505,7 +508,6 @@ class Order extends ObjectBase
                 ->MicroData("http://schema.org/OrderStatus","OrderPaid")
                 ->NotTested();
         
-        return;
     }
         
     /**
@@ -1034,181 +1036,6 @@ class Order extends ObjectBase
      * 
      *  @return         none
      */
-    private function setOrderLineFields($FieldName,$Data) 
-    {
-//        global $db,$langs;
-//Splash::Log()->www("setOrderLine", $Data);            
-        //====================================================================//
-        // Safety Check
-        if ( $FieldName !== "lines" ) {
-            return True;
-        }
-        
-        //====================================================================//
-        // Verify Lines List & Update if Needed 
-        foreach ($Data as $LineData) {
-            $this->orderlineupdate = False;
-            //====================================================================//
-            // Read Next Order Product Line
-            $this->OrderLine = array_shift($this->Object->lines);
-            //====================================================================//
-            // Create New Line
-            if ( !$this->OrderLine ) {
-                $this->OrderLine = new \OrderLine($db);
-                $this->OrderLine->fk_commande = $this->Object->id;
-//                $this->OrderLine->fk_commande = 5;
-            }
-//            //====================================================================//
-//            // If Product Line doesn't Exists
-//            if ( is_null($OrderLine) ) {
-//                //====================================================================//
-//                // Force Order Status To Draft
-//                $this->Object->statut     = 0;
-//                $this->Object->bouillon   = 1;
-//                $this->Object->addline(
-//                        $LineData["desc"], 
-//                        $LineData["price"]["ht"], 
-//                        $LineData["qty"], 
-//                        $LineData["price"]["vat"],
-//                                    0,0,
-//                        $ProductId,
-//                        array_key_exists("remise_percent", $LineData)?$LineData["remise_percent"]:0);
-//                continue;
-//            }
-            
-            //====================================================================//
-            // Update Line Description
-            $this->setOrderLineData($LineData,"desc");
-            //====================================================================//
-            // Update Line Label
-            $this->setOrderLineData($LineData,"label");
-            //====================================================================//
-            // Update Quantity
-            $this->setOrderLineData($LineData,"qty");
-            //====================================================================//
-            // Update Discount
-            $this->setOrderLineData($LineData,"remise_percent");
-            //====================================================================//
-            // Update Sub-Price
-            if (array_key_exists("price", $LineData) ) {
-                if (!$this->Float_Compare($this->OrderLine->subprice,$LineData["price"]["ht"])) {
-                    $this->OrderLine->subprice  = $LineData["price"]["ht"];
-                    $this->OrderLine->price     = $LineData["price"]["ht"];
-                    $this->orderlineupdate      = TRUE;
-                }
-                if (!$this->Float_Compare($this->OrderLine->tva_tx,$LineData["price"]["vat"])) {
-                    $this->OrderLine->tva_tx    = $LineData["price"]["vat"];
-                    $this->orderlineupdate      = TRUE;
-                }
-            }            
-
-            //====================================================================//
-            // Update Line Totals
-            if ($this->orderlineupdate) {
-
-                include_once DOL_DOCUMENT_ROOT.'/core/lib/price.lib.php';
-
-                // Calcul du total TTC et de la TVA pour la ligne a partir de
-                // qty, pu, remise_percent et txtva
-                // TRES IMPORTANT: C'est au moment de l'insertion ligne qu'on doit stocker
-                // la part ht, tva et ttc, et ce au niveau de la ligne qui a son propre taux tva.
-                $localtaxes_type=getLocalTaxesFromRate($this->OrderLine->tva_tx,0,$this->OrderLine->socid);
-
-                $tabprice=calcul_price_total(
-                        $this->OrderLine->qty, $this->OrderLine->subprice, 
-                        $this->OrderLine->remise_percent, $this->OrderLine->tva_tx, 
-                        -1,-1,
-//                        $this->OrderLine->localtax1_tx, $this->OrderLine->localtax2_tx, 
-                        0, "HT", 
-                        $this->OrderLine->info_bits, $this->OrderLine->type, 
-                        '', $localtaxes_type);
-
-                $this->OrderLine->total_ht  = $tabprice[0];
-                $this->OrderLine->total_tva = $tabprice[1];
-                $this->OrderLine->total_ttc = $tabprice[2];
-                $this->OrderLine->total_localtax1 = $tabprice[9];
-                $this->OrderLine->total_localtax2 = $tabprice[10];                
-            }
-            
-            //====================================================================//
-            // Commit Line Update
-            if ( $this->orderlineupdate && $this->OrderLine->id ) {
-                if ( $this->OrderLine->update() <= 0) {  
-                    Splash::Log()->Err("ErrLocalTpl",__CLASS__,__FUNCTION__,"Unable to update Order Line. ");
-                    Splash::Log()->Err("ErrLocalTpl",__CLASS__,__FUNCTION__,$langs->trans($this->OrderLine->error));
-                    continue;
-                }
-                
-            } elseif ( $this->orderlineupdate && !$this->OrderLine->id ) {
-                if ( $this->OrderLine->insert() <= 0) {  
-                    Splash::Log()->Err("ErrLocalTpl",__CLASS__,__FUNCTION__,"Unable to create Order Line. ");
-                    Splash::Log()->Err("ErrLocalTpl",__CLASS__,__FUNCTION__,$langs->trans($this->OrderLine->error));
-                    continue;
-                }
-            }
-            //====================================================================//
-            // Update Product Link
-            if (array_key_exists("fk_product", $LineData) && !empty($LineData["fk_product"]) ) {
-                $ProductId = $this->ObjectId_DecodeId($LineData["fk_product"]);
-                if ( $this->OrderLine->fk_product != $ProductId )  {
-                    $this->OrderLine->setValueFrom("fk_product",$ProductId);
-                    $this->orderlineupdate = TRUE;
-                }   
-            } elseif (array_key_exists("fk_product", $LineData) && empty($LineData["fk_product"]) ) {
-                if ( $this->OrderLine->fk_product != 0 )  {
-                    $this->OrderLine->setValueFrom("fk_product",0);
-                    $this->orderlineupdate = TRUE;
-                }   
-            }       
-            
-            $this->OrderLine->update_total();
-            
-        } 
-        //====================================================================//
-        // Delete Remaining Lines
-        foreach ($this->Object->lines as $OrderLine) {
-            //====================================================================//
-            // Force Order Status To Draft
-            $Object->statut         = 0;
-            $Object->brouillon      = 1;
-            //====================================================================//
-            // Perform Line Delete
-            $this->Object->deleteline($OrderLine->id);
-        }        
-        //====================================================================//
-        // Update Order Total Prices
-        $this->Object->update_price();
-        unset($this->In[$FieldName]);
-    }
-    
-    /**
-     *  @abstract     Write Given Fields
-     * 
-     *  @param        array     $OrderLineData          OrderLine Data Array
-     *  @param        string    $FieldName              Field Identifier / Name
-     * 
-     *  @return         none
-     */
-    private function setOrderLineData($OrderLineData,$FieldName) 
-    {
-        if ( !array_key_exists($FieldName, $OrderLineData) ) {
-            return;
-        }
-        if ($this->OrderLine->$FieldName !== $OrderLineData[$FieldName]) {
-            $this->OrderLine->$FieldName = $OrderLineData[$FieldName];
-            $this->orderlineupdate = TRUE;
-        }   
-        return;
-    }   
-    
-    /**
-     *  @abstract     Write Given Fields
-     * 
-     *  @param        string    $FieldName              Field Identifier / Name
-     *  @param        mixed     $Data                   Field Data
-     * 
-     *  @return         none
-     */
     private function setMetaFields($FieldName,$Data) 
     {
     }
@@ -1227,12 +1054,6 @@ class Order extends ObjectBase
         // WRITE Field
         switch ($FieldName)
         {            
-            //====================================================================//
-            // ORDER STATUS
-            //====================================================================//        
-            case 'status':
-                $this->setOrderStatus($Data); 
-                break;
             
             default:
                 return;
@@ -1245,7 +1066,6 @@ class Order extends ObjectBase
      */
     private function setSaveObject() 
     {
-//        global $db,$user,$langs,$user,$conf;
         
         //====================================================================//
         // If NO Id Given = > Create Object
@@ -1254,9 +1074,8 @@ class Order extends ObjectBase
         if ( empty($this->Object->id) ) {
             //====================================================================//
             // Create Object In Database
-            if ( $this->Object->create($user) <= 0) {    
-                Splash::Log()->Err("ErrLocalTpl",__CLASS__,__FUNCTION__,"Unable to create new \Order. ");
-                return Splash::Log()->Err("ErrLocalTpl",__CLASS__,__FUNCTION__,$langs->trans($this->Object->error));
+            if ( $this->Object->create() <= 0) {    
+                return Splash::Log()->Err("ErrLocalTpl",__CLASS__,__FUNCTION__,"Unable to create new \Order. ");
             }
             Splash::Log()->Deb("MsgLocalTpl",__CLASS__,__FUNCTION__,"Order Created");
             $this->update = False;
@@ -1271,7 +1090,6 @@ class Order extends ObjectBase
             //====================================================================//
             // Write Requested Fields
             $this->setPostCreateFields($FieldName,$Data);
-            $this->setOrderLineFields($FieldName,$Data);
         }
 
         //====================================================================//
@@ -1286,113 +1104,13 @@ class Order extends ObjectBase
         //====================================================================//
         
         if (!empty($this->Object->id) && $this->update ) {
-            //====================================================================//
-            // Appel des triggers
-            include_once DOL_DOCUMENT_ROOT . '/core/class/interfaces.class.php';
-            $interface=new Interfaces($db);
-            if ( $interface->run_triggers('ORDER_UPDATE',$this->Object,$user,$langs,$conf) <= 0) {  
-                foreach ($interface->errors as $Error) {
-                    Splash::Log()->Err("ErrLocalTpl",__CLASS__,__FUNCTION__,$langs->trans($Error));
-                }
-            }
             Splash::Log()->Deb("MsgLocalTpl",__CLASS__,__FUNCTION__,"Order Updated");
             $this->update = False;
             return $this->Object->id;
         }
         
         return $this->Object->id; 
-    }    
-    
-    //====================================================================//
-    // Class Tooling Functions
-    //====================================================================//
-   
-    /**
-     *   @abstract   Update Order Status
-     * 
-     *   @param      string     $Status         Schema.org Order Status String
-     * 
-     *   @return     bool 
-     */
-    private function setOrderStatus($Status) {
-//        global $conf,$langs,$user;
-        
-        $langs->load("stocks");
-        //====================================================================//
-        // Safety Check
-        if ( empty($this->Object->id) ) {
-            return False;
-        }
-        //====================================================================//
-        // Verify Stock Is Defined if Required
-        // If stock is incremented on validate order, we must increment it          
-        if ( !empty($conf->stock->enabled) && $conf->global->STOCK_CALCULATE_ON_VALIDATE_ORDER == 1) {
-            if ( empty($conf->global->SPLASH_STOCK ) ) {
-                return Splash::Log()->Err("ErrLocalTpl", __CLASS__, __FUNCTION__, $langs->trans("WarehouseSourceNotDefined"));
-            }
-        }    
-        //====================================================================//
-        // Statut Canceled
-        //====================================================================//
-        // Statut Canceled
-        if ( ($Status == "OrderCanceled") && ($this->Object->statut != -1) )    {
-            //====================================================================//
-            // If Previously Closed => Set Draft
-            if ( ( $this->Object->statut == 3 ) && ( $this->Object->set_draft($user,$conf->global->SPLASH_STOCK) != 1 ) ) {
-                return Splash::Log()->Err("ErrLocalTpl", __CLASS__, "Set Draft", $langs->trans($this->Object->error) );
-            }         
-            //====================================================================//
-            // If Previously Draft => Valid
-            if ( ( $this->Object->statut == 0 ) && ( $this->Object->valid($user,$conf->global->SPLASH_STOCK) != 1 ) ) {
-                return Splash::Log()->Err("ErrLocalTpl", __CLASS__, "Set Validated", $langs->trans($this->Object->error) );
-            }               
-            //====================================================================//
-            // Set Canceled
-            if ( $this->Object->cancel($conf->global->SPLASH_STOCK) != 1 ) {
-                return Splash::Log()->Err("ErrLocalTpl", __CLASS__,"Set Canceled", $langs->trans($this->Object->error) );
-            }                
-            return True;
-        }
-        //====================================================================//
-        // If Previously Canceled => Re-Validate
-        if ( ( $this->Object->statut == -1 ) && ( $this->Object->valid($user,$conf->global->SPLASH_STOCK) != 1 ) ) {
-            return Splash::Log()->Err("ErrLocalTpl", __CLASS__, "Set Validated Again", $langs->trans($this->Object->error) );
-        }         
-        //====================================================================//
-        // Statut Draft
-        if ( ($Status == "OrderDraft") && ($this->Object->statut != 0) )    {
-            //====================================================================//
-            // If Not Draft (Validated or Closed)            
-            if ( $this->Object->set_draft($user,$conf->global->SPLASH_STOCK) != 1 ) {
-                return Splash::Log()->Err("ErrLocalTpl", __CLASS__, __FUNCTION__, $langs->trans($this->Object->error) );
-            }                
-            return True;
-        }        
-        //====================================================================//
-        // Statut Validated || Closed => Go Valid if Draft
-        if ( ( $this->Object->statut == 0 ) && ( $this->Object->valid($user,$conf->global->SPLASH_STOCK) != 1 ) ) {
-            return Splash::Log()->Err("ErrLocalTpl", __CLASS__, "Set Validated", $langs->trans($this->Object->error) );
-        }         
-        //====================================================================//
-        // Statut Not Closed but Validated Only => ReOpen 
-        if ($Status != "OrderDelivered")    {
-            //====================================================================//
-            // If Previously Closed => Re-Open
-            if ( ( $this->Object->statut == 3 ) && ( $this->Object->set_reopen($user) != 1 ) ) {
-                return Splash::Log()->Err("ErrLocalTpl", __CLASS__, "Re-Open", $langs->trans($this->Object->error) );
-            }      
-        }            
-        //====================================================================//
-        // Statut Closed => Go Closed
-        if ( ($Status == "OrderDelivered") && ($this->Object->statut != 3) )    {
-            //====================================================================//
-            // If Previously Validated => Close
-            if ( ( $this->Object->statut == 1 ) && ( $this->Object->cloture($user) != 1 ) ) {
-                return Splash::Log()->Err("ErrLocalTpl", __CLASS__, "Set Closed", $langs->trans($this->Object->error) );
-            }         
-        }
-        return True;
-    }    
+    }      
     
     
 }
