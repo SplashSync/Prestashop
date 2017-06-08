@@ -57,7 +57,7 @@ class ThirdParty extends ObjectBase
     protected static    $ICO     =  "fa fa-user";
 
     /**
-     *  Object Synchronistion Limitations 
+     *  Object Synchronization Limitations 
      *  
      *  This Flags are Used by Splash Server to Prevent Unexpected Operations on Remote Server
      */
@@ -66,7 +66,7 @@ class ThirdParty extends ObjectBase
     protected static    $ALLOW_PUSH_DELETED         =  TRUE;        // Allow Delete Of Existing Local Objects
     
     /**
-     *  Object Synchronistion Recommended Configuration 
+     *  Object Synchronization Recommended Configuration 
      */
     protected static    $ENABLE_PUSH_CREATED       =  FALSE;        // Enable Creation Of New Local Objects when Not Existing
     protected static    $ENABLE_PUSH_UPDATED       =  TRUE;         // Enable Update Of Existing Local Objects when Modified Remotly
@@ -467,7 +467,7 @@ class ThirdParty extends ObjectBase
         
         //====================================================================//
         // WebSite
-        $this->FieldsFactory()->Create(SPL_T_VARCHAR)
+        $this->FieldsFactory()->Create(SPL_T_URL)
                 ->Identifier("website")
                 ->Name(Translate::getAdminTranslation("Website", "AdminCustomers"))
                 ->Group(Translate::getAdminTranslation("Address", "AdminCustomers"))
