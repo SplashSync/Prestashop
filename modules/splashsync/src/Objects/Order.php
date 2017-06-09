@@ -433,7 +433,7 @@ class Order extends ObjectBase
         //====================================================================//
         // Order Total Price HT
         $this->FieldsFactory()->Create(SPL_T_DOUBLE)
-                ->Identifier("total_paid_tax_incl")
+                ->Identifier("total_paid_tax_excl")
                 ->Name(Translate::getAdminTranslation("Total (Tax excl.)", "AdminOrders") . $CurrencySuffix)
                 ->MicroData("http://schema.org/Invoice","totalPaymentDue")
                 ->isListed()
@@ -442,7 +442,7 @@ class Order extends ObjectBase
         //====================================================================//
         // Order Total Price TTC
         $this->FieldsFactory()->Create(SPL_T_DOUBLE)
-                ->Identifier("total_paid_tax_excl")
+                ->Identifier("total_paid_tax_incl")
                 ->Name(Translate::getAdminTranslation("Total (Tax incl.)", "AdminOrders") . $CurrencySuffix)
                 ->MicroData("http://schema.org/Invoice","totalPaymentDueTaxIncluded")
                 ->isListed()
