@@ -165,16 +165,16 @@ class ThirdParty extends ObjectBase
         if ( !empty($filter) && is_string($filter)) {
             //====================================================================//
             // Search in Customer Company
-            $Where  = " LOWER( c.`company` ) LIKE LOWER( '%" . $filter ."%') ";        
+            $Where  = " LOWER( c.`company` )        LIKE LOWER( '%" . pSQL($filter) ."%') ";        
             //====================================================================//
             // Search in Customer FirstName
-            $Where .= " OR LOWER( c.`firstname` ) LIKE LOWER( '%" . $filter ."%') ";        
+            $Where .= " OR LOWER( c.`firstname` )   LIKE LOWER( '%" . pSQL($filter) ."%') ";        
             //====================================================================//
             // Search in Customer LastName
-            $Where .= " OR LOWER( c.`lastname` ) LIKE LOWER( '%" . $filter ."%') ";        
+            $Where .= " OR LOWER( c.`lastname` )    LIKE LOWER( '%" . pSQL($filter) ."%') ";        
             //====================================================================//
             // Search in Customer Email
-            $Where .= " OR LOWER( c.`email` ) LIKE LOWER( '%" . $filter ."%') ";        
+            $Where .= " OR LOWER( c.`email` )       LIKE LOWER( '%" . pSQL($filter) ."%') ";        
             $sql->where($Where);        
         } 
         
@@ -189,7 +189,7 @@ class ThirdParty extends ObjectBase
         Db::getInstance()->executeS($sql);
         if (Db::getInstance()->getNumberError())
         {
-            return Splash::Log()->Err("ErrLocalTpl",SPL_O_CUSTOMERS,__FUNCTION__, Db::getInstance()->getMsgError());            
+            return Splash::Log()->Err("ErrLocalTpl",__CLASS__,__FUNCTION__, Db::getInstance()->getMsgError());            
         }
         //====================================================================//
         // Compute Total Number of Results

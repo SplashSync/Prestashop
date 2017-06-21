@@ -538,7 +538,7 @@ class Local
         //====================================================================//
         // Build WHERE        
         $sql->where('t.`rate` = '. (float) $TaxRate );
-        $sql->where('g.`id_country` = '. $CountryId );
+        $sql->where('g.`id_country` = '. (int) $CountryId );
         //====================================================================//
         // Build ORDER BY
         $sql->orderBy('country_name ASC');

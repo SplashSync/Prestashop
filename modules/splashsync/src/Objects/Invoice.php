@@ -196,11 +196,11 @@ class Invoice extends ObjectBase
         //====================================================================//
         // Setup filters
         if ( !empty($filter) ) {
-            $Where = " LOWER( i.number ) LIKE LOWER( '%" . $filter ."%') ";
-            $Where.= " OR LOWER( o.reference ) LIKE LOWER( '%" . $filter ."%') ";
-            $Where.= " OR LOWER( c.firstname ) LIKE LOWER( '%" . $filter ."%') ";
-            $Where.= " OR LOWER( c.lastname ) LIKE LOWER( '%" . $filter ."%') ";
-            $Where.= " OR LOWER( i.date_add ) LIKE LOWER( '%" . $filter ."%') ";
+            $Where = " LOWER( i.number )        LIKE LOWER( '%" . pSQL($filter) ."%') ";
+            $Where.= " OR LOWER( o.reference )  LIKE LOWER( '%" . pSQL($filter) ."%') ";
+            $Where.= " OR LOWER( c.firstname )  LIKE LOWER( '%" . pSQL($filter) ."%') ";
+            $Where.= " OR LOWER( c.lastname )   LIKE LOWER( '%" . pSQL($filter) ."%') ";
+            $Where.= " OR LOWER( i.date_add )   LIKE LOWER( '%" . pSQL($filter) ."%') ";
             $sql->where($Where);
         }  
         //====================================================================//

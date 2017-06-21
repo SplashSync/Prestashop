@@ -145,7 +145,7 @@ class Address extends ObjectBase
     
     /**
     *   @abstract     Return List Of Customer with required filters
-    *   @param        array   $filters          Filters for Customers List. 
+    *   @param        array   $filter               Filters for Object List. 
     *   @param        array   $params              Search parameters for result List. 
     *                         $params["max"]       Maximum Number of results 
     *                         $params["offset"]    List Start Offset 
@@ -155,7 +155,7 @@ class Address extends ObjectBase
     *                         $data["meta"]["total"]     ==> Total Number of results
     *                         $data["meta"]["current"]   ==> Total Number of results
     */
-    public function ObjectsList($filters=NULL,$params=NULL)
+    public function ObjectsList($filter=NULL,$params=NULL)
     {
         //====================================================================//
         // Stack Trace
@@ -179,25 +179,18 @@ class Address extends ObjectBase
         $sql->leftJoin("country_lang", 'c', 'c.id_country = a.id_country AND id_lang = ' . Context::getContext()->language->id . " ");
         //====================================================================//
         // Setup filters
-        if ( !empty($filters) ) {
+        if ( !empty($filter) ) {
             // Add filters with names convertions. Added LOWER function to be NON case sensitive
-            if ( !empty($filters["fullname"]) )  {   
-                $sqlfilter = " LOWER( c.firstname ) LIKE LOWER( '%" . $filters["fullname"] ."%') ";
-                $sqlfilter.= " OR LOWER( c.lastname ) LIKE LOWER( '%" . $filters["fullname"] ."%') ";
-                $sqlfilter.= " OR LOWER( c.company ) LIKE LOWER( '%" . $filters["fullname"] ."%') ";
-                $sql->where($sqlfilter);
-            }
-            if ( !empty($filters["email"]) )  {      
-                $sql->where(" LOWER( c.email ) LIKE LOWER( '%" . $filters["email"] ."%') ");
-            }
-            if ( isset($filters["active"]) )  {      
-                $sql->where(" c.`active` = '" . (int)$filters["active"] ."' ");
-            }
+            $sqlfilter = " LOWER( a.firstname )     LIKE LOWER( '%" . pSQL($filter) . "%') ";
+            $sqlfilter.= " OR LOWER( a.lastname )   LIKE LOWER( '%" . pSQL($filter) . "%') ";
+            $sqlfilter.= " OR LOWER( a.company )    LIKE LOWER( '%" . pSQL($filter) . "%') ";
+            $sqlfilter.= " OR LOWER( c.name )       LIKE LOWER( '%" . pSQL($filter) . "%') ";
+            $sql->where($sqlfilter);
         }  
         //====================================================================//
         // Setup sortorder
-        $SortField = empty($params["sortfield"])    ?   "lastname"  :   $params["sortfield"];
-        $SortOrder = empty($params["sortorder"])    ?   "ASC"      :   $params["sortorder"];
+        $SortField = empty($params["sortfield"])    ?   "lastname"  :   pSQL($params["sortfield"]);
+        $SortOrder = empty($params["sortorder"])    ?   "ASC"       :   pSQL($params["sortorder"]);
         // Build ORDER BY
         $sql->orderBy('`' . $SortField . '` ' . $SortOrder );
         

@@ -73,7 +73,7 @@ trait SplashIdTrait {
     public static function getSplashId( $ObjectType , $ObjectId)
     {
         $Sql     =  "SELECT spl_id FROM `"._DB_PREFIX_."splash_links`";
-        $Sql    .=  " WHERE type='" . $ObjectType . "' AND id='".$ObjectId."' ";
+        $Sql    .=  " WHERE type='" . pSQL($ObjectType) . "' AND id='" . pSQL($ObjectId) . "' ";
         return Db::getInstance()->getValue($Sql, 0);
     }    
     
@@ -93,17 +93,17 @@ trait SplashIdTrait {
         // Object is Unknown
         if (!$Current) {
             return Db::getInstance()->insert("splash_links", array(
-                "id"        =>  $ObjectId,
-                "type"      =>  $ObjectType,
-                "spl_id"    =>  $SplashId,
+                "id"        =>  pSQL($ObjectId),
+                "type"      =>  pSQL($ObjectType),
+                "spl_id"    =>  pSQL($SplashId),
             ));
         }
         // Splash Id Changed
         if ($Current !== $SplashId) {
             return Db::getInstance()->update("splash_links", array(
-                "id"        =>  $ObjectId,
-                "type"      =>  $ObjectType,
-                "spl_id"    =>  $SplashId,
+                "id"        =>  pSQL($ObjectId),
+                "type"      =>  pSQL($ObjectType),
+                "spl_id"    =>  pSQL($SplashId),
             ));
         }            
         

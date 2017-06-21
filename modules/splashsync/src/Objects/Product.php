@@ -214,16 +214,16 @@ class Product extends ObjectBase
         if ( !empty($filter) ) {
             //====================================================================//
             // Search by Product Name
-            $Where = " LOWER( pl.name ) LIKE LOWER( '%" . $filter ."%') ";
+            $Where = " LOWER( pl.name )         LIKE LOWER( '%" . pSQL($filter) ."%') ";
             //====================================================================//
             // Search by Product Name
-            $Where .= " OR LOWER( pl.name ) LIKE LOWER( '%" . $filter ."%') ";
+            $Where .= " OR LOWER( pl.name )     LIKE LOWER( '%" . pSQL($filter) ."%') ";
             //====================================================================//
             // Search by Product Ref
-            $Where .= " OR LOWER( p.reference ) LIKE LOWER( '%" . $filter ."%') ";
+            $Where .= " OR LOWER( p.reference ) LIKE LOWER( '%" . pSQL($filter) ."%') ";
             //====================================================================//
             // Search by Product Short Desc
-            $Where .= " OR LOWER(pl.description_short ) LIKE LOWER( '%" . $filter ."%') ";
+            $Where .= " OR LOWER(pl.description_short ) LIKE LOWER( '%" . pSQL($filter) ."%') ";
             $sql->where($Where);
         }  
         //====================================================================//

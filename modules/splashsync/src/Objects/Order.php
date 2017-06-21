@@ -198,11 +198,11 @@ class Order extends ObjectBase
         //====================================================================//
         // Setup filters
         if ( !empty($filter) ) {
-            $Where = " LOWER( o.id_order ) LIKE LOWER( '%" . $filter ."%') ";
-            $Where.= " OR LOWER( o.reference ) LIKE LOWER( '%" . $filter ."%') ";
-            $Where.= " OR LOWER( c.firstname ) LIKE LOWER( '%" . $filter ."%') ";
-            $Where.= " OR LOWER( c.lastname ) LIKE LOWER( '%" . $filter ."%') ";
-            $Where.= " OR LOWER( o.date_add ) LIKE LOWER( '%" . $filter ."%') ";
+            $Where = " LOWER( o.id_order )      LIKE LOWER( '%" . pSQL($filter) ."%') ";
+            $Where.= " OR LOWER( o.reference )  LIKE LOWER( '%" . pSQL($filter) ."%') ";
+            $Where.= " OR LOWER( c.firstname )  LIKE LOWER( '%" . pSQL($filter) ."%') ";
+            $Where.= " OR LOWER( c.lastname )   LIKE LOWER( '%" . pSQL($filter) ."%') ";
+            $Where.= " OR LOWER( o.date_add )   LIKE LOWER( '%" . pSQL($filter) ."%') ";
             $sql->where($Where);
         }    
         //====================================================================//
