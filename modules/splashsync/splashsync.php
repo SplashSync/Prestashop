@@ -42,7 +42,7 @@ class SplashSync extends Module
             $this->name = 'splashsync';
             $this->tab = 'administration';
             $this->version = '1.0.4';
-            $this->author = 'www.SplashSync.com';
+            $this->author = 'SplashSync';
             $this->need_instance = 0;
             $this->ps_versions_compliancy = array('min' => '1.5', 'max' => '1.7'); 
             $this->module_key = '48032a9ff6cc3a4a43a0ea2acf7ccf10';
