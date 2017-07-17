@@ -231,7 +231,7 @@ class Product extends ObjectBase
         $SortField = empty($params["sortfield"])    ?   "ref"  :   $params["sortfield"];
         $SortOrder = empty($params["sortorder"])    ?   "ASC"  :   $params["sortorder"];
         // Build ORDER BY
-        $sql->orderBy('`' . $SortField . '` ' . $SortOrder );
+        $sql->orderBy('`' . pSQL($SortField) . '` ' . pSQL($SortOrder) );
         
         //====================================================================//
         // Execute final request
@@ -246,7 +246,7 @@ class Product extends ObjectBase
         $Total      = Db::getInstance()->NumRows();
         //====================================================================//
         // Build LIMIT
-        $sql->limit($params["max"],$params["offset"]);
+        $sql->limit(pSQL($params["max"]),pSQL($params["offset"]));
         $Result = Db::getInstance()->executeS($sql);
         //====================================================================//
         // Init Result Array

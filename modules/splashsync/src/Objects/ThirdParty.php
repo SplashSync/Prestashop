@@ -183,7 +183,7 @@ class ThirdParty extends ObjectBase
         $SortField = empty($params["sortfield"])    ?   "lastname"  :   $params["sortfield"];
         $SortOrder = empty($params["sortorder"])    ?   "ASC"       :   $params["sortorder"];
         // Build ORDER BY
-        $sql->orderBy('`' . $SortField . '` ' . $SortOrder );
+        $sql->orderBy('`' . pSQL($SortField) . '` ' . pSQL($SortOrder) );
         //====================================================================//
         // Execute count request
         Db::getInstance()->executeS($sql);
@@ -198,7 +198,7 @@ class ThirdParty extends ObjectBase
         // Build LIMIT
         $Max    = empty($params["max"])     ?   0   :   $params["max"];
         $Offset = empty($params["offset"])  ?   0   :   $params["offset"];
-        $sql->limit($Max,$Offset);
+        $sql->limit(pSQL($Max),pSQL($Offset));
         //====================================================================//
         // Execute final request
         $result = Db::getInstance()->executeS($sql);   
