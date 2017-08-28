@@ -208,7 +208,7 @@ class Invoice extends ObjectBase
         $SortField = empty($params["sortfield"])    ?   "date_add"  :   $params["sortfield"];
         $SortOrder = empty($params["sortorder"])    ?   "DESC"      :   $params["sortorder"];
         // Build ORDER BY
-        $sql->orderBy('`' . $SortField . '` ' . $SortOrder );
+        $sql->orderBy('`' . pSQL($SortField) . '` ' . pSQL($SortOrder) );
         
         //====================================================================//
         // Execute count request
@@ -222,7 +222,7 @@ class Invoice extends ObjectBase
         $total      = Db::getInstance()->NumRows();
         //====================================================================//
         // Build LIMIT
-        $sql->limit($params["max"],$params["offset"]);
+        $sql->limit(pSQL($params["max"]),pSQL($params["offset"]));
         //====================================================================//
         // Execute final request
         $result = Db::getInstance()->executeS($sql);   
