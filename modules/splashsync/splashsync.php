@@ -462,12 +462,12 @@ class SplashSync extends Module
             
             if ( $output == null )
             {
-                Configuration::updateValue('SPLASH_WS_EXPERT',  $expert);
-                Configuration::updateValue('SPLASH_WS_HOST',    $host);
-                Configuration::updateValue('SPLASH_WS_ID',      $ServerId);
-                Configuration::updateValue('SPLASH_WS_KEY',     $UserKey);
-                Configuration::updateValue('SPLASH_LANG_ID',    $LangId);
-                Configuration::updateValue('SPLASH_USER_ID',    $UserId);
+                Configuration::updateValue('SPLASH_WS_EXPERT',  trim($expert));
+                Configuration::updateValue('SPLASH_WS_HOST',    trim($host));
+                Configuration::updateValue('SPLASH_WS_ID',      trim($ServerId));
+                Configuration::updateValue('SPLASH_WS_KEY',     trim($UserKey));
+                Configuration::updateValue('SPLASH_LANG_ID',    trim($LangId));
+                Configuration::updateValue('SPLASH_USER_ID',    trim($UserId));
                 $output .= $this->displayConfirmation($this->l('Settings updated'));
             }
             
