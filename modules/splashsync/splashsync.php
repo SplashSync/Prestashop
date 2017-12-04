@@ -661,7 +661,8 @@ class SplashSync extends Module
         //====================================================================//
         // Register Module JS
         $this->context->controller->addJS($this->_path.'views/js/splash.js');
-        $this->context->controller->addJS($this->_path.'views/js/jquery.min.js');
+//        $this->context->controller->addJS($this->_path.'views/js/jquery.min.js');
+        $this->context->controller->addJquery();
         $this->context->controller->addJS($this->_path.'views/js/jquery.noty.packaged.min.js');
     }
 
@@ -753,6 +754,9 @@ class SplashSync extends Module
                 $IdList[] =   (int) Splash\Client\Splash::Object("Product")->getUnikId($id_product,$Attr["id_product_attribute"]);
             }
         }
+        if ( empty($IdList) ) {
+            return True;
+        } 
         //====================================================================//
         // Commit Update For Product                
         return $this->_Commit("Product",$IdList,$action,$comment);
