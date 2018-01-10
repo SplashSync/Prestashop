@@ -6,7 +6,7 @@ language: php
 # Versions of PHP to test against
 php:
     - "5.6"
-    - "7.0"
+#    - "7.0"
 #    - "7.1"
 #    - "7.2"
 
@@ -33,7 +33,7 @@ before_script:
 
   
 # Move Module Contents to Tmp Folder
-#    - mv  $TRAVIS_BUILD_DIR 
+    - mv  $TRAVIS_BUILD_DIR/* $TMP_BUILD_DIR
 #    - export PLUGIN_SLUG=$(basename $(pwd))
 #    
 #  
