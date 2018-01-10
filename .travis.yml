@@ -2,6 +2,8 @@
 
 # Tell Travis CI we're using PHP
 language: php
+sudo: required
+dist: trusty
 
 # Versions of PHP to test against
 php:
