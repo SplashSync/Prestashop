@@ -1428,14 +1428,14 @@ class Product extends ObjectBase
             //====================================================================//
             // Update Attribute Price if Required
             if ( !$this->Float_Compare($PriceHT,  $this->Attribute->price) ) {
-                $this->Attribute->price     =   $PriceHT;
+                $this->Attribute->price     =   round($PriceHT, 10);
                 $this->AttributeUpdate      =   True;
             }
         //====================================================================//
         // Update product Price without Attribute
         } else {
            if ( !$this->Float_Compare($this->NewPrice["ht"],  $this->Object->price) ) {
-                $this->Object->price = $this->NewPrice["ht"];
+                $this->Object->price = round($this->NewPrice["ht"] , 10);
                 $this->update   = True;
             } 
         }
