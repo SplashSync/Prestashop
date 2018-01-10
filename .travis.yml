@@ -34,7 +34,8 @@ before_script:
   
 # Move Module Contents to Tmp Folder
     - mkdir     $TMP_BUILD_DIR
-    - mv        $TRAVIS_BUILD_DIR/*.* $TMP_BUILD_DIR
+    - mv        $TRAVIS_BUILD_DIR/*     $TMP_BUILD_DIR
+    - mv        $TRAVIS_BUILD_DIR/.*    $TMP_BUILD_DIR
     - ls -al    $TRAVIS_BUILD_DIR
     
 # Clone Prestashop into Build Folder
