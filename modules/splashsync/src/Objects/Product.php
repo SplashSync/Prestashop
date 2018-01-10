@@ -580,7 +580,7 @@ class Product extends ObjectBase
         // Long Description
         $this->FieldsFactory()->Create(SPL_T_MTEXT)
                 ->Identifier("description")
-                ->Name(Translate::getAdminTranslation("Short description", "AdminProducts"))                
+                ->Name(Translate::getAdminTranslation("description", "AdminProducts"))                
                 ->Group($GroupName)
                 ->MicroData("http://schema.org/Article","articleBody");
         
@@ -588,7 +588,7 @@ class Product extends ObjectBase
         // Short Description
         $this->FieldsFactory()->Create(SPL_T_MVARCHAR)
                 ->Identifier("description_short")
-                ->Name(Translate::getAdminTranslation("Description", "AdminProducts"))                
+                ->Name(Translate::getAdminTranslation("Short Description", "AdminProducts"))                
                 ->Group($GroupName)
                 ->MicroData("http://schema.org/Product","description");
 

@@ -17,23 +17,24 @@ env:
     
 before_script:
 
-    - export TMP_BUILD_DIR=/tmp/SplashSync
 
-    - |
-      echo Start travis
-      echo Current dir is `pwd`
-      echo Home dir is `echo ~`
-      echo TRAVIS_BUILD_DIR is $TRAVIS_BUILD_DIR
-      echo TMP_BUILD_DIR is $TMP_BUILD_DIR
+#    - |
+#      echo Start travis
+#      echo Current dir is `pwd`
+#      echo Home dir is `echo ~`
+#      echo TRAVIS_BUILD_DIR is $TRAVIS_BUILD_DIR
+#      echo TMP_BUILD_DIR is $TMP_BUILD_DIR
 
+#   Move Module to Tmp Folder
+    - bash build/move_prestashop.sh
 #   Install Prestashop
-    - bash build/install_prestashop.sh
+    - bash $MODULE_SCRIPTS_DIR/install_prestashop.sh
 #    Setup WebServer (Apache & PHP-Fpm)
-    - bash build/install_webserver.sh
+    - bash $MODULE_SCRIPTS_DIR/install_webserver.sh
 #   Start Prestashop (Composer & More)
-    - bash build/start_prestashop.sh
+    - bash $MODULE_SCRIPTS_DIR/start_prestashop.sh
 #   Install Module
-    - bash build/install_module.sh
+    - bash $MODULE_SCRIPTS_DIR/install_module.sh
     
 #  
 ## Move Module Contents to Tmp Folder
