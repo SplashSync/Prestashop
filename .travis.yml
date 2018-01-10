@@ -2,8 +2,24 @@
 
 # Tell Travis CI we're using PHP
 language: php
+
+addons:
+    #chrome: stable
+    apt:
+        packages:
+        - apache2
+        - postfix
+        - libapache2-mod-fastcgi
+        - libappindicator1
+        - fonts-liberation
+
+cache:
+  directories:
+    - $HOME/.composer/cache
+
 sudo: required
 dist: trusty
+
 
 # Versions of PHP to test against
 php:
