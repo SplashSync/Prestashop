@@ -1,0 +1,88 @@
+# Travis CI Configuration File
+
+# Tell Travis CI we're using PHP
+language: php
+
+# Versions of PHP to test against
+php:
+    - "5.6"
+    - "7.0"
+#    - "7.1"
+#    - "7.2"
+
+# Gloabl Env Configuration
+env:
+    global:
+        - SYMFONY_DEPRECATIONS_HELPER=disabled
+    
+    
+install:
+    # Disable Xdebug ...
+    - phpenv config-rm xdebug.ini
+    
+before_script:
+
+    - export TMP_BUILD_DIR=/tmp/SplashSync
+
+    - |
+      echo Start travis
+      echo Current dir is `pwd`
+      echo Home dir is `echo ~`
+      echo TRAVIS_BUILD_DIR is $TRAVIS_BUILD_DIR
+      echo TMP_BUILD_DIR is $TMP_BUILD_DIR
+
+  
+# Move Module Contents to Tmp Folder
+#    - mv  $TRAVIS_BUILD_DIR 
+#    - export PLUGIN_SLUG=$(basename $(pwd))
+#    
+#  
+#    - |
+#      if [ "$DEBUG" = true ]; then
+#        echo "Debugging informations"
+#        # Check PHP
+#        php -i
+#        # Check PHPUnit installation
+#        which phpunit
+#        phpunit --version
+#        # Check MySQL
+#        mysql --version
+#        mysql -e "SELECT VERSION();"
+#        echo
+#      fi
+#  
+#    # Clone Dolibarr & Move to Web folder
+#    - git clone --depth=1 --branch="$DOL_VERSION" https://github.com/Dolibarr/dolibarr.git $DOL_BUILD_DIR
+#
+#    # Init Database
+#    - bash $TRAVIS_BUILD_DIR/build/install_database.sh
+#    
+#    # Setup Conf file
+#    - cd $DOL_BUILD_DIR
+#    - bash $TRAVIS_BUILD_DIR/build/configure_dolibarr.sh  
+#    - bash $TRAVIS_BUILD_DIR/build/upgrade_dolibarr.sh  
+#        
+#    # Copy Splash Module to Dolibarr folder
+#    - cp -rf "$TRAVIS_BUILD_DIR/splash" "$DOL_BUILD_DIR/htdocs/splash"
+#    - cp "$TRAVIS_BUILD_DIR/composer.json" "$DOL_BUILD_DIR/htdocs/composer.json"
+#    - cp -rf "$TRAVIS_BUILD_DIR/build" "$DOL_BUILD_DIR/htdocs/build"
+#
+#    # Run Composer
+#    - cd "$DOL_BUILD_DIR/htdocs/"
+#    - composer update 
+#    
+#    # Move to Dolibarr Root Dir
+#    - cd "$DOL_BUILD_DIR/htdocs"
+    
+
+script: 
+#    - php build/bootstrap.php
+#    - phpunit --version
+#    - phpunit -c build/phpunit.xml.dist 
+        
+notifications:
+  email:         
+    on_success: never # default: change
+    on_failure: never # default: always
+
+after_failure:
