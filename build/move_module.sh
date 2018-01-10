@@ -1,9 +1,6 @@
 
 echo Move Module to TMP Folder
 
-export MODULE_DIR=/tmp/SplashSync
-export MODULE_SCRIPTS_DIR=/tmp/SplashSync/build
-
 # Move Module Contents to Tmp Folder
 mkdir     $MODULE_DIR
 mv -f     $TRAVIS_BUILD_DIR/*             $MODULE_DIR      
