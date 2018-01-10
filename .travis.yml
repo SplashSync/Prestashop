@@ -37,7 +37,7 @@ before_script:
     - mv -f     $TRAVIS_BUILD_DIR/*             $TMP_BUILD_DIR      
     - rm -Rf    $TRAVIS_BUILD_DIR/.git
     - rm -Rf    $TRAVIS_BUILD_DIR/.gitignore
-    - rm -Rf    $TRAVIS_BUILD_DIR/.travis-ci.yml
+    - rm -Rf    $TRAVIS_BUILD_DIR/.travis.yml
     - ls -al    $TRAVIS_BUILD_DIR
     
 # Clone Prestashop into Build Folder
