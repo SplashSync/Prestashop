@@ -209,7 +209,7 @@ class Local
         foreach (Language::getLanguages() as $Language) {
             $Tmp = explode ( "-" , $Language["language_code"]);
             if ( count($Tmp) != 2 ) {
-                return Splash::Log()->Err("ErrSelfTestLangCode");
+                return Splash::Log()->Err("ErrSelfTestLangCode", $Language["language_code"]);
             }
         }
                 
