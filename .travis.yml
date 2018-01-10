@@ -15,11 +15,6 @@ env:
     global:
         - SYMFONY_DEPRECATIONS_HELPER=disabled
     
-    
-install:
-    # Disable Xdebug ...
-    - phpenv config-rm xdebug.ini
-    
 before_script:
 
     - export TMP_BUILD_DIR=/tmp/SplashSync
@@ -31,9 +26,13 @@ before_script:
       echo TRAVIS_BUILD_DIR is $TRAVIS_BUILD_DIR
       echo TMP_BUILD_DIR is $TMP_BUILD_DIR
 
-    - bash build/install_webserver.sh
+#   Install Prestashop
     - bash build/install_prestashop.sh
+#    Setup WebServer (Apache & PHP-Fpm)
+    - bash build/install_webserver.sh
+#   Start Prestashop (Composer & More)
     - bash build/start_prestashop.sh
+#   Install Module
     - bash build/install_module.sh
     
 #  
