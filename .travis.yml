@@ -118,6 +118,8 @@ before_script:
 
 script: 
 #    - php build/bootstrap.php
+
+    - ls -la
     - phpunit --version
     - phpunit -c phpunit.xml 
         
