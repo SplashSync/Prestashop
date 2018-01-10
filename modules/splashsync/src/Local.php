@@ -160,7 +160,9 @@ class Local
         // When Library is called in TRAVIS CI mode ONLY
         //====================================================================//
         if ( !empty(Splash::Input("SPLASH_TRAVIS")) && !$this->getLocalModule()->isEnabled('splashsync') ) {
-            $this->getLocalModule()->install();
+            if ( !$this->getLocalModule()->install() ) {
+                Splash::Log()->Err('Splash Module Intall Failled');
+            }
         }
         
         return True;
