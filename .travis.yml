@@ -35,6 +35,15 @@ before_script:
 # Move Module Contents to Tmp Folder
     - mkdir $TMP_BUILD_DIR
     - mv  $TRAVIS_BUILD_DIR/* $TMP_BUILD_DIR
+    - ls -l  $TRAVIS_BUILD_DIR
+    - ls -l  $TMP_BUILD_DIR
+    
+# Clone Prestashop into Build Folder
+    - git clone --depth=50 --branch=master https://github.com/Prestashop/Prestashop.git $TRAVIS_BUILD_DIR
+    - cd $TRAVIS_BUILD_DIR
+    - ls -l  $TRAVIS_BUILD_DIR
+    
+    
 #    - export PLUGIN_SLUG=$(basename $(pwd))
 #    
 #  
