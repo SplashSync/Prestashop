@@ -1738,13 +1738,14 @@ class Product extends ObjectBase
             // Fetch Images Object
             $ObjectImage = new Image($ImageArray["id_image"],  $this->LangId);
 
+            $ImageName   =   !empty($this->Object->link_rewrite) ? array_shift($this->Object->link_rewrite) : 'Image';
             //====================================================================//
             // Insert Image in Output List
             $Image = $this->Img_Encode(
-                    $ObjectImage->legend?$ObjectImage->legend:$ObjectImage->id . "." . $ObjectImage->image_format, 
+                    ($ObjectImage->legend?$ObjectImage->legend:$ObjectImage->id . "." . $ObjectImage->image_format), 
                     $ObjectImage->id . "." . $ObjectImage->image_format, 
                     $this->Object->image_folder . $ObjectImage->getImgFolder(), 
-                    $link->getImageLink($this->Object->link_rewrite, $ImageArray["id_image"]) );
+                    $link->getImageLink($ImageName, $ImageArray["id_image"]) );
 
             //====================================================================//
             // Init Image List Item
@@ -1909,8 +1910,6 @@ class Product extends ObjectBase
         $Path       = dirname($ObjectImage->getPathForCreation());
         $Filename   = "/" . $ObjectImage->id . "." . $ObjectImage->image_format;
         Splash::File()->WriteFile($Path,$Filename,$NewImageFile["md5"],$NewImageFile["raw"]); 
-//        \Cache::getInstance()->Flush();
-        
     }    
     
     /**
