@@ -21,3 +21,5 @@ mysql -D prestashop -e "INSERT INTO ps_configuration ( name ,  value ,  date_add
 mysql -D prestashop -e "INSERT INTO ps_configuration ( name ,  value ,  date_add ,  date_upd ) VALUES ('SPLASH_LANG_ID','en-US',NOW(), NOW());"
 mysql -D prestashop -e "INSERT INTO ps_configuration ( name ,  value ,  date_add ,  date_upd ) VALUES ('SPLASH_USER_ID','1',NOW(), NOW());"
 
+# Enable the Module
+mysql -D prestashop -e "INSERT INTO ps_module ( name ,  active ,  version ) VALUES ( 'splashsync', 1 , 'test');"
