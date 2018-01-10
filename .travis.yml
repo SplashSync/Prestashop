@@ -121,6 +121,7 @@ script:
 
     - ls -la
     - phpunit --version
+    - phpunit -c phpunit.xml modules/splashsync/vendor/splash/phpcore/Tests/Core/
     - phpunit -c phpunit.xml 
         
 notifications:
