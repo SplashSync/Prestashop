@@ -35,12 +35,16 @@ before_script:
 # Move Module Contents to Tmp Folder
     - mkdir $TMP_BUILD_DIR
     - mv    $TRAVIS_BUILD_DIR/* $TMP_BUILD_DIR
-    - rm    $TRAVIS_BUILD_DIR -Rf
-    - mkdir $TRAVIS_BUILD_DIR
+#    - rm    $TRAVIS_BUILD_DIR -Rf
+#    - mkdir $TRAVIS_BUILD_DIR
     
 # Clone Prestashop into Build Folder
-    - git clone --depth=50 --branch=master https://github.com/Prestashop/Prestashop.git $TRAVIS_BUILD_DIR
     - cd $TRAVIS_BUILD_DIR
+    - git init
+    - git git remote add origin https://github.com/Prestashop/Prestashop.git
+    - git fetch
+    - git checkout -t origin/master
+#    - git clone --depth=50 --branch=master https://github.com/Prestashop/Prestashop.git $TRAVIS_BUILD_DIR
     - ls -l  $TRAVIS_BUILD_DIR
     
     
