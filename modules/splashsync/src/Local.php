@@ -689,23 +689,23 @@ class Local
         Splash::Log()->Trace(__CLASS__,__FUNCTION__);    
         //====================================================================//        
         // Load Local Splash Sync Module
-        if ( !isset(static::$SplashSyncModule) ) {
-            static::$SplashSyncModule =   $this->getLocalModule(); ;
+        if ( !isset($this->SplashSyncModule) ) {
+            $this->SplashSyncModule =   $this->getLocalModule(); ;
         }
         //====================================================================//        
         // Check if Module is Installed & Enabled
-        if ( static::$SplashSyncModule->isEnabled('splashsync') ) {
+        if ( $this->SplashSyncModule->isEnabled('splashsync') ) {
             return True;
         }
         //====================================================================//        
         // Execute Module is Uninstall
-        if ( static::$SplashSyncModule->uninstall() ) {
+        if ( $this->SplashSyncModule->uninstall() ) {
             Splash::Log()->Msg('[SPLASH] Splash Module Unintall Done');
         }
         //====================================================================//        
         // Execute Module is Install
-        static::$SplashSyncModule->updateTranslationsAfterInstall(False);
-        if ( static::$SplashSyncModule->install() ) {
+        $this->SplashSyncModule->updateTranslationsAfterInstall(False);
+        if ( $this->SplashSyncModule->install() ) {
             Splash::Log()->Msg('[SPLASH] Splash Module Intall Done');
             echo Splash::Log()->GetConsoleLog(True);
             return True;
@@ -713,7 +713,7 @@ class Local
         //====================================================================//        
         // Import & Display Errors
         Splash::Log()->Err('[SPLASH] Splash Module Intall Failled');
-        foreach (static::$SplashSyncModule->getErrors() as $Error) {
+        foreach ($this->SplashSyncModule->getErrors() as $Error) {
             Splash::Log()->Err('[SPLASH] Mod. Install : ' . $Error);
         }
         echo Splash::Log()->GetConsoleLog(True);
