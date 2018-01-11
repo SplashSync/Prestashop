@@ -698,7 +698,6 @@ class Local
         }
         //====================================================================//        
         // Execute Module is Install
-        \SplashSync::$update_translations_after_install = False;
         if ( $Module->install() ) {
             Splash::Log()->Msg('[SPLASH] Splash Module Intall Done');
             return True;
