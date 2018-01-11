@@ -31,7 +31,14 @@ php:
 env:
     global:
         - SYMFONY_DEPRECATIONS_HELPER=disabled
-    
+        
+    matrix:
+        - PS_VERSION=develop
+        - PS_VERSION=master
+        
+    allow_failures:
+        - env: PS_VERSION=develop
+        
 before_script:
 
     - export MODULE_DIR=/tmp/SplashSync
