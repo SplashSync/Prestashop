@@ -25,6 +25,8 @@ if (!defined('_PS_VERSION_')) {
 class SplashSync extends Module
 {
     
+    protected static $update_translations_after_install = true;
+    
 //====================================================================//
 // *******************************************************************//
 //  MODULE CONSTRUCTOR
@@ -99,7 +101,7 @@ class SplashSync extends Module
         }
         //====================================================================//
         // Install Parent Module
-        if (!parent::install() )            {  return false;    }
+        if ( !parent::install() )            {  return false;    }
 
         //====================================================================//
         // Create Splash Linking Table
