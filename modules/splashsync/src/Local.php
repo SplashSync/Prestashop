@@ -28,7 +28,6 @@ use Splash\Local\Traits\SplashIdTrait;
  * @abstract    Splash Local Core Class - Head of Module's Local Integration 
  * @author      B. Paquier <contact@splashsync.com>
  */
-
 class Local 
 {
     
@@ -159,17 +158,10 @@ class Local
         //====================================================================//
         // When Library is called in TRAVIS CI mode ONLY
         //====================================================================//
-        if ( !empty(Splash::Input("SPLASH_TRAVIS")) && !$this->getLocalModule()->isEnabled('splashsync') ) {
-            $this->getLocalModule()->install();
-            $this->getLocalModule()->enable();
-            if ( $this->getLocalModule()->isEnabled('splashsync') ) {
-                Splash::Log()->Err('Splash Module Intall Failled');
-            } else {
-                Splash::Log()->Msg('Splash Module Intall Done');
-            }
-            echo Splash::Log()->GetConsoleLog(True);
+        if ( !empty(Splash::Input("SPLASH_TRAVIS")) ) {
+            $this->onTravisIncludes();
         }
-        
+                
         return True;
     }      
 
@@ -683,6 +675,37 @@ class Local
         return $UpdateRequired;
     }     
     
+//====================================================================//
+//  Prestashop Module Testing
+//====================================================================//
+
+    /**
+     * @abstract    When Module is Loaded by Travis Ci, Check Module is Installed
+     */
+    private function onTravisIncludes() 
+    {
+        $Module = $this->getLocalModule();  
+        //====================================================================//        
+        // Check if Module is Installed & Enabled
+        if ( $Module->isEnabled('splashsync') ) {
+            return True;
+        }
+        //====================================================================//        
+        // Execute Module is Install
+        if ( $Module->install() ) {
+            Splash::Log()->Msg('[SPLASH] Splash Module Intall Done');
+            return True;
+        }
+        //====================================================================//        
+        // Import & Display Errors
+        Splash::Log()->Err('[SPLASH] Splash Module Intall Failled');
+        foreach ($Module->getErrors() as $Error) {
+            Splash::Log()->Err('[SPLASH] Mod. Install : ' . $Error);
+        }
+        echo Splash::Log()->GetConsoleLog(True);
+        return False;
+    }
+        
 }
 
 ?>
