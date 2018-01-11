@@ -688,22 +688,24 @@ class Local
         // Stack Trace
         Splash::Log()->Trace(__CLASS__,__FUNCTION__);    
         //====================================================================//        
-        // Load Local Spmlash Sync Module
-        $Module = $this->getLocalModule();  
+        // Load Local Splash Sync Module
+        if ( !isset(static::$Module) ) {
+            static::$Module =   $this->getLocalModule(); ;
+        }
         //====================================================================//        
         // Check if Module is Installed & Enabled
-        if ( $Module->isEnabled('splashsync') ) {
+        if ( static::$Module->isEnabled('splashsync') ) {
             return True;
         }
         //====================================================================//        
         // Execute Module is Uninstall
-        if ( $Module->uninstall() ) {
+        if ( static::$Module->uninstall() ) {
             Splash::Log()->Msg('[SPLASH] Splash Module Unintall Done');
         }
         //====================================================================//        
         // Execute Module is Install
-        $Module->updateTranslationsAfterInstall(False);
-        if ( $Module->install() ) {
+        static::$Module->updateTranslationsAfterInstall(False);
+        if ( static::$Module->install() ) {
             Splash::Log()->Msg('[SPLASH] Splash Module Intall Done');
             echo Splash::Log()->GetConsoleLog(True);
             return True;
@@ -711,7 +713,7 @@ class Local
         //====================================================================//        
         // Import & Display Errors
         Splash::Log()->Err('[SPLASH] Splash Module Intall Failled');
-        foreach ($Module->getErrors() as $Error) {
+        foreach (static::$Module->getErrors() as $Error) {
             Splash::Log()->Err('[SPLASH] Mod. Install : ' . $Error);
         }
         echo Splash::Log()->GetConsoleLog(True);
