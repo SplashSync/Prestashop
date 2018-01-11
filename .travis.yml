@@ -20,7 +20,6 @@ cache:
 sudo: required
 dist: trusty
 
-
 # Versions of PHP to test against
 php:
     - "5.6"
@@ -38,13 +37,6 @@ before_script:
     - export MODULE_DIR=/tmp/SplashSync
     - export MODULE_SCRIPTS_DIR=/tmp/SplashSync/build
 
-#    - |
-#      echo Start travis
-#      echo Current dir is `pwd`
-#      echo Home dir is `echo ~`
-#      echo TRAVIS_BUILD_DIR is $TRAVIS_BUILD_DIR
-#      echo TMP_BUILD_DIR is $TMP_BUILD_DIR
-
 #   Move Module to Tmp Folder
     - bash build/move_module.sh
 #   Install Prestashop
@@ -56,66 +48,6 @@ before_script:
 #   Install Module
     - bash $MODULE_SCRIPTS_DIR/install_module.sh
     
-#  
-## Move Module Contents to Tmp Folder
-#    - mkdir     $TMP_BUILD_DIR
-#    - mv -f     $TRAVIS_BUILD_DIR/*             $TMP_BUILD_DIR      
-#    - rm -Rf    $TRAVIS_BUILD_DIR/.git
-#    - rm -Rf    $TRAVIS_BUILD_DIR/.gitignore
-#    - rm -Rf    $TRAVIS_BUILD_DIR/.travis.yml
-#    - ls -al    $TRAVIS_BUILD_DIR
-#    
-## Clone Prestashop into Build Folder
-#    - cd $TRAVIS_BUILD_DIR
-##    - git init
-##    - git remote add origin https://github.com/Prestashop/Prestashop.git
-##    - git fetch
-##    - git checkout -t origin/master
-#    - git clone --depth=50 --branch=master https://github.com/Prestashop/Prestashop.git $TRAVIS_BUILD_DIR
-#    - ls -l  $TRAVIS_BUILD_DIR
-    
-    
-#    - export PLUGIN_SLUG=$(basename $(pwd))
-#    
-#  
-#    - |
-#      if [ "$DEBUG" = true ]; then
-#        echo "Debugging informations"
-#        # Check PHP
-#        php -i
-#        # Check PHPUnit installation
-#        which phpunit
-#        phpunit --version
-#        # Check MySQL
-#        mysql --version
-#        mysql -e "SELECT VERSION();"
-#        echo
-#      fi
-#  
-#    # Clone Dolibarr & Move to Web folder
-#    - git clone --depth=1 --branch="$DOL_VERSION" https://github.com/Dolibarr/dolibarr.git $DOL_BUILD_DIR
-#
-#    # Init Database
-#    - bash $TRAVIS_BUILD_DIR/build/install_database.sh
-#    
-#    # Setup Conf file
-#    - cd $DOL_BUILD_DIR
-#    - bash $TRAVIS_BUILD_DIR/build/configure_dolibarr.sh  
-#    - bash $TRAVIS_BUILD_DIR/build/upgrade_dolibarr.sh  
-#        
-#    # Copy Splash Module to Dolibarr folder
-#    - cp -rf "$TRAVIS_BUILD_DIR/splash" "$DOL_BUILD_DIR/htdocs/splash"
-#    - cp "$TRAVIS_BUILD_DIR/composer.json" "$DOL_BUILD_DIR/htdocs/composer.json"
-#    - cp -rf "$TRAVIS_BUILD_DIR/build" "$DOL_BUILD_DIR/htdocs/build"
-#
-#    # Run Composer
-#    - cd "$DOL_BUILD_DIR/htdocs/"
-#    - composer update 
-#    
-#    # Move to Dolibarr Root Dir
-#    - cd "$DOL_BUILD_DIR/htdocs"
-    
-
 script: 
 #    - php build/bootstrap.php
 
