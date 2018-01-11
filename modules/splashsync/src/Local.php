@@ -692,15 +692,15 @@ class Local
         }
         //====================================================================//        
         // Execute Module is Uninstall
-        $Module->updateTranslationsAfterInstall(False);
         if ( $Module->uninstall() ) {
             Splash::Log()->Msg('[SPLASH] Splash Module Unintall Done');
-            return True;
         }
         //====================================================================//        
         // Execute Module is Install
+        $Module->updateTranslationsAfterInstall(False);
         if ( $Module->install() ) {
             Splash::Log()->Msg('[SPLASH] Splash Module Intall Done');
+            echo Splash::Log()->GetConsoleLog(True);
             return True;
         }
         //====================================================================//        
