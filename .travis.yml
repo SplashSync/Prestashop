@@ -23,7 +23,7 @@ dist: trusty
 # Versions of PHP to test against
 php:
     - "5.6"
-#    - "7.0"
+    - "7.0"
 #    - "7.1"
 #    - "7.2"
 
@@ -35,7 +35,6 @@ env:
     matrix:
         - PS_VERSION=develop
         - PS_VERSION=master
-        - PS_VERSION=1.7.0.x
         - PS_VERSION=1.7.1.x
         - PS_VERSION=1.7.2.x
         - PS_VERSION=1.7.3.x
