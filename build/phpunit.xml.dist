@@ -47,7 +47,7 @@
     </filter>
     
     <php>
-        <const  name="SPLASH_DEBUG"     value="false"/>
+        <const  name="SPLASH_DEBUG"     value="true"/>
         <server name="SPLASH_TRAVIS"    value="true" />
         <server name="SERVER_NAME"      value="127.0.0.1:9000"/>        
     </php>
