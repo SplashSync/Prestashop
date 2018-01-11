@@ -59,10 +59,6 @@ before_script:
     - bash $MODULE_SCRIPTS_DIR/install_module.sh
     
 script: 
-#    - php build/bootstrap.php
-
-    - ls -la
-    - phpunit --version
     - phpunit -c phpunit.xml modules/splashsync/vendor/splash/phpcore/Tests/Core/
     - phpunit -c phpunit.xml 
         
