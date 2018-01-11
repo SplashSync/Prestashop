@@ -684,6 +684,11 @@ class Local
      */
     private function onTravisIncludes() 
     {
+        //====================================================================//
+        // Stack Trace
+        Splash::Log()->Trace(__CLASS__,__FUNCTION__);    
+        //====================================================================//        
+        // Load Local Spmlash Sync Module
         $Module = $this->getLocalModule();  
         //====================================================================//        
         // Check if Module is Installed & Enabled
