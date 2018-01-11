@@ -692,6 +692,7 @@ class Local
         }
         //====================================================================//        
         // Execute Module is Uninstall
+        $Module->updateTranslationsAfterInstall(False);
         if ( $Module->uninstall() ) {
             Splash::Log()->Msg('[SPLASH] Splash Module Unintall Done');
             return True;

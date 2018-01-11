@@ -814,7 +814,8 @@ class Invoice extends ObjectBase
         //====================================================================//
         // Fill List with Data
         foreach ($this->Products as $key => $Product) {
-            
+
+//Splash::Log()->www("Product", $Product);
             //====================================================================//
             // READ Fields
             switch ($ListFieldName)
