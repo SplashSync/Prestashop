@@ -691,6 +691,12 @@ class Local
             return True;
         }
         //====================================================================//        
+        // Execute Module is Uninstall
+        if ( $Module->uninstall() ) {
+            Splash::Log()->Msg('[SPLASH] Splash Module Unintall Done');
+            return True;
+        }
+        //====================================================================//        
         // Execute Module is Install
         if ( $Module->install() ) {
             Splash::Log()->Msg('[SPLASH] Splash Module Intall Done');
