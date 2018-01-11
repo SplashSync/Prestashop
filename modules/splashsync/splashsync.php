@@ -25,7 +25,7 @@ if (!defined('_PS_VERSION_')) {
 class SplashSync extends Module
 {
     
-    protected static $update_translations_after_install = true;
+    protected static $update_translations_after_install = False;
     
 //====================================================================//
 // *******************************************************************//
