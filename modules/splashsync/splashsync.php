@@ -661,7 +661,6 @@ class SplashSync extends Module
         //====================================================================//
         // Register Module JS
         $this->context->controller->addJS($this->_path.'views/js/splash.js');
-//        $this->context->controller->addJS($this->_path.'views/js/jquery.min.js');
         $this->context->controller->addJquery();
         $this->context->controller->addJS($this->_path.'views/js/jquery.noty.packaged.min.js');
     }
@@ -678,7 +677,7 @@ class SplashSync extends Module
         //====================================================================//
         // Assign Smarty Variables
         $this->context->smarty->assign('notifications', json_decode( $Notifications, True) );
-        $this->context->smarty->assign('url', "http://" . Configuration::get('PS_SHOP_DOMAIN') . __PS_BASE_URI__ );
+        $this->context->smarty->assign('surl', \Splash\Client\Splash::Input("REQUEST_SCHEME") . "://" . Configuration::get('PS_SHOP_DOMAIN') . __PS_BASE_URI__ );
 
         //====================================================================//
         // Render Footer
