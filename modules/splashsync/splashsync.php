@@ -41,7 +41,7 @@ class SplashSync extends Module
             // Init Module Main Information Fields
             $this->name = 'splashsync';
             $this->tab = 'administration';
-            $this->version = '1.0.6';
+            $this->version = '1.0.8';
             $this->author = 'SplashSync';
             $this->need_instance = 0;
             $this->ps_versions_compliancy = array('min' => '1.5', 'max' => '1.7'); 
@@ -271,6 +271,7 @@ class SplashSync extends Module
         // Load current value
         $helper->fields_value['SPLASH_WS_ID']       = Configuration::get('SPLASH_WS_ID');
         $helper->fields_value['SPLASH_WS_KEY']      = Configuration::get('SPLASH_WS_KEY');
+        $helper->fields_value['SPLASH_WS_METHOD']   = Configuration::get('SPLASH_WS_METHOD');
         $helper->fields_value['SPLASH_WS_EXPERT']   = Configuration::get('SPLASH_WS_EXPERT');
         $helper->fields_value['SPLASH_WS_HOST']     = Configuration::get('SPLASH_WS_HOST');
         $helper->fields_value['SPLASH_LANG_ID']     = Configuration::get('SPLASH_LANG_ID');
@@ -305,12 +306,14 @@ class SplashSync extends Module
                     'size' => 60,
                     'required' => true
                 );
+        
         //====================================================================//
         // Expert Mode
         $Fields[] = array(
                     'type' => 'checkbox',
                     'name' => 'SPLASH_WS',
                     'label' => $this->l('Enable Expert Mode'),
+                    'hint' => $this->l('Enable this option only if requested by Splash Team.'),
                     'values' => array(
                         'query' => array(
                             array(
@@ -325,6 +328,31 @@ class SplashSync extends Module
             );       
 
         if ( Configuration::get('SPLASH_WS_EXPERT') ) {
+            
+            
+            //====================================================================//
+            // Webservice SOAP Protocol
+            $Fields[] = array(
+                        'label' => $this->l('Webservice'),
+                        'hint' => $this->l('Webservice libary used for communication.'),
+                        'type' => 'select',
+                        'name' => 'SPLASH_WS_METHOD',
+                        'options' => array(
+                            'query' => array(
+                                array(
+                                    'id' => 'SOAP',
+                                    'name' => "Generic PHP SOAP",
+                                ),
+                                array(
+                                    'id' => 'NuSOAP',
+                                    'name' => "NuSOAP Library",
+                                ),
+                            ),
+                            'id'    => 'id',
+                            'name'  => 'name'
+                        )            
+                    );
+        
             //====================================================================//
             // Server Host Url
             $Fields[] = array(
@@ -417,12 +445,6 @@ class SplashSync extends Module
 
         if (Tools::isSubmit('submit'.$this->name))
         {
-            //====================================================================//
-            // Verify Server Host Url            
-            $host       = Tools::getValue('SPLASH_WS_HOST');
-            if ( !empty($host) && !Validate::isUrlOrEmpty($host) ) {
-                $output .= $this->displayError( $this->l('Invalid Server Url!') );
-            }
  
             //====================================================================//
             // Verify USER ID         
@@ -451,20 +473,36 @@ class SplashSync extends Module
             if ( empty($UserId) || !Validate::isInt($UserId) ) {
                 $output .= $this->displayError( $this->l('Invalid User') );
             }
-            
+
             //====================================================================//
             // Verify Expert Mode           
             $expert = Tools::getValue('SPLASH_WS_EXPERT');
-            if ( !$expert ) {
-                $host = "";
+            if ( !$expert || !Configuration::get('SPLASH_WS_EXPERT') ) {
+                $WsHost     =   "https://www.splashsync.com/ws/soap";
+                $WsMethod   =   "SOAP";                
+            } else {
+                $WsHost     =   Tools::getValue('SPLASH_WS_HOST');
+                $WsMethod   =   Tools::getValue('SPLASH_WS_METHOD');
             }
-
             
+            //====================================================================//
+            // Verify Server Host Url            
+            if ( empty($WsHost) || !Validate::isUrlOrEmpty($WsHost) ) {
+                $output .= $this->displayError( $this->l('Invalid Server Url!') );
+            }
+            
+            //====================================================================//
+            // Verify WS Method         
+            if ( empty($WsMethod) || !Validate::isString($WsMethod) || !in_array($WsMethod, [ "NuSOAP", "SOAP"]) ) {
+                $output .= $this->displayError( $this->l('Invalid WebService Protocol') );
+            }                
+
             if ( $output == null )
             {
                 Configuration::updateValue('SPLASH_WS_EXPERT',  trim($expert));
-                Configuration::updateValue('SPLASH_WS_HOST',    trim($host));
+                Configuration::updateValue('SPLASH_WS_HOST',    trim($WsHost));
                 Configuration::updateValue('SPLASH_WS_ID',      trim($ServerId));
+                Configuration::updateValue('SPLASH_WS_METHOD',  trim($WsMethod));
                 Configuration::updateValue('SPLASH_WS_KEY',     trim($UserKey));
                 Configuration::updateValue('SPLASH_LANG_ID',    trim($LangId));
                 Configuration::updateValue('SPLASH_USER_ID',    trim($UserId));

@@ -61,9 +61,15 @@ class Local
         // Server Identification Parameters
         $Parameters["WsIdentifier"]         =   Configuration::get('SPLASH_WS_ID');
         $Parameters["WsEncryptionKey"]      =   Configuration::get('SPLASH_WS_KEY');
+
+        //====================================================================//
+        // If Expert Mode => Allow Overide of Communication Protocol
+        if ( (Configuration::get('SPLASH_WS_EXPERT')) && !empty(Configuration::get('SPLASH_WS_METHOD')) ) {
+            $Parameters["WsMethod"]         =   Configuration::get('SPLASH_WS_METHOD');
+        }
         
         //====================================================================//
-        // If Debug Mode => Allow Overide of Server Host Address
+        // If Expert Mode => Allow Overide of Server Host Address
         if ( (Configuration::get('SPLASH_WS_EXPERT')) && !empty(Configuration::get('SPLASH_WS_HOST')) ) {
             $Parameters["WsHost"]           =   Configuration::get('SPLASH_WS_HOST');
         }
