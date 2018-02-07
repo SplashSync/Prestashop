@@ -715,7 +715,7 @@ class SplashSync extends Module
         //====================================================================//
         // Assign Smarty Variables
         $this->context->smarty->assign('notifications', json_decode( $Notifications, True) );
-        $this->context->smarty->assign('url', \Splash\Client\Splash::Input("REQUEST_SCHEME") . "://" . Configuration::get('PS_SHOP_DOMAIN') . __PS_BASE_URI__ );
+        $this->context->smarty->assign('url', \Splash\Client\Splash::Ws()->getServerScheme() . "://" . Configuration::get('PS_SHOP_DOMAIN') . __PS_BASE_URI__ );
 
         //====================================================================//
         // Render Footer
