@@ -36,3 +36,5 @@ upload/
 /composer.lock
 /modules/splashsync/vendor/
 
+/nbproject/private/
+/nbproject/

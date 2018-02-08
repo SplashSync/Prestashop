@@ -290,6 +290,7 @@ class Order extends ObjectBase
             $this->getMainFields($Key,$FieldName);
             $this->getProductsLineFields($Key,$FieldName);
             $this->getShippingLineFields($Key,$FieldName);
+            $this->getDiscountLineFields($Key,$FieldName);
             
             $this->getMetaFields($Key, $FieldName);
 //            $this->getPostCreateFields($Key, $FieldName);
@@ -780,10 +781,17 @@ class Order extends ObjectBase
             // Order Line Unit Price
             case 'unit_price':
                 //====================================================================//
+                // Manually Compute Tax Rate 
+                if ( $this->Object->total_shipping_tax_incl != $this->Object->total_shipping_tax_excl )  {
+                    $Tax    =   round(100 * ( ($this->Object->total_shipping_tax_incl - $this->Object->total_shipping_tax_excl) /  $this->Object->total_shipping_tax_excl ), 2);                  
+                } else {
+                    $Tax    =   0;
+                }
+                //====================================================================//
                 // Build Price Array
                 $Value = self::Price_Encode(
                         (double)    Tools::convertPrice($this->Object->total_shipping_tax_excl,  $this->Currency),
-                        (double)    $this->Object->carrier_tax_rate,
+                        (double)    $Tax,
                                     Null,
                                     $this->Currency->iso_code,
                                     $this->Currency->sign,
@@ -796,6 +804,92 @@ class Order extends ObjectBase
         //====================================================================//
         // Create Line Array If Needed
         $key = count($this->Products);
+        if (!array_key_exists($key,$this->Out["lines"])) {
+            $this->Out["lines"][$key] = array();
+        }            
+        //====================================================================//
+        // Store Data in Array
+        $FieldIndex = explode("@",$FieldName);
+        $this->Out["lines"][$key][$FieldIndex[0]] = $Value;
+    }
+    
+    /**
+     *  @abstract     Read requested Field
+     * 
+     *  @param        string    $Key                    Input List Key
+     *  @param        string    $FieldName              Field Identifier / Name
+     * 
+     *  @return         none
+     */
+    private function getDiscountLineFields($Key,$FieldName)
+    {
+        //====================================================================//
+        // Check List Name
+        if (self::ListField_DecodeListName($FieldName) !== "lines") {
+            return True;
+        }
+        //====================================================================//
+        // Decode Field Name
+        $ListFieldName = self::ListField_DecodeFieldName($FieldName);
+        //====================================================================//
+        // Create List Array If Needed
+        if (!array_key_exists("lines",$this->Out)) {
+            $this->Out["lines"] = array();
+        }
+        
+        //====================================================================//
+        // Check If Order has Discounts
+        if ( $this->Object->total_discounts == 0 )  {
+            return;
+        }
+        
+        //====================================================================//
+        // READ Fields
+        switch ($ListFieldName)
+        {
+            //====================================================================//
+            // Order Line Direct Reading Data
+            case 'product_name':
+                $Value = $this->spl->l("Discount");
+                break;                
+            case 'product_quantity':
+                $Value = 1;
+                break;                
+            case 'reduction_percent':
+                $Value = 0;
+                break;
+            //====================================================================//
+            // Order Line Product Id
+            case 'product_id':
+                $Value = Null;
+                break;
+            //====================================================================//
+            // Order Line Unit Price
+            case 'unit_price':
+                //====================================================================//
+                // Manually Compute Tax Rate 
+                if ( $this->Object->total_discounts_tax_incl != $this->Object->total_discounts_tax_excl )  {
+                    $Tax    =   round(100 * ( ($this->Object->total_discounts_tax_incl - $this->Object->total_discounts_tax_excl) /  $this->Object->total_discounts_tax_excl ), 2);                  
+                } else {
+                    $Tax    =   0;
+                }
+                //====================================================================//
+                // Build Price Array
+                $Value = self::Price_Encode(
+                        (double)    (-1) * Tools::convertPrice($this->Object->total_discounts_tax_excl,  $this->Currency),
+                        (double)    $Tax,
+                                    Null,
+                                    $this->Currency->iso_code,
+                                    $this->Currency->sign,
+                                    $this->Currency->name);
+                break;
+            default:
+                return;
+        }
+        
+        //====================================================================//
+        // Create Line Array If Needed
+        $key = count($this->Products) + 1;
         if (!array_key_exists($key,$this->Out["lines"])) {
             $this->Out["lines"][$key] = array();
         }            

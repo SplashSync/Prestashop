@@ -278,7 +278,7 @@ class Invoice extends ObjectBase
         if ( $this->Order->id != $this->Object->id_order )   {
             return Splash::Log()->Err("ErrLocalTpl",__CLASS__,__FUNCTION__," Unable to load Invoice Order (" . $this->Object->id_order . ").");
         }
-        $this->Products     =   $this->Object->getProducts();
+        $this->Products     =   $this->Object->getProductsDetail();
         $this->Payments     =   $this->Object->getOrderPaymentCollection();
         //====================================================================//
         // Init Response Array 
@@ -294,6 +294,7 @@ class Invoice extends ObjectBase
             $this->getMainFields($Key,$FieldName);
             $this->getProductsLineFields($Key,$FieldName);
             $this->getShippingLineFields($Key,$FieldName);
+            $this->getDiscountLineFields($Key,$FieldName);
             $this->getPaymentLineFields($Key, $FieldName);
         }        
         //====================================================================//
@@ -757,10 +758,17 @@ class Invoice extends ObjectBase
             // Order Line Unit Price
             case 'unit_price':
                 //====================================================================//
+                // Manually Compute Tax Rate 
+                if ( $this->Object->total_shipping_tax_incl != $this->Object->total_shipping_tax_excl )  {
+                    $Tax    =   round(100 * ( ($this->Object->total_shipping_tax_incl - $this->Object->total_shipping_tax_excl) /  $this->Object->total_shipping_tax_excl ), 2);                  
+                } else {
+                    $Tax    =   0;
+                }                
+                //====================================================================//
                 // Build Price Array
                 $Value = self::Price_Encode(
                         (double)    Tools::convertPrice($this->Object->total_shipping_tax_excl,  $this->Currency),
-                        (double)    $this->Order->carrier_tax_rate,
+                        (double)    $Tax,
                                     Null,
                                     $this->Currency->iso_code,
                                     $this->Currency->sign,
@@ -773,6 +781,91 @@ class Invoice extends ObjectBase
         //====================================================================//
         // Create Line Array If Needed
         $key = count($this->Products);
+        if (!array_key_exists($key,$this->Out["lines"])) {
+            $this->Out["lines"][$key] = array();
+        }            
+        //====================================================================//
+        // Store Data in Array
+        $FieldIndex = explode("@",$FieldName);
+        $this->Out["lines"][$key][$FieldIndex[0]] = $Value;
+    }
+    
+    /**
+     *  @abstract     Read requested Field
+     * 
+     *  @param        string    $Key                    Input List Key
+     *  @param        string    $FieldName              Field Identifier / Name
+     * 
+     *  @return         none
+     */
+    private function getDiscountLineFields($Key,$FieldName)
+    {
+        //====================================================================//
+        // Check List Name
+        if (self::ListField_DecodeListName($FieldName) !== "lines") {
+            return True;
+        }
+        //====================================================================//
+        // Decode Field Name
+        $ListFieldName = self::ListField_DecodeFieldName($FieldName);
+        //====================================================================//
+        // Create List Array If Needed
+        if (!array_key_exists("lines",$this->Out)) {
+            $this->Out["lines"] = array();
+        }
+        //====================================================================//
+        // Check If Order has Discounts
+        if ( $this->Object->total_discount_tax_incl == 0 )  {
+            return;
+        }
+        
+        //====================================================================//
+        // READ Fields
+        switch ($ListFieldName)
+        {
+            //====================================================================//
+            // Order Line Direct Reading Data
+            case 'product_name':
+                $Value = $this->spl->l("Discount");
+                break;                
+            case 'product_quantity':
+                $Value = 1;
+                break;                
+            case 'reduction_percent':
+                $Value = 0;
+                break;
+            //====================================================================//
+            // Order Line Product Id
+            case 'product_id':
+                $Value = Null;
+                break;
+            //====================================================================//
+            // Order Line Unit Price
+            case 'unit_price':
+                //====================================================================//
+                // Manually Compute Tax Rate 
+                if ( $this->Object->total_discount_tax_incl != $this->Object->total_discount_tax_excl )  {
+                    $Tax    =   round(100 * ( ($this->Object->total_discount_tax_incl - $this->Object->total_discount_tax_excl) /  $this->Object->total_discount_tax_excl ), 2);                  
+                } else {
+                    $Tax    =   0;
+                }
+                //====================================================================//
+                // Build Price Array
+                $Value = self::Price_Encode(
+                        (double)    (-1) * Tools::convertPrice($this->Object->total_discount_tax_excl,  $this->Currency),
+                        (double)    $Tax,
+                                    Null,
+                                    $this->Currency->iso_code,
+                                    $this->Currency->sign,
+                                    $this->Currency->name);
+                break;
+            default:
+                return;
+        }
+        
+        //====================================================================//
+        // Create Line Array If Needed
+        $key = count($this->Products) + 1;
         if (!array_key_exists($key,$this->Out["lines"])) {
             $this->Out["lines"][$key] = array();
         }            
@@ -842,6 +935,11 @@ class Invoice extends ObjectBase
                 //====================================================================//
                 // Order Line Unit Price
                 case 'unit_price':
+                    //====================================================================//
+                    // Manually Compute Tax Rate 
+                    if ( $Product["unit_price_tax_excl"] != $Product["unit_price_tax_incl"] )  {
+                        $Product["tax_rate"]    =       round(100 * ( ($Product["unit_price_tax_incl"] - $Product["unit_price_tax_excl"]) /  $Product["unit_price_tax_excl"] ), 2);                  
+                    }
                     //====================================================================//
                     // Build Price Array
                     $Value = self::Price_Encode(
