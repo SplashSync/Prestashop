@@ -569,6 +569,30 @@ class Local
         return False;
     }
     
+    /**
+     * @abstract    Identify Best Tax Rate from Raw Computed Value 
+     * @param       float     $TaxRate            Product Tax Rate in Percent
+     * @param       int       $TaxRateGroupId     Product Tax Rate Group Id
+     * @return      TaxRule 
+     */
+    public function getBestTaxRateInGroup($TaxRate, $TaxRateGroupId) 
+    {
+        //====================================================================//
+        // Get default Language Id
+        $LangId = Context::getContext()->language->id;
+        //====================================================================//
+        // For All Tax Rules of This Group, Search for Closest Rate
+        $BestRate   =   0;
+        foreach ( \TaxRule::getTaxRulesByGroupId($LangId, $TaxRateGroupId) as $TaxRule) {
+            
+            if ( abs($TaxRate - $TaxRule["rate"]) <  abs($TaxRate - $BestRate) ) {
+                $BestRate   =   $TaxRule["rate"];
+            } 
+            
+        }
+        return $BestRate;
+    }
+    
 //====================================================================//
 //  Prestashop Getters & Setters
 //====================================================================//

@@ -908,7 +908,6 @@ class Invoice extends ObjectBase
         // Fill List with Data
         foreach ($this->Products as $key => $Product) {
 
-//Splash::Log()->www("Product", $Product);
             //====================================================================//
             // READ Fields
             switch ($ListFieldName)
@@ -938,7 +937,14 @@ class Invoice extends ObjectBase
                     //====================================================================//
                     // Manually Compute Tax Rate 
                     if ( $Product["unit_price_tax_excl"] != $Product["unit_price_tax_incl"] )  {
-                        $Product["tax_rate"]    =       round(100 * ( ($Product["unit_price_tax_incl"] - $Product["unit_price_tax_excl"]) /  $Product["unit_price_tax_excl"] ), 2);                  
+                        $RawTaxRate =   (100 * ( ($Product["unit_price_tax_incl"] - $Product["unit_price_tax_excl"]) /  $Product["unit_price_tax_excl"] ));                  
+                    }
+                    //====================================================================//
+                    // If Tax Rate Group is Defined => Search for Best Tax Rate 
+                    if ( !empty($Product["id_tax_rules_group"]) ) {
+                        $Product["tax_rate"]    =       Splash::Local()->getBestTaxRateInGroup($RawTaxRate, $Product["id_tax_rules_group"]);                  
+                    } else {
+                        $Product["tax_rate"]    =       round( $RawTaxRate , 2);                  
                     }
                     //====================================================================//
                     // Build Price Array
