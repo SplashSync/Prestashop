@@ -582,6 +582,14 @@ class ThirdParty extends ObjectBase
                 ->Group($GroupName)
                 ->ReadOnly();
 
+        //====================================================================//
+        // VAT Number
+        $this->FieldsFactory()->Create(SPL_T_VARCHAR)
+                ->Identifier("vat_number")
+                ->Name(Translate::getAdminTranslation("VAT Number", "AdminAddresses"))
+                ->MicroData("http://schema.org/Organization","vatID")
+                ->ReadOnly();        
+        
     }
             
     /**
@@ -812,6 +820,7 @@ class ThirdParty extends ObjectBase
             case 'country':
             case 'phone':
             case 'phone_mobile':
+            case 'vat_number':
                 //====================================================================//
                 // READ Directly on Class
                 $this->Out[$FieldName] = $MainAddress->$FieldName;
