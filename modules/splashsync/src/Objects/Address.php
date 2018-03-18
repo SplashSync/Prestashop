@@ -545,7 +545,7 @@ class Address extends ObjectBase
                 ->NotTested();
         
         //====================================================================//
-        // APE
+        // VAT Number
         $this->FieldsFactory()->Create(SPL_T_VARCHAR)
                 ->Identifier("vat_number")
                 ->Name($this->spl->l("VAT number"))
