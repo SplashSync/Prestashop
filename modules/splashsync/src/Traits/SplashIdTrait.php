@@ -17,8 +17,6 @@
 
 namespace Splash\Local\Traits;
 
-use Splash\Core\SplashCore      as Splash;
-
 use Db;
 
 /**
@@ -88,6 +86,10 @@ trait SplashIdTrait {
      */
     public static function setSplashId( $ObjectType , $ObjectId , $SplashId = Null)
     {
+        if ( empty($SplashId) ) {
+            return False;
+        }            
+        
         // Read Splash Id
         $Current = self::getSplashId($ObjectType, $ObjectId);
         // Object is Unknown
@@ -101,12 +103,11 @@ trait SplashIdTrait {
         // Splash Id Changed
         if ($Current !== $SplashId) {
             return Db::getInstance()->update("splash_links", array(
-                "id"        =>  pSQL($ObjectId),
-                "type"      =>  pSQL($ObjectType),
-                "spl_id"    =>  pSQL($SplashId),
-            ));
+                    "spl_id"    =>  pSQL($SplashId),
+                ),
+                "type='" . pSQL($ObjectType) . "' AND id='" . pSQL($ObjectId) . "' "
+            );
         }            
-        
         return True;
     }     
     
