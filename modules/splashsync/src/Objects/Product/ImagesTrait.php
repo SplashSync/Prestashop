@@ -21,9 +21,7 @@ use Splash\Models\Objects\ImagesTrait as SplashImagesTrait;
 
 //====================================================================//
 // Prestashop Static Classes	
-use Shop, Configuration, Currency, Combination, Language, Context, Translate;
-use Image, ImageType, ImageManager, StockAvailable;
-use DbQuery, Db, Tools;
+use Context, Translate, Image, ImageType, ImageManager, Tools;
 
 /**
  * @abstract    Access to Product Images Fields

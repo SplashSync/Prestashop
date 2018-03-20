@@ -96,6 +96,34 @@ trait MainTrait {
                 ->MicroData("http://schema.org/Product","volume")
                 ->ReadOnly();
        
+        //====================================================================//
+        // PRODUCT BARCODES
+        //====================================================================//
+
+        //====================================================================//
+        // UPC
+        $this->FieldsFactory()->Create(SPL_T_INT)
+                ->Identifier("upc")
+                ->Name(Translate::getAdminTranslation("UPC Code", "AdminProducts"))
+                ->Group($GroupName)
+                ->MicroData("http://schema.org/Product","gtin12");
+
+        //====================================================================//
+        // EAN
+        $this->FieldsFactory()->Create(SPL_T_INT)
+                ->Identifier("ean13")
+                ->Name(Translate::getAdminTranslation("EAN Code", "AdminProducts"))
+                ->Group($GroupName)
+                ->MicroData("http://schema.org/Product","gtin13");
+        
+        //====================================================================//
+        // ISBN
+        $this->FieldsFactory()->Create(SPL_T_INT)
+                ->Identifier("isbn")
+                ->Name(Translate::getAdminTranslation("ISBN Code", "AdminProducts"))
+                ->Group($GroupName)
+                ->MicroData("http://schema.org/Product","gtin14");
+        
     }
 
     /**
@@ -132,9 +160,22 @@ trait MainTrait {
                     $this->Out[$FieldName] = (float) $this->Object->depth * $this->Object->width; 
                     break;
                 case 'volume':
-                    $this->Out[$FieldName] = (float) $this->Object->height * $this->Object->depth * $this->Object->width; 
+                    $this->Out[$FieldName] = (float) $this->Object->height * $this->Object->depth * $this->Object->width;
                     break;
-                                
+
+                //====================================================================//
+                // PRODUCT BARCODES
+                //====================================================================//
+                case 'upc':
+                case 'ean13':
+                case 'isbn':
+                    if ( $this->AttributeId ) {
+                        $this->getSimple($FieldName, "Attribute");
+                    } else {
+                        $this->getSimple($FieldName);
+                    }
+                    break;
+                
             default:
                 return;
         }
@@ -182,6 +223,20 @@ trait MainTrait {
                 $this->setSimpleFloat($FieldName, $Data);
                 break;                
             
+               //====================================================================//
+                // PRODUCT BARCODES
+                //====================================================================//
+                case 'upc':
+                case 'ean13':
+                case 'isbn':
+                    if ( $this->AttributeId ) {
+                        $this->setSimple($FieldName, $Data, "Attribute");
+                    } else {
+                        $this->setSimple($FieldName, $Data);
+                    }
+                    break;
+ 
+                    
             default:
                 return;
         }
