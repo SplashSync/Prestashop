@@ -25,7 +25,7 @@ use Splash\Core\SplashCore      as Splash;
 // Prestashop Static Classes	
 use Shop, Configuration, Currency, Product, Combination, Language, Context, Translate;
 use Image, ImageType, ImageManager, StockAvailable;
-use DbQuery, Db, Tools, Order;
+use DbQuery, Db, Tools, Order, Cart;
 
 /**
  * @abstract    Prestashop Orders CRUD Functions
@@ -52,7 +52,14 @@ trait CRUDTrait
         
         //====================================================================//
         // Load Order Products         
-        $this->Products = $Object->getProducts();
+        $this->Products         = $Object->getProductsDetail();
+        //====================================================================//
+        // Load Shipping Tax Calculator         
+        $this->ShippingTaxCalculator    = (new \Carrier($Object->id_carrier))
+                    ->getTaxCalculator(new \Address($Object->id_address_delivery));
+
+        
+                
         return $Object;
     }    
 
@@ -69,29 +76,72 @@ trait CRUDTrait
         
         //====================================================================//
         // Check Order Minimal Fields are given
-//        if ( empty($this->In["firstname"]) ) {
-//            return Splash::Log()->Err("ErrLocalFieldMissing",__CLASS__,__FUNCTION__,"firstname");
-//        }
-//        if ( empty($this->In["lastname"]) ) {
-//            return Splash::Log()->Err("ErrLocalFieldMissing",__CLASS__,__FUNCTION__,"lastname");
-//        }
-//        if ( empty($this->In["email"]) ) {
-//            return Splash::Log()->Err("ErrLocalFieldMissing",__CLASS__,__FUNCTION__,"email");
-//        }
-//        
-//        
+        // => Done By IntelliParser
+        //====================================================================//
+ 
+        //====================================================================//
+        // Create a New Cart
+        $this->Cart =   new Cart();
+        $this->Cart->id_currency      =   Configuration::get('PS_CURRENCY_DEFAULT');
+        if ( $this->Cart->add() != True) {  
+            return Splash::Log()->Err("ErrLocalTpl",__CLASS__,__FUNCTION__,"Unable to Create new Order Cart.");
+        }
+        
         //====================================================================//
         // Create a New Order
-        $Order  =   new Order();
+        $this->Object  =   new Order();
+        
+        //====================================================================//
+        // Setup Minimal Data
+        $this->Object->id_cart          =   $this->Cart->id;
+        $this->Object->id_currency      =   Configuration::get('PS_CURRENCY_DEFAULT');
+        $this->Object->conversion_rate  =   1;
+        $this->Object->id_carrier       =   1;
+        $this->Object->id_shop          =   1;
+        $this->Object->payment          =   "Payment by check";
+        $this->Object->module           =   "ps_checkpayment";
+        $this->Object->secure_key       =   md5(uniqid(rand(), true));
+        
+//        $this->Object->total_products_wt = (float)$this->context->cart->getOrderTotal(true, Cart::ONLY_PRODUCTS, $order->product_list, $id_carrier);
+//        $order->total_discounts_tax_excl = (float)abs($this->context->cart->getOrderTotal(false, Cart::ONLY_DISCOUNTS, $order->product_list, $id_carrier));
+//        $order->total_discounts_tax_incl = (float)abs($this->context->cart->getOrderTotal(true, Cart::ONLY_DISCOUNTS, $order->product_list, $id_carrier));
+//        $order->total_discounts = $order->total_discounts_tax_incl;
+//
+//        $order->total_shipping_tax_excl = (float)$this->context->cart->getPackageShippingCost((int)$id_carrier, false, null, $order->product_list);
+//        $order->total_shipping_tax_incl = (float)$this->context->cart->getPackageShippingCost((int)$id_carrier, true, null, $order->product_list);
+//        $order->total_shipping = $order->total_shipping_tax_incl;
+//
+//        if (!is_null($carrier) && Validate::isLoadedObject($carrier)) {
+//            $order->carrier_tax_rate = $carrier->getTaxesRate(new Address((int)$this->context->cart->{Configuration::get('PS_TAX_ADDRESS_TYPE')}));
+//        }
+//
+//        $order->total_wrapping_tax_excl = (float)abs($this->context->cart->getOrderTotal(false, Cart::ONLY_WRAPPING, $order->product_list, $id_carrier));
+//        $order->total_wrapping_tax_incl = (float)abs($this->context->cart->getOrderTotal(true, Cart::ONLY_WRAPPING, $order->product_list, $id_carrier));
+//        $order->total_wrapping = $order->total_wrapping_tax_incl;
+
+        $this->Object->total_products       = (float) 0;
+        $this->Object->total_products_wt    = (float) 0;
+        $this->Object->total_paid_tax_excl  = (float) 0;
+        $this->Object->total_paid_tax_incl  = (float) 0;
+        $this->Object->total_paid           = 0;
+        $this->Object->total_paid_real      = 0;
+        $this->Object->round_mode           = Configuration::get('PS_PRICE_ROUND_MODE');
+        $this->Object->round_type           = Configuration::get('PS_ROUND_TYPE');
+
+        $this->setCoreFields("id_customer",                 $this->In["id_customer"]);
+        
+        $this->setAddressFields("id_address_delivery",      $this->In["id_address_delivery"]);
+        $this->setAddressFields("id_address_invoice",       $this->In["id_address_invoice"]);
+        
         
         //====================================================================//
         // Persist Order in Database
-        if ( $Order->add() != True) {  
+        if ( $this->Object->add() != True) {  
             return Splash::Log()->Err("ErrLocalTpl",__CLASS__,__FUNCTION__,"Unable to Create new Order.");
         }
             
         Splash::Log()->Deb("MsgLocalTpl",__CLASS__,__FUNCTION__,"New Order Created");
-        return $Order;
+        return $this->Object;
     }
     
     /**

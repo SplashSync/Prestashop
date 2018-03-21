@@ -50,6 +50,7 @@ class Order extends AbstractObject
     use \Splash\Local\Objects\Order\CRUDTrait;
     use \Splash\Local\Objects\Order\CoreTrait;
     use \Splash\Local\Objects\Order\MainTrait;
+    use \Splash\Local\Objects\Order\AddressTrait;
     use \Splash\Local\Objects\Order\ItemsTrait;
     
     //====================================================================//
@@ -81,7 +82,7 @@ class Order extends AbstractObject
      *  
      *  This Flags are Used by Splash Server to Prevent Unexpected Operations on Remote Server
      */
-    protected static    $ALLOW_PUSH_CREATED         =  FALSE;       // Allow Creation Of New Local Objects
+    protected static    $ALLOW_PUSH_CREATED         =  TRUE;        // Allow Creation Of New Local Objects
     protected static    $ALLOW_PUSH_UPDATED         =  TRUE;        // Allow Update Of Existing Local Objects
     protected static    $ALLOW_PUSH_DELETED         =  FALSE;       // Allow Delete Of Existing Local Objects
     
@@ -89,9 +90,13 @@ class Order extends AbstractObject
      *  Object Synchronistion Recommended Configuration 
      */
     protected static    $ENABLE_PUSH_CREATED       =  FALSE;         // Enable Creation Of New Local Objects when Not Existing
-    protected static    $ENABLE_PUSH_UPDATED       =  FALSE;         // Enable Update Of Existing Local Objects when Modified Remotly
+    protected static    $ENABLE_PUSH_UPDATED       =  TRUE;         // Enable Update Of Existing Local Objects when Modified Remotly
     protected static    $ENABLE_PUSH_DELETED       =  FALSE;         // Enable Delete Of Existing Local Objects when Deleted Remotly
-
+    
+//    protected static    $ENABLE_PUSH_CREATED       =  FALSE;         // Enable Creation Of New Local Objects when Not Existing
+//    protected static    $ENABLE_PUSH_UPDATED       =  FALSE;         // Enable Update Of Existing Local Objects when Modified Remotly
+//    protected static    $ENABLE_PUSH_DELETED       =  FALSE;         // Enable Delete Of Existing Local Objects when Deleted Remotly
+    
     protected static    $ENABLE_PULL_CREATED       =  TRUE;          // Enable Import Of New Local Objects 
     protected static    $ENABLE_PULL_UPDATED       =  TRUE;          // Enable Import of Updates of Local Objects when Modified Localy
     protected static    $ENABLE_PULL_DELETED       =  TRUE;          // Enable Delete Of Remotes Objects when Deleted Localy    

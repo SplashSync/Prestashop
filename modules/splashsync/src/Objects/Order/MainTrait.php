@@ -125,7 +125,7 @@ trait MainTrait {
                 ->Name($Prefix . $this->spl->l("Paid"))
                 ->Group(Translate::getAdminTranslation("Meta", "AdminThemes"))
                 ->MicroData("http://schema.org/OrderStatus","OrderPaid")
-                ->NotTested();
+                ->ReadOnly();
         
     }
     

@@ -47,7 +47,8 @@ trait CoreTrait {
                 ->Identifier("reference")
                 ->Name(Translate::getAdminTranslation("Reference", "AdminOrders"))
                 ->MicroData("http://schema.org/Order","orderNumber")       
-                ->ReadOnly()
+//                ->ReadOnly()
+                ->isRequired()                
                 ->IsListed();
 
         //====================================================================//
@@ -115,14 +116,14 @@ trait CoreTrait {
         switch ($FieldName)
         {
             //====================================================================//
-            // Direct Readings
-            case 'ref':
-                $this->setSingleField($FieldName,$Data);
+            // Direct Writing
+            case 'reference':
+                $this->setSimple($FieldName,$Data);
                 break;   
                     
             //====================================================================//
-            // Order Company Id 
-            case 'socid':
+            // Customer Object Id 
+            case 'id_customer':
                 $this->setSimple($FieldName,self::Objects()->Id( $Data ));
                 break;                 
             default:

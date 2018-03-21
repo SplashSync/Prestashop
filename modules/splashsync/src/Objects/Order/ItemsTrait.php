@@ -22,7 +22,7 @@ use Splash\Models\Objects\PricesTrait;
 
 //====================================================================//
 // Prestashop Static Classes	
-use Shop, Configuration, Currency, Combination, Language, Context, Translate;
+use Shop, Configuration, Currency, Combination, Language, Context, Translate, OrderDetail;
 use Image, ImageType, ImageManager, StockAvailable;
 use DbQuery, Db, Tools;
 
@@ -48,7 +48,9 @@ trait ItemsTrait {
                 ->Name(Translate::getAdminTranslation("Short description", "AdminProducts"))
                 ->MicroData("http://schema.org/partOfInvoice","description")       
                 ->Group(Translate::getAdminTranslation("Products", "AdminOrders"))
-                ->Association("product_name@lines","product_quantity@lines","unit_price@lines");        
+                ->Association("product_name@lines","product_quantity@lines","product_id@lines","unit_price@lines")
+//                ->ReadOnly()
+                ;                
 
         //====================================================================//
         // Order Line Product Identifier
@@ -58,8 +60,9 @@ trait ItemsTrait {
                 ->Name(Translate::getAdminTranslation("Product ID", "AdminImport"))
                 ->MicroData("http://schema.org/Product","productID")
                 ->Group(Translate::getAdminTranslation("Products", "AdminOrders"))
-                ->Association("product_name@lines","product_quantity@lines","unit_price@lines");        
-//                ->NotTested();        
+                ->Association("product_name@lines","product_quantity@lines","product_id@lines","unit_price@lines")
+//                ->ReadOnly()
+                ;                
 
         //====================================================================//
         // Order Line Quantity
@@ -69,7 +72,9 @@ trait ItemsTrait {
                 ->Name(Translate::getAdminTranslation("Quantity", "AdminOrders"))
                 ->MicroData("http://schema.org/QuantitativeValue","value")        
                 ->Group(Translate::getAdminTranslation("Products", "AdminOrders"))
-                ->Association("product_name@lines","product_quantity@lines","unit_price@lines");        
+                ->Association("product_name@lines","product_quantity@lines","product_id@lines","unit_price@lines")
+//                ->ReadOnly()
+                ;                                
 
         //====================================================================//
         // Order Line Discount
@@ -79,7 +84,9 @@ trait ItemsTrait {
                 ->Name(Translate::getAdminTranslation("Discount (%)", "AdminGroups"))
                 ->MicroData("http://schema.org/Order","discount")
                 ->Group(Translate::getAdminTranslation("Products", "AdminOrders"))
-                ->Association("product_name@lines","product_quantity@lines","unit_price@lines");        
+                ->Association("product_name@lines","product_quantity@lines","unit_price@lines")
+                ->ReadOnly()
+                ;                
 
         //====================================================================//
         // Order Line Unit Price
@@ -89,7 +96,21 @@ trait ItemsTrait {
                 ->Name(Translate::getAdminTranslation("Price", "AdminOrders"))
                 ->MicroData("http://schema.org/PriceSpecification","price")        
                 ->Group(Translate::getAdminTranslation("Products", "AdminOrders"))
-                ->Association("product_name@lines","product_quantity@lines","unit_price@lines");        
+                ->Association("product_name@lines","product_quantity@lines","product_id@lines","unit_price@lines")
+//                ->ReadOnly()
+                ;  
+        
+        //====================================================================//
+        // Order Line Tax Name
+        $this->FieldsFactory()->Create(SPL_T_VARCHAR)        
+                ->Identifier("tax_name")
+                ->InList("lines")
+                ->Name(Translate::getAdminTranslation("Tax Name", "AdminOrders"))
+                ->MicroData("http://schema.org/PriceSpecification","valueAddedTaxName")        
+                ->Group(Translate::getAdminTranslation("Products", "AdminOrders"))
+                ->Association("product_name@lines","product_quantity@lines","unit_price@lines")
+                ->ReadOnly()
+                ;          
 
     }
     
@@ -102,7 +123,7 @@ trait ItemsTrait {
      * 
      *  @return         none
      */
-    private function getShippingFields($Key,$FieldName)
+    private function getProductsFields($Key,$FieldName)
     {
         //====================================================================//
         // Check if List field & Init List Array
@@ -111,57 +132,210 @@ trait ItemsTrait {
             return;
         }
         //====================================================================//
-        // READ Fields
-        switch ($FieldId)
-        {
+        // Verify List is Not Empty
+        if ( !is_array($this->Products) ) {
+            return True;
+        }        
+        
+        //====================================================================//
+        // Fill List with Data
+        foreach ($this->Products as $key => $Product) {
+            
             //====================================================================//
-            // Order Line Direct Reading Data
-            case 'product_name':
-                $Value = $this->spl->l("Delivery");
-                break;                
-            case 'product_quantity':
-                $Value = 1;
-                break;                
-            case 'reduction_percent':
-                $Value = 0;
-                break;
-            //====================================================================//
-            // Order Line Product Id
-            case 'product_id':
-                $Value = Null;
-                break;
-            //====================================================================//
-            // Order Line Unit Price
-            case 'unit_price':
+            // READ Fields
+            switch ($FieldId)
+            {
                 //====================================================================//
-                // Manually Compute Tax Rate 
-                if ( $this->Object->total_shipping_tax_incl != $this->Object->total_shipping_tax_excl )  {
-                    $Tax    =   round(100 * ( ($this->Object->total_shipping_tax_incl - $this->Object->total_shipping_tax_excl) /  $this->Object->total_shipping_tax_excl ), 2);                  
-                } else {
-                    $Tax    =   0;
-                }
+                // Order Line Direct Reading Data
+                case 'product_name':
+                case 'product_quantity':
+                    $Value = $Product[$FieldId];
+                    break;
+                case 'reduction_percent':
+                    $Value = 0;
+                    break;
                 //====================================================================//
-                // Build Price Array
-                $Value = self::Prices()->Encode(
-                        (double)    Tools::convertPrice($this->Object->total_shipping_tax_excl,  $this->Currency),
-                        (double)    $Tax,
-                                    Null,
-                                    $this->Currency->iso_code,
-                                    $this->Currency->sign,
-                                    $this->Currency->name);
-                break;
-            default:
-                return;
+                // Order Line Product Id
+                case 'product_id':
+                    $UnikId = Splash::Object('Product')->getUnikId($Product["product_id"], $Product["product_attribute_id"]);
+                    $Value = self::Objects()->Encode( "Product" , $UnikId );
+                    break;
+                //====================================================================//
+                // Order Line Unit Price
+                case 'unit_price':
+                    //====================================================================//
+                    // Build Price Array
+                    $Value = self::Prices()->Encode(
+                            (double)    Tools::convertPrice($Product["unit_price_tax_excl"],  $this->Currency),
+                            (double)    OrderDetail::getTaxCalculatorStatic($Product["id_order_detail"])->getTotalRate(),
+                                        Null,
+                                        $this->Currency->iso_code,
+                                        $this->Currency->sign,
+                                        $this->Currency->name);
+                    break;
+                //====================================================================//
+                // Order Line Tax Name
+                case 'tax_name':
+                    $Value = OrderDetail::getTaxCalculatorStatic($Product["id_order_detail"])->getTaxesName();
+                    break;
+                
+                default:
+                    return;
+            }
+            //====================================================================//
+            // Insert Data in List
+            self::Lists()->Insert( $this->Out, "lines", $FieldName, $key, $Value );             
+        }
+        unset($this->In[$Key]);
+    }
+
+    /**
+     *  @abstract     Write Given Fields
+     * 
+     *  @param        string    $FieldName              Field Identifier / Name
+     *  @param        mixed     $Data                   Field Data
+     * 
+     *  @return         none
+     */
+    private function setProductsFields($FieldName,$Data) 
+    {
+        //====================================================================//
+        // Safety Check
+        if ( $FieldName !== "lines" ) {
+            return True;
+        }
+        //====================================================================//
+        // Verify Lines List & Update if Needed 
+        foreach ($Data as $ProductItem) {
+            //====================================================================//
+            // Update Product Line
+            $this->updateProduct(array_shift($this->Products) , $ProductItem);
+        } 
+        //====================================================================//
+        // Delete Remaining Lines
+        foreach ($this->Products as $ProductItem) {
+            $OrderDetail    =   new OrderDetail($ProductItem["id_order_detail"]);
+            $this->Object->deleteProduct( $this->Object , $OrderDetail , $ProductItem["product_quantity"] ); 
+        }        
+//        //====================================================================//
+//        // Update Order/Invoice Total Prices
+//        $this->Object->update_price();
+//        //====================================================================//
+//        // Reload Order/Invoice Lines
+//        $this->Object->fetch_lines();
+        
+        unset($this->In[$FieldName]);
+    }
+    
+    /**
+     *  @abstract     Write Data to Current Item
+     * 
+     *  @param        array     $CurrentProduct    Current Item Data Array
+     *  @param        array     $ProductItem       Input Item Data Array
+     * 
+     *  @return         none
+     */
+    private function updateProduct($CurrentProduct , $ProductItem) {
+        
+        //====================================================================//
+        // Not A Product Line => Skipped
+        if ( empty($ProductItem["product_id"]) ) {
+            return;
+        }        
+        //====================================================================//
+        // New Line ? => Create One
+        if ( is_null($CurrentProduct) || empty($CurrentProduct["id_order_detail"]) ) {
+            //====================================================================//
+            // Create New OrderDetail Item
+            $OrderDetail =  new OrderDetail();
+        } else {
+            $OrderDetail =  new OrderDetail($CurrentProduct["id_order_detail"]);
+        }
+        $Update =    False;
+        
+//Splash::Log()->www("OrderDetail", $OrderDetail);        
+        //====================================================================//
+        // Update Line Description
+        if ( $OrderDetail->product_name != $ProductItem["product_name"] ) {
+            $OrderDetail->product_name = $ProductItem["product_name"];
+            $Update =    True;
+        }
+
+        
+//        $this->setItemSimpleData($ItemData,"desc");
+//        //====================================================================//
+//        // Update Line Label
+//        $this->setItemSimpleData($ItemData,"label");
+        //====================================================================//
+        // Update Quantity
+        if ( $OrderDetail->product_quantity != $ProductItem["product_quantity"] ) {
+            $OrderDetail->product_quantity = $ProductItem["product_quantity"];
+            $Update =    True;
+        }        
+//        //====================================================================//
+//        // Update Discount
+//        $this->setItemSimpleData($ItemData,"remise_percent");
+        //====================================================================//
+        // Update Price
+        // 
+        // self::Prices()->Encode
+        if ( $OrderDetail->unit_price_tax_incl != self::Prices()->TaxIncluded($ProductItem["unit_price"]) ) {
+            $OrderDetail->unit_price_tax_incl = self::Prices()->TaxIncluded($ProductItem["unit_price"]);
+            $Update =    True;
+        }
+        if ( $OrderDetail->unit_price_tax_excl != self::Prices()->TaxExcluded($ProductItem["unit_price"]) ) {
+            $OrderDetail->unit_price_tax_excl = self::Prices()->TaxExcluded($ProductItem["unit_price"]);
+            $Update =    True;
+        }
+//        //        $this->setItemPrice($ItemData);
+        //====================================================================//
+        // Update Product Link
+        $UnikId         = self::Objects()->Id( $ProductItem["product_id"] );
+        $ProductId      = Splash::Object('Product')->getId($UnikId);
+        $AttributeId    = Splash::Object('Product')->getAttribute($UnikId);
+        if ( $OrderDetail->product_id != $ProductId ) {
+            $OrderDetail->product_id = $ProductId;
+            $Update =    True;
+        }
+        if ( $OrderDetail->product_attribute_id != $AttributeId ) {
+            $OrderDetail->product_attribute_id = $AttributeId;
+            $Update =    True;
+        }
+//        //====================================================================//
+//        // Update Line Totals
+//        Configuration::set('PS_ORDER_RECALCULATE_SHIPPING' , 1);
+//        $this->Object->refreshShippingCost();
+        //====================================================================//
+        // Commit Line Update
+        if ( !$Update ) {
+            return;
+        } 
+        
+        if ( !$OrderDetail->id ) {
+            if ( $OrderDetail->add() != True) {  
+                return Splash::Log()->Err("ErrLocalTpl",__CLASS__,__FUNCTION__,"Unable to Create new Order Line.");
+            } 
+            var_dump("New OrderDetail");
+        } else {
+            if ( $OrderDetail->update() != True) {  
+                return Splash::Log()->Err("ErrLocalTpl",__CLASS__,__FUNCTION__,"Unable to Update Order Line.");
+            }        
         }
         
-        //====================================================================//
-        // Create Line Array If Needed
-        $key = count($this->Products);
-        //====================================================================//
-        // Insert Data in List
-        self::Lists()->Insert( $this->Out, "lines", $FieldName, $key, $Value );        
-        
-    }
+//        
+//        //====================================================================//
+//        // Prepare Args
+//        $Arg1 = ( Splash::Local()->DolVersionCmp("5.0.0") > 0 ) ? $user : 0;
+//        //====================================================================//
+//        // Perform Line Update        
+//        if ( $this->CurrentItem->update($Arg1) <= 0) {
+//            $this->CatchDolibarrErrors($this->CurrentItem);
+//            return Splash::Log()->Err("ErrLocalTpl",__CLASS__,__FUNCTION__,"Unable to update Line Item. ");
+//        }
+//        //====================================================================//
+//        // Update Item Totals
+//        $this->CurrentItem->update_total();
+    }    
     
     /**
      *  @abstract     Read requested Field
@@ -210,7 +384,7 @@ trait ItemsTrait {
                 //====================================================================//
                 // Manually Compute Tax Rate 
                 if ( $this->Object->total_discounts_tax_incl != $this->Object->total_discounts_tax_excl )  {
-                    $Tax    =   round(100 * ( ($this->Object->total_discounts_tax_incl - $this->Object->total_discounts_tax_excl) /  $this->Object->total_discounts_tax_excl ), 2);                  
+                    $Tax    =   round(100 * ( ($this->Object->total_discounts_tax_incl - $this->Object->total_discounts_tax_excl) /  $this->Object->total_discounts_tax_excl ), 3);                  
                 } else {
                     $Tax    =   0;
                 }
@@ -223,6 +397,9 @@ trait ItemsTrait {
                                     $this->Currency->iso_code,
                                     $this->Currency->sign,
                                     $this->Currency->name);
+                break;
+            case 'tax_name':
+                $Value = Null;
                 break;
             default:
                 return;
@@ -244,7 +421,7 @@ trait ItemsTrait {
      * 
      *  @return         none
      */
-    private function getProductsFields($Key,$FieldName)
+    private function getShippingFields($Key,$FieldName)
     {
         //====================================================================//
         // Check if List field & Init List Array
@@ -253,60 +430,59 @@ trait ItemsTrait {
             return;
         }
         //====================================================================//
-        // Verify List is Not Empty
-        if ( !is_array($this->Products) ) {
-            return True;
-        }        
+        // READ Fields
+        switch ($FieldId)
+        {
+            //====================================================================//
+            // Order Line Direct Reading Data
+            case 'product_name':
+                $Value = $this->spl->l("Delivery");
+                break;                
+            case 'product_quantity':
+                $Value = 1;
+                break;                
+            case 'reduction_percent':
+                $Value = 0;
+                break;
+            //====================================================================//
+            // Order Line Product Id
+            case 'product_id':
+                $Value = Null;
+                break;
+            //====================================================================//
+            // Order Line Unit Price
+            case 'unit_price':
+                //====================================================================//
+                // Compute Tax Rate Using Tax Calculator 
+                if ( $this->Object->total_shipping_tax_incl != $this->Object->total_shipping_tax_excl )  {
+                    $Tax    =   $this->ShippingTaxCalculator->getTotalRate();
+                } else {
+                    $Tax    =   0;
+                }
+                //====================================================================//
+                // Build Price Array
+                $Value = self::Prices()->Encode(
+                        (double)    Tools::convertPrice($this->Object->total_shipping_tax_excl,  $this->Currency),
+                        (double)    $Tax,
+                                    Null,
+                                    $this->Currency->iso_code,
+                                    $this->Currency->sign,
+                                    $this->Currency->name);
+                break;
+            case 'tax_name':
+                $Value = $this->ShippingTaxCalculator->getTaxesName();
+                break;
+            default:
+                return;
+        }
         
         //====================================================================//
-        // Fill List with Data
-        foreach ($this->Products as $key => $Product) {
-            
-            //====================================================================//
-            // READ Fields
-            switch ($FieldId)
-            {
-                //====================================================================//
-                // Order Line Direct Reading Data
-                case 'product_name':
-                case 'product_quantity':
-                    $Value = $Product[$FieldId];
-                    break;
-                case 'reduction_percent':
-//                    if ( $Product["original_product_price"] <= 0 ) {
-//                        $Value = 0;
-//                    } 
-//                    $Value = round(100 * ($Product["original_product_price"] - $Product["unit_price_tax_excl"]) / $Product["original_product_price"] , 2) ;
-                    $Value = 0;
-                    break;
-                //====================================================================//
-                // Order Line Product Id
-                case 'product_id':
-                    $UnikId = Splash::Object('Product')->getUnikId($Product["product_id"], $Product["product_attribute_id"]);
-                    $Value = self::Objects()->Encode( "Product" , $UnikId );
-                    break;
-                //====================================================================//
-                // Order Line Unit Price
-                case 'unit_price':
-                    //====================================================================//
-                    // Build Price Array
-                    $Value = self::Prices()->Encode(
-                            (double)    Tools::convertPrice($Product["unit_price_tax_excl"],  $this->Currency),
-                            (double)    $Product["tax_rate"],
-                                        Null,
-                                        $this->Currency->iso_code,
-                                        $this->Currency->sign,
-                                        $this->Currency->name);
-                    break;
-                default:
-                    return;
-            }
-            //====================================================================//
-            // Insert Data in List
-            self::Lists()->Insert( $this->Out, "lines", $FieldName, $key, $Value );             
-        }
-        unset($this->In[$Key]);
+        // Create Line Array If Needed
+        $key = count($this->Products);
+        //====================================================================//
+        // Insert Data in List
+        self::Lists()->Insert( $this->Out, "lines", $FieldName, $key, $Value );        
+        
     }
-    
     
 }

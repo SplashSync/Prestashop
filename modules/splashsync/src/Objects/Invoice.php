@@ -278,7 +278,7 @@ class Invoice extends ObjectBase
         if ( $this->Order->id != $this->Object->id_order )   {
             return Splash::Log()->Err("ErrLocalTpl",__CLASS__,__FUNCTION__," Unable to load Invoice Order (" . $this->Object->id_order . ").");
         }
-        $this->Products     =   $this->Object->getProductsDetail();
+        $this->Products     =   $this->Object->getProducts();
         $this->Payments     =   $this->Object->getOrderPaymentCollection();
         //====================================================================//
         // Init Response Array 
@@ -934,6 +934,10 @@ class Invoice extends ObjectBase
                 //====================================================================//
                 // Order Line Unit Price
                 case 'unit_price':
+                    
+$TaxCalc    =    \OrderDetail::getTaxCalculatorStatic($Product["id_order_detail"]);
+                    
+Splash::Log()->www("Tax", $TaxCalc);
                     //====================================================================//
                     // Manually Compute Tax Rate 
                     if ( $Product["unit_price_tax_excl"] != $Product["unit_price_tax_incl"] )  {
@@ -950,7 +954,8 @@ class Invoice extends ObjectBase
                     // Build Price Array
                     $Value = self::Price_Encode(
                             (double)    Tools::convertPrice($Product["unit_price_tax_excl"],  $this->Currency),
-                            (double)    $Product["tax_rate"],
+//                            (double)    $Product["tax_rate"],
+                            (double)    $TaxCalc->getTotalRate(),
                                         Null,
                                         $this->Currency->iso_code,
                                         $this->Currency->sign,
