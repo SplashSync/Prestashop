@@ -52,6 +52,8 @@ class Order extends AbstractObject
     use \Splash\Local\Objects\Order\MainTrait;
     use \Splash\Local\Objects\Order\AddressTrait;
     use \Splash\Local\Objects\Order\ItemsTrait;
+    use \Splash\Local\Objects\Order\PaymentsTrait;
+    use \Splash\Local\Objects\Order\StatusTrait;
     
     //====================================================================//
     // Object Definition Parameters	
@@ -82,9 +84,13 @@ class Order extends AbstractObject
      *  
      *  This Flags are Used by Splash Server to Prevent Unexpected Operations on Remote Server
      */
+//    protected static    $ALLOW_PUSH_CREATED         =  SPLASH_DEBUG;        // Allow Creation Of New Local Objects
+//    protected static    $ALLOW_PUSH_UPDATED         =  SPLASH_DEBUG;        // Allow Update Of Existing Local Objects
+//    protected static    $ALLOW_PUSH_DELETED         =  SPLASH_DEBUG;       // Allow Delete Of Existing Local Objects
+    
     protected static    $ALLOW_PUSH_CREATED         =  TRUE;        // Allow Creation Of New Local Objects
     protected static    $ALLOW_PUSH_UPDATED         =  TRUE;        // Allow Update Of Existing Local Objects
-    protected static    $ALLOW_PUSH_DELETED         =  FALSE;       // Allow Delete Of Existing Local Objects
+    protected static    $ALLOW_PUSH_DELETED         =  TRUE;       // Allow Delete Of Existing Local Objects
     
     /**
      *  Object Synchronistion Recommended Configuration 
@@ -105,7 +111,8 @@ class Order extends AbstractObject
     // General Class Variables	
     //====================================================================//
 
-    private     $Products = Null;
+    protected   $Products       = array();
+    protected   $Payments       = array();    
     
     //====================================================================//
     // Class Constructor

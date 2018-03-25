@@ -38,7 +38,7 @@ trait ItemsTrait {
     /**
     *   @abstract     Build Fields using FieldFactory
     */
-    private function buildItemsFields() {
+    protected function buildItemsFields() {
         
         //====================================================================//
         // Order Line Description
@@ -136,7 +136,6 @@ trait ItemsTrait {
         if ( !is_array($this->Products) ) {
             return True;
         }        
-        
         //====================================================================//
         // Fill List with Data
         foreach ($this->Products as $key => $Product) {
@@ -211,18 +210,13 @@ trait ItemsTrait {
             // Update Product Line
             $this->updateProduct(array_shift($this->Products) , $ProductItem);
         } 
+        
         //====================================================================//
         // Delete Remaining Lines
         foreach ($this->Products as $ProductItem) {
             $OrderDetail    =   new OrderDetail($ProductItem["id_order_detail"]);
             $this->Object->deleteProduct( $this->Object , $OrderDetail , $ProductItem["product_quantity"] ); 
         }        
-//        //====================================================================//
-//        // Update Order/Invoice Total Prices
-//        $this->Object->update_price();
-//        //====================================================================//
-//        // Reload Order/Invoice Lines
-//        $this->Object->fetch_lines();
         
         unset($this->In[$FieldName]);
     }
@@ -248,46 +242,41 @@ trait ItemsTrait {
             //====================================================================//
             // Create New OrderDetail Item
             $OrderDetail =  new OrderDetail();
+            $OrderDetail->id_order      =    $this->Object->id;  
+            $OrderDetail->id_shop       =    $this->Object->id_shop;  
+            $OrderDetail->id_warehouse  =    0;  
+            
         } else {
             $OrderDetail =  new OrderDetail($CurrentProduct["id_order_detail"]);
         }
         $Update =    False;
         
-//Splash::Log()->www("OrderDetail", $OrderDetail);        
         //====================================================================//
         // Update Line Description
         if ( $OrderDetail->product_name != $ProductItem["product_name"] ) {
             $OrderDetail->product_name = $ProductItem["product_name"];
             $Update =    True;
         }
-
         
-//        $this->setItemSimpleData($ItemData,"desc");
-//        //====================================================================//
-//        // Update Line Label
-//        $this->setItemSimpleData($ItemData,"label");
         //====================================================================//
         // Update Quantity
         if ( $OrderDetail->product_quantity != $ProductItem["product_quantity"] ) {
             $OrderDetail->product_quantity = $ProductItem["product_quantity"];
             $Update =    True;
         }        
-//        //====================================================================//
-//        // Update Discount
-//        $this->setItemSimpleData($ItemData,"remise_percent");
+        
         //====================================================================//
         // Update Price
-        // 
-        // self::Prices()->Encode
         if ( $OrderDetail->unit_price_tax_incl != self::Prices()->TaxIncluded($ProductItem["unit_price"]) ) {
             $OrderDetail->unit_price_tax_incl = self::Prices()->TaxIncluded($ProductItem["unit_price"]);
             $Update =    True;
         }
         if ( $OrderDetail->unit_price_tax_excl != self::Prices()->TaxExcluded($ProductItem["unit_price"]) ) {
-            $OrderDetail->unit_price_tax_excl = self::Prices()->TaxExcluded($ProductItem["unit_price"]);
+            $OrderDetail->unit_price_tax_excl   = self::Prices()->TaxExcluded($ProductItem["unit_price"]);
+            $OrderDetail->product_price         = self::Prices()->TaxExcluded($ProductItem["unit_price"]);
             $Update =    True;
         }
-//        //        $this->setItemPrice($ItemData);
+        
         //====================================================================//
         // Update Product Link
         $UnikId         = self::Objects()->Id( $ProductItem["product_id"] );
@@ -301,10 +290,7 @@ trait ItemsTrait {
             $OrderDetail->product_attribute_id = $AttributeId;
             $Update =    True;
         }
-//        //====================================================================//
-//        // Update Line Totals
-//        Configuration::set('PS_ORDER_RECALCULATE_SHIPPING' , 1);
-//        $this->Object->refreshShippingCost();
+        
         //====================================================================//
         // Commit Line Update
         if ( !$Update ) {
@@ -315,23 +301,12 @@ trait ItemsTrait {
             if ( $OrderDetail->add() != True) {  
                 return Splash::Log()->Err("ErrLocalTpl",__CLASS__,__FUNCTION__,"Unable to Create new Order Line.");
             } 
-            var_dump("New OrderDetail");
         } else {
             if ( $OrderDetail->update() != True) {  
                 return Splash::Log()->Err("ErrLocalTpl",__CLASS__,__FUNCTION__,"Unable to Update Order Line.");
             }        
         }
         
-//        
-//        //====================================================================//
-//        // Prepare Args
-//        $Arg1 = ( Splash::Local()->DolVersionCmp("5.0.0") > 0 ) ? $user : 0;
-//        //====================================================================//
-//        // Perform Line Update        
-//        if ( $this->CurrentItem->update($Arg1) <= 0) {
-//            $this->CatchDolibarrErrors($this->CurrentItem);
-//            return Splash::Log()->Err("ErrLocalTpl",__CLASS__,__FUNCTION__,"Unable to update Line Item. ");
-//        }
 //        //====================================================================//
 //        // Update Item Totals
 //        $this->CurrentItem->update_total();
@@ -429,6 +404,11 @@ trait ItemsTrait {
         if ( !$FieldId ) {
             return;
         }
+        //====================================================================//
+        // Check If Order has Discounts
+        if ( SPLASH_DEBUG && ( $this->Object->total_shipping_tax_incl == 0 ) )  {
+            return;
+        }        
         //====================================================================//
         // READ Fields
         switch ($FieldId)

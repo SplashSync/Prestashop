@@ -53,6 +53,10 @@ trait CRUDTrait
         //====================================================================//
         // Load Order Products         
         $this->Products         = $Object->getProductsDetail();
+        $this->Payments         = $Object->getOrderPaymentCollection();
+//        $this->Payments         = $Object->getOrderPayments();
+                
+        $this->PaymentMethod    = $Object->module;
         //====================================================================//
         // Load Shipping Tax Calculator         
         $this->ShippingTaxCalculator    = (new \Carrier($Object->id_carrier))
@@ -102,23 +106,6 @@ trait CRUDTrait
         $this->Object->module           =   "ps_checkpayment";
         $this->Object->secure_key       =   md5(uniqid(rand(), true));
         
-//        $this->Object->total_products_wt = (float)$this->context->cart->getOrderTotal(true, Cart::ONLY_PRODUCTS, $order->product_list, $id_carrier);
-//        $order->total_discounts_tax_excl = (float)abs($this->context->cart->getOrderTotal(false, Cart::ONLY_DISCOUNTS, $order->product_list, $id_carrier));
-//        $order->total_discounts_tax_incl = (float)abs($this->context->cart->getOrderTotal(true, Cart::ONLY_DISCOUNTS, $order->product_list, $id_carrier));
-//        $order->total_discounts = $order->total_discounts_tax_incl;
-//
-//        $order->total_shipping_tax_excl = (float)$this->context->cart->getPackageShippingCost((int)$id_carrier, false, null, $order->product_list);
-//        $order->total_shipping_tax_incl = (float)$this->context->cart->getPackageShippingCost((int)$id_carrier, true, null, $order->product_list);
-//        $order->total_shipping = $order->total_shipping_tax_incl;
-//
-//        if (!is_null($carrier) && Validate::isLoadedObject($carrier)) {
-//            $order->carrier_tax_rate = $carrier->getTaxesRate(new Address((int)$this->context->cart->{Configuration::get('PS_TAX_ADDRESS_TYPE')}));
-//        }
-//
-//        $order->total_wrapping_tax_excl = (float)abs($this->context->cart->getOrderTotal(false, Cart::ONLY_WRAPPING, $order->product_list, $id_carrier));
-//        $order->total_wrapping_tax_incl = (float)abs($this->context->cart->getOrderTotal(true, Cart::ONLY_WRAPPING, $order->product_list, $id_carrier));
-//        $order->total_wrapping = $order->total_wrapping_tax_incl;
-
         $this->Object->total_products       = (float) 0;
         $this->Object->total_products_wt    = (float) 0;
         $this->Object->total_paid_tax_excl  = (float) 0;
@@ -139,6 +126,10 @@ trait CRUDTrait
         if ( $this->Object->add() != True) {  
             return Splash::Log()->Err("ErrLocalTpl",__CLASS__,__FUNCTION__,"Unable to Create new Order.");
         }
+        
+        //====================================================================//
+        // Create Empty Order Products List        
+        $this->Products         = array();        
             
         Splash::Log()->Deb("MsgLocalTpl",__CLASS__,__FUNCTION__,"New Order Created");
         return $this->Object;
@@ -199,6 +190,24 @@ trait CRUDTrait
         // An Order Cannot Get deleted
         Splash::Log()->Err("ErrLocalTpl",__CLASS__,__FUNCTION__,"You Cannot Delete Prestashop Orders");
         
+        //====================================================================//
+        // Load Object From DataBase
+        //====================================================================//
+        $this->Object     = new Order($Id);
+        if ($this->Object->id != $Id ) {
+            return Splash::Log()->War("ErrLocalTpl",__CLASS__,__FUNCTION__," Unable to load Order (" . $Id . ").");
+        }        
+        
+        //====================================================================//
+        // Delete All OrderDetails Lines 
+//        if ( $this->AttributeId ) {
+//            return $this->Object->deleteAttributeCombination($this->AttributeId);
+//        }
+        
+        //====================================================================//
+        // Else Delete Product From DataBase
+//        return $this->Object->delete();        
+        $this->Object->delete();        
         return True;
     }    
     

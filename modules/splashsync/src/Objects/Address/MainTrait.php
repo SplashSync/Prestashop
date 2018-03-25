@@ -56,6 +56,7 @@ trait MainTrait {
                 ->Name(Translate::getAdminTranslation("Zip/Postal Code", "AdminAddresses"))
                 ->MicroData("http://schema.org/PostalAddress","postalCode")
                 ->Group($GroupName)
+                ->AddOption("maxLength" , 12)                
                 ->isRequired();
         
         //====================================================================//
