@@ -8,7 +8,7 @@ But Splash need complete ISO languages codes to identfy which languages are used
 
 You will see this error on module's configuration page.
 
-![](https://splashsync.github.io/Prestashop/img/screenshot_10.png)
+![](https://splashsync.github.io/Prestashop/img/screenshot_8.png)
 
 To solve this, goes to languages configuration and change **Language Code** to a standard format.
 
