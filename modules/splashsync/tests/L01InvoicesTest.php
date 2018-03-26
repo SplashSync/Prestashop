@@ -49,9 +49,7 @@ class L01InvoicesTest extends ObjectsCase {
         //====================================================================//
         //   Set Order State to Delivered  
         $Order->setCurrentState(5);
-        $Order->update();
-        
-        
+        $Order->update();   
     }
     
 }
