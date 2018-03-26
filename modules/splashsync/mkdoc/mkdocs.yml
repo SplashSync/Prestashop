@@ -2,7 +2,7 @@
 # Main Configuration
 ###########################################################
 site_name: Splash Module for Prestashop 
-site_dir: "../../docs"
+site_dir: "../../../docs"
 theme: readthedocs
 
 repo_url: https://github.com/SplashSync/Prestashop
