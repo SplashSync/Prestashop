@@ -52,7 +52,7 @@
         }, 
         {
             "location": "/install/", 
-            "text": "Installation\n\n\nEasy Installation\n\n\nPrestashop offer possibility to install modules directly from PrestaShop Addons or Administration Interface. \n\n\nFor sure, you can use it to install our module. If it didn't work, please use the manual installation.\n\n\nManual Installation\n\n\n\n\nDownload latest stable version here : \nSplash Modules\n\n\nCopy module contents on PrestaShop module's folder (modules/splashsync)\n\n\nEnable \n Configure the module\n\n\n\n\nRequirements\n\n\n\n\nPHP 5.6+ | PHP 7.0+\n\n\nPrestaShop 1.6+\n\n\nAn active Splash Sync User Account\n\n\n\n\nDocumentation\n\n\nFor the configuration guide and reference, see: \nPrestashop Module Wiki\n\n\nContributing\n\n\nAny Pull requests are welcome! \n\n\nThis module is part of \nSplashSync\n project.", 
+            "text": "Installation\n\n\nEasy Installation\n\n\nPrestashop offer possibility to install modules directly from PrestaShop Addons or Administration Interface. \n\n\nFor sure, you can use it to install our module. If it didn't work, please use the manual installation.\n\n\nManual Installation\n\n\n\n\nDownload latest stable version here : \nSplash Modules\n\n\nCopy module contents on PrestaShop module's folder (modules/splashsync)\n\n\nEnable \n Configure the module\n\n\n\n\nRequirements\n\n\n\n\nPHP 5.6+ | PHP 7.0+\n\n\nPrestaShop 1.6+\n\n\nAn active Splash Sync User Account\n\n\n\n\nDocumentation\n\n\nFor the configuration guide and reference, see: \nPrestashop Module Documentation\n\n\nContributing\n\n\nAny Pull requests are welcome! \n\n\nThis module is part of \nSplashSync\n project.", 
             "title": "Installation"
         }, 
         {
@@ -77,7 +77,7 @@
         }, 
         {
             "location": "/install/#documentation", 
-            "text": "For the configuration guide and reference, see:  Prestashop Module Wiki", 
+            "text": "For the configuration guide and reference, see:  Prestashop Module Documentation", 
             "title": "Documentation"
         }, 
         {

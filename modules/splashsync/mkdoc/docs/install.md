@@ -20,7 +20,7 @@ For sure, you can use it to install our module. If it didn't work, please use th
 
 ## Documentation
 
-For the configuration guide and reference, see: [Prestashop Module Wiki](https://github.com/Prestashop/wiki)
+For the configuration guide and reference, see: [Prestashop Module Documentation](https://splashsync.github.io/Prestashop)
 
 ## Contributing
 
