@@ -17,6 +17,7 @@ pages:
     - Features:                 features.md
     - Installation:             install.md
     - Configuration:            configuration.md
+    - Tricks & FAQ:             faq.md
 #    - Test & Connect: connect.md
 #    - Documentation Française :
 #        - Accueil :             fr/index.md

@@ -2,7 +2,7 @@
     "docs": [
         {
             "location": "/", 
-            "text": "Splash Sync Module for Prestahop\n\n\nWelcome to the Prestahop Module's Documentation!\n\n\nThis module implement Splash Sync connector for Prestahop E-Commerce Platform. It provide access to multiples Objects for automated synchronization though Splash Sync dedicated protocol.\n\n\nSummary\n\n\nThis documentation will focus on:\n\n\n\n\nFeatures \n Benefits\n\n\nModule Installation\n\n\nModule Configuration\n\n\n\n\nMore about Splash\n\n\nThis module is part of \nSplashSync\n project. \n\n\nFor more informations about Splash Sync, the way it works and how you can use it to connect your applications, please refer our \nonline documentation\n.", 
+            "text": "Splash Sync Module for Prestahop\n\n\nWelcome to the Prestahop Module's Documentation!\n\n\nThis module implement Splash Sync connector for Prestahop E-Commerce Platform. It provide access to multiples Objects for automated synchronization though Splash Sync dedicated protocol.\n\n\nSummary\n\n\nThis documentation will focus on:\n\n\n\n\nFeatures \n Benefits\n\n\nModule Installation\n\n\nModule Configuration\n\n\nFAQ \n Tricks\n\n\n\n\nMore about Splash\n\n\nThis module is part of \nSplashSync\n project. \n\n\nFor more informations about Splash Sync, the way it works and how you can use it to connect your applications, please refer our \nonline documentation\n.", 
             "title": "Home"
         }, 
         {
@@ -12,7 +12,7 @@
         }, 
         {
             "location": "/#summary", 
-            "text": "This documentation will focus on:   Features   Benefits  Module Installation  Module Configuration", 
+            "text": "This documentation will focus on:   Features   Benefits  Module Installation  Module Configuration  FAQ   Tricks", 
             "title": "Summary"
         }, 
         {
@@ -122,6 +122,46 @@
         }, 
         {
             "location": "/configuration/#check-results-of-self-tests", 
+            "text": "Each time you update your configuration, module will verify your parameters and ensure communication with Splash is working fine. \nEnsure all tests are passed... this is critical!", 
+            "title": "Check results of Self-Tests"
+        }, 
+        {
+            "location": "/faq/", 
+            "text": "FAQ\n\n\nLanguage Code in Wrong Format\n\n\nIf you installed a pre-configured package of Prestashop, language code may be incomplete. \n\n\nFor exemple, your language code may be \nes\n instead of \nes-es\n, or \nen\n isntead of \nen-us\n.  \n\n\n\n\nConnect to your Splash Account\n\n\nFirst, you need to create access keys for you module in our website. To do so, on Splash workspace, go to \nServers\n \n \nAdd a Server\n and note your id \n encryption keys. \n\n\n\n\nThen, enter the keys on Module's configuration (take care not to forget any character). \n\n\n\n\nSetup default Parameters\n\n\nTo work correctly, this module need few parameters to be selected. These defaults values will be used upon objects creation/modification.\n\n\n\n\nDefault Language\n\n\nSelect which language package module should use for communication with Splash Server.\n\n\nDefault User\n\n\nSelect which user will be used for all actions executed by Splash Module. \nWe highly recommend creation of a dedicated user for Splash. \nBe aware Splash Module will take care of Users rights policy, this user must have appropriated right on Prestashop.\n\n\nCheck results of Self-Tests\n\n\nEach time you update your configuration, module will verify your parameters and ensure communication with Splash is working fine. \nEnsure all tests are passed... this is critical!", 
+            "title": "Tricks & FAQ"
+        }, 
+        {
+            "location": "/faq/#faq", 
+            "text": "", 
+            "title": "FAQ"
+        }, 
+        {
+            "location": "/faq/#language-code-in-wrong-format", 
+            "text": "If you installed a pre-configured package of Prestashop, language code may be incomplete.   For exemple, your language code may be  es  instead of  es-es , or  en  isntead of  en-us .", 
+            "title": "Language Code in Wrong Format"
+        }, 
+        {
+            "location": "/faq/#connect-to-your-splash-account", 
+            "text": "First, you need to create access keys for you module in our website. To do so, on Splash workspace, go to  Servers     Add a Server  and note your id   encryption keys.    Then, enter the keys on Module's configuration (take care not to forget any character).", 
+            "title": "Connect to your Splash Account"
+        }, 
+        {
+            "location": "/faq/#setup-default-parameters", 
+            "text": "To work correctly, this module need few parameters to be selected. These defaults values will be used upon objects creation/modification.", 
+            "title": "Setup default Parameters"
+        }, 
+        {
+            "location": "/faq/#default-language", 
+            "text": "Select which language package module should use for communication with Splash Server.", 
+            "title": "Default Language"
+        }, 
+        {
+            "location": "/faq/#default-user", 
+            "text": "Select which user will be used for all actions executed by Splash Module. \nWe highly recommend creation of a dedicated user for Splash. \nBe aware Splash Module will take care of Users rights policy, this user must have appropriated right on Prestashop.", 
+            "title": "Default User"
+        }, 
+        {
+            "location": "/faq/#check-results-of-self-tests", 
             "text": "Each time you update your configuration, module will verify your parameters and ensure communication with Splash is working fine. \nEnsure all tests are passed... this is critical!", 
             "title": "Check results of Self-Tests"
         }

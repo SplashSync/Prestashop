@@ -8,7 +8,7 @@
   
   
   <link rel="shortcut icon" href="../img/favicon.ico">
-  <title>Installation - Splash Module for Prestashop</title>
+  <title>Tricks & FAQ - Splash Module for Prestashop</title>
   <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
 
   <link rel="stylesheet" href="../css/theme.css" type="text/css" />
@@ -17,9 +17,9 @@
   
   <script>
     // Current page data
-    var mkdocs_page_name = "Installation";
-    var mkdocs_page_input_path = "install.md";
-    var mkdocs_page_url = "/install/";
+    var mkdocs_page_name = "Tricks & FAQ";
+    var mkdocs_page_input_path = "faq.md";
+    var mkdocs_page_url = "/faq/";
   </script>
   
   <script src="../js/jquery-2.1.1.min.js"></script>
@@ -57,32 +57,9 @@
     <a class="" href="../features/">Features</a>
 	    </li>
           
-            <li class="toctree-l1 current">
+            <li class="toctree-l1">
 		
-    <a class="current" href="./">Installation</a>
-    <ul class="subnav">
-            
-    <li class="toctree-l2"><a href="#installation">Installation</a></li>
-    
-        <ul>
-        
-            <li><a class="toctree-l3" href="#easy-installation">Easy Installation</a></li>
-        
-            <li><a class="toctree-l3" href="#manual-installation">Manual Installation</a></li>
-        
-        </ul>
-    
-
-    <li class="toctree-l2"><a href="#requirements">Requirements</a></li>
-    
-
-    <li class="toctree-l2"><a href="#documentation">Documentation</a></li>
-    
-
-    <li class="toctree-l2"><a href="#contributing">Contributing</a></li>
-    
-
-    </ul>
+    <a class="" href="../install/">Installation</a>
 	    </li>
           
             <li class="toctree-l1">
@@ -90,9 +67,27 @@
     <a class="" href="../configuration/">Configuration</a>
 	    </li>
           
-            <li class="toctree-l1">
+            <li class="toctree-l1 current">
 		
-    <a class="" href="../faq/">Tricks & FAQ</a>
+    <a class="current" href="./">Tricks & FAQ</a>
+    <ul class="subnav">
+            
+    <li class="toctree-l2"><a href="#faq">FAQ</a></li>
+    
+        <ul>
+        
+            <li><a class="toctree-l3" href="#language-code-in-wrong-format">Language Code in Wrong Format</a></li>
+        
+            <li><a class="toctree-l3" href="#connect-to-your-splash-account">Connect to your Splash Account</a></li>
+        
+            <li><a class="toctree-l3" href="#setup-default-parameters">Setup default Parameters</a></li>
+        
+            <li><a class="toctree-l3" href="#check-results-of-self-tests">Check results of Self-Tests</a></li>
+        
+        </ul>
+    
+
+    </ul>
 	    </li>
           
         </ul>
@@ -117,10 +112,10 @@
     
       
     
-    <li>Installation</li>
+    <li>Tricks & FAQ</li>
     <li class="wy-breadcrumbs-aside">
       
-        <a href="https://github.com/SplashSync/Prestashop/edit/master/docs/install.md"
+        <a href="https://github.com/SplashSync/Prestashop/edit/master/docs/faq.md"
           class="icon icon-github"> Edit on GitHub</a>
       
     </li>
@@ -130,27 +125,29 @@
           <div role="main">
             <div class="section">
               
-                <h2 id="installation">Installation</h2>
-<h3 id="easy-installation">Easy Installation</h3>
-<p>Prestashop offer possibility to install modules directly from PrestaShop Addons or Administration Interface. </p>
-<p>For sure, you can use it to install our module. If it didn't work, please use the manual installation.</p>
-<h3 id="manual-installation">Manual Installation</h3>
-<ul>
-<li>Download latest stable version here : <a href="http://www.splashsync.com/en/modules/">Splash Modules</a></li>
-<li>Copy module contents on PrestaShop module's folder (modules/splashsync)</li>
-<li>Enable &amp; Configure the module</li>
-</ul>
-<h2 id="requirements">Requirements</h2>
-<ul>
-<li>PHP 5.6+ | PHP 7.0+</li>
-<li>PrestaShop 1.6+</li>
-<li>An active Splash Sync User Account</li>
-</ul>
-<h2 id="documentation">Documentation</h2>
-<p>For the configuration guide and reference, see: <a href="https://splashsync.github.io/Prestashop">Prestashop Module Documentation</a></p>
-<h2 id="contributing">Contributing</h2>
-<p>Any Pull requests are welcome! </p>
-<p>This module is part of <a href="http://www.splashsync.com">SplashSync</a> project.</p>
+                <h2 id="faq">FAQ</h2>
+<h3 id="language-code-in-wrong-format">Language Code in Wrong Format</h3>
+<p>If you installed a pre-configured package of Prestashop, language code may be incomplete. </p>
+<p>For exemple, your language code may be <strong>es</strong> instead of <strong>es-es</strong>, or <strong>en</strong> isntead of <strong>en-us</strong>.  </p>
+<p><img alt="" src="https://splashsync.github.io/Prestashop/img/screenshot_8.png" /></p>
+<h3 id="connect-to-your-splash-account">Connect to your Splash Account</h3>
+<p>First, you need to create access keys for you module in our website. To do so, on Splash workspace, go to <strong>Servers</strong> &gt;&gt; <strong>Add a Server</strong> and note your id &amp; encryption keys. </p>
+<p><img alt="" src="https://splashsync.github.io/Prestashop/img/screenshot_2.png" /></p>
+<p>Then, enter the keys on Module's configuration (take care not to forget any character). </p>
+<p><img alt="" src="https://splashsync.github.io/Prestashop/img/screenshot_3.png" /></p>
+<h3 id="setup-default-parameters">Setup default Parameters</h3>
+<p>To work correctly, this module need few parameters to be selected. These defaults values will be used upon objects creation/modification.</p>
+<p><img alt="" src="https://splashsync.github.io/Prestashop/img/screenshot_4.png" /></p>
+<h5 id="default-language">Default Language</h5>
+<p>Select which language package module should use for communication with Splash Server.</p>
+<h5 id="default-user">Default User</h5>
+<p>Select which user will be used for all actions executed by Splash Module. 
+We highly recommend creation of a dedicated user for Splash. 
+Be aware Splash Module will take care of Users rights policy, this user must have appropriated right on Prestashop.</p>
+<h3 id="check-results-of-self-tests">Check results of Self-Tests</h3>
+<p>Each time you update your configuration, module will verify your parameters and ensure communication with Splash is working fine. 
+Ensure all tests are passed... this is critical!</p>
+<p><img alt="" src="https://splashsync.github.io/Prestashop/img/screenshot_5.png" /></p>
               
             </div>
           </div>
@@ -158,10 +155,8 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="../configuration/" class="btn btn-neutral float-right" title="Configuration">Next <span class="icon icon-circle-arrow-right"></span></a>
       
-      
-        <a href="../features/" class="btn btn-neutral" title="Features"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../configuration/" class="btn btn-neutral" title="Configuration"><span class="icon icon-circle-arrow-left"></span> Previous</a>
       
     </div>
   
@@ -191,10 +186,8 @@
           <a href="https://github.com/SplashSync/Prestashop/" class="fa fa-github" style="float: left; color: #fcfcfc"> GitHub</a>
       
       
-        <span><a href="../features/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+        <span><a href="../configuration/" style="color: #fcfcfc;">&laquo; Previous</a></span>
       
-      
-        <span style="margin-left: 15px"><a href="../configuration/" style="color: #fcfcfc">Next &raquo;</a></span>
       
     </span>
 </div>

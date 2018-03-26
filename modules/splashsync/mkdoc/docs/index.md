@@ -14,6 +14,7 @@ This documentation will focus on:
 * [Features & Benefits](https://splashsync.github.io/Prestashop/features)
 * [Module Installation](https://splashsync.github.io/Prestashop/install)
 * [Module Configuration](https://splashsync.github.io/Prestashop/configuration)
+* [FAQ & Tricks](https://splashsync.github.io/Prestashop/faq)
 
 ## More about Splash
 This module is part of [SplashSync](https://www.splashsync.com) project. 
