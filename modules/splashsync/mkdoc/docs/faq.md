@@ -4,39 +4,33 @@
 ### Language Code in Wrong Format 
 
 If you installed a pre-configured package of Prestashop, language code may be incomplete. 
+But Splash need complete ISO languages codes to identfy which languages are used in your products descriptions. 
 
-For exemple, your language code may be **es** instead of **es-es**, or **en** isntead of **en-us**.  
+You will see this error on module's configuration page.
 
-![](https://splashsync.github.io/Prestashop/img/screenshot_8.png)
+![](https://splashsync.github.io/Prestashop/img/screenshot_10.png)
 
+To solve this, goes to languages configuration and change **Language Code** to a standard format.
 
-### Connect to your Splash Account
+![](https://splashsync.github.io/Prestashop/img/screenshot_9.png)
 
-First, you need to create access keys for you module in our website. To do so, on Splash workspace, go to **Servers** >> **Add a Server** and note your id & encryption keys. 
+I.e, if your language code is:
 
-![](https://splashsync.github.io/Prestashop/img/screenshot_2.png)
+- **en**, change to **en-us**.  
+- **es**, change to **es-es**. 
+- **fr**, change to **fr-fr**. 
+- **it**, change to **it-it**. 
 
-Then, enter the keys on Module's configuration (take care not to forget any character). 
+### Multi-Language Mode Requirement 
 
-![](https://splashsync.github.io/Prestashop/img/screenshot_3.png)
+To use and synchronize Prestashop Products catalog with other applications, ensure they are compatible with Multilanguage fields.
 
-### Setup default Parameters
+I.e on Dolibarr, you must enable Multilanguage mode to synchronize Prestashop Products. 
 
-To work correctly, this module need few parameters to be selected. These defaults values will be used upon objects creation/modification.
+### Products Imports from Splash
 
-![](https://splashsync.github.io/Prestashop/img/screenshot_4.png)
+By default, our Prestashop Module is only done to export new products from Prestashop to your Splash Eco-System.
+To make it better, we use product names with options as products name, this allow us to get different names for each product variants. 
 
-##### Default Language
-Select which language package module should use for communication with Splash Server.
-
-##### Default User
-Select which user will be used for all actions executed by Splash Module. 
-We highly recommend creation of a dedicated user for Splash. 
-Be aware Splash Module will take care of Users rights policy, this user must have appropriated right on Prestashop.
-
-### Check results of Self-Tests
-
-Each time you update your configuration, module will verify your parameters and ensure communication with Splash is working fine. 
-Ensure all tests are passed... this is critical!
-
-![](https://splashsync.github.io/Prestashop/img/screenshot_5.png)
+In order to allow import of new products from Splash to Prestashop, you will have to update your synchronization schemas in order to add an export schema on field "Product Name without Options". 
+This will explain Splash that Product Name shall be written here. 

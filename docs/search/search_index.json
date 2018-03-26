@@ -127,7 +127,7 @@
         }, 
         {
             "location": "/faq/", 
-            "text": "FAQ\n\n\nLanguage Code in Wrong Format\n\n\nIf you installed a pre-configured package of Prestashop, language code may be incomplete. \n\n\nFor exemple, your language code may be \nes\n instead of \nes-es\n, or \nen\n isntead of \nen-us\n.  \n\n\n\n\nConnect to your Splash Account\n\n\nFirst, you need to create access keys for you module in our website. To do so, on Splash workspace, go to \nServers\n \n \nAdd a Server\n and note your id \n encryption keys. \n\n\n\n\nThen, enter the keys on Module's configuration (take care not to forget any character). \n\n\n\n\nSetup default Parameters\n\n\nTo work correctly, this module need few parameters to be selected. These defaults values will be used upon objects creation/modification.\n\n\n\n\nDefault Language\n\n\nSelect which language package module should use for communication with Splash Server.\n\n\nDefault User\n\n\nSelect which user will be used for all actions executed by Splash Module. \nWe highly recommend creation of a dedicated user for Splash. \nBe aware Splash Module will take care of Users rights policy, this user must have appropriated right on Prestashop.\n\n\nCheck results of Self-Tests\n\n\nEach time you update your configuration, module will verify your parameters and ensure communication with Splash is working fine. \nEnsure all tests are passed... this is critical!", 
+            "text": "FAQ\n\n\nLanguage Code in Wrong Format\n\n\nIf you installed a pre-configured package of Prestashop, language code may be incomplete. \nBut Splash need complete ISO languages codes to identfy which languages are used in your products descriptions. \n\n\nYou will see this error on module's configuration page.\n\n\n\n\nTo solve this, goes to languages configuration and change \nLanguage Code\n to a standard format.\n\n\n\n\nI.e, if your language code is:\n\n\n\n\nen\n, change to \nen-us\n.  \n\n\nes\n, change to \nes-es\n. \n\n\nfr\n, change to \nfr-fr\n. \n\n\nit\n, change to \nit-it\n. \n\n\n\n\nMulti-Language Mode Requirement\n\n\nTo use and synchronize Prestashop Products catalog with other applications, ensure they are compatible with Multilanguage fields.\n\n\nI.e on Dolibarr, you must enable Multilanguage mode to synchronize Prestashop Products. \n\n\nProducts Imports from Splash\n\n\nBy default, our Prestashop Module is only done to export new products from Prestashop to your Splash Eco-System.\nTo make it better, we use product names with options as products name, this allow us to get different names for each product variants. \n\n\nIn order to allow import of new products from Splash to Prestashop, you will have to update your synchronization schemas in order to add an export schema on field \"Product Name without Options\". \nThis will explain Splash that Product Name shall be written here.", 
             "title": "Tricks & FAQ"
         }, 
         {
@@ -137,33 +137,18 @@
         }, 
         {
             "location": "/faq/#language-code-in-wrong-format", 
-            "text": "If you installed a pre-configured package of Prestashop, language code may be incomplete.   For exemple, your language code may be  es  instead of  es-es , or  en  isntead of  en-us .", 
+            "text": "If you installed a pre-configured package of Prestashop, language code may be incomplete. \nBut Splash need complete ISO languages codes to identfy which languages are used in your products descriptions.   You will see this error on module's configuration page.   To solve this, goes to languages configuration and change  Language Code  to a standard format.   I.e, if your language code is:   en , change to  en-us .    es , change to  es-es .   fr , change to  fr-fr .   it , change to  it-it .", 
             "title": "Language Code in Wrong Format"
         }, 
         {
-            "location": "/faq/#connect-to-your-splash-account", 
-            "text": "First, you need to create access keys for you module in our website. To do so, on Splash workspace, go to  Servers     Add a Server  and note your id   encryption keys.    Then, enter the keys on Module's configuration (take care not to forget any character).", 
-            "title": "Connect to your Splash Account"
+            "location": "/faq/#multi-language-mode-requirement", 
+            "text": "To use and synchronize Prestashop Products catalog with other applications, ensure they are compatible with Multilanguage fields.  I.e on Dolibarr, you must enable Multilanguage mode to synchronize Prestashop Products.", 
+            "title": "Multi-Language Mode Requirement"
         }, 
         {
-            "location": "/faq/#setup-default-parameters", 
-            "text": "To work correctly, this module need few parameters to be selected. These defaults values will be used upon objects creation/modification.", 
-            "title": "Setup default Parameters"
-        }, 
-        {
-            "location": "/faq/#default-language", 
-            "text": "Select which language package module should use for communication with Splash Server.", 
-            "title": "Default Language"
-        }, 
-        {
-            "location": "/faq/#default-user", 
-            "text": "Select which user will be used for all actions executed by Splash Module. \nWe highly recommend creation of a dedicated user for Splash. \nBe aware Splash Module will take care of Users rights policy, this user must have appropriated right on Prestashop.", 
-            "title": "Default User"
-        }, 
-        {
-            "location": "/faq/#check-results-of-self-tests", 
-            "text": "Each time you update your configuration, module will verify your parameters and ensure communication with Splash is working fine. \nEnsure all tests are passed... this is critical!", 
-            "title": "Check results of Self-Tests"
+            "location": "/faq/#products-imports-from-splash", 
+            "text": "By default, our Prestashop Module is only done to export new products from Prestashop to your Splash Eco-System.\nTo make it better, we use product names with options as products name, this allow us to get different names for each product variants.   In order to allow import of new products from Splash to Prestashop, you will have to update your synchronization schemas in order to add an export schema on field \"Product Name without Options\". \nThis will explain Splash that Product Name shall be written here.", 
+            "title": "Products Imports from Splash"
         }
     ]
 }
