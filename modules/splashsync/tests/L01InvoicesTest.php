@@ -15,7 +15,11 @@
  * 
  **/
 
+namespace Splash\Tests;
+
 use Splash\Tests\Tools\ObjectsCase;
+
+use Splash\Client\Splash;
 
 /**
  * @abstract    Local Objects Test Suite - Specific Verifications for Invoices Objects. 
@@ -24,21 +28,30 @@ use Splash\Tests\Tools\ObjectsCase;
  */
 class L01InvoicesTest extends ObjectsCase {
     
-    /**
-     * @dataProvider ObjectFieldsProvider
-     */
-    public function testFromModule()
+    public function testCreateAnInvoice()
     {
         $this->assertTrue(True);
+        
+        //====================================================================//
+        //   Create Fake Order Data  
+        $this->Fields   =   $this->fakeFieldsList("Order", ["product_id@lines"], True);
+        $FakeData       =   $this->fakeObjectData($this->Fields);        
+        
+        //====================================================================//
+        //   Execute Action Directly on Module  
+        $ObjectId = Splash::Object("Order")->Set(Null, $FakeData);
+        
+        //====================================================================//
+        //   Load Order Object  
+        $Order  =   Splash::Object("Order")->Load($ObjectId);
+        $this->assertNotEmpty($Order);
+        
+        //====================================================================//
+        //   Set Order State to Delivered  
+        $Order->setCurrentState(5);
+        $Order->update();
+        
+        
     }
-    
-    /**
-     * @dataProvider ObjectFieldsProvider
-     */
-    public function testSingleFieldFromService()
-    {
-        $this->assertTrue(True);
-    }
-    
     
 }

@@ -18,28 +18,18 @@
 >
 
     <testsuites>
-        <testsuite name="Core">
-            <directory>modules/splashsync/vendor/splash/phpcore/Tests/*</directory>
-        </testsuite>
         <testsuite name="Local">
-            <directory>modules/splashsync/Tests/*</directory>
+            <directory>modules/splashsync/tests</directory>
+        </testsuite>
+        <testsuite name="Core">
+            <directory>modules/splashsync/vendor/splash/phpcore/Tests</directory>
         </testsuite>
     </testsuites>
 
     <filter>
-        <whitelist processUncoveredFilesFromWhitelist="true">
-            <directory>modules/splashsync/src</directory>
-            <directory>modules/splashsync/vendor/splash/phpcore</directory>
-            <exclude>
-                <directory>modules/splashsync/vendor</directory>
-            </exclude>
-        </whitelist>
-    </filter>
-
-    <filter>
         <whitelist>
-            <directory>modules/splashsync/tests</directory>
-            <directory>modules/splashsync/vendor/splash/phpcore</directory>
+            <directory>modules/splashsync/tests/*</directory>
+            <directory>modules/splashsync/vendor/splash/phpcore/*</directory>
             <exclude>
                 <directory>modules/splashsync/vendor</directory>
             </exclude>
