@@ -12,7 +12,7 @@ This module implement Splash Sync connector for Prestahop E-Commerce Platform. I
 This documentation will focus on:
 
 * [Features & Benefits](https://splashsync.github.io/Prestashop/features)
-* [Module Installation](https://splashsync.github.io/Prestashop/installation)
+* [Module Installation](https://splashsync.github.io/Prestashop/install)
 * [Module Configuration](https://splashsync.github.io/Prestashop/configuration)
 
 ## More about Splash

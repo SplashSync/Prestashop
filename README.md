@@ -18,7 +18,7 @@ This module implement Splash Sync connector for Prestashop. It provide access to
 
 ## Documentation
 
-For the configuration guide and reference, see: [Prestashop Module Wiki](https://github.com/SplashSync/Prestashop/wiki)
+For the configuration guide and reference, see: [Prestashop Module Docmumentation](https://splashsync.github.io/Prestashop/)
 
 ## Contributing
 
