@@ -20,9 +20,7 @@ use Splash\Core\SplashCore      as Splash;
 
 //====================================================================//
 // Prestashop Static Classes	
-use Shop, Configuration, Currency, Combination, Language, Context, Translate, OrderPayment;
-use Image, ImageType, ImageManager, StockAvailable;
-use DbQuery, Db, Tools;
+use Translate, OrderPayment;
 
 /**
  * @abstract    Access to Orders Payments Fields
@@ -278,9 +276,5 @@ trait PaymentsTrait {
                 return Splash::Log()->Err("ErrLocalTpl",__CLASS__,__FUNCTION__,"Unable to Update Payment Line.");
             }        
         }
-        
-//        //====================================================================//
-//        // Update Item Totals
-//        $this->CurrentItem->update_total();
     }        
 }

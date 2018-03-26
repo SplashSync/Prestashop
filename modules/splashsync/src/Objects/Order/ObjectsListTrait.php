@@ -19,8 +19,7 @@ use Splash\Core\SplashCore      as Splash;
 
 //====================================================================//
 // Prestashop Static Classes	
-use Shop, Configuration, Currency, Translate;
-use DbQuery, Db, Tools;
+use DbQuery, Db;
 
 /**
  * @abstract    Acces to Orders Objects Lists

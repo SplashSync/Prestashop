@@ -15,12 +15,11 @@
 
 namespace Splash\Local\Objects\Order;
 
-use Splash\Core\SplashCore      as Splash;
+//use Splash\Core\SplashCore      as Splash;
 
 //====================================================================//
 // Prestashop Static Classes	
-use Shop, Configuration, Currency, Translate;
-use DbQuery, Db, Tools;
+use Customer, Translate;
 
 /**
  * @abstract    Access to Orders Core Fields
@@ -38,8 +37,20 @@ trait CoreTrait {
         $this->FieldsFactory()->Create(self::Objects()->Encode( "ThirdParty" , SPL_T_ID))
                 ->Identifier("id_customer")
                 ->Name(Translate::getAdminTranslation("Customer ID", "AdminCustomerThreads"))
-                ->MicroData("http://schema.org/Organization","ID")
                 ->isRequired();  
+        if ( get_class($this) ===  "Splash\Local\Objects\Invoice" ) {
+            $this->FieldsFactory()->MicroData("http://schema.org/Invoice","customer");
+        } else {
+            $this->FieldsFactory()->MicroData("http://schema.org/Organization","ID");
+        }
+        
+        //====================================================================//
+        // Customer Email
+        $this->FieldsFactory()->Create(SPL_T_EMAIL)
+                ->Identifier("email")
+                ->Name(Translate::getAdminTranslation("Email address", "AdminCustomers"))
+                ->MicroData("http://schema.org/ContactPoint","email")
+                ->ReadOnly(); 
         
         //====================================================================//
         // Reference
@@ -47,7 +58,7 @@ trait CoreTrait {
                 ->Identifier("reference")
                 ->Name(Translate::getAdminTranslation("Reference", "AdminOrders"))
                 ->MicroData("http://schema.org/Order","orderNumber")       
-//                ->ReadOnly()
+                ->AddOption("maxLength", 8)
                 ->isRequired()                
                 ->IsListed();
 
@@ -79,15 +90,41 @@ trait CoreTrait {
             //====================================================================//
             // Direct Readings
             case 'reference':
-                $this->getSimple($FieldName);                
+                if ( get_class($this) ===  "Splash\Local\Objects\Invoice" ) {
+                    $this->getSimple($FieldName, "Order");                
+                } else {
+                    $this->getSimple($FieldName);                
+                }
                 break;
             
             //====================================================================//
             // Customer Object Id Readings
             case 'id_customer':
-                $this->Out[$FieldName] = self::Objects()->Encode( "ThirdParty" , $this->Object->$FieldName );
+                if ( get_class($this) ===  "Splash\Local\Objects\Invoice" ) {
+                    $this->Out[$FieldName] = self::Objects()->Encode( "ThirdParty" , $this->Order->$FieldName );
+                } else {
+                    $this->Out[$FieldName] = self::Objects()->Encode( "ThirdParty" , $this->Object->$FieldName );
+                }                
                 break;
 
+            //====================================================================//
+            // Customer Email
+            case 'email':
+                if ( get_class($this) ===  "Splash\Local\Objects\Invoice" ) {
+                    $CustomerId = $this->Order->id_customer;
+                } else {
+                    $CustomerId = $this->Object->id_customer;
+                } 
+                //====================================================================//
+                // Load Customer         
+                $Customer = new Customer($CustomerId);
+                if ( $Customer->id != $CustomerId )   {
+                    $this->Out[$FieldName] = Null;
+                    break;
+                }                     
+                $this->Out[$FieldName] = $Customer->email;
+                break;
+                
             //====================================================================//
             // Order Official Date
             case 'order_date':
@@ -118,13 +155,21 @@ trait CoreTrait {
             //====================================================================//
             // Direct Writing
             case 'reference':
-                $this->setSimple($FieldName,$Data);
-                break;   
+                if ( get_class($this) ===  "Splash\Local\Objects\Invoice" ) {
+                    $this->setSimple($FieldName, $Data, "Order");
+                } else {
+                    $this->setSimple($FieldName, $Data);
+                }       
+                break;
                     
             //====================================================================//
             // Customer Object Id 
             case 'id_customer':
-                $this->setSimple($FieldName,self::Objects()->Id( $Data ));
+                if ( get_class($this) ===  "Splash\Local\Objects\Invoice" ) {
+                    $this->setSimple($FieldName, self::Objects()->Id( $Data ), "Order");
+                } else {
+                    $this->setSimple($FieldName, self::Objects()->Id( $Data ));
+                }       
                 break;                 
             default:
                 return;

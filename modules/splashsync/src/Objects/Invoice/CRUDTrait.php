@@ -23,12 +23,10 @@ use Splash\Core\SplashCore      as Splash;
 // Prestashop Static Classes	
 //====================================================================//
 // Prestashop Static Classes	
-use Shop, Configuration, Currency, Product, Combination, Language, Context, Translate;
-use Image, ImageType, ImageManager, StockAvailable;
-use DbQuery, Db, Tools, Order, Cart, OrderInvoice;
+use Order, OrderInvoice;
 
 /**
- * @abstract    Prestashop Orders CRUD Functions
+ * @abstract    Prestashop Invoices CRUD Functions
  */
 trait CRUDTrait
 {
@@ -66,8 +64,6 @@ trait CRUDTrait
         $this->ShippingTaxCalculator    = (new \Carrier($this->Order->id_carrier))
                     ->getTaxCalculator(new \Address($this->Order->id_address_delivery));
 
-        
-                
         return $Object;
     }    
 

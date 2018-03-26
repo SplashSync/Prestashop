@@ -19,8 +19,7 @@ use Splash\Core\SplashCore      as Splash;
 
 //====================================================================//
 // Prestashop Static Classes	
-use Shop, Configuration, Currency, Translate;
-use DbQuery, Db, Tools;
+use DbQuery, Db, OrderInvoice;
 
 /**
  * @abstract    Acces to Invoices Objects Lists
@@ -58,7 +57,7 @@ trait ObjectsListTrait {
         $sql->select("o.`reference`         as reference");     // Order Internal Reference 
         $sql->select("c.`firstname`         as firstname");     // Customer Firstname 
         $sql->select("c.`lastname`          as lastname");      // Customer Lastname 
-        $sql->select("i.`date_add`          as date_add");      // Invoice Date 
+        $sql->select("i.`date_add`          as order_date");    // Invoice Date 
         $sql->select("o.`total_paid_tax_excl`");                // Invoice Total HT 
         $sql->select("o.`total_paid_tax_incl`");                // Invoice Total TTC 
         //====================================================================//
@@ -73,12 +72,12 @@ trait ObjectsListTrait {
             $Where.= " OR LOWER( o.reference )  LIKE LOWER( '%" . pSQL($filter) ."%') ";
             $Where.= " OR LOWER( c.firstname )  LIKE LOWER( '%" . pSQL($filter) ."%') ";
             $Where.= " OR LOWER( c.lastname )   LIKE LOWER( '%" . pSQL($filter) ."%') ";
-            $Where.= " OR LOWER( i.date_add )   LIKE LOWER( '%" . pSQL($filter) ."%') ";
+            $Where.= " OR LOWER( i.order_date ) LIKE LOWER( '%" . pSQL($filter) ."%') ";
             $sql->where($Where);
         }  
         //====================================================================//
         // Setup sortorder
-        $SortField = empty($params["sortfield"])    ?   "date_add"  :   $params["sortfield"];
+        $SortField = empty($params["sortfield"])    ?   "order_date":   $params["sortfield"];
         $SortOrder = empty($params["sortorder"])    ?   "DESC"      :   $params["sortorder"];
         // Build ORDER BY
         $sql->orderBy('`' . pSQL($SortField) . '` ' . pSQL($SortOrder) );

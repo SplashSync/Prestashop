@@ -22,9 +22,7 @@ use Splash\Models\Objects\PricesTrait;
 
 //====================================================================//
 // Prestashop Static Classes	
-use Shop, Configuration, Currency, Combination, Language, Context, Translate, OrderDetail;
-use Image, ImageType, ImageManager, StockAvailable;
-use DbQuery, Db, Tools;
+use Translate, OrderDetail, Tools;
 
 /**
  * @abstract    Access to Orders Items Fields
@@ -49,7 +47,6 @@ trait ItemsTrait {
                 ->MicroData("http://schema.org/partOfInvoice","description")       
                 ->Group(Translate::getAdminTranslation("Products", "AdminOrders"))
                 ->Association("product_name@lines","product_quantity@lines","product_id@lines","unit_price@lines")
-//                ->ReadOnly()
                 ;                
 
         //====================================================================//
@@ -61,7 +58,6 @@ trait ItemsTrait {
                 ->MicroData("http://schema.org/Product","productID")
                 ->Group(Translate::getAdminTranslation("Products", "AdminOrders"))
                 ->Association("product_name@lines","product_quantity@lines","product_id@lines","unit_price@lines")
-//                ->ReadOnly()
                 ;                
 
         //====================================================================//
@@ -73,7 +69,6 @@ trait ItemsTrait {
                 ->MicroData("http://schema.org/QuantitativeValue","value")        
                 ->Group(Translate::getAdminTranslation("Products", "AdminOrders"))
                 ->Association("product_name@lines","product_quantity@lines","product_id@lines","unit_price@lines")
-//                ->ReadOnly()
                 ;                                
 
         //====================================================================//
@@ -97,7 +92,6 @@ trait ItemsTrait {
                 ->MicroData("http://schema.org/PriceSpecification","price")        
                 ->Group(Translate::getAdminTranslation("Products", "AdminOrders"))
                 ->Association("product_name@lines","product_quantity@lines","product_id@lines","unit_price@lines")
-//                ->ReadOnly()
                 ;  
         
         //====================================================================//
@@ -306,10 +300,6 @@ trait ItemsTrait {
                 return Splash::Log()->Err("ErrLocalTpl",__CLASS__,__FUNCTION__,"Unable to Update Order Line.");
             }        
         }
-        
-//        //====================================================================//
-//        // Update Item Totals
-//        $this->CurrentItem->update_total();
     }    
     
     /**
@@ -328,9 +318,17 @@ trait ItemsTrait {
         if ( !$FieldId ) {
             return;
         }
+        
+        if ( get_class($this) ===  "Splash\Local\Objects\Invoice" ) {
+            $DiscountTaxExcl    =   $this->Object->total_discount_tax_excl;
+            $DiscountTaxIncl    =   $this->Object->total_discount_tax_incl;
+        } else {
+            $DiscountTaxExcl    =   $this->Object->total_discounts_tax_excl;
+            $DiscountTaxIncl    =   $this->Object->total_discounts_tax_incl;
+        }         
         //====================================================================//
         // Check If Order has Discounts
-        if ( $this->Object->total_discounts == 0 )  {
+        if ( $DiscountTaxIncl == 0 )  {
             return;
         }
         //====================================================================//
@@ -338,7 +336,7 @@ trait ItemsTrait {
         switch ($FieldId)
         {
             //====================================================================//
-            // Order Line Direct Reading Data
+            // Order Line Direct Reading Datainvoice
             case 'product_name':
                 $Value = $this->spl->l("Discount");
                 break;                
@@ -358,15 +356,15 @@ trait ItemsTrait {
             case 'unit_price':
                 //====================================================================//
                 // Manually Compute Tax Rate 
-                if ( $this->Object->total_discounts_tax_incl != $this->Object->total_discounts_tax_excl )  {
-                    $Tax    =   round(100 * ( ($this->Object->total_discounts_tax_incl - $this->Object->total_discounts_tax_excl) /  $this->Object->total_discounts_tax_excl ), 3);                  
+                if ( $DiscountTaxIncl != $DiscountTaxExcl )  {
+                    $Tax    =   round(100 * ( ($DiscountTaxIncl - $DiscountTaxExcl) /  $DiscountTaxExcl ), 3);
                 } else {
                     $Tax    =   0;
                 }
                 //====================================================================//
                 // Build Price Array
                 $Value = self::Prices()->Encode(
-                        (double)    (-1) * Tools::convertPrice($this->Object->total_discounts_tax_excl,  $this->Currency),
+                        (double)    (-1) * Tools::convertPrice($DiscountTaxExcl,  $this->Currency),
                         (double)    $Tax,
                                     Null,
                                     $this->Currency->iso_code,

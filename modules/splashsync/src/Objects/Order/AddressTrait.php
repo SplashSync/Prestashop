@@ -64,7 +64,11 @@ trait AddressTrait {
             // Customer Address Ids
             case 'id_address_invoice':
             case 'id_address_delivery':
-                $this->Out[$FieldName] = self::Objects()->Encode( "Address" , $this->Object->$FieldName );
+                if ( get_class($this) ===  "Splash\Local\Objects\Invoice" ) {
+                    $this->Out[$FieldName] = self::Objects()->Encode( "Address" , $this->Order->$FieldName );
+                } else {
+                    $this->Out[$FieldName] = self::Objects()->Encode( "Address" , $this->Object->$FieldName );
+                }
                 break;   
             default:
                 return;

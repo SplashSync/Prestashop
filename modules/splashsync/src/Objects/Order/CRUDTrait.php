@@ -21,11 +21,7 @@ use Splash\Core\SplashCore      as Splash;
 
 //====================================================================//
 // Prestashop Static Classes	
-//====================================================================//
-// Prestashop Static Classes	
-use Shop, Configuration, Currency, Product, Combination, Language, Context, Translate;
-use Image, ImageType, ImageManager, StockAvailable;
-use DbQuery, Db, Tools, Order, Cart;
+use Configuration, Order, Cart;
 
 /**
  * @abstract    Prestashop Orders CRUD Functions
@@ -54,16 +50,13 @@ trait CRUDTrait
         // Load Order Products         
         $this->Products         = $Object->getProductsDetail();
         $this->Payments         = $Object->getOrderPaymentCollection();
-//        $this->Payments         = $Object->getOrderPayments();
-                
         $this->PaymentMethod    = $Object->module;
+        
         //====================================================================//
         // Load Shipping Tax Calculator         
         $this->ShippingTaxCalculator    = (new \Carrier($Object->id_carrier))
                     ->getTaxCalculator(new \Address($Object->id_address_delivery));
 
-        
-                
         return $Object;
     }    
 
@@ -199,14 +192,7 @@ trait CRUDTrait
         }        
         
         //====================================================================//
-        // Delete All OrderDetails Lines 
-//        if ( $this->AttributeId ) {
-//            return $this->Object->deleteAttributeCombination($this->AttributeId);
-//        }
-        
-        //====================================================================//
         // Else Delete Product From DataBase
-//        return $this->Object->delete();        
         $this->Object->delete();        
         return True;
     }    

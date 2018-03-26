@@ -15,13 +15,11 @@
 
 namespace Splash\Local\Objects\Order;
 
-use Splash\Core\SplashCore      as Splash;
+//use Splash\Core\SplashCore      as Splash;
 
 //====================================================================//
 // Prestashop Static Classes	
-use Shop, Configuration, Currency, Combination, Language, Context, Translate;
-use Image, ImageType, ImageManager, StockAvailable;
-use DbQuery, Db, Tools;
+use Translate;
 
 /**
  * @abstract    Access to Orders Main Fields

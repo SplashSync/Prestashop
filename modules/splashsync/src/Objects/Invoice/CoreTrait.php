@@ -15,12 +15,11 @@
 
 namespace Splash\Local\Objects\Invoice;
 
-use Splash\Core\SplashCore      as Splash;
+//use Splash\Core\SplashCore      as Splash;
 
 //====================================================================//
 // Prestashop Static Classes	
-use Shop, Configuration, Currency, Translate;
-use DbQuery, Db, Tools;
+use Translate;
 
 /**
  * @abstract    Access to Orders Core Fields
@@ -73,7 +72,7 @@ trait CoreTrait {
                 break;
             
             case 'id_order':
-                $this->Out[$FieldName] = self::ObjectId_Encode( "Order" , $this->Object->$FieldName );
+                $this->Out[$FieldName] = self::Objects()->Encode( "Order" , $this->Object->$FieldName );
                 break;            
             
             default:
@@ -81,27 +80,6 @@ trait CoreTrait {
         }
         
         unset($this->In[$Key]);
-    }    
-    
-    /**
-     *  @abstract     Write Given Fields
-     * 
-     *  @param        string    $FieldName              Field Identifier / Name
-     *  @param        mixed     $Data                   Field Data
-     * 
-     *  @return         none
-     */
-    private function setInvoiceCoreFields($FieldName,$Data) 
-    {
-        //====================================================================//
-        // WRITE Field
-        switch ($FieldName)
-        {
-              
-            default:
-                return;
-        }
-        unset($this->In[$FieldName]);
     }    
     
 }
