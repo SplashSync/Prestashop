@@ -194,25 +194,25 @@ class Local
         
         //====================================================================//
         //  Verify - Server Identifier Given
-        if ( !Configuration::hasKey('SPLASH_WS_ID') || empty(Configuration::get('SPLASH_WS_ID')) ) {
+        if ( empty(Configuration::get('SPLASH_WS_ID')) ) {
             return Splash::Log()->Err("ErrSelfTestNoWsId");
         }        
                 
         //====================================================================//
         //  Verify - Server Encrypt Key Given
-        if ( !Configuration::hasKey('SPLASH_WS_KEY') || empty(Configuration::get('SPLASH_WS_KEY')) ) {
+        if ( empty(Configuration::get('SPLASH_WS_KEY')) ) {
             return Splash::Log()->Err("ErrSelfTestNoWsKey");
         }        
         
         //====================================================================//
         //  Verify - Default Language is Given
-        if ( !Configuration::hasKey('SPLASH_LANG_ID') || empty(Configuration::get('SPLASH_LANG_ID')) ) {
+        if ( empty(Configuration::get('SPLASH_LANG_ID')) ) {
             return Splash::Log()->Err("ErrSelfTestDfLang");
         }        
         
         //====================================================================//
         //  Verify - User Selected
-        if ( !Configuration::hasKey('SPLASH_USER_ID') || empty(Configuration::get('SPLASH_USER_ID')) ) {
+        if ( empty(Configuration::get('SPLASH_USER_ID')) ) {
             return Splash::Log()->Err("ErrSelfTestNoUser");
         }        
 
