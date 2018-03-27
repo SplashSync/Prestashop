@@ -699,7 +699,9 @@ class SplashSync extends Module
         //====================================================================//
         // Register Module JS
         $this->context->controller->addJS($this->_path.'views/js/splash.js');
-//        $this->context->controller->addJquery();
+        if ( \Tools::version_compare(_PS_VERSION_, "1.7", '<') ) {
+            $this->context->controller->addJquery();
+        } 
         $this->context->controller->addJS($this->_path.'views/js/jquery.noty.packaged.min.js');
     }
 
