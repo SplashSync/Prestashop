@@ -59,7 +59,7 @@ before_script:
     - bash $MODULE_SCRIPTS_DIR/install_module.sh
     
 script: 
-    - ls -al
+    - ls -al ./modules/splashsync/vendor/bin/
     # Run Grump Main Test Sequence
     - php ./modules/splashsync/vendor/bin/grumphp run --testsuite=travis
     # With PHP 7 => Execute Phpstan 
