@@ -30,7 +30,7 @@ parameters:
             detect_key_conflicts:   true
         xmllint: ~
         yamllint: ~
-#        phpmd: ~
+#        phpmd:
 #            ruleset:        ["./build/phpmd.xml"]
         securitychecker: ~
         phpcpd:

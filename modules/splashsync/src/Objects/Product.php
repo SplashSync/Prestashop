@@ -43,6 +43,7 @@ use Tools;
 /**
  * @abstract    Splash Local Object Class - Products Local Integration
  * @author      B. Paquier <contact@splashsync.com>
+ * @SuppressWarnings(PHPMD.CamelCasePropertyName)
  */
 class Product extends AbstractObject
 {

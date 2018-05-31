@@ -33,6 +33,7 @@ use Splash\Local\Traits\SplashIdTrait;
 /**
  * @abstract    Splash Local Core Class - Head of Module's Local Integration
  * @author      B. Paquier <contact@splashsync.com>
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 class Local
 {

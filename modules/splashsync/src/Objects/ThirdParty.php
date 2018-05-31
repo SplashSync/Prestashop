@@ -27,6 +27,7 @@ use Splash\Models\Objects\ObjectsTrait;
 /**
  * @abstract    Splash Local Object Class - Customer Accounts Local Integration
  * @author      B. Paquier <contact@splashsync.com>
+ * @SuppressWarnings(PHPMD.CamelCasePropertyName)
  */
 class ThirdParty extends AbstractObject
 {

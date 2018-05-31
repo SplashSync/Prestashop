@@ -33,6 +33,7 @@ use Currency;
 /**
  * @abstract    Splash Local Object Class - Customer Orders Local Integration
  * @author      B. Paquier <contact@splashsync.com>
+ * @SuppressWarnings(PHPMD.CamelCasePropertyName)
  */
 class Order extends AbstractObject
 {

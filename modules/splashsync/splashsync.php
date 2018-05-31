@@ -788,7 +788,7 @@ class SplashSync extends Module
         // Read Product Attributes Conbination
         $AttrList = $product->getAttributesResume(Context::getContext()->language->id);
         if (is_array($AttrList)) {
-            foreach ($AttrList as $key => $Attr) {
+            foreach ($AttrList as $Attr) {
                 //====================================================================//
                 // Add Attribute Product Commit Update List
                 $IdList[] =   (int) Splash\Client\Splash::Object("Product")->getUnikId($id_product, $Attr["id_product_attribute"]);

@@ -2,7 +2,7 @@
     "name": "splash/prestashop",
     "description": "Splash Module for Prestashop",
 
-    "license": "GPL",
+    "license": "MIT",
 
     "minimum-stability": "dev",
     "prefer-stable": true,
@@ -20,12 +20,12 @@
     },
     
     "require": {
-        "php":              "^5.6|^7.0",
-        "splash/phpcore":   ">1.4.0"
+        "php":                              "^5.6|^7.0",
+        "splash/phpcore":                   ">1.4"
     },
     
     "require-dev": {
-        "phpunit/phpunit":                  ">6.0",
+        "phpunit/phpunit":                  ">5.4",
         "composer/composer":                "^1.5",
         "j13k/yaml-lint":                   "^1.1",
         "jakub-onderka/php-parallel-lint":  "^1.0",

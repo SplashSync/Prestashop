@@ -38,6 +38,7 @@ use OrderInvoice;
 /**
  * @abstract    Splash Local Object Class - Customer Invoices Local Integration
  * @author      B. Paquier <contact@splashsync.com>
+ * @SuppressWarnings(PHPMD.CamelCasePropertyName)
  */
 class Invoice extends AbstractObject
 {
