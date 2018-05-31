@@ -4,15 +4,14 @@ echo Install SplashSync Module
 # Build Module Dependencies
 cd $MODULE_DIR
 # With PHP 7 => Load Phpstan   
-if [[ ${TRAVIS_PHP_VERSION:0:1} == "7" ]]; then composer require phpstan/phpstan-shim --no-update; fi
+# if [[ ${TRAVIS_PHP_VERSION:0:1} == "7" ]]; then composer require phpstan/phpstan-shim --no-update; fi
 composer update --prefer-dist --no-interaction --no-progress
 cd $TRAVIS_BUILD_DIR
 
 # Move Module Contents to Install Folder
 mkdir     $TRAVIS_BUILD_DIR/modules/splashsync
 cp -Rf    $MODULE_DIR/modules/splashsync/*              $TRAVIS_BUILD_DIR/modules/splashsync/      
-cp -f     $MODULE_DIR/build/phpunit.xml.dist            $TRAVIS_BUILD_DIR/phpunit.xml      
-cp -f     $MODULE_DIR/grumphp.yml                       $TRAVIS_BUILD_DIR/grumphp.yml      
+cp -f     $MODULE_DIR/build/phpunit.xml.dist            $TRAVIS_BUILD_DIR/phpunit.xml           
 ls -al    $TRAVIS_BUILD_DIR/modules/splashsync
 
 # Change Default Language Code to ISO format
