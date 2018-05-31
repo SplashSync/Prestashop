@@ -84,7 +84,7 @@ trait ObjectsListTrait
         //====================================================================//
         // Execute Generic Search
         $Result     = $this->getObjectsListRawData($sql, "order_date", $params);
-        if ($Result === False) {
+        if ($Result === false) {
             return $Result;
         }
         //====================================================================//

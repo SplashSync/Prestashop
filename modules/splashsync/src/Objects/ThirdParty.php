@@ -40,7 +40,7 @@ class ThirdParty extends AbstractObject
     // Prestashop Common Traits
     use \Splash\Local\Objects\Core\DatesTrait;
     use \Splash\Local\Objects\Core\SplashMetaTrait;
-    use \Splash\Local\Objects\Core\ObjectsListCommonsTrait;    
+    use \Splash\Local\Objects\Core\ObjectsListCommonsTrait;
     
     // Prestashop ThirdParty Traits
     use \Splash\Local\Objects\ThirdParty\ObjectsListTrait;

@@ -59,7 +59,7 @@ class Activity extends WidgetBase
     //====================================================================//
     // Define Standard Options for this Widget
     // Override this array to change default options for your widget
-    protected static $OPTIONS       = array(
+    public static $OPTIONS       = array(
         "Width"     =>      self::SIZE_XL
     );
     

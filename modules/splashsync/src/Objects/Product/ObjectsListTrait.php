@@ -102,9 +102,9 @@ trait ObjectsListTrait
         //====================================================================//
         // Execute Generic Search
         $Result     = $this->getObjectsListRawData($sql, "ref", $params);
-        if ($Result === False) {
+        if ($Result === false) {
             return $Result;
-        }        
+        }
         //====================================================================//
         // Init Result Array
         $Data       = array();

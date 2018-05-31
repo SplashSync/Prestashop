@@ -42,7 +42,7 @@ trait ObjectsListCommonsTrait
         //====================================================================//
         // Compute Total Number of Results
         return (int) Db::getInstance()->NumRows();
-    }    
+    }
 
     protected function getObjectsListRawData($sql, $sortField, $params = null)
     {
@@ -78,7 +78,7 @@ trait ObjectsListCommonsTrait
         //====================================================================//
         // Execute Generic Search
         $Result     = $this->getObjectsListRawData($sql, $sortField, $params);
-        if ($Result === False) {
+        if ($Result === false) {
             return $Result;
         }
         //====================================================================//
@@ -95,5 +95,5 @@ trait ObjectsListCommonsTrait
         $Data["meta"]["total"]      =   $Total;         // Store Total Number of results
         Splash::log()->deb("MsgLocalTpl", __CLASS__, __FUNCTION__, (count($Data)-1)." Objects Found.");
         return $Data;
-    }    
+    }
 }
