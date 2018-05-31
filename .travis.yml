@@ -61,9 +61,9 @@ before_script:
 script: 
     - ls -al
     # Run Grump Main Test Sequence
-    - php modules/splashsync/vendor/bin/grumphp run --testsuite=travis
+    - php ./modules/splashsync/vendor/bin/grumphp run --testsuite=travis
     # With PHP 7 => Execute Phpstan 
-    - if [[ ${TRAVIS_PHP_VERSION:0:1} == "7" ]]; then php modules/splashsync/vendor/bin/grumphp run --testsuite=phpstan; fi     
+    - if [[ ${TRAVIS_PHP_VERSION:0:1} == "7" ]]; then php ./modules/splashsync/vendor/bin/grumphp run --testsuite=phpstan; fi     
     # Run PhpUnit Core Test Sequence
     - phpunit -c phpunit.xml modules/splashsync/vendor/splash/phpcore/Tests/Core/
     # Run PhpUnit Main Test Sequence
