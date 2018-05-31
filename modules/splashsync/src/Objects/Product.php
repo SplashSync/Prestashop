@@ -8,11 +8,11 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- * 
+ *
  *  @author    Splash Sync <www.splashsync.com>
  *  @copyright 2015-2017 Splash Sync
  *  @license   GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007
- * 
+ *
  **/
 
 namespace   Splash\Local\Objects;
@@ -24,13 +24,24 @@ use Splash\Models\Objects\IntelParserTrait;
 use Splash\Models\Objects\SimpleFieldsTrait;
 
 //====================================================================//
-// Prestashop Static Classes	
-use Shop, Configuration, Currency, Combination, Language, Context, Translate;
-use Image, ImageType, ImageManager, StockAvailable;
-use DbQuery, Db, Tools;
+// Prestashop Static Classes
+use Shop;
+use Configuration;
+use Currency;
+use Combination;
+use Language;
+use Context;
+use Translate;
+use Image;
+use ImageType;
+use ImageManager;
+use StockAvailable;
+use DbQuery;
+use Db;
+use Tools;
 
 /**
- * @abstract    Splash Local Object Class - Products Local Integration 
+ * @abstract    Splash Local Object Class - Products Local Integration
  * @author      B. Paquier <contact@splashsync.com>
  */
 class Product extends AbstractObject
@@ -56,7 +67,7 @@ class Product extends AbstractObject
     use \Splash\Local\Objects\Product\MetaTrait;
     
     //====================================================================//
-    // Object Definition Parameters	
+    // Object Definition Parameters
     //====================================================================//
     
     /**
@@ -67,48 +78,48 @@ class Product extends AbstractObject
     /**
      *  Object Name (Translated by Module)
      */
-    protected static    $NAME            =  "Product";
+    protected static $NAME            =  "Product";
     
     /**
-     *  Object Description (Translated by Module) 
+     *  Object Description (Translated by Module)
      */
-    protected static    $DESCRIPTION     =  "Prestashop Product Object";    
+    protected static $DESCRIPTION     =  "Prestashop Product Object";
     
     /**
-     *  Object Icon (FontAwesome or Glyph ico tag) 
+     *  Object Icon (FontAwesome or Glyph ico tag)
      */
-    protected static    $ICO     =  "fa fa-product-hunt";
+    protected static $ICO     =  "fa fa-product-hunt";
     
     /**
-     *  Object Synchronistion Limitations 
-     *  
+     *  Object Synchronistion Limitations
+     *
      *  This Flags are Used by Splash Server to Prevent Unexpected Operations on Remote Server
      */
-    protected static    $ALLOW_PUSH_CREATED         =  TRUE;        // Allow Creation Of New Local Objects
-    protected static    $ALLOW_PUSH_UPDATED         =  TRUE;        // Allow Update Of Existing Local Objects
-    protected static    $ALLOW_PUSH_DELETED         =  TRUE;        // Allow Delete Of Existing Local Objects
+    protected static $ALLOW_PUSH_CREATED         =  true;        // Allow Creation Of New Local Objects
+    protected static $ALLOW_PUSH_UPDATED         =  true;        // Allow Update Of Existing Local Objects
+    protected static $ALLOW_PUSH_DELETED         =  true;        // Allow Delete Of Existing Local Objects
     
     /**
-     *  Object Synchronistion Recommended Configuration 
+     *  Object Synchronistion Recommended Configuration
      */
-    protected static    $ENABLE_PUSH_CREATED       =  FALSE;        // Enable Creation Of New Local Objects when Not Existing
-    protected static    $ENABLE_PUSH_UPDATED       =  TRUE;         // Enable Update Of Existing Local Objects when Modified Remotly
-    protected static    $ENABLE_PUSH_DELETED       =  TRUE;         // Enable Delete Of Existing Local Objects when Deleted Remotly
+    protected static $ENABLE_PUSH_CREATED       =  false;        // Enable Creation Of New Local Objects when Not Existing
+    protected static $ENABLE_PUSH_UPDATED       =  true;         // Enable Update Of Existing Local Objects when Modified Remotly
+    protected static $ENABLE_PUSH_DELETED       =  true;         // Enable Delete Of Existing Local Objects when Deleted Remotly
 
-    protected static    $ENABLE_PULL_CREATED       =  TRUE;         // Enable Import Of New Local Objects 
-    protected static    $ENABLE_PULL_UPDATED       =  TRUE;         // Enable Import of Updates of Local Objects when Modified Localy
-    protected static    $ENABLE_PULL_DELETED       =  TRUE;         // Enable Delete Of Remotes Objects when Deleted Localy       
+    protected static $ENABLE_PULL_CREATED       =  true;         // Enable Import Of New Local Objects
+    protected static $ENABLE_PULL_UPDATED       =  true;         // Enable Import of Updates of Local Objects when Modified Localy
+    protected static $ENABLE_PULL_DELETED       =  true;         // Enable Delete Of Remotes Objects when Deleted Localy
     
     
     //====================================================================//
-    // General Class Variables	
+    // General Class Variables
     //====================================================================//
-    protected $ProductId      = Null;     // Prestashop Product Class Id
-    protected $Attribute      = Null;     // Prestashop Product Attribute Class
-    protected $AttributeId    = Null;     // Prestashop Product Attribute Class Id
-    protected $AttributeUpdate= False;    // Prestashop Product Attribute Update is Requierd
-    protected $LangId         = Null;     // Prestashop Language Class Id
-    protected $Currency       = Null;     // Prestashop Currency Class
+    protected $ProductId      = null;     // Prestashop Product Class Id
+    protected $Attribute      = null;     // Prestashop Product Attribute Class
+    protected $AttributeId    = null;     // Prestashop Product Attribute Class Id
+    protected $AttributeUpdate= false;    // Prestashop Product Attribute Update is Requierd
+    protected $LangId         = null;     // Prestashop Language Class Id
+    protected $Currency       = null;     // Prestashop Currency Class
     
     //====================================================================//
     // Class Constructor
@@ -128,7 +139,7 @@ class Product extends AbstractObject
         
         //====================================================================//
         //  Load Local Translation File
-        Splash::Translator()->Load("objects@local");          
+        Splash::Translator()->Load("objects@local");
        
         //====================================================================//
         // Load Splash Module
@@ -140,15 +151,14 @@ class Product extends AbstractObject
         
         //====================================================================//
         // Load OsWs Currency
-        $this->Currency = new Currency(Configuration::get('PS_CURRENCY_DEFAULT'));        
+        $this->Currency = new Currency(Configuration::get('PS_CURRENCY_DEFAULT'));
 
         //====================================================================//
         // Load User
-        if ( !Splash::local()->LoadLocalUser() )     { 
-            return False;
+        if (!Splash::local()->LoadLocalUser()) {
+            return false;
         }
         
-        return True;
-    }    
-    
+        return true;
+    }
 }

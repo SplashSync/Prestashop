@@ -8,11 +8,11 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- * 
+ *
  *  @author    Splash Sync <www.splashsync.com>
  *  @copyright 2015-2017 Splash Sync
  *  @license   GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007
- * 
+ *
  **/
 
 namespace   Splash\Local\Objects;
@@ -25,11 +25,13 @@ use Splash\Models\Objects\SimpleFieldsTrait;
 use Splash\Models\Objects\ObjectsTrait;
 
 //====================================================================//
-// Prestashop Static Classes	
-use Shop, Configuration, Currency;
+// Prestashop Static Classes
+use Shop;
+use Configuration;
+use Currency;
 
 /**
- * @abstract    Splash Local Object Class - Customer Orders Local Integration 
+ * @abstract    Splash Local Object Class - Customer Orders Local Integration
  * @author      B. Paquier <contact@splashsync.com>
  */
 class Order extends AbstractObject
@@ -55,7 +57,7 @@ class Order extends AbstractObject
     use \Splash\Local\Objects\Order\StatusTrait;
     
     //====================================================================//
-    // Object Definition Parameters	
+    // Object Definition Parameters
     //====================================================================//
     
     /**
@@ -66,44 +68,44 @@ class Order extends AbstractObject
     /**
      *  Object Name (Translated by Module)
      */
-    protected static    $NAME            =  "Customer Order";
+    protected static $NAME            =  "Customer Order";
     
     /**
-     *  Object Description (Translated by Module) 
+     *  Object Description (Translated by Module)
      */
-    protected static    $DESCRIPTION     =  "Prestashop Customers Order Object";    
+    protected static $DESCRIPTION     =  "Prestashop Customers Order Object";
     
     /**
-     *  Object Icon (FontAwesome or Glyph ico tag) 
+     *  Object Icon (FontAwesome or Glyph ico tag)
      */
-    protected static    $ICO     =  "fa fa-shopping-cart ";
+    protected static $ICO     =  "fa fa-shopping-cart ";
     
     /**
-     *  Object Synchronistion Limitations 
-     *  
+     *  Object Synchronistion Limitations
+     *
      *  This Flags are Used by Splash Server to Prevent Unexpected Operations on Remote Server
      */
-    protected static    $ALLOW_PUSH_CREATED         =  SPLASH_DEBUG;        // Allow Creation Of New Local Objects
-    protected static    $ALLOW_PUSH_UPDATED         =  SPLASH_DEBUG;        // Allow Update Of Existing Local Objects
-    protected static    $ALLOW_PUSH_DELETED         =  SPLASH_DEBUG;       // Allow Delete Of Existing Local Objects
+    protected static $ALLOW_PUSH_CREATED         =  SPLASH_DEBUG;        // Allow Creation Of New Local Objects
+    protected static $ALLOW_PUSH_UPDATED         =  SPLASH_DEBUG;        // Allow Update Of Existing Local Objects
+    protected static $ALLOW_PUSH_DELETED         =  SPLASH_DEBUG;       // Allow Delete Of Existing Local Objects
     
     /**
-     *  Object Synchronistion Recommended Configuration 
+     *  Object Synchronistion Recommended Configuration
      */
-    protected static    $ENABLE_PUSH_CREATED       =  FALSE;         // Enable Creation Of New Local Objects when Not Existing
-    protected static    $ENABLE_PUSH_UPDATED       =  FALSE;         // Enable Update Of Existing Local Objects when Modified Remotly
-    protected static    $ENABLE_PUSH_DELETED       =  FALSE;         // Enable Delete Of Existing Local Objects when Deleted Remotly
+    protected static $ENABLE_PUSH_CREATED       =  false;         // Enable Creation Of New Local Objects when Not Existing
+    protected static $ENABLE_PUSH_UPDATED       =  false;         // Enable Update Of Existing Local Objects when Modified Remotly
+    protected static $ENABLE_PUSH_DELETED       =  false;         // Enable Delete Of Existing Local Objects when Deleted Remotly
     
-    protected static    $ENABLE_PULL_CREATED       =  TRUE;          // Enable Import Of New Local Objects 
-    protected static    $ENABLE_PULL_UPDATED       =  TRUE;          // Enable Import of Updates of Local Objects when Modified Localy
-    protected static    $ENABLE_PULL_DELETED       =  TRUE;          // Enable Delete Of Remotes Objects when Deleted Localy    
+    protected static $ENABLE_PULL_CREATED       =  true;          // Enable Import Of New Local Objects
+    protected static $ENABLE_PULL_UPDATED       =  true;          // Enable Import of Updates of Local Objects when Modified Localy
+    protected static $ENABLE_PULL_DELETED       =  true;          // Enable Delete Of Remotes Objects when Deleted Localy
     
     //====================================================================//
-    // General Class Variables	
+    // General Class Variables
     //====================================================================//
 
-    protected   $Products       = array();
-    protected   $Payments       = array();    
+    protected $Products       = array();
+    protected $Payments       = array();
     
     //====================================================================//
     // Class Constructor
@@ -122,7 +124,7 @@ class Order extends AbstractObject
         }
         //====================================================================//
         //  Load Local Translation File
-        Splash::Translator()->Load("objects@local");       
+        Splash::Translator()->Load("objects@local");
         //====================================================================//
         // Load Splash Module
         $this->spl = Splash::local()->getLocalModule();
@@ -132,9 +134,6 @@ class Order extends AbstractObject
         //====================================================================//
         // Load OsWs Currency
         $this->Currency = new Currency(Configuration::get('PS_CURRENCY_DEFAULT'));
-        return True;
-    }    
-    
+        return true;
+    }
 }
-
-?>

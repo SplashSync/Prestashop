@@ -16,15 +16,25 @@
 namespace Splash\Local\Objects\Core;
 
 //====================================================================//
-// Prestashop Static Classes	
-use Address, Gender, Context, State, Country, Translate, Validate;
-use DbQuery, Db, Customer, Tools;
+// Prestashop Static Classes
+use Address;
+use Gender;
+use Context;
+use State;
+use Country;
+use Translate;
+use Validate;
+use DbQuery;
+use Db;
+use Customer;
+use Tools;
 
 /**
  * @abstract    Access to Objects Dates Fields
  * @author      B. Paquier <contact@splashsync.com>
  */
-trait DatesTrait {
+trait DatesTrait
+{
 
 
     /**
@@ -33,45 +43,44 @@ trait DatesTrait {
     private function buildDatesFields()
     {
         //====================================================================//
-        // Creation Date 
+        // Creation Date
         $this->fieldsFactory()->Create(SPL_T_DATETIME)
                 ->Identifier("date_add")
                 ->Name(Translate::getAdminTranslation("Creation", "AdminSupplyOrders"))
                 ->Group(Translate::getAdminTranslation("Meta", "AdminThemes"))
-                ->MicroData("http://schema.org/DataFeedItem","dateCreated")
+                ->MicroData("http://schema.org/DataFeedItem", "dateCreated")
                 ->isReadOnly();
         
         //====================================================================//
-        // Last Change Date 
+        // Last Change Date
         $this->fieldsFactory()->Create(SPL_T_DATETIME)
                 ->Identifier("date_upd")
                 ->Name(Translate::getAdminTranslation("Last modification", "AdminSupplyOrders"))
                 ->Group(Translate::getAdminTranslation("Meta", "AdminThemes"))
-                ->MicroData("http://schema.org/DataFeedItem","dateCreated")
+                ->MicroData("http://schema.org/DataFeedItem", "dateCreated")
                 ->isReadOnly();
-    }    
+    }
 
     /**
      *  @abstract     Read requested Field
-     * 
+     *
      *  @param        string    $Key                    Input List Key
      *  @param        string    $FieldName              Field Identifier / Name
-     * 
+     *
      *  @return         none
      */
-    private function getDatesFields($Key,$FieldName)
+    private function getDatesFields($Key, $FieldName)
     {
             
         //====================================================================//
         // READ Fields
-        switch ($FieldName)
-        {
+        switch ($FieldName) {
             case 'date_add':
             case 'date_upd':
-                if ( isset($this->Object->$FieldName) ) {
+                if (isset($this->Object->$FieldName)) {
                     $this->Out[$FieldName] = $this->Object->$FieldName;
                 } else {
-                    $this->Out[$FieldName] = Null;
+                    $this->Out[$FieldName] = null;
                 }
                 break;
             default:
@@ -79,6 +88,5 @@ trait DatesTrait {
         }
         
         unset($this->In[$Key]);
-    }   
-    
+    }
 }

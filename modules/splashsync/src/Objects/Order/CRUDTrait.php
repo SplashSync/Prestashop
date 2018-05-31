@@ -8,11 +8,11 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- * 
+ *
  *  @author    Splash Sync <www.splashsync.com>
  *  @copyright 2015-2017 Splash Sync
  *  @license   GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007
- * 
+ *
  **/
 
 namespace Splash\Local\Objects\Order;
@@ -20,8 +20,10 @@ namespace Splash\Local\Objects\Order;
 use Splash\Core\SplashCore      as Splash;
 
 //====================================================================//
-// Prestashop Static Classes	
-use Configuration, Order, Cart;
+// Prestashop Static Classes
+use Configuration;
+use Order;
+use Cart;
 
 /**
  * @abstract    Prestashop Orders CRUD Functions
@@ -30,46 +32,46 @@ trait CRUDTrait
 {
     
     /**
-     * @abstract    Load Request Object 
+     * @abstract    Load Request Object
      * @param       string  $Id               Object id
      * @return      mixed
      */
-    public function Load( $Id )
+    public function Load($Id)
     {
         //====================================================================//
         // Stack Trace
-        Splash::log()->trace(__CLASS__,__FUNCTION__); 
+        Splash::log()->trace(__CLASS__, __FUNCTION__);
         //====================================================================//
-        // Load Object         
+        // Load Object
         $Object = new Order($Id);
-        if ( $Object->id != $Id )   {
-            return Splash::log()->err("ErrLocalTpl",__CLASS__,__FUNCTION__," Unable to load Order (" . $Id . ").");
-        }      
+        if ($Object->id != $Id) {
+            return Splash::log()->err("ErrLocalTpl", __CLASS__, __FUNCTION__, " Unable to load Order (" . $Id . ").");
+        }
         
         //====================================================================//
-        // Load Order Products         
+        // Load Order Products
         $this->Products         = $Object->getProductsDetail();
         $this->Payments         = $Object->getOrderPaymentCollection();
         $this->PaymentMethod    = $Object->module;
         
         //====================================================================//
-        // Load Shipping Tax Calculator         
+        // Load Shipping Tax Calculator
         $this->ShippingTaxCalculator    = (new \Carrier($Object->id_carrier))
                     ->getTaxCalculator(new \Address($Object->id_address_delivery));
 
         return $Object;
-    }    
+    }
 
     /**
-     * @abstract    Create Request Object 
-     * 
+     * @abstract    Create Request Object
+     *
      * @return      object     New Object
      */
     public function Create()
     {
         //====================================================================//
         // Stack Trace
-        Splash::log()->trace(__CLASS__,__FUNCTION__);   
+        Splash::log()->trace(__CLASS__, __FUNCTION__);
         
         //====================================================================//
         // Check Order Minimal Fields are given
@@ -80,8 +82,8 @@ trait CRUDTrait
         // Create a New Cart
         $this->Cart =   new Cart();
         $this->Cart->id_currency      =   Configuration::get('PS_CURRENCY_DEFAULT');
-        if ( $this->Cart->add() != True) {  
-            return Splash::log()->err("ErrLocalTpl",__CLASS__,__FUNCTION__,"Unable to Create new Order Cart.");
+        if ($this->Cart->add() != true) {
+            return Splash::log()->err("ErrLocalTpl", __CLASS__, __FUNCTION__, "Unable to Create new Order Cart.");
         }
         
         //====================================================================//
@@ -108,39 +110,39 @@ trait CRUDTrait
         $this->Object->round_mode           = Configuration::get('PS_PRICE_ROUND_MODE');
         $this->Object->round_type           = Configuration::get('PS_ROUND_TYPE');
 
-        $this->setCoreFields("id_customer",                 $this->In["id_customer"]);
+        $this->setCoreFields("id_customer", $this->In["id_customer"]);
         
-        $this->setAddressFields("id_address_delivery",      $this->In["id_address_delivery"]);
-        $this->setAddressFields("id_address_invoice",       $this->In["id_address_invoice"]);
+        $this->setAddressFields("id_address_delivery", $this->In["id_address_delivery"]);
+        $this->setAddressFields("id_address_invoice", $this->In["id_address_invoice"]);
         
         
         //====================================================================//
         // Persist Order in Database
-        if ( $this->Object->add() != True) {  
-            return Splash::log()->err("ErrLocalTpl",__CLASS__,__FUNCTION__,"Unable to Create new Order.");
+        if ($this->Object->add() != true) {
+            return Splash::log()->err("ErrLocalTpl", __CLASS__, __FUNCTION__, "Unable to Create new Order.");
         }
         
         //====================================================================//
-        // Create Empty Order Products List        
-        $this->Products         = array();        
+        // Create Empty Order Products List
+        $this->Products         = array();
             
-        Splash::log()->deb("MsgLocalTpl",__CLASS__,__FUNCTION__,"New Order Created");
+        Splash::log()->deb("MsgLocalTpl", __CLASS__, __FUNCTION__, "New Order Created");
         return $this->Object;
     }
     
     /**
-     * @abstract    Update Request Object 
-     * 
+     * @abstract    Update Request Object
+     *
      * @param       array   $Needed         Is This Update Needed
-     * 
+     *
      * @return      string      Object Id
      */
-    public function Update( $Needed )
+    public function Update($Needed)
     {
         //====================================================================//
         // Stack Trace
-        Splash::log()->trace(__CLASS__,__FUNCTION__);  
-        if ( !$Needed) {
+        Splash::log()->trace(__CLASS__, __FUNCTION__);
+        if (!$Needed) {
             return (int) $this->Object->id;
         }
         
@@ -148,53 +150,52 @@ trait CRUDTrait
         // If Id Given = > Update Object
         //====================================================================//
         if (!empty($this->Object->id)) {
-            if ( $this->Object->update() != True) {  
-                return Splash::log()->err("ErrLocalTpl",__CLASS__,__FUNCTION__,"Unable to Update Order (" . $this->Object->id . ").");
+            if ($this->Object->update() != true) {
+                return Splash::log()->err("ErrLocalTpl", __CLASS__, __FUNCTION__, "Unable to Update Order (" . $this->Object->id . ").");
             }
             
-            Splash::log()->deb("MsgLocalTpl",__CLASS__,__FUNCTION__,"Order Updated");
+            Splash::log()->deb("MsgLocalTpl", __CLASS__, __FUNCTION__, "Order Updated");
         }
         
         //====================================================================//
         // UPDATE/CREATE SPLASH ID
-        //====================================================================//  
-        if ( isset ($this->NewSplashId) )   {  
-            Splash::local()->setSplashId( self::$NAME , $this->Object->id, $this->NewSplashId);    
+        //====================================================================//
+        if (isset($this->NewSplashId)) {
+            Splash::local()->setSplashId(self::$NAME, $this->Object->id, $this->NewSplashId);
             unset($this->NewSplashId);
         }
         
         return (int) $this->Object->id;
-    }  
+    }
     
     /**
      * @abstract    Delete requested Object
-     * 
+     *
      * @param       int     $Id     Object Id.  If NULL, Object needs to be created.
-     * 
-     * @return      bool                          
-     */    
-    public function Delete($Id=NULL)
+     *
+     * @return      bool
+     */
+    public function Delete($Id = null)
     {
         //====================================================================//
         // Stack Trace
-        Splash::log()->trace(__CLASS__,__FUNCTION__);    
+        Splash::log()->trace(__CLASS__, __FUNCTION__);
         
         //====================================================================//
         // An Order Cannot Get deleted
-        Splash::log()->err("ErrLocalTpl",__CLASS__,__FUNCTION__,"You Cannot Delete Prestashop Orders");
+        Splash::log()->err("ErrLocalTpl", __CLASS__, __FUNCTION__, "You Cannot Delete Prestashop Orders");
         
         //====================================================================//
         // Load Object From DataBase
         //====================================================================//
         $this->Object     = new Order($Id);
-        if ($this->Object->id != $Id ) {
-            return Splash::log()->war("ErrLocalTpl",__CLASS__,__FUNCTION__," Unable to load Order (" . $Id . ").");
-        }        
+        if ($this->Object->id != $Id) {
+            return Splash::log()->war("ErrLocalTpl", __CLASS__, __FUNCTION__, " Unable to load Order (" . $Id . ").");
+        }
         
         //====================================================================//
         // Else Delete Product From DataBase
-        $this->Object->delete();        
-        return True;
-    }    
-    
+        $this->Object->delete();
+        return true;
+    }
 }

@@ -18,15 +18,25 @@ namespace Splash\Local\Objects\ThirdParty;
 use Splash\Core\SplashCore      as Splash;
 
 //====================================================================//
-// Prestashop Static Classes	
-use Address, Gender, Context, State, Country, Translate, Validate;
-use DbQuery, Db, Customer, Tools;
+// Prestashop Static Classes
+use Address;
+use Gender;
+use Context;
+use State;
+use Country;
+use Translate;
+use Validate;
+use DbQuery;
+use Db;
+use Customer;
+use Tools;
 
 /**
  * @abstract    Access to thirdparty Meta Fields
  * @author      B. Paquier <contact@splashsync.com>
  */
-trait MetaTrait {
+trait MetaTrait
+{
 
 
     /**
@@ -40,7 +50,7 @@ trait MetaTrait {
         $this->fieldsFactory()->Create(SPL_T_BOOL)
                 ->Identifier("active")
                 ->Name(Translate::getAdminTranslation("Enabled", "AdminCustomers"))
-                ->MicroData("http://schema.org/Organization","active")
+                ->MicroData("http://schema.org/Organization", "active")
                 ->isListed();
         
         //====================================================================//
@@ -49,7 +59,7 @@ trait MetaTrait {
                 ->Identifier("newsletter")
                 ->Name(Translate::getAdminTranslation("Newsletter", "AdminCustomers"))
                 ->Group(Translate::getAdminTranslation("Meta", "AdminThemes"))
-                ->MicroData("http://schema.org/Organization","newsletter");
+                ->MicroData("http://schema.org/Organization", "newsletter");
         
         //====================================================================//
         // Adverstising
@@ -57,25 +67,23 @@ trait MetaTrait {
                 ->Identifier("optin")
                 ->Name(Translate::getAdminTranslation("Opt-in", "AdminCustomers"))
                 ->Group(Translate::getAdminTranslation("Meta", "AdminThemes"))
-                ->MicroData("http://schema.org/Organization","advertising");
-        
-    }    
+                ->MicroData("http://schema.org/Organization", "advertising");
+    }
 
     /**
      *  @abstract     Read requested Field
-     * 
+     *
      *  @param        string    $Key                    Input List Key
      *  @param        string    $FieldName              Field Identifier / Name
-     * 
+     *
      *  @return         none
      */
-    private function getMetaFields($Key,$FieldName)
+    private function getMetaFields($Key, $FieldName)
     {
             
         //====================================================================//
         // READ Fields
-        switch ($FieldName)
-        {
+        switch ($FieldName) {
             case 'active':
             case 'newsletter':
             case 'passwd':
@@ -87,33 +95,32 @@ trait MetaTrait {
         }
         
         unset($this->In[$Key]);
-    }    
+    }
 
     /**
      *  @abstract     Write Given Fields
-     * 
+     *
      *  @param        string    $FieldName              Field Identifier / Name
      *  @param        mixed     $Data                   Field Data
-     * 
+     *
      *  @return         none
      */
-    private function setMetaFields($FieldName,$Data) {
+    private function setMetaFields($FieldName, $Data)
+    {
         //====================================================================//
         // WRITE Fields
-        switch ($FieldName)
-        {
+        switch ($FieldName) {
             case 'active':
             case 'newsletter':
             case 'optin':
-                if ( $this->Object->$FieldName != $Data ) {
+                if ($this->Object->$FieldName != $Data) {
                     $this->Object->$FieldName = $Data;
                     $this->needUpdate();
-                }  
+                }
                 break;
             default:
                 return;
         }
         unset($this->In[$FieldName]);
-    }      
-    
+    }
 }

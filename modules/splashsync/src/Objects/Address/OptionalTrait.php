@@ -16,14 +16,15 @@
 namespace Splash\Local\Objects\Address;
 
 //====================================================================//
-// Prestashop Static Classes	
+// Prestashop Static Classes
 use Translate;
 
 /**
  * @abstract    Access to Address Optional Fields
  * @author      B. Paquier <contact@splashsync.com>
  */
-trait OptionalTrait {
+trait OptionalTrait
+{
 
             
     /**
@@ -37,21 +38,21 @@ trait OptionalTrait {
         $this->fieldsFactory()->Create(SPL_T_PHONE)
                 ->Identifier("phone")
                 ->Name(Translate::getAdminTranslation("Home phone", "AdminAddresses"))
-                ->MicroData("http://schema.org/PostalAddress","telephone");
+                ->MicroData("http://schema.org/PostalAddress", "telephone");
         
         //====================================================================//
         // Mobile Phone
         $this->fieldsFactory()->Create(SPL_T_PHONE)
                 ->Identifier("phone_mobile")
                 ->Name(Translate::getAdminTranslation("Mobile phone", "AdminAddresses"))
-                ->MicroData("http://schema.org/Person","telephone");
+                ->MicroData("http://schema.org/Person", "telephone");
 
         //====================================================================//
         // SIRET
         $this->fieldsFactory()->Create(SPL_T_VARCHAR)
                 ->Identifier("dni")
                 ->Name($this->spl->l("Company ID Number"))
-                ->MicroData("http://schema.org/Organization","taxID")
+                ->MicroData("http://schema.org/Organization", "taxID")
                 ->Group("ID")
                 ->isNotTested();
         
@@ -60,7 +61,7 @@ trait OptionalTrait {
         $this->fieldsFactory()->Create(SPL_T_VARCHAR)
                 ->Identifier("vat_number")
                 ->Name($this->spl->l("VAT number"))
-                ->MicroData("http://schema.org/Organization","vatID")
+                ->MicroData("http://schema.org/Organization", "vatID")
                 ->Group("ID")
                 ->isNotTested();
         
@@ -69,25 +70,23 @@ trait OptionalTrait {
         $this->fieldsFactory()->Create(SPL_T_VARCHAR)
                 ->Identifier("other")
                 ->Name($this->spl->l("Note"))
-                ->MicroData("http://schema.org/PostalAddress","description")      
+                ->MicroData("http://schema.org/PostalAddress", "description")
                 ->Group("Notes");
-                 
-    }    
+    }
      
     /**
      *  @abstract     Read requested Field
-     * 
+     *
      *  @param        string    $Key                    Input List Key
      *  @param        string    $FieldName              Field Identifier / Name
-     * 
+     *
      *  @return         none
      */
-    private function getOptionalFields($Key,$FieldName)
+    private function getOptionalFields($Key, $FieldName)
     {
         //====================================================================//
         // READ Fields
-        switch ($FieldName)
-        {
+        switch ($FieldName) {
             //====================================================================//
             // Direct Readings
             case 'dni':
@@ -103,22 +102,21 @@ trait OptionalTrait {
         }
         
         unset($this->In[$Key]);
-    }       
+    }
     
     /**
      *  @abstract     Write Given Fields
-     * 
+     *
      *  @param        string    $FieldName              Field Identifier / Name
      *  @param        mixed     $Data                   Field Data
-     * 
+     *
      *  @return         none
      */
-    private function setOptionalFields($FieldName,$Data) 
+    private function setOptionalFields($FieldName, $Data)
     {
         //====================================================================//
         // WRITE Field
-        switch ($FieldName)
-        {
+        switch ($FieldName) {
             //====================================================================//
             // Direct Readings
             case 'dni':
@@ -126,7 +124,7 @@ trait OptionalTrait {
             case 'phone':
             case 'phone_mobile':
             case 'other':
-                $this->setSimple($FieldName, $Data);          
+                $this->setSimple($FieldName, $Data);
                 break;
                 
             default:
@@ -134,7 +132,5 @@ trait OptionalTrait {
         }
         
         unset($this->In[$FieldName]);
-    }    
-    
-    
+    }
 }

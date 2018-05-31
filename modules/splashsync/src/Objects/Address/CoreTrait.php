@@ -18,14 +18,16 @@ namespace Splash\Local\Objects\Address;
 use Splash\Core\SplashCore      as Splash;
 
 //====================================================================//
-// Prestashop Static Classes	
-use Customer, Translate;
+// Prestashop Static Classes
+use Customer;
+use Translate;
 
 /**
  * @abstract    Access to Address Core Fields
  * @author      B. Paquier <contact@splashsync.com>
  */
-trait CoreTrait {
+trait CoreTrait
+{
 
     /**
     *   @abstract     Build Address Core Fields using FieldFactory
@@ -38,14 +40,14 @@ trait CoreTrait {
                 ->Identifier("alias")
                 ->Name($this->spl->l("Address alias"))
                 ->Name(Translate::getAdminTranslation("Address alias", "AdminAddresses"))
-                ->MicroData("http://schema.org/PostalAddress","name");
+                ->MicroData("http://schema.org/PostalAddress", "name");
         
         //====================================================================//
         // Customer
-        $this->fieldsFactory()->Create(self::Objects()->Encode( "ThirdParty" , SPL_T_ID))
+        $this->fieldsFactory()->Create(self::Objects()->Encode("ThirdParty", SPL_T_ID))
                 ->Identifier("id_customer")
                 ->Name(Translate::getAdminTranslation("Customer ID", "AdminCustomerThreads"))
-                ->MicroData("http://schema.org/Organization","ID")
+                ->MicroData("http://schema.org/Organization", "ID")
                 ->isRequired();
         
         //====================================================================//
@@ -53,7 +55,7 @@ trait CoreTrait {
         $this->fieldsFactory()->Create(SPL_T_VARCHAR)
                 ->Identifier("company")
                 ->Name(Translate::getAdminTranslation("Company", "AdminCustomers"))
-                ->MicroData("http://schema.org/Organization","legalName")
+                ->MicroData("http://schema.org/Organization", "legalName")
                 ->isListed();
         
         //====================================================================//
@@ -61,36 +63,35 @@ trait CoreTrait {
         $this->fieldsFactory()->Create(SPL_T_VARCHAR)
                 ->Identifier("firstname")
                 ->Name(Translate::getAdminTranslation("First name", "AdminCustomers"))
-                ->MicroData("http://schema.org/Person","familyName")
-                ->Association("firstname","lastname")        
+                ->MicroData("http://schema.org/Person", "familyName")
+                ->Association("firstname", "lastname")
                 ->isRequired()
-                ->isListed();        
+                ->isListed();
         
         //====================================================================//
         // Lastname
         $this->fieldsFactory()->Create(SPL_T_VARCHAR)
                 ->Identifier("lastname")
                 ->Name(Translate::getAdminTranslation("Last name", "AdminCustomers"))
-                ->MicroData("http://schema.org/Person","givenName")
-                ->Association("firstname","lastname")            
+                ->MicroData("http://schema.org/Person", "givenName")
+                ->Association("firstname", "lastname")
                 ->isRequired()
-                ->isListed();             
+                ->isListed();
     }
     
     /**
      *  @abstract     Read requested Field
-     * 
+     *
      *  @param        string    $Key                    Input List Key
      *  @param        string    $FieldName              Field Identifier / Name
-     * 
+     *
      *  @return         none
      */
-    private function getCoreFields($Key,$FieldName)
+    private function getCoreFields($Key, $FieldName)
     {
         //====================================================================//
         // READ Fields
-        switch ($FieldName)
-        {
+        switch ($FieldName) {
             //====================================================================//
             // Direct Readings
             case 'alias':
@@ -103,29 +104,28 @@ trait CoreTrait {
             //====================================================================//
             // Customer Object Id Readings
             case 'id_customer':
-                $this->Out[$FieldName] = self::Objects()->Encode( "ThirdParty" , $this->Object->$FieldName );
+                $this->Out[$FieldName] = self::Objects()->Encode("ThirdParty", $this->Object->$FieldName);
                 break;
             
             default:
-                return;            
+                return;
         }
         unset($this->In[$Key]);
-    }    
+    }
     
     /**
      *  @abstract     Write Given Fields
-     * 
+     *
      *  @param        string    $FieldName              Field Identifier / Name
      *  @param        mixed     $Data                   Field Data
-     * 
+     *
      *  @return         none
      */
-    private function setCoreFields($FieldName,$Data) 
+    private function setCoreFields($FieldName, $Data)
     {
         //====================================================================//
         // WRITE Field
-        switch ($FieldName)
-        {
+        switch ($FieldName) {
             //====================================================================//
             // Direct Writtings
             case 'alias':
@@ -139,42 +139,42 @@ trait CoreTrait {
             // Customer Object Id Writtings
             case 'id_customer':
                 $this->setIdCustomer($Data);
-                break;   
+                break;
             default:
-                return;                
+                return;
         }
         unset($this->In[$FieldName]);
-    }   
+    }
     
     /**
      *  @abstract     Write Given Fields
      */
-    private function setIdCustomer($Data) {
+    private function setIdCustomer($Data)
+    {
 
         //====================================================================//
         // Decode Customer Id
-        $Id = self::Objects()->Id( $Data );
+        $Id = self::Objects()->Id($Data);
         //====================================================================//
         // Check For Change
-        if ( $Id == $this->Object->id_customer ) {
-            return True;
-        } 
+        if ($Id == $this->Object->id_customer) {
+            return true;
+        }
         //====================================================================//
         // Verify Object Type
-        if ( self::Objects()->Type( $Data ) !== "ThirdParty" ) {
-            return Splash::log()->err("ErrLocalTpl",__CLASS__,__FUNCTION__," Wrong Object Type (" . self::Objects()->Type( $Data ) . ").");
-        } 
+        if (self::Objects()->Type($Data) !== "ThirdParty") {
+            return Splash::log()->err("ErrLocalTpl", __CLASS__, __FUNCTION__, " Wrong Object Type (" . self::Objects()->Type($Data) . ").");
+        }
         //====================================================================//
         // Verify Object Exists
         $Customer   =   new Customer($Id);
-        if ( $Customer->id != $Id ) {
-            return Splash::log()->err("ErrLocalTpl",__CLASS__,__FUNCTION__," Unable to load Address Customer(" . $Id . ").");
-        } 
+        if ($Customer->id != $Id) {
+            return Splash::log()->err("ErrLocalTpl", __CLASS__, __FUNCTION__, " Unable to load Address Customer(" . $Id . ").");
+        }
         //====================================================================//
         // Update Link
         $this->setSimple("id_customer", $Id);
         
-        return True;
-    }       
-    
+        return true;
+    }
 }

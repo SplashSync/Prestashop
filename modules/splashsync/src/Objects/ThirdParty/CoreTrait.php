@@ -18,15 +18,25 @@ namespace Splash\Local\Objects\ThirdParty;
 use Splash\Core\SplashCore      as Splash;
 
 //====================================================================//
-// Prestashop Static Classes	
-use Address, Gender, Context, State, Country, Translate, Validate;
-use DbQuery, Db, Customer, Tools;
+// Prestashop Static Classes
+use Address;
+use Gender;
+use Context;
+use State;
+use Country;
+use Translate;
+use Validate;
+use DbQuery;
+use Db;
+use Customer;
+use Tools;
 
 /**
  * @abstract    Access to thirdparty Core Fields
  * @author      B. Paquier <contact@splashsync.com>
  */
-trait CoreTrait {
+trait CoreTrait
+{
 
     /**
     *   @abstract     Build Customers Core Fields using FieldFactory
@@ -38,27 +48,25 @@ trait CoreTrait {
         $this->fieldsFactory()->Create(SPL_T_EMAIL)
                 ->Identifier("email")
                 ->Name(Translate::getAdminTranslation("Email address", "AdminCustomers"))
-                ->MicroData("http://schema.org/ContactPoint","email")
-                ->Association("firstname","lastname")
+                ->MicroData("http://schema.org/ContactPoint", "email")
+                ->Association("firstname", "lastname")
                 ->isRequired()
-                ->isListed();        
-        
+                ->isListed();
     }
     
     /**
      *  @abstract     Read requested Field
-     * 
+     *
      *  @param        string    $Key                    Input List Key
      *  @param        string    $FieldName              Field Identifier / Name
-     * 
+     *
      *  @return         none
      */
-    private function getCoreFields($Key,$FieldName)
+    private function getCoreFields($Key, $FieldName)
     {
         //====================================================================//
         // READ Field
-        switch ($FieldName)
-        {
+        switch ($FieldName) {
             case 'email':
                 $this->Out[$FieldName] = $this->Object->$FieldName;
                 unset($this->In[$Key]);
@@ -68,25 +76,24 @@ trait CoreTrait {
 
     /**
      *  @abstract     Write Given Fields
-     * 
+     *
      *  @param        string    $FieldName              Field Identifier / Name
      *  @param        mixed     $Data                   Field Data
-     * 
+     *
      *  @return         none
      */
-    private function setCoreFields($FieldName,$Data) {
+    private function setCoreFields($FieldName, $Data)
+    {
         //====================================================================//
         // WRITE Fields
-        switch ($FieldName)
-        {
+        switch ($FieldName) {
             case 'email':
-                if ( $this->Object->$FieldName != $Data ) {
+                if ($this->Object->$FieldName != $Data) {
                     $this->Object->$FieldName = $Data;
                     $this->needUpdate();
-                }  
+                }
                 unset($this->In[$FieldName]);
                 break;
         }
     }
-    
 }

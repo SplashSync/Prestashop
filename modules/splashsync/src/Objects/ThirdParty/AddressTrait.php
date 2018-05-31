@@ -18,15 +18,25 @@ namespace Splash\Local\Objects\ThirdParty;
 use Splash\Core\SplashCore      as Splash;
 
 //====================================================================//
-// Prestashop Static Classes	
-use Address, Gender, Context, State, Country, Translate, Validate;
-use DbQuery, Db, Customer, Tools;
+// Prestashop Static Classes
+use Address;
+use Gender;
+use Context;
+use State;
+use Country;
+use Translate;
+use Validate;
+use DbQuery;
+use Db;
+use Customer;
+use Tools;
 
 /**
  * @abstract    Access to thirdparty Primary Address Fields
  * @author      B. Paquier <contact@splashsync.com>
  */
-trait AddressTrait {
+trait AddressTrait
+{
 
     /**
     *   @abstract     Build Customers Main Fields using FieldFactory
@@ -40,7 +50,7 @@ trait AddressTrait {
         $this->fieldsFactory()->Create(SPL_T_VARCHAR)
                 ->Identifier("address1")
                 ->Name($GroupName)
-                ->MicroData("http://schema.org/PostalAddress","streetAddress")
+                ->MicroData("http://schema.org/PostalAddress", "streetAddress")
                 ->Group($GroupName)
                 ->isReadOnly();
 
@@ -49,7 +59,7 @@ trait AddressTrait {
         $this->fieldsFactory()->Create(SPL_T_VARCHAR)
                 ->Identifier("address2")
                 ->Name($GroupName . " (2)")
-                ->MicroData("http://schema.org/PostalAddress","postOfficeBoxNumber")
+                ->MicroData("http://schema.org/PostalAddress", "postOfficeBoxNumber")
                 ->Group($GroupName)
                 ->isReadOnly();
         
@@ -58,7 +68,7 @@ trait AddressTrait {
         $this->fieldsFactory()->Create(SPL_T_VARCHAR)
                 ->Identifier("postcode")
                 ->Name(Translate::getAdminTranslation("Zip/Postal Code", "AdminAddresses"))
-                ->MicroData("http://schema.org/PostalAddress","postalCode")
+                ->MicroData("http://schema.org/PostalAddress", "postalCode")
                 ->Group($GroupName)
                 ->isReadOnly();
         
@@ -67,7 +77,7 @@ trait AddressTrait {
         $this->fieldsFactory()->Create(SPL_T_VARCHAR)
                 ->Identifier("city")
                 ->Name(Translate::getAdminTranslation("City", "AdminAddresses"))
-                ->MicroData("http://schema.org/PostalAddress","addressLocality")
+                ->MicroData("http://schema.org/PostalAddress", "addressLocality")
                 ->Group($GroupName)
                 ->isReadOnly();
         
@@ -76,7 +86,7 @@ trait AddressTrait {
         $this->fieldsFactory()->Create(SPL_T_VARCHAR)
                 ->Identifier("state")
                 ->Name(Translate::getAdminTranslation("State", "AdminAddresses"))
-                ->MicroData("http://schema.org/PostalAddress","addressRegion")
+                ->MicroData("http://schema.org/PostalAddress", "addressRegion")
                 ->Group($GroupName)
                 ->isReadOnly();
         
@@ -85,7 +95,7 @@ trait AddressTrait {
         $this->fieldsFactory()->Create(SPL_T_STATE)
                 ->Identifier("id_state")
                 ->Name(Translate::getAdminTranslation("State", "AdminAddresses") . " (Code)")
-                ->MicroData("http://schema.org/PostalAddress","addressRegion")
+                ->MicroData("http://schema.org/PostalAddress", "addressRegion")
                 ->Group($GroupName)
                 ->isReadOnly();
         
@@ -94,7 +104,7 @@ trait AddressTrait {
         $this->fieldsFactory()->Create(SPL_T_VARCHAR)
                 ->Identifier("country")
                 ->Name(Translate::getAdminTranslation("Country", "AdminAddresses"))
-                ->MicroData("http://schema.org/PostalAddress","addressCountry")
+                ->MicroData("http://schema.org/PostalAddress", "addressCountry")
                 ->Group($GroupName)
                 ->isReadOnly();
         
@@ -103,7 +113,7 @@ trait AddressTrait {
         $this->fieldsFactory()->Create(SPL_T_COUNTRY)
                 ->Identifier("id_country")
                 ->Name(Translate::getAdminTranslation("Country", "AdminAddresses") . " (Code)")
-                ->MicroData("http://schema.org/PostalAddress","addressCountry")
+                ->MicroData("http://schema.org/PostalAddress", "addressCountry")
                 ->Group($GroupName)
                 ->isReadOnly();
         
@@ -112,7 +122,7 @@ trait AddressTrait {
         $this->fieldsFactory()->Create(SPL_T_PHONE)
                 ->Identifier("phone")
                 ->Name(Translate::getAdminTranslation("Home phone", "AdminAddresses"))
-                ->MicroData("http://schema.org/PostalAddress","telephone")
+                ->MicroData("http://schema.org/PostalAddress", "telephone")
                 ->Group($GroupName)
                 ->isReadOnly();
         
@@ -121,7 +131,7 @@ trait AddressTrait {
         $this->fieldsFactory()->Create(SPL_T_PHONE)
                 ->Identifier("phone_mobile")
                 ->Name(Translate::getAdminTranslation("Mobile phone", "AdminAddresses"))
-                ->MicroData("http://schema.org/Person","telephone")
+                ->MicroData("http://schema.org/Person", "telephone")
                 ->Group($GroupName)
                 ->isReadOnly();
 
@@ -130,17 +140,17 @@ trait AddressTrait {
         $this->fieldsFactory()->Create(SPL_T_VARCHAR)
                 ->Identifier("vat_number")
                 ->Name(Translate::getAdminTranslation("VAT Number", "AdminAddresses"))
-                ->MicroData("http://schema.org/Organization","vatID")
-                ->isReadOnly();        
-        
+                ->MicroData("http://schema.org/Organization", "vatID")
+                ->isReadOnly();
     }
     
     /**
      *  @abstract     Read requested Field
-     * 
+     *
      *  @return         bool
      */
-    private function getAddressList() {
+    private function getAddressList()
+    {
         
         //====================================================================//
         // Create List If Not Existing
@@ -155,42 +165,41 @@ trait AddressTrait {
         //====================================================================//
         // If Address List Is Empty => Null
         if (empty($AddresList)) {
-            return True;
+            return true;
         }
                 
         //====================================================================//
         // Run Through Address List
         foreach ($AddresList as $Key => $Address) {
-            $this->Out["contacts"][$Key] = array ( "address" => self::Objects()->Encode( "Address" , $Address["id_address"]) );
+            $this->Out["contacts"][$Key] = array ( "address" => self::Objects()->Encode("Address", $Address["id_address"]) );
         }
                 
-        return True;
-    }    
+        return true;
+    }
     
     /**
      *  @abstract     Read requested Field
-     * 
+     *
      *  @param        string    $Key                    Input List Key
      *  @param        string    $FieldName              Field Identifier / Name
-     * 
+     *
      *  @return         none
      */
-    private function getPrimaryAddressFields($Key,$FieldName)    
+    private function getPrimaryAddressFields($Key, $FieldName)
     {
         //====================================================================//
         // Identify Main Address Id
-        $MainAddress = new Address( Address::getFirstCustomerAddressId($this->Object->id) );
+        $MainAddress = new Address(Address::getFirstCustomerAddressId($this->Object->id));
         
         //====================================================================//
-        // If Empty, Create A New One 
-        if ( !$MainAddress ) {
+        // If Empty, Create A New One
+        if (!$MainAddress) {
             $MainAddress = new Address();
-        }        
+        }
         
         //====================================================================//
         // READ Fields
-        switch ($FieldName)
-        {
+        switch ($FieldName) {
             case 'address1':
             case 'address2':
             case 'postcode':
@@ -226,6 +235,4 @@ trait AddressTrait {
                 break;
         }
     }
-    
-    
 }

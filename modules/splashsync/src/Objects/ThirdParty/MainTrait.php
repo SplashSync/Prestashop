@@ -18,15 +18,25 @@ namespace Splash\Local\Objects\ThirdParty;
 use Splash\Core\SplashCore      as Splash;
 
 //====================================================================//
-// Prestashop Static Classes	
-use Address, Gender, Context, State, Country, Translate, Validate;
-use DbQuery, Db, Customer, Tools;
+// Prestashop Static Classes
+use Address;
+use Gender;
+use Context;
+use State;
+use Country;
+use Translate;
+use Validate;
+use DbQuery;
+use Db;
+use Customer;
+use Tools;
 
 /**
  * @abstract    Access to thirdparty Main Fields
  * @author      B. Paquier <contact@splashsync.com>
  */
-trait MainTrait {
+trait MainTrait
+{
 
     
     /**
@@ -40,28 +50,28 @@ trait MainTrait {
         $this->fieldsFactory()->Create(SPL_T_VARCHAR)
                 ->Identifier("firstname")
                 ->Name(Translate::getAdminTranslation("First name", "AdminCustomers"))
-                ->MicroData("http://schema.org/Person","familyName")
-                ->Association("firstname","lastname")        
+                ->MicroData("http://schema.org/Person", "familyName")
+                ->Association("firstname", "lastname")
                 ->isRequired()
-                ->isListed();        
+                ->isListed();
         
         //====================================================================//
         // Lastname
         $this->fieldsFactory()->Create(SPL_T_VARCHAR)
                 ->Identifier("lastname")
                 ->Name(Translate::getAdminTranslation("Last name", "AdminCustomers"))
-                ->MicroData("http://schema.org/Person","givenName")
-                ->Association("firstname","lastname")            
+                ->MicroData("http://schema.org/Person", "givenName")
+                ->Association("firstname", "lastname")
                 ->isRequired()
-                ->isListed();       
+                ->isListed();
         
         //====================================================================//
         // Gender Name
         $this->fieldsFactory()->Create(SPL_T_VARCHAR)
                 ->Identifier("gender_name")
                 ->Name(Translate::getAdminTranslation("Social title", "AdminCustomers"))
-                ->MicroData("http://schema.org/Person","honorificPrefix")
-                ->isReadOnly();       
+                ->MicroData("http://schema.org/Person", "honorificPrefix")
+                ->isReadOnly();
 
         //====================================================================//
         // Gender Type
@@ -69,18 +79,18 @@ trait MainTrait {
         $this->fieldsFactory()->Create(SPL_T_INT)
                 ->Identifier("gender_type")
                 ->Name(Translate::getAdminTranslation("Social title", "AdminCustomers") . " (ID)")
-                ->MicroData("http://schema.org/Person","gender")
+                ->MicroData("http://schema.org/Person", "gender")
                 ->Description($desc)
                 ->Group(Translate::getAdminTranslation("Meta", "AdminThemes"))
                 ->AddChoices(array("0" => "Male", "1" => "female"))
-                ->isNotTested();       
+                ->isNotTested();
 
         //====================================================================//
         // Company
         $this->fieldsFactory()->Create(SPL_T_VARCHAR)
                 ->Identifier("company")
                 ->Name(Translate::getAdminTranslation("Company", "AdminCustomers"))
-                ->MicroData("http://schema.org/Organization","legalName")
+                ->MicroData("http://schema.org/Organization", "legalName")
                 ->isListed();
         
         //====================================================================//
@@ -88,7 +98,7 @@ trait MainTrait {
         $this->fieldsFactory()->Create(SPL_T_VARCHAR)
                 ->Identifier("siret")
                 ->Name(Translate::getAdminTranslation("SIRET", "AdminCustomers"))
-                ->MicroData("http://schema.org/Organization","taxID")
+                ->MicroData("http://schema.org/Organization", "taxID")
                 ->Group("ID")
                 ->isNotTested();
         
@@ -97,7 +107,7 @@ trait MainTrait {
         $this->fieldsFactory()->Create(SPL_T_VARCHAR)
                 ->Identifier("ape")
                 ->Name(Translate::getAdminTranslation("APE", "AdminCustomers"))
-                ->MicroData("http://schema.org/Organization","naics")
+                ->MicroData("http://schema.org/Organization", "naics")
                 ->Group("ID")
                 ->isNotTested();
         
@@ -106,27 +116,23 @@ trait MainTrait {
         $this->fieldsFactory()->Create(SPL_T_URL)
                 ->Identifier("website")
                 ->Name(Translate::getAdminTranslation("Website", "AdminCustomers"))
-                ->MicroData("http://schema.org/Organization","url");
-        
-
-        
-    }    
+                ->MicroData("http://schema.org/Organization", "url");
+    }
     
     
     /**
      *  @abstract     Read requested Field
-     * 
+     *
      *  @param        string    $Key                    Input List Key
      *  @param        string    $FieldName              Field Identifier / Name
-     * 
+     *
      *  @return         none
      */
-    private function getMainFields($Key,$FieldName)
+    private function getMainFields($Key, $FieldName)
     {
         //====================================================================//
         // READ Fields
-        switch ($FieldName)
-        {
+        switch ($FieldName) {
             case 'lastname':
             case 'firstname':
             case 'passwd':
@@ -137,10 +143,10 @@ trait MainTrait {
                 break;
 
             case 'company':
-                if ( !empty($this->Object->$FieldName) ) {
+                if (!empty($this->Object->$FieldName)) {
                     $this->getSimple($FieldName);
                     break;
-                } 
+                }
                 $this->Out[$FieldName] = "Prestashop("  . $this->Object->id . ")";
                 break;
             
@@ -151,7 +157,7 @@ trait MainTrait {
                     $this->Out[$FieldName] = Splash::Trans("Empty");
                     break;
                 }
-                $gender = new Gender($this->Object->id_gender,Context::getContext()->language->id);
+                $gender = new Gender($this->Object->id_gender, Context::getContext()->language->id);
                 if ($gender->type == 0) {
                     $this->Out[$FieldName] = $this->spl->l('Male');
                 } elseif ($gender->type == 1) {
@@ -169,27 +175,27 @@ trait MainTrait {
                 }
                 $gender = new Gender($this->Object->id_gender);
                 $this->Out[$FieldName] = (int) $gender->type;
-                break;    
+                break;
                 
             default:
                 return;
         }
         unset($this->In[$Key]);
-    }    
+    }
     
     /**
      *  @abstract     Write Given Fields
-     * 
+     *
      *  @param        string    $FieldName              Field Identifier / Name
      *  @param        mixed     $Data                   Field Data
-     * 
+     *
      *  @return         none
      */
-    private function setMainFields($FieldName,$Data) {
+    private function setMainFields($FieldName, $Data)
+    {
         //====================================================================//
         // WRITE Fields
-        switch ($FieldName)
-        {
+        switch ($FieldName) {
             case 'firstname':
             case 'lastname':
             case 'passwd':
@@ -198,17 +204,17 @@ trait MainTrait {
                 break;
                 
             case 'company':
-                if ( $this->Object->$FieldName === "Prestashop("  . $this->Object->id . ")" ) {
+                if ($this->Object->$FieldName === "Prestashop("  . $this->Object->id . ")") {
                     break;
-                } 
+                }
                 $this->setSimple($FieldName, $Data);
                 break;
 
             //====================================================================//
             // Write SIRET With Verification
             case 'siret':
-                if ( !Validate::isSiret($Data) ) {
-                    Splash::log()->war("MsgLocalTpl",__CLASS__,__FUNCTION__,"Given SIRET Number is Invalid. Skipped");
+                if (!Validate::isSiret($Data)) {
+                    Splash::log()->war("MsgLocalTpl", __CLASS__, __FUNCTION__, "Given SIRET Number is Invalid. Skipped");
                     break;
                 }
                 $this->setSimple($FieldName, $Data);
@@ -217,8 +223,8 @@ trait MainTrait {
             //====================================================================//
             // Write APE With Verification
             case 'ape':
-                if ( !Validate::isApe($Data) ) {
-                    Splash::log()->war("MsgLocalTpl",__CLASS__,__FUNCTION__,"Given APE Code is Invalid. Skipped");
+                if (!Validate::isApe($Data)) {
+                    Splash::log()->war("MsgLocalTpl", __CLASS__, __FUNCTION__, "Given APE Code is Invalid. Skipped");
                     break;
                 }
                 $this->setSimple($FieldName, $Data);
@@ -230,29 +236,28 @@ trait MainTrait {
                 //====================================================================//
                 // Identify Gender Type
                 $genders = Gender::getGenders(Context::getContext()->language->id);
-                $genders->where("type","=",$Data);
+                $genders->where("type", "=", $Data);
                 $gendertype = $genders->getFirst();
 
                 //====================================================================//
                 // Unknown Gender Type => Take First Available Gender
-                if ( ( $gendertype == False ) ) {
+                if (( $gendertype == false )) {
                     $genders = Gender::getGenders(Context::getContext()->language->id);
                     $gendertype = $genders->getFirst();
-                    Splash::log()->war("MsgLocalTpl",__CLASS__,__FUNCTION__,"This Gender Type doesn't exist.");
+                    Splash::log()->war("MsgLocalTpl", __CLASS__, __FUNCTION__, "This Gender Type doesn't exist.");
                 }
 
                 //====================================================================//
                 // Update Gender Type
-                if ( $this->Object->id_gender != $gendertype->id_gender ) {
+                if ($this->Object->id_gender != $gendertype->id_gender) {
                     $this->Object->id_gender = $gendertype->id_gender;
                     $this->needUpdate();
                 }
-                break;                     
+                break;
 
             default:
                 return;
         }
         unset($this->In[$FieldName]);
-    }    
-    
+    }
 }

@@ -18,21 +18,34 @@ namespace Splash\Local\Objects\Product;
 use Splash\Core\SplashCore      as Splash;
 
 //====================================================================//
-// Prestashop Static Classes	
-use Shop, Configuration, Currency, Combination, Language, Context, Translate;
-use Image, ImageType, ImageManager, StockAvailable;
-use DbQuery, Db, Tools;
+// Prestashop Static Classes
+use Shop;
+use Configuration;
+use Currency;
+use Combination;
+use Language;
+use Context;
+use Translate;
+use Image;
+use ImageType;
+use ImageManager;
+use StockAvailable;
+use DbQuery;
+use Db;
+use Tools;
 
 /**
  * @abstract    Access to Product Meta Fields
  * @author      B. Paquier <contact@splashsync.com>
  */
-trait MetaTrait {
+trait MetaTrait
+{
     
     /**
     *   @abstract     Build Meta Fields using FieldFactory
     */
-    private function buildMetaFields() {
+    private function buildMetaFields()
+    {
         //====================================================================//
         // STRUCTURAL INFORMATIONS
         //====================================================================//
@@ -41,41 +54,40 @@ trait MetaTrait {
         // Active => Product Is Enables & Visible
         $this->fieldsFactory()->Create(SPL_T_BOOL)
                 ->Identifier("active")
-                ->Name(Translate::getAdminTranslation("Enabled", "AdminProducts"))                
-                ->MicroData("http://schema.org/Product","active");        
+                ->Name(Translate::getAdminTranslation("Enabled", "AdminProducts"))
+                ->MicroData("http://schema.org/Product", "active");
         
         //====================================================================//
         // Active => Product Is available_for_order
         $this->fieldsFactory()->Create(SPL_T_BOOL)
                 ->Identifier("available_for_order")
                 ->Name(Translate::getAdminTranslation("Available for order", "AdminProducts"))
-                ->MicroData("http://schema.org/Product","offered")
+                ->MicroData("http://schema.org/Product", "offered")
                 ->isListed();
         
         //====================================================================//
-        // On Sale 
+        // On Sale
         $this->fieldsFactory()->Create(SPL_T_BOOL)
                 ->Identifier("on_sale")
                 ->Name($this->spl->l("On Sale"))
-                ->MicroData("http://schema.org/Product","onsale");
-        
-    }   
+                ->MicroData("http://schema.org/Product", "onsale");
+    }
     
     
     /**
      *  @abstract     Read requested Field
-     * 
+     *
      *  @param        string    $Key                    Input List Key
      *  @param        string    $FieldName              Field Identifier / Name
-     * 
+     *
      *  @return         none
      */
-    private function getMetaFields($Key,$FieldName) {
+    private function getMetaFields($Key, $FieldName)
+    {
 
         //====================================================================//
         // READ Fields
-        switch ($FieldName)
-        {
+        switch ($FieldName) {
             //====================================================================//
             // OTHERS INFORMATIONS
             //====================================================================//
@@ -89,35 +101,31 @@ trait MetaTrait {
         }
         
         unset($this->In[$Key]);
-    }       
+    }
     
     /**
      *  @abstract     Write Given Fields
-     * 
+     *
      *  @param        string    $FieldName              Field Identifier / Name
      *  @param        mixed     $Data                   Field Data
-     * 
+     *
      *  @return         none
      */
-    private function setMetaFields($FieldName,$Data) 
+    private function setMetaFields($FieldName, $Data)
     {
         //====================================================================//
         // WRITE Field
-        switch ($FieldName)
-        {
+        switch ($FieldName) {
             //====================================================================//
             // Direct Writtings
             case 'active':
             case 'available_for_order':
             case 'on_sale':
                 $this->setSimple($FieldName, $Data);
-                break; 
+                break;
             default:
                 return;
         }
         unset($this->In[$FieldName]);
-    }    
-    
-    
-    
+    }
 }

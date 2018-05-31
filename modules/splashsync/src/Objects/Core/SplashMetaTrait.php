@@ -18,15 +18,25 @@ namespace Splash\Local\Objects\Core;
 use Splash\Core\SplashCore      as Splash;
 
 //====================================================================//
-// Prestashop Static Classes	
-use Address, Gender, Context, State, Country, Translate, Validate;
-use DbQuery, Db, Customer, Tools;
+// Prestashop Static Classes
+use Address;
+use Gender;
+use Context;
+use State;
+use Country;
+use Translate;
+use Validate;
+use DbQuery;
+use Db;
+use Customer;
+use Tools;
 
 /**
  * @abstract    Access to Objects Splash Meta Fields
  * @author      B. Paquier <contact@splashsync.com>
  */
-trait SplashMetaTrait {
+trait SplashMetaTrait
+{
 
 
     /**
@@ -40,58 +50,56 @@ trait SplashMetaTrait {
                 ->Identifier("splash_id")
                 ->Name("Splash Id")
                 ->Group(Translate::getAdminTranslation("Meta", "AdminThemes"))
-                ->MicroData("http://splashync.com/schemas","ObjectId");      
-    }    
+                ->MicroData("http://splashync.com/schemas", "ObjectId");
+    }
 
     /**
      *  @abstract     Read requested Field
-     * 
+     *
      *  @param        string    $Key                    Input List Key
      *  @param        string    $FieldName              Field Identifier / Name
-     * 
+     *
      *  @return         none
      */
-    protected function getSplashMetaFields($Key,$FieldName)
+    protected function getSplashMetaFields($Key, $FieldName)
     {
             
         //====================================================================//
         // READ Fields
-        switch ($FieldName)
-        {
+        switch ($FieldName) {
             case 'splash_id':
-                $this->Out[$FieldName] = Splash::local()->getSplashId( self::$NAME , $this->Object->id);    
-                break;              
+                $this->Out[$FieldName] = Splash::local()->getSplashId(self::$NAME, $this->Object->id);
+                break;
             default:
                 return;
         }
         
         unset($this->In[$Key]);
-    }    
+    }
 
     /**
      *  @abstract     Write Given Fields
-     * 
+     *
      *  @param        string    $FieldName              Field Identifier / Name
      *  @param        mixed     $Data                   Field Data
-     * 
+     *
      *  @return         none
      */
-    protected function setSplashMetaFields($FieldName,$Data) {
+    protected function setSplashMetaFields($FieldName, $Data)
+    {
         //====================================================================//
         // WRITE Fields
-        switch ($FieldName)
-        {
+        switch ($FieldName) {
             case 'splash_id':
                 if ($this->Object->id) {
-                    Splash::local()->setSplashId( self::$NAME , $this->Object->id , $Data);    
+                    Splash::local()->setSplashId(self::$NAME, $this->Object->id, $Data);
                 } else {
-                    $this->NewSplashId = $Data;                   
+                    $this->NewSplashId = $Data;
                 }
-                break;                  
+                break;
             default:
                 return;
         }
         unset($this->In[$FieldName]);
-    }      
-    
+    }
 }

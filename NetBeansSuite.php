@@ -60,7 +60,8 @@
  *
  * @package NetBeans
  */
-class NetBeansSuite extends PHPUnit_Framework_TestSuite {
+class NetBeansSuite extends PHPUnit_Framework_TestSuite
+{
     /**
      * The name of the parameter followed by equals sign ("=") of the file or directory to be run by PHPUnit.
      * @see toRun()
@@ -79,7 +80,8 @@ class NetBeansSuite extends PHPUnit_Framework_TestSuite {
      * @static
      * @return NetBeansSuite
      */
-    public static function suite() {
+    public static function suite()
+    {
         $suite = new NetBeansSuite();
         foreach (self::toRun() as $file) {
             $suite->addTestFile($file);
@@ -97,7 +99,8 @@ class NetBeansSuite extends PHPUnit_Framework_TestSuite {
      * @return array an array of files to be run by PHPUnit
      * @see RUN
      */
-    private static function toRun() {
+    private static function toRun()
+    {
         
         $result = array();
         foreach (explode(";", self::RUN) as $part) {
@@ -126,7 +129,8 @@ class NetBeansSuite extends PHPUnit_Framework_TestSuite {
      * @link http://php.net/manual/en/function.glob.php
      * @link http://php.net/manual/en/function.getcwd.php
      */
-    private static function rglob($pattern = '*', $path = '', $flags = 0) {
+    private static function rglob($pattern = '*', $path = '', $flags = 0)
+    {
         $paths = glob($path.'*', GLOB_MARK | GLOB_ONLYDIR | GLOB_NOSORT) or array();
         $files = glob($path.$pattern, $flags) or array();
         foreach ($paths as $path) {
@@ -135,5 +139,3 @@ class NetBeansSuite extends PHPUnit_Framework_TestSuite {
         return $files;
     }
 }
-
-?>

@@ -8,11 +8,11 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- * 
+ *
  *  @author    Splash Sync <www.splashsync.com>
  *  @copyright 2015-2017 Splash Sync
  *  @license   GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007
- * 
+ *
  **/
                     
 //====================================================================//
@@ -29,35 +29,35 @@ use Splash\Models\WidgetBase;
 use Splash\Core\SplashCore      as Splash;
 
 /**
- *	\class      Address
- *	\brief      Address - Thirdparty Contacts Management Class
+ *  \class      Address
+ *  \brief      Address - Thirdparty Contacts Management Class
  */
 class Demo extends WidgetBase
 {
     
     //====================================================================//
-    // Object Definition Parameters	
+    // Object Definition Parameters
     //====================================================================//
     
     /**
      *  Widget Disable Flag. Uncomment thius line to Override this flag and disable Object.
      */
-    protected static    $DISABLED        =  True;
+    protected static $DISABLED        =  true;
     
     /**
      *  Widget Name (Translated by Module)
      */
-    protected static    $NAME            =  "Demo Widget";
+    protected static $NAME            =  "Demo Widget";
     
     /**
-     *  Widget Description (Translated by Module) 
+     *  Widget Description (Translated by Module)
      */
-    protected static    $DESCRIPTION     =  "TEST & DEMONSTRATION WIDGET";    
+    protected static $DESCRIPTION     =  "TEST & DEMONSTRATION WIDGET";
     
     /**
-     *  Widget Icon (FontAwesome or Glyph ico tag) 
+     *  Widget Icon (FontAwesome or Glyph ico tag)
      */
-    protected static    $ICO            =  "fa fa-magic";
+    protected static $ICO            =  "fa fa-magic";
     
     //====================================================================//
     // Define Standard Options for this Widget
@@ -67,7 +67,7 @@ class Demo extends WidgetBase
     );
     
     //====================================================================//
-    // General Class Variables	
+    // General Class Variables
     //====================================================================//
 
     //====================================================================//
@@ -83,9 +83,9 @@ class Demo extends WidgetBase
 //        //====================================================================//
 //        // Place Here Any SPECIFIC Initialisation Code
 //        //====================================================================//
-//        
+//
 //        return True;
-//    }    
+//    }
     
     //====================================================================//
     // Class Main Functions
@@ -101,35 +101,35 @@ class Demo extends WidgetBase
         $this->fieldsFactory()->Create(SPL_T_VARCHAR)
                 ->Identifier("text_input")
                 ->Name("Text Input")
-                ->Description("Widget Specific Custom text Input");        
+                ->Description("Widget Specific Custom text Input");
         
         //====================================================================//
         // Reference
         $this->fieldsFactory()->Create(SPL_T_INT)
                 ->Identifier("integer_input")
                 ->Name("Numeric Input")
-                ->Description("Widget Specific Custom Numeric Input"); 
+                ->Description("Widget Specific Custom Numeric Input");
         
         //====================================================================//
         // Publish Fields
         return $this->fieldsFactory()->Publish();
 //        return array();
-    }        
+    }
     
     /**
      *  @abstract     Return requested Customer Data
-     * 
-     *  @param        array   $params               Search parameters for result List. 
-     *                        $params["start"]      Maximum Number of results 
-     *                        $params["end"]        List Start Offset 
-     *                        $params["groupby"]    Field name for sort list (Available fields listed below)    
+     *
+     *  @param        array   $params               Search parameters for result List.
+     *                        $params["start"]      Maximum Number of results
+     *                        $params["end"]        List Start Offset
+     *                        $params["groupby"]    Field name for sort list (Available fields listed below)
 
      */
-    public function Get($params=NULL)
+    public function Get($params = null)
     {
         //====================================================================//
         // Stack Trace
-        Splash::log()->trace(__CLASS__,__FUNCTION__);  
+        Splash::log()->trace(__CLASS__, __FUNCTION__);
         //====================================================================//
         // Load Default Language
         Splash::local()->LoadDefaultLanguage();
@@ -138,8 +138,8 @@ class Demo extends WidgetBase
         // Setup Widget Core Informations
         //====================================================================//
 
-        $this->setTitle($this->getName()); 
-        $this->setIcon($this->getIcon()); 
+        $this->setTitle($this->getName());
+        $this->setIcon($this->getIcon());
         
         //====================================================================//
         // Build Intro Text Block
@@ -149,12 +149,12 @@ class Demo extends WidgetBase
         //====================================================================//
         // Build Inputs Block
         //====================================================================//
-        $this->buildParametersBlock($params);        
+        $this->buildParametersBlock($params);
         
         //====================================================================//
         // Build Inputs Block
         //====================================================================//
-        $this->buildNotificationsBlock();        
+        $this->buildNotificationsBlock();
 
         //====================================================================//
         // Set Blocks to Widget
@@ -173,22 +173,24 @@ class Demo extends WidgetBase
     /**
     *   @abstract     Block Building - Text Intro
     */
-    private function buildIntroBlock()   {
+    private function buildIntroBlock()
+    {
         //====================================================================//
         // Into Text Block
         $this->BlocksFactory()->addTextBlock("This is a Demo Text Block!!" . "You can repeat me as much as you want!");
-    }    
+    }
   
     /**
     *   @abstract     Block Building - Inputs Parameters
     */
-    private function buildParametersBlock($Inputs = array())   {
+    private function buildParametersBlock($Inputs = array())
+    {
 
         //====================================================================//
         // verify Inputs
-        if( !is_array($Inputs) && !is_a($Inputs, "ArrayObject") ) {
+        if (!is_array($Inputs) && !is_a($Inputs, "ArrayObject")) {
             $this->BlocksFactory()->addNotificationsBlock(array("warning" => "Inputs is not an Array! Is " . get_class($Inputs)));
-        } 
+        }
         
         //====================================================================//
         // Parameters Table Block
@@ -198,13 +200,14 @@ class Demo extends WidgetBase
             $TableContents[]    =   array($key, $value);
         }
         
-        $this->BlocksFactory()->addTableBlock($TableContents,array("Width" => self::SIZE_M));
-    } 
+        $this->BlocksFactory()->addTableBlock($TableContents, array("Width" => self::SIZE_M));
+    }
     
     /**
     *   @abstract     Block Building - Notifications Parameters
     */
-    private function buildNotificationsBlock()   {
+    private function buildNotificationsBlock()
+    {
 
         //====================================================================//
         // Notifications Block
@@ -217,15 +220,10 @@ class Demo extends WidgetBase
         );
         
         
-        $this->BlocksFactory()->addNotificationsBlock($Notifications,array("Width" => self::SIZE_M));
-    } 
+        $this->BlocksFactory()->addNotificationsBlock($Notifications, array("Width" => self::SIZE_M));
+    }
     
     //====================================================================//
     // Class Tooling Functions
     //====================================================================//
-
 }
-
-
-
-?>

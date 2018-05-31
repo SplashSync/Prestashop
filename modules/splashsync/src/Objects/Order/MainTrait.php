@@ -18,21 +18,23 @@ namespace Splash\Local\Objects\Order;
 //use Splash\Core\SplashCore      as Splash;
 
 //====================================================================//
-// Prestashop Static Classes	
+// Prestashop Static Classes
 use Translate;
 
 /**
  * @abstract    Access to Orders Main Fields
  * @author      B. Paquier <contact@splashsync.com>
  */
-trait MainTrait {
+trait MainTrait
+{
     
  
 
     /**
     *   @abstract     Build Fields using FieldFactory
     */
-    private function buildMainFields() {
+    private function buildMainFields()
+    {
         
         //====================================================================//
         // PRICES INFORMATIONS
@@ -45,7 +47,7 @@ trait MainTrait {
         $this->fieldsFactory()->Create(SPL_T_DOUBLE)
                 ->Identifier("total_paid_tax_excl")
                 ->Name(Translate::getAdminTranslation("Total (Tax excl.)", "AdminOrders") . $CurrencySuffix)
-                ->MicroData("http://schema.org/Invoice","totalPaymentDue")
+                ->MicroData("http://schema.org/Invoice", "totalPaymentDue")
                 ->isListed()
                 ->isReadOnly();
         
@@ -54,26 +56,24 @@ trait MainTrait {
         $this->fieldsFactory()->Create(SPL_T_DOUBLE)
                 ->Identifier("total_paid_tax_incl")
                 ->Name(Translate::getAdminTranslation("Total (Tax incl.)", "AdminOrders") . $CurrencySuffix)
-                ->MicroData("http://schema.org/Invoice","totalPaymentDueTaxIncluded")
+                ->MicroData("http://schema.org/Invoice", "totalPaymentDueTaxIncluded")
                 ->isListed()
-                ->isReadOnly();        
-        
+                ->isReadOnly();
     }
     
     /**
      *  @abstract     Read requested Field
-     * 
+     *
      *  @param        string    $Key                    Input List Key
      *  @param        string    $FieldName              Field Identifier / Name
-     * 
+     *
      *  @return         none
      */
-    private function getMainFields($Key,$FieldName)
+    private function getMainFields($Key, $FieldName)
     {
         //====================================================================//
         // READ Fields
-        switch ($FieldName)
-        {
+        switch ($FieldName) {
             //====================================================================//
             // PRICE INFORMATIONS
             //====================================================================//
@@ -88,5 +88,4 @@ trait MainTrait {
         
         unset($this->In[$Key]);
     }
-    
 }

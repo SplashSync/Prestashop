@@ -20,23 +20,36 @@ use Splash\Core\SplashCore      as Splash;
 use Splash\Models\Objects\PricesTrait as SplashPricesTrait;
 
 //====================================================================//
-// Prestashop Static Classes	
-use Shop, Configuration, Currency, Combination, Language, Context, Translate;
-use Image, ImageType, ImageManager, StockAvailable;
-use DbQuery, Db, Tools;
+// Prestashop Static Classes
+use Shop;
+use Configuration;
+use Currency;
+use Combination;
+use Language;
+use Context;
+use Translate;
+use Image;
+use ImageType;
+use ImageManager;
+use StockAvailable;
+use DbQuery;
+use Db;
+use Tools;
 
 /**
  * @abstract    Access to Product Prices Fields
  * @author      B. Paquier <contact@splashsync.com>
  */
-trait PricesTrait {
+trait PricesTrait
+{
     
     use SplashPricesTrait;
     
     /**
     *   @abstract     Build Fields using FieldFactory
     */
-    private function buildPricesFields() {
+    private function buildPricesFields()
+    {
         
         $GroupName2 = Translate::getAdminTranslation("Prices", "AdminProducts");
         
@@ -49,7 +62,7 @@ trait PricesTrait {
         $this->fieldsFactory()->Create(SPL_T_PRICE)
                 ->Identifier("price")
                 ->Name(Translate::getAdminTranslation("Price (tax excl.)", "AdminProducts") . " (" . $this->Currency->sign . ")")
-                ->MicroData("http://schema.org/Product","price")
+                ->MicroData("http://schema.org/Product", "price")
                 ->Group($GroupName2)
                 ->isListed();
         
@@ -58,7 +71,7 @@ trait PricesTrait {
         $this->fieldsFactory()->Create(SPL_T_PRICE)
                 ->Identifier("price-base")
                 ->Name(Translate::getAdminTranslation("Price (tax excl.)", "AdminProducts") . " Base (" . $this->Currency->sign . ")")
-                ->MicroData("http://schema.org/Product","basePrice")
+                ->MicroData("http://schema.org/Product", "basePrice")
                 ->Group($GroupName2)
                 ->isListed();
         
@@ -68,24 +81,22 @@ trait PricesTrait {
                 ->Identifier("price-wholesale")
                 ->Name(Translate::getAdminTranslation("Wholesale price", "AdminProducts") . " Base (" . $this->Currency->sign . ")")
                 ->Group($GroupName2)
-                ->MicroData("http://schema.org/Product","wholesalePrice");
-        
+                ->MicroData("http://schema.org/Product", "wholesalePrice");
     }
 
     /**
      *  @abstract     Read requested Field
-     * 
+     *
      *  @param        string    $Key                    Input List Key
      *  @param        string    $FieldName              Field Identifier / Name
-     * 
+     *
      *  @return         none
      */
-    private function getPricesFields($Key,$FieldName)
+    private function getPricesFields($Key, $FieldName)
     {
         //====================================================================//
         // READ Fields
-        switch ($FieldName)
-        {
+        switch ($FieldName) {
             //====================================================================//
             // PRICE INFORMATIONS
             //====================================================================//
@@ -93,45 +104,54 @@ trait PricesTrait {
             case 'price':
                 //====================================================================//
                 // Read Price
-                $PriceHT    = (double)  Tools::convertPrice($this->Object->getPrice(false, $this->AttributeId),  $this->Currency);
+                $PriceHT    = (double)  Tools::convertPrice($this->Object->getPrice(false, $this->AttributeId), $this->Currency);
                 $Tax        = (double)  $this->Object->getTaxesRate();
                 //====================================================================//
                 // Build Price Array
                 $this->Out[$FieldName] = self::Prices()->Encode(
-                        $PriceHT,$Tax,Null,
-                        $this->Currency->iso_code,
-                        $this->Currency->sign,
-                        $this->Currency->name);
+                    $PriceHT,
+                    $Tax,
+                    null,
+                    $this->Currency->iso_code,
+                    $this->Currency->sign,
+                    $this->Currency->name
+                );
                 break;
             case 'price-base':
                 //====================================================================//
                 // Read Price
-                $PriceHT    = (double)  Tools::convertPrice($this->Object->price,  $this->Currency);
+                $PriceHT    = (double)  Tools::convertPrice($this->Object->price, $this->Currency);
                 $Tax        = (double)  $this->Object->getTaxesRate();
                 //====================================================================//
                 // Build Price Array
                 $this->Out[$FieldName] = self::Prices()->Encode(
-                        $PriceHT,$Tax,Null,
-                        $this->Currency->iso_code,
-                        $this->Currency->sign,
-                        $this->Currency->name);
-                break;                
+                    $PriceHT,
+                    $Tax,
+                    null,
+                    $this->Currency->iso_code,
+                    $this->Currency->sign,
+                    $this->Currency->name
+                );
+                break;
             case 'price-wholesale':
                 //====================================================================//
                 // Read Price
-                if ( $this->AttributeId && ($this->Attribute->wholesale_price > 0) ) {
-                    $PriceHT = (double) Tools::convertPrice($this->Attribute->wholesale_price,  $this->Currency);
+                if ($this->AttributeId && ($this->Attribute->wholesale_price > 0)) {
+                    $PriceHT = (double) Tools::convertPrice($this->Attribute->wholesale_price, $this->Currency);
                 } else {
-                    $PriceHT = (double) Tools::convertPrice($this->Object->wholesale_price,  $this->Currency);  
+                    $PriceHT = (double) Tools::convertPrice($this->Object->wholesale_price, $this->Currency);
                 }
                 $Tax        = (double)  $this->Object->getTaxesRate();
                 //====================================================================//
                 // Build Price Array
                 $this->Out[$FieldName] = self::Prices()->Encode(
-                        $PriceHT,$Tax,Null,
-                        $this->Currency->iso_code,
-                        $this->Currency->sign,
-                        $this->Currency->name);
+                    $PriceHT,
+                    $Tax,
+                    null,
+                    $this->Currency->iso_code,
+                    $this->Currency->sign,
+                    $this->Currency->name
+                );
 
                 break;
                     
@@ -142,144 +162,141 @@ trait PricesTrait {
         if (!is_null($Key)) {
             unset($this->In[$Key]);
         }
-    }    
+    }
     
     /**
      *  @abstract     Write Given Fields
-     * 
+     *
      *  @param        string    $FieldName              Field Identifier / Name
      *  @param        mixed     $Data                   Field Data
-     * 
+     *
      *  @return         none
      */
-    private function setPricesFields($FieldName,$Data) 
+    private function setPricesFields($FieldName, $Data)
     {
         //====================================================================//
         // WRITE Field
-        switch ($FieldName)
-        {          
-            
+        switch ($FieldName) {
             //====================================================================//
             // PRICES INFORMATIONS
             //====================================================================//
             case 'price':
                 //====================================================================//
                 // Read Current Product Price (Via Out Buffer)
-                $this->getPricesFields(Null,"price");
+                $this->getPricesFields(null, "price");
 
                 //====================================================================//
                 // Compare Prices
-                if ( !self::Prices()->Compare($this->Out["price"],$Data) ) {
+                if (!self::Prices()->Compare($this->Out["price"], $Data)) {
                     $this->NewPrice = $Data;
                     $this->needUpdate();
                 }
                 
-                break;    
+                break;
                 
             case 'price-base':
                 //====================================================================//
                 // Read Current Product Price (Via Out Buffer)
-                $this->getPricesFields(Null,"price-base");
+                $this->getPricesFields(null, "price-base");
                 
                 //====================================================================//
                 // Compare Prices
-                if ( !self::Prices()->Compare($this->Out["price-base"],$Data) ) {
+                if (!self::Prices()->Compare($this->Out["price-base"], $Data)) {
                     $this->Object->price = $Data["ht"];
                     $this->needUpdate();
                     //====================================================================//
                     // Clear Cache
-                    \Product::flushPriceCache();   
+                    \Product::flushPriceCache();
                 }
                 
-                break;                  
+                break;
                 
             case 'price-wholesale':
                 //====================================================================//
                 // Read Current Product Price (Via Out Buffer)
-                $this->getPricesFields(Null,"price-wholesale");
+                $this->getPricesFields(null, "price-wholesale");
 
                 //====================================================================//
                 // Compare Prices
-                if ( self::Prices()->Compare($this->Out["price-wholesale"],$Data) ) {
+                if (self::Prices()->Compare($this->Out["price-wholesale"], $Data)) {
                     break;
                 }
                 
                 //====================================================================//
                 // Update product Wholesale Price with Attribute
-                if ( $this->AttributeId ) {
+                if ($this->AttributeId) {
                     $this->Attribute->wholesale_price   =   $Data["ht"];
-                    $this->AttributeUpdate              =   True;
+                    $this->AttributeUpdate              =   true;
                 //====================================================================//
                 // Update product Price without Attribute
                 } else {
                     $this->Object->wholesale_price      =   $Data["ht"];
                     $this->needUpdate();
-                }                
-                break;                   
+                }
+                break;
 
             default:
                 return;
         }
         unset($this->In[$FieldName]);
-    }   
+    }
     
     
     /**
      *  @abstract     Write New Price
-     * 
+     *
      *  @return         bool
      */
     private function setSavePrice()
     {
         //====================================================================//
         // Verify Price Need to be Updated
-        if ( empty($this->NewPrice) ) {
-            return True;
+        if (empty($this->NewPrice)) {
+            return true;
         }
 
         //====================================================================//
         // Update product Price with Attribute
-        if ( $this->Attribute ) {
+        if ($this->Attribute) {
             //====================================================================//
             // Evaluate Attribute Price
             $PriceHT = $this->NewPrice["ht"] - $this->Object->price;
             //====================================================================//
             // Update Attribute Price if Required
-            if ( abs($PriceHT - $this->Attribute->price) > 1E-6 ) {
+            if (abs($PriceHT - $this->Attribute->price) > 1E-6) {
                 $this->Attribute->price     =   round($PriceHT, 9);
-                $this->AttributeUpdate      =   True;
+                $this->AttributeUpdate      =   true;
             }
         //====================================================================//
         // Update product Price without Attribute
         } else {
-            if ( abs($this->NewPrice["ht"] - $this->Object->price) > 1E-6 ) {
-                $this->Object->price = round($this->NewPrice["ht"] , 9);
+            if (abs($this->NewPrice["ht"] - $this->Object->price) > 1E-6) {
+                $this->Object->price = round($this->NewPrice["ht"], 9);
                 $this->needUpdate();
-            } 
+            }
         }
         
         //====================================================================//
         // Update Price VAT Rate
-        if ( abs($this->NewPrice["vat"] - $this->Object->tax_rate) > 1E-6 ) {
+        if (abs($this->NewPrice["vat"] - $this->Object->tax_rate) > 1E-6) {
             //====================================================================//
             // Search For Tax Id Group with Given Tax Rate and Country
             $NewTaxRateGroupId  =   Splash::local()->getTaxRateGroupId($this->NewPrice["vat"]);
             //====================================================================//
             // If Tax Group Found, Update Product
-            if ( ( $NewTaxRateGroupId >= 0 ) && ( $NewTaxRateGroupId != $this->Object->id_tax_rules_group ) ) {
+            if (( $NewTaxRateGroupId >= 0 ) && ( $NewTaxRateGroupId != $this->Object->id_tax_rules_group )) {
                  $this->Object->id_tax_rules_group  = (int) $NewTaxRateGroupId;
                  $this->Object->tax_rate            = $this->NewPrice["vat"];
                  $this->needUpdate();
             } else {
-                Splash::log()->war("VAT Rate Update : Unable to find this tax rate localy (" . $this->NewPrice["vat"] . ")"); 
+                Splash::log()->war("VAT Rate Update : Unable to find this tax rate localy (" . $this->NewPrice["vat"] . ")");
             }
-        }     
+        }
         
         //====================================================================//
         // Clear Cache
-        \Product::flushPriceCache();          
+        \Product::flushPriceCache();
         
-        return True;
-    }    
-    
+        return true;
+    }
 }

@@ -18,32 +18,37 @@ namespace   Splash\Local\Objects\Product;
 use Splash\Core\SplashCore      as Splash;
 
 //====================================================================//
-// Prestashop Static Classes	
-use DbQuery, Db, Configuration, Product, Shop;
+// Prestashop Static Classes
+use DbQuery;
+use Db;
+use Configuration;
+use Product;
+use Shop;
 
 /**
  * @abstract    Acces to Product Objects Lists
  * @author      B. Paquier <contact@splashsync.com>
  */
-trait ObjectsListTrait {
+trait ObjectsListTrait
+{
 
     /**
     *   @abstract     Return List Of Products with required filters
-     * 
-    *   @param        string  $filter                   Filters/Search String for Contact List. 
-    *   @param        array   $params                   Search parameters for result List. 
-    *                         $params["max"]            Maximum Number of results 
-    *                         $params["offset"]         List Start Offset 
-    *                         $params["sortfield"]      Field name for sort list (Available fields listed below)    
-    *                         $params["sortorder"]      List Order Constraign (Default = ASC)    
-     * 
+     *
+    *   @param        string  $filter                   Filters/Search String for Contact List.
+    *   @param        array   $params                   Search parameters for result List.
+    *                         $params["max"]            Maximum Number of results
+    *                         $params["offset"]         List Start Offset
+    *                         $params["sortfield"]      Field name for sort list (Available fields listed below)
+    *                         $params["sortorder"]      List Order Constraign (Default = ASC)
+     *
     *   @return       array   $data                     List of all customers main data
     *                         $data["meta"]["total"]     ==> Total Number of results
     *                         $data["meta"]["current"]   ==> Total Number of results
     */
-    public function ObjectsList($filter=NULL,$params=NULL)
+    public function ObjectsList($filter = null, $params = null)
     {
-        Splash::log()->deb("MsgLocalFuncTrace",__CLASS__,__FUNCTION__);             
+        Splash::log()->deb("MsgLocalFuncTrace", __CLASS__, __FUNCTION__);
         
         //====================================================================//
         // Prepare SQL request for reading in Database
@@ -74,7 +79,7 @@ trait ObjectsListTrait {
         //====================================================================//
         // Setup filters
         // Add filters with names convertions. Added LOWER function to be NON case sensitive
-        if ( !empty($filter) ) {
+        if (!empty($filter)) {
             //====================================================================//
             // Search by Product Name
             $Where = " LOWER( pl.name )         LIKE LOWER( '%" . pSQL($filter) ."%') ";
@@ -88,28 +93,27 @@ trait ObjectsListTrait {
             // Search by Product Short Desc
             $Where .= " OR LOWER(pl.description_short ) LIKE LOWER( '%" . pSQL($filter) ."%') ";
             $sql->where($Where);
-        }  
+        }
         //====================================================================//
         // Setup sortorder
         $SortField = empty($params["sortfield"])    ?   "ref"  :   $params["sortfield"];
         $SortOrder = empty($params["sortorder"])    ?   "ASC"  :   $params["sortorder"];
         // Build ORDER BY
-        $sql->orderBy('`' . pSQL($SortField) . '` ' . pSQL($SortOrder) );
+        $sql->orderBy('`' . pSQL($SortField) . '` ' . pSQL($SortOrder));
         
         //====================================================================//
         // Execute final request
         Db::getInstance()->executeS($sql);
         Splash::log()->deb("Products - Get  List SQL=\"".$sql."\"");
-        if (Db::getInstance()->getNumberError())
-        {
-            return Splash::log()->err("ErrLocalTpl",__CLASS__,__FUNCTION__," Error : " . Db::getInstance()->getMsgError());
-        } 
+        if (Db::getInstance()->getNumberError()) {
+            return Splash::log()->err("ErrLocalTpl", __CLASS__, __FUNCTION__, " Error : " . Db::getInstance()->getMsgError());
+        }
         //====================================================================//
         // Compute Total Number of Results
         $Total      = Db::getInstance()->NumRows();
         //====================================================================//
         // Build LIMIT
-        $sql->limit(pSQL($params["max"]),pSQL($params["offset"]));
+        $sql->limit(pSQL($params["max"]), pSQL($params["offset"]));
         $Result = Db::getInstance()->executeS($sql);
         //====================================================================//
         // Init Result Array
@@ -121,11 +125,10 @@ trait ObjectsListTrait {
             $Data["meta"]["total"]      =   $Total;                         // Store Total Number of results
 //            OsWs::Log()->Deb("Main - Get Product List, ".$count." Products Found.");
             return $Data;
-        } 
+        }
         //====================================================================//
         // For each result, read information and add to $Data
-        foreach ($Result as $Product)
-        {
+        foreach ($Result as $Product) {
             //====================================================================//
             // Init Buffer Array
             $DataBuffer = array();
@@ -137,42 +140,40 @@ trait ObjectsListTrait {
             // Fill Product Base Data to Buffer
             $DataBuffer["price_type"]           =   "HT";
             $DataBuffer["vat"]                  =   "";
-            $DataBuffer["currency"]             =   $this->Currency->sign; 
+            $DataBuffer["currency"]             =   $this->Currency->sign;
             $DataBuffer["available_for_order"]  =   $Product["available_for_order"];
             $DataBuffer["created"]              =   $Product["created"];
             $DataBuffer["modified"]             =   $Product["modified"];
             
             //====================================================================//
             // Fill Simple Product Data to Buffer
-            if ( !$Product["id_attribute"] ) 
-            {
+            if (!$Product["id_attribute"]) {
                 $DataBuffer["id"]                   =   $Product["id"];
                 $DataBuffer["ref"]                  =   $Product["ref"];
                 $DataBuffer["name"]                 =   $Product["name"];
                 $DataBuffer["weight"]               =   $Product["weight"] . Configuration::get('PS_WEIGHT_UNIT');
                 $DataBuffer["stock"]                =   $p->getQuantity($Product["id"]);
-                $DataBuffer["price"]                =   $p->getPrice(False, Null, 3);
-                $DataBuffer["price-base"]           =   $p->getPrice(False, Null, 3);
+                $DataBuffer["price"]                =   $p->getPrice(false, null, 3);
+                $DataBuffer["price-base"]           =   $p->getPrice(false, null, 3);
             //====================================================================//
             // Fill Product Combination Data to Buffer
             } else {
-                $DataBuffer["id"]           =   (int) $this->getUnikId($Product["id"],$Product["id_attribute"]);
+                $DataBuffer["id"]           =   (int) $this->getUnikId($Product["id"], $Product["id_attribute"]);
                 $DataBuffer["ref"]          =   empty($Product["ref_attribute"])?$Product["ref"]  . "-" . $Product["id_attribute"]:$Product["ref_attribute"];
                 $DataBuffer["name"]         =   $Product["name"];
                 $DataBuffer["weight"]       =   ($Product["weight"] + $Product["weight_attribute"]) . Configuration::get('PS_WEIGHT_UNIT');
-                $DataBuffer["price"]        =   $p->getPrice(false, $Product["id_attribute"] ,3);
-                $DataBuffer["price-base"]   =   $p->getPrice(False, Null, 3);
-                $DataBuffer["stock"]        =   $p->getQuantity($Product["id"],$Product["id_attribute"]);
+                $DataBuffer["price"]        =   $p->getPrice(false, $Product["id_attribute"], 3);
+                $DataBuffer["price-base"]   =   $p->getPrice(false, null, 3);
+                $DataBuffer["stock"]        =   $p->getQuantity($Product["id"], $Product["id_attribute"]);
             }
-            array_push($Data , $DataBuffer);
+            array_push($Data, $DataBuffer);
         }
         
         //====================================================================//
         // Compute List Meta Informations
         $Data["meta"]["current"]    =   count($Data);   // Store Current Number of results
         $Data["meta"]["total"]      =   $Total;         // Store Total Number of results
-        Splash::log()->deb("MsgLocalTpl",__CLASS__,__FUNCTION__, " " . $Data["meta"]["current"] . " Products Found.");
+        Splash::log()->deb("MsgLocalTpl", __CLASS__, __FUNCTION__, " " . $Data["meta"]["current"] . " Products Found.");
         return $Data;
     }
-    
 }

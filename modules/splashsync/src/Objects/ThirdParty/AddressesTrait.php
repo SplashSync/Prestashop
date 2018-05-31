@@ -16,14 +16,16 @@
 namespace Splash\Local\Objects\ThirdParty;
 
 //====================================================================//
-// Prestashop Static Classes	
-use Context, Translate;
+// Prestashop Static Classes
+use Context;
+use Translate;
 
 /**
  * @abstract    Access to thirdparty Primary Address Fields
  * @author      B. Paquier <contact@splashsync.com>
  */
-trait AddressesTrait {
+trait AddressesTrait
+{
 
     /**
     *   @abstract     Build Fields using FieldFactory
@@ -32,11 +34,11 @@ trait AddressesTrait {
     {
         //====================================================================//
         // Address List
-        $this->fieldsFactory()->Create(self::Objects()->Encode( "Address" , SPL_T_ID))
+        $this->fieldsFactory()->Create(self::Objects()->Encode("Address", SPL_T_ID))
                 ->Identifier("address")
                 ->InList("contacts")
                 ->Name(Translate::getAdminTranslation("Address", "AdminCustomers"))
-                ->MicroData("http://schema.org/Organization","address")
+                ->MicroData("http://schema.org/Organization", "address")
                 ->Group(Translate::getAdminTranslation("Addresses", "AdminCustomers"))
                 ->isReadOnly();
     }
@@ -44,23 +46,22 @@ trait AddressesTrait {
     
     /**
      *  @abstract     Read requested Field
-     * 
+     *
      *  @param        string    $Key                    Input List Key
      *  @param        string    $FieldName              Field Identifier / Name
-     * 
+     *
      *  @return         none
      */
-    private function getAddressesFields($Key,$FieldName)    
+    private function getAddressesFields($Key, $FieldName)
     {
         //====================================================================//
         // READ Fields
-        switch ($FieldName)
-        {  
+        switch ($FieldName) {
             //====================================================================//
             // Customer Address List
             case 'address@contacts':
                 $this->getAddressList();
-                break;   
+                break;
             default:
                 return;
         }
@@ -70,10 +71,11 @@ trait AddressesTrait {
     
     /**
      *  @abstract     Read requested Field
-     * 
+     *
      *  @return         bool
      */
-    private function getAddressesList() {
+    private function getAddressesList()
+    {
         
         //====================================================================//
         // Create List If Not Existing
@@ -86,15 +88,14 @@ trait AddressesTrait {
         //====================================================================//
         // If Address List Is Empty => Null
         if (empty($AddresList)) {
-            return True;
+            return true;
         }
         //====================================================================//
         // Run Through Address List
         foreach ($AddresList as $Key => $Address) {
-            $this->Out["contacts"][$Key] = array ( "address" => self::Objects()->Encode( "Address" , $Address["id_address"]) );
+            $this->Out["contacts"][$Key] = array ( "address" => self::Objects()->Encode("Address", $Address["id_address"]) );
         }
                 
-        return True;
-    }  
-    
+        return true;
+    }
 }

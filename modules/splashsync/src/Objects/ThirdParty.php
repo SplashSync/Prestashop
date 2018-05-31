@@ -8,11 +8,11 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- * 
+ *
  *  @author    Splash Sync <www.splashsync.com>
  *  @copyright 2015-2017 Splash Sync
  *  @license   GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007
- * 
+ *
  **/
 
 namespace   Splash\Local\Objects;
@@ -25,7 +25,7 @@ use Splash\Models\Objects\SimpleFieldsTrait;
 use Splash\Models\Objects\ObjectsTrait;
 
 /**
- * @abstract    Splash Local Object Class - Customer Accounts Local Integration 
+ * @abstract    Splash Local Object Class - Customer Accounts Local Integration
  * @author      B. Paquier <contact@splashsync.com>
  */
 class ThirdParty extends AbstractObject
@@ -50,7 +50,7 @@ class ThirdParty extends AbstractObject
     use \Splash\Local\Objects\ThirdParty\MetaTrait;
     
     //====================================================================//
-    // Object Definition Parameters	
+    // Object Definition Parameters
     //====================================================================//
     
     /**
@@ -61,37 +61,37 @@ class ThirdParty extends AbstractObject
     /**
      *  Object Name (Translated by Module)
      */
-    protected static    $NAME            =  "ThirdParty";
+    protected static $NAME            =  "ThirdParty";
     
     /**
-     *  Object Description (Translated by Module) 
+     *  Object Description (Translated by Module)
      */
-    protected static    $DESCRIPTION     =  "Prestashop Customer Object";    
+    protected static $DESCRIPTION     =  "Prestashop Customer Object";
     
     /**
-     *  Object Icon (FontAwesome or Glyph ico tag) 
+     *  Object Icon (FontAwesome or Glyph ico tag)
      */
-    protected static    $ICO     =  "fa fa-user";
+    protected static $ICO     =  "fa fa-user";
 
     /**
-     *  Object Synchronization Limitations 
-     *  
+     *  Object Synchronization Limitations
+     *
      *  This Flags are Used by Splash Server to Prevent Unexpected Operations on Remote Server
      */
-    protected static    $ALLOW_PUSH_CREATED         =  TRUE;        // Allow Creation Of New Local Objects
-    protected static    $ALLOW_PUSH_UPDATED         =  TRUE;        // Allow Update Of Existing Local Objects
-    protected static    $ALLOW_PUSH_DELETED         =  TRUE;        // Allow Delete Of Existing Local Objects
+    protected static $ALLOW_PUSH_CREATED         =  true;        // Allow Creation Of New Local Objects
+    protected static $ALLOW_PUSH_UPDATED         =  true;        // Allow Update Of Existing Local Objects
+    protected static $ALLOW_PUSH_DELETED         =  true;        // Allow Delete Of Existing Local Objects
     
     /**
-     *  Object Synchronization Recommended Configuration 
+     *  Object Synchronization Recommended Configuration
      */
-    protected static    $ENABLE_PUSH_CREATED       =  FALSE;        // Enable Creation Of New Local Objects when Not Existing
-    protected static    $ENABLE_PUSH_UPDATED       =  TRUE;         // Enable Update Of Existing Local Objects when Modified Remotly
-    protected static    $ENABLE_PUSH_DELETED       =  TRUE;         // Enable Delete Of Existing Local Objects when Deleted Remotly
+    protected static $ENABLE_PUSH_CREATED       =  false;        // Enable Creation Of New Local Objects when Not Existing
+    protected static $ENABLE_PUSH_UPDATED       =  true;         // Enable Update Of Existing Local Objects when Modified Remotly
+    protected static $ENABLE_PUSH_DELETED       =  true;         // Enable Delete Of Existing Local Objects when Deleted Remotly
 
-    protected static    $ENABLE_PULL_CREATED       =  TRUE;         // Enable Import Of New Local Objects 
-    protected static    $ENABLE_PULL_UPDATED       =  TRUE;         // Enable Import of Updates of Local Objects when Modified Localy
-    protected static    $ENABLE_PULL_DELETED       =  TRUE;         // Enable Delete Of Remotes Objects when Deleted Localy 
+    protected static $ENABLE_PULL_CREATED       =  true;         // Enable Import Of New Local Objects
+    protected static $ENABLE_PULL_UPDATED       =  true;         // Enable Import of Updates of Local Objects when Modified Localy
+    protected static $ENABLE_PULL_DELETED       =  true;         // Enable Delete Of Remotes Objects when Deleted Localy
         
     //====================================================================//
     // Class Constructor
@@ -101,18 +101,13 @@ class ThirdParty extends AbstractObject
     {
         //====================================================================//
         //  Load Local Translation File
-        Splash::Translator()->Load("objects@local");          
+        Splash::Translator()->Load("objects@local");
        
         //====================================================================//
         // Load Splash Module
         $this->spl = Splash::local()->getLocalModule();
-        if ( $this->spl == False ) {
-            return False;
+        if ($this->spl == false) {
+            return false;
         }
     }
-
 }
-
-
-
-

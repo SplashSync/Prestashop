@@ -18,68 +18,67 @@ namespace Splash\Local\Objects\Invoice;
 //use Splash\Core\SplashCore      as Splash;
 
 //====================================================================//
-// Prestashop Static Classes	
+// Prestashop Static Classes
 use Translate;
 
 /**
  * @abstract    Access to Orders Core Fields
  * @author      B. Paquier <contact@splashsync.com>
  */
-trait CoreTrait {
+trait CoreTrait
+{
     
     /**
     *   @abstract     Build Core Fields using FieldFactory
     */
-    private function buildInvoiceCoreFields()   {
+    private function buildInvoiceCoreFields()
+    {
         
         //====================================================================//
         // Order Object
-        $this->fieldsFactory()->Create(self::Objects()->Encode( "Order" , SPL_T_ID))
+        $this->fieldsFactory()->Create(self::Objects()->Encode("Order", SPL_T_ID))
                 ->Identifier("id_order")
                 ->Name($this->spl->l('Order'))
-                ->MicroData("http://schema.org/Invoice","referencesOrder")
-                ->isReadOnly()                
-                ;  
+                ->MicroData("http://schema.org/Invoice", "referencesOrder")
+                ->isReadOnly()
+                ;
         
         //====================================================================//
         // Invoice Reference
         $this->fieldsFactory()->Create(SPL_T_VARCHAR)
                 ->Identifier("number")
                 ->Name(Translate::getAdminTranslation("Invoice number", "AdminInvoices"))
-                ->MicroData("http://schema.org/Invoice","confirmationNumber")       
+                ->MicroData("http://schema.org/Invoice", "confirmationNumber")
                 ->isReadOnly()
                 ->isListed()
                 ;
-        
-    }    
+    }
     
     /**
      *  @abstract     Read requested Field
-     * 
+     *
      *  @param        string    $Key                    Input List Key
      *  @param        string    $FieldName              Field Identifier / Name
-     * 
+     *
      *  @return         none
      */
-    private function getInvoiceCoreFields($Key,$FieldName)
+    private function getInvoiceCoreFields($Key, $FieldName)
     {
         //====================================================================//
         // READ Fields
-        switch ($FieldName)
-        {
+        switch ($FieldName) {
             case 'number':
                 $this->Out[$FieldName] = $this->Object->getInvoiceNumberFormatted($this->LangId);
                 break;
             
             case 'id_order':
-                $this->Out[$FieldName] = self::Objects()->Encode( "Order" , $this->Object->$FieldName );
-                break;            
+                $this->Out[$FieldName] = self::Objects()->Encode("Order", $this->Object->$FieldName);
+                break;
             
             default:
                 return;
         }
         
         unset($this->In[$Key]);
-    }    
-    
+    }
 }

@@ -16,14 +16,17 @@
 namespace Splash\Local\Objects\Address;
 
 //====================================================================//
-// Prestashop Static Classes	
-use Country, State, Translate;
+// Prestashop Static Classes
+use Country;
+use State;
+use Translate;
 
 /**
  * @abstract    Access to Address Main Fields
  * @author      B. Paquier <contact@splashsync.com>
  */
-trait MainTrait {
+trait MainTrait
+{
 
     /**
     *   @abstract     Build Address Main Fields using FieldFactory
@@ -37,7 +40,7 @@ trait MainTrait {
         $this->fieldsFactory()->Create(SPL_T_VARCHAR)
                 ->Identifier("address1")
                 ->Name($GroupName)
-                ->MicroData("http://schema.org/PostalAddress","streetAddress")
+                ->MicroData("http://schema.org/PostalAddress", "streetAddress")
                 ->Group($GroupName)
                 ->isRequired();
 
@@ -47,16 +50,16 @@ trait MainTrait {
                 ->Identifier("address2")
                 ->Name($GroupName . " (2)")
                 ->Group($GroupName)
-                ->MicroData("http://schema.org/PostalAddress","postOfficeBoxNumber");
+                ->MicroData("http://schema.org/PostalAddress", "postOfficeBoxNumber");
         
         //====================================================================//
         // Zip Code
         $this->fieldsFactory()->Create(SPL_T_VARCHAR)
                 ->Identifier("postcode")
                 ->Name(Translate::getAdminTranslation("Zip/Postal Code", "AdminAddresses"))
-                ->MicroData("http://schema.org/PostalAddress","postalCode")
+                ->MicroData("http://schema.org/PostalAddress", "postalCode")
                 ->Group($GroupName)
-                ->AddOption("maxLength" , 12)                
+                ->AddOption("maxLength", 12)
                 ->isRequired();
         
         //====================================================================//
@@ -64,7 +67,7 @@ trait MainTrait {
         $this->fieldsFactory()->Create(SPL_T_VARCHAR)
                 ->Identifier("city")
                 ->Name(Translate::getAdminTranslation("City", "AdminAddresses"))
-                ->MicroData("http://schema.org/PostalAddress","addressLocality")
+                ->MicroData("http://schema.org/PostalAddress", "addressLocality")
                 ->Group($GroupName)
                 ->isRequired()
                 ->isListed();
@@ -83,7 +86,7 @@ trait MainTrait {
                 ->Identifier("id_state")
                 ->Name(Translate::getAdminTranslation("State", "AdminAddresses") . " (Code)")
                 ->Group($GroupName)
-                ->MicroData("http://schema.org/PostalAddress","addressRegion");
+                ->MicroData("http://schema.org/PostalAddress", "addressRegion");
         
         //====================================================================//
         // Country Name
@@ -99,25 +102,24 @@ trait MainTrait {
         $this->fieldsFactory()->Create(SPL_T_COUNTRY)
                 ->Identifier("id_country")
                 ->Name(Translate::getAdminTranslation("Country", "AdminAddresses") . " (Code)")
-                ->MicroData("http://schema.org/PostalAddress","addressCountry")
+                ->MicroData("http://schema.org/PostalAddress", "addressCountry")
                 ->Group($GroupName)
                 ->isRequired();
     }
     
     /**
      *  @abstract     Read requested Field
-     * 
+     *
      *  @param        string    $Key                    Input List Key
      *  @param        string    $FieldName              Field Identifier / Name
-     * 
+     *
      *  @return         none
      */
-    private function getMainFields($Key,$FieldName)
+    private function getMainFields($Key, $FieldName)
     {
         //====================================================================//
         // READ Fields
-        switch ($FieldName)
-        {
+        switch ($FieldName) {
             //====================================================================//
             // Direct Readings
             case 'address1':
@@ -148,26 +150,25 @@ trait MainTrait {
                 break;
             
             default:
-                return;            
+                return;
         }
         unset($this->In[$Key]);
-    }     
+    }
     
     /**
      *  @abstract     Write Given Fields
-     * 
+     *
      *  @param        string    $FieldName              Field Identifier / Name
      *  @param        mixed     $Data                   Field Data
-     * 
+     *
      *  @return         none
      */
-    private function setMainFields($FieldName,$Data) 
+    private function setMainFields($FieldName, $Data)
     {
         
         //====================================================================//
         // WRITE Field
-        switch ($FieldName)
-        {
+        switch ($FieldName) {
             //====================================================================//
             // Direct Readings
             case 'address1':
@@ -180,24 +181,23 @@ trait MainTrait {
             //====================================================================//
             // Country ISO Id - READ With Convertion
             case 'id_country':
-                if ( $this->Object->$FieldName  != Country::getByIso($Data) ) {
+                if ($this->Object->$FieldName  != Country::getByIso($Data)) {
                     $this->Object->$FieldName  = Country::getByIso($Data);
                     $this->needUpdate();
-                } 
+                }
                 break;
             //====================================================================//
             // State ISO Id - READ With Convertion
             case 'id_state':
-                if ( $this->Object->$FieldName  != State::getIdByIso($Data) ) {
+                if ($this->Object->$FieldName  != State::getIdByIso($Data)) {
                     $this->Object->$FieldName  = State::getIdByIso($Data);
                     $this->needUpdate();
-                } 
+                }
                 break;
                 
             default:
-                return;            
+                return;
         }
         unset($this->In[$FieldName]);
-    }      
-    
+    }
 }
