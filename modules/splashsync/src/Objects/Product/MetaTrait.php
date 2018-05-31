@@ -39,14 +39,14 @@ trait MetaTrait {
 
         //====================================================================//
         // Active => Product Is Enables & Visible
-        $this->FieldsFactory()->Create(SPL_T_BOOL)
+        $this->fieldsFactory()->Create(SPL_T_BOOL)
                 ->Identifier("active")
                 ->Name(Translate::getAdminTranslation("Enabled", "AdminProducts"))                
                 ->MicroData("http://schema.org/Product","active");        
         
         //====================================================================//
         // Active => Product Is available_for_order
-        $this->FieldsFactory()->Create(SPL_T_BOOL)
+        $this->fieldsFactory()->Create(SPL_T_BOOL)
                 ->Identifier("available_for_order")
                 ->Name(Translate::getAdminTranslation("Available for order", "AdminProducts"))
                 ->MicroData("http://schema.org/Product","offered")
@@ -54,7 +54,7 @@ trait MetaTrait {
         
         //====================================================================//
         // On Sale 
-        $this->FieldsFactory()->Create(SPL_T_BOOL)
+        $this->fieldsFactory()->Create(SPL_T_BOOL)
                 ->Identifier("on_sale")
                 ->Name($this->spl->l("On Sale"))
                 ->MicroData("http://schema.org/Product","onsale");

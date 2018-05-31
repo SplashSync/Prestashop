@@ -37,101 +37,101 @@ trait AddressTrait {
 
         //====================================================================//
         // Addess
-        $this->FieldsFactory()->Create(SPL_T_VARCHAR)
+        $this->fieldsFactory()->Create(SPL_T_VARCHAR)
                 ->Identifier("address1")
                 ->Name($GroupName)
                 ->MicroData("http://schema.org/PostalAddress","streetAddress")
                 ->Group($GroupName)
-                ->ReadOnly();
+                ->isReadOnly();
 
         //====================================================================//
         // Addess Complement
-        $this->FieldsFactory()->Create(SPL_T_VARCHAR)
+        $this->fieldsFactory()->Create(SPL_T_VARCHAR)
                 ->Identifier("address2")
                 ->Name($GroupName . " (2)")
                 ->MicroData("http://schema.org/PostalAddress","postOfficeBoxNumber")
                 ->Group($GroupName)
-                ->ReadOnly();
+                ->isReadOnly();
         
         //====================================================================//
         // Zip Code
-        $this->FieldsFactory()->Create(SPL_T_VARCHAR)
+        $this->fieldsFactory()->Create(SPL_T_VARCHAR)
                 ->Identifier("postcode")
                 ->Name(Translate::getAdminTranslation("Zip/Postal Code", "AdminAddresses"))
                 ->MicroData("http://schema.org/PostalAddress","postalCode")
                 ->Group($GroupName)
-                ->ReadOnly();
+                ->isReadOnly();
         
         //====================================================================//
         // City Name
-        $this->FieldsFactory()->Create(SPL_T_VARCHAR)
+        $this->fieldsFactory()->Create(SPL_T_VARCHAR)
                 ->Identifier("city")
                 ->Name(Translate::getAdminTranslation("City", "AdminAddresses"))
                 ->MicroData("http://schema.org/PostalAddress","addressLocality")
                 ->Group($GroupName)
-                ->ReadOnly();
+                ->isReadOnly();
         
         //====================================================================//
         // State Name
-        $this->FieldsFactory()->Create(SPL_T_VARCHAR)
+        $this->fieldsFactory()->Create(SPL_T_VARCHAR)
                 ->Identifier("state")
                 ->Name(Translate::getAdminTranslation("State", "AdminAddresses"))
                 ->MicroData("http://schema.org/PostalAddress","addressRegion")
                 ->Group($GroupName)
-                ->ReadOnly();
+                ->isReadOnly();
         
         //====================================================================//
         // State code
-        $this->FieldsFactory()->Create(SPL_T_STATE)
+        $this->fieldsFactory()->Create(SPL_T_STATE)
                 ->Identifier("id_state")
                 ->Name(Translate::getAdminTranslation("State", "AdminAddresses") . " (Code)")
                 ->MicroData("http://schema.org/PostalAddress","addressRegion")
                 ->Group($GroupName)
-                ->ReadOnly();
+                ->isReadOnly();
         
         //====================================================================//
         // Country Name
-        $this->FieldsFactory()->Create(SPL_T_VARCHAR)
+        $this->fieldsFactory()->Create(SPL_T_VARCHAR)
                 ->Identifier("country")
                 ->Name(Translate::getAdminTranslation("Country", "AdminAddresses"))
                 ->MicroData("http://schema.org/PostalAddress","addressCountry")
                 ->Group($GroupName)
-                ->ReadOnly();
+                ->isReadOnly();
         
         //====================================================================//
         // Country ISO Code
-        $this->FieldsFactory()->Create(SPL_T_COUNTRY)
+        $this->fieldsFactory()->Create(SPL_T_COUNTRY)
                 ->Identifier("id_country")
                 ->Name(Translate::getAdminTranslation("Country", "AdminAddresses") . " (Code)")
                 ->MicroData("http://schema.org/PostalAddress","addressCountry")
                 ->Group($GroupName)
-                ->ReadOnly();
+                ->isReadOnly();
         
         //====================================================================//
         // Phone
-        $this->FieldsFactory()->Create(SPL_T_PHONE)
+        $this->fieldsFactory()->Create(SPL_T_PHONE)
                 ->Identifier("phone")
                 ->Name(Translate::getAdminTranslation("Home phone", "AdminAddresses"))
                 ->MicroData("http://schema.org/PostalAddress","telephone")
                 ->Group($GroupName)
-                ->ReadOnly();
+                ->isReadOnly();
         
         //====================================================================//
         // Mobile Phone
-        $this->FieldsFactory()->Create(SPL_T_PHONE)
+        $this->fieldsFactory()->Create(SPL_T_PHONE)
                 ->Identifier("phone_mobile")
                 ->Name(Translate::getAdminTranslation("Mobile phone", "AdminAddresses"))
                 ->MicroData("http://schema.org/Person","telephone")
                 ->Group($GroupName)
-                ->ReadOnly();
+                ->isReadOnly();
 
         //====================================================================//
         // VAT Number
-        $this->FieldsFactory()->Create(SPL_T_VARCHAR)
+        $this->fieldsFactory()->Create(SPL_T_VARCHAR)
                 ->Identifier("vat_number")
                 ->Name(Translate::getAdminTranslation("VAT Number", "AdminAddresses"))
                 ->MicroData("http://schema.org/Organization","vatID")
-                ->ReadOnly();        
+                ->isReadOnly();        
         
     }
     

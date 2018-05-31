@@ -40,7 +40,7 @@ trait ItemsTrait {
         
         //====================================================================//
         // Order Line Description
-        $this->FieldsFactory()->Create(SPL_T_VARCHAR)
+        $this->fieldsFactory()->Create(SPL_T_VARCHAR)
                 ->Identifier("product_name")
                 ->InList("lines")
                 ->Name(Translate::getAdminTranslation("Short description", "AdminProducts"))
@@ -51,7 +51,7 @@ trait ItemsTrait {
 
         //====================================================================//
         // Order Line Product Identifier
-        $this->FieldsFactory()->Create(self::Objects()->Encode( "Product" , SPL_T_ID))        
+        $this->fieldsFactory()->Create(self::Objects()->Encode( "Product" , SPL_T_ID))        
                 ->Identifier("product_id")
                 ->InList("lines")
                 ->Name(Translate::getAdminTranslation("Product ID", "AdminImport"))
@@ -62,7 +62,7 @@ trait ItemsTrait {
 
         //====================================================================//
         // Order Line Quantity
-        $this->FieldsFactory()->Create(SPL_T_INT)        
+        $this->fieldsFactory()->Create(SPL_T_INT)        
                 ->Identifier("product_quantity")
                 ->InList("lines")
                 ->Name(Translate::getAdminTranslation("Quantity", "AdminOrders"))
@@ -73,19 +73,19 @@ trait ItemsTrait {
 
         //====================================================================//
         // Order Line Discount
-        $this->FieldsFactory()->Create(SPL_T_DOUBLE)        
+        $this->fieldsFactory()->Create(SPL_T_DOUBLE)        
                 ->Identifier("reduction_percent")
                 ->InList("lines")
                 ->Name(Translate::getAdminTranslation("Discount (%)", "AdminGroups"))
                 ->MicroData("http://schema.org/Order","discount")
                 ->Group(Translate::getAdminTranslation("Products", "AdminOrders"))
                 ->Association("product_name@lines","product_quantity@lines","unit_price@lines")
-                ->ReadOnly()
+                ->isReadOnly()
                 ;                
 
         //====================================================================//
         // Order Line Unit Price
-        $this->FieldsFactory()->Create(SPL_T_PRICE)        
+        $this->fieldsFactory()->Create(SPL_T_PRICE)        
                 ->Identifier("unit_price")
                 ->InList("lines")
                 ->Name(Translate::getAdminTranslation("Price", "AdminOrders"))
@@ -96,14 +96,14 @@ trait ItemsTrait {
         
         //====================================================================//
         // Order Line Tax Name
-        $this->FieldsFactory()->Create(SPL_T_VARCHAR)        
+        $this->fieldsFactory()->Create(SPL_T_VARCHAR)        
                 ->Identifier("tax_name")
                 ->InList("lines")
                 ->Name(Translate::getAdminTranslation("Tax Name", "AdminOrders"))
                 ->MicroData("http://schema.org/PriceSpecification","valueAddedTaxName")        
                 ->Group(Translate::getAdminTranslation("Products", "AdminOrders"))
                 ->Association("product_name@lines","product_quantity@lines","unit_price@lines")
-                ->ReadOnly()
+                ->isReadOnly()
                 ;          
 
     }
@@ -121,7 +121,7 @@ trait ItemsTrait {
     {
         //====================================================================//
         // Check if List field & Init List Array
-        $FieldId = self::Lists()->InitOutput( $this->Out, "lines", $FieldName );
+        $FieldId = self::lists()->InitOutput( $this->Out, "lines", $FieldName );
         if ( !$FieldId ) {
             return;
         }
@@ -177,7 +177,7 @@ trait ItemsTrait {
             }
             //====================================================================//
             // Insert Data in List
-            self::Lists()->Insert( $this->Out, "lines", $FieldName, $key, $Value );             
+            self::lists()->Insert( $this->Out, "lines", $FieldName, $key, $Value );             
         }
         unset($this->In[$Key]);
     }
@@ -293,11 +293,11 @@ trait ItemsTrait {
         
         if ( !$OrderDetail->id ) {
             if ( $OrderDetail->add() != True) {  
-                return Splash::Log()->Err("ErrLocalTpl",__CLASS__,__FUNCTION__,"Unable to Create new Order Line.");
+                return Splash::log()->err("ErrLocalTpl",__CLASS__,__FUNCTION__,"Unable to Create new Order Line.");
             } 
         } else {
             if ( $OrderDetail->update() != True) {  
-                return Splash::Log()->Err("ErrLocalTpl",__CLASS__,__FUNCTION__,"Unable to Update Order Line.");
+                return Splash::log()->err("ErrLocalTpl",__CLASS__,__FUNCTION__,"Unable to Update Order Line.");
             }        
         }
     }    
@@ -314,7 +314,7 @@ trait ItemsTrait {
     {
         //====================================================================//
         // Check if List field & Init List Array
-        $FieldId = self::Lists()->InitOutput( $this->Out, "lines", $FieldName );
+        $FieldId = self::lists()->InitOutput( $this->Out, "lines", $FieldName );
         if ( !$FieldId ) {
             return;
         }
@@ -383,7 +383,7 @@ trait ItemsTrait {
         $key = count($this->Products) + 1;
         //====================================================================//
         // Insert Data in List
-        self::Lists()->Insert( $this->Out, "lines", $FieldName, $key, $Value ); 
+        self::lists()->Insert( $this->Out, "lines", $FieldName, $key, $Value ); 
     }
     
     /**
@@ -398,7 +398,7 @@ trait ItemsTrait {
     {
         //====================================================================//
         // Check if List field & Init List Array
-        $FieldId = self::Lists()->InitOutput( $this->Out, "lines", $FieldName );
+        $FieldId = self::lists()->InitOutput( $this->Out, "lines", $FieldName );
         if ( !$FieldId ) {
             return;
         }
@@ -459,7 +459,7 @@ trait ItemsTrait {
         $key = count($this->Products);
         //====================================================================//
         // Insert Data in List
-        self::Lists()->Insert( $this->Out, "lines", $FieldName, $key, $Value );        
+        self::lists()->Insert( $this->Out, "lines", $FieldName, $key, $Value );        
         
     }
     

@@ -43,7 +43,7 @@ trait ObjectsListTrait {
     {
         //====================================================================//
         // Stack Trace
-        Splash::Log()->Trace(__CLASS__,__FUNCTION__);             
+        Splash::log()->trace(__CLASS__,__FUNCTION__);             
         
         //====================================================================//
         // Build query
@@ -90,7 +90,7 @@ trait ObjectsListTrait {
         Db::getInstance()->executeS($sql);
         if (Db::getInstance()->getNumberError())
         {
-            return Splash::Log()->Err("ErrLocalTpl",__CLASS__,__FUNCTION__, Db::getInstance()->getMsgError());            
+            return Splash::log()->err("ErrLocalTpl",__CLASS__,__FUNCTION__, Db::getInstance()->getMsgError());            
         }
         //====================================================================//
         // Compute Total Number of Results
@@ -105,7 +105,7 @@ trait ObjectsListTrait {
         $result = Db::getInstance()->executeS($sql);   
         if (Db::getInstance()->getNumberError())
         {
-            return Splash::Log()->Err("ErrLocalTpl",__CLASS__,__FUNCTION__, Db::getInstance()->getMsgError());            
+            return Splash::log()->err("ErrLocalTpl",__CLASS__,__FUNCTION__, Db::getInstance()->getMsgError());            
         }        
         //====================================================================//
         // Init Result Array
@@ -121,7 +121,7 @@ trait ObjectsListTrait {
         // Prepare List result meta infos
         $Data["meta"]["current"]    =   count($Data);       // Store Current Number of results
         $Data["meta"]["total"]      =   $total;             // Store Total Number of results
-        Splash::Log()->Deb("MsgLocalTpl",__CLASS__,__FUNCTION__,(count($Data)-1)." Customers Found.");
+        Splash::log()->deb("MsgLocalTpl",__CLASS__,__FUNCTION__,(count($Data)-1)." Customers Found.");
         return $Data;
     }
     

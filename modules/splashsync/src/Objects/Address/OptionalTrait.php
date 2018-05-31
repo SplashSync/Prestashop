@@ -34,39 +34,39 @@ trait OptionalTrait {
         
         //====================================================================//
         // Phone
-        $this->FieldsFactory()->Create(SPL_T_PHONE)
+        $this->fieldsFactory()->Create(SPL_T_PHONE)
                 ->Identifier("phone")
                 ->Name(Translate::getAdminTranslation("Home phone", "AdminAddresses"))
                 ->MicroData("http://schema.org/PostalAddress","telephone");
         
         //====================================================================//
         // Mobile Phone
-        $this->FieldsFactory()->Create(SPL_T_PHONE)
+        $this->fieldsFactory()->Create(SPL_T_PHONE)
                 ->Identifier("phone_mobile")
                 ->Name(Translate::getAdminTranslation("Mobile phone", "AdminAddresses"))
                 ->MicroData("http://schema.org/Person","telephone");
 
         //====================================================================//
         // SIRET
-        $this->FieldsFactory()->Create(SPL_T_VARCHAR)
+        $this->fieldsFactory()->Create(SPL_T_VARCHAR)
                 ->Identifier("dni")
                 ->Name($this->spl->l("Company ID Number"))
                 ->MicroData("http://schema.org/Organization","taxID")
                 ->Group("ID")
-                ->NotTested();
+                ->isNotTested();
         
         //====================================================================//
         // VAT Number
-        $this->FieldsFactory()->Create(SPL_T_VARCHAR)
+        $this->fieldsFactory()->Create(SPL_T_VARCHAR)
                 ->Identifier("vat_number")
                 ->Name($this->spl->l("VAT number"))
                 ->MicroData("http://schema.org/Organization","vatID")
                 ->Group("ID")
-                ->NotTested();
+                ->isNotTested();
         
         //====================================================================//
         // Note
-        $this->FieldsFactory()->Create(SPL_T_VARCHAR)
+        $this->fieldsFactory()->Create(SPL_T_VARCHAR)
                 ->Identifier("other")
                 ->Name($this->spl->l("Note"))
                 ->MicroData("http://schema.org/PostalAddress","description")      

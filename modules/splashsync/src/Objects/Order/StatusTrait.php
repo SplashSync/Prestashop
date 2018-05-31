@@ -38,12 +38,12 @@ trait StatusTrait {
 
         //====================================================================//
         // Order Current Status
-        $this->FieldsFactory()->Create(SPL_T_VARCHAR)
+        $this->fieldsFactory()->Create(SPL_T_VARCHAR)
                 ->Identifier("status")
                 ->Name(Translate::getAdminTranslation("Order status", "AdminStatuses"))
                 ->Description(Translate::getAdminTranslation("Status of the order", "AdminSupplyOrdersChangeState"))
                 ->MicroData("http://schema.org/Order","orderStatus")
-                ->ReadOnly();      
+                ->isReadOnly();      
 
         //====================================================================//
         // ORDER STATUS FLAGS
@@ -55,42 +55,42 @@ trait StatusTrait {
         // Is Canceled
         // => There is no Diffrence Between a Draft & Canceled Order on Prestashop. 
         //      Any Non Validated Order is considered as Canceled
-        $this->FieldsFactory()->Create(SPL_T_BOOL)
+        $this->fieldsFactory()->Create(SPL_T_BOOL)
                 ->Identifier("isCanceled")
                 ->Name($Prefix . $this->spl->l("Canceled"))
                 ->MicroData("http://schema.org/OrderStatus","OrderCancelled")
                 ->Group(Translate::getAdminTranslation("Meta", "AdminThemes"))
                 ->Association( "isCanceled","isValidated","isClosed")
-                ->ReadOnly();     
+                ->isReadOnly();     
         
         //====================================================================//
         // Is Validated
-        $this->FieldsFactory()->Create(SPL_T_BOOL)
+        $this->fieldsFactory()->Create(SPL_T_BOOL)
                 ->Identifier("isValidated")
                 ->Name($Prefix . Translate::getAdminTranslation("Valid", "AdminCartRules"))
                 ->MicroData("http://schema.org/OrderStatus","OrderProcessing")
                 ->Group(Translate::getAdminTranslation("Meta", "AdminThemes"))
                 ->Association( "isCanceled","isValidated","isClosed")
-                ->ReadOnly();
+                ->isReadOnly();
         
         //====================================================================//
         // Is Closed
-        $this->FieldsFactory()->Create(SPL_T_BOOL)
+        $this->fieldsFactory()->Create(SPL_T_BOOL)
                 ->Identifier("isClosed")
                 ->Name($Prefix . Translate::getAdminTranslation("Closed", "AdminCustomers"))
                 ->MicroData("http://schema.org/OrderStatus","OrderDelivered")
                 ->Group(Translate::getAdminTranslation("Meta", "AdminThemes"))
                 ->Association( "isCanceled","isValidated","isClosed")
-                ->ReadOnly();
+                ->isReadOnly();
 
         //====================================================================//
         // Is Paid
-        $this->FieldsFactory()->Create(SPL_T_BOOL)
+        $this->fieldsFactory()->Create(SPL_T_BOOL)
                 ->Identifier("isPaid")
                 ->Name($Prefix . $this->spl->l("Paid"))
                 ->Group(Translate::getAdminTranslation("Meta", "AdminThemes"))
                 ->MicroData("http://schema.org/OrderStatus","OrderPaid")
-                ->ReadOnly();
+                ->isReadOnly();
         
     }
     

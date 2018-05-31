@@ -195,25 +195,25 @@ class Local
         //====================================================================//
         //  Verify - Server Identifier Given
         if ( empty(Configuration::get('SPLASH_WS_ID')) ) {
-            return Splash::Log()->Err("ErrSelfTestNoWsId");
+            return Splash::log()->err("ErrSelfTestNoWsId");
         }        
                 
         //====================================================================//
         //  Verify - Server Encrypt Key Given
         if ( empty(Configuration::get('SPLASH_WS_KEY')) ) {
-            return Splash::Log()->Err("ErrSelfTestNoWsKey");
+            return Splash::log()->err("ErrSelfTestNoWsKey");
         }        
         
         //====================================================================//
         //  Verify - Default Language is Given
         if ( empty(Configuration::get('SPLASH_LANG_ID')) ) {
-            return Splash::Log()->Err("ErrSelfTestDfLang");
+            return Splash::log()->err("ErrSelfTestDfLang");
         }        
         
         //====================================================================//
         //  Verify - User Selected
         if ( empty(Configuration::get('SPLASH_USER_ID')) ) {
-            return Splash::Log()->Err("ErrSelfTestNoUser");
+            return Splash::log()->err("ErrSelfTestNoUser");
         }        
 
         //====================================================================//
@@ -221,7 +221,7 @@ class Local
         foreach (Language::getLanguages() as $Language) {
             $Tmp = explode ( "-" , $Language["language_code"]);
             if ( count($Tmp) != 2 ) {
-                return Splash::Log()->Err("ErrSelfTestLangCode", $Language["language_code"]);
+                return Splash::log()->err("ErrSelfTestLangCode", $Language["language_code"]);
             }
         }
                 
@@ -232,7 +232,7 @@ class Local
             self::createSplashIdTable();
             // Check Again
             if ( !self::checkSplashIdTable() ) {
-                return Splash::Log()->Err("ErrSelfTestNoTable");
+                return Splash::log()->err("ErrSelfTestNoTable");
             }
         }   
 
@@ -347,7 +347,7 @@ class Local
         //====================================================================//
         // Safety Check
         if ( !class_exists("Employee") ) {
-            return Splash::Log()->Err('Commons  - Unable To Load Employee Class Definition.');
+            return Splash::log()->err('Commons  - Unable To Load Employee Class Definition.');
         }        
         
         //====================================================================//
@@ -361,13 +361,13 @@ class Local
         // Fetch Remote User
         $User = new Employee($UserId);
         if ( $User->id != $UserId )  {
-            return Splash::Log()->Err('Commons  - Unable To Load Employee from Splash Parameters.');
+            return Splash::log()->err('Commons  - Unable To Load Employee from Splash Parameters.');
         }
 
         //====================================================================//
         // Setup Remote User
         Context::getContext()->employee = $User;
-        return Splash::Log()->Deb('Commons  - Employee Loaded from Splash Parameters => ' . $User->email);
+        return Splash::log()->deb('Commons  - Employee Loaded from Splash Parameters => ' . $User->email);
     }
     
 //====================================================================//
@@ -508,7 +508,7 @@ class Local
         //====================================================================//
         // Safety Check
         if ( !class_exists("SplashSync") ) {
-            return Splash::Log()->Err('Commons  - Unable To Load Splash Module Class Definition.');
+            return Splash::log()->err('Commons  - Unable To Load Splash Module Class Definition.');
         }
         //====================================================================//
         // Create New Splash Module Instance
@@ -604,7 +604,7 @@ class Local
     {
         //====================================================================//
         // Stack Trace
-        Splash::Log()->Trace(__CLASS__,__FUNCTION__);    
+        Splash::log()->trace(__CLASS__,__FUNCTION__);    
         //====================================================================//        
         // Load Local Splash Sync Module
         if ( !isset($this->SplashSyncModule) ) {
@@ -618,23 +618,23 @@ class Local
         //====================================================================//        
         // Execute Module is Uninstall
         if ( $this->SplashSyncModule->uninstall() ) {
-            Splash::Log()->Msg('[SPLASH] Splash Module Unintall Done');
+            Splash::log()->msg('[SPLASH] Splash Module Unintall Done');
         }
         //====================================================================//        
         // Execute Module is Install
         $this->SplashSyncModule->updateTranslationsAfterInstall(False);
         if ( $this->SplashSyncModule->install() ) {
-            Splash::Log()->Msg('[SPLASH] Splash Module Intall Done');
-            echo Splash::Log()->GetConsoleLog(True);
+            Splash::log()->msg('[SPLASH] Splash Module Intall Done');
+            echo Splash::log()->GetConsoleLog(True);
             return True;
         }
         //====================================================================//        
         // Import & Display Errors
-        Splash::Log()->Err('[SPLASH] Splash Module Intall Failled');
+        Splash::log()->err('[SPLASH] Splash Module Intall Failled');
         foreach ($this->SplashSyncModule->getErrors() as $Error) {
-            Splash::Log()->Err('[SPLASH] Mod. Install : ' . $Error);
+            Splash::log()->err('[SPLASH] Mod. Install : ' . $Error);
         }
-        echo Splash::Log()->GetConsoleLog(True);
+        echo Splash::log()->GetConsoleLog(True);
         return False;
     }
         

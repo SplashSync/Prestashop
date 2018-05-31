@@ -37,7 +37,7 @@ trait MainTrait {
         
         //====================================================================//
         // Firstname
-        $this->FieldsFactory()->Create(SPL_T_VARCHAR)
+        $this->fieldsFactory()->Create(SPL_T_VARCHAR)
                 ->Identifier("firstname")
                 ->Name(Translate::getAdminTranslation("First name", "AdminCustomers"))
                 ->MicroData("http://schema.org/Person","familyName")
@@ -47,7 +47,7 @@ trait MainTrait {
         
         //====================================================================//
         // Lastname
-        $this->FieldsFactory()->Create(SPL_T_VARCHAR)
+        $this->fieldsFactory()->Create(SPL_T_VARCHAR)
                 ->Identifier("lastname")
                 ->Name(Translate::getAdminTranslation("Last name", "AdminCustomers"))
                 ->MicroData("http://schema.org/Person","givenName")
@@ -57,27 +57,27 @@ trait MainTrait {
         
         //====================================================================//
         // Gender Name
-        $this->FieldsFactory()->Create(SPL_T_VARCHAR)
+        $this->fieldsFactory()->Create(SPL_T_VARCHAR)
                 ->Identifier("gender_name")
                 ->Name(Translate::getAdminTranslation("Social title", "AdminCustomers"))
                 ->MicroData("http://schema.org/Person","honorificPrefix")
-                ->ReadOnly();       
+                ->isReadOnly();       
 
         //====================================================================//
         // Gender Type
         $desc = Translate::getAdminTranslation("Social title", "AdminCustomers") . " ; 0 => Male // 1 => Female // 2 => Neutral";
-        $this->FieldsFactory()->Create(SPL_T_INT)
+        $this->fieldsFactory()->Create(SPL_T_INT)
                 ->Identifier("gender_type")
                 ->Name(Translate::getAdminTranslation("Social title", "AdminCustomers") . " (ID)")
                 ->MicroData("http://schema.org/Person","gender")
                 ->Description($desc)
                 ->Group(Translate::getAdminTranslation("Meta", "AdminThemes"))
                 ->AddChoices(array("0" => "Male", "1" => "female"))
-                ->NotTested();       
+                ->isNotTested();       
 
         //====================================================================//
         // Company
-        $this->FieldsFactory()->Create(SPL_T_VARCHAR)
+        $this->fieldsFactory()->Create(SPL_T_VARCHAR)
                 ->Identifier("company")
                 ->Name(Translate::getAdminTranslation("Company", "AdminCustomers"))
                 ->MicroData("http://schema.org/Organization","legalName")
@@ -85,25 +85,25 @@ trait MainTrait {
         
         //====================================================================//
         // SIRET
-        $this->FieldsFactory()->Create(SPL_T_VARCHAR)
+        $this->fieldsFactory()->Create(SPL_T_VARCHAR)
                 ->Identifier("siret")
                 ->Name(Translate::getAdminTranslation("SIRET", "AdminCustomers"))
                 ->MicroData("http://schema.org/Organization","taxID")
                 ->Group("ID")
-                ->NotTested();
+                ->isNotTested();
         
         //====================================================================//
         // APE
-        $this->FieldsFactory()->Create(SPL_T_VARCHAR)
+        $this->fieldsFactory()->Create(SPL_T_VARCHAR)
                 ->Identifier("ape")
                 ->Name(Translate::getAdminTranslation("APE", "AdminCustomers"))
                 ->MicroData("http://schema.org/Organization","naics")
                 ->Group("ID")
-                ->NotTested();
+                ->isNotTested();
         
         //====================================================================//
         // WebSite
-        $this->FieldsFactory()->Create(SPL_T_URL)
+        $this->fieldsFactory()->Create(SPL_T_URL)
                 ->Identifier("website")
                 ->Name(Translate::getAdminTranslation("Website", "AdminCustomers"))
                 ->MicroData("http://schema.org/Organization","url");
@@ -208,7 +208,7 @@ trait MainTrait {
             // Write SIRET With Verification
             case 'siret':
                 if ( !Validate::isSiret($Data) ) {
-                    Splash::Log()->War("MsgLocalTpl",__CLASS__,__FUNCTION__,"Given SIRET Number is Invalid. Skipped");
+                    Splash::log()->war("MsgLocalTpl",__CLASS__,__FUNCTION__,"Given SIRET Number is Invalid. Skipped");
                     break;
                 }
                 $this->setSimple($FieldName, $Data);
@@ -218,7 +218,7 @@ trait MainTrait {
             // Write APE With Verification
             case 'ape':
                 if ( !Validate::isApe($Data) ) {
-                    Splash::Log()->War("MsgLocalTpl",__CLASS__,__FUNCTION__,"Given APE Code is Invalid. Skipped");
+                    Splash::log()->war("MsgLocalTpl",__CLASS__,__FUNCTION__,"Given APE Code is Invalid. Skipped");
                     break;
                 }
                 $this->setSimple($FieldName, $Data);
@@ -238,7 +238,7 @@ trait MainTrait {
                 if ( ( $gendertype == False ) ) {
                     $genders = Gender::getGenders(Context::getContext()->language->id);
                     $gendertype = $genders->getFirst();
-                    Splash::Log()->War("MsgLocalTpl",__CLASS__,__FUNCTION__,"This Gender Type doesn't exist.");
+                    Splash::log()->war("MsgLocalTpl",__CLASS__,__FUNCTION__,"This Gender Type doesn't exist.");
                 }
 
                 //====================================================================//

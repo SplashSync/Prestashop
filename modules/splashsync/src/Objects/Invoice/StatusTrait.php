@@ -37,12 +37,12 @@ trait StatusTrait
         
        //====================================================================//
         // Order Current Status
-        $this->FieldsFactory()->Create(SPL_T_VARCHAR)
+        $this->fieldsFactory()->Create(SPL_T_VARCHAR)
                 ->Identifier("status")
                 ->Name(Translate::getAdminTranslation("Status", "AdminOrders"))
                 ->MicroData("http://schema.org/Invoice","paymentStatus")
-                ->ReadOnly()
-                ->NotTested();
+                ->isReadOnly()
+                ->isNotTested();
         
         //====================================================================//
         // INVOICE STATUS FLAGS
@@ -54,33 +54,33 @@ trait StatusTrait
         // Is Canceled
         // => There is no Diffrence Between a Draft & Canceled Order on Prestashop. 
         //      Any Non Validated Order is considered as Canceled
-        $this->FieldsFactory()->Create(SPL_T_BOOL)
+        $this->fieldsFactory()->Create(SPL_T_BOOL)
                 ->Identifier("isCanceled")
                 ->Name($Prefix . $this->spl->l("Canceled"))
                 ->MicroData("http://schema.org/PaymentStatusType","PaymentDeclined")
                 ->Association( "isCanceled","isValidated")
                 ->Group(Translate::getAdminTranslation("Meta", "AdminThemes"))
-                ->ReadOnly();     
+                ->isReadOnly();     
         
         //====================================================================//
         // Is Validated
-        $this->FieldsFactory()->Create(SPL_T_BOOL)
+        $this->fieldsFactory()->Create(SPL_T_BOOL)
                 ->Identifier("isValidated")
                 ->Name($Prefix . Translate::getAdminTranslation("Valid", "AdminCartRules"))
                 ->MicroData("http://schema.org/PaymentStatusType","PaymentDue")
                 ->Association( "isCanceled","isValidated")
                 ->Group(Translate::getAdminTranslation("Meta", "AdminThemes"))
-                ->ReadOnly();
+                ->isReadOnly();
 
         //====================================================================//
         // Is Paid
-        $this->FieldsFactory()->Create(SPL_T_BOOL)
+        $this->fieldsFactory()->Create(SPL_T_BOOL)
                 ->Identifier("isPaid")
                 ->Name($Prefix . $this->spl->l("Paid"))
                 ->MicroData("http://schema.org/PaymentStatusType","PaymentComplete")
-                ->ReadOnly()
+                ->isReadOnly()
                 ->Group(Translate::getAdminTranslation("Meta", "AdminThemes"))
-                ->NotTested();
+                ->isNotTested();
         
         return;
     }

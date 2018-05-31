@@ -125,10 +125,10 @@ class Order extends AbstractObject
         Splash::Translator()->Load("objects@local");       
         //====================================================================//
         // Load Splash Module
-        $this->spl = Splash::Local()->getLocalModule();
+        $this->spl = Splash::local()->getLocalModule();
         //====================================================================//
         // Load Default Language
-        $this->LangId   = Splash::Local()->LoadDefaultLanguage();
+        $this->LangId   = Splash::local()->LoadDefaultLanguage();
         //====================================================================//
         // Load OsWs Currency
         $this->Currency = new Currency(Configuration::get('PS_CURRENCY_DEFAULT'));

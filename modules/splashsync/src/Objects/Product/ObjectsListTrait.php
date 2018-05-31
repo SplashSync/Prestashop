@@ -43,7 +43,7 @@ trait ObjectsListTrait {
     */
     public function ObjectsList($filter=NULL,$params=NULL)
     {
-        Splash::Log()->Deb("MsgLocalFuncTrace",__CLASS__,__FUNCTION__);             
+        Splash::log()->deb("MsgLocalFuncTrace",__CLASS__,__FUNCTION__);             
         
         //====================================================================//
         // Prepare SQL request for reading in Database
@@ -99,10 +99,10 @@ trait ObjectsListTrait {
         //====================================================================//
         // Execute final request
         Db::getInstance()->executeS($sql);
-        Splash::Log()->Deb("Products - Get  List SQL=\"".$sql."\"");
+        Splash::log()->deb("Products - Get  List SQL=\"".$sql."\"");
         if (Db::getInstance()->getNumberError())
         {
-            return Splash::Log()->Err("ErrLocalTpl",__CLASS__,__FUNCTION__," Error : " . Db::getInstance()->getMsgError());
+            return Splash::log()->err("ErrLocalTpl",__CLASS__,__FUNCTION__," Error : " . Db::getInstance()->getMsgError());
         } 
         //====================================================================//
         // Compute Total Number of Results
@@ -171,7 +171,7 @@ trait ObjectsListTrait {
         // Compute List Meta Informations
         $Data["meta"]["current"]    =   count($Data);   // Store Current Number of results
         $Data["meta"]["total"]      =   $Total;         // Store Total Number of results
-        Splash::Log()->Deb("MsgLocalTpl",__CLASS__,__FUNCTION__, " " . $Data["meta"]["current"] . " Products Found.");
+        Splash::log()->deb("MsgLocalTpl",__CLASS__,__FUNCTION__, " " . $Data["meta"]["current"] . " Products Found.");
         return $Data;
     }
     

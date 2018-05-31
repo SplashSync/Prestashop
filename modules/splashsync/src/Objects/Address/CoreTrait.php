@@ -34,7 +34,7 @@ trait CoreTrait {
     {
         //====================================================================//
         // Alias
-        $this->FieldsFactory()->Create(SPL_T_VARCHAR)
+        $this->fieldsFactory()->Create(SPL_T_VARCHAR)
                 ->Identifier("alias")
                 ->Name($this->spl->l("Address alias"))
                 ->Name(Translate::getAdminTranslation("Address alias", "AdminAddresses"))
@@ -42,7 +42,7 @@ trait CoreTrait {
         
         //====================================================================//
         // Customer
-        $this->FieldsFactory()->Create(self::Objects()->Encode( "ThirdParty" , SPL_T_ID))
+        $this->fieldsFactory()->Create(self::Objects()->Encode( "ThirdParty" , SPL_T_ID))
                 ->Identifier("id_customer")
                 ->Name(Translate::getAdminTranslation("Customer ID", "AdminCustomerThreads"))
                 ->MicroData("http://schema.org/Organization","ID")
@@ -50,7 +50,7 @@ trait CoreTrait {
         
         //====================================================================//
         // Company
-        $this->FieldsFactory()->Create(SPL_T_VARCHAR)
+        $this->fieldsFactory()->Create(SPL_T_VARCHAR)
                 ->Identifier("company")
                 ->Name(Translate::getAdminTranslation("Company", "AdminCustomers"))
                 ->MicroData("http://schema.org/Organization","legalName")
@@ -58,7 +58,7 @@ trait CoreTrait {
         
         //====================================================================//
         // Firstname
-        $this->FieldsFactory()->Create(SPL_T_VARCHAR)
+        $this->fieldsFactory()->Create(SPL_T_VARCHAR)
                 ->Identifier("firstname")
                 ->Name(Translate::getAdminTranslation("First name", "AdminCustomers"))
                 ->MicroData("http://schema.org/Person","familyName")
@@ -68,7 +68,7 @@ trait CoreTrait {
         
         //====================================================================//
         // Lastname
-        $this->FieldsFactory()->Create(SPL_T_VARCHAR)
+        $this->fieldsFactory()->Create(SPL_T_VARCHAR)
                 ->Identifier("lastname")
                 ->Name(Translate::getAdminTranslation("Last name", "AdminCustomers"))
                 ->MicroData("http://schema.org/Person","givenName")
@@ -162,13 +162,13 @@ trait CoreTrait {
         //====================================================================//
         // Verify Object Type
         if ( self::Objects()->Type( $Data ) !== "ThirdParty" ) {
-            return Splash::Log()->Err("ErrLocalTpl",__CLASS__,__FUNCTION__," Wrong Object Type (" . self::Objects()->Type( $Data ) . ").");
+            return Splash::log()->err("ErrLocalTpl",__CLASS__,__FUNCTION__," Wrong Object Type (" . self::Objects()->Type( $Data ) . ").");
         } 
         //====================================================================//
         // Verify Object Exists
         $Customer   =   new Customer($Id);
         if ( $Customer->id != $Id ) {
-            return Splash::Log()->Err("ErrLocalTpl",__CLASS__,__FUNCTION__," Unable to load Address Customer(" . $Id . ").");
+            return Splash::log()->err("ErrLocalTpl",__CLASS__,__FUNCTION__," Unable to load Address Customer(" . $Id . ").");
         } 
         //====================================================================//
         // Update Link

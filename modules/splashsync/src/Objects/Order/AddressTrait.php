@@ -29,7 +29,7 @@ trait AddressTrait {
         
         //====================================================================//
         // Billing Address
-        $this->FieldsFactory()->Create(self::Objects()->Encode( "Address" , SPL_T_ID))
+        $this->fieldsFactory()->Create(self::Objects()->Encode( "Address" , SPL_T_ID))
                 ->Identifier("id_address_invoice")
                 ->Name('Billing Address ID')
                 ->MicroData("http://schema.org/Order","billingAddress")
@@ -37,7 +37,7 @@ trait AddressTrait {
         
         //====================================================================//
         // Shipping Address
-        $this->FieldsFactory()->Create(self::Objects()->Encode( "Address" , SPL_T_ID))
+        $this->fieldsFactory()->Create(self::Objects()->Encode( "Address" , SPL_T_ID))
                 ->Identifier("id_address_delivery")
                 ->Name('Shipping Address ID')
                 ->MicroData("http://schema.org/Order","orderDelivery")

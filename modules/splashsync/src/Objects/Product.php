@@ -132,11 +132,11 @@ class Product extends AbstractObject
        
         //====================================================================//
         // Load Splash Module
-        $this->spl = Splash::Local()->getLocalModule();
+        $this->spl = Splash::local()->getLocalModule();
 
         //====================================================================//
         // Load Default Language
-        $this->LangId   = Splash::Local()->LoadDefaultLanguage();
+        $this->LangId   = Splash::local()->LoadDefaultLanguage();
         
         //====================================================================//
         // Load OsWs Currency
@@ -144,7 +144,7 @@ class Product extends AbstractObject
 
         //====================================================================//
         // Load User
-        if ( !Splash::Local()->LoadLocalUser() )     { 
+        if ( !Splash::local()->LoadLocalUser() )     { 
             return False;
         }
         

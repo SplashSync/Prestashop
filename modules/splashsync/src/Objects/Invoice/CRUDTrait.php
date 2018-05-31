@@ -40,17 +40,17 @@ trait CRUDTrait
     {
         //====================================================================//
         // Stack Trace
-        Splash::Log()->Trace(__CLASS__,__FUNCTION__); 
+        Splash::log()->trace(__CLASS__,__FUNCTION__); 
         
         //====================================================================//
         // Load Object         
         $Object   = new OrderInvoice($Id);
         if ( $Object->id != $Id )   {
-            return Splash::Log()->Err("ErrLocalTpl",__CLASS__,__FUNCTION__," Unable to load Invoice (" . $Id . ").");
+            return Splash::log()->err("ErrLocalTpl",__CLASS__,__FUNCTION__," Unable to load Invoice (" . $Id . ").");
         }
         $this->Order    = new Order($Object->id_order);
         if ( $this->Order->id != $Object->id_order )   {
-            return Splash::Log()->Err("ErrLocalTpl",__CLASS__,__FUNCTION__," Unable to load Invoice Order (" . $Object->id_order . ").");
+            return Splash::log()->err("ErrLocalTpl",__CLASS__,__FUNCTION__," Unable to load Invoice Order (" . $Object->id_order . ").");
         }
         
         //====================================================================//
@@ -76,11 +76,11 @@ trait CRUDTrait
     {
         //====================================================================//
         // Stack Trace
-        Splash::Log()->Trace(__CLASS__,__FUNCTION__);   
+        Splash::log()->trace(__CLASS__,__FUNCTION__);   
         
         //====================================================================//
         // An Invoice Cannot Get deleted
-        Splash::Log()->Err("ErrLocalTpl",__CLASS__,__FUNCTION__,"You Cannot Create Prestashop Invoices");        
+        Splash::log()->err("ErrLocalTpl",__CLASS__,__FUNCTION__,"You Cannot Create Prestashop Invoices");        
         
         return Null;
     }
@@ -96,14 +96,14 @@ trait CRUDTrait
     {
         //====================================================================//
         // Stack Trace
-        Splash::Log()->Trace(__CLASS__,__FUNCTION__);  
+        Splash::log()->trace(__CLASS__,__FUNCTION__);  
         if ( !$Needed) {
             return (int) $this->Object->id;
         }
         
         //====================================================================//
         // An Invoice Cannot Get deleted
-        Splash::Log()->Err("ErrLocalTpl",__CLASS__,__FUNCTION__,"You Cannot Update Prestashop Invoices");
+        Splash::log()->err("ErrLocalTpl",__CLASS__,__FUNCTION__,"You Cannot Update Prestashop Invoices");
         
         return (int) $this->Object->id;
     }  
@@ -119,11 +119,11 @@ trait CRUDTrait
     {
         //====================================================================//
         // Stack Trace
-        Splash::Log()->Trace(__CLASS__,__FUNCTION__);    
+        Splash::log()->trace(__CLASS__,__FUNCTION__);    
         
         //====================================================================//
         // An Invoice Cannot Get deleted
-        Splash::Log()->Err("ErrLocalTpl",__CLASS__,__FUNCTION__,"You Cannot Delete Prestashop Invoices");
+        Splash::log()->err("ErrLocalTpl",__CLASS__,__FUNCTION__,"You Cannot Delete Prestashop Invoices");
         
         return True;
     }    

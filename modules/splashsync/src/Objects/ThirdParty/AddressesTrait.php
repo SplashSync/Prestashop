@@ -32,13 +32,13 @@ trait AddressesTrait {
     {
         //====================================================================//
         // Address List
-        $this->FieldsFactory()->Create(self::Objects()->Encode( "Address" , SPL_T_ID))
+        $this->fieldsFactory()->Create(self::Objects()->Encode( "Address" , SPL_T_ID))
                 ->Identifier("address")
                 ->InList("contacts")
                 ->Name(Translate::getAdminTranslation("Address", "AdminCustomers"))
                 ->MicroData("http://schema.org/Organization","address")
                 ->Group(Translate::getAdminTranslation("Addresses", "AdminCustomers"))
-                ->ReadOnly();
+                ->isReadOnly();
     }
   
     

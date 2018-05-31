@@ -34,42 +34,42 @@ trait CoreTrait {
         
         //====================================================================//
         // Customer Object
-        $this->FieldsFactory()->Create(self::Objects()->Encode( "ThirdParty" , SPL_T_ID))
+        $this->fieldsFactory()->Create(self::Objects()->Encode( "ThirdParty" , SPL_T_ID))
                 ->Identifier("id_customer")
                 ->Name(Translate::getAdminTranslation("Customer ID", "AdminCustomerThreads"))
                 ->isRequired();  
         if ( get_class($this) ===  "Splash\Local\Objects\Invoice" ) {
-            $this->FieldsFactory()->MicroData("http://schema.org/Invoice","customer");
+            $this->fieldsFactory()->MicroData("http://schema.org/Invoice","customer");
         } else {
-            $this->FieldsFactory()->MicroData("http://schema.org/Organization","ID");
+            $this->fieldsFactory()->MicroData("http://schema.org/Organization","ID");
         }
         
         //====================================================================//
         // Customer Email
-        $this->FieldsFactory()->Create(SPL_T_EMAIL)
+        $this->fieldsFactory()->Create(SPL_T_EMAIL)
                 ->Identifier("email")
                 ->Name(Translate::getAdminTranslation("Email address", "AdminCustomers"))
                 ->MicroData("http://schema.org/ContactPoint","email")
-                ->ReadOnly(); 
+                ->isReadOnly(); 
         
         //====================================================================//
         // Reference
-        $this->FieldsFactory()->Create(SPL_T_VARCHAR)
+        $this->fieldsFactory()->Create(SPL_T_VARCHAR)
                 ->Identifier("reference")
                 ->Name(Translate::getAdminTranslation("Reference", "AdminOrders"))
                 ->MicroData("http://schema.org/Order","orderNumber")       
                 ->AddOption("maxLength", 8)
                 ->isRequired()                
-                ->IsListed();
+                ->isListed();
 
         //====================================================================//
         // Order Date 
-        $this->FieldsFactory()->Create(SPL_T_DATE)
+        $this->fieldsFactory()->Create(SPL_T_DATE)
                 ->Identifier("order_date")
                 ->Name(Translate::getAdminTranslation("Date", "AdminProducts"))
                 ->MicroData("http://schema.org/Order","orderDate")
-                ->ReadOnly()
-                ->IsListed();
+                ->isReadOnly()
+                ->isListed();
         
     }    
     

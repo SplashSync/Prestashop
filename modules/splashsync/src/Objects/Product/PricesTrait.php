@@ -46,7 +46,7 @@ trait PricesTrait {
         
         //====================================================================//
         // Product Selling Price
-        $this->FieldsFactory()->Create(SPL_T_PRICE)
+        $this->fieldsFactory()->Create(SPL_T_PRICE)
                 ->Identifier("price")
                 ->Name(Translate::getAdminTranslation("Price (tax excl.)", "AdminProducts") . " (" . $this->Currency->sign . ")")
                 ->MicroData("http://schema.org/Product","price")
@@ -55,7 +55,7 @@ trait PricesTrait {
         
         //====================================================================//
         // Product Selling Base Price
-        $this->FieldsFactory()->Create(SPL_T_PRICE)
+        $this->fieldsFactory()->Create(SPL_T_PRICE)
                 ->Identifier("price-base")
                 ->Name(Translate::getAdminTranslation("Price (tax excl.)", "AdminProducts") . " Base (" . $this->Currency->sign . ")")
                 ->MicroData("http://schema.org/Product","basePrice")
@@ -64,7 +64,7 @@ trait PricesTrait {
         
         //====================================================================//
         // WholeSale Price
-        $this->FieldsFactory()->Create(SPL_T_PRICE)
+        $this->fieldsFactory()->Create(SPL_T_PRICE)
                 ->Identifier("price-wholesale")
                 ->Name(Translate::getAdminTranslation("Wholesale price", "AdminProducts") . " Base (" . $this->Currency->sign . ")")
                 ->Group($GroupName2)
@@ -263,7 +263,7 @@ trait PricesTrait {
         if ( abs($this->NewPrice["vat"] - $this->Object->tax_rate) > 1E-6 ) {
             //====================================================================//
             // Search For Tax Id Group with Given Tax Rate and Country
-            $NewTaxRateGroupId  =   Splash::Local()->getTaxRateGroupId($this->NewPrice["vat"]);
+            $NewTaxRateGroupId  =   Splash::local()->getTaxRateGroupId($this->NewPrice["vat"]);
             //====================================================================//
             // If Tax Group Found, Update Product
             if ( ( $NewTaxRateGroupId >= 0 ) && ( $NewTaxRateGroupId != $this->Object->id_tax_rules_group ) ) {
@@ -271,7 +271,7 @@ trait PricesTrait {
                  $this->Object->tax_rate            = $this->NewPrice["vat"];
                  $this->needUpdate();
             } else {
-                Splash::Log()->War("VAT Rate Update : Unable to find this tax rate localy (" . $this->NewPrice["vat"] . ")"); 
+                Splash::log()->war("VAT Rate Update : Unable to find this tax rate localy (" . $this->NewPrice["vat"] . ")"); 
             }
         }     
         

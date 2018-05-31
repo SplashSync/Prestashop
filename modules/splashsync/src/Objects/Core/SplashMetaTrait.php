@@ -36,7 +36,7 @@ trait SplashMetaTrait {
     {
         //====================================================================//
         // Splash Unique Object Id
-        $this->FieldsFactory()->Create(SPL_T_VARCHAR)
+        $this->fieldsFactory()->Create(SPL_T_VARCHAR)
                 ->Identifier("splash_id")
                 ->Name("Splash Id")
                 ->Group(Translate::getAdminTranslation("Meta", "AdminThemes"))
@@ -59,7 +59,7 @@ trait SplashMetaTrait {
         switch ($FieldName)
         {
             case 'splash_id':
-                $this->Out[$FieldName] = Splash::Local()->getSplashId( self::$NAME , $this->Object->id);    
+                $this->Out[$FieldName] = Splash::local()->getSplashId( self::$NAME , $this->Object->id);    
                 break;              
             default:
                 return;
@@ -83,7 +83,7 @@ trait SplashMetaTrait {
         {
             case 'splash_id':
                 if ($this->Object->id) {
-                    Splash::Local()->setSplashId( self::$NAME , $this->Object->id , $Data);    
+                    Splash::local()->setSplashId( self::$NAME , $this->Object->id , $Data);    
                 } else {
                     $this->NewSplashId = $Data;                   
                 }

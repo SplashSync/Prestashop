@@ -131,10 +131,10 @@ class Invoice extends AbstractObject
         Splash::Translator()->Load("objects@local");       
         //====================================================================//
         // Load Splash Module
-        $this->spl = Splash::Local()->getLocalModule();        
+        $this->spl = Splash::local()->getLocalModule();        
         //====================================================================//
         // Load Default Language
-        $this->LangId   = Splash::Local()->LoadDefaultLanguage();
+        $this->LangId   = Splash::local()->LoadDefaultLanguage();
         //====================================================================//
         // Load OsWs Currency
         $this->Currency = new Currency(Configuration::get('PS_CURRENCY_DEFAULT'));
@@ -155,14 +155,14 @@ class Invoice extends AbstractObject
 //    {
 //        //====================================================================//
 //        // Stack Trace
-//        Splash::Log()->Trace(__CLASS__,__FUNCTION__);             
+//        Splash::log()->trace(__CLASS__,__FUNCTION__);             
 //        //====================================================================//
 //        //  Load Local Translation File
 //        Splash::Translator()->Load("objects@local");       
 //        
 //        //====================================================================//
 //        // Load Splash Module
-//        $this->spl = Splash::Local()->getLocalModule();
+//        $this->spl = Splash::local()->getLocalModule();
 //        if ( $this->spl == False ) {
 //            return False;
 //        }       
@@ -184,7 +184,7 @@ class Invoice extends AbstractObject
 //        $this->buildPaymentLineFields();
 //        //====================================================================//
 //        // Publish Fields
-//        return $this->FieldsFactory()->Publish();
+//        return $this->fieldsFactory()->Publish();
 //    }
 //    
 //    /**
@@ -203,7 +203,7 @@ class Invoice extends AbstractObject
 //    {
 //        //====================================================================//
 //        // Stack Trace
-//        Splash::Log()->Trace(__CLASS__,__FUNCTION__);             
+//        Splash::log()->trace(__CLASS__,__FUNCTION__);             
 //        
 //        //===============================customer=====================================//
 //        // Build query
@@ -247,7 +247,7 @@ class Invoice extends AbstractObject
 //        Db::getInstance()->executeS($sql);
 //        if (Db::getInstance()->getNumberError())
 //        {
-//            return Splash::Log()->Err("ErrLocalTpl",__CLASS__,__FUNCTION__, Db::getInstance()->getMsgError());            
+//            return Splash::log()->err("ErrLocalTpl",__CLASS__,__FUNCTION__, Db::getInstance()->getMsgError());            
 //        }
 //        //====================================================================//
 //        // Compute Total Number of Results
@@ -260,7 +260,7 @@ class Invoice extends AbstractObject
 //        $result = Db::getInstance()->executeS($sql);   
 //        if (Db::getInstance()->getNumberError())
 //        {
-//            return Splash::Log()->Err("ErrLocalTpl",__CLASS__,__FUNCTION__, Db::getInstance()->getMsgError());            
+//            return Splash::log()->err("ErrLocalTpl",__CLASS__,__FUNCTION__, Db::getInstance()->getMsgError());            
 //        }        
 //        //====================================================================//
 //        // Init Result Array
@@ -277,7 +277,7 @@ class Invoice extends AbstractObject
 //        // Prepare List result meta infos
 //        $Data["meta"]["current"]    =   count($Data);  // Store Current Number of results
 //        $Data["meta"]["total"]      =   $total;  // Store Total Number of results
-//        Splash::Log()->Deb("MsgLocalTpl",__CLASS__,__FUNCTION__,(count($Data)-1)." Invoices Found.");
+//        Splash::log()->deb("MsgLocalTpl",__CLASS__,__FUNCTION__,(count($Data)-1)." Invoices Found.");
 //        return $Data;
 //    }
 //    
@@ -290,13 +290,13 @@ class Invoice extends AbstractObject
 //    {
 //        //====================================================================//
 //        // Stack Trace
-//        Splash::Log()->Trace(__CLASS__,__FUNCTION__);  
+//        Splash::log()->trace(__CLASS__,__FUNCTION__);  
 //        //====================================================================//
 //        // Init Reading
 //        $this->In = $list;
 //        //====================================================================//
 //        // Load Splash Module
-//        $this->spl = Splash::Local()->getLocalModule();
+//        $this->spl = Splash::local()->getLocalModule();
 //        if ( $this->spl == False ) {
 //            return False;
 //        }        
@@ -304,11 +304,11 @@ class Invoice extends AbstractObject
 //        // Init Object 
 //        $this->Object = new OrderInvoice($id);
 //        if ( $this->Object->id != $id )   {
-//            return Splash::Log()->Err("ErrLocalTpl",__CLASS__,__FUNCTION__," Unable to load Invoice (" . $id . ").");
+//            return Splash::log()->err("ErrLocalTpl",__CLASS__,__FUNCTION__," Unable to load Invoice (" . $id . ").");
 //        }
 //        $this->Order = new \Order($this->Object->id_order);
 //        if ( $this->Order->id != $this->Object->id_order )   {
-//            return Splash::Log()->Err("ErrLocalTpl",__CLASS__,__FUNCTION__," Unable to load Invoice Order (" . $this->Object->id_order . ").");
+//            return Splash::log()->err("ErrLocalTpl",__CLASS__,__FUNCTION__," Unable to load Invoice Order (" . $this->Object->id_order . ").");
 //        }
 //        $this->Products     =   $this->Object->getProducts();
 //        $this->Payments     =   $this->Object->getOrderPaymentCollection();
@@ -333,14 +333,14 @@ class Invoice extends AbstractObject
 //        // Verify Requested Fields List is now Empty => All Fields Read Successfully
 //        if ( count($this->In) ) {
 //            foreach (clone $this->In as $FieldName) {
-//                Splash::Log()->War("ErrLocalWrongField",__CLASS__,__FUNCTION__, $FieldName);
+//                Splash::log()->war("ErrLocalWrongField",__CLASS__,__FUNCTION__, $FieldName);
 //            }
 //            return False;
 //        }        
 //        //====================================================================//
 //        // Return Data
 //        //====================================================================//
-//        Splash::Log()->Deb("MsgLocalTpl",__CLASS__,__FUNCTION__," DATA : " . print_r($this->Out,1));
+//        Splash::log()->deb("MsgLocalTpl",__CLASS__,__FUNCTION__," DATA : " . print_r($this->Out,1));
 //        return $this->Out; 
 //    }
 //        
@@ -354,11 +354,11 @@ class Invoice extends AbstractObject
 //    {
 //        //====================================================================//
 //        // Stack Trace
-//        Splash::Log()->Trace(__CLASS__,__FUNCTION__);
+//        Splash::log()->trace(__CLASS__,__FUNCTION__);
 //        
 //        //====================================================================//
 //        // An Order Cannot Get deleted
-//        Splash::Log()->Err("ErrLocalTpl",__CLASS__,__FUNCTION__,"You Cannot Update Prestashop Invoices");
+//        Splash::log()->err("ErrLocalTpl",__CLASS__,__FUNCTION__,"You Cannot Update Prestashop Invoices");
 //
 //        return (int) $id;        
 //    }       
@@ -372,11 +372,11 @@ class Invoice extends AbstractObject
 //    {
 //        //====================================================================//
 //        // Stack Trace
-//        Splash::Log()->Trace(__CLASS__,__FUNCTION__);  
+//        Splash::log()->trace(__CLASS__,__FUNCTION__);  
 //        
 //        //====================================================================//
 //        // An Order Cannot Get deleted
-//        Splash::Log()->Err("ErrLocalTpl",__CLASS__,__FUNCTION__,"You Cannot Delete Prestashop Invoices");
+//        Splash::log()->err("ErrLocalTpl",__CLASS__,__FUNCTION__,"You Cannot Delete Prestashop Invoices");
 //        return True;
 //    }       
 //
@@ -391,7 +391,7 @@ class Invoice extends AbstractObject
 //        
 //        //====================================================================//
 //        // Customer Object
-//        $this->FieldsFactory()->Create(self::ObjectId_Encode( "ThirdParty" , SPL_T_ID))
+//        $this->fieldsFactory()->Create(self::ObjectId_Encode( "ThirdParty" , SPL_T_ID))
 //                ->Identifier("id_customer")
 //                ->Name(Translate::getAdminTranslation("Customer ID", "AdminCustomerThreads"))
 //                ->MicroData("http://schema.org/Invoice","customer")
@@ -399,7 +399,7 @@ class Invoice extends AbstractObject
 //        
 //        //====================================================================//
 //        // Order Object
-//        $this->FieldsFactory()->Create(self::ObjectId_Encode( "Order" , SPL_T_ID))
+//        $this->fieldsFactory()->Create(self::ObjectId_Encode( "Order" , SPL_T_ID))
 //                ->Identifier("id_order")
 //                ->Name($this->spl->l('Order'))
 //                ->MicroData("http://schema.org/Invoice","referencesOrder")
@@ -407,31 +407,31 @@ class Invoice extends AbstractObject
 //        
 //        //====================================================================//
 //        // Invoice Reference
-//        $this->FieldsFactory()->Create(SPL_T_VARCHAR)
+//        $this->fieldsFactory()->Create(SPL_T_VARCHAR)
 //                ->Identifier("number")
 //                ->Name(Translate::getAdminTranslation("Invoice number", "AdminInvoices"))
 //                ->MicroData("http://schema.org/Invoice","confirmationNumber")       
-//                ->ReadOnly()
-//                ->IsListed();
+//                ->isReadOnly()
+//                ->isListed();
 //
 //        //====================================================================//
 //        // Order Reference
-//        $this->FieldsFactory()->Create(SPL_T_VARCHAR)
+//        $this->fieldsFactory()->Create(SPL_T_VARCHAR)
 //                ->Identifier("reference")
 //                ->Name(Translate::getAdminTranslation("Reference", "AdminOrders"))
 //                ->MicroData("http://schema.org/Order","orderNumber")       
-//                ->ReadOnly()
-//                ->IsListed();
+//                ->isReadOnly()
+//                ->isListed();
 //        
 //        //====================================================================//
 //        // Order Date 
-//        $this->FieldsFactory()->Create(SPL_T_DATE)
+//        $this->fieldsFactory()->Create(SPL_T_DATE)
 //                ->Identifier("date_add")
 //                ->Name(Translate::getAdminTranslation("Creation", "AdminSupplyOrders"))
 //                ->MicroData("http://schema.org/Order","orderDate")
-//                ->ReadOnly()
+//                ->isReadOnly()
 //                ->isRequired()
-//                ->IsListed();
+//                ->isListed();
 //        
 //    }    
 //
@@ -442,7 +442,7 @@ class Invoice extends AbstractObject
 //        
 ////        //====================================================================//
 ////        // Delivery Date 
-////        $this->FieldsFactory()->Create(SPL_T_DATE)
+////        $this->fieldsFactory()->Create(SPL_T_DATE)
 ////                ->Identifier("date_livraison")
 ////                ->Name($langs->trans("DeliveryDate"))
 ////                ->MicroData("http://schema.org/ParcelDelivery","expectedArrivalUntil");
@@ -455,30 +455,30 @@ class Invoice extends AbstractObject
 //        
 //        //====================================================================//
 //        // Order Total Price HT
-//        $this->FieldsFactory()->Create(SPL_T_DOUBLE)
+//        $this->fieldsFactory()->Create(SPL_T_DOUBLE)
 //                ->Identifier("total_paid_tax_incl")
 //                ->Name(Translate::getAdminTranslation("Total (Tax excl.)", "AdminOrders") . $CurrencySuffix)
 //                ->MicroData("http://schema.org/Invoice","totalPaymentDue")
 //                ->isListed()
-//                ->ReadOnly();
+//                ->isReadOnly();
 //        
 //        //====================================================================//
 //        // Order Total Price TTC
-//        $this->FieldsFactory()->Create(SPL_T_DOUBLE)
+//        $this->fieldsFactory()->Create(SPL_T_DOUBLE)
 //                ->Identifier("total_paid_tax_excl")
 //                ->Name(Translate::getAdminTranslation("Total (Tax incl.)", "AdminOrders") . $CurrencySuffix)
 //                ->MicroData("http://schema.org/Invoice","totalPaymentDueTaxIncluded")
 //                ->isListed()
-//                ->ReadOnly();        
+//                ->isReadOnly();        
 //
 //       //====================================================================//
 //        // Order Current Status
-//        $this->FieldsFactory()->Create(SPL_T_VARCHAR)
+//        $this->fieldsFactory()->Create(SPL_T_VARCHAR)
 //                ->Identifier("status")
 //                ->Name(Translate::getAdminTranslation("Status", "AdminOrders"))
 //                ->MicroData("http://schema.org/Invoice","paymentStatus")
-//                ->ReadOnly()
-//                ->NotTested();
+//                ->isReadOnly()
+//                ->isNotTested();
 //        
 //        //====================================================================//
 //        // INVOICE STATUS FLAGS
@@ -490,33 +490,33 @@ class Invoice extends AbstractObject
 //        // Is Canceled
 //        // => There is no Diffrence Between a Draft & Canceled Order on Prestashop. 
 //        //      Any Non Validated Order is considered as Canceled
-//        $this->FieldsFactory()->Create(SPL_T_BOOL)
+//        $this->fieldsFactory()->Create(SPL_T_BOOL)
 //                ->Identifier("isCanceled")
 //                ->Name($Prefix . $this->spl->l("Canceled"))
 //                ->MicroData("http://schema.org/PaymentStatusType","PaymentDeclined")
 //                ->Association( "isCanceled","isValidated")
 //                ->Group(Translate::getAdminTranslation("Meta", "AdminThemes"))
-//                ->ReadOnly();     
+//                ->isReadOnly();     
 //        
 //        //====================================================================//
 //        // Is Validated
-//        $this->FieldsFactory()->Create(SPL_T_BOOL)
+//        $this->fieldsFactory()->Create(SPL_T_BOOL)
 //                ->Identifier("isValidated")
 //                ->Name($Prefix . Translate::getAdminTranslation("Valid", "AdminCartRules"))
 //                ->MicroData("http://schema.org/PaymentStatusType","PaymentDue")
 //                ->Association( "isCanceled","isValidated")
 //                ->Group(Translate::getAdminTranslation("Meta", "AdminThemes"))
-//                ->ReadOnly();
+//                ->isReadOnly();
 //
 //        //====================================================================//
 //        // Is Paid
-//        $this->FieldsFactory()->Create(SPL_T_BOOL)
+//        $this->fieldsFactory()->Create(SPL_T_BOOL)
 //                ->Identifier("isPaid")
 //                ->Name($Prefix . $this->spl->l("Paid"))
 //                ->MicroData("http://schema.org/PaymentStatusType","PaymentComplete")
-//                ->ReadOnly()
+//                ->isReadOnly()
 //                ->Group(Translate::getAdminTranslation("Meta", "AdminThemes"))
-//                ->NotTested();
+//                ->isNotTested();
 //        
 //        return;
 //    }
@@ -528,7 +528,7 @@ class Invoice extends AbstractObject
 //        
 //        //====================================================================//
 //        // Order Line Description
-//        $this->FieldsFactory()->Create(SPL_T_VARCHAR)
+//        $this->fieldsFactory()->Create(SPL_T_VARCHAR)
 //                ->Identifier("product_name")
 //                ->InList("lines")
 //                ->Name(Translate::getAdminTranslation("Short description", "AdminProducts"))
@@ -538,7 +538,7 @@ class Invoice extends AbstractObject
 //
 //        //====================================================================//
 //        // Order Line Product Identifier
-//        $this->FieldsFactory()->Create(self::ObjectId_Encode( "Product" , SPL_T_ID))        
+//        $this->fieldsFactory()->Create(self::ObjectId_Encode( "Product" , SPL_T_ID))        
 //                ->Identifier("product_id")
 //                ->InList("lines")
 //                ->Name(Translate::getAdminTranslation("Product ID", "AdminImport"))
@@ -548,7 +548,7 @@ class Invoice extends AbstractObject
 //
 //        //====================================================================//
 //        // Order Line Quantity
-//        $this->FieldsFactory()->Create(SPL_T_INT)        
+//        $this->fieldsFactory()->Create(SPL_T_INT)        
 //                ->Identifier("product_quantity")
 //                ->InList("lines")
 //                ->Name(Translate::getAdminTranslation("Quantity", "AdminOrders"))
@@ -558,7 +558,7 @@ class Invoice extends AbstractObject
 //
 //        //====================================================================//
 //        // Order Line Discount
-//        $this->FieldsFactory()->Create(SPL_T_DOUBLE)        
+//        $this->fieldsFactory()->Create(SPL_T_DOUBLE)        
 //                ->Identifier("reduction_percent")
 //                ->InList("lines")
 //                ->Name(Translate::getAdminTranslation("Discount (%)", "AdminGroups"))
@@ -568,7 +568,7 @@ class Invoice extends AbstractObject
 //
 //        //====================================================================//
 //        // Order Line Unit Price
-//        $this->FieldsFactory()->Create(SPL_T_PRICE)        
+//        $this->fieldsFactory()->Create(SPL_T_PRICE)        
 //                ->Identifier("unit_price")
 //                ->InList("lines")
 //                ->Name(Translate::getAdminTranslation("Price", "AdminOrders"))
@@ -585,45 +585,45 @@ class Invoice extends AbstractObject
 //        
 //        //====================================================================//
 //        // Payment Line Payment Method 
-//        $this->FieldsFactory()->Create(SPL_T_VARCHAR)
+//        $this->fieldsFactory()->Create(SPL_T_VARCHAR)
 //                ->Identifier("mode")
 //                ->InList("payments")
 //                ->Name(Translate::getAdminTranslation("Payment method", "AdminOrders"))
 //                ->MicroData("http://schema.org/Invoice","PaymentMethod")
 //                ->Group(Translate::getAdminTranslation("Payment", "AdminPayment"))
-//                ->NotTested();        
+//                ->isNotTested();        
 //
 //        //====================================================================//
 //        // Payment Line Date
-//        $this->FieldsFactory()->Create(SPL_T_DATE)        
+//        $this->fieldsFactory()->Create(SPL_T_DATE)        
 //                ->Identifier("date")
 //                ->InList("payments")
 //                ->Name(Translate::getAdminTranslation("Date", "AdminProducts"))
 //                ->MicroData("http://schema.org/PaymentChargeSpecification","validFrom")
 ////                ->Association("date@payments","mode@payments","amount@payments");        
 //                ->Group(Translate::getAdminTranslation("Payment", "AdminPayment"))
-//                ->NotTested();        
+//                ->isNotTested();        
 //
 //        //====================================================================//
 //        // Payment Line Payment Identifier
-//        $this->FieldsFactory()->Create(SPL_T_VARCHAR)        
+//        $this->fieldsFactory()->Create(SPL_T_VARCHAR)        
 //                ->Identifier("number")
 //                ->InList("payments")
 //                ->Name(Translate::getAdminTranslation("Transaction ID", "AdminOrders"))                
 //                ->MicroData("http://schema.org/Invoice","paymentMethodId")        
 ////                ->Association("date@payments","mode@payments","amount@payments");        
 //                ->Group(Translate::getAdminTranslation("Payment", "AdminPayment"))
-//                ->NotTested();        
+//                ->isNotTested();        
 //
 //        //====================================================================//
 //        // Payment Line Amount
-//        $this->FieldsFactory()->Create(SPL_T_DOUBLE)        
+//        $this->fieldsFactory()->Create(SPL_T_DOUBLE)        
 //                ->Identifier("amount")
 //                ->InList("payments")
 //                ->Name(Translate::getAdminTranslation("Amount", "AdminOrders"))                
 //                ->MicroData("http://schema.org/PaymentChargeSpecification","price")
 //                ->Group(Translate::getAdminTranslation("Payment", "AdminPayment"))
-//                ->NotTested();        
+//                ->isNotTested();        
 //
 //    }
 //    
@@ -969,7 +969,7 @@ class Invoice extends AbstractObject
 //                    
 //$TaxCalc    =    \OrderDetail::getTaxCalculatorStatic($Product["id_order_detail"]);
 //                    
-//Splash::Log()->www("Tax", $TaxCalc);
+//Splash::log()->www("Tax", $TaxCalc);
 //                    //====================================================================//
 //                    // Manually Compute Tax Rate 
 //                    if ( $Product["unit_price_tax_excl"] != $Product["unit_price_tax_incl"] )  {
@@ -978,7 +978,7 @@ class Invoice extends AbstractObject
 //                    //====================================================================//
 //                    // If Tax Rate Group is Defined => Search for Best Tax Rate 
 //                    if ( !empty($Product["id_tax_rules_group"]) ) {
-//                        $Product["tax_rate"]    =       Splash::Local()->getBestTaxRateInGroup($RawTaxRate, $Product["id_tax_rules_group"]);                  
+//                        $Product["tax_rate"]    =       Splash::local()->getBestTaxRateInGroup($RawTaxRate, $Product["id_tax_rules_group"]);                  
 //                    } else {
 //                        $Product["tax_rate"]    =       round( $RawTaxRate , 2);                  
 //                    }

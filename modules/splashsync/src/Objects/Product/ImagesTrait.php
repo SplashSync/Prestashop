@@ -44,7 +44,7 @@ trait ImagesTrait {
         
         //====================================================================//
         // Product Images List
-        $this->FieldsFactory()->Create(SPL_T_IMG)
+        $this->fieldsFactory()->Create(SPL_T_IMG)
                 ->Identifier("image")
                 ->InList("images")
                 ->Name(Translate::getAdminTranslation("Images", "AdminProducts"))
@@ -53,13 +53,13 @@ trait ImagesTrait {
         
         //====================================================================//
         // Product Images => Is Cover
-        $this->FieldsFactory()->Create(SPL_T_BOOL)
+        $this->fieldsFactory()->Create(SPL_T_BOOL)
                 ->Identifier("cover")
                 ->InList("images")
                 ->Name(Translate::getAdminTranslation("Cover", "AdminProducts"))
                 ->MicroData("http://schema.org/Product","isCover")
                 ->Group($GroupName3)
-                ->NotTested();        
+                ->isNotTested();        
         
     }
 

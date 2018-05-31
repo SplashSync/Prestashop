@@ -42,7 +42,7 @@ trait CRUDTrait
     {
         //====================================================================//
         // Stack Trace
-        Splash::Log()->Trace(__CLASS__,__FUNCTION__); 
+        Splash::log()->trace(__CLASS__,__FUNCTION__); 
         
         //====================================================================//
         // Decode Product Id
@@ -52,7 +52,7 @@ trait CRUDTrait
         //====================================================================//
         // Safety Checks 
         if (empty ($UnikId)  || empty($this->ProductId)) {
-            return Splash::Log()->Err("ErrLocalTpl",__CLASS__,__FUNCTION__," Missing Id.");
+            return Splash::log()->err("ErrLocalTpl",__CLASS__,__FUNCTION__," Missing Id.");
         }
         
         //====================================================================//
@@ -61,7 +61,7 @@ trait CRUDTrait
         if ( !empty($this->ProductId) ) {
             $Object = new Product($this->ProductId, True);
             if ($Object->id != $this->ProductId ) {
-                return Splash::Log()->Err("ErrLocalTpl",__CLASS__,__FUNCTION__,"Unable to fetch Product (" . $this->ProductId . ")");
+                return Splash::log()->err("ErrLocalTpl",__CLASS__,__FUNCTION__,"Unable to fetch Product (" . $this->ProductId . ")");
             }
             //====================================================================//
             // Setup Images Variables
@@ -74,7 +74,7 @@ trait CRUDTrait
         if ( !empty($this->AttributeId) ) {
             $this->Attribute = new Combination($this->AttributeId);
             if ($this->Attribute->id != $this->AttributeId ) {
-                return Splash::Log()->Err("ErrLocalTpl",__CLASS__,__FUNCTION__,"Unable to fetch Product Attribute (" . $this->AttributeId . ")");
+                return Splash::log()->err("ErrLocalTpl",__CLASS__,__FUNCTION__,"Unable to fetch Product Attribute (" . $this->AttributeId . ")");
             }
             $Object->id_product_attribute = $this->AttributeId;
         }        
@@ -91,17 +91,17 @@ trait CRUDTrait
     {
         //====================================================================//
         // Stack Trace
-        Splash::Log()->Trace(__CLASS__,__FUNCTION__);   
+        Splash::log()->trace(__CLASS__,__FUNCTION__);   
         
         //====================================================================//
         // Check Product Ref is given
         if ( empty($this->In["ref"]) ) {
-            return Splash::Log()->Err("ErrLocalFieldMissing",__CLASS__,__FUNCTION__,"ref");
+            return Splash::log()->err("ErrLocalFieldMissing",__CLASS__,__FUNCTION__,"ref");
         }
         //====================================================================//
         // Check Product Name is given
         if ( empty($this->In["name"]) ) {
-            return Splash::Log()->Err("ErrLocalFieldMissing",__CLASS__,__FUNCTION__,"name");
+            return Splash::log()->err("ErrLocalFieldMissing",__CLASS__,__FUNCTION__,"name");
         }
         //====================================================================//
         // Init Product Link Rewrite Url
@@ -127,12 +127,12 @@ trait CRUDTrait
     {
         //====================================================================//
         // Stack Trace
-        Splash::Log()->Trace(__CLASS__,__FUNCTION__);  
+        Splash::log()->trace(__CLASS__,__FUNCTION__);  
         
         //====================================================================//
         // Verify Update Is requiered
         if ( !$Needed && !$this->AttributeUpdate ) {
-            Splash::Log()->Deb("MsgLocalNoUpdateReq",__CLASS__,__FUNCTION__);
+            Splash::log()->deb("MsgLocalNoUpdateReq",__CLASS__,__FUNCTION__);
             return (int) $this->getUnikId(); 
         }
         
@@ -140,7 +140,7 @@ trait CRUDTrait
         // CREATE PRODUCT IF NEW
         if ( $Needed && is_null($this->ProductId) ) {
             if ($this->Object->add() != True ) {    
-                return Splash::Log()->Err("ErrLocalTpl",__CLASS__, __FUNCTION__, " Unable to create Product."); 
+                return Splash::log()->err("ErrLocalTpl",__CLASS__, __FUNCTION__, " Unable to create Product."); 
             }
             //====================================================================//
             // LOCK PRODUCT to prevent triggered actions on Price or Stock Update
@@ -155,7 +155,7 @@ trait CRUDTrait
         // CREATE PRODUCT ATTRIBUTE IF NEW
         if ( $this->AttributeUpdate && is_null($this->AttributeId) ) {
             if ($this->Attribute->add() != True ) {    
-                return Splash::Log()->Err("ErrLocalTpl",__CLASS__, __FUNCTION__, " Unable to create Product Combination."); 
+                return Splash::log()->err("ErrLocalTpl",__CLASS__, __FUNCTION__, " Unable to create Product Combination."); 
             }
             //====================================================================//
             // Store New Id on SplashObject Class
@@ -183,7 +183,7 @@ trait CRUDTrait
         // UPDATE/CREATE SPLASH ID
         //====================================================================//  
         if ( isset ($this->NewSplashId) )   {  
-            Splash::Local()->setSplashId( "Product" , $this->getUnikId(), $this->NewSplashId);    
+            Splash::local()->setSplashId( "Product" , $this->getUnikId(), $this->NewSplashId);    
             unset($this->NewSplashId);
         }
         //====================================================================//
@@ -203,7 +203,7 @@ trait CRUDTrait
         //====================================================================//
         if ( $this->ProductId && $Needed ) {
             if ($this->Object->update() != True ) {  
-                return Splash::Log()->Err("ErrLocalTpl", __CLASS__, __FUNCTION__, " Unable to update Product.");     
+                return Splash::log()->err("ErrLocalTpl", __CLASS__, __FUNCTION__, " Unable to update Product.");     
             }
         }
         
@@ -212,7 +212,7 @@ trait CRUDTrait
         if ( $this->AttributeId && $this->AttributeUpdate ) 
         {
             if ( $this->Attribute->update() != True ) {  
-                return Splash::Log()->Err("ErrLocalTpl", __CLASS__, __FUNCTION__, " Unable to update Product Attribute.");     
+                return Splash::log()->err("ErrLocalTpl", __CLASS__, __FUNCTION__, " Unable to update Product Attribute.");     
             }
         } 
         
@@ -230,12 +230,12 @@ trait CRUDTrait
     {
         //====================================================================//
         // Stack Trace
-        Splash::Log()->Trace(__CLASS__,__FUNCTION__);    
+        Splash::log()->trace(__CLASS__,__FUNCTION__);    
         
         //====================================================================//
         // Safety Checks 
         if (empty($UnikId)) {
-            return Splash::Log()->Err("ErrSchNoObjectId",__CLASS__."::".__FUNCTION__);
+            return Splash::log()->err("ErrSchNoObjectId",__CLASS__."::".__FUNCTION__);
         }
         
         //====================================================================//
@@ -244,7 +244,7 @@ trait CRUDTrait
             $this->ProductId    = $this->getId($UnikId);
             $this->AttributeId  = $this->getAttribute($UnikId);
         } else {
-            return Splash::Log()->Err("ErrSchWrongObjectId",__FUNCTION__);
+            return Splash::log()->err("ErrSchWrongObjectId",__FUNCTION__);
         }        
         
         //====================================================================//
@@ -252,7 +252,7 @@ trait CRUDTrait
         //====================================================================//
         $this->Object     = new Product($this->ProductId,true);
         if ($this->Object->id != $this->ProductId ) {
-            return Splash::Log()->War("ErrLocalTpl",__CLASS__,__FUNCTION__," Unable to load Product (" . $this->ProductId . ").");
+            return Splash::log()->war("ErrLocalTpl",__CLASS__,__FUNCTION__," Unable to load Product (" . $this->ProductId . ").");
         }
         
         //====================================================================//

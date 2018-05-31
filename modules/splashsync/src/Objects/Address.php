@@ -111,7 +111,7 @@ class Address extends AbstractObject
         
         //====================================================================//
         // Load Splash Module
-        $this->spl = Splash::Local()->getLocalModule();
+        $this->spl = Splash::local()->getLocalModule();
         
         return True;
     }

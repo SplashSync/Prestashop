@@ -84,10 +84,10 @@ class Activity extends WidgetBase
     {
         //====================================================================//
         // Stack Trace
-        Splash::Log()->Trace(__CLASS__,__FUNCTION__);  
+        Splash::log()->trace(__CLASS__,__FUNCTION__);  
         //====================================================================//
         // Load Default Language
-        Splash::Local()->LoadDefaultLanguage();
+        Splash::local()->LoadDefaultLanguage();
 
         //====================================================================//
         // Setup Widget Core Informations
@@ -142,7 +142,7 @@ class Activity extends WidgetBase
         
         //====================================================================//
         // Load Splash Module
-        $this->spl = Splash::Local()->getLocalModule();
+        $this->spl = Splash::local()->getLocalModule();
         if ( $this->spl == False ) {
             return False;
         } 
@@ -232,7 +232,7 @@ class Activity extends WidgetBase
 		$to = min(time(), strtotime($date_to));
 		for ($date = $from; $date <= $to; $date = strtotime('+1 day', $date))
 		{
-//                    Splash::Log()->www("Date" , $date );
+//                    Splash::log()->www("Date" , $date );
 			$refined_data['sales'][$date] = 0;
 			if (isset($gross_data['total_paid_tax_excl'][$date]))
 				$refined_data['sales'][$date] += $gross_data['total_paid_tax_excl'][$date];

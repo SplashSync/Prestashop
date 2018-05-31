@@ -42,7 +42,7 @@ trait StockTrait {
         
         //====================================================================//
         // Stock Reel
-        $this->FieldsFactory()->Create(SPL_T_INT)
+        $this->fieldsFactory()->Create(SPL_T_INT)
                 ->Identifier("stock")
                 ->Name(Translate::getAdminTranslation("Stock", "AdminProducts"))
                 ->MicroData("http://schema.org/Offer","inventoryLevel")
@@ -51,16 +51,16 @@ trait StockTrait {
 
         //====================================================================//
         // Out of Stock Flag
-        $this->FieldsFactory()->Create(SPL_T_BOOL)
+        $this->fieldsFactory()->Create(SPL_T_BOOL)
                 ->Identifier("outofstock")
                 ->Name(Translate::getAdminTranslation("This product is out of stock", "AdminOrders"))
                 ->MicroData("http://schema.org/ItemAvailability","OutOfStock")
                 ->Group($GroupName)
-                ->ReadOnly();
+                ->isReadOnly();
                 
         //====================================================================//
         // Minimum Order Quantity
-        $this->FieldsFactory()->Create(SPL_T_INT)
+        $this->fieldsFactory()->Create(SPL_T_INT)
                 ->Identifier("minimal_quantity")
                 ->Name(Translate::getAdminTranslation("Minimum quantity", "AdminProducts"))
                 ->Description(Translate::getAdminTranslation("The minimum quantity to buy this product (set to 1 to disable this feature).", "AdminProducts"))
@@ -135,7 +135,7 @@ trait StockTrait {
                 //====================================================================//
                 // Product uses Advanced Stock Manager => Cancel Product Stock Update
                 if ($this->Object->useAdvancedStockManagement() ) {
-                    Splash::Log()->Err('Update Product Stock Using Advanced Stock Management : This Feature is not implemented Yet!!');
+                    Splash::log()->err('Update Product Stock Using Advanced Stock Management : This Feature is not implemented Yet!!');
                     break;
                 }                 
                 //====================================================================//

@@ -34,21 +34,21 @@ trait CoreTrait {
         
         //====================================================================//
         // Order Object
-        $this->FieldsFactory()->Create(self::Objects()->Encode( "Order" , SPL_T_ID))
+        $this->fieldsFactory()->Create(self::Objects()->Encode( "Order" , SPL_T_ID))
                 ->Identifier("id_order")
                 ->Name($this->spl->l('Order'))
                 ->MicroData("http://schema.org/Invoice","referencesOrder")
-                ->ReadOnly()                
+                ->isReadOnly()                
                 ;  
         
         //====================================================================//
         // Invoice Reference
-        $this->FieldsFactory()->Create(SPL_T_VARCHAR)
+        $this->fieldsFactory()->Create(SPL_T_VARCHAR)
                 ->Identifier("number")
                 ->Name(Translate::getAdminTranslation("Invoice number", "AdminInvoices"))
                 ->MicroData("http://schema.org/Invoice","confirmationNumber")       
-                ->ReadOnly()
-                ->IsListed()
+                ->isReadOnly()
+                ->isListed()
                 ;
         
     }    

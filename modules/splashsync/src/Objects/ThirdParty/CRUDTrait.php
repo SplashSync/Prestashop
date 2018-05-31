@@ -38,12 +38,12 @@ trait CRUDTrait
     {
         //====================================================================//
         // Stack Trace
-        Splash::Log()->Trace(__CLASS__,__FUNCTION__); 
+        Splash::log()->trace(__CLASS__,__FUNCTION__); 
         //====================================================================//
         // Load Object         
         $Object = new Customer($Id);
         if ( $Object->id != $Id )   {
-            return Splash::Log()->Err("ErrLocalTpl",__CLASS__,__FUNCTION__," Unable to load Customer (" . $Id . ").");
+            return Splash::log()->err("ErrLocalTpl",__CLASS__,__FUNCTION__," Unable to load Customer (" . $Id . ").");
         }       
         return $Object;
     }    
@@ -57,18 +57,18 @@ trait CRUDTrait
     {
         //====================================================================//
         // Stack Trace
-        Splash::Log()->Trace(__CLASS__,__FUNCTION__);   
+        Splash::log()->trace(__CLASS__,__FUNCTION__);   
         
         //====================================================================//
         // Check Customer Name is given
         if ( empty($this->In["firstname"]) ) {
-            return Splash::Log()->Err("ErrLocalFieldMissing",__CLASS__,__FUNCTION__,"firstname");
+            return Splash::log()->err("ErrLocalFieldMissing",__CLASS__,__FUNCTION__,"firstname");
         }
         if ( empty($this->In["lastname"]) ) {
-            return Splash::Log()->Err("ErrLocalFieldMissing",__CLASS__,__FUNCTION__,"lastname");
+            return Splash::log()->err("ErrLocalFieldMissing",__CLASS__,__FUNCTION__,"lastname");
         }
         if ( empty($this->In["email"]) ) {
-            return Splash::Log()->Err("ErrLocalFieldMissing",__CLASS__,__FUNCTION__,"email");
+            return Splash::log()->err("ErrLocalFieldMissing",__CLASS__,__FUNCTION__,"email");
         }
         //====================================================================//
         // Create Empty Customer
@@ -86,7 +86,7 @@ trait CRUDTrait
     {
         //====================================================================//
         // Stack Trace
-        Splash::Log()->Trace(__CLASS__,__FUNCTION__);  
+        Splash::log()->trace(__CLASS__,__FUNCTION__);  
         if ( !$Needed) {
             return (int) $this->Object->id;
         }
@@ -95,10 +95,10 @@ trait CRUDTrait
         //====================================================================//
         if (!empty($this->Object->id)) {
             if ( $this->Object->update() != True) {  
-                return Splash::Log()->Err("ErrLocalTpl",__CLASS__,__FUNCTION__,"Unable to update (" . $this->Object->id . ").");
+                return Splash::log()->err("ErrLocalTpl",__CLASS__,__FUNCTION__,"Unable to update (" . $this->Object->id . ").");
             }
             
-            Splash::Log()->Deb("MsgLocalTpl",__CLASS__,__FUNCTION__,"Customer Updated");
+            Splash::log()->deb("MsgLocalTpl",__CLASS__,__FUNCTION__,"Customer Updated");
             return $this->Object->id;
         }
         
@@ -110,21 +110,21 @@ trait CRUDTrait
         // If NO Password Given = > Create Random Password
         if ( empty($this->Object->passwd) ) {
             $this->Object->passwd = Tools::passwdGen();               
-            Splash::Log()->War("MsgLocalTpl",__CLASS__,__FUNCTION__,"New Customer Password Generated - " . $this->Object->passwd );
+            Splash::log()->war("MsgLocalTpl",__CLASS__,__FUNCTION__,"New Customer Password Generated - " . $this->Object->passwd );
         }
 
         //====================================================================//
         // Create Object In Database
         if ( ($Result = $this->Object->add(True, True))  != True) {    
-            return Splash::Log()->Err("ErrLocalTpl",__CLASS__,__FUNCTION__,"Unable to create Customer. ");
+            return Splash::log()->err("ErrLocalTpl",__CLASS__,__FUNCTION__,"Unable to create Customer. ");
         }
-        Splash::Log()->Deb("MsgLocalTpl",__CLASS__,__FUNCTION__,"Customer Created");
+        Splash::log()->deb("MsgLocalTpl",__CLASS__,__FUNCTION__,"Customer Created");
         
         //====================================================================//
         // UPDATE/CREATE SPLASH ID
         //====================================================================//  
         if ( isset ($this->NewSplashId) )   {  
-            Splash::Local()->setSplashId( self::$NAME , $this->Object->id, $this->NewSplashId);    
+            Splash::local()->setSplashId( self::$NAME , $this->Object->id, $this->NewSplashId);    
             unset($this->NewSplashId);
         }
         
@@ -142,12 +142,12 @@ trait CRUDTrait
     {
         //====================================================================//
         // Stack Trace
-        Splash::Log()->Trace(__CLASS__,__FUNCTION__);    
+        Splash::log()->trace(__CLASS__,__FUNCTION__);    
         
         //====================================================================//
         // Safety Checks 
         if (empty($id)) {
-            return Splash::Log()->Err("ErrSchNoObjectId",__CLASS__."::".__FUNCTION__);
+            return Splash::log()->err("ErrSchNoObjectId",__CLASS__."::".__FUNCTION__);
         }
         
         //====================================================================//
@@ -155,13 +155,13 @@ trait CRUDTrait
         //====================================================================//
         $Object = new Customer($id);
         if ( $Object->id != $id )   {
-            return Splash::Log()->War("ErrLocalTpl",__CLASS__,__FUNCTION__,"Unable to load (" . $id . ").");
+            return Splash::log()->war("ErrLocalTpl",__CLASS__,__FUNCTION__,"Unable to load (" . $id . ").");
         }          
         //====================================================================//
         // Delete Object From DataBase
         //====================================================================//
         if ( $Object->delete() != True ) {
-            return Splash::Log()->Err("ErrLocalTpl",__CLASS__,__FUNCTION__,"Unable to delete (" . $id . ").");
+            return Splash::log()->err("ErrLocalTpl",__CLASS__,__FUNCTION__,"Unable to delete (" . $id . ").");
         }
         
         return True;

@@ -43,26 +43,26 @@ trait DescTrait {
 
         //====================================================================//
         // Name without Options
-        $this->FieldsFactory()->Create(SPL_T_MVARCHAR)
+        $this->fieldsFactory()->Create(SPL_T_MVARCHAR)
                 ->Identifier("name")
                 ->Name($this->spl->l("Product Name without Options"))
-                ->IsListed()
+                ->isListed()
                 ->MicroData("http://schema.org/Product","alternateName")
                 ->Group($GroupName)
                 ->isRequired();
 
         //====================================================================//
         // Name with Options
-        $this->FieldsFactory()->Create(SPL_T_MVARCHAR)
+        $this->fieldsFactory()->Create(SPL_T_MVARCHAR)
                 ->Identifier("fullname")
                 ->Name($this->spl->l("Product Name with Options"))
-                ->ReadOnly()
+                ->isReadOnly()
                 ->Group($GroupName)
                 ->MicroData("http://schema.org/Product","name");
 
         //====================================================================//
         // Long Description
-        $this->FieldsFactory()->Create(SPL_T_MTEXT)
+        $this->fieldsFactory()->Create(SPL_T_MTEXT)
                 ->Identifier("description")
                 ->Name(Translate::getAdminTranslation("description", "AdminProducts"))                
                 ->Group($GroupName)
@@ -70,7 +70,7 @@ trait DescTrait {
         
         //====================================================================//
         // Short Description
-        $this->FieldsFactory()->Create(SPL_T_MVARCHAR)
+        $this->fieldsFactory()->Create(SPL_T_MVARCHAR)
                 ->Identifier("description_short")
                 ->Name(Translate::getAdminTranslation("Short Description", "AdminProducts"))                
                 ->Group($GroupName)
@@ -78,7 +78,7 @@ trait DescTrait {
 
         //====================================================================//
         // Meta Description
-        $this->FieldsFactory()->Create(SPL_T_MVARCHAR)
+        $this->fieldsFactory()->Create(SPL_T_MVARCHAR)
                 ->Identifier("meta_description")
                 ->Name(Translate::getAdminTranslation("Meta description", "AdminProducts"))
                 ->Description($GroupName2 . " " . Translate::getAdminTranslation("Meta description", "AdminProducts"))
@@ -87,7 +87,7 @@ trait DescTrait {
 
         //====================================================================//
         // Meta Title
-        $this->FieldsFactory()->Create(SPL_T_MVARCHAR)
+        $this->fieldsFactory()->Create(SPL_T_MVARCHAR)
                 ->Identifier("meta_title")
                 ->Name(Translate::getAdminTranslation("Meta title", "AdminProducts"))
                 ->Description($GroupName2 . " " . Translate::getAdminTranslation("Meta title", "AdminProducts"))
@@ -96,17 +96,17 @@ trait DescTrait {
         
         //====================================================================//
         // Meta KeyWords
-        $this->FieldsFactory()->Create(SPL_T_MVARCHAR)
+        $this->fieldsFactory()->Create(SPL_T_MVARCHAR)
                 ->Identifier("meta_keywords")
                 ->Name(Translate::getAdminTranslation("Meta keywords", "AdminProducts"))
                 ->Description($GroupName2 . " " . Translate::getAdminTranslation("Meta keywords", "AdminProducts"))
                 ->MicroData("http://schema.org/Article","keywords")
                 ->Group($GroupName2)
-                ->ReadOnly();
+                ->isReadOnly();
 
         //====================================================================//
         // Meta KeyWords
-        $this->FieldsFactory()->Create(SPL_T_MVARCHAR)
+        $this->fieldsFactory()->Create(SPL_T_MVARCHAR)
                 ->Identifier("link_rewrite")
                 ->Name(Translate::getAdminTranslation("Friendly URL", "AdminProducts"))
                 ->Description($GroupName2 . " " . Translate::getAdminTranslation("Friendly URL", "AdminProducts"))
@@ -223,7 +223,7 @@ trait DescTrait {
         foreach ($Languages as $Lang) {
             //====================================================================//        
             // Encode Language Code From Splash Format to Prestashop Format (fr_FR => fr-fr)
-            $LanguageCode   =   Splash::Local()->Lang_Encode($Lang["language_code"]);
+            $LanguageCode   =   Splash::local()->Lang_Encode($Lang["language_code"]);
             $LanguageId     =   $Lang["id_lang"];
 
             //====================================================================//        
@@ -262,7 +262,7 @@ trait DescTrait {
         foreach ($Data as $IsoCode => $Content) {
             //====================================================================//        
             // Check Language Is Valid
-            $LanguageCode = Splash::Local()->Lang_Decode($IsoCode);
+            $LanguageCode = Splash::local()->Lang_Decode($IsoCode);
             if ( !Validate::isLanguageCode($LanguageCode) ) {   
                 continue;  
             }
@@ -270,7 +270,7 @@ trait DescTrait {
             // Load Language
             $Language = Language::getLanguageByIETFCode($LanguageCode);
             if ( empty($Language) ) {   
-                Splash::Log()->War("MsgLocalTpl",__CLASS__,__FUNCTION__,"Language " . $LanguageCode . " not available on this server.");
+                Splash::log()->war("MsgLocalTpl",__CLASS__,__FUNCTION__,"Language " . $LanguageCode . " not available on this server.");
                 continue;  
             }
             //====================================================================//        
@@ -290,7 +290,7 @@ trait DescTrait {
             //====================================================================//        
             // Verify Data Lenght
             if ( $MaxLength &&  ( Tools::strlen($Content) > $MaxLength) ) {             
-                Splash::Log()->War("MsgLocalTpl",__CLASS__,__FUNCTION__,"Text is too long for field " . $key . ", modification skipped.");
+                Splash::log()->war("MsgLocalTpl",__CLASS__,__FUNCTION__,"Text is too long for field " . $key . ", modification skipped.");
                 continue;
             }
             
@@ -326,7 +326,7 @@ trait DescTrait {
         foreach ($Languages as $Lang) {
             //====================================================================//        
             // Encode Language Code From Splash Format to Prestashop Format (fr_FR => fr-fr)
-            $LanguageCode   =   Splash::Local()->Lang_Encode($Lang["language_code"]);
+            $LanguageCode   =   Splash::local()->Lang_Encode($Lang["language_code"]);
             $LanguageId     =   (int) $Lang["id_lang"];
             
             //====================================================================//        
@@ -363,7 +363,7 @@ trait DescTrait {
         foreach ($Languages as $Lang) {
             //====================================================================//        
             // Encode Language Code From Splash Format to Prestashop Format (fr_FR => fr-fr)
-            $LanguageCode   =   Splash::Local()->Lang_Encode($Lang["language_code"]);
+            $LanguageCode   =   Splash::local()->Lang_Encode($Lang["language_code"]);
             $LanguageId     =   (int) $Lang["id_lang"];
             
             //====================================================================//        

@@ -38,12 +38,12 @@ trait CRUDTrait
     {
         //====================================================================//
         // Stack Trace
-        Splash::Log()->Trace(__CLASS__,__FUNCTION__); 
+        Splash::log()->trace(__CLASS__,__FUNCTION__); 
         //====================================================================//
         // Load Object         
         $Object = new Order($Id);
         if ( $Object->id != $Id )   {
-            return Splash::Log()->Err("ErrLocalTpl",__CLASS__,__FUNCTION__," Unable to load Order (" . $Id . ").");
+            return Splash::log()->err("ErrLocalTpl",__CLASS__,__FUNCTION__," Unable to load Order (" . $Id . ").");
         }      
         
         //====================================================================//
@@ -69,7 +69,7 @@ trait CRUDTrait
     {
         //====================================================================//
         // Stack Trace
-        Splash::Log()->Trace(__CLASS__,__FUNCTION__);   
+        Splash::log()->trace(__CLASS__,__FUNCTION__);   
         
         //====================================================================//
         // Check Order Minimal Fields are given
@@ -81,7 +81,7 @@ trait CRUDTrait
         $this->Cart =   new Cart();
         $this->Cart->id_currency      =   Configuration::get('PS_CURRENCY_DEFAULT');
         if ( $this->Cart->add() != True) {  
-            return Splash::Log()->Err("ErrLocalTpl",__CLASS__,__FUNCTION__,"Unable to Create new Order Cart.");
+            return Splash::log()->err("ErrLocalTpl",__CLASS__,__FUNCTION__,"Unable to Create new Order Cart.");
         }
         
         //====================================================================//
@@ -117,14 +117,14 @@ trait CRUDTrait
         //====================================================================//
         // Persist Order in Database
         if ( $this->Object->add() != True) {  
-            return Splash::Log()->Err("ErrLocalTpl",__CLASS__,__FUNCTION__,"Unable to Create new Order.");
+            return Splash::log()->err("ErrLocalTpl",__CLASS__,__FUNCTION__,"Unable to Create new Order.");
         }
         
         //====================================================================//
         // Create Empty Order Products List        
         $this->Products         = array();        
             
-        Splash::Log()->Deb("MsgLocalTpl",__CLASS__,__FUNCTION__,"New Order Created");
+        Splash::log()->deb("MsgLocalTpl",__CLASS__,__FUNCTION__,"New Order Created");
         return $this->Object;
     }
     
@@ -139,7 +139,7 @@ trait CRUDTrait
     {
         //====================================================================//
         // Stack Trace
-        Splash::Log()->Trace(__CLASS__,__FUNCTION__);  
+        Splash::log()->trace(__CLASS__,__FUNCTION__);  
         if ( !$Needed) {
             return (int) $this->Object->id;
         }
@@ -149,17 +149,17 @@ trait CRUDTrait
         //====================================================================//
         if (!empty($this->Object->id)) {
             if ( $this->Object->update() != True) {  
-                return Splash::Log()->Err("ErrLocalTpl",__CLASS__,__FUNCTION__,"Unable to Update Order (" . $this->Object->id . ").");
+                return Splash::log()->err("ErrLocalTpl",__CLASS__,__FUNCTION__,"Unable to Update Order (" . $this->Object->id . ").");
             }
             
-            Splash::Log()->Deb("MsgLocalTpl",__CLASS__,__FUNCTION__,"Order Updated");
+            Splash::log()->deb("MsgLocalTpl",__CLASS__,__FUNCTION__,"Order Updated");
         }
         
         //====================================================================//
         // UPDATE/CREATE SPLASH ID
         //====================================================================//  
         if ( isset ($this->NewSplashId) )   {  
-            Splash::Local()->setSplashId( self::$NAME , $this->Object->id, $this->NewSplashId);    
+            Splash::local()->setSplashId( self::$NAME , $this->Object->id, $this->NewSplashId);    
             unset($this->NewSplashId);
         }
         
@@ -177,18 +177,18 @@ trait CRUDTrait
     {
         //====================================================================//
         // Stack Trace
-        Splash::Log()->Trace(__CLASS__,__FUNCTION__);    
+        Splash::log()->trace(__CLASS__,__FUNCTION__);    
         
         //====================================================================//
         // An Order Cannot Get deleted
-        Splash::Log()->Err("ErrLocalTpl",__CLASS__,__FUNCTION__,"You Cannot Delete Prestashop Orders");
+        Splash::log()->err("ErrLocalTpl",__CLASS__,__FUNCTION__,"You Cannot Delete Prestashop Orders");
         
         //====================================================================//
         // Load Object From DataBase
         //====================================================================//
         $this->Object     = new Order($Id);
         if ($this->Object->id != $Id ) {
-            return Splash::Log()->War("ErrLocalTpl",__CLASS__,__FUNCTION__," Unable to load Order (" . $Id . ").");
+            return Splash::log()->war("ErrLocalTpl",__CLASS__,__FUNCTION__," Unable to load Order (" . $Id . ").");
         }        
         
         //====================================================================//

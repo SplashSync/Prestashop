@@ -50,7 +50,7 @@ trait PaymentsTrait {
         
         //====================================================================//
         // Payment Line Payment Method 
-        $this->FieldsFactory()->Create(SPL_T_VARCHAR)
+        $this->fieldsFactory()->Create(SPL_T_VARCHAR)
                 ->Identifier("mode")
                 ->InList("payments")
                 ->Name(Translate::getAdminTranslation("Payment method", "AdminOrders"))
@@ -62,18 +62,18 @@ trait PaymentsTrait {
 
         //====================================================================//
         // Payment Line Date
-        $this->FieldsFactory()->Create(SPL_T_DATE)        
+        $this->fieldsFactory()->Create(SPL_T_DATE)        
                 ->Identifier("date")
                 ->InList("payments")
                 ->Name(Translate::getAdminTranslation("Date", "AdminProducts"))
                 ->MicroData("http://schema.org/PaymentChargeSpecification","validFrom")
                 ->Group(Translate::getAdminTranslation("Payment", "AdminPayment"))
-                ->ReadOnly()
+                ->isReadOnly()
                 ;        
 
         //====================================================================//
         // Payment Line Payment Identifier
-        $this->FieldsFactory()->Create(SPL_T_VARCHAR)        
+        $this->fieldsFactory()->Create(SPL_T_VARCHAR)        
                 ->Identifier("number")
                 ->InList("payments")
                 ->Name(Translate::getAdminTranslation("Transaction ID", "AdminOrders"))                
@@ -84,7 +84,7 @@ trait PaymentsTrait {
 
         //====================================================================//
         // Payment Line Amount
-        $this->FieldsFactory()->Create(SPL_T_DOUBLE)        
+        $this->fieldsFactory()->Create(SPL_T_DOUBLE)        
                 ->Identifier("amount")
                 ->InList("payments")
                 ->Name(Translate::getAdminTranslation("Amount", "AdminOrders"))                
@@ -106,7 +106,7 @@ trait PaymentsTrait {
     {
         //====================================================================//
         // Check if List field & Init List Array
-        $FieldId = self::Lists()->InitOutput( $this->Out, "payments", $FieldName );
+        $FieldId = self::lists()->InitOutput( $this->Out, "payments", $FieldName );
         if ( !$FieldId ) {
             return;
         }        
@@ -148,7 +148,7 @@ trait PaymentsTrait {
             }
             //====================================================================//
             // Insert Data in List
-            self::Lists()->Insert( $this->Out, "payments", $FieldName, $key, $Value );                   
+            self::lists()->Insert( $this->Out, "payments", $FieldName, $key, $Value );                   
         }
         unset($this->In[$Key]);
     }
@@ -269,11 +269,11 @@ trait PaymentsTrait {
         
         if ( !$OrderPayment->id ) {
             if ( $OrderPayment->add() != True) {  
-                return Splash::Log()->Err("ErrLocalTpl",__CLASS__,__FUNCTION__,"Unable to Create new Payment Line.");
+                return Splash::log()->err("ErrLocalTpl",__CLASS__,__FUNCTION__,"Unable to Create new Payment Line.");
             } 
         } else {
             if ( $OrderPayment->update() != True) {  
-                return Splash::Log()->Err("ErrLocalTpl",__CLASS__,__FUNCTION__,"Unable to Update Payment Line.");
+                return Splash::log()->err("ErrLocalTpl",__CLASS__,__FUNCTION__,"Unable to Update Payment Line.");
             }        
         }
     }        

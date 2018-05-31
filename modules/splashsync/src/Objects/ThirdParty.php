@@ -105,7 +105,7 @@ class ThirdParty extends AbstractObject
        
         //====================================================================//
         // Load Splash Module
-        $this->spl = Splash::Local()->getLocalModule();
+        $this->spl = Splash::local()->getLocalModule();
         if ( $this->spl == False ) {
             return False;
         }

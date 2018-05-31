@@ -34,21 +34,21 @@ trait DatesTrait {
     {
         //====================================================================//
         // Creation Date 
-        $this->FieldsFactory()->Create(SPL_T_DATETIME)
+        $this->fieldsFactory()->Create(SPL_T_DATETIME)
                 ->Identifier("date_add")
                 ->Name(Translate::getAdminTranslation("Creation", "AdminSupplyOrders"))
                 ->Group(Translate::getAdminTranslation("Meta", "AdminThemes"))
                 ->MicroData("http://schema.org/DataFeedItem","dateCreated")
-                ->ReadOnly();
+                ->isReadOnly();
         
         //====================================================================//
         // Last Change Date 
-        $this->FieldsFactory()->Create(SPL_T_DATETIME)
+        $this->fieldsFactory()->Create(SPL_T_DATETIME)
                 ->Identifier("date_upd")
                 ->Name(Translate::getAdminTranslation("Last modification", "AdminSupplyOrders"))
                 ->Group(Translate::getAdminTranslation("Meta", "AdminThemes"))
                 ->MicroData("http://schema.org/DataFeedItem","dateCreated")
-                ->ReadOnly();
+                ->isReadOnly();
     }    
 
     /**

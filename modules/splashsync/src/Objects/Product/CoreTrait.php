@@ -35,31 +35,31 @@ trait CoreTrait {
     private function buildCoreFields()   {
         //====================================================================//
         // Reference
-        $this->FieldsFactory()->Create(SPL_T_VARCHAR)
+        $this->fieldsFactory()->Create(SPL_T_VARCHAR)
                 ->Identifier("ref")
                 ->Name(Translate::getAdminTranslation("Reference", "AdminProducts"))
                 ->Description(Translate::getAdminTranslation('Your internal reference code for this product.', "AdminProducts"))
-                ->IsListed()
+                ->isListed()
                 ->MicroData("http://schema.org/Product","model")
                 ->isRequired();
         
         //====================================================================//
         // Product Type Id
-        $this->FieldsFactory()->Create(SPL_T_INT)
+        $this->fieldsFactory()->Create(SPL_T_INT)
                 ->Identifier("type-id")
                 ->Name(Translate::getAdminTranslation("Type", "AdminProducts"))
                 ->Description(Translate::getAdminTranslation("Type", "AdminProducts"))
                 ->MicroData("http://schema.org/Product","type")
-                ->ReadOnly();
+                ->isReadOnly();
         
         //====================================================================//
         // Product Type Name
-        $this->FieldsFactory()->Create(SPL_T_VARCHAR)
+        $this->fieldsFactory()->Create(SPL_T_VARCHAR)
                 ->Identifier("type-name")
                 ->Name($this->spl->l('Type Name'))
                 ->Description($this->spl->l('Product Type Name'))
                 ->MicroData("http://schema.org/Product","type")
-                ->ReadOnly();
+                ->isReadOnly();
     } 
     
     /**
