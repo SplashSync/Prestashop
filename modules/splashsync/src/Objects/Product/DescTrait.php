@@ -233,7 +233,7 @@ trait DescTrait
         foreach ($Languages as $Lang) {
             //====================================================================//
             // Encode Language Code From Splash Format to Prestashop Format (fr_FR => fr-fr)
-            $LanguageCode   =   Splash::local()->Lang_Encode($Lang["language_code"]);
+            $LanguageCode   =   Splash::local()->langEncode($Lang["language_code"]);
             $LanguageId     =   $Lang["id_lang"];
 
             //====================================================================//
@@ -272,7 +272,7 @@ trait DescTrait
         foreach ($Data as $IsoCode => $Content) {
             //====================================================================//
             // Check Language Is Valid
-            $LanguageCode = Splash::local()->Lang_Decode($IsoCode);
+            $LanguageCode = Splash::local()->langDecode($IsoCode);
             if (!Validate::isLanguageCode($LanguageCode)) {
                 continue;
             }
@@ -280,7 +280,12 @@ trait DescTrait
             // Load Language
             $Language = Language::getLanguageByIETFCode($LanguageCode);
             if (empty($Language)) {
-                Splash::log()->war("MsgLocalTpl", __CLASS__, __FUNCTION__, "Language " . $LanguageCode . " not available on this server.");
+                Splash::log()->war(
+                    "MsgLocalTpl",
+                    __CLASS__,
+                    __FUNCTION__,
+                    "Language " . $LanguageCode . " not available on this server."
+                );
                 continue;
             }
             //====================================================================//
@@ -302,7 +307,12 @@ trait DescTrait
             //====================================================================//
             // Verify Data Lenght
             if ($MaxLength &&  ( Tools::strlen($Content) > $MaxLength)) {
-                Splash::log()->war("MsgLocalTpl", __CLASS__, __FUNCTION__, "Text is too long for field " . $key . ", modification skipped.");
+                Splash::log()->war(
+                    "MsgLocalTpl",
+                    __CLASS__,
+                    __FUNCTION__,
+                    "Text is too long for field " . $key . ", modification skipped."
+                );
                 continue;
             }
             
@@ -338,13 +348,17 @@ trait DescTrait
         foreach ($Languages as $Lang) {
             //====================================================================//
             // Encode Language Code From Splash Format to Prestashop Format (fr_FR => fr-fr)
-            $LanguageCode   =   Splash::local()->Lang_Encode($Lang["language_code"]);
+            $LanguageCode   =   Splash::local()->langEncode($Lang["language_code"]);
             $LanguageId     =   (int) $Lang["id_lang"];
             
             //====================================================================//
             // Product Specific - Read Full Product Name with Attribute Description
             if (isset($Object->id_product_attribute)) {
-                $Data[$LanguageCode] = \Product::getProductName((int)$Object->id, (int)$Object->id_product_attribute, $LanguageId);
+                $Data[$LanguageCode] = \Product::getProductName(
+                    (int)$Object->id,
+                    (int)$Object->id_product_attribute,
+                    $LanguageId
+                );
             } else {
                 $Data[$LanguageCode] = \Product::getProductName((int)$Object->id, null, $LanguageId);
             }
@@ -374,7 +388,7 @@ trait DescTrait
         foreach ($Languages as $Lang) {
             //====================================================================//
             // Encode Language Code From Splash Format to Prestashop Format (fr_FR => fr-fr)
-            $LanguageCode   =   Splash::local()->Lang_Encode($Lang["language_code"]);
+            $LanguageCode   =   Splash::local()->langEncode($Lang["language_code"]);
             $LanguageId     =   (int) $Lang["id_lang"];
             
             //====================================================================//

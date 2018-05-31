@@ -75,7 +75,8 @@ trait MainTrait
 
         //====================================================================//
         // Gender Type
-        $desc = Translate::getAdminTranslation("Social title", "AdminCustomers") . " ; 0 => Male // 1 => Female // 2 => Neutral";
+        $desc = Translate::getAdminTranslation("Social title", "AdminCustomers");
+        $desc.= " ; 0 => Male // 1 => Female // 2 => Neutral";
         $this->fieldsFactory()->Create(SPL_T_INT)
                 ->Identifier("gender_type")
                 ->Name(Translate::getAdminTranslation("Social title", "AdminCustomers") . " (ID)")
@@ -214,7 +215,12 @@ trait MainTrait
             // Write SIRET With Verification
             case 'siret':
                 if (!Validate::isSiret($Data)) {
-                    Splash::log()->war("MsgLocalTpl", __CLASS__, __FUNCTION__, "Given SIRET Number is Invalid. Skipped");
+                    Splash::log()->war(
+                        "MsgLocalTpl",
+                        __CLASS__,
+                        __FUNCTION__,
+                        "Given SIRET Number is Invalid. Skipped"
+                    );
                     break;
                 }
                 $this->setSimple($FieldName, $Data);

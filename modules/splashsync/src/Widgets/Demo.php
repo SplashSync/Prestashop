@@ -62,7 +62,7 @@ class Demo extends WidgetBase
     //====================================================================//
     // Define Standard Options for this Widget
     // Override this array to change default options for your widget
-    static $OPTIONS       = array(
+    protected static $OPTIONS       = array(
         "Width"     =>      self::SIZE_XL
     );
     
@@ -125,7 +125,7 @@ class Demo extends WidgetBase
      *                        $params["groupby"]    Field name for sort list (Available fields listed below)
 
      */
-    public function Get($params = null)
+    public function get($params = null)
     {
         //====================================================================//
         // Stack Trace
@@ -189,7 +189,8 @@ class Demo extends WidgetBase
         //====================================================================//
         // verify Inputs
         if (!is_array($Inputs) && !is_a($Inputs, "ArrayObject")) {
-            $this->BlocksFactory()->addNotificationsBlock(array("warning" => "Inputs is not an Array! Is " . get_class($Inputs)));
+            $this->BlocksFactory()
+                    ->addNotificationsBlock(array("warning" => "Inputs is not an Array! Is " . get_class($Inputs)));
         }
         
         //====================================================================//

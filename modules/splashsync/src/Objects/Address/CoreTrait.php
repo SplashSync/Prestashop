@@ -163,13 +163,23 @@ trait CoreTrait
         //====================================================================//
         // Verify Object Type
         if (self::Objects()->Type($Data) !== "ThirdParty") {
-            return Splash::log()->err("ErrLocalTpl", __CLASS__, __FUNCTION__, " Wrong Object Type (" . self::Objects()->Type($Data) . ").");
+            return Splash::log()->err(
+                "ErrLocalTpl",
+                __CLASS__,
+                __FUNCTION__,
+                " Wrong Object Type (" . self::Objects()->Type($Data) . ")."
+            );
         }
         //====================================================================//
         // Verify Object Exists
         $Customer   =   new Customer($Id);
         if ($Customer->id != $Id) {
-            return Splash::log()->err("ErrLocalTpl", __CLASS__, __FUNCTION__, " Unable to load Address Customer(" . $Id . ").");
+            return Splash::log()->err(
+                "ErrLocalTpl",
+                __CLASS__,
+                __FUNCTION__,
+                " Unable to load Address Customer(" . $Id . ")."
+            );
         }
         //====================================================================//
         // Update Link

@@ -50,7 +50,7 @@ trait CRUDTrait
      * @param       string  $UnikId               Object id
      * @return      mixed
      */
-    public function Load($UnikId)
+    public function load($UnikId)
     {
         //====================================================================//
         // Stack Trace
@@ -73,7 +73,12 @@ trait CRUDTrait
         if (!empty($this->ProductId)) {
             $Object = new Product($this->ProductId, true);
             if ($Object->id != $this->ProductId) {
-                return Splash::log()->err("ErrLocalTpl", __CLASS__, __FUNCTION__, "Unable to fetch Product (" . $this->ProductId . ")");
+                return Splash::log()->err(
+                    "ErrLocalTpl",
+                    __CLASS__,
+                    __FUNCTION__,
+                    "Unable to fetch Product (" . $this->ProductId . ")"
+                );
             }
             //====================================================================//
             // Setup Images Variables
@@ -86,7 +91,12 @@ trait CRUDTrait
         if (!empty($this->AttributeId)) {
             $this->Attribute = new Combination($this->AttributeId);
             if ($this->Attribute->id != $this->AttributeId) {
-                return Splash::log()->err("ErrLocalTpl", __CLASS__, __FUNCTION__, "Unable to fetch Product Attribute (" . $this->AttributeId . ")");
+                return Splash::log()->err(
+                    "ErrLocalTpl",
+                    __CLASS__,
+                    __FUNCTION__,
+                    "Unable to fetch Product Attribute (" . $this->AttributeId . ")"
+                );
             }
             $Object->id_product_attribute = $this->AttributeId;
         }
@@ -99,7 +109,7 @@ trait CRUDTrait
      *
      * @return      object     New Object
      */
-    public function Create()
+    public function create()
     {
         //====================================================================//
         // Stack Trace
@@ -135,7 +145,7 @@ trait CRUDTrait
      *
      * @return      string      Object Id
      */
-    public function Update($Needed)
+    public function update($Needed)
     {
         //====================================================================//
         // Stack Trace
@@ -152,7 +162,12 @@ trait CRUDTrait
         // CREATE PRODUCT IF NEW
         if ($Needed && is_null($this->ProductId)) {
             if ($this->Object->add() != true) {
-                return Splash::log()->err("ErrLocalTpl", __CLASS__, __FUNCTION__, " Unable to create Product.");
+                return Splash::log()->err(
+                    "ErrLocalTpl",
+                    __CLASS__,
+                    __FUNCTION__,
+                    " Unable to create Product."
+                );
             }
             //====================================================================//
             // LOCK PRODUCT to prevent triggered actions on Price or Stock Update
@@ -167,7 +182,12 @@ trait CRUDTrait
         // CREATE PRODUCT ATTRIBUTE IF NEW
         if ($this->AttributeUpdate && is_null($this->AttributeId)) {
             if ($this->Attribute->add() != true) {
-                return Splash::log()->err("ErrLocalTpl", __CLASS__, __FUNCTION__, " Unable to create Product Combination.");
+                return Splash::log()->err(
+                    "ErrLocalTpl",
+                    __CLASS__,
+                    __FUNCTION__,
+                    " Unable to create Product Combination."
+                );
             }
             //====================================================================//
             // Store New Id on SplashObject Class
@@ -214,7 +234,12 @@ trait CRUDTrait
         //====================================================================//
         if ($this->ProductId && $Needed) {
             if ($this->Object->update() != true) {
-                return Splash::log()->err("ErrLocalTpl", __CLASS__, __FUNCTION__, " Unable to update Product.");
+                return Splash::log()->err(
+                    "ErrLocalTpl",
+                    __CLASS__,
+                    __FUNCTION__,
+                    " Unable to update Product."
+                );
             }
         }
         
@@ -222,7 +247,12 @@ trait CRUDTrait
         // UPDATE ATTRIBUTE INFORMATIONS
         if ($this->AttributeId && $this->AttributeUpdate) {
             if ($this->Attribute->update() != true) {
-                return Splash::log()->err("ErrLocalTpl", __CLASS__, __FUNCTION__, " Unable to update Product Attribute.");
+                return Splash::log()->err(
+                    "ErrLocalTpl",
+                    __CLASS__,
+                    __FUNCTION__,
+                    " Unable to update Product Attribute."
+                );
             }
         }
         
@@ -236,7 +266,7 @@ trait CRUDTrait
      *
      * @return      bool
      */
-    public function Delete($UnikId = null)
+    public function delete($UnikId = null)
     {
         //====================================================================//
         // Stack Trace
@@ -262,7 +292,12 @@ trait CRUDTrait
         //====================================================================//
         $this->Object     = new Product($this->ProductId, true);
         if ($this->Object->id != $this->ProductId) {
-            return Splash::log()->war("ErrLocalTpl", __CLASS__, __FUNCTION__, " Unable to load Product (" . $this->ProductId . ").");
+            return Splash::log()->war(
+                "ErrLocalTpl",
+                __CLASS__,
+                __FUNCTION__,
+                " Unable to load Product (" . $this->ProductId . ")."
+            );
         }
         
         //====================================================================//

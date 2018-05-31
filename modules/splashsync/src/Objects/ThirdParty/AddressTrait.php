@@ -171,7 +171,9 @@ trait AddressTrait
         //====================================================================//
         // Run Through Address List
         foreach ($AddresList as $Key => $Address) {
-            $this->Out["contacts"][$Key] = array ( "address" => self::Objects()->Encode("Address", $Address["id_address"]) );
+            $this->Out["contacts"][$Key] = array (
+                "address" => self::Objects()->Encode("Address", $Address["id_address"])
+                );
         }
                 
         return true;

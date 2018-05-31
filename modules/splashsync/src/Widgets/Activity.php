@@ -59,7 +59,7 @@ class Activity extends WidgetBase
     //====================================================================//
     // Define Standard Options for this Widget
     // Override this array to change default options for your widget
-    static $OPTIONS       = array(
+    protected static $OPTIONS       = array(
         "Width"     =>      self::SIZE_XL
     );
     
@@ -80,7 +80,7 @@ class Activity extends WidgetBase
      *                        $params["groupby"]    Field name for sort list (Available fields listed below)
 
      */
-    public function Get($params = null)
+    public function get($params = null)
     {
         //====================================================================//
         // Stack Trace
@@ -126,7 +126,8 @@ class Activity extends WidgetBase
         //====================================================================//
         // Verify Inputs
         if (!is_array($Inputs) && !is_a($Inputs, "ArrayObject")) {
-            $this->BlocksFactory()->addNotificationsBlock(array("warning" => "Inputs is not an Array! Is " . get_class($Inputs)));
+            $this->BlocksFactory()
+                    ->addNotificationsBlock(array("warning" => "Inputs is not an Array! Is " . get_class($Inputs)));
         }
         if (!isset($Inputs["DateStart"]) || !isset($Inputs["DateEnd"])) {
             $this->BlocksFactory()->addNotificationsBlock(array("warning" => "No Date Range Defined!"));
@@ -239,11 +240,13 @@ class Activity extends WidgetBase
 
             $refined_data['orders'][$date] = isset($gross_data['orders'][$date]) ? $gross_data['orders'][$date] : 0;
 
-            $refined_data['average_cart_value'][$date] = $refined_data['orders'][$date] ? $refined_data['sales'][$date] / $refined_data['orders'][$date] : 0;
+            $refined_data['average_cart_value'][$date] = $refined_data['orders'][$date]
+                    ? $refined_data['sales'][$date] / $refined_data['orders'][$date] : 0;
 
             $refined_data['visits'][$date] = isset($gross_data['visits'][$date]) ? $gross_data['visits'][$date] : 0;
 
-            $refined_data['conversion_rate'][$date] = $refined_data['visits'][$date] ? $refined_data['orders'][$date] / $refined_data['visits'][$date] : 0;
+            $refined_data['conversion_rate'][$date] = $refined_data['visits'][$date]
+                    ? $refined_data['orders'][$date] / $refined_data['visits'][$date] : 0;
 
             $refined_data['net_profits'][$date] = 0;
             if (isset($gross_data['total_paid_tax_excl'][$date])) {

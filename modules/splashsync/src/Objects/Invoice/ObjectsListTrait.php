@@ -42,7 +42,7 @@ trait ObjectsListTrait
     *                         $data["meta"]["total"]     ==> Total Number of results
     *                         $data["meta"]["current"]   ==> Total Number of results
     */
-    public function ObjectsList($filter = null, $params = null)
+    public function objectsList($filter = null, $params = null)
     {
         //====================================================================//
         // Stack Trace
@@ -75,48 +75,32 @@ trait ObjectsListTrait
             $Where.= " OR LOWER( o.reference )  LIKE LOWER( '%" . pSQL($filter) ."%') ";
             $Where.= " OR LOWER( c.firstname )  LIKE LOWER( '%" . pSQL($filter) ."%') ";
             $Where.= " OR LOWER( c.lastname )   LIKE LOWER( '%" . pSQL($filter) ."%') ";
-            $Where.= " OR LOWER( i.order_date ) LIKE LOWER( '%" . pSQL($filter) ."%') ";
+            $Where.= " OR LOWER( o.date_add )   LIKE LOWER( '%" . pSQL($filter) ."%') ";
             $sql->where($Where);
         }
         //====================================================================//
-        // Setup sortorder
-        $SortField = empty($params["sortfield"])    ?   "order_date":   $params["sortfield"];
-        $SortOrder = empty($params["sortorder"])    ?   "DESC"      :   $params["sortorder"];
-        // Build ORDER BY
-        $sql->orderBy('`' . pSQL($SortField) . '` ' . pSQL($SortOrder));
-        
-        //====================================================================//
-        // Execute count request
-        Db::getInstance()->executeS($sql);
-        if (Db::getInstance()->getNumberError()) {
-            return Splash::log()->err("ErrLocalTpl", __CLASS__, __FUNCTION__, Db::getInstance()->getMsgError());
-        }
-        //====================================================================//
         // Compute Total Number of Results
-        $total      = Db::getInstance()->NumRows();
+        $Total      = $this->getObjectListTotal($sql);
         //====================================================================//
-        // Build LIMIT
-        $sql->limit(pSQL($params["max"]), pSQL($params["offset"]));
-        //====================================================================//
-        // Execute final request
-        $result = Db::getInstance()->executeS($sql);
-        if (Db::getInstance()->getNumberError()) {
-            return Splash::log()->err("ErrLocalTpl", __CLASS__, __FUNCTION__, Db::getInstance()->getMsgError());
+        // Execute Generic Search
+        $Result     = $this->getObjectsListRawData($sql, "order_date", $params);
+        if ($Result === False) {
+            return $Result;
         }
         //====================================================================//
         // Init Result Array
         $Data       = array();
         //====================================================================//
         // For each result, read information and add to $Data
-        foreach ($result as $key => $Invoice) {
+        foreach ($Result as $key => $Invoice) {
             $Object = new OrderInvoice($Invoice["id"]);
             $Invoice["number"] = $Object->getInvoiceNumberFormatted($this->LangId);
             $Data[$key] = $Invoice;
         }
         //====================================================================//
         // Prepare List result meta infos
-        $Data["meta"]["current"]    =   count($Data);  // Store Current Number of results
-        $Data["meta"]["total"]      =   $total;  // Store Total Number of results
+        $Data["meta"]["current"]    =   count($Data);   // Store Current Number of results
+        $Data["meta"]["total"]      =   $Total;         // Store Total Number of results
         Splash::log()->deb("MsgLocalTpl", __CLASS__, __FUNCTION__, (count($Data)-1)." Invoices Found.");
         return $Data;
     }

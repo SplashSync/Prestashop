@@ -51,7 +51,10 @@ trait CoreTrait
         $this->fieldsFactory()->Create(SPL_T_VARCHAR)
                 ->Identifier("ref")
                 ->Name(Translate::getAdminTranslation("Reference", "AdminProducts"))
-                ->Description(Translate::getAdminTranslation('Your internal reference code for this product.', "AdminProducts"))
+                ->Description(Translate::getAdminTranslation(
+                    'Your internal reference code for this product.',
+                    "AdminProducts"
+                ))
                 ->isListed()
                 ->MicroData("http://schema.org/Product", "model")
                 ->isRequired();

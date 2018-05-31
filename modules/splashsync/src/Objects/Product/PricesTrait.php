@@ -61,7 +61,12 @@ trait PricesTrait
         // Product Selling Price
         $this->fieldsFactory()->Create(SPL_T_PRICE)
                 ->Identifier("price")
-                ->Name(Translate::getAdminTranslation("Price (tax excl.)", "AdminProducts") . " (" . $this->Currency->sign . ")")
+                ->Name(
+                    Translate::getAdminTranslation(
+                        "Price (tax excl.)",
+                        "AdminProducts"
+                    ) . " (" . $this->Currency->sign . ")"
+                )
                 ->MicroData("http://schema.org/Product", "price")
                 ->Group($GroupName2)
                 ->isListed();
@@ -70,7 +75,12 @@ trait PricesTrait
         // Product Selling Base Price
         $this->fieldsFactory()->Create(SPL_T_PRICE)
                 ->Identifier("price-base")
-                ->Name(Translate::getAdminTranslation("Price (tax excl.)", "AdminProducts") . " Base (" . $this->Currency->sign . ")")
+                ->Name(
+                    Translate::getAdminTranslation(
+                        "Price (tax excl.)",
+                        "AdminProducts"
+                    ) . " Base (" . $this->Currency->sign . ")"
+                )
                 ->MicroData("http://schema.org/Product", "basePrice")
                 ->Group($GroupName2)
                 ->isListed();
@@ -79,7 +89,12 @@ trait PricesTrait
         // WholeSale Price
         $this->fieldsFactory()->Create(SPL_T_PRICE)
                 ->Identifier("price-wholesale")
-                ->Name(Translate::getAdminTranslation("Wholesale price", "AdminProducts") . " Base (" . $this->Currency->sign . ")")
+                ->Name(
+                    Translate::getAdminTranslation(
+                        "Wholesale price",
+                        "AdminProducts"
+                    ) . " Base (" . $this->Currency->sign . ")"
+                )
                 ->Group($GroupName2)
                 ->MicroData("http://schema.org/Product", "wholesalePrice");
     }
@@ -104,7 +119,10 @@ trait PricesTrait
             case 'price':
                 //====================================================================//
                 // Read Price
-                $PriceHT    = (double)  Tools::convertPrice($this->Object->getPrice(false, $this->AttributeId), $this->Currency);
+                $PriceHT    = (double)  Tools::convertPrice(
+                    $this->Object->getPrice(false, $this->AttributeId),
+                    $this->Currency
+                );
                 $Tax        = (double)  $this->Object->getTaxesRate();
                 //====================================================================//
                 // Build Price Array
@@ -289,7 +307,9 @@ trait PricesTrait
                  $this->Object->tax_rate            = $this->NewPrice["vat"];
                  $this->needUpdate();
             } else {
-                Splash::log()->war("VAT Rate Update : Unable to find this tax rate localy (" . $this->NewPrice["vat"] . ")");
+                Splash::log()->war(
+                    "VAT Rate Update : Unable to find this tax rate localy (" . $this->NewPrice["vat"] . ")"
+                );
             }
         }
         

@@ -41,7 +41,7 @@ trait ObjectsListTrait
     *                         $data["meta"]["total"]     ==> Total Number of results
     *                         $data["meta"]["current"]   ==> Total Number of results
     */
-    public function ObjectsList($filter = null, $params = null)
+    public function objectsList($filter = null, $params = null)
     {
         //====================================================================//
         // Stack Trace
@@ -82,45 +82,7 @@ trait ObjectsListTrait
         }
         
         //====================================================================//
-        // Setup sortorder
-        $SortField = empty($params["sortfield"])    ?   "lastname"  :   $params["sortfield"];
-        $SortOrder = empty($params["sortorder"])    ?   "ASC"       :   $params["sortorder"];
-        // Build ORDER BY
-        $sql->orderBy('`' . pSQL($SortField) . '` ' . pSQL($SortOrder));
-        //====================================================================//
-        // Execute count request
-        Db::getInstance()->executeS($sql);
-        if (Db::getInstance()->getNumberError()) {
-            return Splash::log()->err("ErrLocalTpl", __CLASS__, __FUNCTION__, Db::getInstance()->getMsgError());
-        }
-        //====================================================================//
-        // Compute Total Number of Results
-        $total      = Db::getInstance()->NumRows();
-        //====================================================================//
-        // Build LIMIT
-        $Max    = empty($params["max"])     ?   0   :   $params["max"];
-        $Offset = empty($params["offset"])  ?   0   :   $params["offset"];
-        $sql->limit(pSQL($Max), pSQL($Offset));
-        //====================================================================//
-        // Execute final request
-        $result = Db::getInstance()->executeS($sql);
-        if (Db::getInstance()->getNumberError()) {
-            return Splash::log()->err("ErrLocalTpl", __CLASS__, __FUNCTION__, Db::getInstance()->getMsgError());
-        }
-        //====================================================================//
-        // Init Result Array
-        $Data       = array();
-        //====================================================================//
-        // For each result, read information and add to $Data
-        foreach ($result as $key => $Customer) {
-            $Data[$key] = $Customer;
-//            $Data[$key]["fullname"] = Splash::Tools()->encodeFullName($Customer["firstname"],$Customer["lastname"],$Customer["company"]);
-        }
-        //====================================================================//
-        // Prepare List result meta infos
-        $Data["meta"]["current"]    =   count($Data);       // Store Current Number of results
-        $Data["meta"]["total"]      =   $total;             // Store Total Number of results
-        Splash::log()->deb("MsgLocalTpl", __CLASS__, __FUNCTION__, (count($Data)-1)." Customers Found.");
-        return $Data;
+        // Execute Generic Search
+        return $this->getObjectsListGenericData($sql, "lastname", $params);
     }
 }

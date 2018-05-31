@@ -46,7 +46,7 @@ trait ObjectsListTrait
     *                         $data["meta"]["total"]     ==> Total Number of results
     *                         $data["meta"]["current"]   ==> Total Number of results
     */
-    public function ObjectsList($filter = null, $params = null)
+    public function objectsList($filter = null, $params = null)
     {
         Splash::log()->deb("MsgLocalFuncTrace", __CLASS__, __FUNCTION__);
         
@@ -74,7 +74,9 @@ trait ObjectsListTrait
         $sql->from("product", 'p');
         //====================================================================//
         // Build JOIN
-        $sql->leftJoin("product_lang", 'pl', '(pl.id_product = p.id_product AND pl.id_lang = '.(int)  $this->LangId.Shop::addSqlRestrictionOnLang('pl').')');
+        $sqlWhere = '(pl.id_product = p.id_product AND pl.id_lang = ';
+        $sqlWhere.= (int)  $this->LangId.Shop::addSqlRestrictionOnLang('pl').')';
+        $sql->leftJoin("product_lang", 'pl', $sqlWhere);
         $sql->leftJoin("product_attribute", 'pa', '(pa.id_product = p.id_product) ');
         //====================================================================//
         // Setup filters
@@ -95,37 +97,17 @@ trait ObjectsListTrait
             $sql->where($Where);
         }
         //====================================================================//
-        // Setup sortorder
-        $SortField = empty($params["sortfield"])    ?   "ref"  :   $params["sortfield"];
-        $SortOrder = empty($params["sortorder"])    ?   "ASC"  :   $params["sortorder"];
-        // Build ORDER BY
-        $sql->orderBy('`' . pSQL($SortField) . '` ' . pSQL($SortOrder));
-        
-        //====================================================================//
-        // Execute final request
-        Db::getInstance()->executeS($sql);
-        Splash::log()->deb("Products - Get  List SQL=\"".$sql."\"");
-        if (Db::getInstance()->getNumberError()) {
-            return Splash::log()->err("ErrLocalTpl", __CLASS__, __FUNCTION__, " Error : " . Db::getInstance()->getMsgError());
-        }
-        //====================================================================//
         // Compute Total Number of Results
-        $Total      = Db::getInstance()->NumRows();
+        $Total      = $this->getObjectListTotal($sql);
         //====================================================================//
-        // Build LIMIT
-        $sql->limit(pSQL($params["max"]), pSQL($params["offset"]));
-        $Result = Db::getInstance()->executeS($sql);
+        // Execute Generic Search
+        $Result     = $this->getObjectsListRawData($sql, "ref", $params);
+        if ($Result === False) {
+            return $Result;
+        }        
         //====================================================================//
         // Init Result Array
         $Data       = array();
-        //====================================================================//
-        // Check if List result is empty
-        if ($Result == 0) {
-            $Data["meta"]["current"]    =   Db::getInstance()->NumRows();   // Store Current Number of results
-            $Data["meta"]["total"]      =   $Total;                         // Store Total Number of results
-//            OsWs::Log()->Deb("Main - Get Product List, ".$count." Products Found.");
-            return $Data;
-        }
         //====================================================================//
         // For each result, read information and add to $Data
         foreach ($Result as $Product) {
@@ -159,9 +141,12 @@ trait ObjectsListTrait
             // Fill Product Combination Data to Buffer
             } else {
                 $DataBuffer["id"]           =   (int) $this->getUnikId($Product["id"], $Product["id_attribute"]);
-                $DataBuffer["ref"]          =   empty($Product["ref_attribute"])?$Product["ref"]  . "-" . $Product["id_attribute"]:$Product["ref_attribute"];
+                $DataBuffer["ref"]          =   empty($Product["ref_attribute"])
+                        ?$Product["ref"]  . "-" . $Product["id_attribute"]
+                        :$Product["ref_attribute"];
                 $DataBuffer["name"]         =   $Product["name"];
-                $DataBuffer["weight"]       =   ($Product["weight"] + $Product["weight_attribute"]) . Configuration::get('PS_WEIGHT_UNIT');
+                $DataBuffer["weight"]       =   ($Product["weight"] + $Product["weight_attribute"]);
+                $DataBuffer["weight"]      .=   Configuration::get('PS_WEIGHT_UNIT');
                 $DataBuffer["price"]        =   $p->getPrice(false, $Product["id_attribute"], 3);
                 $DataBuffer["price-base"]   =   $p->getPrice(false, null, 3);
                 $DataBuffer["stock"]        =   $p->getQuantity($Product["id"], $Product["id_attribute"]);

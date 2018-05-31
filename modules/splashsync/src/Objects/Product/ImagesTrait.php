@@ -290,9 +290,15 @@ trait ImagesTrait
                 continue;
             }
             foreach (ImageType::getImagesTypes("products") as $imageType) {
-                $ImageThumb = _PS_PROD_IMG_DIR_.$imageObj->getExistingImgPath().'-'.Tools::stripslashes($imageType['name']).'.jpg';
+                $ImageThumb = _PS_PROD_IMG_DIR_.$imageObj->getExistingImgPath();
+                $ImageThumb.= '-'.Tools::stripslashes($imageType['name']).'.jpg';
                 if (!file_exists($ImageThumb)) {
-                    ImageManager::resize($imagePath.'.jpg', $ImageThumb, (int)($imageType['width']), (int)($imageType['height']));
+                    ImageManager::resize(
+                        $imagePath.'.jpg',
+                        $ImageThumb,
+                        (int)($imageType['width']),
+                        (int)($imageType['height'])
+                    );
                 }
             }
         }

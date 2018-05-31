@@ -54,6 +54,7 @@ class Product extends AbstractObject
     // Prestashop Common Traits
     use \Splash\Local\Objects\Core\DatesTrait;
     use \Splash\Local\Objects\Core\SplashMetaTrait;
+    use \Splash\Local\Objects\Core\ObjectsListCommonsTrait;    
     
     // Prestashop Products Traits
     use \Splash\Local\Objects\Product\ObjectsListTrait;
@@ -102,13 +103,19 @@ class Product extends AbstractObject
     /**
      *  Object Synchronistion Recommended Configuration
      */
-    protected static $ENABLE_PUSH_CREATED       =  false;        // Enable Creation Of New Local Objects when Not Existing
-    protected static $ENABLE_PUSH_UPDATED       =  true;         // Enable Update Of Existing Local Objects when Modified Remotly
-    protected static $ENABLE_PUSH_DELETED       =  true;         // Enable Delete Of Existing Local Objects when Deleted Remotly
+    // Enable Creation Of New Local Objects when Not Existing
+    protected static $ENABLE_PUSH_CREATED       =  false;
+    // Enable Update Of Existing Local Objects when Modified Remotly
+    protected static $ENABLE_PUSH_UPDATED       =  true;
+    // Enable Delete Of Existing Local Objects when Deleted Remotly
+    protected static $ENABLE_PUSH_DELETED       =  true;
 
-    protected static $ENABLE_PULL_CREATED       =  true;         // Enable Import Of New Local Objects
-    protected static $ENABLE_PULL_UPDATED       =  true;         // Enable Import of Updates of Local Objects when Modified Localy
-    protected static $ENABLE_PULL_DELETED       =  true;         // Enable Delete Of Remotes Objects when Deleted Localy
+    // Enable Import Of New Local Objects
+    protected static $ENABLE_PULL_CREATED       =  true;
+    // Enable Import of Updates of Local Objects when Modified Localy
+    protected static $ENABLE_PULL_UPDATED       =  true;
+    // Enable Delete Of Remotes Objects when Deleted Localy
+    protected static $ENABLE_PULL_DELETED       =  true;
     
     
     //====================================================================//

@@ -37,7 +37,7 @@ trait CRUDTrait
      * @param       string  $Id               Object id
      * @return      mixed
      */
-    public function Load($Id)
+    public function load($Id)
     {
         //====================================================================//
         // Stack Trace
@@ -51,7 +51,12 @@ trait CRUDTrait
         }
         $this->Order    = new Order($Object->id_order);
         if ($this->Order->id != $Object->id_order) {
-            return Splash::log()->err("ErrLocalTpl", __CLASS__, __FUNCTION__, " Unable to load Invoice Order (" . $Object->id_order . ").");
+            return Splash::log()->err(
+                "ErrLocalTpl",
+                __CLASS__,
+                __FUNCTION__,
+                " Unable to load Invoice Order (" . $Object->id_order . ")."
+            );
         }
         
         //====================================================================//
@@ -73,7 +78,7 @@ trait CRUDTrait
      *
      * @return      object     New Object
      */
-    public function Create()
+    public function create()
     {
         //====================================================================//
         // Stack Trace
@@ -93,7 +98,7 @@ trait CRUDTrait
      *
      * @return      string      Object Id
      */
-    public function Update($Needed)
+    public function update($Needed)
     {
         //====================================================================//
         // Stack Trace
@@ -116,7 +121,7 @@ trait CRUDTrait
      *
      * @return      bool
      */
-    public function Delete($Id = null)
+    public function delete($Id = null)
     {
         //====================================================================//
         // Stack Trace

@@ -151,7 +151,8 @@ trait ItemsTrait
                 //====================================================================//
                 // Order Line Product Id
                 case 'product_id':
-                    $UnikId = Splash::Object('Product')->getUnikId($Product["product_id"], $Product["product_attribute_id"]);
+                    $UnikId = Splash::Object('Product')
+                        ->getUnikId($Product["product_id"], $Product["product_attribute_id"]);
                     $Value = self::Objects()->Encode("Product", $UnikId);
                     break;
                 //====================================================================//

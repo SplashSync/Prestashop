@@ -36,7 +36,7 @@ trait CRUDTrait
      * @param       string  $Id               Object id
      * @return      mixed
      */
-    public function Load($Id)
+    public function load($Id)
     {
         //====================================================================//
         // Stack Trace
@@ -67,7 +67,7 @@ trait CRUDTrait
      *
      * @return      object     New Object
      */
-    public function Create()
+    public function create()
     {
         //====================================================================//
         // Stack Trace
@@ -137,7 +137,7 @@ trait CRUDTrait
      *
      * @return      string      Object Id
      */
-    public function Update($Needed)
+    public function update($Needed)
     {
         //====================================================================//
         // Stack Trace
@@ -151,7 +151,12 @@ trait CRUDTrait
         //====================================================================//
         if (!empty($this->Object->id)) {
             if ($this->Object->update() != true) {
-                return Splash::log()->err("ErrLocalTpl", __CLASS__, __FUNCTION__, "Unable to Update Order (" . $this->Object->id . ").");
+                return Splash::log()->err(
+                    "ErrLocalTpl",
+                    __CLASS__,
+                    __FUNCTION__,
+                    "Unable to Update Order (" . $this->Object->id . ")."
+                );
             }
             
             Splash::log()->deb("MsgLocalTpl", __CLASS__, __FUNCTION__, "Order Updated");
@@ -175,7 +180,7 @@ trait CRUDTrait
      *
      * @return      bool
      */
-    public function Delete($Id = null)
+    public function delete($Id = null)
     {
         //====================================================================//
         // Stack Trace

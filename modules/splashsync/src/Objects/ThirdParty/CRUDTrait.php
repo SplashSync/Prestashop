@@ -35,7 +35,7 @@ trait CRUDTrait
      * @param       string  $Id               Object id
      * @return      mixed
      */
-    public function Load($Id)
+    public function load($Id)
     {
         //====================================================================//
         // Stack Trace
@@ -44,7 +44,12 @@ trait CRUDTrait
         // Load Object
         $Object = new Customer($Id);
         if ($Object->id != $Id) {
-            return Splash::log()->err("ErrLocalTpl", __CLASS__, __FUNCTION__, " Unable to load Customer (" . $Id . ").");
+            return Splash::log()->err(
+                "ErrLocalTpl",
+                __CLASS__,
+                __FUNCTION__,
+                " Unable to load Customer (" . $Id . ")."
+            );
         }
         return $Object;
     }
@@ -54,7 +59,7 @@ trait CRUDTrait
      *
      * @return      object     New Object
      */
-    public function Create()
+    public function create()
     {
         //====================================================================//
         // Stack Trace
@@ -83,7 +88,7 @@ trait CRUDTrait
      *
      * @return      string      Object Id
      */
-    public function Update($Needed)
+    public function update($Needed)
     {
         //====================================================================//
         // Stack Trace
@@ -96,7 +101,12 @@ trait CRUDTrait
         //====================================================================//
         if (!empty($this->Object->id)) {
             if ($this->Object->update() != true) {
-                return Splash::log()->err("ErrLocalTpl", __CLASS__, __FUNCTION__, "Unable to update (" . $this->Object->id . ").");
+                return Splash::log()->err(
+                    "ErrLocalTpl",
+                    __CLASS__,
+                    __FUNCTION__,
+                    "Unable to update (" . $this->Object->id . ")."
+                );
             }
             
             Splash::log()->deb("MsgLocalTpl", __CLASS__, __FUNCTION__, "Customer Updated");
@@ -111,7 +121,12 @@ trait CRUDTrait
         // If NO Password Given = > Create Random Password
         if (empty($this->Object->passwd)) {
             $this->Object->passwd = Tools::passwdGen();
-            Splash::log()->war("MsgLocalTpl", __CLASS__, __FUNCTION__, "New Customer Password Generated - " . $this->Object->passwd);
+            Splash::log()->war(
+                "MsgLocalTpl",
+                __CLASS__,
+                __FUNCTION__,
+                "New Customer Password Generated - " . $this->Object->passwd
+            );
         }
 
         //====================================================================//
@@ -139,7 +154,7 @@ trait CRUDTrait
      *
      * @return      bool
      */
-    public function Delete($id = null)
+    public function delete($id = null)
     {
         //====================================================================//
         // Stack Trace

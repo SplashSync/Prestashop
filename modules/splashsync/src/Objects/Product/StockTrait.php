@@ -76,7 +76,12 @@ trait StockTrait
         $this->fieldsFactory()->Create(SPL_T_INT)
                 ->Identifier("minimal_quantity")
                 ->Name(Translate::getAdminTranslation("Minimum quantity", "AdminProducts"))
-                ->Description(Translate::getAdminTranslation("The minimum quantity to buy this product (set to 1 to disable this feature).", "AdminProducts"))
+                ->Description(
+                    Translate::getAdminTranslation(
+                        "The minimum quantity to buy this product (set to 1 to disable this feature).",
+                        "AdminProducts"
+                    )
+                )
                 ->Group($GroupName)
                 ->MicroData("http://schema.org/Offer", "eligibleTransactionVolume");
     }
@@ -104,7 +109,8 @@ trait StockTrait
             //====================================================================//
             // Out Of Stock
             case 'outofstock':
-                $this->Out[$FieldName] = ( $this->Object->getQuantity($this->ProductId, $this->AttributeId) > 0 ) ? false : true;
+                $Quantity = $this->Object->getQuantity($this->ProductId, $this->AttributeId);
+                $this->Out[$FieldName] = ( $Quantity > 0 ) ? false : true;
                 break;
             //====================================================================//
             // Minimum Order Quantity
@@ -146,7 +152,9 @@ trait StockTrait
                 //====================================================================//
                 // Product uses Advanced Stock Manager => Cancel Product Stock Update
                 if ($this->Object->useAdvancedStockManagement()) {
-                    Splash::log()->err('Update Product Stock Using Advanced Stock Management : This Feature is not implemented Yet!!');
+                    Splash::log()->err(
+                        'Update Product Stock Using Advanced Stock Management : This Feature is not implemented Yet!!'
+                    );
                     break;
                 }
                 //====================================================================//

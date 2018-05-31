@@ -59,7 +59,7 @@ class Local
      *
      *      @return         array       $parameters
      */
-    public static function Parameters()
+    public static function parameters()
     {
         $Parameters       =     array();
 
@@ -112,7 +112,7 @@ class Local
      *
      *      @return         bool
      */
-    public function Includes()
+    public function includes()
     {
         //====================================================================//
         // When Library is called in both client & server mode
@@ -184,7 +184,7 @@ class Local
      *
      *      @return         bool    global test result
      */
-    public static function SelfTest()
+    public static function selfTest()
     {
 
         //====================================================================//
@@ -245,7 +245,7 @@ class Local
      *
      *  @return     arrayobject
      */
-    public function Informations($Informations)
+    public function informations($Informations)
     {
         //====================================================================//
         // Init Response Object
@@ -258,19 +258,27 @@ class Local
         
         //====================================================================//
         // Company Informations
-        $Response->company          = Configuration::get('PS_SHOP_NAME')    ?   Configuration::get('PS_SHOP_NAME')      :   "...";
-        $Response->address          = Configuration::get('PS_SHOP_ADDR1')   ?   Configuration::get('PS_SHOP_ADDR1') . "</br>" . Configuration::get('PS_SHOP_ADDR2')   :   "...";
-        $Response->zip              = Configuration::get('PS_SHOP_CODE')    ?   Configuration::get('PS_SHOP_CODE')      :   "...";
-        $Response->town             = Configuration::get('PS_SHOP_CITY')    ?   Configuration::get('PS_SHOP_CITY')      :   "...";
-        $Response->country          = Configuration::get('PS_SHOP_COUNTRY') ?   Configuration::get('PS_SHOP_COUNTRY')   :   "...";
+        $Response->company          = Configuration::get('PS_SHOP_NAME')    ?
+                Configuration::get('PS_SHOP_NAME')      :   "...";
+        $Response->address          = Configuration::get('PS_SHOP_ADDR1')   ?
+                Configuration::get('PS_SHOP_ADDR1') . "</br>" . Configuration::get('PS_SHOP_ADDR2')   :   "...";
+        $Response->zip              = Configuration::get('PS_SHOP_CODE')    ?
+                Configuration::get('PS_SHOP_CODE')      :   "...";
+        $Response->town             = Configuration::get('PS_SHOP_CITY')    ?
+                Configuration::get('PS_SHOP_CITY')      :   "...";
+        $Response->country          = Configuration::get('PS_SHOP_COUNTRY') ?
+                Configuration::get('PS_SHOP_COUNTRY')   :   "...";
         $Response->www              = Configuration::get('PS_SHOP_DOMAIN') . __PS_BASE_URI__;
-        $Response->email            = Configuration::get('PS_SHOP_EMAIL')   ?   Configuration::get('PS_SHOP_EMAIL')     :   "...";
-        $Response->phone            = Configuration::get('PS_SHOP_PHONE')   ?   Configuration::get('PS_SHOP_PHONE')     :   "...";
+        $Response->email            = Configuration::get('PS_SHOP_EMAIL')   ?
+                Configuration::get('PS_SHOP_EMAIL')     :   "...";
+        $Response->phone            = Configuration::get('PS_SHOP_PHONE')   ?
+                Configuration::get('PS_SHOP_PHONE')     :   "...";
         
         //====================================================================//
         // Server Logo & Images
         $Response->icoraw           = Splash::File()->ReadFileContents(_PS_IMG_DIR_ . "favicon.ico");
-        $Response->logourl          = "http://" . Configuration::get('PS_SHOP_DOMAIN') . __PS_BASE_URI__ . "img/" . Configuration::get('PS_LOGO');
+        $Response->logourl          = "http://" . Configuration::get('PS_SHOP_DOMAIN') . __PS_BASE_URI__;
+        $Response->logourl         .= "img/" . Configuration::get('PS_LOGO');
         $Response->logoraw          = Splash::File()->ReadFileContents(_PS_IMG_DIR_ . Configuration::get('PS_LOGO'));
         
         //====================================================================//
@@ -301,7 +309,7 @@ class Local
      *
      *      @return         array       $parameters
      */
-    public static function TestParameters()
+    public static function testParameters()
     {
         //====================================================================//
         // Init Parameters Array
@@ -311,7 +319,7 @@ class Local
         // Server Actives Languages List
         $Parameters["Langs"] = array();
         foreach (Language::getLanguages() as $Language) {
-            $Parameters["Langs"][] =   self::Lang_Encode($Language["language_code"]);
+            $Parameters["Langs"][] =   self::langEncode($Language["language_code"]);
         }
         
         return $Parameters;
@@ -328,7 +336,7 @@ class Local
      *      @param          array       $cfg       Loacal Parameters Array
      *      @return         int                     0 if KO, >0 if OK
      */
-    public function LoadLocalUser()
+    public function loadLocalUser()
     {
         
         //====================================================================//
@@ -377,7 +385,7 @@ class Local
      *
      *      @return         bool
      */
-    public function LoadDefaultLanguage()
+    public function loadDefaultLanguage()
     {
 //        $LangCode = Configuration::get('SPLASH_LANG_ID');
         $LangCode = Splash::Configuration()->DefaultLanguage;
@@ -399,7 +407,7 @@ class Local
      *      @param          string      $In         Language Code in Prestashop Format
      *      @return         string      $Out        Language Code in Splash Format
      */
-    public static function Lang_Encode($In)
+    public static function langEncode($In)
     {
         //====================================================================//
         // Split Language Code
@@ -417,7 +425,7 @@ class Local
      *      @param          string      $In         Language Code in Splash Format
      *      @return         string      $Out        Language Code in Prestashop Format
      */
-    public static function Lang_Decode($In)
+    public static function langDecode($In)
     {
         //====================================================================//
         // Split Language Code
