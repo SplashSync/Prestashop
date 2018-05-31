@@ -16,6 +16,7 @@ parameters:
             ignore_patterns:
                 - phpstan.php
                 - defines.inc.php
+                - splashsync.php
         git_blacklist:
             keywords:
                 - "var_dump"

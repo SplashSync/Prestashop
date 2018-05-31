@@ -37,36 +37,40 @@ class SplashSync extends Module
     */
     public function __construct()
     {
-            //====================================================================//
-            // Init Module Main Information Fields
-            $this->name = 'splashsync';
-            $this->tab = 'administration';
-            $this->version = '1.2.0';
-            $this->author = 'SplashSync';
-            $this->need_instance = 0;
-            $this->ps_versions_compliancy = array('min' => '1.5', 'max' => '1.7');
-            $this->module_key = '48032a9ff6cc3a4a43a0ea2acf7ccf10';
-            
-            //====================================================================//
-            // Activate BootStarp
-            $this->bootstrap = true;
-            //====================================================================//
-            // Construct Parent Module
-            parent::__construct();
+        //====================================================================//
+        // Init Module Main Information Fields
+        $this->name = 'splashsync';
+        $this->tab = 'administration';
+        $this->version = '1.2.0';
+        $this->author = 'SplashSync';
+        $this->need_instance = 0;
+        $this->ps_versions_compliancy = array('min' => '1.5', 'max' => '1.7');
+        $this->module_key = '48032a9ff6cc3a4a43a0ea2acf7ccf10';
 
-            //====================================================================//
-            // Module Descriptions Fields
-            //====================================================================//
-            // Display Name
-            $this->displayName = $this->l('Splash Sync Connector');
-            // Module Short Description
-            $this->description = $this->l('Splash Sync Open Synchronisation Module. Connect your Shop with SplashSync Server to synchronize Customers, Products, Orders and more...');
-            // Unistall Message
-            $this->confirmUninstall = $this->l('Are you sure you want to uninstall?');
-            
-            //====================================================================//
-            // WebService
-            //====================================================================//
+        //====================================================================//
+        // Activate BootStarp
+        $this->bootstrap = true;
+        //====================================================================//
+        // Construct Parent Module
+        parent::__construct();
+
+        //====================================================================//
+        // Module Descriptions Fields
+        //====================================================================//
+        // Display Name
+        $this->displayName = $this->l('Splash Sync Connector');
+        // Module Short Description
+        $this->description = $this->l(
+            'Splash Sync Open Synchronisation Module. '
+                . 'Connect your Shop with SplashSync Server to synchronize Customers, '
+                . 'Products, Orders and more...'
+        );
+        // Unistall Message
+        $this->confirmUninstall = $this->l('Are you sure you want to uninstall?');
+
+        //====================================================================//
+        // WebService
+        //====================================================================//
         if (!class_exists("Splash")) {
             //====================================================================//
             // Splash Module & Dependecies Autoloader
@@ -75,9 +79,9 @@ class SplashSync extends Module
             // Init Splash Module
             Splash\Client\Splash::Core();
         }
-            //====================================================================//
-            // INIT Context VAriables
-            self::_InitContext();
+        //====================================================================//
+        // INIT Context VAriables
+        self::_InitContext();
     }
 
 //====================================================================//
