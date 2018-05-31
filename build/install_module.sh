@@ -12,9 +12,11 @@ cd $TRAVIS_BUILD_DIR
 #mkdir     $TRAVIS_BUILD_DIR/modules/splashsync
 #cp -Rf    $MODULE_DIR/modules/splashsync/*              $TRAVIS_BUILD_DIR/modules/splashsync/      
 cp -Rf    $MODULE_DIR/*                                 $TRAVIS_BUILD_DIR/      
+rm -Rf    $TRAVIS_BUILD_DIR/.git/*      
 cp -Rf    $MODULE_DIR/.git/*                            $TRAVIS_BUILD_DIR/.git/      
 cp -f     $MODULE_DIR/build/phpunit.xml.dist            $TRAVIS_BUILD_DIR/phpunit.xml           
 ls -al    $TRAVIS_BUILD_DIR/modules/splashsync
+ls -al    $TRAVIS_BUILD_DIR/
 
 # Change Default Language Code to ISO format
 mysql -D prestashop -e "UPDATE ps_lang SET language_code = 'fr-fr' WHERE ps_lang.language_code = 'fr';"
