@@ -3,10 +3,11 @@ echo Move Module to TMP Folder
 
 # Move Module Contents to Tmp Folder
 mkdir     $MODULE_DIR
-mv -f     $TRAVIS_BUILD_DIR/*           $MODULE_DIR      
+mv -f     $TRAVIS_BUILD_DIR/*               $MODULE_DIR      
 
 mkdir     $MODULE_DIR/.git
-mv -f     $TRAVIS_BUILD_DIR/.git/*      $MODULE_DIR/.git      
+mv -f     $TRAVIS_BUILD_DIR/.git/*          $MODULE_DIR/.git      
+mv -f     $TRAVIS_BUILD_DIR/.travis.yml     $MODULE_DIR/.travis.yml      
 
 # Delete Remaining Contents from Build Folder
 rm -Rf    $TRAVIS_BUILD_DIR/.git
