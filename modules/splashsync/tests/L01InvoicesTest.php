@@ -29,27 +29,27 @@ use Splash\Client\Splash;
 class L01InvoicesTest extends ObjectsCase
 {
     
-    public function testCreateAnInvoice()
-    {
-        $this->assertTrue(true);
-        
-        //====================================================================//
-        //   Create Fake Order Data
-        $this->Fields   =   $this->fakeFieldsList("Order", ["product_id@lines"], true);
-        $FakeData       =   $this->fakeObjectData($this->Fields);
-        
-        //====================================================================//
-        //   Execute Action Directly on Module
-        $ObjectId = Splash::Object("Order")->Set(null, $FakeData);
-        
-        //====================================================================//
-        //   Load Order Object
-        $Order  =   Splash::Object("Order")->Load($ObjectId);
-        $this->assertNotEmpty($Order);
-        
-        //====================================================================//
-        //   Set Order State to Delivered
-        $Order->setCurrentState(5);
-        $Order->update();
-    }
+//    public function testCreateAnInvoice()
+//    {
+//        $this->assertTrue(true);
+//        
+//        //====================================================================//
+//        //   Create Fake Order Data
+//        $this->Fields   =   $this->fakeFieldsList("Order", ["product_id@lines"], true);
+//        $FakeData       =   $this->fakeObjectData($this->Fields);
+//        
+//        //====================================================================//
+//        //   Execute Action Directly on Module
+//        $ObjectId = Splash::Object("Order")->Set(null, $FakeData);
+//        
+//        //====================================================================//
+//        //   Load Order Object
+//        $Order  =   Splash::Object("Order")->Load($ObjectId);
+//        $this->assertNotEmpty($Order);
+//        
+//        //====================================================================//
+//        //   Set Order State to Delivered
+//        $Order->setCurrentState(5);
+//        $Order->update();
+//    }
 }
