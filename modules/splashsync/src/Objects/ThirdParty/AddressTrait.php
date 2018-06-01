@@ -39,9 +39,9 @@ trait AddressTrait
 {
 
     /**
-    *   @abstract     Build Customers Main Fields using FieldFactory
-    */
-    private function buildPrimaryAddressFields()
+     * @abstract    Build Fields using FieldFactory
+     */
+    private function buildPrimaryAddressPart1Fields()
     {
         $GroupName  =   Translate::getAdminTranslation("Address", "AdminCustomers");
 
@@ -116,6 +116,14 @@ trait AddressTrait
                 ->MicroData("http://schema.org/PostalAddress", "addressCountry")
                 ->Group($GroupName)
                 ->isReadOnly();
+    }
+
+    /**
+     * @abstract    Build Fields using FieldFactory
+     */
+    private function buildPrimaryAddressPart2Fields()
+    {
+        $GroupName  =   Translate::getAdminTranslation("Address", "AdminCustomers");
         
         //====================================================================//
         // Phone
@@ -147,7 +155,7 @@ trait AddressTrait
     /**
      *  @abstract     Read requested Field
      *
-     *  @return         bool
+     *  @return void
      */
     private function getAddressList()
     {
@@ -165,7 +173,7 @@ trait AddressTrait
         //====================================================================//
         // If Address List Is Empty => Null
         if (empty($AddresList)) {
-            return true;
+            return;
         }
                 
         //====================================================================//
@@ -176,16 +184,17 @@ trait AddressTrait
                 );
         }
                 
-        return true;
+        return;
     }
     
     /**
-     *  @abstract     Read requested Field
+     * @abstract     Read requested Field
      *
-     *  @param        string    $Key                    Input List Key
-     *  @param        string    $FieldName              Field Identifier / Name
+     * @param       string    $Key                    Input List Key
+     * @param       string    $FieldName              Field Identifier / Name
      *
-     *  @return         none
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @return         none
      */
     private function getPrimaryAddressFields($Key, $FieldName)
     {

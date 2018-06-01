@@ -131,7 +131,7 @@ trait CRUDTrait
 
         //====================================================================//
         // Create Object In Database
-        if (($Result = $this->Object->add(true, true))  != true) {
+        if ($this->Object->add(true, true) != true) {
             return Splash::log()->err("ErrLocalTpl", __CLASS__, __FUNCTION__, "Unable to create Customer. ");
         }
         Splash::log()->deb("MsgLocalTpl", __CLASS__, __FUNCTION__, "Customer Created");

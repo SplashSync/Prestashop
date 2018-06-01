@@ -120,6 +120,7 @@ trait CRUDTrait
      * @param       int     $Id     Object Id.  If NULL, Object needs to be created.
      *
      * @return      bool
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function delete($Id = null)
     {

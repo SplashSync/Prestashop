@@ -112,46 +112,8 @@ trait StatusTrait
             // ORDER STATUS
             //====================================================================//
             case 'status':
-                //====================================================================//
-                // If order is in  Static Status => Use Static Status
-                if ($this->Object->current_state == 1) {
-                    $this->Out[$FieldName]  = "OrderPaymentDue";
-                    break;
-                } elseif ($this->Object->current_state == 2) {
-                    $this->Out[$FieldName]  = "OrderProcessing";
-                    break;
-                } elseif ($this->Object->current_state == 3) {
-                    $this->Out[$FieldName]  = "OrderProcessing";
-                    break;
-                } elseif ($this->Object->current_state == 4) {
-                    $this->Out[$FieldName]  = "OrderInTransit";
-                    break;
-                } elseif ($this->Object->current_state == 5) {
-                    $this->Out[$FieldName]  = "OrderDelivered";
-                    break;
-                }
-                //====================================================================//
-                // If order is invalid => Canceled
-                if (!$this->Object->valid) {
-                    $this->Out[$FieldName]  = "OrderCanceled";
-                    break;
-                }
-                //====================================================================//
-                // Other Status => Use Status Flag to Detect Current Order Status
-                //====================================================================//
-                if ($this->Object->isPaidAndShipped()) {
-                    $this->Out[$FieldName]  = "OrderDelivered";
-                    break;
-                } elseif ($this->Object->hasBeenPaid()) {
-                    $this->Out[$FieldName]  = "OrderProcessing";
-                    break;
-                }
-                //====================================================================//
-                // Default Status => Order is Closed & Delivered
-                // Used for Orders imported to Prestashop that do not have Prestatsop Status
-                $this->Out[$FieldName]  = "OrderDelivered";
+                $this->Out[$FieldName]  = $this->getSplashStatus();
                 break;
-            
             case 'isCanceled':
                 $this->Out[$FieldName]  = (bool) !$this->Object->valid;
                 break;
@@ -170,5 +132,43 @@ trait StatusTrait
         }
         
         unset($this->In[$Key]);
+    }
+    
+    /**
+     *  @abstract     Read Order Status
+     *  @return       string
+     */
+    private function getSplashStatus()
+    {
+        //====================================================================//
+        // If order is in  Static Status => Use Static Status
+        if ($this->Object->current_state == 1) {
+            return "OrderPaymentDue";
+        } elseif ($this->Object->current_state == 2) {
+            return "OrderProcessing";
+        } elseif ($this->Object->current_state == 3) {
+            return "OrderProcessing";
+        } elseif ($this->Object->current_state == 4) {
+            return "OrderInTransit";
+        } elseif ($this->Object->current_state == 5) {
+            return "OrderDelivered";
+        }
+        //====================================================================//
+        // If order is invalid => Canceled
+        if (!$this->Object->valid) {
+            return "OrderCanceled";
+        }
+        //====================================================================//
+        // Other Status => Use Status Flag to Detect Current Order Status
+        //====================================================================//
+        if ($this->Object->isPaidAndShipped()) {
+            return "OrderDelivered";
+        } elseif ($this->Object->hasBeenPaid()) {
+            return "OrderProcessing";
+        }
+        //====================================================================//
+        // Default Status => Order is Closed & Delivered
+        // Used for Orders imported to Prestashop that do not have Prestatsop Status
+        return "OrderDelivered";
     }
 }

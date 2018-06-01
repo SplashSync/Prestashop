@@ -34,6 +34,7 @@ use Splash\Local\Traits\SplashIdTrait;
  * @abstract    Splash Local Core Class - Head of Module's Local Integration
  * @author      B. Paquier <contact@splashsync.com>
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Local
 {
@@ -405,16 +406,16 @@ class Local
     
     /**
      *      @abstract       Translate Prestashop Languages Code to Splash Standard Format
-     *      @param          string      $In         Language Code in Prestashop Format
+     *      @param          string      $PsCode     Language Code in Prestashop Format
      *      @return         string      $Out        Language Code in Splash Format
      */
-    public static function langEncode($In)
+    public static function langEncode($PsCode)
     {
         //====================================================================//
         // Split Language Code
-        $Tmp = explode("-", $In);
+        $Tmp = explode("-", $PsCode);
         if (count($Tmp) != 2) {
-            $Out = $In;
+            $Out = $PsCode;
         } else {
             $Out = $Tmp[0] . "_" . Tools::strtoupper($Tmp[1]);
         }
@@ -423,16 +424,16 @@ class Local
 
     /**
      *      @abstract       Translate Prestashop Languages Code from Splash Standard Format
-     *      @param          string      $In         Language Code in Splash Format
+     *      @param          string      $IsoCode         Language Code in Splash Format
      *      @return         string      $Out        Language Code in Prestashop Format
      */
-    public static function langDecode($In)
+    public static function langDecode($IsoCode)
     {
         //====================================================================//
         // Split Language Code
-        $Tmp = explode("_", $In);
+        $Tmp = explode("_", $IsoCode);
         if (count($Tmp) != 2) {
-            return $In;
+            return $IsoCode;
         } else {
             return $Tmp[0] . "-" . Tools::strtolower($Tmp[1]);
         }

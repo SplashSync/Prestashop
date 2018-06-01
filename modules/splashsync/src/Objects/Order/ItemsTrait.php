@@ -113,12 +113,13 @@ trait ItemsTrait
     
     
     /**
-     *  @abstract     Read requested Field
+     * @abstract     Read requested Field
      *
-     *  @param        string    $Key                    Input List Key
-     *  @param        string    $FieldName              Field Identifier / Name
+     * @param        string    $Key                    Input List Key
+     * @param        string    $FieldName              Field Identifier / Name
      *
-     *  @return         none
+     * @return       void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function getProductsFields($Key, $FieldName)
     {
@@ -219,12 +220,14 @@ trait ItemsTrait
     }
     
     /**
-     *  @abstract     Write Data to Current Item
+     * @abstract    Write Data to Current Item
      *
-     *  @param        array     $CurrentProduct    Current Item Data Array
-     *  @param        array     $ProductItem       Input Item Data Array
+     * @param       array     $CurrentProduct    Current Item Data Array
+     * @param       array     $ProductItem       Input Item Data Array
      *
-     *  @return         none
+     * @return      void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     private function updateProduct($CurrentProduct, $ProductItem)
     {
@@ -311,7 +314,8 @@ trait ItemsTrait
      *  @param        string    $Key                    Input List Key
      *  @param        string    $FieldName              Field Identifier / Name
      *
-     *  @return         none
+     *  @return       none
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     private function getDiscountFields($Key, $FieldName)
     {
@@ -321,17 +325,9 @@ trait ItemsTrait
         if (!$FieldId) {
             return;
         }
-        
-        if (get_class($this) ===  "Splash\Local\Objects\Invoice") {
-            $DiscountTaxExcl    =   $this->Object->total_discount_tax_excl;
-            $DiscountTaxIncl    =   $this->Object->total_discount_tax_incl;
-        } else {
-            $DiscountTaxExcl    =   $this->Object->total_discounts_tax_excl;
-            $DiscountTaxIncl    =   $this->Object->total_discounts_tax_incl;
-        }
         //====================================================================//
         // Check If Order has Discounts
-        if ($DiscountTaxIncl == 0) {
+        if ($this->getDiscountTaxIncl() == 0) {
             return;
         }
         //====================================================================//
@@ -356,23 +352,7 @@ trait ItemsTrait
             //====================================================================//
             // Order Line Unit Price
             case 'unit_price':
-                //====================================================================//
-                // Manually Compute Tax Rate
-                if ($DiscountTaxIncl != $DiscountTaxExcl) {
-                    $Tax    =   round(100 * ( ($DiscountTaxIncl - $DiscountTaxExcl) /  $DiscountTaxExcl ), 3);
-                } else {
-                    $Tax    =   0;
-                }
-                //====================================================================//
-                // Build Price Array
-                $Value = self::Prices()->Encode(
-                    (double)    (-1) * Tools::convertPrice($DiscountTaxExcl, $this->Currency),
-                    (double)    $Tax,
-                    null,
-                    $this->Currency->iso_code,
-                    $this->Currency->sign,
-                    $this->Currency->name
-                );
+                $Value = $this->getDiscountPrice($this->getDiscountTaxIncl(), $this->getDiscountTaxExcl());
                 break;
             case 'tax_name':
                 $Value = null;
@@ -389,6 +369,51 @@ trait ItemsTrait
         self::lists()->Insert($this->Out, "lines", $FieldName, $key, $Value);
     }
     
+    private function getDiscountPrice($DiscountTaxIncl, $DiscountTaxExcl)
+    {
+        //====================================================================//
+        // Manually Compute Tax Rate
+        if ($DiscountTaxIncl != $DiscountTaxExcl) {
+            $Tax    =   round(100 * ( ($DiscountTaxIncl - $DiscountTaxExcl) /  $DiscountTaxExcl ), 3);
+        } else {
+            $Tax    =   0;
+        }
+        //====================================================================//
+        // Build Price Array
+        return self::Prices()->Encode(
+            (double)    (-1) * Tools::convertPrice($DiscountTaxExcl, $this->Currency),
+            (double)    $Tax,
+            null,
+            $this->Currency->iso_code,
+            $this->Currency->sign,
+            $this->Currency->name
+        );
+    }
+    
+    /**
+     * @abstract     get Total Discount Tax Excluded
+     * @return       double
+     */
+    private function getDiscountTaxExcl()
+    {
+        if (get_class($this) ===  "Splash\Local\Objects\Invoice") {
+            return  $this->Object->total_discount_tax_excl;
+        }
+        return  $this->Object->total_discounts_tax_excl;
+    }
+
+    /**
+     * @abstract     get Total Discount Tax Included
+     * @return       double
+     */
+    private function getDiscountTaxIncl()
+    {
+        if (get_class($this) ===  "Splash\Local\Objects\Invoice") {
+            return  $this->Object->total_discount_tax_incl;
+        }
+        return  $this->Object->total_discounts_tax_incl;
+    }
+    
     /**
      *  @abstract     Read requested Field
      *
@@ -396,18 +421,18 @@ trait ItemsTrait
      *  @param        string    $FieldName              Field Identifier / Name
      *
      *  @return         none
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function getShippingFields($Key, $FieldName)
     {
         //====================================================================//
         // Check if List field & Init List Array
         $FieldId = self::lists()->InitOutput($this->Out, "lines", $FieldName);
-        if (!$FieldId) {
-            return;
-        }
         //====================================================================//
+        // Check if List field
         // Check If Order has Discounts
-        if (SPLASH_DEBUG && ( $this->Object->total_shipping_tax_incl == 0 )) {
+        if ((!$FieldId) || (SPLASH_DEBUG && ( $this->Object->total_shipping_tax_incl == 0 ))) {
             return;
         }
         //====================================================================//
@@ -432,23 +457,7 @@ trait ItemsTrait
             //====================================================================//
             // Order Line Unit Price
             case 'unit_price':
-                //====================================================================//
-                // Compute Tax Rate Using Tax Calculator
-                if ($this->Object->total_shipping_tax_incl != $this->Object->total_shipping_tax_excl) {
-                    $Tax    =   $this->ShippingTaxCalculator->getTotalRate();
-                } else {
-                    $Tax    =   0;
-                }
-                //====================================================================//
-                // Build Price Array
-                $Value = self::Prices()->Encode(
-                    (double)    Tools::convertPrice($this->Object->total_shipping_tax_excl, $this->Currency),
-                    (double)    $Tax,
-                    null,
-                    $this->Currency->iso_code,
-                    $this->Currency->sign,
-                    $this->Currency->name
-                );
+                $Value = $this->getShippingPrice();
                 break;
             case 'tax_name':
                 $Value = $this->ShippingTaxCalculator->getTaxesName();
@@ -458,10 +467,28 @@ trait ItemsTrait
         }
         
         //====================================================================//
-        // Create Line Array If Needed
-        $key = count($this->Products);
-        //====================================================================//
         // Insert Data in List
-        self::lists()->Insert($this->Out, "lines", $FieldName, $key, $Value);
+        self::lists()->Insert($this->Out, "lines", $FieldName, count($this->Products), $Value);
+    }
+    
+    private function getShippingPrice()
+    {
+        //====================================================================//
+        // Compute Tax Rate Using Tax Calculator
+        if ($this->Object->total_shipping_tax_incl != $this->Object->total_shipping_tax_excl) {
+            $Tax    =   $this->ShippingTaxCalculator->getTotalRate();
+        } else {
+            $Tax    =   0;
+        }
+        //====================================================================//
+        // Build Price Array
+        return self::Prices()->Encode(
+            (double)    Tools::convertPrice($this->Object->total_shipping_tax_excl, $this->Currency),
+            (double)    $Tax,
+            null,
+            $this->Currency->iso_code,
+            $this->Currency->sign,
+            $this->Currency->name
+        );
     }
 }

@@ -183,9 +183,11 @@ trait ImagesTrait
          
      
     /**
-    *   @abstract     Update Product Image Array from Server Data
-    *   @param        array   $Data             Input Image List for Update
-    */
+     * @abstract    Update Product Image Array from Server Data
+     * @param       array   $Data             Input Image List for Update
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     */
     public function setImgArray($Data)
     {
         //====================================================================//
@@ -203,6 +205,7 @@ trait ImagesTrait
             $this->Object->id,
             $this->AttributeId
         );
+        
         //====================================================================//
         // UPDATE IMAGES LIST
         //====================================================================//
@@ -268,40 +271,11 @@ trait ImagesTrait
         
         //====================================================================//
         // If Current Image List Is Empty => Clear Remaining Local Images
-        if (!empty($ObjectImagesList) && !$this->AttributeId) {
-            foreach ($ObjectImagesList as $ImageArray) {
-                //====================================================================//
-                // Fetch Images Object
-                $ObjectImage = new Image($ImageArray["id_image"]);
-                $ObjectImage->deleteImage(true);
-                $ObjectImage->delete();
-                $this->needUpdate();
-            }
-        }
+        $this->cleanImages($ObjectImagesList);
         
         //====================================================================//
         // Generate Images Thumbnail
-        //====================================================================//
-        // Load Object Images List
-        foreach (Image::getImages($this->LangId, $this->ProductId) as $image) {
-            $imageObj   = new Image($image['id_image']);
-            $imagePath  = _PS_PROD_IMG_DIR_.$imageObj->getExistingImgPath();
-            if (!file_exists($imagePath.'.jpg')) {
-                continue;
-            }
-            foreach (ImageType::getImagesTypes("products") as $imageType) {
-                $ImageThumb = _PS_PROD_IMG_DIR_.$imageObj->getExistingImgPath();
-                $ImageThumb.= '-'.Tools::stripslashes($imageType['name']).'.jpg';
-                if (!file_exists($ImageThumb)) {
-                    ImageManager::resize(
-                        $imagePath.'.jpg',
-                        $ImageThumb,
-                        (int)($imageType['width']),
-                        (int)($imageType['height'])
-                    );
-                }
-            }
-        }
+        $this->updateImgThumbnail();
         
         return true;
     }
@@ -340,5 +314,52 @@ trait ImagesTrait
         $Path       = dirname($ObjectImage->getPathForCreation());
         $Filename   = "/" . $ObjectImage->id . "." . $ObjectImage->image_format;
         Splash::File()->WriteFile($Path, $Filename, $NewImageFile["md5"], $NewImageFile["raw"]);
+    }
+    
+    /**
+     * @abstract     CleanUp Product Images List
+     */
+    public function cleanImages($ObjectImagesList)
+    {
+        //====================================================================//
+        // If Current Image List Is Empty => Clear Remaining Local Images
+        if (!empty($ObjectImagesList) && !$this->AttributeId) {
+            foreach ($ObjectImagesList as $ImageArray) {
+                //====================================================================//
+                // Fetch Images Object
+                $ObjectImage = new Image($ImageArray["id_image"]);
+                $ObjectImage->deleteImage(true);
+                $ObjectImage->delete();
+                $this->needUpdate();
+            }
+        }
+    }
+    
+    /**
+     * @abstract    Update Product Image Thumbnail
+     */
+    private function updateImgThumbnail()
+    {
+        //====================================================================//
+        // Load Object Images List
+        foreach (Image::getImages($this->LangId, $this->ProductId) as $image) {
+            $imageObj   = new Image($image['id_image']);
+            $imagePath  = _PS_PROD_IMG_DIR_.$imageObj->getExistingImgPath();
+            if (!file_exists($imagePath.'.jpg')) {
+                continue;
+            }
+            foreach (ImageType::getImagesTypes("products") as $imageType) {
+                $ImageThumb = _PS_PROD_IMG_DIR_.$imageObj->getExistingImgPath();
+                $ImageThumb.= '-'.Tools::stripslashes($imageType['name']).'.jpg';
+                if (!file_exists($ImageThumb)) {
+                    ImageManager::resize(
+                        $imagePath.'.jpg',
+                        $ImageThumb,
+                        (int)($imageType['width']),
+                        (int)($imageType['height'])
+                    );
+                }
+            }
+        }
     }
 }

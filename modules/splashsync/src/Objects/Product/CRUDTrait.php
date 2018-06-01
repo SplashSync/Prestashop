@@ -21,22 +21,9 @@ use Splash\Core\SplashCore      as Splash;
 
 //====================================================================//
 // Prestashop Static Classes
-//====================================================================//
-// Prestashop Static Classes
-use Shop;
-use Configuration;
-use Currency;
 use Product;
 use Combination;
-use Language;
-use Context;
-use Translate;
-use Image;
-use ImageType;
-use ImageManager;
 use StockAvailable;
-use DbQuery;
-use Db;
 use Tools;
 
 /**
@@ -144,6 +131,8 @@ trait CRUDTrait
      * @param       array   $Needed         Is This Update Needed
      *
      * @return      string      Object Id
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function update($Needed)
     {
@@ -198,36 +187,9 @@ trait CRUDTrait
         }
         
         //====================================================================//
-        // UPDATE/CREATE PRODUCT PRICE
+        // UPDATE/CREATE POST CREATE FIELDS
         //====================================================================//
-        if (isset($this->NewPrice)) {
-            $this->setSavePrice();
-            unset($this->NewPrice);
-        }
-        //====================================================================//
-        // UPDATE/CREATE PRODUCT IMAGES
-        //====================================================================//
-        if (isset($this->NewImagesArray)) {
-            $this->setImgArray($this->NewImagesArray);
-            unset($this->NewImagesArray);
-        }
-        //====================================================================//
-        // UPDATE/CREATE SPLASH ID
-        //====================================================================//
-        if (isset($this->NewSplashId)) {
-            Splash::local()->setSplashId("Product", $this->getUnikId(), $this->NewSplashId);
-            unset($this->NewSplashId);
-        }
-        //====================================================================//
-        // INIT PRODUCT STOCK
-        //====================================================================//
-        if (isset($this->NewStock)) {
-            //====================================================================//
-            // Product Just Created => Setup Product Stock
-            StockAvailable::setQuantity($this->ProductId, $this->AttributeId, $this->NewStock);
-            $Needed = true;
-            unset($this->NewStock);
-        }
+        $this->updatePostCreateFields();
         
         //====================================================================//
         // UPDATE MAIN INFORMATIONS
@@ -257,6 +219,49 @@ trait CRUDTrait
         }
         
         return (int) $this->getUnikId();
+    }
+    
+    /**
+     * @abstract    Update Request Object
+     * @return      void
+     */
+    private function updatePostCreateFields()
+    {
+        //====================================================================//
+        // Stack Trace
+        Splash::log()->trace(__CLASS__, __FUNCTION__);
+        
+        //====================================================================//
+        // UPDATE/CREATE PRODUCT PRICE
+        //====================================================================//
+        if (isset($this->NewPrice)) {
+            $this->setSavePrice();
+            unset($this->NewPrice);
+        }
+        //====================================================================//
+        // UPDATE/CREATE PRODUCT IMAGES
+        //====================================================================//
+        if (isset($this->NewImagesArray)) {
+            $this->setImgArray($this->NewImagesArray);
+            unset($this->NewImagesArray);
+        }
+        //====================================================================//
+        // UPDATE/CREATE SPLASH ID
+        //====================================================================//
+        if (isset($this->NewSplashId)) {
+            Splash::local()->setSplashId("Product", $this->getUnikId(), $this->NewSplashId);
+            unset($this->NewSplashId);
+        }
+        //====================================================================//
+        // INIT PRODUCT STOCK
+        //====================================================================//
+        if (isset($this->NewStock)) {
+            //====================================================================//
+            // Product Just Created => Setup Product Stock
+            StockAvailable::setQuantity($this->ProductId, $this->AttributeId, $this->NewStock);
+            $this->needUdpate();
+            unset($this->NewStock);
+        }
     }
     
     /**

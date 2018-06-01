@@ -19,17 +19,10 @@ use Splash\Core\SplashCore      as Splash;
 
 //====================================================================//
 // Prestashop Static Classes
-use Address;
 use Gender;
 use Context;
-use State;
-use Country;
 use Translate;
 use Validate;
-use DbQuery;
-use Db;
-use Customer;
-use Tools;
 
 /**
  * @abstract    Access to thirdparty Main Fields
@@ -150,7 +143,26 @@ trait MainTrait
                 }
                 $this->Out[$FieldName] = "Prestashop("  . $this->Object->id . ")";
                 break;
-            
+                            
+            default:
+                return;
+        }
+        unset($this->In[$Key]);
+    }
+    
+    /**
+     *  @abstract     Read requested Field
+     *
+     *  @param        string    $Key                    Input List Key
+     *  @param        string    $FieldName              Field Identifier / Name
+     *
+     *  @return         none
+     */
+    private function getGenderFields($Key, $FieldName)
+    {
+        //====================================================================//
+        // READ Fields
+        switch ($FieldName) {
             //====================================================================//
             // Gender Name
             case 'gender_name':
@@ -210,7 +222,26 @@ trait MainTrait
                 }
                 $this->setSimple($FieldName, $Data);
                 break;
-
+                
+            default:
+                return;
+        }
+        unset($this->In[$FieldName]);
+    }
+    
+    /**
+     *  @abstract     Write Given Fields
+     *
+     *  @param        string    $FieldName              Field Identifier / Name
+     *  @param        mixed     $Data                   Field Data
+     *
+     *  @return         none
+     */
+    private function setIdentificationFields($FieldName, $Data)
+    {
+        //====================================================================//
+        // WRITE Fields
+        switch ($FieldName) {
             //====================================================================//
             // Write SIRET With Verification
             case 'siret':
@@ -235,7 +266,26 @@ trait MainTrait
                 }
                 $this->setSimple($FieldName, $Data);
                 break;
-                                        
+                
+            default:
+                return;
+        }
+        unset($this->In[$FieldName]);
+    }
+    
+    /**
+     *  @abstract     Write Given Fields
+     *
+     *  @param        string    $FieldName              Field Identifier / Name
+     *  @param        mixed     $Data                   Field Data
+     *
+     *  @return         none
+     */
+    private function setGenderFields($FieldName, $Data)
+    {
+        //====================================================================//
+        // WRITE Fields
+        switch ($FieldName) {
             //====================================================================//
             // Gender Type
             case 'gender_type':

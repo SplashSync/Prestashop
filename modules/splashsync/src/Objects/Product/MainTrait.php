@@ -19,20 +19,7 @@ use Splash\Core\SplashCore      as Splash;
 
 //====================================================================//
 // Prestashop Static Classes
-use Shop;
-use Configuration;
-use Currency;
-use Combination;
-use Language;
-use Context;
 use Translate;
-use Image;
-use ImageType;
-use ImageManager;
-use StockAvailable;
-use DbQuery;
-use Db;
-use Tools;
 
 /**
  * @abstract    Access to Product Main Fields
@@ -48,8 +35,6 @@ trait MainTrait
     {
         
         $GroupName  = Translate::getAdminTranslation("Shipping", "AdminProducts");
-        $GroupName2 = Translate::getAdminTranslation("Prices", "AdminProducts");
-        $GroupName3 = Translate::getAdminTranslation("Images", "AdminProducts");
         
         //====================================================================//
         // PRODUCT SPECIFICATIONS
@@ -152,27 +137,40 @@ trait MainTrait
         // READ Fields
         switch ($FieldName) {
                 //====================================================================//
-                // PRODUCT SPECIFICATIONS
+                // PRODUCT BARCODES
                 //====================================================================//
-            case 'weight':
+            case 'upc':
+            case 'ean13':
+            case 'isbn':
                 if ($this->AttributeId) {
-                    $this->Out[$FieldName] = (float) $this->Object->weight + $this->Attribute->weight;
+                    $this->getSimple($FieldName, "Attribute");
                 } else {
-                    $this->Out[$FieldName] = (float) $this->Object->weight;
+                    $this->getSimple($FieldName);
                 }
                 break;
-            case 'height':
-            case 'depth':
-            case 'width':
-                $this->getSimple($FieldName);
-                break;
-            case 'surface':
-                $this->Out[$FieldName] = (float) $this->Object->depth * $this->Object->width;
-                break;
-            case 'volume':
-                $this->Out[$FieldName] = (float) $this->Object->height * $this->Object->depth * $this->Object->width;
-                break;
-
+                
+            default:
+                return;
+        }
+        
+        if (!is_null($Key)) {
+            unset($this->In[$Key]);
+        }
+    }
+   
+    /**
+     *  @abstract     Read requested Field
+     *
+     *  @param        string    $Key                    Input List Key
+     *  @param        string    $FieldName              Field Identifier / Name
+     *
+     *  @return         none
+     */
+    private function getBarCodeFields($Key, $FieldName)
+    {
+        //====================================================================//
+        // READ Fields
+        switch ($FieldName) {
                 //====================================================================//
                 // PRODUCT BARCODES
                 //====================================================================//
@@ -231,7 +229,26 @@ trait MainTrait
                 $this->setSimpleFloat($FieldName, $Data);
                 break;
             
-               //====================================================================//
+            default:
+                return;
+        }
+        unset($this->In[$FieldName]);
+    }
+    
+    /**
+     *  @abstract     Write Given Fields
+     *
+     *  @param        string    $FieldName              Field Identifier / Name
+     *  @param        mixed     $Data                   Field Data
+     *
+     *  @return         none
+     */
+    private function setBarCodeFields($FieldName, $Data)
+    {
+        //====================================================================//
+        // WRITE Field
+        switch ($FieldName) {
+                //====================================================================//
                 // PRODUCT BARCODES
                 //====================================================================//
             case 'upc':
@@ -243,7 +260,6 @@ trait MainTrait
                     $this->setSimple($FieldName, $Data);
                 }
                 break;
- 
                     
             default:
                 return;

@@ -19,20 +19,9 @@ use Splash\Core\SplashCore      as Splash;
 
 //====================================================================//
 // Prestashop Static Classes
-use Shop;
-use Configuration;
-use Currency;
-use Combination;
 use Language;
-use Context;
 use Translate;
-use Image;
-use ImageType;
-use ImageManager;
-use StockAvailable;
 use Validate;
-use DbQuery;
-use Db;
 use Tools;
 
 /**
@@ -270,60 +259,76 @@ trait DescTrait
         //====================================================================//
         // Update Multilangual Contents
         foreach ($Data as $IsoCode => $Content) {
-            //====================================================================//
-            // Check Language Is Valid
-            $LanguageCode = Splash::local()->langDecode($IsoCode);
-            if (!Validate::isLanguageCode($LanguageCode)) {
-                continue;
-            }
-            //====================================================================//
-            // Load Language
-            $Language = Language::getLanguageByIETFCode($LanguageCode);
-            if (empty($Language)) {
-                Splash::log()->war(
-                    "MsgLocalTpl",
-                    __CLASS__,
-                    __FUNCTION__,
-                    "Language " . $LanguageCode . " not available on this server."
-                );
-                continue;
-            }
-            //====================================================================//
-            // Store Contents
-            //====================================================================//
-            //====================================================================//
-            // Extract Contents
-            $Current   =   &$Object->$key;
-            //====================================================================//
-            // Create Array if Needed
-            if (!is_array($Current)) {
-                $Current = array();
-            }
-            //====================================================================//
-            // Compare Data
-            if (array_key_exists($Language->id, $Current) && ( $Current[$Language->id] === $Content)) {
-                continue;
-            }
-            //====================================================================//
-            // Verify Data Lenght
-            if ($MaxLength &&  ( Tools::strlen($Content) > $MaxLength)) {
-                Splash::log()->war(
-                    "MsgLocalTpl",
-                    __CLASS__,
-                    __FUNCTION__,
-                    "Text is too long for field " . $key . ", modification skipped."
-                );
-                continue;
-            }
-            
-            
-            //====================================================================//
-            // Update Data
-            $Current[$Language->id]     = $Content;
-            $this->needUpdate();
+            $this->setMultilangContents($Object, $key, $IsoCode, $Content, $MaxLength);
         }
 
         return true;
+    }
+    
+    /**
+     *      @abstract       Update Multilangual Contents For an Object
+     *
+     *      @param          object      $Object     Pointer to Prestashop Object
+     *      @param          array       $key        Id of a Multilangual Contents
+     *      @param          string      $IsoCode    New Multilangual Content
+     *      @param          array       $Data       New Multilangual Content
+     *      @param          int         $MaxLength  Maximum Contents Lenght
+     *
+     *      @return         bool                     0 if no update needed, 1 if update needed
+     */
+    public function setMultilangContents($Object = null, $key = null, $IsoCode = null, $Data = null, $MaxLength = null)
+    {
+        //====================================================================//
+        // Check Language Is Valid
+        $LanguageCode = Splash::local()->langDecode($IsoCode);
+        if (!Validate::isLanguageCode($LanguageCode)) {
+            return;
+        }
+        //====================================================================//
+        // Load Language
+        $Language = Language::getLanguageByIETFCode($LanguageCode);
+        if (empty($Language)) {
+            Splash::log()->war(
+                "MsgLocalTpl",
+                __CLASS__,
+                __FUNCTION__,
+                "Language " . $LanguageCode . " not available on this server."
+            );
+            return;
+        }
+        //====================================================================//
+        // Store Contents
+        //====================================================================//
+        //====================================================================//
+        // Extract Contents
+        $Current   =   &$Object->$key;
+        //====================================================================//
+        // Create Array if Needed
+        if (!is_array($Current)) {
+            $Current = array();
+        }
+        //====================================================================//
+        // Compare Data
+        if (array_key_exists($Language->id, $Current) && ( $Current[$Language->id] === $Data)) {
+            return;
+        }
+        //====================================================================//
+        // Verify Data Lenght
+        if ($MaxLength &&  ( Tools::strlen($Data) > $MaxLength)) {
+            Splash::log()->war(
+                "MsgLocalTpl",
+                __CLASS__,
+                __FUNCTION__,
+                "Text is too long for field " . $key . ", modification skipped."
+            );
+            return;
+        }
+
+
+        //====================================================================//
+        // Update Data
+        $Current[$Language->id]     = $Data;
+        $this->needUpdate();
     }
     
     /**

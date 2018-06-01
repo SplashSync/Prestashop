@@ -178,6 +178,27 @@ trait MainTrait
             case 'country':
                 $this->setSimple($FieldName, $Data);
                 break;
+                
+            default:
+                return;
+        }
+        unset($this->In[$FieldName]);
+    }
+
+    /**
+     *  @abstract     Write Given Fields
+     *
+     *  @param        string    $FieldName              Field Identifier / Name
+     *  @param        mixed     $Data                   Field Data
+     *
+     *  @return         none
+     */
+    private function setCountryFields($FieldName, $Data)
+    {
+        
+        //====================================================================//
+        // WRITE Field
+        switch ($FieldName) {
             //====================================================================//
             // Country ISO Id - READ With Convertion
             case 'id_country':

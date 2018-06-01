@@ -236,11 +236,39 @@ trait PaymentsTrait
         if (is_null($OrderPayment)) {
             //====================================================================//
             // Create New OrderDetail Item
-            $OrderPayment   =  new OrderPayment();
-            $OrderPayment->order_reference      =    $this->Object->reference;
-            $OrderPayment->id_currency          =    $this->Object->id_currency;
-            $OrderPayment->conversion_rate      =    1;
+            $OrderPayment                       =   new OrderPayment();
+            $OrderPayment->order_reference      =   $this->Object->reference;
+            $OrderPayment->id_currency          =   $this->Object->id_currency;
+            $OrderPayment->conversion_rate      =   1;
         }
+        
+        //====================================================================//
+        // Update Payment Data & Check Update Needed
+        if (!$this->updatePaymentData($OrderPayment, $PaymentItem)) {
+            return;
+        }
+        
+        if (!$OrderPayment->id) {
+            if ($OrderPayment->add() != true) {
+                return Splash::log()->err("ErrLocalTpl", __CLASS__, __FUNCTION__, "Unable to Create new Payment Line.");
+            }
+        } else {
+            if ($OrderPayment->update() != true) {
+                return Splash::log()->err("ErrLocalTpl", __CLASS__, __FUNCTION__, "Unable to Update Payment Line.");
+            }
+        }
+    }
+    
+    /**
+     *  @abstract     Write Data to Current Item
+     *
+     *  @param        array     $OrderPayment       Current Item Data Array
+     *  @param        array     $PaymentItem        Input Item Data Array
+     *
+     *  @return       bool
+     */
+    private function updatePaymentData($OrderPayment, $PaymentItem)
+    {
         $Update =    false;
         
         //====================================================================//
@@ -263,21 +291,7 @@ trait PaymentsTrait
             $OrderPayment->transaction_id = $PaymentItem["number"];
             $Update =    true;
         }
-        
-        //====================================================================//
-        // Commit Line Update
-        if (!$Update) {
-            return;
-        }
-        
-        if (!$OrderPayment->id) {
-            if ($OrderPayment->add() != true) {
-                return Splash::log()->err("ErrLocalTpl", __CLASS__, __FUNCTION__, "Unable to Create new Payment Line.");
-            }
-        } else {
-            if ($OrderPayment->update() != true) {
-                return Splash::log()->err("ErrLocalTpl", __CLASS__, __FUNCTION__, "Unable to Update Payment Line.");
-            }
-        }
+ 
+        return $Update;
     }
 }

@@ -32,6 +32,8 @@ parameters:
         yamllint: ~
         phpmd:
             ruleset:        ["./build/phpmd.xml"]
+            exclude:
+                - splashsync.php            
         securitychecker: ~
         phpcpd:
             exclude:        

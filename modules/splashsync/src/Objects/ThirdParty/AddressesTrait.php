@@ -72,7 +72,7 @@ trait AddressesTrait
     /**
      *  @abstract     Read requested Field
      *
-     *  @return         bool
+     *  @return void
      */
     private function getAddressesList()
     {
@@ -88,7 +88,7 @@ trait AddressesTrait
         //====================================================================//
         // If Address List Is Empty => Null
         if (empty($AddresList)) {
-            return true;
+            return;
         }
         //====================================================================//
         // Run Through Address List
@@ -98,6 +98,6 @@ trait AddressesTrait
                 );
         }
                 
-        return true;
+        return;
     }
 }

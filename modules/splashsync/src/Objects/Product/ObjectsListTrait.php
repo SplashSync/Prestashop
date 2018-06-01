@@ -111,47 +111,7 @@ trait ObjectsListTrait
         //====================================================================//
         // For each result, read information and add to $Data
         foreach ($Result as $Product) {
-            //====================================================================//
-            // Init Buffer Array
-            $DataBuffer = array();
-            //====================================================================//
-            // Read Product Attributes Conbination
-            $p = new Product();
-            $p->id = $Product["id"];
-            //====================================================================//
-            // Fill Product Base Data to Buffer
-            $DataBuffer["price_type"]           =   "HT";
-            $DataBuffer["vat"]                  =   "";
-            $DataBuffer["currency"]             =   $this->Currency->sign;
-            $DataBuffer["available_for_order"]  =   $Product["available_for_order"];
-            $DataBuffer["created"]              =   $Product["created"];
-            $DataBuffer["modified"]             =   $Product["modified"];
-            
-            //====================================================================//
-            // Fill Simple Product Data to Buffer
-            if (!$Product["id_attribute"]) {
-                $DataBuffer["id"]                   =   $Product["id"];
-                $DataBuffer["ref"]                  =   $Product["ref"];
-                $DataBuffer["name"]                 =   $Product["name"];
-                $DataBuffer["weight"]               =   $Product["weight"] . Configuration::get('PS_WEIGHT_UNIT');
-                $DataBuffer["stock"]                =   $p->getQuantity($Product["id"]);
-                $DataBuffer["price"]                =   $p->getPrice(false, null, 3);
-                $DataBuffer["price-base"]           =   $p->getPrice(false, null, 3);
-            //====================================================================//
-            // Fill Product Combination Data to Buffer
-            } else {
-                $DataBuffer["id"]           =   (int) $this->getUnikId($Product["id"], $Product["id_attribute"]);
-                $DataBuffer["ref"]          =   empty($Product["ref_attribute"])
-                        ?$Product["ref"]  . "-" . $Product["id_attribute"]
-                        :$Product["ref_attribute"];
-                $DataBuffer["name"]         =   $Product["name"];
-                $DataBuffer["weight"]       =   ($Product["weight"] + $Product["weight_attribute"]);
-                $DataBuffer["weight"]      .=   Configuration::get('PS_WEIGHT_UNIT');
-                $DataBuffer["price"]        =   $p->getPrice(false, $Product["id_attribute"], 3);
-                $DataBuffer["price-base"]   =   $p->getPrice(false, null, 3);
-                $DataBuffer["stock"]        =   $p->getQuantity($Product["id"], $Product["id_attribute"]);
-            }
-            array_push($Data, $DataBuffer);
+            array_push($Data, $this->getTransformedProductArray($Product));
         }
         
         //====================================================================//
@@ -160,5 +120,50 @@ trait ObjectsListTrait
         $Data["meta"]["total"]      =   $Total;         // Store Total Number of results
         Splash::log()->deb("MsgLocalTpl", __CLASS__, __FUNCTION__, " " . $Data["meta"]["current"] . " Products Found.");
         return $Data;
+    }
+    
+    private function getTransformedProductArray($Product)
+    {
+        //====================================================================//
+        // Init Buffer Array
+        $DataBuffer = array();
+        //====================================================================//
+        // Read Product Attributes Conbination
+        $ProductClass = new Product();
+        $ProductClass->id = $Product["id"];
+        //====================================================================//
+        // Fill Product Base Data to Buffer
+        $DataBuffer["price_type"]           =   "HT";
+        $DataBuffer["vat"]                  =   "";
+        $DataBuffer["currency"]             =   $this->Currency->sign;
+        $DataBuffer["available_for_order"]  =   $Product["available_for_order"];
+        $DataBuffer["created"]              =   $Product["created"];
+        $DataBuffer["modified"]             =   $Product["modified"];
+
+        //====================================================================//
+        // Fill Simple Product Data to Buffer
+        if (!$Product["id_attribute"]) {
+            $DataBuffer["id"]                   =   $Product["id"];
+            $DataBuffer["ref"]                  =   $Product["ref"];
+            $DataBuffer["name"]                 =   $Product["name"];
+            $DataBuffer["weight"]               =   $Product["weight"] . Configuration::get('PS_WEIGHT_UNIT');
+            $DataBuffer["stock"]                =   $ProductClass->getQuantity($Product["id"]);
+            $DataBuffer["price"]                =   $ProductClass->getPrice(false, null, 3);
+            $DataBuffer["price-base"]           =   $ProductClass->getPrice(false, null, 3);
+        //====================================================================//
+        // Fill Product Combination Data to Buffer
+        } else {
+            $DataBuffer["id"]           =   (int) $this->getUnikId($Product["id"], $Product["id_attribute"]);
+            $DataBuffer["ref"]          =   empty($Product["ref_attribute"])
+                    ?$Product["ref"]  . "-" . $Product["id_attribute"]
+                    :$Product["ref_attribute"];
+            $DataBuffer["name"]         =   $Product["name"];
+            $DataBuffer["weight"]       =   ($Product["weight"] + $Product["weight_attribute"]);
+            $DataBuffer["weight"]      .=   Configuration::get('PS_WEIGHT_UNIT');
+            $DataBuffer["price"]        =   $ProductClass->getPrice(false, $Product["id_attribute"], 3);
+            $DataBuffer["price-base"]   =   $ProductClass->getPrice(false, null, 3);
+            $DataBuffer["stock"]        =   $ProductClass->getQuantity($Product["id"], $Product["id_attribute"]);
+        }
+        return $DataBuffer;
     }
 }

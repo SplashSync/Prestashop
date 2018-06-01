@@ -19,20 +19,7 @@ use Splash\Core\SplashCore      as Splash;
 
 //====================================================================//
 // Prestashop Static Classes
-use Shop;
-use Configuration;
-use Currency;
-use Combination;
-use Language;
-use Context;
 use Translate;
-use Image;
-use ImageType;
-use ImageManager;
-use StockAvailable;
-use DbQuery;
-use Db;
-use Tools;
 
 /**
  * @abstract    Access to Product Core Fields
