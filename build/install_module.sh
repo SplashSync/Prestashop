@@ -9,12 +9,19 @@ composer update --prefer-dist --no-interaction --no-progress
 cd $TRAVIS_BUILD_DIR
 
 # Move Module Contents to Install Folder
+echo Move Module Contenst to Prestashop Modules Directory
 mkdir     $TRAVIS_BUILD_DIR/modules/splashsync
 cp -Rf    $MODULE_DIR/modules/splashsync/*              $TRAVIS_BUILD_DIR/modules/splashsync/      
+
+echo Move Git Files to Prestashop Root Directory
+mkdir     $TRAVIS_BUILD_DIR/.git
 rm -Rf    $TRAVIS_BUILD_DIR/.git/*      
-cp -Rf    $MODULE_DIR/.git/*                            $TRAVIS_BUILD_DIR/.git/*      
+cp -Rf    $MODULE_DIR/.git/*                            $TRAVIS_BUILD_DIR/.git/*
+      
+echo Move Configuration Files to Prestashop Root Directory
 cp -f     $MODULE_DIR/build/phpunit.xml.dist            $TRAVIS_BUILD_DIR/phpunit.xml           
 cp -f     $MODULE_DIR/grumphp.yml                       $TRAVIS_BUILD_DIR/grumphp.yml           
+
 ls -al    $TRAVIS_BUILD_DIR/modules/splashsync
 ls -al    $MODULE_DIR/.git/
 ls -al    $TRAVIS_BUILD_DIR/.git/
