@@ -22,23 +22,14 @@ use Splash\Core\SplashCore      as Splash;
 use Splash\Models\AbstractObject;
 use Splash\Models\Objects\IntelParserTrait;
 use Splash\Models\Objects\SimpleFieldsTrait;
+use Splash\Models\Objects\ObjectsTrait;
+use Splash\Models\Objects\ListsTrait;
 
 //====================================================================//
 // Prestashop Static Classes
 use Shop;
 use Configuration;
 use Currency;
-use Combination;
-use Language;
-use Context;
-use Translate;
-use Image;
-use ImageType;
-use ImageManager;
-use StockAvailable;
-use DbQuery;
-use Db;
-use Tools;
 
 /**
  * @abstract    Splash Local Object Class - Products Local Integration
@@ -51,6 +42,8 @@ class Product extends AbstractObject
     // Splash Php Core Traits
     use IntelParserTrait;
     use SimpleFieldsTrait;
+    use ObjectsTrait;
+    use ListsTrait;
 
     // Prestashop Common Traits
     use \Splash\Local\Objects\Core\DatesTrait;
@@ -67,6 +60,7 @@ class Product extends AbstractObject
     use \Splash\Local\Objects\Product\PricesTrait;
     use \Splash\Local\Objects\Product\ImagesTrait;
     use \Splash\Local\Objects\Product\MetaTrait;
+//    use \Splash\Local\Objects\Product\AttributesTrait;
     
     //====================================================================//
     // Object Definition Parameters
@@ -106,17 +100,17 @@ class Product extends AbstractObject
      */
     // Enable Creation Of New Local Objects when Not Existing
     protected static $ENABLE_PUSH_CREATED       =  false;
-    // Enable Update Of Existing Local Objects when Modified Remotly
-    protected static $ENABLE_PUSH_UPDATED       =  true;
-    // Enable Delete Of Existing Local Objects when Deleted Remotly
-    protected static $ENABLE_PUSH_DELETED       =  true;
-
-    // Enable Import Of New Local Objects
-    protected static $ENABLE_PULL_CREATED       =  true;
-    // Enable Import of Updates of Local Objects when Modified Localy
-    protected static $ENABLE_PULL_UPDATED       =  true;
-    // Enable Delete Of Remotes Objects when Deleted Localy
-    protected static $ENABLE_PULL_DELETED       =  true;
+//    // Enable Update Of Existing Local Objects when Modified Remotly
+//    protected static $ENABLE_PUSH_UPDATED       =  true;
+//    // Enable Delete Of Existing Local Objects when Deleted Remotly
+//    protected static $ENABLE_PUSH_DELETED       =  true;
+//
+//    // Enable Import Of New Local Objects
+//    protected static $ENABLE_PULL_CREATED       =  true;
+//    // Enable Import of Updates of Local Objects when Modified Localy
+//    protected static $ENABLE_PULL_UPDATED       =  true;
+//    // Enable Delete Of Remotes Objects when Deleted Localy
+//    protected static $ENABLE_PULL_DELETED       =  true;
     
     
     //====================================================================//
