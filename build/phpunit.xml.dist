@@ -18,9 +18,9 @@
 >
 
     <testsuites>
-        <testsuite name="Local">
+<!--        <testsuite name="Local">
             <directory>modules/splashsync/tests</directory>
-        </testsuite>
+        </testsuite>-->
         <testsuite name="Core">
             <directory>modules/splashsync/vendor/splash/phpcore/Tests</directory>
         </testsuite>

@@ -19,7 +19,7 @@
 
     <testsuites>
         <testsuite name="All">
-            <!--<directory>modules/splashsync/tests</directory>-->
+            <directory>modules/splashsync/tests</directory>
             <directory>modules/splashsync/vendor/splash/phpcore/Tests</directory>
         </testsuite>
     </testsuites>

@@ -44,12 +44,12 @@ class Activity extends WidgetBase
     /**
      *  Widget Name (Translated by Module)
      */
-    protected static $NAME            =  "Prestashop Activity Widget";
+    protected static $NAME          =  "Prestashop Activity Widget";
     
     /**
      *  Widget Description (Translated by Module)
      */
-    protected static $DESCRIPTION     =  "Display Main Activity of your E-Commerce";
+    protected static $DESCRIPTION   =  "Display Main Activity of your E-Commerce";
     
     /**
      *  Widget Icon (FontAwesome or Glyph ico tag)
@@ -229,39 +229,47 @@ class Activity extends WidgetBase
             'net_profits' => array()
         );
 
-        $from = strtotime($date_from);
-        $to = min(time(), strtotime($date_to));
-        for ($date = $from; $date <= $to; $date = strtotime('+1 day', $date)) {
-//                    Splash::log()->www("Date" , $date );
-            $refined_data['sales'][$date] = 0;
-            if (isset($gross_data['total_paid_tax_excl'][$date])) {
-                $refined_data['sales'][$date] += $gross_data['total_paid_tax_excl'][$date];
-            }
-
-            $refined_data['orders'][$date] = isset($gross_data['orders'][$date]) ? $gross_data['orders'][$date] : 0;
-
-            $refined_data['average_cart_value'][$date] = $refined_data['orders'][$date]
-                    ? $refined_data['sales'][$date] / $refined_data['orders'][$date] : 0;
-
-            $refined_data['visits'][$date] = isset($gross_data['visits'][$date]) ? $gross_data['visits'][$date] : 0;
-
-            $refined_data['conversion_rate'][$date] = $refined_data['visits'][$date]
-                    ? $refined_data['orders'][$date] / $refined_data['visits'][$date] : 0;
-
-            $refined_data['net_profits'][$date] = 0;
-            if (isset($gross_data['total_paid_tax_excl'][$date])) {
-                $refined_data['net_profits'][$date] += $gross_data['total_paid_tax_excl'][$date];
-            }
-            if (isset($gross_data['total_purchases'][$date])) {
-                $refined_data['net_profits'][$date] -= $gross_data['total_purchases'][$date];
-            }
-            if (isset($gross_data['total_expenses'][$date])) {
-                $refined_data['net_profits'][$date] -= $gross_data['total_expenses'][$date];
-            }
+        $DateFrom   = strtotime($date_from);
+        $DateTo     = min(time(), strtotime($date_to));
+        for ($date = $DateFrom; $date <= $DateTo; $date = strtotime('+1 day', $date)) {
+            $this->getRefinedSales($refined_data, $date, $gross_data);
+            $this->getRefinedProfits($refined_data, $date, $gross_data);
         }
         return $refined_data;
     }
 
+    private function getRefinedSales(&$refined_data, $date, $gross_data)
+    {
+        $refined_data['sales'][$date] = 0;
+        if (isset($gross_data['total_paid_tax_excl'][$date])) {
+            $refined_data['sales'][$date] += $gross_data['total_paid_tax_excl'][$date];
+        }
+
+        $refined_data['orders'][$date] = isset($gross_data['orders'][$date]) ? $gross_data['orders'][$date] : 0;
+
+        $refined_data['average_cart_value'][$date] = $refined_data['orders'][$date]
+                ? $refined_data['sales'][$date] / $refined_data['orders'][$date] : 0;
+
+        $refined_data['visits'][$date] = isset($gross_data['visits'][$date]) ? $gross_data['visits'][$date] : 0;
+
+        $refined_data['conversion_rate'][$date] = $refined_data['visits'][$date]
+                ? $refined_data['orders'][$date] / $refined_data['visits'][$date] : 0;
+    }
+    
+    private function getRefinedProfits(&$refined_data, $date, $gross_data)
+    {
+        $refined_data['net_profits'][$date] = 0;
+        if (isset($gross_data['total_paid_tax_excl'][$date])) {
+            $refined_data['net_profits'][$date] += $gross_data['total_paid_tax_excl'][$date];
+        }
+        if (isset($gross_data['total_purchases'][$date])) {
+            $refined_data['net_profits'][$date] -= $gross_data['total_purchases'][$date];
+        }
+        if (isset($gross_data['total_expenses'][$date])) {
+            $refined_data['net_profits'][$date] -= $gross_data['total_expenses'][$date];
+        }
+    }
+    
     protected function addupData($data)
     {
         $summing = array(
