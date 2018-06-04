@@ -10,3 +10,9 @@ require_once dirname(__DIR__) . "/vendor/autoload.php";
 //====================================================================//
 // Init Splash for Local Includes 
 Splash\Client\Splash::core();
+Splash\Client\Splash::local();
+
+////====================================================================//
+//// Prestashop Classes Includes 
+//require_once dirname(__DIR__) . "/classes/Cookie.php";
+//require_once dirname(__DIR__) . "/classes/Tools.php";
