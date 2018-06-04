@@ -93,7 +93,7 @@ class SplashSync extends Module
         }
         //====================================================================//
         // INIT Context VAriables
-        self::_InitContext();
+        self::initContext();
     }
 
 //====================================================================//
@@ -213,6 +213,23 @@ class SplashSync extends Module
         return true;
     }
     
+    /**
+    *  @abstract    Init Splash Parameters in structure in Global Context
+    *  @return      bool                True if OK, False if Errors
+    */
+    private function initContext()
+    {
+        //====================================================================//
+        //  Init Splash Parameters in structure if empty
+        if (!isset(Context::getContext()->splash)) {
+            Context::getContext()->splash = new ArrayObject(array(), ArrayObject::ARRAY_AS_PROPS);
+        }
+        //====================================================================//
+        //  Init Cookie structure if empty
+        Context::getContext()->cookie->update();
+        return true;
+    }
+  
 //====================================================================//
 // *******************************************************************//
 //  MODULE SETUP PAGE MANAGEMENT
