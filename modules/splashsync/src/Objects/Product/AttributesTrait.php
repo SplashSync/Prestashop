@@ -41,7 +41,7 @@ trait AttributesTrait
         
         //====================================================================//
         // Product Variation Parent Link
-        $this->FieldsFactory()->Create(self::Objects()->Encode("Product", SPL_T_ID))
+        $this->FieldsFactory()->Create(self::objects()->encode("Product", SPL_T_ID))
                 ->Identifier("parent_id")
                 ->Name("Parent")
                 ->Group("Meta")
@@ -50,7 +50,7 @@ trait AttributesTrait
 //
 //        //====================================================================//
 //        // Product Variation List - Product Link
-//        $this->FieldsFactory()->Create(self::Objects()->Encode( "Product" , SPL_T_ID))
+//        $this->FieldsFactory()->Create(self::objects()->encode( "Product" , SPL_T_ID))
 //                ->Identifier("id")
 //                ->Name( __("Children"))
 //                ->InList("children")
@@ -115,7 +115,7 @@ trait AttributesTrait
         switch ($FieldName) {
             case 'parent_id':
                 if ($this->AttributeId) {
-                    $this->Out[$FieldName] = self::Objects()->Encode("Product", $this->ProductId);
+                    $this->Out[$FieldName] = self::objects()->encode("Product", $this->ProductId);
                     break;
                 }
                 $this->Out[$FieldName] = null;
@@ -164,7 +164,7 @@ trait AttributesTrait
 //                        "children",
 //                        $FieldId,
 //                        $Index,
-//                        self::Objects()->Encode("Product", $Id)
+//                        self::objects()->encode("Product", $Id)
 //                    );
 //                    break;
 //

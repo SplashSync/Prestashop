@@ -44,7 +44,7 @@ trait CoreTrait
         
         //====================================================================//
         // Customer
-        $this->fieldsFactory()->Create(self::Objects()->Encode("ThirdParty", SPL_T_ID))
+        $this->fieldsFactory()->Create(self::objects()->encode("ThirdParty", SPL_T_ID))
                 ->Identifier("id_customer")
                 ->Name(Translate::getAdminTranslation("Customer ID", "AdminCustomerThreads"))
                 ->MicroData("http://schema.org/Organization", "ID")
@@ -104,7 +104,7 @@ trait CoreTrait
             //====================================================================//
             // Customer Object Id Readings
             case 'id_customer':
-                $this->Out[$FieldName] = self::Objects()->Encode("ThirdParty", $this->Object->$FieldName);
+                $this->Out[$FieldName] = self::objects()->encode("ThirdParty", $this->Object->$FieldName);
                 break;
             
             default:
@@ -154,7 +154,7 @@ trait CoreTrait
 
         //====================================================================//
         // Decode Customer Id
-        $Id = self::Objects()->Id($Data);
+        $Id = self::objects()->Id($Data);
         //====================================================================//
         // Check For Change
         if ($Id == $this->Object->id_customer) {
@@ -162,12 +162,12 @@ trait CoreTrait
         }
         //====================================================================//
         // Verify Object Type
-        if (self::Objects()->Type($Data) !== "ThirdParty") {
+        if (self::objects()->Type($Data) !== "ThirdParty") {
             return Splash::log()->err(
                 "ErrLocalTpl",
                 __CLASS__,
                 __FUNCTION__,
-                " Wrong Object Type (" . self::Objects()->Type($Data) . ")."
+                " Wrong Object Type (" . self::objects()->Type($Data) . ")."
             );
         }
         //====================================================================//

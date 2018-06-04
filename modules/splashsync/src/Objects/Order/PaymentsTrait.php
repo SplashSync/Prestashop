@@ -170,9 +170,9 @@ trait PaymentsTrait
             return $OrderPayment->payment_method;
         }
         //====================================================================//
-        // Detect Payment Metyhod Type from Default Payment "known" methods
-        if (array_key_exists($this->PaymentMethod, $this->KnownPaymentMethods)) {
-            return $this->KnownPaymentMethods[$this->PaymentMethod];
+        // Detect Payment Method Type from Default Payment "known" methods
+        if (array_key_exists($OrderPayment->payment_method, $this->KnownPaymentMethods)) {
+            return $this->KnownPaymentMethods[$OrderPayment->payment_method];
         }
         //====================================================================//
         // Detect Payment Method is Credit Card Like Method

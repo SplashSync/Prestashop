@@ -21,19 +21,7 @@ use Splash\Models\Objects\PricesTrait as SplashPricesTrait;
 
 //====================================================================//
 // Prestashop Static Classes
-use Shop;
-use Configuration;
-use Currency;
-use Combination;
-use Language;
-use Context;
 use Translate;
-use Image;
-use ImageType;
-use ImageManager;
-use StockAvailable;
-use DbQuery;
-use Db;
 use Tools;
 
 /**
@@ -44,6 +32,11 @@ trait PricesTrait
 {
     
     use SplashPricesTrait;
+    
+    /**
+     * @var string
+     */
+    private $NewPrice = null;
     
     /**
     *   @abstract     Build Fields using FieldFactory
@@ -126,7 +119,7 @@ trait PricesTrait
                 $Tax        = (double)  $this->Object->getTaxesRate();
                 //====================================================================//
                 // Build Price Array
-                $this->Out[$FieldName] = self::Prices()->Encode(
+                $this->Out[$FieldName] = self::prices()->Encode(
                     $PriceHT,
                     $Tax,
                     null,
@@ -142,7 +135,7 @@ trait PricesTrait
                 $Tax        = (double)  $this->Object->getTaxesRate();
                 //====================================================================//
                 // Build Price Array
-                $this->Out[$FieldName] = self::Prices()->Encode(
+                $this->Out[$FieldName] = self::prices()->Encode(
                     $PriceHT,
                     $Tax,
                     null,
@@ -162,7 +155,7 @@ trait PricesTrait
                 $Tax        = (double)  $this->Object->getTaxesRate();
                 //====================================================================//
                 // Build Price Array
-                $this->Out[$FieldName] = self::Prices()->Encode(
+                $this->Out[$FieldName] = self::prices()->Encode(
                     $PriceHT,
                     $Tax,
                     null,
@@ -205,7 +198,7 @@ trait PricesTrait
 
                 //====================================================================//
                 // Compare Prices
-                if (!self::Prices()->Compare($this->Out["price"], $Data)) {
+                if (!self::prices()->Compare($this->Out["price"], $Data)) {
                     $this->NewPrice = $Data;
                     $this->needUpdate();
                 }
@@ -219,7 +212,7 @@ trait PricesTrait
                 
                 //====================================================================//
                 // Compare Prices
-                if (!self::Prices()->Compare($this->Out["price-base"], $Data)) {
+                if (!self::prices()->Compare($this->Out["price-base"], $Data)) {
                     $this->Object->price = $Data["ht"];
                     $this->needUpdate();
                     //====================================================================//
@@ -236,7 +229,7 @@ trait PricesTrait
 
                 //====================================================================//
                 // Compare Prices
-                if (self::Prices()->Compare($this->Out["price-wholesale"], $Data)) {
+                if (self::prices()->Compare($this->Out["price-wholesale"], $Data)) {
                     break;
                 }
                 

@@ -167,7 +167,7 @@ trait MainTrait
             // Gender Name
             case 'gender_name':
                 if (empty($this->Object->id_gender)) {
-                    $this->Out[$FieldName] = Splash::Trans("Empty");
+                    $this->Out[$FieldName] = Splash::trans("Empty");
                     break;
                 }
                 $gender = new Gender($this->Object->id_gender, Context::getContext()->language->id);

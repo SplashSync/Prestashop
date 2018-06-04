@@ -19,17 +19,7 @@ use Splash\Core\SplashCore      as Splash;
 
 //====================================================================//
 // Prestashop Static Classes
-use Address;
-use Gender;
-use Context;
-use State;
-use Country;
 use Translate;
-use Validate;
-use DbQuery;
-use Db;
-use Customer;
-use Tools;
 
 /**
  * @abstract    Access to Objects Splash Meta Fields
@@ -37,8 +27,11 @@ use Tools;
  */
 trait SplashMetaTrait
 {
-
-
+    /**
+     * @var string
+     */
+    protected $NewSplashId = null;
+    
     /**
     *   @abstract     Build Fields using FieldFactory
     */

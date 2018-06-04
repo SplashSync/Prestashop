@@ -24,12 +24,27 @@ use Splash\Core\SplashCore      as Splash;
 use Configuration;
 use Order;
 use Cart;
+use TaxCalculator;
 
 /**
  * @abstract    Prestashop Orders CRUD Functions
  */
 trait CRUDTrait
 {
+    /**
+     * @var Cart
+     */
+    private $Cart = null;
+    
+    /**
+     * @var Order
+     */
+    protected $Order          = null;
+    
+    /**
+     * @var TaxCalculator
+     */
+    protected $ShippingTaxCalculator = null;
     
     /**
      * @abstract    Load Request Object
@@ -165,9 +180,9 @@ trait CRUDTrait
         //====================================================================//
         // UPDATE/CREATE SPLASH ID
         //====================================================================//
-        if (isset($this->NewSplashId)) {
+        if (!is_null($this->NewSplashId)) {
             Splash::local()->setSplashId(self::$NAME, $this->Object->id, $this->NewSplashId);
-            unset($this->NewSplashId);
+            $this->NewSplashId = null;
         }
         
         return (int) $this->Object->id;

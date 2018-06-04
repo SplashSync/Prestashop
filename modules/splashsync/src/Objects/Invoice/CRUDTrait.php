@@ -25,12 +25,22 @@ use Splash\Core\SplashCore      as Splash;
 // Prestashop Static Classes
 use Order;
 use OrderInvoice;
+use TaxCalculator;
 
 /**
  * @abstract    Prestashop Invoices CRUD Functions
  */
 trait CRUDTrait
 {
+    /**
+     * @var Order
+     */
+    protected $Order          = null;
+    
+    /**
+     * @var TaxCalculator
+     */
+    protected $ShippingTaxCalculator = null;
     
     /**
      * @abstract    Load Request Object

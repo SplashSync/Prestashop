@@ -30,7 +30,7 @@ trait AddressTrait
         
         //====================================================================//
         // Billing Address
-        $this->fieldsFactory()->Create(self::Objects()->Encode("Address", SPL_T_ID))
+        $this->fieldsFactory()->Create(self::objects()->encode("Address", SPL_T_ID))
                 ->Identifier("id_address_invoice")
                 ->Name('Billing Address ID')
                 ->MicroData("http://schema.org/Order", "billingAddress")
@@ -38,7 +38,7 @@ trait AddressTrait
         
         //====================================================================//
         // Shipping Address
-        $this->fieldsFactory()->Create(self::Objects()->Encode("Address", SPL_T_ID))
+        $this->fieldsFactory()->Create(self::objects()->encode("Address", SPL_T_ID))
                 ->Identifier("id_address_delivery")
                 ->Name('Shipping Address ID')
                 ->MicroData("http://schema.org/Order", "orderDelivery")
@@ -64,9 +64,9 @@ trait AddressTrait
             case 'id_address_invoice':
             case 'id_address_delivery':
                 if (get_class($this) ===  "Splash\Local\Objects\Invoice") {
-                    $this->Out[$FieldName] = self::Objects()->Encode("Address", $this->Order->$FieldName);
+                    $this->Out[$FieldName] = self::objects()->encode("Address", $this->Order->$FieldName);
                 } else {
-                    $this->Out[$FieldName] = self::Objects()->Encode("Address", $this->Object->$FieldName);
+                    $this->Out[$FieldName] = self::objects()->encode("Address", $this->Object->$FieldName);
                 }
                 break;
             default:
@@ -92,7 +92,7 @@ trait AddressTrait
             // Customer Address Ids
             case 'id_address_invoice':
             case 'id_address_delivery':
-                $this->setSimple($FieldName, self::Objects()->Id($Data));
+                $this->setSimple($FieldName, self::objects()->Id($Data));
                 break;
                 
             default:

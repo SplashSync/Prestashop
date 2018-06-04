@@ -70,6 +70,7 @@ trait HooksTrait
     {
         //====================================================================//
         // Retrieve Product Id
+        $id_product = null;
         if (isset($product->id_product)) {
             $id_product = $product->id_customer;
         } elseif (isset($product->id)) {
@@ -81,7 +82,7 @@ trait HooksTrait
         //====================================================================//
         // Safety Check
         if (empty($id_product)) {
-            log()->err("ErrLocalTpl", "Product", __FUNCTION__, "Unable to Read Product Id.");
+            Splash::log()->err("ErrLocalTpl", "Product", __FUNCTION__, "Unable to Read Product Id.");
         }
         //====================================================================//
         // Add Base Product Commit Update List
@@ -94,7 +95,7 @@ trait HooksTrait
             foreach ($AttrList as $Attr) {
                 //====================================================================//
                 // Add Attribute Product Commit Update List
-                $IdList[] =   (int) Splash::Object("Product")->getUnikId($id_product, $Attr["id_product_attribute"]);
+                $IdList[] =   (int) Splash::object("Product")->getUnikId($id_product, $Attr["id_product_attribute"]);
             }
         }
         if (empty($IdList)) {
@@ -152,7 +153,7 @@ trait HooksTrait
             if (isset($params["id_product_attribute"]) && !empty($params["id_product_attribute"])) {
                 //====================================================================//
                 // Generate Unik Product Id
-                $UnikId     =   (int) Splash::Object("Product")
+                $UnikId     =   (int) Splash::object("Product")
                         ->getUnikId($params["id_product"], $params["id_product_attribute"]);
             } else {
                 $UnikId     =   (int) $params["id_product"];
@@ -179,7 +180,7 @@ trait HooksTrait
             if (isset($Product["id_product_attribute"]) && !empty($Product["id_product_attribute"])) {
                 //====================================================================//
                 // Generate Unik Product Id
-                $UnikId[]       =   (int) Splash::Object("Product")
+                $UnikId[]       =   (int) Splash::object("Product")
                         ->getUnikId($Product["id_product"], $Product["id_product_attribute"]);
             } else {
                 $UnikId[]       =   (int) $Product["id_product"];
@@ -200,6 +201,7 @@ trait HooksTrait
     {
         //====================================================================//
         // Retrieve Combination Id
+        $id_combination = null;
         if (isset($combination->id)) {
             $id_combination = $combination->id;
         } elseif (isset($combination->id_product_attribute)) {
@@ -220,7 +222,7 @@ trait HooksTrait
         }
         //====================================================================//
         // Generate Unik Product Id
-        $UnikId       =   (int) Splash::Object("Product")->getUnikId($combination->id_product, $id_combination);
+        $UnikId       =   (int) Splash::object("Product")->getUnikId($combination->id_product, $id_combination);
         //====================================================================//
         // Commit Update For Product Attribute
         return $this->doCommit("Product", $UnikId, $action, $comment);

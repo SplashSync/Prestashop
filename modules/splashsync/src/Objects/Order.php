@@ -29,6 +29,7 @@ use Splash\Models\Objects\ObjectsTrait;
 use Shop;
 use Configuration;
 use Currency;
+use SplashSync;
 
 /**
  * @abstract    Splash Local Object Class - Customer Orders Local Integration
@@ -57,7 +58,7 @@ class Order extends AbstractObject
     use \Splash\Local\Objects\Order\ItemsTrait;
     use \Splash\Local\Objects\Order\PaymentsTrait;
     use \Splash\Local\Objects\Order\StatusTrait;
-    
+
     //====================================================================//
     // Object Definition Parameters
     //====================================================================//
@@ -101,12 +102,12 @@ class Order extends AbstractObject
     // Enable Delete Of Existing Local Objects when Deleted Remotly
     protected static $ENABLE_PUSH_DELETED       =  false;
 
-    // Enable Import Of New Local Objects
-    protected static $ENABLE_PULL_CREATED       =  true;
-    // Enable Import of Updates of Local Objects when Modified Localy
-    protected static $ENABLE_PULL_UPDATED       =  true;
-    // Enable Delete Of Remotes Objects when Deleted Localy
-    protected static $ENABLE_PULL_DELETED       =  true;
+//    // Enable Import Of New Local Objects
+//    protected static $ENABLE_PULL_CREATED       =  true;
+//    // Enable Import of Updates of Local Objects when Modified Localy
+//    protected static $ENABLE_PULL_UPDATED       =  true;
+//    // Enable Delete Of Remotes Objects when Deleted Localy
+//    protected static $ENABLE_PULL_DELETED       =  true;
     
     //====================================================================//
     // General Class Variables
@@ -114,7 +115,23 @@ class Order extends AbstractObject
 
     protected $Products       = array();
     protected $Payments       = array();
+    protected $PaymentMethod  = null;
     
+    /**
+     * @var int
+     */
+    private $LangId = null;
+
+    /**
+     * @var Currency
+     */
+    private $Currency = null;
+    
+    /**
+     * @var SplashSync
+     */
+    private $spl = null;
+       
     //====================================================================//
     // Class Constructor
     //====================================================================//
@@ -132,7 +149,7 @@ class Order extends AbstractObject
         }
         //====================================================================//
         //  Load Local Translation File
-        Splash::Translator()->Load("objects@local");
+        Splash::translator()->Load("objects@local");
         //====================================================================//
         // Load Splash Module
         $this->spl = Splash::local()->getLocalModule();

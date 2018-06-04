@@ -37,7 +37,7 @@ trait CoreTrait
         
         //====================================================================//
         // Customer Object
-        $this->fieldsFactory()->Create(self::Objects()->Encode("ThirdParty", SPL_T_ID))
+        $this->fieldsFactory()->Create(self::objects()->encode("ThirdParty", SPL_T_ID))
                 ->Identifier("id_customer")
                 ->Name(Translate::getAdminTranslation("Customer ID", "AdminCustomerThreads"))
                 ->isRequired();
@@ -102,9 +102,9 @@ trait CoreTrait
             // Customer Object Id Readings
             case 'id_customer':
                 if (get_class($this) ===  "Splash\Local\Objects\Invoice") {
-                    $this->Out[$FieldName] = self::Objects()->Encode("ThirdParty", $this->Order->$FieldName);
+                    $this->Out[$FieldName] = self::objects()->encode("ThirdParty", $this->Order->$FieldName);
                 } else {
-                    $this->Out[$FieldName] = self::Objects()->Encode("ThirdParty", $this->Object->$FieldName);
+                    $this->Out[$FieldName] = self::objects()->encode("ThirdParty", $this->Object->$FieldName);
                 }
                 break;
 
@@ -166,9 +166,9 @@ trait CoreTrait
             // Customer Object Id
             case 'id_customer':
                 if (get_class($this) ===  "Splash\Local\Objects\Invoice") {
-                    $this->setSimple($FieldName, self::Objects()->Id($Data), "Order");
+                    $this->setSimple($FieldName, self::objects()->Id($Data), "Order");
                 } else {
-                    $this->setSimple($FieldName, self::Objects()->Id($Data));
+                    $this->setSimple($FieldName, self::objects()->Id($Data));
                 }
                 break;
             default:

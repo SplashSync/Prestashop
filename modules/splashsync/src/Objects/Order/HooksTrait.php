@@ -21,6 +21,8 @@
 
 namespace Splash\Local\Objects\Order;
 
+use Splash\Core\SplashCore      as Splash;
+
 use PrestaShopCollection;
 
 /**
@@ -70,6 +72,7 @@ trait HooksTrait
         $Errors = 0;
         //====================================================================//
         // Retrieve Customer Id
+        $id_order = null;
         if (isset($order->id_order)) {
             $id_order = $order->id_order;
         } elseif (isset($order->id)) {
@@ -138,6 +141,7 @@ trait HooksTrait
     {
         //====================================================================//
         // Retrieve Customer Id
+        $id = null;
         if (isset($order->id_order_invoice)) {
             $id = $order->id_order_invoice;
         } elseif (isset($order->id)) {

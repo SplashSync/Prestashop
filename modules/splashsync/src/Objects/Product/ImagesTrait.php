@@ -38,6 +38,16 @@ trait ImagesTrait
     use SplashImagesTrait;
     
     /**
+     * @var int
+     */
+    private $ImgPosition = 0;
+    
+    /**
+     * @var array
+     */
+    private $NewImagesArray = null;
+    
+    /**
     *   @abstract     Build Fields using FieldFactory
     */
     private function buildImagesFields()
@@ -163,7 +173,7 @@ trait ImagesTrait
             $ImageName   =   !empty($this->Object->link_rewrite) ? array_shift($this->Object->link_rewrite) : 'Image';
             //====================================================================//
             // Insert Image in Output List
-            $Image = $this->Images()->Encode(
+            $Image = self::images()->Encode(
                 ($ObjectImage->legend?$ObjectImage->legend:$ObjectImage->id . "." . $ObjectImage->image_format),
                 $ObjectImage->id . "." . $ObjectImage->image_format,
                 $this->Object->image_folder . $ObjectImage->getImgFolder(),
@@ -255,7 +265,7 @@ trait ImagesTrait
                 if (!is_null($IsCover) && ((bool) $ObjectImage->cover) !==  ((bool) $IsCover)) {
                     $ObjectImage->cover = $IsCover;
                     $ObjectImage->update();
-                    $this->update = true;
+                    $this->needUpdate();
                 }
                 break;
             }
@@ -288,14 +298,14 @@ trait ImagesTrait
     {
         //====================================================================//
         // Read File from Splash Server
-        $NewImageFile    =   Splash::File()->getFile($ImgArray["file"], $ImgArray["md5"]);
+        $NewImageFile    =   Splash::file()->getFile($ImgArray["file"], $ImgArray["md5"]);
         
         //====================================================================//
         // File Imported => Write it Here
         if ($NewImageFile == false) {
             return false;
         }
-        $this->update = true;
+        $this->needUpdate();
         
         //====================================================================//
         // Create New Image Object
@@ -313,7 +323,7 @@ trait ImagesTrait
         // Write Image On Folder
         $Path       = dirname($ObjectImage->getPathForCreation());
         $Filename   = "/" . $ObjectImage->id . "." . $ObjectImage->image_format;
-        Splash::File()->WriteFile($Path, $Filename, $NewImageFile["md5"], $NewImageFile["raw"]);
+        Splash::file()->WriteFile($Path, $Filename, $NewImageFile["md5"], $NewImageFile["raw"]);
     }
     
     /**

@@ -17,6 +17,8 @@
 
 namespace Splash\Local;
 
+use ArrayObject;
+
 use Splash\Core\SplashCore      as Splash;
 
 use Db;
@@ -27,6 +29,8 @@ use Context;
 use Language;
 use Employee;
 use Tools;
+use TaxRule;
+use SplashSync;
 
 use Splash\Local\Traits\SplashIdTrait;
 
@@ -38,6 +42,11 @@ use Splash\Local\Traits\SplashIdTrait;
  */
 class Local
 {
+    
+    /**
+     * @var SplashSync
+     */
+    private $SplashSyncModule = null;
     
     use SplashIdTrait;
     
@@ -150,11 +159,11 @@ class Local
         if (SPLASH_SERVER_MODE) {
             //====================================================================//
             // Load Default Language
-            $this->LoadDefaultLanguage();
+            $this->loadDefaultLanguage();
             
             //====================================================================//
             // Load Default User
-            $this->LoadLocalUser();
+            $this->loadLocalUser();
         } //====================================================================//
         // When Library is called in client mode ONLY
         //====================================================================//
@@ -165,7 +174,7 @@ class Local
         //====================================================================//
         // When Library is called in TRAVIS CI mode ONLY
         //====================================================================//
-        if (!empty(Splash::Input("SPLASH_TRAVIS"))) {
+        if (!empty(Splash::input("SPLASH_TRAVIS"))) {
             $this->onTravisIncludes();
         }
                 
@@ -191,7 +200,7 @@ class Local
 
         //====================================================================//
         //  Load Local Translation File
-        Splash::Translator()->Load("main@local");
+        Splash::translator()->load("main@local");
         
         //====================================================================//
         //  Verify - Server Identifier Given
@@ -243,9 +252,9 @@ class Local
     /**
      *  @abstract   Update Server Informations with local Data
      *
-     *  @param     arrayobject  $Informations   Informations Inputs
+     *  @param      ArrayObject  $Informations   Informations Inputs
      *
-     *  @return     arrayobject
+     *  @return     ArrayObject
      */
     public function informations($Informations)
     {
@@ -278,10 +287,10 @@ class Local
         
         //====================================================================//
         // Server Logo & Images
-        $Response->icoraw           = Splash::File()->ReadFileContents(_PS_IMG_DIR_ . "favicon.ico");
+        $Response->icoraw           = Splash::file()->ReadFileContents(_PS_IMG_DIR_ . "favicon.ico");
         $Response->logourl          = "http://" . Configuration::get('PS_SHOP_DOMAIN') . __PS_BASE_URI__;
         $Response->logourl         .= "img/" . Configuration::get('PS_LOGO');
-        $Response->logoraw          = Splash::File()->ReadFileContents(_PS_IMG_DIR_ . Configuration::get('PS_LOGO'));
+        $Response->logoraw          = Splash::file()->ReadFileContents(_PS_IMG_DIR_ . Configuration::get('PS_LOGO'));
         
         //====================================================================//
         // Server Informations
@@ -390,7 +399,7 @@ class Local
     public function loadDefaultLanguage()
     {
 //        $LangCode = Configuration::get('SPLASH_LANG_ID');
-        $LangCode = Splash::Configuration()->DefaultLanguage;
+        $LangCode = Splash::configuration()->DefaultLanguage;
         
         //====================================================================//
         // Load Default Language from Local Module Configuration
@@ -565,7 +574,7 @@ class Local
         // Execute final request
         $result = Db::getInstance()->executeS($sql);
         if (Db::getInstance()->getNumberError()) {
-            return OSWS_KO;
+            return false;
         }
         
         if (count($result) > 0) {
@@ -613,7 +622,6 @@ class Local
         // Load Local Splash Sync Module
         if (!isset($this->SplashSyncModule)) {
             $this->SplashSyncModule =   $this->getLocalModule();
-            ;
         }
         //====================================================================//
         // Check if Module is Installed & Enabled

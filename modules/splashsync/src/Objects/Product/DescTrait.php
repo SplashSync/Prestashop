@@ -144,10 +144,10 @@ trait DescTrait
                 $this->Out[$FieldName] = $this->getMultilang($this->Object, $FieldName);
                 break;
             case 'meta_keywords':
-                $this->Out[$FieldName] = $this->getMultilangTags($this->Object, $FieldName);
+                $this->Out[$FieldName] = $this->getMultilangTags($this->Object);
                 break;
             case 'fullname':
-                $this->Out[$FieldName] = $this->getMultilangFullName($this->Object, $FieldName);
+                $this->Out[$FieldName] = $this->getMultilangFullName($this->Object);
                 break;
                 
             default:

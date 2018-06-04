@@ -57,6 +57,7 @@ trait CRUDTrait
         //====================================================================//
         // If $id Given => Load Product Object From DataBase
         //====================================================================//
+        $Object = false;
         if (!empty($this->ProductId)) {
             $Object = new Product($this->ProductId, true);
             if ($Object->id != $this->ProductId) {
@@ -160,7 +161,7 @@ trait CRUDTrait
             }
             //====================================================================//
             // LOCK PRODUCT to prevent triggered actions on Price or Stock Update
-            $this->Lock($this->Object->id);
+            $this->lock($this->Object->id);
             //====================================================================//
             // Store New Id on SplashObject Class
             $this->ProductId    = $this->Object->id;
@@ -183,7 +184,7 @@ trait CRUDTrait
             $this->AttributeId  = $this->Attribute->id;
             //====================================================================//
             // LOCK PRODUCT to prevent triggered actions on Price or Stock Update
-            $this->Lock($this->getUnikId());
+            $this->lock($this->getUnikId());
         }
         
         //====================================================================//
@@ -234,33 +235,33 @@ trait CRUDTrait
         //====================================================================//
         // UPDATE/CREATE PRODUCT PRICE
         //====================================================================//
-        if (isset($this->NewPrice)) {
+        if (!is_null($this->NewPrice)) {
             $this->setSavePrice();
-            unset($this->NewPrice);
+            $this->NewPrice = null;
         }
         //====================================================================//
         // UPDATE/CREATE PRODUCT IMAGES
         //====================================================================//
-        if (isset($this->NewImagesArray)) {
+        if (!is_null($this->NewImagesArray)) {
             $this->setImgArray($this->NewImagesArray);
-            unset($this->NewImagesArray);
+            $this->NewImagesArray = null;
         }
         //====================================================================//
         // UPDATE/CREATE SPLASH ID
         //====================================================================//
-        if (isset($this->NewSplashId)) {
+        if (!is_null($this->NewSplashId)) {
             Splash::local()->setSplashId("Product", $this->getUnikId(), $this->NewSplashId);
-            unset($this->NewSplashId);
+            $this->NewSplashId = null;
         }
         //====================================================================//
         // INIT PRODUCT STOCK
         //====================================================================//
-        if (isset($this->NewStock)) {
+        if (!is_null($this->NewStock)) {
             //====================================================================//
             // Product Just Created => Setup Product Stock
             StockAvailable::setQuantity($this->ProductId, $this->AttributeId, $this->NewStock);
-            $this->needUdpate();
-            unset($this->NewStock);
+            $this->needUpdate();
+            $this->NewStock = null;
         }
     }
     

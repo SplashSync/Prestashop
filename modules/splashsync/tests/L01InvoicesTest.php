@@ -28,6 +28,8 @@ use Splash\Client\Splash;
  */
 class L01InvoicesTest extends ObjectsCase
 {
+    private $Fields = null;
+    
     public function testCreateAnInvoice()
     {
         $this->assertTrue(true);
@@ -39,11 +41,11 @@ class L01InvoicesTest extends ObjectsCase
 
         //====================================================================//
         //   Execute Action Directly on Module
-        $ObjectId = Splash::Object("Order")->Set(null, $FakeData);
+        $ObjectId = Splash::object("Order")->Set(null, $FakeData);
 
         //====================================================================//
         //   Load Order Object
-        $Order  =   Splash::Object("Order")->Load($ObjectId);
+        $Order  =   Splash::object("Order")->Load($ObjectId);
         $this->assertNotEmpty($Order);
 
         //====================================================================//

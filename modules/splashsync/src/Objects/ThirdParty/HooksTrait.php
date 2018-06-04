@@ -69,6 +69,7 @@ trait HooksTrait
     {
         //====================================================================//
         // Retrieve Customer Id
+        $id_customer = null;
         if (isset($customer->id_customer)) {
             $id_customer = $customer->id_customer;
         } elseif (isset($customer->id)) {

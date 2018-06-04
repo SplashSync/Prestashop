@@ -31,6 +31,18 @@ if (!defined('_PS_VERSION_')) {
 class SplashSync extends Module
 {
     
+    /** @var bool */
+    public $bootstrap = true;
+
+    /** @var string */
+    public $confirmUninstall = true;
+    
+    /** @var array */
+    private $dataList = array();
+
+    /** @var array */
+    private $fieldsList = array();
+    
     use \Splash\Local\Objects\ThirdParty\HooksTrait;
     use \Splash\Local\Objects\Address\HooksTrait;
     use \Splash\Local\Objects\Product\HooksTrait;
@@ -60,8 +72,9 @@ class SplashSync extends Module
         $this->module_key = '48032a9ff6cc3a4a43a0ea2acf7ccf10';
 
         //====================================================================//
-        // Activate BootStarp
+        // Activate BootStrap
         $this->bootstrap = true;
+        
         //====================================================================//
         // Construct Parent Module
         parent::__construct();
@@ -89,7 +102,7 @@ class SplashSync extends Module
             require_once(dirname(__FILE__) . "/vendor/autoload.php");
             //====================================================================//
             // Init Splash Module
-            Splash\Client\Splash::Core();
+            Splash\Client\Splash::core();
         }
         //====================================================================//
         // INIT Context VAriables
@@ -562,7 +575,7 @@ class SplashSync extends Module
 
         $helper->token = Tools::getAdminTokenLite('AdminModules');
         $helper->currentIndex = AdminController::$currentIndex.'&configure='.$this->name;
-        return $helper->generateList($this->data_list, $this->fields_list);
+        return $helper->generateList($this->dataList, $this->fieldsList);
     }
     
     /**
@@ -572,7 +585,7 @@ class SplashSync extends Module
     {
         //====================================================================//
         // Built List Culumns Definition
-        $this->fields_list = array(
+        $this->fieldsList = array(
             'id' => array(
                 'title' => $this->l('Id'),
                 'width' => 140,
@@ -596,7 +609,7 @@ class SplashSync extends Module
         );
         
         
-        $this->data_list = array();
+        $this->dataList = array();
     }
     
     /**
@@ -607,7 +620,7 @@ class SplashSync extends Module
         //====================================================================//
         // Execute Module SelfTests
         //====================================================================//
-        Splash\Client\Splash::SelfTest();
+        Splash\Client\Splash::selfTest();
         //====================================================================//
         // Post Splash Messages
         $this->importMessages();
@@ -621,14 +634,14 @@ class SplashSync extends Module
         //====================================================================//
         // List Objects
         //====================================================================//
-        $ObjectsList    = count(Splash\Client\Splash::Objects()) . ' (';
-        foreach (Splash\Client\Splash::Objects() as $value) {
+        $ObjectsList    = count(Splash\Client\Splash::objects()) . ' (';
+        foreach (Splash\Client\Splash::objects() as $value) {
             $ObjectsList    .= $value . ", ";
         }
         $ObjectsList    .= ")";
         
-        $this->data_list[] = array(
-            "id"    =>  count($this->data_list) + 1,
+        $this->dataList[] = array(
+            "id"    =>  count($this->dataList) + 1,
             "name"  =>  $this->l('Available Objects'),
             "desc"  =>  $this->l('List of all Available objects on this server.'),
             "result"=>  $ObjectsList,
@@ -646,7 +659,7 @@ class SplashSync extends Module
         //====================================================================//
         // Splash Server Ping
         //====================================================================//
-        if (Splash\Client\Splash::Ping()) {
+        if (Splash\Client\Splash::ping()) {
             $Result =   $this->l('Passed');
             $Ping   =   true;
         } else {
@@ -654,8 +667,8 @@ class SplashSync extends Module
             $Ping   =   false;
         }
         
-        $this->data_list[] = array(
-            "id"    =>  count($this->data_list) + 1,
+        $this->dataList[] = array(
+            "id"    =>  count($this->dataList) + 1,
             "name"  =>  $this->l('Ping Test'),
             "desc"  =>  $this->l('Test to Ping Splash Server.'),
             "result"=>  $Result,
@@ -667,14 +680,14 @@ class SplashSync extends Module
         //====================================================================//
         // Splash Server Connect
         //====================================================================//
-        if ($Ping && Splash\Client\Splash::Connect()) {
+        if ($Ping && Splash\Client\Splash::connect()) {
             $Result = $this->l('Passed');
         } else {
             $Result = $this->l('Fail');
         }
         
-        $this->data_list[] = array(
-            "id"    =>  count($this->data_list) + 1,
+        $this->dataList[] = array(
+            "id"    =>  count($this->dataList) + 1,
             "name"  =>  $this->l('Connect Test'),
             "desc"  =>  $this->l('Test to Connect to Splash Server.'),
             "result"=>  $Result,
@@ -718,7 +731,7 @@ class SplashSync extends Module
         
         //====================================================================//
         // Check if Object is in Remote Create Mode
-        if (Splash\Client\Splash::Object($_Type)->isLocked() && ($_Action == SPL_A_UPDATE)) {
+        if (Splash\Client\Splash::object($_Type)->isLocked() && ($_Action == SPL_A_UPDATE)) {
             //====================================================================//
             // Overide Action For Create
             $_Action = SPL_A_CREATE;
@@ -737,7 +750,7 @@ class SplashSync extends Module
         }
         //====================================================================//
         // Commit Action on remotes nodes (Master & Slaves)
-        $result = Splash\Client\Splash::Commit($_Type, $_Id, $_Action, $UserName, $_Comment);
+        $result = Splash\Client\Splash::commit($_Type, $_Id, $_Action, $UserName, $_Comment);
         //====================================================================//
         // Post Splash Messages
         $this->importMessages();
@@ -778,7 +791,7 @@ class SplashSync extends Module
         $this->context->smarty->assign('notifications', json_decode($Notifications, true));
         $this->context->smarty->assign(
             'url',
-            \Splash\Client\Splash::Ws()->getServerScheme()
+            \Splash\Client\Splash::ws()->getServerScheme()
                 . "://" . Configuration::get('PS_SHOP_DOMAIN')
                 . __PS_BASE_URI__
         );
@@ -803,11 +816,9 @@ class SplashSync extends Module
 //====================================================================//
        
     /**
-    *  @abstract    Read all log messages posted by OsWs and post it
-    *
-    *  @param       OsWs_Log                Input OsWs Log Class
-    *  @return      None
-    */
+     * @abstract    Read all log messages posted by OsWs and post it
+     * @return    void
+     */
     private function importMessages()
     {
         //====================================================================//
@@ -827,8 +838,6 @@ class SplashSync extends Module
             Context::getContext()->cookie->__set("spl_notify", $NewRaw);
             Context::getContext()->cookie->write();
         }
-        
-        return true;
     }
    
     /**

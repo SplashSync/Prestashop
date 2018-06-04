@@ -15,21 +15,9 @@
 
 namespace Splash\Local\Objects\ThirdParty;
 
-use Splash\Core\SplashCore      as Splash;
-
 //====================================================================//
 // Prestashop Static Classes
-use Address;
-use Gender;
-use Context;
-use State;
-use Country;
 use Translate;
-use Validate;
-use DbQuery;
-use Db;
-use Customer;
-use Tools;
 
 /**
  * @abstract    Access to thirdparty Meta Fields

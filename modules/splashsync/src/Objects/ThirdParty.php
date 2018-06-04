@@ -23,6 +23,7 @@ use Splash\Models\AbstractObject;
 use Splash\Models\Objects\IntelParserTrait;
 use Splash\Models\Objects\SimpleFieldsTrait;
 use Splash\Models\Objects\ObjectsTrait;
+use SplashSync;
 
 /**
  * @abstract    Splash Local Object Class - Customer Accounts Local Integration
@@ -50,6 +51,11 @@ class ThirdParty extends AbstractObject
     use \Splash\Local\Objects\ThirdParty\AddressTrait;
     use \Splash\Local\Objects\ThirdParty\AddressesTrait;
     use \Splash\Local\Objects\ThirdParty\MetaTrait;
+    
+    /**
+     * @var SplashSync
+     */
+    private $spl = null;
     
     //====================================================================//
     // Object Definition Parameters
@@ -109,7 +115,7 @@ class ThirdParty extends AbstractObject
     {
         //====================================================================//
         //  Load Local Translation File
-        Splash::Translator()->Load("objects@local");
+        Splash::translator()->Load("objects@local");
        
         //====================================================================//
         // Load Splash Module

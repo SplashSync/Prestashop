@@ -42,6 +42,11 @@ trait StockTrait
 {
     
     /**
+     * @var string
+     */
+    private $NewStock = null;
+    
+    /**
     *   @abstract     Build Fields using FieldFactory
     */
     private function buildStockFields()

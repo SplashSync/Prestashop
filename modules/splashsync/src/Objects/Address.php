@@ -23,6 +23,7 @@ use Splash\Models\AbstractObject;
 use Splash\Models\Objects\IntelParserTrait;
 use Splash\Models\Objects\SimpleFieldsTrait;
 use Splash\Models\Objects\ObjectsTrait;
+use SplashSync;
 
 /**
  * @abstract    Splash Local Object Class - Customer Address Local Integration
@@ -103,6 +104,11 @@ class Address extends AbstractObject
     // General Class Variables
     //====================================================================//
 
+    /**
+     * @var SplashSync
+     */
+    private $spl = null;
+    
     //====================================================================//
     // Class Constructor
     //====================================================================//
@@ -115,7 +121,7 @@ class Address extends AbstractObject
     {
         //====================================================================//
         //  Load Local Translation File
-        Splash::Translator()->Load("objects@local");
+        Splash::translator()->Load("objects@local");
         
         //====================================================================//
         // Load Splash Module

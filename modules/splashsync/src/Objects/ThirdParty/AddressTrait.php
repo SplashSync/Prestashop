@@ -15,21 +15,13 @@
 
 namespace Splash\Local\Objects\ThirdParty;
 
-use Splash\Core\SplashCore      as Splash;
-
 //====================================================================//
 // Prestashop Static Classes
 use Address;
-use Gender;
 use Context;
 use State;
 use Country;
 use Translate;
-use Validate;
-use DbQuery;
-use Db;
-use Customer;
-use Tools;
 
 /**
  * @abstract    Access to thirdparty Primary Address Fields
@@ -180,7 +172,7 @@ trait AddressTrait
         // Run Through Address List
         foreach ($AddresList as $Key => $Address) {
             $this->Out["contacts"][$Key] = array (
-                "address" => self::Objects()->Encode("Address", $Address["id_address"])
+                "address" => self::objects()->Encode("Address", $Address["id_address"])
                 );
         }
                 

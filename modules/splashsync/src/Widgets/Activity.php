@@ -30,12 +30,32 @@ use Splash\Core\SplashCore      as Splash;
 
 use AdminStatsController;
 use Configuration;
+use Currency;
+use SplashSync;
 
 /**
  * @abstract    Splash Widget - Display of Main Shop Activity
  */
 class Activity extends WidgetBase
 {
+    /**
+     * @var Currency
+     */
+    private $currency = null;
+
+    /**
+     * @var SplashSync
+     */
+    private $spl = null;
+
+    /**
+     * @var array
+     */
+    private $SparkOptions = array(
+        "AllowHtml"         =>  true,
+        "Width"             =>  self::SIZE_XS
+    );
+
     
     //====================================================================//
     // Object Definition Parameters
@@ -103,11 +123,11 @@ class Activity extends WidgetBase
         
         //====================================================================//
         // Set Blocks to Widget
-        $this->setBlocks($this->BlocksFactory()->Render());
+        $this->setBlocks($this->blocksFactory()->Render());
 
         //====================================================================//
         // Publish Widget
-        return $this->Render();
+        return $this->render();
     }
         
 
@@ -126,11 +146,11 @@ class Activity extends WidgetBase
         //====================================================================//
         // Verify Inputs
         if (!is_array($Inputs) && !is_a($Inputs, "ArrayObject")) {
-            $this->BlocksFactory()
+            $this->blocksFactory()
                     ->addNotificationsBlock(array("warning" => "Inputs is not an Array! Is " . get_class($Inputs)));
         }
         if (!isset($Inputs["DateStart"]) || !isset($Inputs["DateEnd"])) {
-            $this->BlocksFactory()->addNotificationsBlock(array("warning" => "No Date Range Defined!"));
+            $this->blocksFactory()->addNotificationsBlock(array("warning" => "No Date Range Defined!"));
             return;
         }
         
@@ -140,7 +160,7 @@ class Activity extends WidgetBase
         
         //====================================================================//
         // Load Default Currency
-        $this->currency = new \Currency(Configuration::get('PS_CURRENCY_DEFAULT'));
+        $this->currency = new Currency(Configuration::get('PS_CURRENCY_DEFAULT'));
         
         //====================================================================//
         // Load Splash Module
@@ -165,7 +185,7 @@ class Activity extends WidgetBase
             
         //====================================================================//
         // Add SparkInfo Blocks
-        $this->BlocksFactory()
+        $this->blocksFactory()
                 
                 ->addSparkInfoBlock(array(
                     "title"     =>      $this->spl->l('Sales'),

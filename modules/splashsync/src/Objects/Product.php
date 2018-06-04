@@ -30,6 +30,7 @@ use Splash\Models\Objects\ListsTrait;
 use Shop;
 use Configuration;
 use Currency;
+use SplashSync;
 
 /**
  * @abstract    Splash Local Object Class - Products Local Integration
@@ -61,6 +62,11 @@ class Product extends AbstractObject
     use \Splash\Local\Objects\Product\ImagesTrait;
     use \Splash\Local\Objects\Product\MetaTrait;
 //    use \Splash\Local\Objects\Product\AttributesTrait;
+    
+    /**
+     * @var SplashSync
+     */
+    private $spl = null;
     
     //====================================================================//
     // Object Definition Parameters
@@ -141,7 +147,7 @@ class Product extends AbstractObject
         
         //====================================================================//
         //  Load Local Translation File
-        Splash::Translator()->Load("objects@local");
+        Splash::translator()->Load("objects@local");
        
         //====================================================================//
         // Load Splash Module

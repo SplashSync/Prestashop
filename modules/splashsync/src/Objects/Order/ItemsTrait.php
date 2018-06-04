@@ -55,7 +55,7 @@ trait ItemsTrait
 
         //====================================================================//
         // Order Line Product Identifier
-        $this->fieldsFactory()->Create(self::Objects()->Encode("Product", SPL_T_ID))
+        $this->fieldsFactory()->Create(self::objects()->Encode("Product", SPL_T_ID))
                 ->Identifier("product_id")
                 ->InList("lines")
                 ->Name(Translate::getAdminTranslation("Product ID", "AdminImport"))
@@ -152,16 +152,16 @@ trait ItemsTrait
                 //====================================================================//
                 // Order Line Product Id
                 case 'product_id':
-                    $UnikId = Splash::Object('Product')
+                    $UnikId = Splash::object('Product')
                         ->getUnikId($Product["product_id"], $Product["product_attribute_id"]);
-                    $Value = self::Objects()->Encode("Product", $UnikId);
+                    $Value = self::objects()->Encode("Product", $UnikId);
                     break;
                 //====================================================================//
                 // Order Line Unit Price
                 case 'unit_price':
                     //====================================================================//
                     // Build Price Array
-                    $Value = self::Prices()->Encode(
+                    $Value = self::prices()->Encode(
                         (double)    Tools::convertPrice($Product["unit_price_tax_excl"], $this->Currency),
                         (double)    OrderDetail::getTaxCalculatorStatic($Product["id_order_detail"])->getTotalRate(),
                         null,
@@ -267,21 +267,21 @@ trait ItemsTrait
         
         //====================================================================//
         // Update Price
-        if ($OrderDetail->unit_price_tax_incl != self::Prices()->TaxIncluded($ProductItem["unit_price"])) {
-            $OrderDetail->unit_price_tax_incl = self::Prices()->TaxIncluded($ProductItem["unit_price"]);
+        if ($OrderDetail->unit_price_tax_incl != self::prices()->TaxIncluded($ProductItem["unit_price"])) {
+            $OrderDetail->unit_price_tax_incl   = self::prices()->TaxIncluded($ProductItem["unit_price"]);
             $Update =    true;
         }
-        if ($OrderDetail->unit_price_tax_excl != self::Prices()->TaxExcluded($ProductItem["unit_price"])) {
-            $OrderDetail->unit_price_tax_excl   = self::Prices()->TaxExcluded($ProductItem["unit_price"]);
-            $OrderDetail->product_price         = self::Prices()->TaxExcluded($ProductItem["unit_price"]);
+        if ($OrderDetail->unit_price_tax_excl != self::prices()->TaxExcluded($ProductItem["unit_price"])) {
+            $OrderDetail->unit_price_tax_excl   = self::prices()->TaxExcluded($ProductItem["unit_price"]);
+            $OrderDetail->product_price         = self::prices()->TaxExcluded($ProductItem["unit_price"]);
             $Update =    true;
         }
         
         //====================================================================//
         // Update Product Link
-        $UnikId         = self::Objects()->Id($ProductItem["product_id"]);
-        $ProductId      = Splash::Object('Product')->getId($UnikId);
-        $AttributeId    = Splash::Object('Product')->getAttribute($UnikId);
+        $UnikId         = self::objects()->Id($ProductItem["product_id"]);
+        $ProductId      = Splash::object('Product')->getId($UnikId);
+        $AttributeId    = Splash::object('Product')->getAttribute($UnikId);
         if ($OrderDetail->product_id != $ProductId) {
             $OrderDetail->product_id = $ProductId;
             $Update =    true;
@@ -380,7 +380,7 @@ trait ItemsTrait
         }
         //====================================================================//
         // Build Price Array
-        return self::Prices()->Encode(
+        return self::prices()->Encode(
             (double)    (-1) * Tools::convertPrice($DiscountTaxExcl, $this->Currency),
             (double)    $Tax,
             null,
@@ -482,7 +482,7 @@ trait ItemsTrait
         }
         //====================================================================//
         // Build Price Array
-        return self::Prices()->Encode(
+        return self::prices()->Encode(
             (double)    Tools::convertPrice($this->Object->total_shipping_tax_excl, $this->Currency),
             (double)    $Tax,
             null,

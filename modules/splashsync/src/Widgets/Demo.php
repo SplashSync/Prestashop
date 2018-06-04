@@ -158,11 +158,11 @@ class Demo extends WidgetBase
 
         //====================================================================//
         // Set Blocks to Widget
-        $this->setBlocks($this->BlocksFactory()->Render());
+        $this->setBlocks($this->blocksFactory()->Render());
 
         //====================================================================//
         // Publish Widget
-        return $this->Render();
+        return $this->render();
     }
         
 
@@ -177,7 +177,7 @@ class Demo extends WidgetBase
     {
         //====================================================================//
         // Into Text Block
-        $this->BlocksFactory()->addTextBlock("This is a Demo Text Block!!" . "You can repeat me as much as you want!");
+        $this->blocksFactory()->addTextBlock("This is a Demo Text Block!!" . "You can repeat me as much as you want!");
     }
   
     /**
@@ -189,7 +189,7 @@ class Demo extends WidgetBase
         //====================================================================//
         // verify Inputs
         if (!is_array($Inputs) && !is_a($Inputs, "ArrayObject")) {
-            $this->BlocksFactory()
+            $this->blocksFactory()
                     ->addNotificationsBlock(array("warning" => "Inputs is not an Array! Is " . get_class($Inputs)));
         }
         
@@ -201,7 +201,7 @@ class Demo extends WidgetBase
             $TableContents[]    =   array($key, $value);
         }
         
-        $this->BlocksFactory()->addTableBlock($TableContents, array("Width" => self::SIZE_M));
+        $this->blocksFactory()->addTableBlock($TableContents, array("Width" => self::SIZE_M));
     }
     
     /**
@@ -221,7 +221,7 @@ class Demo extends WidgetBase
         );
         
         
-        $this->BlocksFactory()->addNotificationsBlock($Notifications, array("Width" => self::SIZE_M));
+        $this->blocksFactory()->addNotificationsBlock($Notifications, array("Width" => self::SIZE_M));
     }
     
     //====================================================================//

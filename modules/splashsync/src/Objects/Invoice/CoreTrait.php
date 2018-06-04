@@ -36,7 +36,7 @@ trait CoreTrait
         
         //====================================================================//
         // Order Object
-        $this->fieldsFactory()->Create(self::Objects()->Encode("Order", SPL_T_ID))
+        $this->fieldsFactory()->Create(self::objects()->encode("Order", SPL_T_ID))
                 ->Identifier("id_order")
                 ->Name($this->spl->l('Order'))
                 ->MicroData("http://schema.org/Invoice", "referencesOrder")
@@ -72,7 +72,7 @@ trait CoreTrait
                 break;
             
             case 'id_order':
-                $this->Out[$FieldName] = self::Objects()->Encode("Order", $this->Object->$FieldName);
+                $this->Out[$FieldName] = self::objects()->encode("Order", $this->Object->$FieldName);
                 break;
             
             default:
