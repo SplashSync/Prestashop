@@ -3,8 +3,8 @@ echo Install SplashSync Module
 
 # Build Module Dependencies
 cd $MODULE_DIR
-# With PHP 7 => Load Phpstan   
-# if [[ ${TRAVIS_PHP_VERSION:0:1} == "7" ]]; then composer require phpstan/phpstan-shim --no-update; fi
+ With PHP 7 => Load Phpstan   
+ if [[ ${TRAVIS_PHP_VERSION:0:1} == "7" ]]; then composer require phpstan/phpstan-shim --no-update; fi
 composer update --prefer-dist --no-interaction --no-progress
 cd $TRAVIS_BUILD_DIR
 
@@ -20,13 +20,12 @@ cp -f     $MODULE_DIR/build/phpunit.xml.dist            $TRAVIS_BUILD_DIR/phpuni
 #echo Move Git Files to Prestashop Root Directory
 #rm -Rf    $TRAVIS_BUILD_DIR/.git      
 #mkdir     $TRAVIS_BUILD_DIR/.git      
-#cp -Rf    $MODULE_DIR/.git/*                            $TRAVIS_BUILD_DIR/.git/
-      
-#cp -f     $MODULE_DIR/grumphp.yml                       $TRAVIS_BUILD_DIR/grumphp.yml           
+cp -Rf    $MODULE_DIR/.git/*                            $TRAVIS_BUILD_DIR/.git/
+cp -f     $MODULE_DIR/grumphp.yml                       $TRAVIS_BUILD_DIR/grumphp.yml           
 
 #ls -al    $TRAVIS_BUILD_DIR/modules/splashsync
-ls -al    $MODULE_DIR/
-#ls -al    $TRAVIS_BUILD_DIR/.git/
+#ls -al    $MODULE_DIR/
+ls -al    $TRAVIS_BUILD_DIR/.git/
 
 # Change Default Language Code to ISO format
 mysql -D prestashop -e "UPDATE ps_lang SET language_code = 'fr-fr' WHERE ps_lang.language_code = 'fr';"
