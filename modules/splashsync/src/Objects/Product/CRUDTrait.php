@@ -68,9 +68,9 @@ trait CRUDTrait
                     "Unable to fetch Product (" . $this->ProductId . ")"
                 );
             }
-            //====================================================================//
-            // Setup Images Variables
-            $Object->image_folder   = _PS_PROD_IMG_DIR_;
+//            //====================================================================//
+//            // Setup Images Variables
+//            $Object->image_folder   = _PS_PROD_IMG_DIR_;
         }
         
         //====================================================================//
@@ -86,7 +86,7 @@ trait CRUDTrait
                     "Unable to fetch Product Attribute (" . $this->AttributeId . ")"
                 );
             }
-            $Object->id_product_attribute = $this->AttributeId;
+//            $Object->id_product_attribute = $this->AttributeId;
         }
         
         return $Object;
@@ -326,10 +326,21 @@ trait CRUDTrait
     public function getUnikId($ProductId = null, $AttributeId = 0)
     {
         if (is_null($ProductId)) {
-            return $this->ProductId + ($this->AttributeId << 20);
+            return self::getUnikIdStatic($this->ProductId, $this->AttributeId);
         }
-        return $ProductId + ($AttributeId << 20);
+        return self::getUnikIdStatic($ProductId, $AttributeId);        
     }
+    
+    /**
+     *      @abstract       Convert id_product & id_product_attribute pair
+     *      @param          int(10)       $ProductId               Product Identifier
+     *      @param          int(10)       $AttributeId     Product Combinaison Identifier
+     *      @return         int(32)       $UnikId                   0 if KO, >0 if OK
+     */
+    public static function getUnikIdStatic($ProductId, $AttributeId)
+    {
+        return $ProductId + ($AttributeId << 20);
+    }    
     
     /**
      *      @abstract       Revert UnikId to decode id_product

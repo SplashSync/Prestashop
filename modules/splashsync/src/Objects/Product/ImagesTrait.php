@@ -61,7 +61,7 @@ trait ImagesTrait
         
         //====================================================================//
         // Product Images List
-        $this->fieldsFactory()->Create(SPL_T_IMG)
+        $this->fieldsFactory()->create(SPL_T_IMG)
                 ->Identifier("image")
                 ->InList("images")
                 ->Name(Translate::getAdminTranslation("Images", "AdminProducts"))
@@ -70,7 +70,7 @@ trait ImagesTrait
         
         //====================================================================//
         // Product Images => Is Cover
-        $this->fieldsFactory()->Create(SPL_T_BOOL)
+        $this->fieldsFactory()->create(SPL_T_BOOL)
                 ->Identifier("cover")
                 ->InList("images")
                 ->Name(Translate::getAdminTranslation("Cover", "AdminProducts"))
@@ -176,7 +176,7 @@ trait ImagesTrait
             $Image = self::images()->Encode(
                 ($ObjectImage->legend?$ObjectImage->legend:$ObjectImage->id . "." . $ObjectImage->image_format),
                 $ObjectImage->id . "." . $ObjectImage->image_format,
-                $this->Object->image_folder . $ObjectImage->getImgFolder(),
+                _PS_PROD_IMG_DIR_ . $ObjectImage->getImgFolder(),
                 $link->getImageLink($ImageName, $ImageArray["id_image"])
             );
 
@@ -186,7 +186,7 @@ trait ImagesTrait
                 $this->Out["images"][$key] = array();
             }
             $this->Out["images"][$key]["image"] = $Image;
-            $this->Out["images"][$key]["cover"] = (bool) $ObjectImage->cover;
+            $this->Out["images"][$key]["cover"] = $ObjectImage->cover;
         }
         return true;
     }
@@ -262,7 +262,7 @@ trait ImagesTrait
                 }
                 //====================================================================//
                 // Update Image is Cover Flag
-                if (!is_null($IsCover) && ((bool) $ObjectImage->cover) !==  ((bool) $IsCover)) {
+                if (!is_null($IsCover) && ($ObjectImage->cover) !==  ((bool) $IsCover)) {
                     $ObjectImage->cover = $IsCover;
                     $ObjectImage->update();
                     $this->needUpdate();
@@ -310,7 +310,7 @@ trait ImagesTrait
         //====================================================================//
         // Create New Image Object
         $ObjectImage                = new Image();
-        $ObjectImage->label         = isset($NewImageFile["name"]) ? $NewImageFile["name"] : $NewImageFile["filename"];
+        $ObjectImage->legend        = isset($NewImageFile["name"]) ? $NewImageFile["name"] : $NewImageFile["filename"];
         $ObjectImage->id_product    = $this->ProductId;
         $ObjectImage->position      = $this->ImgPosition;
         $ObjectImage->cover         = $IsCover;
@@ -323,7 +323,7 @@ trait ImagesTrait
         // Write Image On Folder
         $Path       = dirname($ObjectImage->getPathForCreation());
         $Filename   = "/" . $ObjectImage->id . "." . $ObjectImage->image_format;
-        Splash::file()->WriteFile($Path, $Filename, $NewImageFile["md5"], $NewImageFile["raw"]);
+        Splash::file()->writeFile($Path, $Filename, $NewImageFile["md5"], $NewImageFile["raw"]);
     }
     
     /**

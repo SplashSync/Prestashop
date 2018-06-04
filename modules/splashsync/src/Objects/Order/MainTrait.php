@@ -44,7 +44,7 @@ trait MainTrait
                 
         //====================================================================//
         // Order Total Price HT
-        $this->fieldsFactory()->Create(SPL_T_DOUBLE)
+        $this->fieldsFactory()->create(SPL_T_DOUBLE)
                 ->Identifier("total_paid_tax_excl")
                 ->Name(Translate::getAdminTranslation("Total (Tax excl.)", "AdminOrders") . $CurrencySuffix)
                 ->MicroData("http://schema.org/Invoice", "totalPaymentDue")
@@ -53,7 +53,7 @@ trait MainTrait
         
         //====================================================================//
         // Order Total Price TTC
-        $this->fieldsFactory()->Create(SPL_T_DOUBLE)
+        $this->fieldsFactory()->create(SPL_T_DOUBLE)
                 ->Identifier("total_paid_tax_incl")
                 ->Name(Translate::getAdminTranslation("Total (Tax incl.)", "AdminOrders") . $CurrencySuffix)
                 ->MicroData("http://schema.org/Invoice", "totalPaymentDueTaxIncluded")

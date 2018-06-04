@@ -287,10 +287,10 @@ class Local
         
         //====================================================================//
         // Server Logo & Images
-        $Response->icoraw           = Splash::file()->ReadFileContents(_PS_IMG_DIR_ . "favicon.ico");
+        $Response->icoraw           = Splash::file()->readFileContents(_PS_IMG_DIR_ . "favicon.ico");
         $Response->logourl          = "http://" . Configuration::get('PS_SHOP_DOMAIN') . __PS_BASE_URI__;
         $Response->logourl         .= "img/" . Configuration::get('PS_LOGO');
-        $Response->logoraw          = Splash::file()->ReadFileContents(_PS_IMG_DIR_ . Configuration::get('PS_LOGO'));
+        $Response->logoraw          = Splash::file()->readFileContents(_PS_IMG_DIR_ . Configuration::get('PS_LOGO'));
         
         //====================================================================//
         // Server Informations
@@ -343,9 +343,8 @@ class Local
 //====================================================================//
     
     /**
-     *      @abstract       Initiate Local Request User if not already defined
-     *      @param          array       $cfg       Loacal Parameters Array
-     *      @return         int                     0 if KO, >0 if OK
+     * @abstract    Initiate Local Request User if not already defined
+     * @return      bool
      */
     public function loadLocalUser()
     {
@@ -455,7 +454,7 @@ class Local
     /**
      *      @abstract       Search for Prestashop Admin Folder in upper folders
      *
-     *      @return         string
+     *      @return         string|false
      */
     private function getAdminFolder()
     {
@@ -516,15 +515,14 @@ class Local
  
     /**
      *      @abstract       Initiate Local SplashSync Module
-     *      @param          array       $cfg       Loacal Parameters Array
-     *      @return         int                    0 if KO, >0 if OK
+     *      @return         SplashSync
      */
     public function getLocalModule()
     {
         //====================================================================//
         // Safety Check
         if (!class_exists("SplashSync")) {
-            return Splash::log()->err('Commons  - Unable To Load Splash Module Class Definition.');
+            Splash::log()->err('Commons  - Unable To Load Splash Module Class Definition.');
         }
         //====================================================================//
         // Create New Splash Module Instance
@@ -565,7 +563,7 @@ class Local
         $sql->leftJoin("tax", 't', '(g.`id_tax` = t.`id_tax`)');
         //====================================================================//
         // Build WHERE
-        $sql->where('t.`rate` = '. (float) $TaxRate);
+        $sql->where('t.`rate` = '. $TaxRate);
         $sql->where('g.`id_country` = '. (int) $CountryId);
         //====================================================================//
         // Build ORDER BY
@@ -577,7 +575,7 @@ class Local
             return false;
         }
         
-        if (count($result) > 0) {
+        if (Db::getInstance()->numRows() > 0) {
             $NewTaxRate = array_shift($result);
             return $NewTaxRate["id_group"];
         }
@@ -638,7 +636,7 @@ class Local
         $this->SplashSyncModule->updateTranslationsAfterInstall(false);
         if ($this->SplashSyncModule->install()) {
             Splash::log()->msg('[SPLASH] Splash Module Intall Done');
-            echo Splash::log()->GetConsoleLog(true);
+            echo Splash::log()->getConsoleLog(true);
             return true;
         }
         //====================================================================//
@@ -647,7 +645,7 @@ class Local
         foreach ($this->SplashSyncModule->getErrors() as $Error) {
             Splash::log()->err('[SPLASH] Mod. Install : ' . $Error);
         }
-        echo Splash::log()->GetConsoleLog(true);
+        echo Splash::log()->getConsoleLog(true);
         return false;
     }
 }

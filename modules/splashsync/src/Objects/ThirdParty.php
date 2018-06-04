@@ -115,13 +115,10 @@ class ThirdParty extends AbstractObject
     {
         //====================================================================//
         //  Load Local Translation File
-        Splash::translator()->Load("objects@local");
+        Splash::translator()->load("objects@local");
        
         //====================================================================//
         // Load Splash Module
         $this->spl = Splash::local()->getLocalModule();
-        if ($this->spl == false) {
-            return false;
-        }
     }
 }

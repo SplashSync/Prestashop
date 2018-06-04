@@ -34,9 +34,9 @@ trait SplashIdTrait
     {
         // List Tables
         Db::getInstance()
-                ->Execute("SHOW TABLES LIKE '"._DB_PREFIX_."splash_links'");
+                ->execute("SHOW TABLES LIKE '"._DB_PREFIX_."splash_links'");
         // Check Count
-        if (Db::getInstance()->NumRows() == 1) {
+        if (Db::getInstance()->numRows() == 1) {
             return true;
         }
         return false;
@@ -58,7 +58,7 @@ trait SplashIdTrait
         $Sql   .=   "`spl_origin`   VARCHAR(256)    DEFAULT NULL ,";
         $Sql   .=   "`extra`        TEXT            DEFAULT NULL )";
         
-        return Db::getInstance()->Execute($Sql);
+        return Db::getInstance()->execute($Sql);
     }
     
     /**

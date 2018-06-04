@@ -24,6 +24,8 @@ namespace Splash\Local\Objects\Product;
 use Splash\Client\Splash;
 use Context;
 
+use Splash\Local\Objects\Product;
+
 /**
  * @abstract Prestashop Hooks for Products
  */
@@ -95,7 +97,7 @@ trait HooksTrait
             foreach ($AttrList as $Attr) {
                 //====================================================================//
                 // Add Attribute Product Commit Update List
-                $IdList[] =   (int) Splash::object("Product")->getUnikId($id_product, $Attr["id_product_attribute"]);
+                $IdList[] =   (int) Product::getUnikIdStatic($id_product, $Attr["id_product_attribute"]);
             }
         }
         if (empty($IdList)) {
@@ -153,8 +155,7 @@ trait HooksTrait
             if (isset($params["id_product_attribute"]) && !empty($params["id_product_attribute"])) {
                 //====================================================================//
                 // Generate Unik Product Id
-                $UnikId     =   (int) Splash::object("Product")
-                        ->getUnikId($params["id_product"], $params["id_product_attribute"]);
+                $UnikId     =   (int) Product::getUnikIdStatic($params["id_product"], $params["id_product_attribute"]);
             } else {
                 $UnikId     =   (int) $params["id_product"];
             }
@@ -180,8 +181,7 @@ trait HooksTrait
             if (isset($Product["id_product_attribute"]) && !empty($Product["id_product_attribute"])) {
                 //====================================================================//
                 // Generate Unik Product Id
-                $UnikId[]       =   (int) Splash::object("Product")
-                        ->getUnikId($Product["id_product"], $Product["id_product_attribute"]);
+                $UnikId[]       =   (int) Product::getUnikIdStatic($Product["id_product"], $Product["id_product_attribute"]);
             } else {
                 $UnikId[]       =   (int) $Product["id_product"];
             }
@@ -222,7 +222,7 @@ trait HooksTrait
         }
         //====================================================================//
         // Generate Unik Product Id
-        $UnikId       =   (int) Splash::object("Product")->getUnikId($combination->id_product, $id_combination);
+        $UnikId       =   (int) Product::getUnikIdStatic($combination->id_product, $id_combination);
         //====================================================================//
         // Commit Update For Product Attribute
         return $this->doCommit("Product", $UnikId, $action, $comment);

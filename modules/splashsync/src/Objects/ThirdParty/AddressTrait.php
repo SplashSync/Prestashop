@@ -39,7 +39,7 @@ trait AddressTrait
 
         //====================================================================//
         // Addess
-        $this->fieldsFactory()->Create(SPL_T_VARCHAR)
+        $this->fieldsFactory()->create(SPL_T_VARCHAR)
                 ->Identifier("address1")
                 ->Name($GroupName)
                 ->MicroData("http://schema.org/PostalAddress", "streetAddress")
@@ -48,7 +48,7 @@ trait AddressTrait
 
         //====================================================================//
         // Addess Complement
-        $this->fieldsFactory()->Create(SPL_T_VARCHAR)
+        $this->fieldsFactory()->create(SPL_T_VARCHAR)
                 ->Identifier("address2")
                 ->Name($GroupName . " (2)")
                 ->MicroData("http://schema.org/PostalAddress", "postOfficeBoxNumber")
@@ -57,7 +57,7 @@ trait AddressTrait
         
         //====================================================================//
         // Zip Code
-        $this->fieldsFactory()->Create(SPL_T_VARCHAR)
+        $this->fieldsFactory()->create(SPL_T_VARCHAR)
                 ->Identifier("postcode")
                 ->Name(Translate::getAdminTranslation("Zip/Postal Code", "AdminAddresses"))
                 ->MicroData("http://schema.org/PostalAddress", "postalCode")
@@ -66,7 +66,7 @@ trait AddressTrait
         
         //====================================================================//
         // City Name
-        $this->fieldsFactory()->Create(SPL_T_VARCHAR)
+        $this->fieldsFactory()->create(SPL_T_VARCHAR)
                 ->Identifier("city")
                 ->Name(Translate::getAdminTranslation("City", "AdminAddresses"))
                 ->MicroData("http://schema.org/PostalAddress", "addressLocality")
@@ -75,7 +75,7 @@ trait AddressTrait
         
         //====================================================================//
         // State Name
-        $this->fieldsFactory()->Create(SPL_T_VARCHAR)
+        $this->fieldsFactory()->create(SPL_T_VARCHAR)
                 ->Identifier("state")
                 ->Name(Translate::getAdminTranslation("State", "AdminAddresses"))
                 ->MicroData("http://schema.org/PostalAddress", "addressRegion")
@@ -84,7 +84,7 @@ trait AddressTrait
         
         //====================================================================//
         // State code
-        $this->fieldsFactory()->Create(SPL_T_STATE)
+        $this->fieldsFactory()->create(SPL_T_STATE)
                 ->Identifier("id_state")
                 ->Name(Translate::getAdminTranslation("State", "AdminAddresses") . " (Code)")
                 ->MicroData("http://schema.org/PostalAddress", "addressRegion")
@@ -93,7 +93,7 @@ trait AddressTrait
         
         //====================================================================//
         // Country Name
-        $this->fieldsFactory()->Create(SPL_T_VARCHAR)
+        $this->fieldsFactory()->create(SPL_T_VARCHAR)
                 ->Identifier("country")
                 ->Name(Translate::getAdminTranslation("Country", "AdminAddresses"))
                 ->MicroData("http://schema.org/PostalAddress", "addressCountry")
@@ -102,7 +102,7 @@ trait AddressTrait
         
         //====================================================================//
         // Country ISO Code
-        $this->fieldsFactory()->Create(SPL_T_COUNTRY)
+        $this->fieldsFactory()->create(SPL_T_COUNTRY)
                 ->Identifier("id_country")
                 ->Name(Translate::getAdminTranslation("Country", "AdminAddresses") . " (Code)")
                 ->MicroData("http://schema.org/PostalAddress", "addressCountry")
@@ -119,7 +119,7 @@ trait AddressTrait
         
         //====================================================================//
         // Phone
-        $this->fieldsFactory()->Create(SPL_T_PHONE)
+        $this->fieldsFactory()->create(SPL_T_PHONE)
                 ->Identifier("phone")
                 ->Name(Translate::getAdminTranslation("Home phone", "AdminAddresses"))
                 ->MicroData("http://schema.org/PostalAddress", "telephone")
@@ -128,7 +128,7 @@ trait AddressTrait
         
         //====================================================================//
         // Mobile Phone
-        $this->fieldsFactory()->Create(SPL_T_PHONE)
+        $this->fieldsFactory()->create(SPL_T_PHONE)
                 ->Identifier("phone_mobile")
                 ->Name(Translate::getAdminTranslation("Mobile phone", "AdminAddresses"))
                 ->MicroData("http://schema.org/Person", "telephone")
@@ -137,7 +137,7 @@ trait AddressTrait
 
         //====================================================================//
         // VAT Number
-        $this->fieldsFactory()->Create(SPL_T_VARCHAR)
+        $this->fieldsFactory()->create(SPL_T_VARCHAR)
                 ->Identifier("vat_number")
                 ->Name(Translate::getAdminTranslation("VAT Number", "AdminAddresses"))
                 ->MicroData("http://schema.org/Organization", "vatID")

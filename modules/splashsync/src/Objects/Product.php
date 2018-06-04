@@ -133,10 +133,6 @@ class Product extends AbstractObject
     // Class Constructor
     //====================================================================//
         
-    /**
-     *      @abstract       Class Constructor (Used only if localy necessary)
-     *      @return         int                     0 if KO, >0 if OK
-     */
     public function __construct()
     {
         //====================================================================//
@@ -147,7 +143,7 @@ class Product extends AbstractObject
         
         //====================================================================//
         //  Load Local Translation File
-        Splash::translator()->Load("objects@local");
+        Splash::translator()->load("objects@local");
        
         //====================================================================//
         // Load Splash Module
@@ -155,7 +151,7 @@ class Product extends AbstractObject
 
         //====================================================================//
         // Load Default Language
-        $this->LangId   = Splash::local()->LoadDefaultLanguage();
+        $this->LangId   = Splash::local()->loadDefaultLanguage();
         
         //====================================================================//
         // Load OsWs Currency
@@ -163,10 +159,6 @@ class Product extends AbstractObject
 
         //====================================================================//
         // Load User
-        if (!Splash::local()->LoadLocalUser()) {
-            return false;
-        }
-        
-        return true;
+        Splash::local()->loadLocalUser();
     }
 }

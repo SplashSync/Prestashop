@@ -44,7 +44,7 @@ trait DatesTrait
     {
         //====================================================================//
         // Creation Date
-        $this->fieldsFactory()->Create(SPL_T_DATETIME)
+        $this->fieldsFactory()->create(SPL_T_DATETIME)
                 ->Identifier("date_add")
                 ->Name(Translate::getAdminTranslation("Creation", "AdminSupplyOrders"))
                 ->Group(Translate::getAdminTranslation("Meta", "AdminThemes"))
@@ -53,7 +53,7 @@ trait DatesTrait
         
         //====================================================================//
         // Last Change Date
-        $this->fieldsFactory()->Create(SPL_T_DATETIME)
+        $this->fieldsFactory()->create(SPL_T_DATETIME)
                 ->Identifier("date_upd")
                 ->Name(Translate::getAdminTranslation("Last modification", "AdminSupplyOrders"))
                 ->Group(Translate::getAdminTranslation("Meta", "AdminThemes"))

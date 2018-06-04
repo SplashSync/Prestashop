@@ -35,7 +35,7 @@ class SplashSync extends Module
     public $bootstrap = true;
 
     /** @var string */
-    public $confirmUninstall = true;
+    public $confirmUninstall = null;
     
     /** @var array */
     private $dataList = array();
@@ -63,10 +63,10 @@ class SplashSync extends Module
     {
         //====================================================================//
         // Init Module Main Information Fields
-        $this->name = 'splashsync';
-        $this->tab = 'administration';
-        $this->version = '1.2.0';
-        $this->author = 'SplashSync';
+        $this->name     = 'splashsync';
+        $this->tab      = 'administration';
+        $this->version  = 1.2;
+        $this->author   = 'SplashSync';
         $this->need_instance = 0;
         $this->ps_versions_compliancy = array('min' => '1.5', 'max' => '1.7');
         $this->module_key = '48032a9ff6cc3a4a43a0ea2acf7ccf10';
@@ -564,8 +564,6 @@ class SplashSync extends Module
         //====================================================================//
         $helper = new HelperList();
 
-        $helper->shopLinkType = '';
-
         $helper->simple_header = true;
 
         $helper->identifier = 'id';
@@ -737,8 +735,6 @@ class SplashSync extends Module
             $_Action = SPL_A_CREATE;
         }
         
-        
-//        Splash\Client\Splash::log()->www("Splash Commit => " , $_Id);
         //====================================================================//
         // Prepare User Name for Logging
         if (!empty(Context::getContext()->employee)) {
@@ -827,7 +823,7 @@ class SplashSync extends Module
         
         //====================================================================//
         // Merge Cookie With Log
-        Splash\Client\Splash::log()->Merge(json_decode($RawNotifications, true));
+        Splash\Client\Splash::log()->merge(json_decode($RawNotifications, true));
 
         //====================================================================//
         // Encode & Compare

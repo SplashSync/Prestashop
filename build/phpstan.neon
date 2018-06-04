@@ -1,9 +1,11 @@
 parameters:
     bootstrap: "./build/phpstan.php"
-
     universalObjectCratesClasses:
             - ArrayObject
+    ignoreErrors:
+            - '#Call to an undefined method [a-zA-Z0-9\\_]+ObjectInterface::load()#'
+            - '#[a-zA-Z0-9\\_\#]+ class Currency constructor expects null, string given#'
+            - '#[a-zA-Z0-9\\_\#]+ class Address constructor expects int|null, bool|int|null given#'
+            - '#Access to an undefined property ObjectModel::[a-zA-Z0-9$\\_]#'
+            - '#Access to an undefined property Context::[a-zA-Z0-9$\\_]#'
 
-#    ignoreErrors:
-#            - '#Call to an undefined method object::getAttributeRawValue().#'
-#            - '#Call to an undefined method Mage_Core_Model_Abstract::updateAttributes().#'

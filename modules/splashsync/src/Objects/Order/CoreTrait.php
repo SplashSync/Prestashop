@@ -37,7 +37,7 @@ trait CoreTrait
         
         //====================================================================//
         // Customer Object
-        $this->fieldsFactory()->Create(self::objects()->encode("ThirdParty", SPL_T_ID))
+        $this->fieldsFactory()->create(self::objects()->encode("ThirdParty", SPL_T_ID))
                 ->Identifier("id_customer")
                 ->Name(Translate::getAdminTranslation("Customer ID", "AdminCustomerThreads"))
                 ->isRequired();
@@ -49,7 +49,7 @@ trait CoreTrait
         
         //====================================================================//
         // Customer Email
-        $this->fieldsFactory()->Create(SPL_T_EMAIL)
+        $this->fieldsFactory()->create(SPL_T_EMAIL)
                 ->Identifier("email")
                 ->Name(Translate::getAdminTranslation("Email address", "AdminCustomers"))
                 ->MicroData("http://schema.org/ContactPoint", "email")
@@ -57,7 +57,7 @@ trait CoreTrait
         
         //====================================================================//
         // Reference
-        $this->fieldsFactory()->Create(SPL_T_VARCHAR)
+        $this->fieldsFactory()->create(SPL_T_VARCHAR)
                 ->Identifier("reference")
                 ->Name(Translate::getAdminTranslation("Reference", "AdminOrders"))
                 ->MicroData("http://schema.org/Order", "orderNumber")
@@ -67,7 +67,7 @@ trait CoreTrait
 
         //====================================================================//
         // Order Date
-        $this->fieldsFactory()->Create(SPL_T_DATE)
+        $this->fieldsFactory()->create(SPL_T_DATE)
                 ->Identifier("order_date")
                 ->Name(Translate::getAdminTranslation("Date", "AdminProducts"))
                 ->MicroData("http://schema.org/Order", "orderDate")

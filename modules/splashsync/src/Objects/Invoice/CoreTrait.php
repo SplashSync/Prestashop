@@ -36,7 +36,7 @@ trait CoreTrait
         
         //====================================================================//
         // Order Object
-        $this->fieldsFactory()->Create(self::objects()->encode("Order", SPL_T_ID))
+        $this->fieldsFactory()->create(self::objects()->encode("Order", SPL_T_ID))
                 ->Identifier("id_order")
                 ->Name($this->spl->l('Order'))
                 ->MicroData("http://schema.org/Invoice", "referencesOrder")
@@ -45,7 +45,7 @@ trait CoreTrait
         
         //====================================================================//
         // Invoice Reference
-        $this->fieldsFactory()->Create(SPL_T_VARCHAR)
+        $this->fieldsFactory()->create(SPL_T_VARCHAR)
                 ->Identifier("number")
                 ->Name(Translate::getAdminTranslation("Invoice number", "AdminInvoices"))
                 ->MicroData("http://schema.org/Invoice", "confirmationNumber")

@@ -37,7 +37,7 @@ trait MainTrait
 
         //====================================================================//
         // Addess
-        $this->fieldsFactory()->Create(SPL_T_VARCHAR)
+        $this->fieldsFactory()->create(SPL_T_VARCHAR)
                 ->Identifier("address1")
                 ->Name($GroupName)
                 ->MicroData("http://schema.org/PostalAddress", "streetAddress")
@@ -46,7 +46,7 @@ trait MainTrait
 
         //====================================================================//
         // Addess Complement
-        $this->fieldsFactory()->Create(SPL_T_VARCHAR)
+        $this->fieldsFactory()->create(SPL_T_VARCHAR)
                 ->Identifier("address2")
                 ->Name($GroupName . " (2)")
                 ->Group($GroupName)
@@ -54,7 +54,7 @@ trait MainTrait
         
         //====================================================================//
         // Zip Code
-        $this->fieldsFactory()->Create(SPL_T_VARCHAR)
+        $this->fieldsFactory()->create(SPL_T_VARCHAR)
                 ->Identifier("postcode")
                 ->Name(Translate::getAdminTranslation("Zip/Postal Code", "AdminAddresses"))
                 ->MicroData("http://schema.org/PostalAddress", "postalCode")
@@ -64,7 +64,7 @@ trait MainTrait
         
         //====================================================================//
         // City Name
-        $this->fieldsFactory()->Create(SPL_T_VARCHAR)
+        $this->fieldsFactory()->create(SPL_T_VARCHAR)
                 ->Identifier("city")
                 ->Name(Translate::getAdminTranslation("City", "AdminAddresses"))
                 ->MicroData("http://schema.org/PostalAddress", "addressLocality")
@@ -74,7 +74,7 @@ trait MainTrait
         
         //====================================================================//
         // State Name
-        $this->fieldsFactory()->Create(SPL_T_VARCHAR)
+        $this->fieldsFactory()->create(SPL_T_VARCHAR)
                 ->Identifier("state")
                 ->Name(Translate::getAdminTranslation("State", "AdminAddresses"))
                 ->Group($GroupName)
@@ -82,7 +82,7 @@ trait MainTrait
         
         //====================================================================//
         // State code
-        $this->fieldsFactory()->Create(SPL_T_STATE)
+        $this->fieldsFactory()->create(SPL_T_STATE)
                 ->Identifier("id_state")
                 ->Name(Translate::getAdminTranslation("State", "AdminAddresses") . " (Code)")
                 ->Group($GroupName)
@@ -90,7 +90,7 @@ trait MainTrait
         
         //====================================================================//
         // Country Name
-        $this->fieldsFactory()->Create(SPL_T_VARCHAR)
+        $this->fieldsFactory()->create(SPL_T_VARCHAR)
                 ->Identifier("country")
                 ->Name(Translate::getAdminTranslation("Country", "AdminAddresses"))
                 ->Group($GroupName)
@@ -99,7 +99,7 @@ trait MainTrait
         
         //====================================================================//
         // Country ISO Code
-        $this->fieldsFactory()->Create(SPL_T_COUNTRY)
+        $this->fieldsFactory()->create(SPL_T_COUNTRY)
                 ->Identifier("id_country")
                 ->Name(Translate::getAdminTranslation("Country", "AdminAddresses") . " (Code)")
                 ->MicroData("http://schema.org/PostalAddress", "addressCountry")

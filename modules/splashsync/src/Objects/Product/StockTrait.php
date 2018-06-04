@@ -60,7 +60,7 @@ trait StockTrait
         
         //====================================================================//
         // Stock Reel
-        $this->fieldsFactory()->Create(SPL_T_INT)
+        $this->fieldsFactory()->create(SPL_T_INT)
                 ->Identifier("stock")
                 ->Name(Translate::getAdminTranslation("Stock", "AdminProducts"))
                 ->MicroData("http://schema.org/Offer", "inventoryLevel")
@@ -69,7 +69,7 @@ trait StockTrait
 
         //====================================================================//
         // Out of Stock Flag
-        $this->fieldsFactory()->Create(SPL_T_BOOL)
+        $this->fieldsFactory()->create(SPL_T_BOOL)
                 ->Identifier("outofstock")
                 ->Name(Translate::getAdminTranslation("This product is out of stock", "AdminOrders"))
                 ->MicroData("http://schema.org/ItemAvailability", "OutOfStock")
@@ -78,7 +78,7 @@ trait StockTrait
                 
         //====================================================================//
         // Minimum Order Quantity
-        $this->fieldsFactory()->Create(SPL_T_INT)
+        $this->fieldsFactory()->create(SPL_T_INT)
                 ->Identifier("minimal_quantity")
                 ->Name(Translate::getAdminTranslation("Minimum quantity", "AdminProducts"))
                 ->Description(

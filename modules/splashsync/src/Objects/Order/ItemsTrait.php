@@ -26,6 +26,8 @@ use Translate;
 use OrderDetail;
 use Tools;
 
+use Splash\Local\Objects\Product;
+
 /**
  * @abstract    Access to Orders Items Fields
  * @author      B. Paquier <contact@splashsync.com>
@@ -44,7 +46,7 @@ trait ItemsTrait
         
         //====================================================================//
         // Order Line Description
-        $this->fieldsFactory()->Create(SPL_T_VARCHAR)
+        $this->fieldsFactory()->create(SPL_T_VARCHAR)
                 ->Identifier("product_name")
                 ->InList("lines")
                 ->Name(Translate::getAdminTranslation("Short description", "AdminProducts"))
@@ -55,7 +57,7 @@ trait ItemsTrait
 
         //====================================================================//
         // Order Line Product Identifier
-        $this->fieldsFactory()->Create(self::objects()->Encode("Product", SPL_T_ID))
+        $this->fieldsFactory()->create(self::objects()->Encode("Product", SPL_T_ID))
                 ->Identifier("product_id")
                 ->InList("lines")
                 ->Name(Translate::getAdminTranslation("Product ID", "AdminImport"))
@@ -66,7 +68,7 @@ trait ItemsTrait
 
         //====================================================================//
         // Order Line Quantity
-        $this->fieldsFactory()->Create(SPL_T_INT)
+        $this->fieldsFactory()->create(SPL_T_INT)
                 ->Identifier("product_quantity")
                 ->InList("lines")
                 ->Name(Translate::getAdminTranslation("Quantity", "AdminOrders"))
@@ -77,7 +79,7 @@ trait ItemsTrait
 
         //====================================================================//
         // Order Line Discount
-        $this->fieldsFactory()->Create(SPL_T_DOUBLE)
+        $this->fieldsFactory()->create(SPL_T_DOUBLE)
                 ->Identifier("reduction_percent")
                 ->InList("lines")
                 ->Name(Translate::getAdminTranslation("Discount (%)", "AdminGroups"))
@@ -89,7 +91,7 @@ trait ItemsTrait
 
         //====================================================================//
         // Order Line Unit Price
-        $this->fieldsFactory()->Create(SPL_T_PRICE)
+        $this->fieldsFactory()->create(SPL_T_PRICE)
                 ->Identifier("unit_price")
                 ->InList("lines")
                 ->Name(Translate::getAdminTranslation("Price", "AdminOrders"))
@@ -100,7 +102,7 @@ trait ItemsTrait
         
         //====================================================================//
         // Order Line Tax Name
-        $this->fieldsFactory()->Create(SPL_T_VARCHAR)
+        $this->fieldsFactory()->create(SPL_T_VARCHAR)
                 ->Identifier("tax_name")
                 ->InList("lines")
                 ->Name(Translate::getAdminTranslation("Tax Name", "AdminOrders"))
@@ -152,8 +154,7 @@ trait ItemsTrait
                 //====================================================================//
                 // Order Line Product Id
                 case 'product_id':
-                    $UnikId = Splash::object('Product')
-                        ->getUnikId($Product["product_id"], $Product["product_attribute_id"]);
+                    $UnikId = Product::getUnikIdStatic($Product["product_id"], $Product["product_attribute_id"]);
                     $Value = self::objects()->Encode("Product", $UnikId);
                     break;
                 //====================================================================//
@@ -162,8 +163,8 @@ trait ItemsTrait
                     //====================================================================//
                     // Build Price Array
                     $Value = self::prices()->Encode(
-                        (double)    Tools::convertPrice($Product["unit_price_tax_excl"], $this->Currency),
-                        (double)    OrderDetail::getTaxCalculatorStatic($Product["id_order_detail"])->getTotalRate(),
+                        Tools::convertPrice($Product["unit_price_tax_excl"], $this->Currency),
+                        OrderDetail::getTaxCalculatorStatic($Product["id_order_detail"])->getTotalRate(),
                         null,
                         $this->Currency->iso_code,
                         $this->Currency->sign,
@@ -280,8 +281,8 @@ trait ItemsTrait
         //====================================================================//
         // Update Product Link
         $UnikId         = self::objects()->Id($ProductItem["product_id"]);
-        $ProductId      = Splash::object('Product')->getId($UnikId);
-        $AttributeId    = Splash::object('Product')->getAttribute($UnikId);
+        $ProductId      = Product::getId($UnikId);
+        $AttributeId    = Product::getAttribute($UnikId);
         if ($OrderDetail->product_id != $ProductId) {
             $OrderDetail->product_id = $ProductId;
             $Update =    true;
@@ -483,7 +484,7 @@ trait ItemsTrait
         //====================================================================//
         // Build Price Array
         return self::prices()->Encode(
-            (double)    Tools::convertPrice($this->Object->total_shipping_tax_excl, $this->Currency),
+            Tools::convertPrice($this->Object->total_shipping_tax_excl, $this->Currency),
             (double)    $Tax,
             null,
             $this->Currency->iso_code,

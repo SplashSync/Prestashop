@@ -35,7 +35,7 @@ trait CoreTrait
     {
         //====================================================================//
         // Reference
-        $this->fieldsFactory()->Create(SPL_T_VARCHAR)
+        $this->fieldsFactory()->create(SPL_T_VARCHAR)
                 ->Identifier("ref")
                 ->Name(Translate::getAdminTranslation("Reference", "AdminProducts"))
                 ->Description(Translate::getAdminTranslation(
@@ -48,7 +48,7 @@ trait CoreTrait
         
         //====================================================================//
         // Product Type Id
-        $this->fieldsFactory()->Create(SPL_T_INT)
+        $this->fieldsFactory()->create(SPL_T_INT)
                 ->Identifier("type-id")
                 ->Name(Translate::getAdminTranslation("Type", "AdminProducts"))
                 ->Description(Translate::getAdminTranslation("Type", "AdminProducts"))
@@ -57,7 +57,7 @@ trait CoreTrait
         
         //====================================================================//
         // Product Type Name
-        $this->fieldsFactory()->Create(SPL_T_VARCHAR)
+        $this->fieldsFactory()->create(SPL_T_VARCHAR)
                 ->Identifier("type-name")
                 ->Name($this->spl->l('Type Name'))
                 ->Description($this->spl->l('Product Type Name'))

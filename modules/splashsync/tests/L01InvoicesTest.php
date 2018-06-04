@@ -41,11 +41,11 @@ class L01InvoicesTest extends ObjectsCase
 
         //====================================================================//
         //   Execute Action Directly on Module
-        $ObjectId = Splash::object("Order")->Set(null, $FakeData);
+        $ObjectId = Splash::object("Order")->set(null, $FakeData);
 
         //====================================================================//
         //   Load Order Object
-        $Order  =   Splash::object("Order")->Load($ObjectId);
+        $Order  =   Splash::object("Order")->load($ObjectId);
         $this->assertNotEmpty($Order);
 
         //====================================================================//

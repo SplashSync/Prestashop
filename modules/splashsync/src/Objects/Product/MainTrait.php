@@ -42,7 +42,7 @@ trait MainTrait
 
         //====================================================================//
         // Weight
-        $this->fieldsFactory()->Create(SPL_T_DOUBLE)
+        $this->fieldsFactory()->create(SPL_T_DOUBLE)
                 ->Identifier("weight")
                 ->Name(Translate::getAdminTranslation("Package weight", "AdminProducts"))
                 ->Group($GroupName)
@@ -50,7 +50,7 @@ trait MainTrait
         
         //====================================================================//
         // Height
-        $this->fieldsFactory()->Create(SPL_T_DOUBLE)
+        $this->fieldsFactory()->create(SPL_T_DOUBLE)
                 ->Identifier("height")
                 ->Name(Translate::getAdminTranslation("Package height", "AdminProducts"))
                 ->Group($GroupName)
@@ -58,7 +58,7 @@ trait MainTrait
         
         //====================================================================//
         // Depth
-        $this->fieldsFactory()->Create(SPL_T_DOUBLE)
+        $this->fieldsFactory()->create(SPL_T_DOUBLE)
                 ->Identifier("depth")
                 ->Name(Translate::getAdminTranslation("Package depth", "AdminProducts"))
                 ->Group($GroupName)
@@ -66,7 +66,7 @@ trait MainTrait
         
         //====================================================================//
         // Width
-        $this->fieldsFactory()->Create(SPL_T_DOUBLE)
+        $this->fieldsFactory()->create(SPL_T_DOUBLE)
                 ->Identifier("width")
                 ->Name(Translate::getAdminTranslation("Package width", "AdminProducts"))
                 ->Group($GroupName)
@@ -78,7 +78,7 @@ trait MainTrait
         
         //====================================================================//
         // Surface
-        $this->fieldsFactory()->Create(SPL_T_DOUBLE)
+        $this->fieldsFactory()->create(SPL_T_DOUBLE)
                 ->Identifier("surface")
                 ->Name($this->spl->l("Surface"))
                 ->Group($GroupName)
@@ -87,7 +87,7 @@ trait MainTrait
         
         //====================================================================//
         // Volume
-        $this->fieldsFactory()->Create(SPL_T_DOUBLE)
+        $this->fieldsFactory()->create(SPL_T_DOUBLE)
                 ->Identifier("volume")
                 ->Name($this->spl->l("Volume"))
                 ->Group($GroupName)
@@ -100,7 +100,7 @@ trait MainTrait
 
         //====================================================================//
         // UPC
-        $this->fieldsFactory()->Create(SPL_T_INT)
+        $this->fieldsFactory()->create(SPL_T_INT)
                 ->Identifier("upc")
                 ->Name(Translate::getAdminTranslation("UPC Code", "AdminProducts"))
                 ->Group($GroupName)
@@ -108,7 +108,7 @@ trait MainTrait
 
         //====================================================================//
         // EAN
-        $this->fieldsFactory()->Create(SPL_T_INT)
+        $this->fieldsFactory()->create(SPL_T_INT)
                 ->Identifier("ean13")
                 ->Name(Translate::getAdminTranslation("EAN Code", "AdminProducts"))
                 ->Group($GroupName)
@@ -116,7 +116,7 @@ trait MainTrait
         
         //====================================================================//
         // ISBN
-        $this->fieldsFactory()->Create(SPL_T_INT)
+        $this->fieldsFactory()->create(SPL_T_INT)
                 ->Identifier("isbn")
                 ->Name(Translate::getAdminTranslation("ISBN Code", "AdminProducts"))
                 ->Group($GroupName)

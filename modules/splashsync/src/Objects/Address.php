@@ -113,20 +113,14 @@ class Address extends AbstractObject
     // Class Constructor
     //====================================================================//
         
-    /**
-     *      @abstract       Class Constructor (Used only if localy necessary)
-     *      @return         int                     0 if KO, >0 if OK
-     */
     public function __construct()
     {
         //====================================================================//
         //  Load Local Translation File
-        Splash::translator()->Load("objects@local");
+        Splash::translator()->load("objects@local");
         
         //====================================================================//
         // Load Splash Module
         $this->spl = Splash::local()->getLocalModule();
-        
-        return true;
     }
 }

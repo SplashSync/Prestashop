@@ -98,22 +98,21 @@ class Demo extends WidgetBase
     {
         //====================================================================//
         // Reference
-        $this->fieldsFactory()->Create(SPL_T_VARCHAR)
+        $this->fieldsFactory()->create(SPL_T_VARCHAR)
                 ->Identifier("text_input")
                 ->Name("Text Input")
                 ->Description("Widget Specific Custom text Input");
         
         //====================================================================//
         // Reference
-        $this->fieldsFactory()->Create(SPL_T_INT)
+        $this->fieldsFactory()->create(SPL_T_INT)
                 ->Identifier("integer_input")
                 ->Name("Numeric Input")
                 ->Description("Widget Specific Custom Numeric Input");
         
         //====================================================================//
         // Publish Fields
-        return $this->fieldsFactory()->Publish();
-//        return array();
+        return $this->fieldsFactory()->publish();
     }
     
     /**
@@ -132,7 +131,7 @@ class Demo extends WidgetBase
         Splash::log()->trace(__CLASS__, __FUNCTION__);
         //====================================================================//
         // Load Default Language
-        Splash::local()->LoadDefaultLanguage();
+        Splash::local()->loadDefaultLanguage();
 
         //====================================================================//
         // Setup Widget Core Informations
@@ -158,7 +157,7 @@ class Demo extends WidgetBase
 
         //====================================================================//
         // Set Blocks to Widget
-        $this->setBlocks($this->blocksFactory()->Render());
+        $this->setBlocks($this->blocksFactory()->render());
 
         //====================================================================//
         // Publish Widget

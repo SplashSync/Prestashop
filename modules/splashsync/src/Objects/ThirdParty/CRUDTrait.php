@@ -33,7 +33,7 @@ trait CRUDTrait
     /**
      * @abstract    Load Request Object
      * @param       string  $Id               Object id
-     * @return      mixed
+     * @return      Customer|false
      */
     public function load($Id)
     {

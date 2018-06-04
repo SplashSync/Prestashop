@@ -39,7 +39,7 @@ trait SplashMetaTrait
     {
         //====================================================================//
         // Splash Unique Object Id
-        $this->fieldsFactory()->Create(SPL_T_VARCHAR)
+        $this->fieldsFactory()->create(SPL_T_VARCHAR)
                 ->Identifier("splash_id")
                 ->Name("Splash Id")
                 ->Group(Translate::getAdminTranslation("Meta", "AdminThemes"))

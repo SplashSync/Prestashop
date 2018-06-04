@@ -34,7 +34,7 @@ trait AddressesTrait
     {
         //====================================================================//
         // Address List
-        $this->fieldsFactory()->Create(self::objects()->Encode("Address", SPL_T_ID))
+        $this->fieldsFactory()->create(self::objects()->Encode("Address", SPL_T_ID))
                 ->Identifier("address")
                 ->InList("contacts")
                 ->Name(Translate::getAdminTranslation("Address", "AdminCustomers"))

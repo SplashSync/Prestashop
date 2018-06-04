@@ -38,7 +38,7 @@ trait StatusTrait
         
        //====================================================================//
         // Order Current Status
-        $this->fieldsFactory()->Create(SPL_T_VARCHAR)
+        $this->fieldsFactory()->create(SPL_T_VARCHAR)
                 ->Identifier("status")
                 ->Name(Translate::getAdminTranslation("Status", "AdminOrders"))
                 ->MicroData("http://schema.org/Invoice", "paymentStatus")
@@ -55,7 +55,7 @@ trait StatusTrait
         // Is Canceled
         // => There is no Diffrence Between a Draft & Canceled Order on Prestashop.
         //      Any Non Validated Order is considered as Canceled
-        $this->fieldsFactory()->Create(SPL_T_BOOL)
+        $this->fieldsFactory()->create(SPL_T_BOOL)
                 ->Identifier("isCanceled")
                 ->Name($Prefix . $this->spl->l("Canceled"))
                 ->MicroData("http://schema.org/PaymentStatusType", "PaymentDeclined")
@@ -65,7 +65,7 @@ trait StatusTrait
         
         //====================================================================//
         // Is Validated
-        $this->fieldsFactory()->Create(SPL_T_BOOL)
+        $this->fieldsFactory()->create(SPL_T_BOOL)
                 ->Identifier("isValidated")
                 ->Name($Prefix . Translate::getAdminTranslation("Valid", "AdminCartRules"))
                 ->MicroData("http://schema.org/PaymentStatusType", "PaymentDue")
@@ -75,7 +75,7 @@ trait StatusTrait
 
         //====================================================================//
         // Is Paid
-        $this->fieldsFactory()->Create(SPL_T_BOOL)
+        $this->fieldsFactory()->create(SPL_T_BOOL)
                 ->Identifier("isPaid")
                 ->Name($Prefix . $this->spl->l("Paid"))
                 ->MicroData("http://schema.org/PaymentStatusType", "PaymentComplete")
@@ -121,14 +121,14 @@ trait StatusTrait
             // INVOICE PAYMENT STATUS
             //====================================================================//
             case 'isCanceled':
-                $this->Out[$FieldName]  = (bool) !$this->Order->valid;
+                $this->Out[$FieldName]  = !$this->Order->valid;
                 break;
             case 'isValidated':
                 $this->Out[$FieldName]  = (bool) $this->Order->valid;
                 break;
             case 'isPaid':
                 $delta = $this->Object->getTotalPaid() - $this->Object->total_paid_tax_incl;
-                $this->Out[$FieldName]  = (bool) ( ($delta < 1E-6 ) || ($delta > 0)  );
+                $this->Out[$FieldName]  = ( ($delta < 1E-6 ) || ($delta > 0)  );
                 break;
         
             default:

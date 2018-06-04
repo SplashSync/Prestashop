@@ -101,13 +101,6 @@ class Order extends AbstractObject
     protected static $ENABLE_PUSH_UPDATED       =  false;
     // Enable Delete Of Existing Local Objects when Deleted Remotly
     protected static $ENABLE_PUSH_DELETED       =  false;
-
-//    // Enable Import Of New Local Objects
-//    protected static $ENABLE_PULL_CREATED       =  true;
-//    // Enable Import of Updates of Local Objects when Modified Localy
-//    protected static $ENABLE_PULL_UPDATED       =  true;
-//    // Enable Delete Of Remotes Objects when Deleted Localy
-//    protected static $ENABLE_PULL_DELETED       =  true;
     
     //====================================================================//
     // General Class Variables
@@ -136,10 +129,6 @@ class Order extends AbstractObject
     // Class Constructor
     //====================================================================//
         
-    /**
-     *      @abstract       Class Constructor (Used only if localy necessary)
-     *      @return         int                     0 if KO, >0 if OK
-     */
     public function __construct()
     {
         //====================================================================//
@@ -149,16 +138,15 @@ class Order extends AbstractObject
         }
         //====================================================================//
         //  Load Local Translation File
-        Splash::translator()->Load("objects@local");
+        Splash::translator()->load("objects@local");
         //====================================================================//
         // Load Splash Module
         $this->spl = Splash::local()->getLocalModule();
         //====================================================================//
         // Load Default Language
-        $this->LangId   = Splash::local()->LoadDefaultLanguage();
+        $this->LangId   = Splash::local()->loadDefaultLanguage();
         //====================================================================//
-        // Load OsWs Currency
+        // Load Default Currency
         $this->Currency = new Currency(Configuration::get('PS_CURRENCY_DEFAULT'));
-        return true;
     }
 }

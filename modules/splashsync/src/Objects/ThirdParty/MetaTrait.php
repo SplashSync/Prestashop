@@ -35,7 +35,7 @@ trait MetaTrait
 
         //====================================================================//
         // Active
-        $this->fieldsFactory()->Create(SPL_T_BOOL)
+        $this->fieldsFactory()->create(SPL_T_BOOL)
                 ->Identifier("active")
                 ->Name(Translate::getAdminTranslation("Enabled", "AdminCustomers"))
                 ->MicroData("http://schema.org/Organization", "active")
@@ -43,7 +43,7 @@ trait MetaTrait
         
         //====================================================================//
         // Newsletter
-        $this->fieldsFactory()->Create(SPL_T_BOOL)
+        $this->fieldsFactory()->create(SPL_T_BOOL)
                 ->Identifier("newsletter")
                 ->Name(Translate::getAdminTranslation("Newsletter", "AdminCustomers"))
                 ->Group(Translate::getAdminTranslation("Meta", "AdminThemes"))
@@ -51,7 +51,7 @@ trait MetaTrait
         
         //====================================================================//
         // Adverstising
-        $this->fieldsFactory()->Create(SPL_T_BOOL)
+        $this->fieldsFactory()->create(SPL_T_BOOL)
                 ->Identifier("optin")
                 ->Name(Translate::getAdminTranslation("Opt-in", "AdminCustomers"))
                 ->Group(Translate::getAdminTranslation("Meta", "AdminThemes"))

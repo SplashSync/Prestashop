@@ -46,7 +46,7 @@ trait DescTrait
 
         //====================================================================//
         // Name without Options
-        $this->fieldsFactory()->Create(SPL_T_MVARCHAR)
+        $this->fieldsFactory()->create(SPL_T_MVARCHAR)
                 ->Identifier("name")
                 ->Name($this->spl->l("Product Name without Options"))
                 ->isListed()
@@ -56,7 +56,7 @@ trait DescTrait
 
         //====================================================================//
         // Name with Options
-        $this->fieldsFactory()->Create(SPL_T_MVARCHAR)
+        $this->fieldsFactory()->create(SPL_T_MVARCHAR)
                 ->Identifier("fullname")
                 ->Name($this->spl->l("Product Name with Options"))
                 ->isReadOnly()
@@ -65,7 +65,7 @@ trait DescTrait
 
         //====================================================================//
         // Long Description
-        $this->fieldsFactory()->Create(SPL_T_MTEXT)
+        $this->fieldsFactory()->create(SPL_T_MTEXT)
                 ->Identifier("description")
                 ->Name(Translate::getAdminTranslation("description", "AdminProducts"))
                 ->Group($GroupName)
@@ -73,7 +73,7 @@ trait DescTrait
         
         //====================================================================//
         // Short Description
-        $this->fieldsFactory()->Create(SPL_T_MVARCHAR)
+        $this->fieldsFactory()->create(SPL_T_MVARCHAR)
                 ->Identifier("description_short")
                 ->Name(Translate::getAdminTranslation("Short Description", "AdminProducts"))
                 ->Group($GroupName)
@@ -81,7 +81,7 @@ trait DescTrait
 
         //====================================================================//
         // Meta Description
-        $this->fieldsFactory()->Create(SPL_T_MVARCHAR)
+        $this->fieldsFactory()->create(SPL_T_MVARCHAR)
                 ->Identifier("meta_description")
                 ->Name(Translate::getAdminTranslation("Meta description", "AdminProducts"))
                 ->Description($GroupName2 . " " . Translate::getAdminTranslation("Meta description", "AdminProducts"))
@@ -90,7 +90,7 @@ trait DescTrait
 
         //====================================================================//
         // Meta Title
-        $this->fieldsFactory()->Create(SPL_T_MVARCHAR)
+        $this->fieldsFactory()->create(SPL_T_MVARCHAR)
                 ->Identifier("meta_title")
                 ->Name(Translate::getAdminTranslation("Meta title", "AdminProducts"))
                 ->Description($GroupName2 . " " . Translate::getAdminTranslation("Meta title", "AdminProducts"))
@@ -99,7 +99,7 @@ trait DescTrait
         
         //====================================================================//
         // Meta KeyWords
-        $this->fieldsFactory()->Create(SPL_T_MVARCHAR)
+        $this->fieldsFactory()->create(SPL_T_MVARCHAR)
                 ->Identifier("meta_keywords")
                 ->Name(Translate::getAdminTranslation("Meta keywords", "AdminProducts"))
                 ->Description($GroupName2 . " " . Translate::getAdminTranslation("Meta keywords", "AdminProducts"))
@@ -109,7 +109,7 @@ trait DescTrait
 
         //====================================================================//
         // Meta KeyWords
-        $this->fieldsFactory()->Create(SPL_T_MVARCHAR)
+        $this->fieldsFactory()->create(SPL_T_MVARCHAR)
                 ->Identifier("link_rewrite")
                 ->Name(Translate::getAdminTranslation("Friendly URL", "AdminProducts"))
                 ->Description($GroupName2 . " " . Translate::getAdminTranslation("Friendly URL", "AdminProducts"))

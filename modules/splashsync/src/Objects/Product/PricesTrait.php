@@ -52,7 +52,7 @@ trait PricesTrait
         
         //====================================================================//
         // Product Selling Price
-        $this->fieldsFactory()->Create(SPL_T_PRICE)
+        $this->fieldsFactory()->create(SPL_T_PRICE)
                 ->Identifier("price")
                 ->Name(
                     Translate::getAdminTranslation(
@@ -66,7 +66,7 @@ trait PricesTrait
         
         //====================================================================//
         // Product Selling Base Price
-        $this->fieldsFactory()->Create(SPL_T_PRICE)
+        $this->fieldsFactory()->create(SPL_T_PRICE)
                 ->Identifier("price-base")
                 ->Name(
                     Translate::getAdminTranslation(
@@ -80,7 +80,7 @@ trait PricesTrait
         
         //====================================================================//
         // WholeSale Price
-        $this->fieldsFactory()->Create(SPL_T_PRICE)
+        $this->fieldsFactory()->create(SPL_T_PRICE)
                 ->Identifier("price-wholesale")
                 ->Name(
                     Translate::getAdminTranslation(
@@ -112,7 +112,7 @@ trait PricesTrait
             case 'price':
                 //====================================================================//
                 // Read Price
-                $PriceHT    = (double)  Tools::convertPrice(
+                $PriceHT    = Tools::convertPrice(
                     $this->Object->getPrice(false, $this->AttributeId),
                     $this->Currency
                 );
@@ -131,7 +131,7 @@ trait PricesTrait
             case 'price-base':
                 //====================================================================//
                 // Read Price
-                $PriceHT    = (double)  Tools::convertPrice($this->Object->price, $this->Currency);
+                $PriceHT    = Tools::convertPrice($this->Object->price, $this->Currency);
                 $Tax        = (double)  $this->Object->getTaxesRate();
                 //====================================================================//
                 // Build Price Array
@@ -148,9 +148,9 @@ trait PricesTrait
                 //====================================================================//
                 // Read Price
                 if ($this->AttributeId && ($this->Attribute->wholesale_price > 0)) {
-                    $PriceHT = (double) Tools::convertPrice($this->Attribute->wholesale_price, $this->Currency);
+                    $PriceHT = Tools::convertPrice($this->Attribute->wholesale_price, $this->Currency);
                 } else {
-                    $PriceHT = (double) Tools::convertPrice($this->Object->wholesale_price, $this->Currency);
+                    $PriceHT = Tools::convertPrice($this->Object->wholesale_price, $this->Currency);
                 }
                 $Tax        = (double)  $this->Object->getTaxesRate();
                 //====================================================================//

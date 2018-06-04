@@ -40,7 +40,7 @@ trait StatusTrait
 
         //====================================================================//
         // Order Current Status
-        $this->fieldsFactory()->Create(SPL_T_VARCHAR)
+        $this->fieldsFactory()->create(SPL_T_VARCHAR)
                 ->Identifier("status")
                 ->Name(Translate::getAdminTranslation("Order status", "AdminStatuses"))
                 ->Description(Translate::getAdminTranslation("Status of the order", "AdminSupplyOrdersChangeState"))
@@ -57,7 +57,7 @@ trait StatusTrait
         // Is Canceled
         // => There is no Diffrence Between a Draft & Canceled Order on Prestashop.
         //      Any Non Validated Order is considered as Canceled
-        $this->fieldsFactory()->Create(SPL_T_BOOL)
+        $this->fieldsFactory()->create(SPL_T_BOOL)
                 ->Identifier("isCanceled")
                 ->Name($Prefix . $this->spl->l("Canceled"))
                 ->MicroData("http://schema.org/OrderStatus", "OrderCancelled")
@@ -67,7 +67,7 @@ trait StatusTrait
         
         //====================================================================//
         // Is Validated
-        $this->fieldsFactory()->Create(SPL_T_BOOL)
+        $this->fieldsFactory()->create(SPL_T_BOOL)
                 ->Identifier("isValidated")
                 ->Name($Prefix . Translate::getAdminTranslation("Valid", "AdminCartRules"))
                 ->MicroData("http://schema.org/OrderStatus", "OrderProcessing")
@@ -77,7 +77,7 @@ trait StatusTrait
         
         //====================================================================//
         // Is Closed
-        $this->fieldsFactory()->Create(SPL_T_BOOL)
+        $this->fieldsFactory()->create(SPL_T_BOOL)
                 ->Identifier("isClosed")
                 ->Name($Prefix . Translate::getAdminTranslation("Closed", "AdminCustomers"))
                 ->MicroData("http://schema.org/OrderStatus", "OrderDelivered")
@@ -87,7 +87,7 @@ trait StatusTrait
 
         //====================================================================//
         // Is Paid
-        $this->fieldsFactory()->Create(SPL_T_BOOL)
+        $this->fieldsFactory()->create(SPL_T_BOOL)
                 ->Identifier("isPaid")
                 ->Name($Prefix . $this->spl->l("Paid"))
                 ->Group(Translate::getAdminTranslation("Meta", "AdminThemes"))
@@ -115,7 +115,7 @@ trait StatusTrait
                 $this->Out[$FieldName]  = $this->getSplashStatus();
                 break;
             case 'isCanceled':
-                $this->Out[$FieldName]  = (bool) !$this->Object->valid;
+                $this->Out[$FieldName]  = !$this->Object->valid;
                 break;
             case 'isValidated':
                 $this->Out[$FieldName]  = (bool) $this->Object->valid;

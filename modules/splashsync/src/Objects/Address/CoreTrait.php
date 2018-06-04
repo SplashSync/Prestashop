@@ -36,7 +36,7 @@ trait CoreTrait
     {
         //====================================================================//
         // Alias
-        $this->fieldsFactory()->Create(SPL_T_VARCHAR)
+        $this->fieldsFactory()->create(SPL_T_VARCHAR)
                 ->Identifier("alias")
                 ->Name($this->spl->l("Address alias"))
                 ->Name(Translate::getAdminTranslation("Address alias", "AdminAddresses"))
@@ -44,7 +44,7 @@ trait CoreTrait
         
         //====================================================================//
         // Customer
-        $this->fieldsFactory()->Create(self::objects()->encode("ThirdParty", SPL_T_ID))
+        $this->fieldsFactory()->create(self::objects()->encode("ThirdParty", SPL_T_ID))
                 ->Identifier("id_customer")
                 ->Name(Translate::getAdminTranslation("Customer ID", "AdminCustomerThreads"))
                 ->MicroData("http://schema.org/Organization", "ID")
@@ -52,7 +52,7 @@ trait CoreTrait
         
         //====================================================================//
         // Company
-        $this->fieldsFactory()->Create(SPL_T_VARCHAR)
+        $this->fieldsFactory()->create(SPL_T_VARCHAR)
                 ->Identifier("company")
                 ->Name(Translate::getAdminTranslation("Company", "AdminCustomers"))
                 ->MicroData("http://schema.org/Organization", "legalName")
@@ -60,7 +60,7 @@ trait CoreTrait
         
         //====================================================================//
         // Firstname
-        $this->fieldsFactory()->Create(SPL_T_VARCHAR)
+        $this->fieldsFactory()->create(SPL_T_VARCHAR)
                 ->Identifier("firstname")
                 ->Name(Translate::getAdminTranslation("First name", "AdminCustomers"))
                 ->MicroData("http://schema.org/Person", "familyName")
@@ -70,7 +70,7 @@ trait CoreTrait
         
         //====================================================================//
         // Lastname
-        $this->fieldsFactory()->Create(SPL_T_VARCHAR)
+        $this->fieldsFactory()->create(SPL_T_VARCHAR)
                 ->Identifier("lastname")
                 ->Name(Translate::getAdminTranslation("Last name", "AdminCustomers"))
                 ->MicroData("http://schema.org/Person", "givenName")

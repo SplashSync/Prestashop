@@ -35,21 +35,21 @@ trait OptionalTrait
         
         //====================================================================//
         // Phone
-        $this->fieldsFactory()->Create(SPL_T_PHONE)
+        $this->fieldsFactory()->create(SPL_T_PHONE)
                 ->Identifier("phone")
                 ->Name(Translate::getAdminTranslation("Home phone", "AdminAddresses"))
                 ->MicroData("http://schema.org/PostalAddress", "telephone");
         
         //====================================================================//
         // Mobile Phone
-        $this->fieldsFactory()->Create(SPL_T_PHONE)
+        $this->fieldsFactory()->create(SPL_T_PHONE)
                 ->Identifier("phone_mobile")
                 ->Name(Translate::getAdminTranslation("Mobile phone", "AdminAddresses"))
                 ->MicroData("http://schema.org/Person", "telephone");
 
         //====================================================================//
         // SIRET
-        $this->fieldsFactory()->Create(SPL_T_VARCHAR)
+        $this->fieldsFactory()->create(SPL_T_VARCHAR)
                 ->Identifier("dni")
                 ->Name($this->spl->l("Company ID Number"))
                 ->MicroData("http://schema.org/Organization", "taxID")
@@ -58,7 +58,7 @@ trait OptionalTrait
         
         //====================================================================//
         // VAT Number
-        $this->fieldsFactory()->Create(SPL_T_VARCHAR)
+        $this->fieldsFactory()->create(SPL_T_VARCHAR)
                 ->Identifier("vat_number")
                 ->Name($this->spl->l("VAT number"))
                 ->MicroData("http://schema.org/Organization", "vatID")
@@ -67,7 +67,7 @@ trait OptionalTrait
         
         //====================================================================//
         // Note
-        $this->fieldsFactory()->Create(SPL_T_VARCHAR)
+        $this->fieldsFactory()->create(SPL_T_VARCHAR)
                 ->Identifier("other")
                 ->Name($this->spl->l("Note"))
                 ->MicroData("http://schema.org/PostalAddress", "description")

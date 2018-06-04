@@ -28,7 +28,7 @@ $cookie = new Cookie('psAdmin'); // Use "psAdmin" to read an employee's cookie.
 //====================================================================//
 //  Validate Ajax Token
 $Token  = Tools::getAdminToken(
-    'AdminModules'.(int)Tab::getIdFromClassName('AdminModules').(int)$cookie->__get("id_employee")
+    'AdminModules'.Tab::getIdFromClassName('AdminModules').(int)$cookie->__get("id_employee")
 );
 if (Tools::getValue("token") !== $Token) {
     // Ooops! Token is not valid!

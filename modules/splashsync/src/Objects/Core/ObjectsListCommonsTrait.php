@@ -41,7 +41,7 @@ trait ObjectsListCommonsTrait
         }
         //====================================================================//
         // Compute Total Number of Results
-        return (int) Db::getInstance()->NumRows();
+        return (int) Db::getInstance()->numRows();
     }
 
     protected function getObjectsListRawData($sql, $sortField, $params = null)
