@@ -41,7 +41,7 @@ parameters:
                 - "modules/splashsync/vendor"               
         phpstan:
             level: 1
-#            configuration:  "build/phpstan.neon"           
+            configuration:  "build/phpstan.neon"           
 #            ignore_patterns:
 #                - LocalizationTrait.php
 #                - splash/admin
