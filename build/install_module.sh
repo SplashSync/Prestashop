@@ -16,12 +16,13 @@ cp -Rf    $MODULE_DIR/modules/splashsync/*              $TRAVIS_BUILD_DIR/module
 # Move Configuration Files to Prestashop Root Directory
 echo Move Configuration Files to Prestashop Root Directory
 cp -f     $MODULE_DIR/build/phpunit.xml.dist            $TRAVIS_BUILD_DIR/phpunit.xml           
+cp -f     $MODULE_DIR/grumphp.yml                       $TRAVIS_BUILD_DIR/grumphp.yml           
+mkdir     $TRAVIS_BUILD_DIR/build
+cp -f     $MODULE_DIR/build/*                           $TRAVIS_BUILD_DIR/build/           
 
 #echo Move Git Files to Prestashop Root Directory
 #rm -Rf    $TRAVIS_BUILD_DIR/.git      
-#mkdir     $TRAVIS_BUILD_DIR/.git      
 cp -Rf    $MODULE_DIR/.git/*                            $TRAVIS_BUILD_DIR/.git/
-cp -f     $MODULE_DIR/grumphp.yml                       $TRAVIS_BUILD_DIR/grumphp.yml           
 
 #ls -al    $TRAVIS_BUILD_DIR/modules/splashsync
 #ls -al    $MODULE_DIR/
