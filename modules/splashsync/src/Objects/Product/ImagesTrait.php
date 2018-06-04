@@ -27,6 +27,7 @@ use Image;
 use ImageType;
 use ImageManager;
 use Tools;
+use Db;
 
 /**
  * @abstract    Access to Product Images Fields
@@ -128,7 +129,7 @@ trait ImagesTrait
             case 'images':
                 if ($this->Object->id) {
                     $this->setImgArray($Data);
-                    $this->setImgArray($Data);
+//                    $this->setImgArray($Data);
                 } else {
                     $this->NewImagesArray = $Data;
                 }
@@ -242,12 +243,12 @@ trait ImagesTrait
                 // Compute Md5 CheckSum for this Image
                 $CheckSum = md5_file(
                     _PS_PROD_IMG_DIR_
-                        . $ObjectImage->getImgFolder()
-                        . $ObjectImage->id . "."
+                    . $ObjectImage->getImgFolder()
+                    . $ObjectImage->id . "."
                     . $ObjectImage->image_format
                 );
                 //====================================================================//
-                // If CheckSum are Different => Coninue
+                // If CheckSum are Different => Continue
                 if ($InImage["md5"] !== $CheckSum) {
                     continue;
                 }
@@ -258,7 +259,9 @@ trait ImagesTrait
                 //====================================================================//
                 // Update Image Position in List
                 if (!$this->AttributeId && ( $this->ImgPosition != $ObjectImage->position)) {
-                    $ObjectImage->updatePosition($this->ImgPosition < $ObjectImage->position, $this->ImgPosition);
+                    $ObjectImage->position = $this->ImgPosition;
+                    $ObjectImage->update();
+                    $this->needUpdate();
                 }
                 //====================================================================//
                 // Update Image is Cover Flag
