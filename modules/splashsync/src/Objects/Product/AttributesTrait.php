@@ -8,11 +8,11 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- * 
+ *
  *  @author    Splash Sync <www.splashsync.com>
  *  @copyright 2015-2017 Splash Sync
  *  @license   GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007
- * 
+ *
  **/
 
 namespace Splash\Local\Objects\Product;
@@ -24,7 +24,8 @@ use Translate;
 /**
  * @abstract    Prestashop Product Attributes Data Access
  */
-trait AttributesTrait {
+trait AttributesTrait
+{
     
     //====================================================================//
     // Fields Generation Functions
@@ -33,40 +34,41 @@ trait AttributesTrait {
     /**
     *   @abstract     Build Attributes Fields using FieldFactory
     */
-    private function buildAttributesFields()   {
+    private function buildAttributesFields()
+    {
         
         $Group  =  Translate::getAdminTranslation("Combinations", "AdminProducts");
         
         //====================================================================//
         // Product Variation Parent Link
-        $this->FieldsFactory()->Create(self::Objects()->Encode( "Product" , SPL_T_ID))        
+        $this->FieldsFactory()->Create(self::Objects()->Encode("Product", SPL_T_ID))
                 ->Identifier("parent_id")
                 ->Name("Parent")
                 ->Group("Meta")
-                ->MicroData("http://schema.org/Product","isVariationOf")
+                ->MicroData("http://schema.org/Product", "isVariationOf")
                 ->isReadOnly();
-//        
+//
 //        //====================================================================//
 //        // Product Variation List - Product Link
-//        $this->FieldsFactory()->Create(self::Objects()->Encode( "Product" , SPL_T_ID))        
+//        $this->FieldsFactory()->Create(self::Objects()->Encode( "Product" , SPL_T_ID))
 //                ->Identifier("id")
 //                ->Name( __("Children"))
 //                ->InList("children")
 //                ->MicroData("http://schema.org/Product","Variation")
-//                ->ReadOnly();         
-//        
+//                ->ReadOnly();
+//
 //        //====================================================================//
 //        // Product Variation List - Product SKU
-//        $this->FieldsFactory()->Create(SPL_T_VARCHAR)        
+//        $this->FieldsFactory()->Create(SPL_T_VARCHAR)
 //                ->Identifier("sku")
 //                ->Name( __("Name"))
 //                ->InList("children")
 //                ->MicroData("http://schema.org/Product","VariationName")
 //                ->ReadOnly();
-//        
+//
 //        //====================================================================//
 //        // Product Variation List - Variation Attribute
-//        $this->FieldsFactory()->Create(SPL_T_VARCHAR)        
+//        $this->FieldsFactory()->Create(SPL_T_VARCHAR)
 //                ->Identifier("attribute")
 //                ->Name(  __("Attribute"))
 //                ->InList("children")
@@ -75,25 +77,24 @@ trait AttributesTrait {
         
         //====================================================================//
         // Product Variation List - Variation Attribute
-        $this->FieldsFactory()->Create(SPL_T_VARCHAR)        
+        $this->FieldsFactory()->Create(SPL_T_VARCHAR)
                 ->Identifier("code")
-                ->Name( "Attribute" )
+                ->Name("Attribute")
                 ->InList("attributes")
                 ->Group($Group)
-                ->MicroData("http://schema.org/Product","VariationAttribute")
-                ->isReadOnly();  
+                ->MicroData("http://schema.org/Product", "VariationAttribute")
+                ->isReadOnly();
         
         //====================================================================//
         // Product Variation List - Variation Attribute
-        $this->FieldsFactory()->Create(SPL_T_VARCHAR)        
+        $this->FieldsFactory()->Create(SPL_T_VARCHAR)
                 ->Identifier("attributes")
-                ->Name( "Attribute" )
+                ->Name("Attribute")
                 ->InList("attributes")
                 ->Group($Group)
-                ->MicroData("http://schema.org/Product","VariationAttribute")
-                ->isReadOnly();        
-        
-    }    
+                ->MicroData("http://schema.org/Product", "VariationAttribute")
+                ->isReadOnly();
+    }
 
     //====================================================================//
     // Fields Reading Functions
@@ -101,24 +102,23 @@ trait AttributesTrait {
     
     /**
      *  @abstract     Read requested Field
-     * 
+     *
      *  @param        string    $Key                    Input List Key
      *  @param        string    $FieldName              Field Identifier / Name
-     * 
+     *
      *  @return         none
      */
-    private function getVariationFields($Key,$FieldName)
+    private function getVariationFields($Key, $FieldName)
     {
         //====================================================================//
         // READ Fields
-        switch ($FieldName)
-        {
+        switch ($FieldName) {
             case 'parent_id':
-                if ( $this->AttributeId ) {
-                    $this->Out[$FieldName] = self::Objects()->Encode( "Product" , $this->ProductId);
+                if ($this->AttributeId) {
+                    $this->Out[$FieldName] = self::Objects()->Encode("Product", $this->ProductId);
                     break;
                 }
-                $this->Out[$FieldName] = Null;
+                $this->Out[$FieldName] = null;
                 break;
                 
             default:
@@ -130,48 +130,60 @@ trait AttributesTrait {
         
     /**
      *  @abstract     Read requested Field
-     * 
+     *
      *  @param        string    $Key                    Input List Key
      *  @param        string    $FieldName              Field Identifier / Name
-     * 
+     *
      *  @return         none
      */
-    private function getAttributesFields($Key,$FieldName)
+    private function getAttributesFields($Key, $FieldName)
     {
         //====================================================================//
         // Check if List field & Init List Array
-        $FieldId = self::Lists()->InitOutput( $this->Out, "attributes", $FieldName );
-        if ( !$FieldId ) {
+        $FieldId = self::Lists()->InitOutput($this->Out, "attributes", $FieldName);
+        if (!$FieldId) {
             return;
-        } 
+        }
         
-//Splash::log()->www("Object Attributes", $this->Object->getAttributeCombinations(null,true));        
-Splash::log()->www("Object Attributes", $this->Object->getAttributeCombinationsById($this->AttributeId, $this->LangId));        
+//Splash::log()->www("Object Attributes", $this->Object->getAttributeCombinations(null,true));
+        Splash::log()->www(
+            "Object Attributes",
+            $this->Object->getAttributeCombinationsById($this->AttributeId, $this->LangId)
+        );
         //====================================================================//
         // READ Fields
-        foreach ( $this->Object->getAttributeCombinations() as $Index => $Attribute) {
-            
+        foreach ($this->Object->getAttributeCombinations() as $Index => $Attribute) {
             if ($Attribute["id_product_attribute"] != $this->AttributeId) {
                 continue;
-            } 
+            }
             
-            switch ($FieldId)
-            {
-//
+            switch ($FieldId) {
 //                case 'id':
-//                    self::Lists()->Insert( $this->Out, "children", $FieldId, $Index, self::Objects()->Encode( "Product" , $Id) );
+//                    self::Lists()->Insert(
+//                        $this->Out,
+//                        "children",
+//                        $FieldId,
+//                        $Index,
+//                        self::Objects()->Encode("Product", $Id)
+//                    );
 //                    break;
 //
 //                case 'sku':
-//                    self::Lists()->Insert( $this->Out, "children", $FieldId, $Index, get_post_meta( $Id, "_sku", True ) );
+//                    self::Lists()->Insert(
+//                        $this->Out,
+//                        "children",
+//                        $FieldId,
+//                        $Index,
+//                        get_post_meta($Id, "_sku", true)
+//                    );
 //                    break;
-//
+
                 case 'code':
-                    self::Lists()->Insert( $this->Out, "attributes", $FieldId, $Index, $Attribute["group_name"] );
+                    self::Lists()->Insert($this->Out, "attributes", $FieldId, $Index, $Attribute["group_name"]);
                     break;
                 
                 case 'attributes':
-                    self::Lists()->Insert( $this->Out, "attributes", $FieldId, $Index, $Attribute["attribute_name"] );
+                    self::Lists()->Insert($this->Out, "attributes", $FieldId, $Index, $Attribute["attribute_name"]);
                     break;
 
                 default:
@@ -187,13 +199,13 @@ Splash::log()->www("Object Attributes", $this->Object->getAttributeCombinationsB
       
     /**
      *  @abstract     Write Given Fields
-     * 
+     *
      *  @param        string    $FieldName              Field Identifier / Name
      *  @param        mixed     $Data                   Field Data
-     * 
+     *
      *  @return         none
      */
-//    private function setVariationFields($FieldName,$Data) 
+//    private function setVariationFields($FieldName,$Data)
 //    {
 //        //====================================================================//
 //        // WRITE Field
@@ -202,8 +214,7 @@ Splash::log()->www("Object Attributes", $this->Object->getAttributeCombinationsB
 //            default:
 //                return;
 //        }
-//        
+//
 //        unset($this->In[$FieldName]);
 //    }
-    
 }

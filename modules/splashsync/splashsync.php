@@ -22,8 +22,20 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
+/**
+ * @abstract    Splash Sync Prestashop Module Main Class
+ *
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class SplashSync extends Module
 {
+    
+    use \Splash\Local\Objects\ThirdParty\HooksTrait;
+    use \Splash\Local\Objects\Address\HooksTrait;
+    use \Splash\Local\Objects\Product\HooksTrait;
+//    use \Splash\Local\Objects\Category\HooksTrait;
+    use \Splash\Local\Objects\Order\HooksTrait;
     
 //====================================================================//
 // *******************************************************************//
@@ -91,9 +103,12 @@ class SplashSync extends Module
 //====================================================================//
     
     /**
-    *  @abstract    Splash Module Install Function
-    *  @return      bool                True if OK, False if Errors
-    */
+     * @abstract    Splash Module Install Function
+     * @return      bool
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     */
     public function install()
     {
         //====================================================================//
@@ -198,23 +213,6 @@ class SplashSync extends Module
         return true;
     }
     
-    /**
-    *  @abstract    Init Splash Parameters in structure in Global Context
-    *  @return      bool                True if OK, False if Errors
-    */
-    private function _InitContext()
-    {
-        //====================================================================//
-        //  Init Splash Parameters in structure if empty
-        if (!isset(Context::getContext()->splash)) {
-            Context::getContext()->splash = new ArrayObject(array(), ArrayObject::ARRAY_AS_PROPS);
-        }
-        //====================================================================//
-        //  Init Cookie structure if empty
-        Context::getContext()->cookie->update();
-        return true;
-    }
-  
 //====================================================================//
 // *******************************************************************//
 //  MODULE SETUP PAGE MANAGEMENT
@@ -289,7 +287,7 @@ class SplashSync extends Module
         return $helper->generateForm($fields_form);
     }
     
-    public function getMainFormArray()
+    private function getMainFormArray()
     {
 
         //====================================================================//
@@ -388,7 +386,7 @@ class SplashSync extends Module
         return $Output;
     }
     
-    public function getOptionFormArray()
+    private function getOptionFormArray()
     {
 
         //====================================================================//
@@ -445,7 +443,12 @@ class SplashSync extends Module
         return $Output;
     }
     
-    public function setMainFormValues()
+    /**
+     * @abstract    Update Configuration when Form is Submited
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     */
+    private function setMainFormValues()
     {
         $output = null;
 
@@ -514,8 +517,41 @@ class SplashSync extends Module
         }
         return $output;
     }
+
+    /**
+     * @abstract    Execute Server SelfTests
+     */
+    private function displayTest()
+    {
+        
+        $this->displayTestHead();
+        $this->displayTestSelfTests();
+        $this->displayTestObjectList();
+        $this->displayTestPingAndConnect();
+        
+        //====================================================================//
+        // Build Html Results List
+        //====================================================================//
+        $helper = new HelperList();
+
+        $helper->shopLinkType = '';
+
+        $helper->simple_header = true;
+
+        $helper->identifier = 'id';
+        $helper->show_toolbar = true;
+        $helper->title = $this->l('Module Basics Tests');
+        $helper->table = $this->name.'_categories';
+
+        $helper->token = Tools::getAdminTokenLite('AdminModules');
+        $helper->currentIndex = AdminController::$currentIndex.'&configure='.$this->name;
+        return $helper->generateList($this->data_list, $this->fields_list);
+    }
     
-    public function displayTest()
+    /**
+     * @abstract    Display Tests Results Table Header
+     */
+    private function displayTestHead()
     {
         //====================================================================//
         // Built List Culumns Definition
@@ -544,15 +580,27 @@ class SplashSync extends Module
         
         
         $this->data_list = array();
-        
+    }
+    
+    /**
+     * @abstract    Execute Server SelfTests
+     */
+    private function displayTestSelfTests()
+    {
         //====================================================================//
         // Execute Module SelfTests
         //====================================================================//
         Splash\Client\Splash::SelfTest();
         //====================================================================//
         // Post Splash Messages
-        $this->_importMessages();
-        
+        $this->importMessages();
+    }
+
+    /**
+     * @abstract    Execute Server Objects List
+     */
+    private function displayTestObjectList()
+    {
         //====================================================================//
         // List Objects
         //====================================================================//
@@ -570,8 +618,14 @@ class SplashSync extends Module
         );
         //====================================================================//
         // Post Splash Messages
-        $this->_importMessages();
-        
+        $this->importMessages();
+    }
+
+    /**
+     * @abstract    Execute Server Ping & Connect
+     */
+    private function displayTestPingAndConnect()
+    {
         //====================================================================//
         // Splash Server Ping
         //====================================================================//
@@ -591,7 +645,7 @@ class SplashSync extends Module
         );
         //====================================================================//
         // Post Splash Messages
-        $this->_importMessages();
+        $this->importMessages();
         
         //====================================================================//
         // Splash Server Connect
@@ -610,25 +664,7 @@ class SplashSync extends Module
         );
         //====================================================================//
         // Post Splash Messages
-        $this->_importMessages();
-        
-        //====================================================================//
-        // Build Html Results List
-        //====================================================================//
-        $helper = new HelperList();
-
-        $helper->shopLinkType = '';
-
-        $helper->simple_header = true;
-
-        $helper->identifier = 'id';
-        $helper->show_toolbar = true;
-        $helper->title = $this->l('Module Basics Tests');
-        $helper->table = $this->name.'_categories';
-
-        $helper->token = Tools::getAdminTokenLite('AdminModules');
-        $helper->currentIndex = AdminController::$currentIndex.'&configure='.$this->name;
-        return $helper->generateList($this->data_list, $this->fields_list);
+        $this->importMessages();
     }
     
 //====================================================================//
@@ -644,19 +680,23 @@ class SplashSync extends Module
      *  @param          string      $_Action        Action to Commit
      *  @param          string      $_Comment       Comment For this action
      *  @return         int                         0 if KO, 1 if OK
+     * @SuppressWarnings(PHPMD.DevelopmentCodeFragment)
      */
-    public function _Commit($_Type, $_Id, $_Action, $_Comment)
+    protected function doCommit($_Type, $_Id, $_Action, $_Comment)
     {
         //====================================================================//
         // Safety Checks
         if (is_numeric($_Id)) {
-            Splash\Client\Splash::log()->deb("Splash Commit => Type = " . $_Type . " Action = " . $_Action . " Id = " . $_Id);
+            Splash\Client\Splash::log()
+                    ->deb("Splash Commit => " . $_Type . " Action = " . $_Action . " Id = " . $_Id);
         } elseif (is_array($_Id) && empty($_Id)) {
             return Splash\Client\Splash::log()->war("Splash Commit => Empty Array");
         } elseif (is_array($_Id)) {
-            Splash\Client\Splash::log()->deb("Splash Commit => Type = " . $_Type . " Action = " . $_Action . " Multiple Id (x" . count($_Id) . ")");
+            Splash\Client\Splash::log()
+                    ->deb("Splash Commit => " . $_Type . " Action = " . $_Action . " Ids (x" . count($_Id) . ")");
         } else {
-            return Splash\Client\Splash::log()->err("Splash Hook Error : Wrong Id List Given => " . print_r($_Id, 1));
+            return Splash\Client\Splash::log()
+                    ->err("Splash Hook Error : Wrong Id List Given => " . print_r($_Id, 1));
         }
         
         //====================================================================//
@@ -683,7 +723,7 @@ class SplashSync extends Module
         $result = Splash\Client\Splash::Commit($_Type, $_Id, $_Action, $UserName, $_Comment);
         //====================================================================//
         // Post Splash Messages
-        $this->_importMessages();
+        $this->importMessages();
         return $result;
     }
     
@@ -719,460 +759,18 @@ class SplashSync extends Module
         //====================================================================//
         // Assign Smarty Variables
         $this->context->smarty->assign('notifications', json_decode($Notifications, true));
-        $this->context->smarty->assign('url', \Splash\Client\Splash::Ws()->getServerScheme() . "://" . Configuration::get('PS_SHOP_DOMAIN') . __PS_BASE_URI__);
+        $this->context->smarty->assign(
+            'url',
+            \Splash\Client\Splash::Ws()->getServerScheme()
+                . "://" . Configuration::get('PS_SHOP_DOMAIN')
+                . __PS_BASE_URI__
+        );
 
         //====================================================================//
         // Render Footer
         return $this->display(__FILE__, 'footer.tpl');
     }
 
-//====================================================================//
-// *******************************************************************//
-//  MODULE BACK OFFICE (PRODUCTS) HOOKS
-// *******************************************************************//
-//====================================================================//
-
-
-    /**
-    *   @abstract       This hook is called after a customer is created
-    */
-    public function hookactionObjectProductAddAfter($params)
-    {
-        return $this->hookactionProduct($params["object"], SPL_A_CREATE, $this->l('Product Created on Prestashop'));
-    }
-        
-    /**
-    *   @abstract       This hook is called after a customer is created
-    */
-    public function hookactionObjectProductUpdateAfter($params)
-    {
-        return $this->hookactionProduct($params["object"], SPL_A_UPDATE, $this->l('Product Updated on Prestashop'));
-    }
-    
-    /**
-    *   @abstract       This hook is called after a customer is created
-    */
-    public function hookactionObjectProductDeleteAfter($params)
-    {
-        return $this->hookactionProduct($params["object"], SPL_A_DELETE, $this->l('Product Deleted on Prestashop'));
-    }
-      
-    /**
-     *      @abstract   This function is called after each action on a product object
-     *      @param      object   $product           Prestashop Product Object
-     *      @param      string   $action            Performed Action
-     *      @param      string   $comment           Action Comment
-     */
-    private function hookactionProduct($product, $action, $comment)
-    {
-        //====================================================================//
-        // Retrieve Product Id
-        if (isset($product->id_product)) {
-            $id_product = $product->id_customer;
-        } elseif (isset($product->id)) {
-            $id_product = $product->id;
-        }
-        //====================================================================//
-        // Log
-        $this->_debHook(__FUNCTION__, $id_product . " >> " . $comment);
-        //====================================================================//
-        // Safety Check
-        if (empty($id_product)) {
-            Splash\Client\Splash::log()->err("ErrLocalTpl", "Product", __FUNCTION__, "Unable to Read Product Id.");
-        }
-        //====================================================================//
-        // Add Base Product Commit Update List
-        $IdList = array();
-        $IdList[] = $id_product;
-        //====================================================================//
-        // Read Product Attributes Conbination
-        $AttrList = $product->getAttributesResume(Context::getContext()->language->id);
-        if (is_array($AttrList)) {
-            foreach ($AttrList as $Attr) {
-                //====================================================================//
-                // Add Attribute Product Commit Update List
-                $IdList[] =   (int) Splash\Client\Splash::Object("Product")->getUnikId($id_product, $Attr["id_product_attribute"]);
-            }
-        }
-        if (empty($IdList)) {
-            return true;
-        }
-        //====================================================================//
-        // Commit Update For Product
-        return $this->_Commit("Product", $IdList, $action, $comment);
-    }
-    
-    /**
-    *   @abstract       This hook is called after a customer is created
-    */
-    public function hookactionObjectCombinationAddAfter($params)
-    {
-        return $this->hookactionCombination($params["object"], SPL_A_CREATE, $this->l('Product Attribute Created on Prestashop'));
-    }
-        
-    /**
-    *   @abstract       This hook is called after a customer is created
-    */
-    public function hookactionObjectCombinationUpdateAfter($params)
-    {
-        return $this->hookactionCombination($params["object"], SPL_A_UPDATE, $this->l('Product Attribute Updated on Prestashop'));
-    }
-    
-    /**
-    *   @abstract       This hook is called after a customer is created
-    */
-    public function hookactionObjectCombinationDeleteAfter($params)
-    {
-        return $this->hookactionCombination($params["object"], SPL_A_DELETE, $this->l('Product Attribute Deleted on Prestashop'));
-    }
-        
-    /**
-    *   @abstract       This hook is called after a customer effectively places their order
-    */
-    public function hookactionUpdateQuantity($params)
-    {
-        //====================================================================//
-        // On Product Admin Page stock Update
-        if (!isset($params["cart"])) {
-            if (isset($params["id_product_attribute"]) && !empty($params["id_product_attribute"])) {
-                //====================================================================//
-                // Generate Unik Product Id
-                $UnikId     =   (int) Splash\Client\Splash::Object("Product")->getUnikId($params["id_product"], $params["id_product_attribute"]);
-            } else {
-                $UnikId     =   (int) $params["id_product"];
-            }
-            //====================================================================//
-            // Commit Update For Product
-            $this->_Commit("Product", $UnikId, SPL_A_UPDATE, $this->l('Product Stock Updated on Prestashop'));
-            return;
-        }
-        //====================================================================//
-        // Get Products from Cart
-        $Products = $params["cart"]->getProducts();
-        //====================================================================//
-        // Init Products Id Array
-        $UnikId = array();
-        //====================================================================//
-        // Walk on Products
-        foreach ($Products as $Product) {
-            if (isset($Product["id_product_attribute"]) && !empty($Product["id_product_attribute"])) {
-                //====================================================================//
-                // Generate Unik Product Id
-                $UnikId[]       =   (int) Splash\Client\Splash::Object("Product")->getUnikId($Product["id_product"], $Product["id_product_attribute"]);
-            } else {
-                $UnikId[]       =   (int) $Product["id_product"];
-            }
-        }
-        //====================================================================//
-        // Commit Update For Product
-        $this->_Commit("Product", $UnikId, SPL_A_UPDATE, $this->l('Product Stock Updated on Prestashop'));
-    }
-    
-    /**
-     *      @abstract   This function is called after each action on a Combination object
-     *      @param      object   $combination          Prestashop Combination Object
-     *      @param      string   $action            Performed Action
-     *      @param      string   $comment           Action Comment
-     */
-    private function hookactionCombination($combination, $action, $comment)
-    {
-        //====================================================================//
-        // Retrieve Combination Id
-        if (isset($combination->id)) {
-            $id_combination = $combination->id;
-        } elseif (isset($combination->id_product_attribute)) {
-            $id_combination = $combination->id_product_attribute;
-        }
-        //====================================================================//
-        // Log
-        $this->_debHook(__FUNCTION__, $id_combination . " >> " . $comment);
-        //====================================================================//
-        // Safety Check
-        if (empty($id_combination)) {
-            return Splash\Client\Splash::log()->err("ErrLocalTpl", "Combination", __FUNCTION__, "Unable to Read Product Attribute Id.");
-        }
-        if (empty($combination->id_product)) {
-            return Splash\Client\Splash::log()->err("ErrLocalTpl", "Combination", __FUNCTION__, "Unable to Read Product Id.");
-        }
-        //====================================================================//
-        // Generate Unik Product Id
-        $UnikId       =   (int) Splash\Client\Splash::Object("Product")->getUnikId($combination->id_product, $id_combination);
-        //====================================================================//
-        // Commit Update For Product Attribute
-        return $this->_Commit("Product", $UnikId, $action, $comment);
-    }
-
-//====================================================================//
-// *******************************************************************//
-//  MODULE BACK OFFICE (CATEGORY) HOOKS
-// *******************************************************************//
-//====================================================================//
-    
-    /**
-    *   @abstract       This hook is displayed after a product is created
-    */
-    public function hookactionCategoryAdd($params)
-    {
-        $this->_debHook(__FUNCTION__, $params["category"]->id);
-        //====================================================================//
-        // Commit Update For Base Product
-        $error =    0;
-        $error += 1 - $this->_Commit(SPL_O_PRODCAT, $params["category"]->id, SPL_A_CREATE, $this->l('Category Added on Prestashop'));
-        if ($error) {
-            return false;
-        }
-        return true;
-    }
-    
-    /**
-    *   @abstract       This hook is called while saving products
-    */
-    public function hookactionCategoryUpdate($params)
-    {
-        $this->_debHook(__FUNCTION__, $params["category"]->id, $params);
-        if (!isset($params["category"])) {
-            return false;
-        }
-        //====================================================================//
-        // Commit Update For Base Product
-        $error =    0;
-        $error += 1 - $this->_Commit(SPL_O_PRODCAT, $params["category"]->id, SPL_A_UPDATE, $this->l('Category Updated on Prestashop'));
-        if ($error) {
-            return false;
-        }
-        return true;
-    }
-    
-    /**
-    *   @abstract       This hook is called when a product is deleted
-    */
-    public function hookactionCategoryDelete($params)
-    {
-        $this->_debHook(__FUNCTION__, $params["category"]->id, $params);
-        //====================================================================//
-        // Commit Update For Base Product
-        $error =    0;
-        $error += 1 - $this->_Commit(SPL_O_PRODCAT, $params["category"]->id, SPL_A_DELETE, $this->l('Category Deleted on Prestashop'));
-        if ($error) {
-            return false;
-        }
-        return true;
-    }
-    
-//====================================================================//
-// *******************************************************************//
-//  MODULE BACK OFFICE (CUSTOMERS) HOOKS
-// *******************************************************************//
-//====================================================================//
-    
-    /**
-    *   @abstract       This hook is displayed after a customer is created
-    */
-    public function hookactionObjectCustomerAddAfter($params)
-    {
-        return $this->hookactionCustomer($params["object"], SPL_A_CREATE, $this->l('Customer Created on Prestashop'));
-    }
-        
-    /**
-    *   @abstract       This hook is displayed after a customer is created
-    */
-    public function hookactionObjectCustomerUpdateAfter($params)
-    {
-        return $this->hookactionCustomer($params["object"], SPL_A_UPDATE, $this->l('Customer Updated on Prestashop'));
-    }
-    
-    /**
-    *   @abstract       This hook is displayed after a customer is created
-    */
-    public function hookactionObjectCustomerDeleteAfter($params)
-    {
-        return $this->hookactionCustomer($params["object"], SPL_A_DELETE, $this->l('Customer Deleted on Prestashop'));
-    }
-
-    /**
-     *      @abstract   This function is called after each action on a customer object
-     *      @param      object   $customer          Prestashop Customers Object
-     *      @param      string   $action            Performed Action
-     *      @param      string   $comment           Action Comment
-     */
-    private function hookactionCustomer($customer, $action, $comment)
-    {
-        //====================================================================//
-        // Retrieve Customer Id
-        if (isset($customer->id_customer)) {
-            $id_customer = $customer->id_customer;
-        } elseif (isset($customer->id)) {
-            $id_customer = $customer->id;
-        }
-        //====================================================================//
-        // Log
-        $this->_debHook(__FUNCTION__, $id_customer . " >> " . $comment);
-        //====================================================================//
-        // Safety Check
-        if (empty($id_customer)) {
-            Splash\Client\Splash::log()->err("ErrLocalTpl", __CLASS__, __FUNCTION__, "Unable to Read Customer Id.");
-        }
-        //====================================================================//
-        // Commit Update For Product
-        return $this->_Commit("ThirdParty", $id_customer, $action, $comment);
-    }
-    
-//====================================================================//
-// *******************************************************************//
-//  MODULE BACK OFFICE (CUSTOMERS) HOOKS
-// *******************************************************************//
-//====================================================================//
-    
-    /**
-    *   @abstract       This hook is displayed after an Address is created
-    */
-    public function hookactionObjectAddressAddAfter($params)
-    {
-        return $this->_Commit("Address", $params["object"]->id, SPL_A_CREATE, $this->l('Customer Address Created on Prestashop'));
-    }
-    
-    /**
-    *   @abstract       This hook is displayed after an Address is updated
-    */
-    public function hookactionObjectAddressUpdateAfter($params)
-    {
-        return $this->_Commit("Address", $params["object"]->id, SPL_A_UPDATE, $this->l('Customer Address Updated on Prestashop'));
-    }
-    /**
-    *   @abstract       This hook is displayed after an Address is deleted
-    */
-    public function hookactionObjectAddressDeleteAfter($params)
-    {
-        return $this->_Commit("Address", $params["object"]->id, SPL_A_DELETE, $this->l('Customer Address Deleted on Prestashop'));
-    }
-    
-//====================================================================//
-// *******************************************************************//
-//  MODULE BACK OFFICE (ORDERS) HOOKS
-// *******************************************************************//
-//====================================================================//
-    
-    /**
-    *   @abstract       This hook is called after a order is created
-    */
-    public function hookactionObjectOrderAddAfter($params)
-    {
-        return $this->hookactionOrder($params["object"], SPL_A_CREATE, $this->l('Order Created on Prestashop'));
-    }
-    
-    /**
-    *   @abstract       This hook is called after a order is updated
-    */
-    public function hookactionObjectOrderUpdateAfter($params)
-    {
-        return $this->hookactionOrder($params["object"], SPL_A_UPDATE, $this->l('Order Updated on Prestashop'));
-    }
-    
-    /**
-    *   @abstract       This hook is called after a order is deleted
-    */
-    public function hookactionObjectOrderDeleteAfter($params)
-    {
-        return $this->hookactionOrder($params["object"], SPL_A_DELETE, $this->l('Order Deleted on Prestashop'));
-    }
-    
-    /**
-     *      @abstract   This function is called after each action on a order object
-     *      @param      object   $order             Prestashop Order Object
-     *      @param      string   $action            Performed Action
-     *      @param      string   $comment           Action Comment
-     */
-    private function hookactionOrder($order, $action, $comment)
-    {
-        $Errors = 0;
-        //====================================================================//
-        // Retrieve Customer Id
-        if (isset($order->id_order)) {
-            $id_order = $order->id_order;
-        } elseif (isset($order->id)) {
-            $id_order = $order->id;
-        }
-        //====================================================================//
-        // Log
-        $this->_debHook(__FUNCTION__, $id_order . " >> " . $comment);
-        //====================================================================//
-        // Safety Check
-        if (empty($id_order)) {
-            Splash\Client\Splash::log()->err("ErrLocalTpl", "Order", __FUNCTION__, "Unable to Read Order Id.");
-        }
-        //====================================================================//
-        // Commit Update For Order
-        $Errors += !$this->_Commit("Order", $id_order, $action, $comment);
-        if ($action == SPL_A_UPDATE) {
-            //====================================================================//
-            // Commit Update For Order Invoices
-            $Invoices = new PrestaShopCollection('OrderInvoice');
-            $Invoices->where('id_order', '=', $id_order);
-            foreach ($Invoices as $Invoice) {
-                $Errors += !$this->_Commit("Invoice", $Invoice->id, $action, $comment);
-            }
-        }
-        return $Errors?false:true;
-    }
-    
-//====================================================================//
-// *******************************************************************//
-//  MODULE BACK OFFICE (INVOICES) HOOKS
-// *******************************************************************//
-//====================================================================//
-    
-    /**
-    *   @abstract       This hook is called after a Invoice is created
-    */
-    public function hookactionObjectOrderInvoiceAddAfter($params)
-    {
-        return $this->hookactionInvoice($params["object"], SPL_A_CREATE, $this->l('Invoice Created on Prestashop'));
-    }
-    
-    /**
-    *   @abstract       This hook is called after a Invoice is updated
-    */
-    public function hookactionObjectOrderInvoiceUpdateAfter($params)
-    {
-        return $this->hookactionInvoice($params["object"], SPL_A_UPDATE, $this->l('Invoice Updated on Prestashop'));
-    }
-    
-    /**
-    *   @abstract       This hook is called after a Invoice is deleted
-    */
-    public function hookactionObjectOrderInvoiceDeleteAfter($params)
-    {
-        return $this->hookactionInvoice($params["object"], SPL_A_DELETE, $this->l('Invoice Deleted on Prestashop'));
-    }
-    
-    /**
-     *      @abstract   This function is called after each action on a order object
-     *      @param      object   $order             Prestashop Order Object
-     *      @param      string   $action            Performed Action
-     *      @param      string   $comment           Action Comment
-     */
-    private function hookactionInvoice($order, $action, $comment)
-    {
-        //====================================================================//
-        // Retrieve Customer Id
-        if (isset($order->id_order_invoice)) {
-            $id = $order->id_order_invoice;
-        } elseif (isset($order->id)) {
-            $id = $order->id;
-        }
-        //====================================================================//
-        // Log
-        $this->_debHook(__FUNCTION__, $id . " >> " . $comment);
-        //====================================================================//
-        // Safety Check
-        if (empty($id)) {
-            Splash\Client\Splash::log()->err("ErrLocalTpl", "Invoice", __FUNCTION__, "Unable to Read Order Invoice Id.");
-        }
-        //====================================================================//
-        // Commit Update For Invoice
-        return $this->_Commit("Invoice", $id, $action, $comment);
-    }
-    
 //====================================================================//
 // *******************************************************************//
 //  MODULE FRONT OFFICE (SHOP) HOOKS
@@ -1193,7 +791,7 @@ class SplashSync extends Module
     *  @param       OsWs_Log                Input OsWs Log Class
     *  @return      None
     */
-    private function _importMessages()
+    private function importMessages()
     {
         //====================================================================//
         // Read Current Cookie String
@@ -1217,9 +815,10 @@ class SplashSync extends Module
     }
    
     /**
-    *  @abstract    Post User Debug
-    */
-    private function _debHook($name, $Id, $Other = null)
+     * @abstract    Post User Debug
+     * @SuppressWarnings(PHPMD.DevelopmentCodeFragment)
+     */
+    protected function debugHook($name, $Id, $Other = null)
     {
         if (_PS_MODE_DEV_ == true) {
             Splash\Client\Splash::log()->war("Hook => " . $name . " => Id " . $Id);

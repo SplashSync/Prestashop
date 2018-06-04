@@ -15,8 +15,8 @@ parameters:
             triggered_by:   [php]
             ignore_patterns:
                 - phpstan.php
-                - defines.inc.php
-                - splashsync.php
+#                - defines.inc.php
+                - modules/splashsync/splashsync.php
         git_blacklist:
             keywords:
                 - "var_dump"
@@ -32,8 +32,8 @@ parameters:
         yamllint: ~
         phpmd:
             ruleset:        ["./build/phpmd.xml"]
-            exclude:
-                - splashsync.php            
+#            exclude:
+#                - splashsync.php            
         securitychecker: ~
         phpcpd:
             exclude:        
