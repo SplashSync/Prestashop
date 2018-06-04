@@ -181,9 +181,9 @@ trait HooksTrait
             if (isset($Product["id_product_attribute"]) && !empty($Product["id_product_attribute"])) {
                 //====================================================================//
                 // Generate Unik Product Id
-                $UnikId[]       =   (int) Product::getUnikIdStatic($Product["id_product"], $Product["id_product_attribute"]);
+                $UnikId[] = (int) Product::getUnikIdStatic($Product["id_product"], $Product["id_product_attribute"]);
             } else {
-                $UnikId[]       =   (int) $Product["id_product"];
+                $UnikId[] = (int) $Product["id_product"];
             }
         }
         //====================================================================//
