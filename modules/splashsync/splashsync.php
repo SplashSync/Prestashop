@@ -22,6 +22,11 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
+require_once __DIR__ . "/src/Objects/ThirdParty/HooksTrait.php";
+require_once __DIR__ . "/src/Objects/Address/HooksTrait.php";
+require_once __DIR__ . "/src/Objects/Product/HooksTrait.php";
+require_once __DIR__ . "/src/Objects/Order/HooksTrait.php";
+
 /**
  * @abstract    Splash Sync Prestashop Module Main Class
  *

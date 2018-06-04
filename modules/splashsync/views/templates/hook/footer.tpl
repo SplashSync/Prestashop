@@ -42,7 +42,7 @@
             type: 'get',
             data: 'ClearNotifications=true&token={$smarty.get.token|escape:'htmlall':'UTF-8'}',
             success: function(data) {
-                    console.log('[Splash] Notifications Cleared');
+                console.log('[Splash] Notifications Cleared');
             }
         }); 
     }
