@@ -15,7 +15,7 @@
 
 
 /**
- * @abstract    
+ * @abstract
  * @author      B. Paquier <contact@splashsync.com>
  */
 
@@ -26,7 +26,8 @@ use Splash\Client\Splash;
 /**
  * @abstract Prestashop Hooks for Products
  */
-trait HooksTrait {
+trait HooksTrait
+{
 //====================================================================//
 // *******************************************************************//
 //  MODULE BACK OFFICE (PRODUCTS) HOOKS
@@ -108,7 +109,11 @@ trait HooksTrait {
     */
     public function hookactionObjectCombinationAddAfter($params)
     {
-        return $this->hookactionCombination($params["object"], SPL_A_CREATE, $this->l('Product Attribute Created on Prestashop'));
+        return $this->hookactionCombination(
+            $params["object"],
+            SPL_A_CREATE,
+            $this->l('Product Attribute Created on Prestashop')
+        );
     }
         
     /**
@@ -116,7 +121,11 @@ trait HooksTrait {
     */
     public function hookactionObjectCombinationUpdateAfter($params)
     {
-        return $this->hookactionCombination($params["object"], SPL_A_UPDATE, $this->l('Product Attribute Updated on Prestashop'));
+        return $this->hookactionCombination(
+            $params["object"],
+            SPL_A_UPDATE,
+            $this->l('Product Attribute Updated on Prestashop')
+        );
     }
     
     /**
@@ -124,7 +133,11 @@ trait HooksTrait {
     */
     public function hookactionObjectCombinationDeleteAfter($params)
     {
-        return $this->hookactionCombination($params["object"], SPL_A_DELETE, $this->l('Product Attribute Deleted on Prestashop'));
+        return $this->hookactionCombination(
+            $params["object"],
+            SPL_A_DELETE,
+            $this->l('Product Attribute Deleted on Prestashop')
+        );
     }
         
     /**
@@ -138,13 +151,19 @@ trait HooksTrait {
             if (isset($params["id_product_attribute"]) && !empty($params["id_product_attribute"])) {
                 //====================================================================//
                 // Generate Unik Product Id
-                $UnikId     =   (int) Splash::Object("Product")->getUnikId($params["id_product"], $params["id_product_attribute"]);
+                $UnikId     =   (int) Splash::Object("Product")
+                        ->getUnikId($params["id_product"], $params["id_product_attribute"]);
             } else {
                 $UnikId     =   (int) $params["id_product"];
             }
             //====================================================================//
             // Commit Update For Product
-            $this->doCommit("Product", $UnikId, SPL_A_UPDATE, $this->l('Product Stock Updated on Prestashop'));
+            $this->doCommit(
+                "Product",
+                $UnikId,
+                SPL_A_UPDATE,
+                $this->l('Product Stock Updated on Prestashop')
+            );
             return;
         }
         //====================================================================//
@@ -159,7 +178,8 @@ trait HooksTrait {
             if (isset($Product["id_product_attribute"]) && !empty($Product["id_product_attribute"])) {
                 //====================================================================//
                 // Generate Unik Product Id
-                $UnikId[]       =   (int) Splash::Object("Product")->getUnikId($Product["id_product"], $Product["id_product_attribute"]);
+                $UnikId[]       =   (int) Splash::Object("Product")
+                        ->getUnikId($Product["id_product"], $Product["id_product_attribute"]);
             } else {
                 $UnikId[]       =   (int) $Product["id_product"];
             }
@@ -190,10 +210,12 @@ trait HooksTrait {
         //====================================================================//
         // Safety Check
         if (empty($id_combination)) {
-            return Splash::log()->err("ErrLocalTpl", "Combination", __FUNCTION__, "Unable to Read Product Attribute Id.");
+            return Splash::log()
+                    ->err("ErrLocalTpl", "Combination", __FUNCTION__, "Unable to Read Product Attribute Id.");
         }
         if (empty($combination->id_product)) {
-            return Splash::log()->err("ErrLocalTpl", "Combination", __FUNCTION__, "Unable to Read Product Id.");
+            return Splash::log()
+                    ->err("ErrLocalTpl", "Combination", __FUNCTION__, "Unable to Read Product Id.");
         }
         //====================================================================//
         // Generate Unik Product Id

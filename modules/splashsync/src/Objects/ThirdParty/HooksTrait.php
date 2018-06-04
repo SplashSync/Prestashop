@@ -15,7 +15,7 @@
 
 
 /**
- * @abstract    
+ * @abstract
  * @author      B. Paquier <contact@splashsync.com>
  */
 
@@ -26,7 +26,8 @@ use Splash\Client\Splash;
 /**
  * @abstract Prestashop Hooks for ThirdParty
  */
-trait HooksTrait {
+trait HooksTrait
+{
     
 //====================================================================//
 // *******************************************************************//
@@ -84,5 +85,5 @@ trait HooksTrait {
         //====================================================================//
         // Commit Update For Product
         return $this->doCommit("ThirdParty", $id_customer, $action, $comment);
-    }    
+    }
 }

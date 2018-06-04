@@ -15,7 +15,7 @@
 
 
 /**
- * @abstract    
+ * @abstract
  * @author      B. Paquier <contact@splashsync.com>
  */
 
@@ -24,7 +24,8 @@ namespace Splash\Local\Objects\Category;
 /**
  * @abstract Prestashop Hooks for Category
  */
-trait HooksTrait {
+trait HooksTrait
+{
     
 //====================================================================//
 // *******************************************************************//
@@ -41,7 +42,12 @@ trait HooksTrait {
         //====================================================================//
         // Commit Update For Base Product
         $error =    0;
-        $error += 1 - $this->doCommit(SPL_O_PRODCAT, $params["category"]->id, SPL_A_CREATE, $this->l('Category Added on Prestashop'));
+        $error += 1 - $this->doCommit(
+            SPL_O_PRODCAT,
+            $params["category"]->id,
+            SPL_A_CREATE,
+            $this->l('Category Added on Prestashop')
+        );
         if ($error) {
             return false;
         }
@@ -60,7 +66,12 @@ trait HooksTrait {
         //====================================================================//
         // Commit Update For Base Product
         $error =    0;
-        $error += 1 - $this->doCommit(SPL_O_PRODCAT, $params["category"]->id, SPL_A_UPDATE, $this->l('Category Updated on Prestashop'));
+        $error += 1 - $this->doCommit(
+            SPL_O_PRODCAT,
+            $params["category"]->id,
+            SPL_A_UPDATE,
+            $this->l('Category Updated on Prestashop')
+        );
         if ($error) {
             return false;
         }
@@ -76,11 +87,15 @@ trait HooksTrait {
         //====================================================================//
         // Commit Update For Base Product
         $error =    0;
-        $error += 1 - $this->doCommit(SPL_O_PRODCAT, $params["category"]->id, SPL_A_DELETE, $this->l('Category Deleted on Prestashop'));
+        $error += 1 - $this->doCommit(
+            SPL_O_PRODCAT,
+            $params["category"]->id,
+            SPL_A_DELETE,
+            $this->l('Category Deleted on Prestashop')
+        );
         if ($error) {
             return false;
         }
         return true;
     }
-    
 }

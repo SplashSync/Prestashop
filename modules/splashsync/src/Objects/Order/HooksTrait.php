@@ -15,7 +15,7 @@
 
 
 /**
- * @abstract    
+ * @abstract
  * @author      B. Paquier <contact@splashsync.com>
  */
 
@@ -24,7 +24,8 @@ namespace Splash\Local\Objects\Order;
 /**
  * @abstract Prestashop Hooks for Order & Invoices
  */
-trait HooksTrait {
+trait HooksTrait
+{
     
 //====================================================================//
 // *******************************************************************//
@@ -152,5 +153,4 @@ trait HooksTrait {
         // Commit Update For Invoice
         return $this->doCommit("Invoice", $id, $action, $comment);
     }
-    
 }

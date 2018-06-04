@@ -15,7 +15,7 @@
 
 
 /**
- * @abstract    
+ * @abstract
  * @author      B. Paquier <contact@splashsync.com>
  */
 
@@ -24,7 +24,8 @@ namespace Splash\Local\Objects\Address;
 /**
  * @abstract Prestashop Hooks for Address
  */
-trait HooksTrait {
+trait HooksTrait
+{
     
 //====================================================================//
 // *******************************************************************//
@@ -37,7 +38,12 @@ trait HooksTrait {
     */
     public function hookactionObjectAddressAddAfter($params)
     {
-        return $this->doCommit("Address", $params["object"]->id, SPL_A_CREATE, $this->l('Customer Address Created on Prestashop'));
+        return $this->doCommit(
+            "Address",
+            $params["object"]->id,
+            SPL_A_CREATE,
+            $this->l('Customer Address Created on Prestashop')
+        );
     }
     
     /**
@@ -45,14 +51,23 @@ trait HooksTrait {
     */
     public function hookactionObjectAddressUpdateAfter($params)
     {
-        return $this->doCommit("Address", $params["object"]->id, SPL_A_UPDATE, $this->l('Customer Address Updated on Prestashop'));
+        return $this->doCommit(
+            "Address",
+            $params["object"]->id,
+            SPL_A_UPDATE,
+            $this->l('Customer Address Updated on Prestashop')
+        );
     }
     /**
     *   @abstract       This hook is displayed after an Address is deleted
     */
     public function hookactionObjectAddressDeleteAfter($params)
     {
-        return $this->doCommit("Address", $params["object"]->id, SPL_A_DELETE, $this->l('Customer Address Deleted on Prestashop'));
+        return $this->doCommit(
+            "Address",
+            $params["object"]->id,
+            SPL_A_DELETE,
+            $this->l('Customer Address Deleted on Prestashop')
+        );
     }
-    
 }
