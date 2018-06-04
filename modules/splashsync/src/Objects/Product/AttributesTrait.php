@@ -193,17 +193,17 @@ Splash::log()->www("Object Attributes", $this->Object->getAttributeCombinationsB
      * 
      *  @return         none
      */
-    private function setVariationFields($FieldName,$Data) 
-    {
-        //====================================================================//
-        // WRITE Field
-        switch ($FieldName)
-        {
-            default:
-                return;
-        }
-        
-        unset($this->In[$FieldName]);
-    }
+//    private function setVariationFields($FieldName,$Data) 
+//    {
+//        //====================================================================//
+//        // WRITE Field
+//        switch ($FieldName)
+//        {
+//            default:
+//                return;
+//        }
+//        
+//        unset($this->In[$FieldName]);
+//    }
     
 }
