@@ -39,8 +39,8 @@ parameters:
             exclude:        
                 - "docs"
                 - "modules/splashsync/vendor"               
-#        phpstan:
-#            level: 1
+        phpstan:
+            level: 1
 #            configuration:  "build/phpstan.neon"           
 #            ignore_patterns:
 #                - LocalizationTrait.php
