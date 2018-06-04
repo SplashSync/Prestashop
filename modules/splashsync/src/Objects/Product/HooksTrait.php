@@ -22,6 +22,7 @@
 namespace Splash\Local\Objects\Product;
 
 use Splash\Client\Splash;
+use Context;
 
 /**
  * @abstract Prestashop Hooks for Products

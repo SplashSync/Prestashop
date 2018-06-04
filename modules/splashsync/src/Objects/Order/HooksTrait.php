@@ -21,6 +21,8 @@
 
 namespace Splash\Local\Objects\Order;
 
+use PrestaShopCollection;
+
 /**
  * @abstract Prestashop Hooks for Order & Invoices
  */
