@@ -40,12 +40,8 @@ parameters:
                 - "docs"
                 - "modules/splashsync/vendor"               
         phpstan:
-            level: 1
+            level: max
             configuration:  "build/phpstan.neon"           
-#            ignore_patterns:
-#                - LocalizationTrait.php
-#                - splash/admin
-#                - L03PaymentBanksTest.php
 
     testsuites:
         travis:
