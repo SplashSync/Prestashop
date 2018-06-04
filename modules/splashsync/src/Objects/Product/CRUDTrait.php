@@ -328,7 +328,7 @@ trait CRUDTrait
         if (is_null($ProductId)) {
             return self::getUnikIdStatic($this->ProductId, $this->AttributeId);
         }
-        return self::getUnikIdStatic($ProductId, $AttributeId);        
+        return self::getUnikIdStatic($ProductId, $AttributeId);
     }
     
     /**
@@ -340,7 +340,7 @@ trait CRUDTrait
     public static function getUnikIdStatic($ProductId, $AttributeId)
     {
         return $ProductId + ($AttributeId << 20);
-    }    
+    }
     
     /**
      *      @abstract       Revert UnikId to decode id_product

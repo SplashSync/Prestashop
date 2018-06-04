@@ -136,17 +136,26 @@ trait MainTrait
         //====================================================================//
         // READ Fields
         switch ($FieldName) {
-                //====================================================================//
-                // PRODUCT BARCODES
-                //====================================================================//
-            case 'upc':
-            case 'ean13':
-            case 'isbn':
+            //====================================================================//
+            // PRODUCT SPECIFICATIONS
+            //====================================================================//
+            case 'weight':
                 if ($this->AttributeId) {
-                    $this->getSimple($FieldName, "Attribute");
+                    $this->Out[$FieldName] = (float) $this->Object->weight + $this->Attribute->weight;
                 } else {
-                    $this->getSimple($FieldName);
+                    $this->Out[$FieldName] = (float) $this->Object->weight;
                 }
+                break;
+            case 'height':
+            case 'depth':
+            case 'width':
+                $this->getSimple($FieldName);
+                break;
+            case 'surface':
+                $this->Out[$FieldName] = (float) $this->Object->depth * $this->Object->width;
+                break;
+            case 'volume':
+                $this->Out[$FieldName] = (float) $this->Object->height * $this->Object->depth * $this->Object->width;
                 break;
                 
             default:
@@ -171,9 +180,9 @@ trait MainTrait
         //====================================================================//
         // READ Fields
         switch ($FieldName) {
-                //====================================================================//
-                // PRODUCT BARCODES
-                //====================================================================//
+            //====================================================================//
+            // PRODUCT BARCODES
+            //====================================================================//
             case 'upc':
             case 'ean13':
             case 'isbn':

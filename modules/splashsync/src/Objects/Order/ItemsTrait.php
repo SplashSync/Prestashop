@@ -163,8 +163,8 @@ trait ItemsTrait
                     //====================================================================//
                     // Build Price Array
                     $Value = self::prices()->Encode(
-                        Tools::convertPrice($Product["unit_price_tax_excl"], $this->Currency),
-                        OrderDetail::getTaxCalculatorStatic($Product["id_order_detail"])->getTotalRate(),
+                        (double)    Tools::convertPrice($Product["unit_price_tax_excl"], $this->Currency),
+                        (double)    OrderDetail::getTaxCalculatorStatic($Product["id_order_detail"])->getTotalRate(),
                         null,
                         $this->Currency->iso_code,
                         $this->Currency->sign,
@@ -484,7 +484,7 @@ trait ItemsTrait
         //====================================================================//
         // Build Price Array
         return self::prices()->Encode(
-            Tools::convertPrice($this->Object->total_shipping_tax_excl, $this->Currency),
+            (double)    Tools::convertPrice($this->Object->total_shipping_tax_excl, $this->Currency),
             (double)    $Tax,
             null,
             $this->Currency->iso_code,

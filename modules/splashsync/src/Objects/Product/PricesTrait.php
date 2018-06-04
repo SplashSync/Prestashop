@@ -112,7 +112,7 @@ trait PricesTrait
             case 'price':
                 //====================================================================//
                 // Read Price
-                $PriceHT    = Tools::convertPrice(
+                $PriceHT    = (double) Tools::convertPrice(
                     $this->Object->getPrice(false, $this->AttributeId),
                     $this->Currency
                 );
@@ -131,8 +131,8 @@ trait PricesTrait
             case 'price-base':
                 //====================================================================//
                 // Read Price
-                $PriceHT    = Tools::convertPrice($this->Object->price, $this->Currency);
-                $Tax        = (double)  $this->Object->getTaxesRate();
+                $PriceHT    = (double) Tools::convertPrice($this->Object->price, $this->Currency);
+                $Tax        = (double) $this->Object->getTaxesRate();
                 //====================================================================//
                 // Build Price Array
                 $this->Out[$FieldName] = self::prices()->Encode(
@@ -148,9 +148,9 @@ trait PricesTrait
                 //====================================================================//
                 // Read Price
                 if ($this->AttributeId && ($this->Attribute->wholesale_price > 0)) {
-                    $PriceHT = Tools::convertPrice($this->Attribute->wholesale_price, $this->Currency);
+                    $PriceHT = (double) Tools::convertPrice($this->Attribute->wholesale_price, $this->Currency);
                 } else {
-                    $PriceHT = Tools::convertPrice($this->Object->wholesale_price, $this->Currency);
+                    $PriceHT = (double) Tools::convertPrice($this->Object->wholesale_price, $this->Currency);
                 }
                 $Tax        = (double)  $this->Object->getTaxesRate();
                 //====================================================================//
