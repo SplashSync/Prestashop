@@ -61,7 +61,8 @@ class Product extends AbstractObject
     use \Splash\Local\Objects\Product\PricesTrait;
     use \Splash\Local\Objects\Product\ImagesTrait;
     use \Splash\Local\Objects\Product\MetaTrait;
-//    use \Splash\Local\Objects\Product\AttributesTrait;
+    use \Splash\Local\Objects\Product\AttributeTrait;
+    use \Splash\Local\Objects\Product\VariantsTrait;
     
     /**
      * @var SplashSync
@@ -123,9 +124,6 @@ class Product extends AbstractObject
     // General Class Variables
     //====================================================================//
     protected $ProductId      = null;     // Prestashop Product Class Id
-    protected $Attribute      = null;     // Prestashop Product Attribute Class
-    protected $AttributeId    = null;     // Prestashop Product Attribute Class Id
-    protected $AttributeUpdate= false;    // Prestashop Product Attribute Update is Requierd
     protected $LangId         = null;     // Prestashop Language Class Id
     protected $Currency       = null;     // Prestashop Currency Class
     
