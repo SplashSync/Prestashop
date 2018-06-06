@@ -18,11 +18,11 @@
 >
 
     <testsuites>
-<!--        <testsuite name="Local">
-            <directory>modules/splashsync/tests</directory>
-        </testsuite>-->
         <testsuite name="Core">
             <directory>modules/splashsync/vendor/splash/phpcore/Tests</directory>
+        </testsuite>
+        <testsuite name="Local">
+            <directory>modules/splashsync/tests</directory>
         </testsuite>
     </testsuites>
 
