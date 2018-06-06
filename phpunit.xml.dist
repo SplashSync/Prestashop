@@ -18,9 +18,11 @@
 >
 
     <testsuites>
-        <testsuite name="All">
-            <directory>modules/splashsync/tests</directory>
+        <testsuite name="Core">
             <directory>modules/splashsync/vendor/splash/phpcore/Tests</directory>
+        </testsuite>
+        <testsuite name="Local">
+            <directory>modules/splashsync/tests</directory>
         </testsuite>
     </testsuites>
 
