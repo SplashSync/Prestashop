@@ -241,7 +241,7 @@ trait PricesTrait
                 return;
         }
         
-        if (isset($this->In[$FieldName]) ) {
+        if (isset($this->In[$FieldName])) {
             unset($this->In[$FieldName]);
         }
     }
@@ -306,10 +306,11 @@ trait PricesTrait
      * @param       array   $NewPrice   New Product Price Array
      * @return      bool
      */
-    private function updateAttributePrice($NewPrice) {
+    private function updateAttributePrice($NewPrice)
+    {
         //====================================================================//
         // Detect New Base Price
-        if ( isset($this->In['price-base']["ht"]) ) {
+        if (isset($this->In['price-base']["ht"])) {
             $BasePrice  =   $this->In['price-base']["ht"];
         } else {
             $BasePrice  =   $this->Object->base_price;

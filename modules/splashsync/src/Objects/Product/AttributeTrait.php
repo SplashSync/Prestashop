@@ -103,7 +103,7 @@ trait AttributeTrait
         $this->AttributeId      = self::getAttribute($UnikId);
         //====================================================================//
         // Safety Checks
-        if ( !$this->isLocked("onCombinationCreate") && empty($this->AttributeId)) {
+        if (!$this->isLocked("onCombinationCreate") && empty($this->AttributeId)) {
             //====================================================================//
             // Read Product Combinations
             $AttrList = $this->Object->getAttributesResume($this->LangId);

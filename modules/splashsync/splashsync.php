@@ -723,7 +723,7 @@ class SplashSync extends Module
             Splash\Client\Splash::log()
                     ->deb("Splash Commit => " . $_Type . " Action = " . $_Action . " Id = " . $_Id);
         } elseif (is_array($_Id) && empty($_Id)) {
-            return Splash\Client\Splash::log()->war("Splash Commit => Empty Array");
+            return true;
         } elseif (is_array($_Id)) {
             Splash\Client\Splash::log()
                     ->deb("Splash Commit => " . $_Type . " Action = " . $_Action . " Ids (x" . count($_Id) . ")");

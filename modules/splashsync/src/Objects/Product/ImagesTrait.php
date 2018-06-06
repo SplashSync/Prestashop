@@ -497,22 +497,21 @@ trait ImagesTrait
     {
         //====================================================================//
         // If Generic Product Mode => Skip
-        if ( !$this->AttributeId) {
+        if (!$this->AttributeId) {
             return false;
-        }        
+        }
         //====================================================================//
         // Read Product Combinations
         $AttrList = $this->Object->getAttributesResume($this->LangId);
-        if( empty($AttrList) ) {
+        if (empty($AttrList)) {
             return array();
         }
         $Response   =   array();
         foreach ($AttrList as $AttrResume) {
-            
             //====================================================================//
             // Load Object Images List for Combination
             $PsImages   =   Image::getImages(
-                $this->LangId, 
+                $this->LangId,
                 $this->Object->id,
                 $AttrResume["id_product_attribute"]
             );
@@ -522,9 +521,9 @@ trait ImagesTrait
             foreach ($PsImages as $PsImage) {
                 $Response[$PsImage["id_image"]] = $PsImage["id_image"];
             }
-        }       
+        }
         return $Response;
-    }    
+    }
 
     /**
      * @abstract    CleanUp Base Product Images List
@@ -535,7 +534,7 @@ trait ImagesTrait
     {
         //====================================================================//
         // If Variant Product Mode => Skip
-        if ( empty($ObjectImagesList) || $this->AttributeId) {
+        if (empty($ObjectImagesList) || $this->AttributeId) {
             return;
         }
         //====================================================================//
@@ -558,7 +557,7 @@ trait ImagesTrait
     {
         //====================================================================//
         // If Base Product Mode => Skip
-        if ( !$this->AttributeId) {
+        if (!$this->AttributeId) {
             return;
         }
         //====================================================================//
@@ -572,9 +571,9 @@ trait ImagesTrait
         foreach ($PsImages as $PsImage) {
             //====================================================================//
             // Check if Used
-            if ( in_array($PsImage["id_image"], $UsedImages) ) {
+            if (in_array($PsImage["id_image"], $UsedImages)) {
                 continue;
-            } 
+            }
             //====================================================================//
             // Fetch Images Object
             $Image = new Image($PsImage["id_image"]);
@@ -582,7 +581,7 @@ trait ImagesTrait
             $Image->delete();
             $this->needUpdate();
         }
-    }    
+    }
     
     /**
      * @abstract    Update Product Image Thumbnail

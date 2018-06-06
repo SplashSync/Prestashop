@@ -93,7 +93,7 @@ trait HooksTrait
                 $IdList[] =   (int) Product::getUnikIdStatic($product->id, $Attr["id_product_attribute"]);
             }
             return  $IdList;
-        }      
+        }
         return array($product->id);
     }
     
@@ -247,7 +247,7 @@ trait HooksTrait
         //====================================================================//
         // Commit Update For Product Attribute
         $this->doCommit("Product", $UnikId, $action, $comment);
-        if ($action ==  SPL_A_CREATE ) {
+        if ($action ==  SPL_A_CREATE) {
 //        if ( ($action ==  SPL_A_CREATE) && empty(SPLASH_DEBUG) ) {
             //====================================================================//
             // Commit Update For Product Attribute

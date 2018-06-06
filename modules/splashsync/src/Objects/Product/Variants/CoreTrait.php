@@ -130,7 +130,7 @@ trait CoreTrait
         // WRITE Field
         switch ($FieldName) {
             case 'default_on':
-                if ( $this->AttributeId && ((bool) $Data) ) {
+                if ($this->AttributeId && ((bool) $Data)) {
                     $this->Object->setDefaultAttribute($this->AttributeId);
                 }
                 if ($this->AttributeId) {
