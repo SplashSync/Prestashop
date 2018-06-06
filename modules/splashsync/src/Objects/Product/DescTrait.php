@@ -49,7 +49,6 @@ trait DescTrait
         $this->fieldsFactory()->create(SPL_T_MVARCHAR)
                 ->Identifier("name")
                 ->Name($this->spl->l("Product Name without Options"))
-                ->isListed()
                 ->MicroData("http://schema.org/Product", "alternateName")
                 ->Group($GroupName)
                 ->isRequired();
@@ -59,9 +58,11 @@ trait DescTrait
         $this->fieldsFactory()->create(SPL_T_MVARCHAR)
                 ->Identifier("fullname")
                 ->Name($this->spl->l("Product Name with Options"))
-                ->isReadOnly()
                 ->Group($GroupName)
-                ->MicroData("http://schema.org/Product", "name");
+                ->MicroData("http://schema.org/Product", "name")
+                ->isListed()
+                ->isReadOnly()
+                ;
 
         //====================================================================//
         // Long Description
@@ -358,15 +359,7 @@ trait DescTrait
             
             //====================================================================//
             // Product Specific - Read Full Product Name with Attribute Description
-            if (isset($Object->id_product_attribute)) {
-                $Data[$LanguageCode] = \Product::getProductName(
-                    (int)$Object->id,
-                    (int)$Object->id_product_attribute,
-                    $LanguageId
-                );
-            } else {
-                $Data[$LanguageCode] = \Product::getProductName((int)$Object->id, null, $LanguageId);
-            }
+            $Data[$LanguageCode] = \Product::getProductName((int)$Object->id, $this->AttributeId, $LanguageId);
         }
         return $Data;
     }

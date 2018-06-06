@@ -46,21 +46,22 @@ trait CRUDTrait
         //====================================================================//
         // Decode Product Id
         $this->ProductId        = self::getId($UnikId);
-        $this->AttributeId      = self::getAttribute($UnikId);
 
         //====================================================================//
         // Safety Checks
         if (empty($UnikId)  || empty($this->ProductId)) {
             return Splash::log()->err("ErrLocalTpl", __CLASS__, __FUNCTION__, " Missing Id.");
         }
-        
+        //====================================================================//
+        // Clear Cache
+        \Product::flushPriceCache();
         //====================================================================//
         // If $id Given => Load Product Object From DataBase
         //====================================================================//
-        $Object = false;
+        $this->Object = false;
         if (!empty($this->ProductId)) {
-            $Object = new Product($this->ProductId, true);
-            if ($Object->id != $this->ProductId) {
+            $this->Object = new Product($this->ProductId, true);
+            if ($this->Object->id != $this->ProductId) {
                 return Splash::log()->err(
                     "ErrLocalTpl",
                     __CLASS__,
@@ -68,28 +69,15 @@ trait CRUDTrait
                     "Unable to fetch Product (" . $this->ProductId . ")"
                 );
             }
-//            //====================================================================//
-//            // Setup Images Variables
-//            $Object->image_folder   = _PS_PROD_IMG_DIR_;
         }
-        
         //====================================================================//
         // If $id_attribute Given => Load Product Attribute Combinaisons From DataBase
         //====================================================================//
-        if (!empty($this->AttributeId)) {
-            $this->Attribute = new Combination($this->AttributeId);
-            if ($this->Attribute->id != $this->AttributeId) {
-                return Splash::log()->err(
-                    "ErrLocalTpl",
-                    __CLASS__,
-                    __FUNCTION__,
-                    "Unable to fetch Product Attribute (" . $this->AttributeId . ")"
-                );
-            }
-//            $Object->id_product_attribute = $this->AttributeId;
+        if (!$this->loadAttribute($UnikId)) {
+            return false;
         }
         
-        return $Object;
+        return $this->Object;
     }
 
     /**
@@ -103,6 +91,31 @@ trait CRUDTrait
         // Stack Trace
         Splash::log()->trace(__CLASS__, __FUNCTION__);
         
+        //====================================================================//
+        // Check Required Fields are Given
+        if (!$this->isValidForCreation()) {
+            return false;
+        }
+        
+        //====================================================================//
+        // Check is New Product is Variant Product
+        if (!$this->isNewVariant($this->In)) {
+            //====================================================================//
+            // Create New Simple Product
+            return $this->createSimpleProduct();
+        }
+        
+        //====================================================================//
+        // Create New Variant Product
+        return $this->createVariantProduct($this->In);
+    }
+    
+    /**
+     * @abstract    Ensure Required Fields are Available to Create a Product
+     * @return      bool
+     */
+    private function isValidForCreation()
+    {
         //====================================================================//
         // Check Product Ref is given
         if (empty($this->In["ref"])) {
@@ -120,20 +133,52 @@ trait CRUDTrait
                 $this->In["link_rewrite"][$key] = Tools::link_rewrite($value);
             }
         }
+        return true;
+    }
+    
+    /**
+     * @abstract    Create a New Simple Product
+     *
+     * @return      object     New Object
+     */
+    private function createSimpleProduct()
+    {
+        //====================================================================//
+        // Stack Trace
+        Splash::log()->trace(__CLASS__, __FUNCTION__);
         
         //====================================================================//
         // Create Empty Product
-        return new Product();
+        $this->Object = new Product();
+        //====================================================================//
+        // Setup Product Minimal Data
+        $this->setSimple("reference", $this->In["ref"]);
+        $this->setMultilang($this->Object, "name", $this->In["name"]);
+        $this->setMultilang($this->Object, "link_rewrite", $this->In["link_rewrite"]);
+        //====================================================================//
+        // CREATE PRODUCT
+        if ($this->Object->add() != true) {
+            return Splash::log()->err(
+                "ErrLocalTpl",
+                __CLASS__,
+                __FUNCTION__,
+                " Unable to create Product."
+            );
+        }
+        //====================================================================//
+        // Store New Id on SplashObject Class
+        $this->ProductId    = $this->Object->id;
+        $this->AttributeId  = 0;
+        
+        //====================================================================//
+        // Create Empty Product
+        return $this->Object;
     }
     
     /**
      * @abstract    Update Request Object
-     *
      * @param       array   $Needed         Is This Update Needed
-     *
-     * @return      string      Object Id
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @return      int|false               Object Id
      */
     public function update($Needed)
     {
@@ -143,54 +188,10 @@ trait CRUDTrait
         
         //====================================================================//
         // Verify Update Is requiered
-        if (!$Needed && !$this->AttributeUpdate) {
+        if (!$Needed && !$this->isToUpdate("Attribute")) {
             Splash::log()->deb("MsgLocalNoUpdateReq", __CLASS__, __FUNCTION__);
             return (int) $this->getUnikId();
         }
-        
-        //====================================================================//
-        // CREATE PRODUCT IF NEW
-        if ($Needed && is_null($this->ProductId)) {
-            if ($this->Object->add() != true) {
-                return Splash::log()->err(
-                    "ErrLocalTpl",
-                    __CLASS__,
-                    __FUNCTION__,
-                    " Unable to create Product."
-                );
-            }
-            //====================================================================//
-            // LOCK PRODUCT to prevent triggered actions on Price or Stock Update
-            $this->lock($this->Object->id);
-            //====================================================================//
-            // Store New Id on SplashObject Class
-            $this->ProductId    = $this->Object->id;
-            $this->AttributeId  = 0;
-        }
-        
-        //====================================================================//
-        // CREATE PRODUCT ATTRIBUTE IF NEW
-        if ($this->AttributeUpdate && is_null($this->AttributeId)) {
-            if ($this->Attribute->add() != true) {
-                return Splash::log()->err(
-                    "ErrLocalTpl",
-                    __CLASS__,
-                    __FUNCTION__,
-                    " Unable to create Product Combination."
-                );
-            }
-            //====================================================================//
-            // Store New Id on SplashObject Class
-            $this->AttributeId  = $this->Attribute->id;
-            //====================================================================//
-            // LOCK PRODUCT to prevent triggered actions on Price or Stock Update
-            $this->lock($this->getUnikId());
-        }
-        
-        //====================================================================//
-        // UPDATE/CREATE POST CREATE FIELDS
-        //====================================================================//
-        $this->updatePostCreateFields();
         
         //====================================================================//
         // UPDATE MAIN INFORMATIONS
@@ -208,61 +209,11 @@ trait CRUDTrait
         
         //====================================================================//
         // UPDATE ATTRIBUTE INFORMATIONS
-        if ($this->AttributeId && $this->AttributeUpdate) {
-            if ($this->Attribute->update() != true) {
-                return Splash::log()->err(
-                    "ErrLocalTpl",
-                    __CLASS__,
-                    __FUNCTION__,
-                    " Unable to update Product Attribute."
-                );
-            }
+        if (!$this->updateAttribute($Needed)) {
+            return false;
         }
         
         return (int) $this->getUnikId();
-    }
-    
-    /**
-     * @abstract    Update Request Object
-     * @return      void
-     */
-    private function updatePostCreateFields()
-    {
-        //====================================================================//
-        // Stack Trace
-        Splash::log()->trace(__CLASS__, __FUNCTION__);
-        
-        //====================================================================//
-        // UPDATE/CREATE PRODUCT PRICE
-        //====================================================================//
-        if (!is_null($this->NewPrice)) {
-            $this->setSavePrice();
-            $this->NewPrice = null;
-        }
-        //====================================================================//
-        // UPDATE/CREATE PRODUCT IMAGES
-        //====================================================================//
-        if (!is_null($this->NewImagesArray)) {
-            $this->setImgArray($this->NewImagesArray);
-            $this->NewImagesArray = null;
-        }
-        //====================================================================//
-        // UPDATE/CREATE SPLASH ID
-        //====================================================================//
-        if (!is_null($this->NewSplashId)) {
-            Splash::local()->setSplashId("Product", $this->getUnikId(), $this->NewSplashId);
-            $this->NewSplashId = null;
-        }
-        //====================================================================//
-        // INIT PRODUCT STOCK
-        //====================================================================//
-        if (!is_null($this->NewStock)) {
-            //====================================================================//
-            // Product Just Created => Setup Product Stock
-            StockAvailable::setQuantity($this->ProductId, $this->AttributeId, $this->NewStock);
-            $this->needUpdate();
-            $this->NewStock = null;
-        }
     }
     
     /**
@@ -309,7 +260,7 @@ trait CRUDTrait
         //====================================================================//
         // If Attribute Defined => Delete Combination From DataBase
         if ($this->AttributeId) {
-            return $this->Object->deleteAttributeCombination($this->AttributeId);
+            return $this->deleteAttribute();
         }
         
         //====================================================================//

@@ -192,17 +192,7 @@ trait PricesTrait
             // PRICES INFORMATIONS
             //====================================================================//
             case 'price':
-                //====================================================================//
-                // Read Current Product Price (Via Out Buffer)
-                $this->getPricesFields(null, "price");
-
-                //====================================================================//
-                // Compare Prices
-                if (!self::prices()->Compare($this->Out["price"], $Data)) {
-                    $this->NewPrice = $Data;
-                    $this->needUpdate();
-                }
-                
+                $this->updateProductPrice($Data);
                 break;
                 
             case 'price-base':
@@ -213,7 +203,8 @@ trait PricesTrait
                 //====================================================================//
                 // Compare Prices
                 if (!self::prices()->Compare($this->Out["price-base"], $Data)) {
-                    $this->Object->price = $Data["ht"];
+                    $this->Object->price        = $Data["ht"];
+                    $this->Object->price_base   = $Data["ht"];
                     $this->needUpdate();
                     //====================================================================//
                     // Clear Cache
@@ -237,7 +228,7 @@ trait PricesTrait
                 // Update product Wholesale Price with Attribute
                 if ($this->AttributeId) {
                     $this->Attribute->wholesale_price   =   $Data["ht"];
-                    $this->AttributeUpdate              =   true;
+                    $this->needUpdate("Attribute");
                 //====================================================================//
                 // Update product Price without Attribute
                 } else {
@@ -249,59 +240,56 @@ trait PricesTrait
             default:
                 return;
         }
-        unset($this->In[$FieldName]);
+        
+        if (isset($this->In[$FieldName]) ) {
+            unset($this->In[$FieldName]);
+        }
     }
     
     
     /**
-     *  @abstract     Write New Price
-     *
-     *  @return         bool
+     * @abstract    Write New Price
+     * @param       array   $NewPrice   New Product Price Array
+     * @return      bool
      */
-    private function setSavePrice()
+    private function updateProductPrice($NewPrice)
     {
         //====================================================================//
+        // Read Current Product Price (Via Out Buffer)
+        $this->getPricesFields(null, "price");
+        //====================================================================//
         // Verify Price Need to be Updated
-        if (empty($this->NewPrice)) {
-            return true;
+        if (self::prices()->Compare($this->Out["price"], $NewPrice)) {
+            return;
         }
-
         //====================================================================//
         // Update product Price with Attribute
-        if ($this->Attribute) {
-            //====================================================================//
-            // Evaluate Attribute Price
-            $PriceHT = $this->NewPrice["ht"] - $this->Object->price;
-            //====================================================================//
-            // Update Attribute Price if Required
-            if (abs($PriceHT - $this->Attribute->price) > 1E-6) {
-                $this->Attribute->price     =   round($PriceHT, 9);
-                $this->AttributeUpdate      =   true;
-            }
+        if ($this->AttributeId) {
+            $this->updateAttributePrice($NewPrice);
         //====================================================================//
         // Update product Price without Attribute
         } else {
-            if (abs($this->NewPrice["ht"] - $this->Object->price) > 1E-6) {
-                $this->Object->price = round($this->NewPrice["ht"], 9);
+            if (abs($NewPrice["ht"] - $this->Object->price) > 1E-6) {
+                $this->Object->price = round($NewPrice["ht"], 9);
                 $this->needUpdate();
             }
         }
         
         //====================================================================//
         // Update Price VAT Rate
-        if (abs($this->NewPrice["vat"] - $this->Object->tax_rate) > 1E-6) {
+        if (abs($NewPrice["vat"] - $this->Object->tax_rate) > 1E-6) {
             //====================================================================//
             // Search For Tax Id Group with Given Tax Rate and Country
-            $NewTaxRateGroupId  =   Splash::local()->getTaxRateGroupId($this->NewPrice["vat"]);
+            $NewTaxRateGroupId  =   Splash::local()->getTaxRateGroupId($NewPrice["vat"]);
             //====================================================================//
             // If Tax Group Found, Update Product
             if (( $NewTaxRateGroupId >= 0 ) && ( $NewTaxRateGroupId != $this->Object->id_tax_rules_group )) {
                  $this->Object->id_tax_rules_group  = (int) $NewTaxRateGroupId;
-                 $this->Object->tax_rate            = $this->NewPrice["vat"];
+                 $this->Object->tax_rate            = $NewPrice["vat"];
                  $this->needUpdate();
             } else {
                 Splash::log()->war(
-                    "VAT Rate Update : Unable to find this tax rate localy (" . $this->NewPrice["vat"] . ")"
+                    "VAT Rate Update : Unable to find this tax rate localy (" . $NewPrice["vat"] . ")"
                 );
             }
         }
@@ -311,5 +299,29 @@ trait PricesTrait
         \Product::flushPriceCache();
         
         return true;
+    }
+    
+    /**
+     * @abstract    Update Combination Price Impact
+     * @param       array   $NewPrice   New Product Price Array
+     * @return      bool
+     */
+    private function updateAttributePrice($NewPrice) {
+        //====================================================================//
+        // Detect New Base Price
+        if ( isset($this->In['price-base']["ht"]) ) {
+            $BasePrice  =   $this->In['price-base']["ht"];
+        } else {
+            $BasePrice  =   $this->Object->base_price;
+        }
+        //====================================================================//
+        // Evaluate Attribute Price
+        $PriceHT = $NewPrice["ht"] - $BasePrice;
+        //====================================================================//
+        // Update Attribute Price if Required
+        if (abs($PriceHT - $this->Attribute->price) > 1E-6) {
+            $this->Attribute->price     =   round($PriceHT, 9);
+            $this->needUpdate("Attribute");
+        }
     }
 }

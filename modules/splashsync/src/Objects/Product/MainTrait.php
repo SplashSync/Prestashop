@@ -225,7 +225,7 @@ trait MainTrait
                 $CurrentWeight +=   isset($this->Attribute->$FieldName) ? $this->Attribute->$FieldName : 0;
                 if ($this->AttributeId && ( abs($CurrentWeight - $Data) > 1E-6 )) {
                     $this->Attribute->$FieldName    = $Data - $this->Object->$FieldName;
-                    $this->AttributeUpdate          = true;
+                    $this->needUpdate("Attribute");
                     break;
                 }
                 //====================================================================//

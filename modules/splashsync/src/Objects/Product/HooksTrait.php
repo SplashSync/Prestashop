@@ -63,6 +63,41 @@ trait HooksTrait
     }
       
     /**
+     * @abstract    Get Product Impacted Ids to Commit
+     * @param       object   $product           Prestashop Product Object
+     * @return      array                       Array of Unik Ids
+     */
+    private function getActionProductIds($product)
+    {
+        //====================================================================//
+        // Read Product Combinations
+        $AttrList = $product->getAttributesResume(Context::getContext()->language->id);
+        //====================================================================//
+        // if Product has Combinations
+        if (is_array($AttrList) && !empty($AttrList)) {
+            //====================================================================//
+            // JUST FOR TRAVIS => Only Commit Id of Curent Impacted Combination
+            if (defined("SPLASH_DEBUG")) {
+                if (isset(Splash::object("Product")->AttributeId) && !empty(Splash::object("Product")->AttributeId)) {
+                    //====================================================================//
+                    // Add Current Product Combinations to Commit Update List
+                    return array(
+                        (int) Product::getUnikIdStatic($product->id, Splash::object("Product")->AttributeId)
+                    );
+                }
+            }
+            //====================================================================//
+            // Add Product Combinations to Commit Update List
+            $IdList = array();
+            foreach ($AttrList as $Attr) {
+                $IdList[] =   (int) Product::getUnikIdStatic($product->id, $Attr["id_product_attribute"]);
+            }
+            return  $IdList;
+        }      
+        return array($product->id);
+    }
+    
+    /**
      *      @abstract   This function is called after each action on a product object
      *      @param      object   $product           Prestashop Product Object
      *      @param      string   $action            Performed Action
@@ -71,35 +106,21 @@ trait HooksTrait
     private function hookactionProduct($product, $action, $comment)
     {
         //====================================================================//
-        // Retrieve Product Id
-        $id_product = null;
-        if (isset($product->id_product)) {
-            $id_product = $product->id_customer;
-        } elseif (isset($product->id)) {
-            $id_product = $product->id;
-        }
-        //====================================================================//
-        // Log
-        $this->debugHook(__FUNCTION__, $id_product . " >> " . $comment);
-        //====================================================================//
         // Safety Check
-        if (empty($id_product)) {
+        if (!isset($product->id) || empty($product->id)) {
             Splash::log()->err("ErrLocalTpl", "Product", __FUNCTION__, "Unable to Read Product Id.");
         }
         //====================================================================//
-        // Add Base Product Commit Update List
-        $IdList = array();
-        $IdList[] = $id_product;
+        // Log
+        $this->debugHook(__FUNCTION__, $product->id . " >> " . $comment);
         //====================================================================//
-        // Read Product Attributes Conbination
-        $AttrList = $product->getAttributesResume(Context::getContext()->language->id);
-        if (is_array($AttrList)) {
-            foreach ($AttrList as $Attr) {
-                //====================================================================//
-                // Add Attribute Product Commit Update List
-                $IdList[] =   (int) Product::getUnikIdStatic($id_product, $Attr["id_product_attribute"]);
-            }
+        // Combination Lock Mode => Splash is Creating a Variant Product
+        if (Splash::object("Product")->isLocked("onCombinationLock")) {
+            return;
         }
+        //====================================================================//
+        // Get Product Impacted Ids to Commit
+        $IdList = $this->getActionProductIds($product);
         if (empty($IdList)) {
             return true;
         }
@@ -116,7 +137,7 @@ trait HooksTrait
         return $this->hookactionCombination(
             $params["object"],
             SPL_A_CREATE,
-            $this->l('Product Attribute Created on Prestashop')
+            $this->l('Product Variant Created on Prestashop')
         );
     }
         
@@ -128,7 +149,7 @@ trait HooksTrait
         return $this->hookactionCombination(
             $params["object"],
             SPL_A_UPDATE,
-            $this->l('Product Attribute Updated on Prestashop')
+            $this->l('Product Variant Updated on Prestashop')
         );
     }
     
@@ -140,7 +161,7 @@ trait HooksTrait
         return $this->hookactionCombination(
             $params["object"],
             SPL_A_DELETE,
-            $this->l('Product Attribute Deleted on Prestashop')
+            $this->l('Product Variant Deleted on Prestashop')
         );
     }
         
@@ -225,6 +246,12 @@ trait HooksTrait
         $UnikId       =   (int) Product::getUnikIdStatic($combination->id_product, $id_combination);
         //====================================================================//
         // Commit Update For Product Attribute
-        return $this->doCommit("Product", $UnikId, $action, $comment);
+        $this->doCommit("Product", $UnikId, $action, $comment);
+        if ($action ==  SPL_A_CREATE ) {
+//        if ( ($action ==  SPL_A_CREATE) && empty(SPLASH_DEBUG) ) {
+            //====================================================================//
+            // Commit Update For Product Attribute
+            $this->doCommit("Product", $combination->id_product, SPL_A_DELETE, $comment);
+        }
     }
 }

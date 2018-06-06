@@ -19,20 +19,8 @@ use Splash\Core\SplashCore      as Splash;
 
 //====================================================================//
 // Prestashop Static Classes
-use Shop;
-use Configuration;
-use Currency;
-use Combination;
-use Language;
-use Context;
-use Translate;
-use Image;
-use ImageType;
-use ImageManager;
 use StockAvailable;
-use DbQuery;
-use Db;
-use Tools;
+use Translate;
 
 /**
  * @abstract    Access to Product Stock Fields
@@ -163,36 +151,25 @@ trait StockTrait
                     break;
                 }
                 //====================================================================//
-                // If Product is New
-                if (!$this->Object->id && $Data) {
-                    $this->NewStock = $Data;
-                    $this->needUpdate();
-                    break;
-                }
-                //====================================================================//
                 // Product Already Exists => Update Product Stock
                 if ($this->Object->getQuantity($this->ProductId, $this->AttributeId) != $Data) {
                     //====================================================================//
                     // Update Stock in DataBase
                     StockAvailable::setQuantity($this->ProductId, $this->AttributeId, $Data);
-                    $this->needUpdate();
-//                    //====================================================================//
-//                    // Store Stock in Cache
-//                    $cachekey = "Product-Id" . (int) $id . "-Attr" . $id_attribute;
-//                    $this->cache_stocks[$cachekey] = $Data;
-//                    Context::getContext()->splash->update = 1;
+                    if ($this->AttributeId) {
+                        $this->needUpdate("Attribute");
+                    } else {
+                        $this->needUpdate();
+                    }
                 }
                 break;
             //====================================================================//
             // Minimum Order Quantity
             case 'minimal_quantity':
-                if (!$this->AttributeId) {
+                if ($this->AttributeId) {
+                    $this->setSimple($FieldName, $Data, "Attribute");
+                } else {
                     $this->setSimple($FieldName, $Data);
-                    break;
-                }
-                if ($this->Attribute->$FieldName != $Data) {
-                    $this->Attribute->$FieldName    = $Data;
-                    $this->AttributeUpdate          = true;
                 }
                 break;
             default:

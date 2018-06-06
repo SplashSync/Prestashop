@@ -45,24 +45,6 @@ trait CoreTrait
                 ->isListed()
                 ->MicroData("http://schema.org/Product", "model")
                 ->isRequired();
-        
-        //====================================================================//
-        // Product Type Id
-        $this->fieldsFactory()->create(SPL_T_INT)
-                ->Identifier("type-id")
-                ->Name(Translate::getAdminTranslation("Type", "AdminProducts"))
-                ->Description(Translate::getAdminTranslation("Type", "AdminProducts"))
-                ->MicroData("http://schema.org/Product", "type")
-                ->isReadOnly();
-        
-        //====================================================================//
-        // Product Type Name
-        $this->fieldsFactory()->create(SPL_T_VARCHAR)
-                ->Identifier("type-name")
-                ->Name($this->spl->l('Type Name'))
-                ->Description($this->spl->l('Product Type Name'))
-                ->MicroData("http://schema.org/Product", "type")
-                ->isReadOnly();
     }
     
     /**
@@ -98,12 +80,6 @@ trait CoreTrait
                     $this->Out[$FieldName]  =   $this->Object->reference . "-" . $this->AttributeId;
                 }
                 break;
-            case 'type-id':
-                $this->Out[$FieldName]  =   $this->Object->getType();
-                break;
-            case 'type-name':
-                $this->Out[$FieldName]  =   $this->Object->getWsType();
-                break;
 
             default:
                 return;
@@ -130,16 +106,10 @@ trait CoreTrait
             // MAIN INFORMATIONS
             //====================================================================//
             case 'ref':
-                //====================================================================//
-                // Product has Attribute
-                if ($this->AttributeId && ($this->Attribute->reference !== $Data)) {
-                    $this->Attribute->reference = $Data;
-                    $this->AttributeUpdate = true;
-                //====================================================================//
-                // Product has No Attribute
-                } elseif (!$this->AttributeId && ( $this->Object->reference !== $Data)) {
-                    $this->Object->reference = $Data;
-                    $this->needUpdate();
+                if ($this->AttributeId) {
+                    $this->setSimple("reference", $Data, "Attribute");
+                } else {
+                    $this->setSimple("reference", $Data);
                 }
                 break;
                 

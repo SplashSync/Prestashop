@@ -139,13 +139,12 @@ trait ObjectsListTrait
         $DataBuffer["available_for_order"]  =   $Product["available_for_order"];
         $DataBuffer["created"]              =   $Product["created"];
         $DataBuffer["modified"]             =   $Product["modified"];
-
+        $DataBuffer["fullname"]             =   Product::getProductName($Product["id"], $Product["id_attribute"]);
         //====================================================================//
         // Fill Simple Product Data to Buffer
         if (!$Product["id_attribute"]) {
             $DataBuffer["id"]                   =   $Product["id"];
             $DataBuffer["ref"]                  =   $Product["ref"];
-            $DataBuffer["name"]                 =   $Product["name"];
             $DataBuffer["weight"]               =   $Product["weight"] . Configuration::get('PS_WEIGHT_UNIT');
             $DataBuffer["stock"]                =   $ProductClass->getQuantity($Product["id"]);
             $DataBuffer["price"]                =   $ProductClass->getPrice(false, null, 3);
@@ -157,7 +156,6 @@ trait ObjectsListTrait
             $DataBuffer["ref"]          =   empty($Product["ref_attribute"])
                     ?$Product["ref"]  . "-" . $Product["id_attribute"]
                     :$Product["ref_attribute"];
-            $DataBuffer["name"]         =   $Product["name"];
             $DataBuffer["weight"]       =   ($Product["weight"] + $Product["weight_attribute"]);
             $DataBuffer["weight"]      .=   Configuration::get('PS_WEIGHT_UNIT');
             $DataBuffer["price"]        =   $ProductClass->getPrice(false, $Product["id_attribute"], 3);
