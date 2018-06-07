@@ -248,8 +248,7 @@ trait HooksTrait
         // Commit Update For Product Attribute
         $this->doCommit("Product", $UnikId, $action, $comment);
         if ($action ==  SPL_A_CREATE) {
-            
-Splash::log()->www("Hook Combi", $combination);            
+            Splash::log()->www("Hook Combi", $combination);
 //        if ( ($action ==  SPL_A_CREATE) && empty(SPLASH_DEBUG) ) {
             //====================================================================//
             // Commit Update For Product Attribute
