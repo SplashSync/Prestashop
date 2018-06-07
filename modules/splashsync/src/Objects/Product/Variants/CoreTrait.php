@@ -120,7 +120,10 @@ trait CoreTrait
             
             case 'default_id':
                 if ($this->AttributeId) {
-                    $UnikId     =   (int) $this->getUnikId($this->ProductId, $this->Object->getDefaultIdProductAttribute());
+                    $UnikId     =   (int) $this->getUnikId(
+                        $this->ProductId,
+                        $this->Object->getDefaultIdProductAttribute()
+                    );
                     $this->Out[$FieldName] = self::objects()->encode("Product", $UnikId);
                 } else {
                     $this->Out[$FieldName]  =   null;
@@ -147,19 +150,18 @@ trait CoreTrait
         //====================================================================//
         // WRITE Field
         switch ($FieldName) {
-            
             case 'default_id':
                 //====================================================================//
                 // Check if Valid Data
-                if (!$this->AttributeId || ($this->ProductId != $this->getId($Data)) )  {
+                if (!$this->AttributeId || ($this->ProductId != $this->getId($Data))) {
                     break;
                 }
                 $AttributeId    =     $this->getAttribute($Data);
-                if (!$AttributeId)  {
+                if (!$AttributeId) {
                     break;
                 }
                 $this->Object->setDefaultAttribute($AttributeId);
-                break;                
+                break;
             
             default:
                 return;
