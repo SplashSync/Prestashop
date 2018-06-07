@@ -150,6 +150,9 @@ trait CoreTrait
         //====================================================================//
         // WRITE Field
         switch ($FieldName) {
+            case 'default_on':
+                break;
+            
             case 'default_id':
                 //====================================================================//
                 // Check if Valid Data
@@ -157,9 +160,10 @@ trait CoreTrait
                     break;
                 }
                 $AttributeId    =     $this->getAttribute($Data);
-                if (!$AttributeId) {
+                if (!$AttributeId || ($AttributeId == $this->Object->getDefaultIdProductAttribute())) {
                     break;
                 }
+                $this->Object->deleteDefaultAttributes();
                 $this->Object->setDefaultAttribute($AttributeId);
                 break;
             
