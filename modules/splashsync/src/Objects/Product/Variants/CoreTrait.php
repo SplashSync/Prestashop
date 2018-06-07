@@ -56,8 +56,17 @@ trait CoreTrait
                 ->Name('Is default variant')
                 ->Group(Translate::getAdminTranslation("Meta", "AdminThemes"))
                 ->MicroData("http://schema.org/Product", "isDefaultVariation")
+                ->isReadOnly();
+
+        //====================================================================//
+        // Default Product Variant
+        $this->FieldsFactory()->Create(self::objects()->encode("Product", SPL_T_ID))
+                ->Identifier("default_id")
+                ->Name('Default Variant')
+                ->Group(Translate::getAdminTranslation("Meta", "AdminThemes"))
+                ->MicroData("http://schema.org/Product", "DefaultVariation")
                 ->isNotTested();
-                
+        
         //====================================================================//
         // Product Variation Parent Link
         $this->FieldsFactory()->Create(self::objects()->encode("Product", SPL_T_ID))
@@ -109,6 +118,15 @@ trait CoreTrait
                 }
                 break;
             
+            case 'default_id':
+                if ($this->AttributeId) {
+                    $UnikId     =   (int) $this->getUnikId($this->ProductId, $this->Object->getDefaultIdProductAttribute());
+                    $this->Out[$FieldName] = self::objects()->encode("Product", $UnikId);
+                } else {
+                    $this->Out[$FieldName]  =   null;
+                }
+                break;
+            
             default:
                 return;
         }
@@ -129,14 +147,19 @@ trait CoreTrait
         //====================================================================//
         // WRITE Field
         switch ($FieldName) {
-            case 'default_on':
-                if ($this->AttributeId && ((bool) $Data)) {
-                    $this->Object->setDefaultAttribute($this->AttributeId);
+            
+            case 'default_id':
+                //====================================================================//
+                // Check if Valid Data
+                if (!$this->AttributeId || ($this->ProductId != $this->getId($Data)) )  {
+                    break;
                 }
-                if ($this->AttributeId) {
-                    $this->setSimple($FieldName, $Data, "Attribute");
+                $AttributeId    =     $this->getAttribute($Data);
+                if (!$AttributeId)  {
+                    break;
                 }
-                break;
+                $this->Object->setDefaultAttribute($AttributeId);
+                break;                
             
             default:
                 return;
