@@ -247,7 +247,7 @@ trait HooksTrait
         //====================================================================//
         // Commit Update For Product Attribute
         $this->doCommit("Product", $UnikId, $action, $comment);
-        if (($action ==  SPL_A_CREATE) && empty(SPLASH_DEBUG)) {
+        if ($action ==  SPL_A_CREATE) {
             //====================================================================//
             // Commit Update For Product Attribute
             $this->doCommit("Product", $combination->id_product, SPL_A_DELETE, $comment);

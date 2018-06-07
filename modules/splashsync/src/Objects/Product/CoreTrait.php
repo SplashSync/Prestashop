@@ -64,21 +64,7 @@ trait CoreTrait
             // MAIN INFORMATIONS
             //====================================================================//
             case 'ref':
-                //====================================================================//
-                // Product has No Attribute
-                if (!$this->AttributeId) {
-                    $this->Out[$FieldName]  =   $this->Object->reference;
-                    break;
-                }
-                //====================================================================//
-                // Product has Attribute but Ref is Defined
-                if (!empty($this->Attribute->reference)) {
-                    $this->Out[$FieldName]  =   $this->Attribute->reference;
-                //====================================================================//
-                // Product has Attribute but Attribute Ref is Empty
-                } else {
-                    $this->Out[$FieldName]  =   $this->Object->reference . "-" . $this->AttributeId;
-                }
+                $this->Out[$FieldName]  =   $this->getProductReference();
                 break;
 
             default:
@@ -87,6 +73,24 @@ trait CoreTrait
         
         unset($this->In[$Key]);
     }
+    
+    protected function getProductReference()
+    {
+        //====================================================================//
+        // Product has No Attribute
+        if (!$this->AttributeId) {
+            return  $this->Object->reference;
+        }
+        //====================================================================//
+        // Product has Attribute but Ref is Defined
+        if (!empty($this->Attribute->reference)) {
+            return  $this->Attribute->reference;
+        //====================================================================//
+        // Product has Attribute but Attribute Ref is Empty
+        } else {
+            return  $this->Object->reference . "-" . $this->AttributeId;
+        }
+    }    
     
     /**
      *  @abstract     Write Given Fields
