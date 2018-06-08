@@ -40,7 +40,7 @@ class L03VariantsCRUDTest extends O06SetTest
     
     public function testFeatureIsActive()
     {
-        $this->assertTrue((bool) Combination::isFeatureActive(), "Combination feature is Not Active");
+        $this->assertTrue(Combination::isFeatureActive(), "Combination feature is Not Active");
     }
     
     /**
@@ -134,7 +134,11 @@ class L03VariantsCRUDTest extends O06SetTest
         //====================================================================//
         //   Select Random Attribute
         $AttributeList  =   $AttributeGroup->getWsProductOptionValues();
-        $AttributeId    =   $AttributeList[rand(1, count($AttributeList))-1]["id"];
+        if (is_array($AttributeList)) {
+            $AttributeId    =   $AttributeList[rand(1, count($AttributeList))-1]["id"];
+        } else {
+            $AttributeId    =   $AttributeList[1]["id"];
+        }
         $Attribute      =   new Attribute($AttributeId);
 
         return array(

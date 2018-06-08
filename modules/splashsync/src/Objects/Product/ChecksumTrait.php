@@ -69,11 +69,11 @@ trait ChecksumTrait
         // READ Fields
         switch ($FieldName) {
             case 'md5':
-                $this->Out[$FieldName]  =   $this->getMd5Checksum($this->Object, $this->Attribute);
+                $this->Out[$FieldName]  =   $this->getMd5Checksum();
                 break;
 
             case 'md5-debug':
-                $this->Out[$FieldName]  =   $this->getMd5String($this->Object, $this->Attribute);
+                $this->Out[$FieldName]  =   $this->getMd5String();
                 break;
 
             default:

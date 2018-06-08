@@ -61,7 +61,7 @@ trait AttributeTrait
             // USE LOCK to Allow Base Product Loading
             $this->lock("onCombinationCreate");
             $this->Object   =   $this->load($BaseProductId);
-            $this->unlock("onCombinationCreate");
+            $this->unLock("onCombinationCreate");
         } else {
             //====================================================================//
             // LOCK PRODUCT HOOKS to prevent triggered Actions on Product
@@ -71,7 +71,7 @@ trait AttributeTrait
             $this->Object   =    $this->createSimpleProduct();
             //====================================================================//
             // UNLOCK PRODUCT HOOKS
-            $this->unlock("onCombinationLock");
+            $this->unLock("onCombinationLock");
         }
         //====================================================================//
         // Add Product Combination

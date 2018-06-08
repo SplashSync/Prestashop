@@ -4,9 +4,15 @@ parameters:
             - ArrayObject
     ignoreErrors:
             - '#Call to an undefined method [a-zA-Z0-9\\_]+ObjectInterface::load()#'
+            - '#Call to an undefined method [a-zA-Z0-9\\_]+ObjectInterface::getAttributeGroupByCode()#'
+            - '#Call to an undefined method [a-zA-Z0-9\\_]+ObjectInterface::addAttributeGroup()#'
+            - '#Call to an undefined method [a-zA-Z0-9\\_]+ObjectInterface::getAttributeByCode()#'
+            - '#Call to an undefined method [a-zA-Z0-9\\_]+ObjectInterface::addAttributeValue()#'
+            - '#Call to an undefined method [a-zA-Z0-9\\_]+ObjectInterface::getMultilang()#'
             - '#[a-zA-Z0-9\\_\#]+ class Currency constructor expects null, string given#'
             - '#[a-zA-Z0-9\\_\#]+ class Address constructor expects int|null, bool|int|null given#'
             - '#Access to an undefined property ObjectModel::[a-zA-Z0-9$\\_]#'
             - '#Access to an undefined property Context::[a-zA-Z0-9$\\_]#'
             - "#Casting to float something that's already float#"
+            - "#Property AttributeGroupCore::$name (string) does not accept array#"
 

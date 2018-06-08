@@ -60,7 +60,7 @@ trait CoreTrait
 
         //====================================================================//
         // Default Product Variant
-        $this->FieldsFactory()->Create(self::objects()->encode("Product", SPL_T_ID))
+        $this->fieldsFactory()->create(self::objects()->encode("Product", SPL_T_ID))
                 ->Identifier("default_id")
                 ->Name('Default Variant')
                 ->Group(Translate::getAdminTranslation("Meta", "AdminThemes"))
@@ -69,7 +69,7 @@ trait CoreTrait
         
         //====================================================================//
         // Product Variation Parent Link
-        $this->FieldsFactory()->Create(self::objects()->encode("Product", SPL_T_ID))
+        $this->fieldsFactory()->create(self::objects()->encode("Product", SPL_T_ID))
                 ->Identifier("parent_id")
                 ->Name("Parent")
                 ->Group(Translate::getAdminTranslation("Meta", "AdminThemes"))

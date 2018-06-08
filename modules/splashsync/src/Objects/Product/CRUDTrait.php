@@ -209,7 +209,7 @@ trait CRUDTrait
         
         //====================================================================//
         // UPDATE ATTRIBUTE INFORMATIONS
-        if (!$this->updateAttribute($Needed)) {
+        if (!$this->updateAttribute()) {
             return false;
         }
         

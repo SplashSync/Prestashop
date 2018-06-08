@@ -51,7 +51,7 @@ trait AttributesTrait
         
         //====================================================================//
         // Product Variation List - Variation Attribute Code
-        $this->FieldsFactory()->Create(SPL_T_VARCHAR)
+        $this->fieldsFactory()->create(SPL_T_VARCHAR)
                 ->Identifier("code")
                 ->Name(Translate::getAdminTranslation("Code", "AdminCatalogFeature"))
                 ->InList("attributes")
@@ -61,7 +61,7 @@ trait AttributesTrait
 
         //====================================================================//
         // Product Variation List - Variation Attribute Name
-        $this->FieldsFactory()->Create(SPL_T_VARCHAR)
+        $this->fieldsFactory()->create(SPL_T_VARCHAR)
                 ->Identifier("public_name_s")
                 ->Name(Translate::getAdminTranslation("Name", "AdminCatalogFeature"))
                 ->InList("attributes")
@@ -71,7 +71,7 @@ trait AttributesTrait
         
         //====================================================================//
         // Product Variation List - Variation Attribute Name (MultiLang)
-        $this->FieldsFactory()->Create(SPL_T_MVARCHAR)
+        $this->fieldsFactory()->create(SPL_T_MVARCHAR)
                 ->Identifier("public_name")
                 ->Name(Translate::getAdminTranslation("Name", "AdminCatalogFeature") . " (M)")
                 ->InList("attributes")
@@ -81,7 +81,7 @@ trait AttributesTrait
         
         //====================================================================//
         // Product Variation List - Variation Attribute Value
-        $this->FieldsFactory()->Create(SPL_T_VARCHAR)
+        $this->fieldsFactory()->create(SPL_T_VARCHAR)
                 ->Identifier("name_s")
                 ->Name(Translate::getAdminTranslation("Value", "AdminCatalogFeature"))
                 ->InList("attributes")
@@ -91,7 +91,7 @@ trait AttributesTrait
         
         //====================================================================//
         // Product Variation List - Variation Attribute Value (MultiLang)
-        $this->FieldsFactory()->Create(SPL_T_MVARCHAR)
+        $this->fieldsFactory()->create(SPL_T_MVARCHAR)
                 ->Identifier("name")
                 ->Name(Translate::getAdminTranslation("Value", "AdminCatalogFeature") . " (M)")
                 ->InList("attributes")
@@ -116,7 +116,7 @@ trait AttributesTrait
     {
         //====================================================================//
         // Check if List field & Init List Array
-        $FieldId = self::Lists()->InitOutput($this->Out, "attributes", $FieldName);
+        $FieldId = self::lists()->initOutput($this->Out, "attributes", $FieldName);
         if (!$FieldId) {
             return;
         }
@@ -155,7 +155,7 @@ trait AttributesTrait
                 default:
                     return;
             }
-            self::Lists()->Insert($this->Out, "attributes", $FieldId, $Index, $Value);
+            self::lists()->insert($this->Out, "attributes", $FieldId, $Index, $Value);
         }
         unset($this->In[$Key]);
     }
