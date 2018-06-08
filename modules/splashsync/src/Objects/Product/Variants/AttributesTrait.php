@@ -439,5 +439,4 @@ trait AttributesTrait
         }
         return $Result;
     }
-    
 }

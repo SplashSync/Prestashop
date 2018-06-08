@@ -27,6 +27,7 @@ use Translate;
  */
 trait ChecksumTrait
 {
+    use \Splash\Models\Objects\ChecksumTrait;
     
     /**
     *   @abstract     Build Fields using FieldFactory
@@ -34,7 +35,7 @@ trait ChecksumTrait
     private function buildChecksumFields()
     {
         //====================================================================//
-        // Product CheckSum 
+        // Product CheckSum
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
                 ->Identifier("md5")
                 ->Name("Md5")
@@ -42,7 +43,16 @@ trait ChecksumTrait
                 ->Group(Translate::getAdminTranslation("Meta", "AdminThemes"))
                 ->isListed()
                 ->MicroData("http://schema.org/Product", "md5")
-                ->isReadOnly();        
+                ->isReadOnly();
+        
+        //====================================================================//
+        // Product CheckSum Debug String
+        $this->fieldsFactory()->create(SPL_T_VARCHAR)
+                ->Identifier("md5-debug")
+                ->Name("Md5 Debug")
+                ->Description("Unik Checksum String fro Debug")
+                ->Group(Translate::getAdminTranslation("Meta", "AdminThemes"))
+                ->isReadOnly();
     }
     
     /**
@@ -62,6 +72,10 @@ trait ChecksumTrait
                 $this->Out[$FieldName]  =   $this->getMd5Checksum($this->Object, $this->Attribute);
                 break;
 
+            case 'md5-debug':
+                $this->Out[$FieldName]  =   $this->getMd5String($this->Object, $this->Attribute);
+                break;
+
             default:
                 return;
         }
@@ -78,7 +92,19 @@ trait ChecksumTrait
         return self::getMd5ChecksumFromValues(
             $this->Object->name[$this->LangId],
             $this->Object->reference,
-//            $this->getProductReference(),
+            $this->getProductAttributesArray($this->Object, $this->AttributeId)
+        );
+    }
+    
+    /**
+     *      @abstract       Compute Md5 String from Product & Attributes Objects
+     *      @return         string        $Md5              Unik Checksum
+     */
+    public function getMd5String()
+    {
+        return self::getMd5StringFromValues(
+            $this->Object->name[$this->LangId],
+            $this->Object->reference,
             $this->getProductAttributesArray($this->Object, $this->AttributeId)
         );
     }
@@ -90,25 +116,28 @@ trait ChecksumTrait
      *      @param          array         $Attributes       Array of Product Attributes ($Code => $Value)
      *      @return         string        $Md5              Unik Checksum
      */
-    private static function getMd5StringFromValues($Title, $Sku = null, $Attributes = [])
+    private static function getMd5ChecksumFromValues($Title, $Sku = null, $Attributes = [])
     {
-        $Md5Array  = array_merge_recursive( 
+        $Md5Array  = array_merge_recursive(
             array("title" => $Title, "sku" => $Sku),
             $Attributes
         );
-        return implode("|", ksort($Md5Array));
+        return self::Md5()->fromArray($Md5Array);
     }
     
     /**
-     *      @abstract       Compute Md5 CheckSum from Product Informations
+     *      @abstract       Compute Md5 String from Product Informations
      *      @param          string        $Title            Product Title without Options
      *      @param          string        $Sku              Product Reference
      *      @param          array         $Attributes       Array of Product Attributes ($Code => $Value)
      *      @return         string        $Md5              Unik Checksum
      */
-    public static function getMd5ChecksumFromValues($Title, $Sku = null, $Attributes = [])
+    private static function getMd5StringFromValues($Title, $Sku = null, $Attributes = [])
     {
-        return md5(self::getMd5StringFromValues($Title, $Sku, $Attributes));
+        $Md5Array  = array_merge_recursive(
+            array("title" => $Title, "sku" => $Sku),
+            $Attributes
+        );
+        return self::Md5()->debugFromArray($Md5Array);
     }
-
 }

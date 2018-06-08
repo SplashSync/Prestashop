@@ -90,7 +90,7 @@ trait CoreTrait
         } else {
             return  $this->Object->reference . "-" . $this->AttributeId;
         }
-    }    
+    }
     
     /**
      *  @abstract     Write Given Fields
