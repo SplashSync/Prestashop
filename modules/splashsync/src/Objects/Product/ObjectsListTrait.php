@@ -140,6 +140,11 @@ trait ObjectsListTrait
         $DataBuffer["created"]              =   $Product["created"];
         $DataBuffer["modified"]             =   $Product["modified"];
         $DataBuffer["fullname"]             =   Product::getProductName($Product["id"], $Product["id_attribute"]);
+        $DataBuffer["md5"]                  =   self::getMd5ChecksumFromValues(
+            $Product["name"],
+            $Product["ref"],
+            $this->getProductAttributesArray($ProductClass, $Product["id_attribute"])
+        );
         //====================================================================//
         // Fill Simple Product Data to Buffer
         if (!$Product["id_attribute"]) {

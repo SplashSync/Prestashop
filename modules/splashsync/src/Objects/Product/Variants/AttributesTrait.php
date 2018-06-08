@@ -416,4 +416,28 @@ trait AttributesTrait
         }
         return false;
     }
+    
+    /**
+     * @abstract    Build Product Attribute Definition Array
+     * @param       Product     $Product          Product Object
+     * @param       int         $AttributeId      Product Combinaison Id
+     * @return      int|false
+     */
+    public function getProductAttributesArray($Product, $AttributeId)
+    {
+        $Result =   array();
+        
+        foreach ($Product->getAttributeCombinations($this->LangId) as $Attribute) {
+            //====================================================================//
+            // Filter on a Specific Product Attribute
+            if ($Attribute["id_product_attribute"] != $AttributeId) {
+                continue;
+            }
+            //====================================================================//
+            // Add Attribute Value to Definition Array
+            $Result[$Attribute["group_name"]]   =   $Attribute["attribute_name"];
+        }
+        return $Result;
+    }
+    
 }

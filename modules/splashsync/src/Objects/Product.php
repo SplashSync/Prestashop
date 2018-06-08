@@ -63,6 +63,7 @@ class Product extends AbstractObject
     use \Splash\Local\Objects\Product\MetaTrait;
     use \Splash\Local\Objects\Product\AttributeTrait;
     use \Splash\Local\Objects\Product\VariantsTrait;
+    use \Splash\Local\Objects\Product\ChecksumTrait;
     
     /**
      * @var SplashSync
