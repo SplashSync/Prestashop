@@ -34,7 +34,7 @@ class L02VariantsAttributesTest extends ObjectsCase
     
     public function testFeatureIsActive()
     {
-        $this->assertTrue((bool) Combination::isFeatureActive(), "Combination feature is Not Active");
+        $this->assertNotEmpty(Combination::isFeatureActive(), "Combination feature is Not Active");
     }
     
     public function testIdentifyAttributeGroup()

@@ -122,7 +122,7 @@ trait ChecksumTrait
             array("title" => $Title, "sku" => $Sku),
             $Attributes
         );
-        return self::Md5()->fromArray($Md5Array);
+        return self::md5()->fromArray($Md5Array);
     }
     
     /**
@@ -138,6 +138,6 @@ trait ChecksumTrait
             array("title" => $Title, "sku" => $Sku),
             $Attributes
         );
-        return self::Md5()->debugFromArray($Md5Array);
+        return self::md5()->debugFromArray($Md5Array);
     }
 }

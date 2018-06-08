@@ -40,7 +40,7 @@ class L03VariantsCRUDTest extends O06SetTest
     
     public function testFeatureIsActive()
     {
-        $this->assertTrue(Combination::isFeatureActive(), "Combination feature is Not Active");
+        $this->assertNotEmpty(Combination::isFeatureActive(), "Combination feature is Not Active");
     }
     
     /**
