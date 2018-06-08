@@ -14,5 +14,5 @@ parameters:
             - '#Access to an undefined property ObjectModel::[a-zA-Z0-9$\\_]#'
             - '#Access to an undefined property Context::[a-zA-Z0-9$\\_]#'
             - "#Casting to float something that's already float#"
-            - "#Property AttributeGroupCore::[a-zA-Z0-9\\_\#\$]+ (string) does not accept array#"
+            - "#Property AttributeGroupCore::\\$name \\(string\\) does not accept array#"
 
