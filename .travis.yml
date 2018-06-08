@@ -68,7 +68,7 @@ script:
 #    # Run PhpUnit Core Test Sequence
     - phpunit -c phpunit.xml modules/splashsync/vendor/splash/phpcore/Tests/Core/
 #    # Run PhpUnit Main Test Sequence
-    - phpunit -c phpunit.xml 
+    - phpunit -c phpunit.xml --testdox
         
 notifications:
   email:         
