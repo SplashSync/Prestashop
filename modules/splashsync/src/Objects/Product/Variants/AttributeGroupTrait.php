@@ -52,7 +52,7 @@ trait AttributeGroupTrait
             //====================================================================//
             // Search for this Attribute Group Code
             foreach ($Groups as $Group) {
-                if ( strtolower($Group["name"]) == strtolower($Code)) {
+                if (strtolower($Group["name"]) == strtolower($Code)) {
                     return $Group["id_attribute_group"];
                 }
             }

@@ -15,7 +15,6 @@ parameters:
             triggered_by:   [php]
             ignore_patterns:
                 - phpstan.php
-#                - defines.inc.php
                 - modules/splashsync/splashsync.php
         git_blacklist:
             keywords:
@@ -31,9 +30,7 @@ parameters:
         xmllint: ~
         yamllint: ~
         phpmd:
-            ruleset:        ["./build/phpmd.xml"]
-#            exclude:
-#                - splashsync.php            
+            ruleset:        ["./build/phpmd.xml"]          
         securitychecker: ~
         phpcpd:
             exclude:        

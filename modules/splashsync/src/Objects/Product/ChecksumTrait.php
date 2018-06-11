@@ -42,7 +42,7 @@ trait ChecksumTrait
                 ->Description("Unik Md5 Object Checksum")
                 ->Group(Translate::getAdminTranslation("Meta", "AdminThemes"))
                 ->isListed()
-                ->MicroData("http://schema.org/Product", "md5")
+                ->MicroData("http://schema.org/Thing", "identifier")
                 ->isReadOnly();
         
         //====================================================================//
