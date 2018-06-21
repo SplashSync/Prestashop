@@ -383,6 +383,13 @@ trait AttributesTrait
         // Load Product Attribute Group
         $AttributeGroupId   =   $this->getAttributeGroupByCode($Data["code"]);
         if ($AttributeGroupId) {
+            //====================================================================//
+            // DEBUG MODE => Update Group Names
+            if (defined("SPLASH_DEBUG") && SPLASH_DEBUG) {
+                $AttributeGroup                 =   new AttributeGroup($AttributeGroupId);
+                $this->setMultilang($AttributeGroup, "public_name", $Data["public_name"]);
+                $AttributeGroup->save();
+            } 
             return $AttributeGroupId;
         }
         //====================================================================//

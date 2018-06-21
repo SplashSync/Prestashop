@@ -23,6 +23,7 @@ use Language;
 use Translate;
 use Validate;
 use Tools;
+use Db;
 
 /**
  * @abstract    Access to Product Descriptions Fields
@@ -360,6 +361,13 @@ trait DescTrait
             //====================================================================//
             // Product Specific - Read Full Product Name with Attribute Description
             $Data[$LanguageCode] = \Product::getProductName((int)$Object->id, $this->AttributeId, $LanguageId);
+            
+            //====================================================================//
+            // Catch Potential Prestashop SQL Errors
+            if (Db::getInstance()->getNumberError()) {
+                Splash::Log()->Err("ErrLocalTpl",__CLASS__,__FUNCTION__," Error : " . Db::getInstance()->getMsgError());
+                $Data[$LanguageCode] = \Product::getProductName((int)$Object->id, null, $LanguageId) . " (" . $this->AttributeId . ")" ;           
+            }             
         }
         return $Data;
     }

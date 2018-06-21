@@ -75,12 +75,12 @@ trait ImagesTrait
                 ->MicroData("http://schema.org/Product", "image");
         
         //====================================================================//
-        // Product Images => Is Cover
+        // Product Images => Position
         $this->fieldsFactory()->create(SPL_T_INT)
                 ->Identifier("position")
                 ->InList("images")
                 ->Name(Translate::getAdminTranslation("Position", "AdminProducts"))
-                ->MicroData("http://schema.org/Product", "position")
+                ->MicroData("http://schema.org/Product", "positionImage")
                 ->Group($GroupName3)
                 ->isNotTested();
         
@@ -93,6 +93,16 @@ trait ImagesTrait
                 ->MicroData("http://schema.org/Product", "isCover")
                 ->Group($GroupName3)
                 ->isNotTested();
+        
+        //====================================================================//
+        // Product Images => Is Visible Image
+        $this->fieldsFactory()->create(SPL_T_BOOL)
+                ->Identifier("visible")
+                ->InList("images")
+                ->Name(Translate::getAdminTranslation("Visible", "AdminProducts"))
+                ->MicroData("http://schema.org/Product", "isVisibleImage")
+                ->Group($GroupName3)
+                ->isNotTested();        
     }
 
     /**
