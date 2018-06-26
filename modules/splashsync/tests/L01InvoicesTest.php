@@ -32,23 +32,23 @@ class L01InvoicesTest extends ObjectsCase
     {
         $this->assertTrue(true);
 
-//        //====================================================================//
-//        //   Create Fake Order Data
-//        $this->Fields   =   $this->fakeFieldsList("Order", ["product_id@lines"], true);
-//        $FakeData       =   $this->fakeObjectData($this->Fields);
-//
-//        //====================================================================//
-//        //   Execute Action Directly on Module
-//        $ObjectId = Splash::object("Order")->set(null, $FakeData);
-//
-//        //====================================================================//
-//        //   Load Order Object
-//        $Order  =   Splash::object("Order")->load($ObjectId);
-//        $this->assertNotEmpty($Order);
-//
-//        //====================================================================//
-//        //   Set Order State to Delivered
-//        $Order->setCurrentState(5);
-//        $Order->update();
+        //====================================================================//
+        //   Create Fake Order Data
+        $this->Fields   =   $this->fakeFieldsList("Order", ["product_id@lines"], true);
+        $FakeData       =   $this->fakeObjectData($this->Fields);
+
+        //====================================================================//
+        //   Execute Action Directly on Module
+        $ObjectId = Splash::object("Order")->set(null, $FakeData);
+
+        //====================================================================//
+        //   Load Order Object
+        $Order  =   Splash::object("Order")->load($ObjectId);
+        $this->assertNotEmpty($Order);
+
+        //====================================================================//
+        //   Set Order State to Delivered
+        $Order->setCurrentState(5);
+        $Order->update();
     }
 }
