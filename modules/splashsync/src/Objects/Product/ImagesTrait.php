@@ -250,7 +250,7 @@ trait ImagesTrait
                 "id"        => $ImageId,
                 "image"     => $Image,
                 "position"  => $ObjectImage->position,
-                "cover"     => (bool) $ObjectImage->cover,
+                "cover"     => $ObjectImage->cover,
                 "visible"   => $this->isVisibleImage($ImageId),
             ),
             ArrayObject::ARRAY_AS_PROPS

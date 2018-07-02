@@ -365,7 +365,7 @@ trait DescTrait
             //====================================================================//
             // Catch Potential Prestashop SQL Errors
             if (Db::getInstance()->getNumberError()) {
-                Splash::Log()->Err(
+                Splash::log()->err(
                     "ErrLocalTpl",
                     __CLASS__,
                     __FUNCTION__,
