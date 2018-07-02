@@ -389,7 +389,7 @@ trait AttributesTrait
                 $AttributeGroup                 =   new AttributeGroup($AttributeGroupId);
                 $this->setMultilang($AttributeGroup, "public_name", $Data["public_name"]);
                 $AttributeGroup->save();
-            } 
+            }
             return $AttributeGroupId;
         }
         //====================================================================//

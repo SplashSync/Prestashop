@@ -365,9 +365,18 @@ trait DescTrait
             //====================================================================//
             // Catch Potential Prestashop SQL Errors
             if (Db::getInstance()->getNumberError()) {
-                Splash::Log()->Err("ErrLocalTpl",__CLASS__,__FUNCTION__," Error : " . Db::getInstance()->getMsgError());
-                $Data[$LanguageCode] = \Product::getProductName((int)$Object->id, null, $LanguageId) . " (" . $this->AttributeId . ")" ;           
-            }             
+                Splash::Log()->Err(
+                    "ErrLocalTpl",
+                    __CLASS__,
+                    __FUNCTION__,
+                    " Error : " . Db::getInstance()->getMsgError()
+                );
+                $Data[$LanguageCode] = \Product::getProductName(
+                    (int)$Object->id,
+                    null,
+                    $LanguageId
+                ) . " (" . $this->AttributeId . ")" ;
+            }
         }
         return $Data;
     }

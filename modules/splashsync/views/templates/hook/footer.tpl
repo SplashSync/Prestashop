@@ -40,7 +40,7 @@
         $.ajax({
             url: '{$url|escape:'htmlall':'UTF-8'}modules/splashsync/ajax.php',
             type: 'get',
-            data: 'ClearNotifications=true&token={$smarty.get.token|escape:'htmlall':'UTF-8'}',
+            data: 'ClearNotifications=true&token={$token|escape:'htmlall':'UTF-8'}',
             success: function(data) {
                 console.log('[Splash] Notifications Cleared');
             }

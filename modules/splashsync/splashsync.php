@@ -785,7 +785,8 @@ class SplashSync extends Module
     {
         //====================================================================//
         // Read Cookie String
-        $Notifications  =   Context::getContext()->cookie->__get("spl_notify");
+        $Cookie         =   Context::getContext()->cookie;
+        $Notifications  =   $Cookie->__get("spl_notify");
 
         //====================================================================//
         // Assign Smarty Variables
@@ -796,6 +797,13 @@ class SplashSync extends Module
                 . "://" . Configuration::get('PS_SHOP_DOMAIN')
                 . __PS_BASE_URI__
         );
+        
+        //====================================================================//
+        //  Generate Ajax Token
+        $Token  = Tools::getAdminToken(
+            'AdminModules'.Tab::getIdFromClassName('AdminModules').(int)$Cookie->__get("id_employee")
+        );        
+        $this->context->smarty->assign('token', $Token);
 
         //====================================================================//
         // Render Footer

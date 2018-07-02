@@ -131,7 +131,8 @@ trait PricesTrait
             case 'price-base':
                 //====================================================================//
                 // Read Price
-                $PriceHT    = (double) Tools::convertPrice($this->Object->price, $this->Currency);
+                $PriceHT    = (double) Tools::convertPrice($this->Object->base_price, $this->Currency);
+//                $PriceHT    = (double) Tools::convertPrice($this->Object->price, $this->Currency);
                 $Tax        = (double) $this->Object->getTaxesRate();
                 //====================================================================//
                 // Build Price Array
@@ -204,13 +205,12 @@ trait PricesTrait
                 // Compare Prices
                 if (!self::prices()->Compare($this->Out["price-base"], $Data)) {
                     $this->Object->price        = $Data["ht"];
-                    $this->Object->price_base   = $Data["ht"];
+                    $this->Object->base_price   = $Data["ht"];
                     $this->needUpdate();
                     //====================================================================//
                     // Clear Cache
                     \Product::flushPriceCache();
                 }
-                
                 break;
                 
             case 'price-wholesale':
