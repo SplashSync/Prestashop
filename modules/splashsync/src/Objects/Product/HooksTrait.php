@@ -74,7 +74,7 @@ trait HooksTrait
         // Ensure Input is Product Class
         if (!is_a($product, PsProduct::class)) {
             $product = new PsProduct($product["id_product"]);
-        }        
+        }
         //====================================================================//
         // Read Product Combinations
         $AttrList = $product->getAttributesResume(Context::getContext()->language->id);
@@ -178,7 +178,7 @@ trait HooksTrait
     {
         //====================================================================//
         // Log
-        $this->debugHook(__FUNCTION__, 'Product Stock Updated on Prestashop');        
+        $this->debugHook(__FUNCTION__, 'Product Stock Updated on Prestashop');
         //====================================================================//
         // On Product Admin Page stock Update
         if (!isset($params["cart"])) {
