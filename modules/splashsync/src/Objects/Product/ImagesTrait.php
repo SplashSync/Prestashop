@@ -279,7 +279,7 @@ trait ImagesTrait
         //====================================================================//
         // Images List is Empty
         if (!count($this->VariantImages)) {
-            return false;
+            return true;
         }
         //====================================================================//
         // Search fro this Image in Variant Images

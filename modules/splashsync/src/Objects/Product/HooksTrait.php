@@ -23,6 +23,7 @@ namespace Splash\Local\Objects\Product;
 
 use Splash\Client\Splash;
 use Context;
+use Product as PsProduct;
 
 use Splash\Local\Objects\Product;
 
@@ -69,6 +70,11 @@ trait HooksTrait
      */
     private function getActionProductIds($product)
     {
+        //====================================================================//
+        // Ensure Input is Product Class
+        if (!is_a($product, PsProduct::class)) {
+            $product = new PsProduct($product["id_product"]);
+        }        
         //====================================================================//
         // Read Product Combinations
         $AttrList = $product->getAttributesResume(Context::getContext()->language->id);
@@ -171,20 +177,16 @@ trait HooksTrait
     public function hookactionUpdateQuantity($params)
     {
         //====================================================================//
+        // Log
+        $this->debugHook(__FUNCTION__, 'Product Stock Updated on Prestashop');        
+        //====================================================================//
         // On Product Admin Page stock Update
         if (!isset($params["cart"])) {
-            if (isset($params["id_product_attribute"]) && !empty($params["id_product_attribute"])) {
-                //====================================================================//
-                // Generate Unik Product Id
-                $UnikId     =   (int) Product::getUnikIdStatic($params["id_product"], $params["id_product_attribute"]);
-            } else {
-                $UnikId     =   (int) $params["id_product"];
-            }
             //====================================================================//
             // Commit Update For Product
             $this->doCommit(
                 "Product",
-                $UnikId,
+                $this->getActionProductIds($params),
                 SPL_A_UPDATE,
                 $this->l('Product Stock Updated on Prestashop')
             );
@@ -199,12 +201,8 @@ trait HooksTrait
         //====================================================================//
         // Walk on Products
         foreach ($Products as $Product) {
-            if (isset($Product["id_product_attribute"]) && !empty($Product["id_product_attribute"])) {
-                //====================================================================//
-                // Generate Unik Product Id
-                $UnikId[] = (int) Product::getUnikIdStatic($Product["id_product"], $Product["id_product_attribute"]);
-            } else {
-                $UnikId[] = (int) $Product["id_product"];
+            foreach ($this->getActionProductIds($Product) as $ProductId) {
+                array_push($UnikId, $ProductId);
             }
         }
         //====================================================================//
