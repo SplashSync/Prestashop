@@ -25,6 +25,7 @@
     },
     
     "require-dev": {
+        "symfony/symfony":                  "~3.4",
         "phpunit/phpunit":                  ">5.4",
         "composer/composer":                "^1.5",
         "j13k/yaml-lint":                   "^1.1",

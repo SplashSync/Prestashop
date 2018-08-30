@@ -297,6 +297,10 @@ class Local
         $Response->servertype       =   "Prestashop " . _PS_VERSION_;
         $Response->serverurl        =   Configuration::get('PS_SHOP_DOMAIN') . __PS_BASE_URI__;
         
+        //====================================================================//
+        // Current Module Version
+        $Response->moduleversion    =   Splash::local()->getLocalModule()->version;        
+        
         return $Response;
     }
     
