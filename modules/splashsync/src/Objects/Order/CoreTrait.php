@@ -13,9 +13,8 @@
  *  @copyright 2015-2018 Splash Sync
  *  @license   MIT
  */
-namespace Splash\Local\Objects\Order;
 
-//use Splash\Core\SplashCore      as Splash;
+namespace Splash\Local\Objects\Order;
 
 //====================================================================//
 // Prestashop Static Classes

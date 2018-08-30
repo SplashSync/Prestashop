@@ -14,12 +14,6 @@
  *  @license   MIT
  */
 
-
-/**
- * @abstract
- * @author      B. Paquier <contact@splashsync.com>
- */
-
 namespace Splash\Local\Objects\Order;
 
 use Splash\Core\SplashCore      as Splash;
