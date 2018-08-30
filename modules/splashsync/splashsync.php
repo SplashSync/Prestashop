@@ -36,6 +36,11 @@ require_once __DIR__ . "/src/Objects/Order/HooksTrait.php";
 class SplashSync extends Module
 {
     
+    //====================================================================//
+    // Module Version Informations
+    const VERSION_FLOAT     =   1.2;
+    const VERSION_STR       =   '1.2.0';
+    
     /** @var bool */
     public $bootstrap = true;
 
@@ -70,7 +75,7 @@ class SplashSync extends Module
         // Init Module Main Information Fields
         $this->name     = 'splashsync';
         $this->tab      = 'administration';
-        $this->version  = '1.2.0';
+        $this->version  = self::VERSION_FLOAT;
         $this->author   = 'SplashSync';
         $this->need_instance = 0;
         $this->ps_versions_compliancy = array('min' => '1.5', 'max' => '1.7');
@@ -91,7 +96,7 @@ class SplashSync extends Module
         $this->displayName = $this->l('Splash Sync Connector');
         // Module Short Description
         $this->description = $this->l(
-            'Splash Sync Open Synchronisation Module. '
+            'Splash Sync Open Synchronisation Module for Prestashop. '
                 . 'Connect your Shop with SplashSync Server to synchronize Customers, '
                 . 'Products, Orders and more...'
         );
@@ -863,5 +868,14 @@ class SplashSync extends Module
             return true;
         }
         return true;
+    }
+    
+    /**
+     * @abstract    get Current Module Full Version String
+     * @return      string
+     */
+    public function getFullVersion()
+    {    
+        return self::VERSION_STR;
     }
 }

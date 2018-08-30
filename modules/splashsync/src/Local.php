@@ -299,7 +299,7 @@ class Local
         
         //====================================================================//
         // Current Module Version
-        $Response->moduleversion    =   Splash::local()->getLocalModule()->version;        
+        $Response->moduleversion    =   Splash::local()->getLocalModule()->version;
         
         return $Response;
     }
