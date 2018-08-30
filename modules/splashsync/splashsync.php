@@ -731,7 +731,7 @@ class SplashSync extends Module
             return true;
         } elseif (is_array($_Id)) {
             Splash\Client\Splash::log()
-                    ->deb("Splash Commit => " . $_Type . " Action = " . $_Action . " Ids (x" . implode(", ",$_Id) . ") " . $_Comment);
+                    ->deb("Splash Commit => " . $_Type . " Action = " . $_Action . " Ids (x" . implode(", ", $_Id) . ") " . $_Comment);
         } else {
             return Splash\Client\Splash::log()
                     ->err("Splash Hook Error : Wrong Id List Given => " . print_r($_Id, 1));
@@ -807,7 +807,7 @@ class SplashSync extends Module
         //  Generate Ajax Token
         $Token  = Tools::getAdminToken(
             'AdminModules'.Tab::getIdFromClassName('AdminModules').(int)$Cookie->__get("id_employee")
-        );        
+        );
         $this->context->smarty->assign('token', $Token);
 
         //====================================================================//
