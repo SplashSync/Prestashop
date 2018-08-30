@@ -10,10 +10,9 @@
  * file that was distributed with this source code.
  *
  *  @author    Splash Sync <www.splashsync.com>
- *  @copyright 2015-2017 Splash Sync
- *  @license   GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007
- *
- **/
+ *  @copyright 2015-2018 Splash Sync
+ *  @license   MIT
+ */
 
 /**
  * @abstract    Splash Sync Prestahop Module - Noty Notifications
@@ -35,11 +34,6 @@ require_once __DIR__ . "/src/Objects/Order/HooksTrait.php";
  */
 class SplashSync extends Module
 {
-    
-    //====================================================================//
-    // Module Version Informations
-    const VERSION_STR       =   '1.2.0';
-    
     /** @var bool */
     public $bootstrap = true;
 
@@ -74,7 +68,7 @@ class SplashSync extends Module
         // Init Module Main Information Fields
         $this->name     = 'splashsync';
         $this->tab      = 'administration';
-        $this->version  = 1.2;
+        $this->version  = '1.2.0';
         $this->author   = 'SplashSync';
         $this->need_instance = 0;
         $this->ps_versions_compliancy = array('min' => '1.5', 'max' => '1.7');
