@@ -858,13 +858,5 @@ class SplashSync extends Module
         }
         return true;
     }
-    
-    /**
-     * @abstract    get Current Module Full Version String
-     * @return      string
-     */
-    public function getFullVersion()
-    {
-        return self::VERSION_STR;
-    }
+
 }
