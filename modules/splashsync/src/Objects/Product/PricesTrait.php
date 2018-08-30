@@ -1,6 +1,6 @@
 <?php
 
-/*
+/**
  * This file is part of SplashSync Project.
  *
  * Copyright (C) Splash Sync <www.splashsync.com>
