@@ -77,6 +77,10 @@ trait CRUDTrait
             return false;
         }
         
+        //====================================================================//
+        // Flush Images Infos Cache
+        $this->flushImageCache();
+        
         return $this->Object;
     }
 

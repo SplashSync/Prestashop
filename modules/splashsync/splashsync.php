@@ -721,12 +721,12 @@ class SplashSync extends Module
         // Safety Checks
         if (is_numeric($_Id)) {
             Splash\Client\Splash::log()
-                    ->deb("Splash Commit => " . $_Type . " Action = " . $_Action . " Id = " . $_Id);
+                    ->deb("Splash Commit => " . $_Type . " Action = " . $_Action . " Id = " . $_Id, " : " . $_Comment);
         } elseif (is_array($_Id) && empty($_Id)) {
             return true;
         } elseif (is_array($_Id)) {
             Splash\Client\Splash::log()
-                    ->deb("Splash Commit => " . $_Type . " Action = " . $_Action . " Ids (x" . count($_Id) . ")");
+                    ->deb("Splash Commit => " . $_Type . " Action = " . $_Action . " Ids (x" . implode(", ",$_Id) . ") " . $_Comment);
         } else {
             return Splash\Client\Splash::log()
                     ->err("Splash Hook Error : Wrong Id List Given => " . print_r($_Id, 1));

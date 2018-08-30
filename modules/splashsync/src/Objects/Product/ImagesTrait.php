@@ -29,7 +29,6 @@ use Image;
 use ImageType;
 use ImageManager;
 use Tools;
-use Db;
 
 /**
  * @abstract    Access to Product Images Fields
@@ -155,8 +154,6 @@ trait ImagesTrait
             self::lists()->Insert($this->Out, "images", $FieldName, $Index, $Value);
         }
         unset($this->In[$Key]);
-        
-//Splash::log()->www("Get Images", $this->getImagesInfoArray());
     }
     
     /**
@@ -177,8 +174,6 @@ trait ImagesTrait
             //====================================================================//
             case 'images':
                 $this->setImgArray($Data);
-//Splash::log()->www("Received", $Data);
-//Splash::log()->www("Set Images", $this->getImagesInfoArray());
                 break;
 
             default:
@@ -279,7 +274,7 @@ trait ImagesTrait
         //====================================================================//
         // Images List is Empty
         if (!count($this->VariantImages)) {
-            return false;
+            return true;
         }
         //====================================================================//
         // Search fro this Image in Variant Images
@@ -363,8 +358,7 @@ trait ImagesTrait
 
         //====================================================================//
         // Flush Images Infos Cache
-        $this->ImagesCache      = null;
-        $this->VariantImages    = null;
+        $this->flushImageCache();
         
         return true;
     }
@@ -607,104 +601,7 @@ trait ImagesTrait
             $ObjectImage->delete();
             $this->needUpdate();
         }
-        
-//        $this->cleanBaseProductImages($ObjectImagesList);
-//        $this->cleanVariantProductImages();
     }
-    
-//    /**
-//     * @abstract     Build Array of Product Attributes Used Images Ids
-//     * @return       array|false
-//     */
-//    private function getProductCombinationUsedImagesIds()
-//    {
-//        //====================================================================//
-//        // If Generic Product Mode => Skip
-//        if (!$this->AttributeId) {
-//            return false;
-//        }
-//        //====================================================================//
-//        // Read Product Combinations
-//        $AttrList = $this->Object->getAttributesResume($this->LangId);
-//        if (empty($AttrList)) {
-//            return array();
-//        }
-//        $Response   =   array();
-//        foreach ($AttrList as $AttrResume) {
-//            //====================================================================//
-//            // Load Object Images List for Combination
-//            $PsImages   =   Image::getImages(
-//                $this->LangId,
-//                $this->Object->id,
-//                $AttrResume["id_product_attribute"]
-//            );
-//
-//            //====================================================================//
-//            // Add Image Ids to Response
-//            foreach ($PsImages as $PsImage) {
-//                $Response[$PsImage["id_image"]] = $PsImage["id_image"];
-//            }
-//        }
-//        return $Response;
-//    }
-//
-//    /**
-//     * @abstract    CleanUp Base Product Images List
-//     * @param       array   $ObjectImagesList   Array Of Remaining Product Images
-//     * @return      void
-//     */
-//    private function cleanBaseProductImages($ObjectImagesList)
-//    {
-//        //====================================================================//
-//        // If Variant Product Mode => Skip
-//        if (empty($ObjectImagesList) || $this->AttributeId) {
-//            return;
-//        }
-//        //====================================================================//
-//        // If Current Image List Is Empty => Clear Remaining Local Images
-//        foreach ($ObjectImagesList as $ImageArray) {
-//            //====================================================================//
-//            // Fetch Images Object
-//            $ObjectImage = new Image($ImageArray["id_image"]);
-//            $ObjectImage->deleteImage(true);
-//            $ObjectImage->delete();
-//            $this->needUpdate();
-//        }
-//    }
-//
-//    /**
-//     * @abstract    CleanUp Variant Product Images List
-//     * @return      void
-//     */
-//    private function cleanVariantProductImages()
-//    {
-//        //====================================================================//
-//        // If Base Product Mode => Skip
-//        if (!$this->AttributeId) {
-//            return;
-//        }
-//        //====================================================================//
-//        // Load Object Images List fort Whole Product
-//        $PsImages   =   Image::getImages($this->LangId, $this->Object->id);
-//        //====================================================================//
-//        // Load List of Used Images List fort Whole Product
-//        $UsedImages =   $this->getProductCombinationUsedImagesIds();
-//        //====================================================================//
-//        // If Product Image not Used by Combinations => Clear Local Images
-//        foreach ($PsImages as $PsImage) {
-//            //====================================================================//
-//            // Check if Used
-//            if (in_array($PsImage["id_image"], $UsedImages)) {
-//                continue;
-//            }
-//            //====================================================================//
-//            // Fetch Images Object
-//            $Image = new Image($PsImage["id_image"]);
-//            $Image->deleteImage(true);
-//            $Image->delete();
-//            $this->needUpdate();
-//        }
-//    }
     
     /**
      * @abstract    Update Product Image Thumbnail
@@ -732,5 +629,15 @@ trait ImagesTrait
                 }
             }
         }
+    }
+    
+    /**
+     * @abstract    Flush Product Images Reading Cache
+     * @retrurn     void
+     */
+    private function flushImageCache()
+    {
+        $this->ImagesCache      = null;
+        $this->VariantImages    = null;
     }
 }
