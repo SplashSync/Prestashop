@@ -10,10 +10,9 @@
  * file that was distributed with this source code.
  *
  *  @author    Splash Sync <www.splashsync.com>
- *  @copyright 2015-2017 Splash Sync
- *  @license   GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007
- *
- **/
+ *  @copyright 2015-2018 Splash Sync
+ *  @license   MIT
+ */
 
 namespace Splash\Local;
 
@@ -36,7 +35,6 @@ use Splash\Local\Traits\SplashIdTrait;
 
 /**
  * @abstract    Splash Local Core Class - Head of Module's Local Integration
- * @author      B. Paquier <contact@splashsync.com>
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */

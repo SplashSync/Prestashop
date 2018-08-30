@@ -10,10 +10,9 @@
  * file that was distributed with this source code.
  *
  *  @author    Splash Sync <www.splashsync.com>
- *  @copyright 2015-2017 Splash Sync
- *  @license   GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007
- *
- **/
+ *  @copyright 2015-2018 Splash Sync
+ *  @license   MIT
+ */
 
 namespace Splash\Tests;
 
@@ -27,8 +26,6 @@ use Splash\Tests\WsObjects\O06SetTest;
 
 /**
  * @abstract    Local Objects Test Suite - Specific Verifications for Products Variants.
- *
- * @author SplashSync <contact@splashsync.com>
  */
 class L03VariantsCRUDTest extends O06SetTest
 {

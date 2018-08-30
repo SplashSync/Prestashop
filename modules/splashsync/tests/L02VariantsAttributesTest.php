@@ -10,10 +10,9 @@
  * file that was distributed with this source code.
  *
  *  @author    Splash Sync <www.splashsync.com>
- *  @copyright 2015-2017 Splash Sync
- *  @license   GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007
- *
- **/
+ *  @copyright 2015-2018 Splash Sync
+ *  @license   MIT
+ */
 
 namespace Splash\Tests;
 
@@ -26,8 +25,6 @@ use AttributeGroup;
 
 /**
  * @abstract    Local Objects Test Suite - Specific Verifications for Products Variants Attributes.
- *
- * @author SplashSync <contact@splashsync.com>
  */
 class L02VariantsAttributesTest extends ObjectsCase
 {

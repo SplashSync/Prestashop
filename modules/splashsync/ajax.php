@@ -10,17 +10,16 @@
  * file that was distributed with this source code.
  *
  *  @author    Splash Sync <www.splashsync.com>
- *  @copyright 2015-2017 Splash Sync
- *  @license   GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007
- *
- **/
-
-/**
- * @abstract    Splash Sync Prestahop Module - Noty Notifications
+ *  @copyright 2015-2018 Splash Sync
+ *  @license   MIT
  */
 
 include_once('../../config/config.inc.php');
 include_once('../../init.php');
+
+/**
+ * @abstract    Splash Sync Prestahop Module - Noty Notifications
+ */
 
 //====================================================================//
 //  Init Cookie

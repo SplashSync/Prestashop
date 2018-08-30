@@ -10,10 +10,9 @@
  * file that was distributed with this source code.
  *
  *  @author    Splash Sync <www.splashsync.com>
- *  @copyright 2015-2017 Splash Sync
- *  @license   GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007
- *
- **/
+ *  @copyright 2015-2018 Splash Sync
+ *  @license   MIT
+ */
 
 namespace   Splash\Local\Objects;
 
@@ -33,7 +32,6 @@ use SplashSync;
 
 /**
  * @abstract    Splash Local Object Class - Customer Orders Local Integration
- * @author      B. Paquier <contact@splashsync.com>
  * @SuppressWarnings(PHPMD.CamelCasePropertyName)
  */
 class Order extends AbstractObject
