@@ -15,5 +15,5 @@ parameters:
             - '#Access to an undefined property Context::[a-zA-Z0-9$\\_]#'
             - "#Casting to float something that's already float#"
             - "#Property AttributeGroupCore::\\$name \\(string\\) does not accept array#"
-            - "#Property ModuleCore::$version (float) does not accept string.#"
+            - "#Property ModuleCore::\\$version \\(float\\) does not accept string.#"
 
