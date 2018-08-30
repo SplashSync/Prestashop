@@ -95,11 +95,7 @@ class SplashSync extends Module
         // Display Name
         $this->displayName = $this->l('Splash Sync Connector');
         // Module Short Description
-        $this->description = $this->l(
-            'Splash Sync Open Synchronisation Module for Prestashop. '
-                . 'Connect your Shop with SplashSync Server to synchronize Customers, '
-                . 'Products, Orders and more...'
-        );
+        $this->description = 'SplashSync Universal Synchronization Module for Prestashop.';
         // Unistall Message
         $this->confirmUninstall = $this->l('Are you sure you want to uninstall?');
 
