@@ -44,7 +44,7 @@ class L02VariantsAttributesTest extends ObjectsCase
         $this->assertContains("Size", $AttributeGroup->name);
         //====================================================================//
         //   Load UnKnown Attribute Group
-        $UnknownGroupId     =   Splash::object("Product")->getAttributeGroupByCode(base64_encode(uniqid()));
+        $UnknownGroupId     =   Splash::object("Product")->getAttributeGroupByCode(uniqid());
         $this->assertFalse($UnknownGroupId);
     }
     
