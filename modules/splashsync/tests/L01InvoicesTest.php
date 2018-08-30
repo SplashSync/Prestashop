@@ -31,7 +31,7 @@ class L01InvoicesTest extends ObjectsCase
 
         //====================================================================//
         //   Create Fake Order Data
-        $this->Fields   =   $this->fakeFieldsList("Order", ["product_id@lines"], true);
+        $this->Fields   =   $this->fakeFieldsList("Order", array("product_id@lines"), true);
         $FakeData       =   $this->fakeObjectData($this->Fields);
 
         //====================================================================//

@@ -44,7 +44,7 @@ trait CoreTrait
                 ->Identifier("type")
                 ->Name('Product Type')
                 ->Group(Translate::getAdminTranslation("Meta", "AdminThemes"))
-                ->addChoices(["simple" => "Simple", "variant" => "Variant"])
+                ->addChoices(array("simple" => "Simple", "variant" => "Variant"))
                 ->MicroData("http://schema.org/Product", "type")
                 ->isReadOnly();
         

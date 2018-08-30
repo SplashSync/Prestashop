@@ -21,10 +21,10 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-require_once __DIR__ . "/src/Objects/ThirdParty/HooksTrait.php";
-require_once __DIR__ . "/src/Objects/Address/HooksTrait.php";
-require_once __DIR__ . "/src/Objects/Product/HooksTrait.php";
-require_once __DIR__ . "/src/Objects/Order/HooksTrait.php";
+require_once "src/Objects/ThirdParty/HooksTrait.php";
+require_once "src/Objects/Address/HooksTrait.php";
+require_once "src/Objects/Product/HooksTrait.php";
+require_once "src/Objects/Order/HooksTrait.php";
 
 /**
  * @abstract    Splash Sync Prestashop Module Main Class
@@ -529,7 +529,7 @@ class SplashSync extends Module
             
             //====================================================================//
             // Verify WS Method
-            if (empty($WsMethod) || !Validate::isString($WsMethod) || !in_array($WsMethod, [ "NuSOAP", "SOAP"])) {
+            if (empty($WsMethod) || !Validate::isString($WsMethod) || !in_array($WsMethod, array("NuSOAP", "SOAP"))) {
                 $output .= $this->displayError($this->l('Invalid WebService Protocol'));
             }
 
@@ -864,7 +864,7 @@ class SplashSync extends Module
      * @return      string
      */
     public function getFullVersion()
-    {    
+    {
         return self::VERSION_STR;
     }
 }

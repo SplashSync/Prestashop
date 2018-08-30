@@ -117,7 +117,7 @@ trait ChecksumTrait
      *      @param          array         $Attributes       Array of Product Attributes ($Code => $Value)
      *      @return         string        $Md5              Unik Checksum
      */
-    private static function getMd5ChecksumFromValues($Title, $Sku = null, $Attributes = [])
+    private static function getMd5ChecksumFromValues($Title, $Sku = null, $Attributes = array())
     {
         $Md5Array  = array_merge_recursive(
             array("title" => $Title, "sku" => $Sku),
@@ -133,7 +133,7 @@ trait ChecksumTrait
      *      @param          array         $Attributes       Array of Product Attributes ($Code => $Value)
      *      @return         string        $Md5              Unik Checksum
      */
-    private static function getMd5StringFromValues($Title, $Sku = null, $Attributes = [])
+    private static function getMd5StringFromValues($Title, $Sku = null, $Attributes = array())
     {
         $Md5Array  = array_merge_recursive(
             array("title" => $Title, "sku" => $Sku),

@@ -53,7 +53,7 @@ class L02VariantsAttributesTest extends ObjectsCase
         //====================================================================//
         //   Load Known Attribute Group
         $Code   =   "CustomVariant";
-        $Names  =   ["fr_FR" => "CustomVariantFr", "en_US" => "CustomVariantUs"];
+        $Names  =   array("fr_FR" => "CustomVariantFr", "en_US" => "CustomVariantUs");
 
         //====================================================================//
         //   Ensure Attribute Group is Deleted
@@ -83,10 +83,10 @@ class L02VariantsAttributesTest extends ObjectsCase
         //====================================================================//
         //   Create a New Attribute Values
         for ($i=0; $i<5; $i++) {
-            $Values     =   [
+            $Values     =   array(
                 "fr_FR" => "CustomValueFr" . $i,
                 "en_US" => "CustomValueUs" . $i
-                ];
+            );
             $Attribute = Splash::object("Product")
                     ->addAttributeValue($AttributeGroup->id, $Values);
             $this->assertNotEmpty($Attribute);
@@ -99,11 +99,11 @@ class L02VariantsAttributesTest extends ObjectsCase
             //   Verify Attributes Value Identification
             $this->assertEquals(
                 $Attribute->id,
-                Splash::object("Product")->getAttributeByCode($AttributeGroup->id, ["CustomValueFr" . $i])
+                Splash::object("Product")->getAttributeByCode($AttributeGroup->id, array("CustomValueFr" . $i))
             );
             $this->assertEquals(
                 $Attribute->id,
-                Splash::object("Product")->getAttributeByCode($AttributeGroup->id, ["CustomValueUs" . $i])
+                Splash::object("Product")->getAttributeByCode($AttributeGroup->id, array("CustomValueUs" . $i))
             );
         }
     }

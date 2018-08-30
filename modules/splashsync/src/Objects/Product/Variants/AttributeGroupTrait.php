@@ -18,6 +18,7 @@ namespace Splash\Local\Objects\Product\Variants;
 
 use Splash\Core\SplashCore      as Splash;
 
+use Tools;
 use Language;
 use AttributeGroup;
 
@@ -51,7 +52,7 @@ trait AttributeGroupTrait
             //====================================================================//
             // Search for this Attribute Group Code
             foreach ($Groups as $Group) {
-                if (strtolower($Group["name"]) == strtolower($Code)) {
+                if (Tools::strtolower($Group["name"]) == Tools::strtolower($Code)) {
                     return $Group["id_attribute_group"];
                 }
             }

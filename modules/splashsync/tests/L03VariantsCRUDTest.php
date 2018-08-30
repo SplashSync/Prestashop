@@ -76,7 +76,7 @@ class L03VariantsCRUDTest extends O06SetTest
 
         $Name2   =  $this->getVariantName();
         for ($i=0; $i<2; $i++) {
-            $Result[]   =   array_merge($Name2, $this->getVariantAttributes(['Size','CustomVariant']));
+            $Result[]   =   array_merge($Name2, $this->getVariantAttributes(array('Size','CustomVariant')));
         }
         
         return $Result;
@@ -206,7 +206,7 @@ class L03VariantsCRUDTest extends O06SetTest
         // Prepare Fake Object Data
         //====================================================================//
         
-        $this->Fields   =   $this->fakeFieldsList($ObjectType, [$Field->id], true);
+        $this->Fields   =   $this->fakeFieldsList($ObjectType, array($Field->id), true);
         $FakeData       =   $this->fakeObjectData($this->Fields);
 
         return array_merge($FakeData, $this->CurrentVariation);
