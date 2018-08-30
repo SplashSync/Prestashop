@@ -858,5 +858,4 @@ class SplashSync extends Module
         }
         return true;
     }
-
 }
