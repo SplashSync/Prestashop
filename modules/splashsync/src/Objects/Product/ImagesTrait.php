@@ -230,7 +230,7 @@ trait ImagesTrait
         //====================================================================//
         // Detect Image Name
         $ImageName   =   !empty($this->Object->link_rewrite)
-                ? array_shift(array_values($this->Object->link_rewrite))
+                ? array_values($this->Object->link_rewrite)[0]
                 : 'Image';
         //====================================================================//
         // Encode Image in Splash Format
