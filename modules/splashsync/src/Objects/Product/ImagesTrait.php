@@ -229,7 +229,9 @@ trait ImagesTrait
         $ObjectImage = new Image($ImageId, $this->LangId);
         //====================================================================//
         // Detect Image Name
-        $ImageName   =   !empty($this->Object->link_rewrite) ? array_shift($this->Object->link_rewrite) : 'Image';
+        $ImageName   =   !empty($this->Object->link_rewrite) 
+                ? array_shift(array_values($this->Object->link_rewrite)) 
+                : 'Image';
         //====================================================================//
         // Encode Image in Splash Format
         $Image = self::images()->Encode(
