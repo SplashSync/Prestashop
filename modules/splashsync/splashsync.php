@@ -51,6 +51,7 @@ class SplashSync extends Module
     use \Splash\Local\Objects\Product\HooksTrait;
 //    use \Splash\Local\Objects\Category\HooksTrait;
     use \Splash\Local\Objects\Order\HooksTrait;
+    use \Splash\Local\Traits\SplashIdTrait;
     
 //====================================================================//
 // *******************************************************************//
@@ -136,7 +137,7 @@ class SplashSync extends Module
 
         //====================================================================//
         // Create Splash Linking Table
-        \Splash\Client\Splash::local()->createSplashIdTable();
+        self::createSplashIdTable();
         
         //====================================================================//
         // Register Module Customers Hooks
@@ -835,7 +836,7 @@ class SplashSync extends Module
         //====================================================================//
         // Encode & Compare
         $NewRaw = json_encode(Splash\Client\Splash::log());
-        if (strcmp($RawNotifications, $NewRaw) != 0) {
+        if (strcmp($RawNotifications, (string) $NewRaw) != 0) {
             //====================================================================//
             // Save new Cookie String
             Context::getContext()->cookie->__set("spl_notify", $NewRaw);

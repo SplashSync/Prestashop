@@ -299,7 +299,7 @@ class Local implements LocalClassInterface
         
         //====================================================================//
         // Current Module Version
-        $Response->moduleversion    =   Splash::local()->getLocalModule()->version;
+        $Response->moduleversion    =   $this->getLocalModule()->version;
         
         return $Response;
     }
