@@ -17,6 +17,7 @@
 namespace Splash\Local\Objects\Product;
 
 use Splash\Core\SplashCore      as Splash;
+use Splash\Local\Services\LanguagesManager;
 
 //====================================================================//
 // Prestashop Static Classes
@@ -25,6 +26,7 @@ use Translate;
 use Validate;
 use Tools;
 use Db;
+use Product;
 
 /**
  * @abstract    Access to Product Descriptions Fields
@@ -225,7 +227,7 @@ trait DescTrait
         foreach ($Languages as $Lang) {
             //====================================================================//
             // Encode Language Code From Splash Format to Prestashop Format (fr_FR => fr-fr)
-            $LanguageCode   =   Splash::local()->langEncode($Lang["language_code"]);
+            $LanguageCode   =   LanguagesManager::langEncode($Lang["language_code"]);
             $LanguageId     =   $Lang["id_lang"];
 
             //====================================================================//
@@ -283,7 +285,7 @@ trait DescTrait
     {
         //====================================================================//
         // Check Language Is Valid
-        $LanguageCode = Splash::local()->langDecode($IsoCode);
+        $LanguageCode = LanguagesManager::langDecode($IsoCode);
         if (!Validate::isLanguageCode($LanguageCode)) {
             return;
         }
@@ -356,12 +358,12 @@ trait DescTrait
         foreach ($Languages as $Lang) {
             //====================================================================//
             // Encode Language Code From Splash Format to Prestashop Format (fr_FR => fr-fr)
-            $LanguageCode   =   Splash::local()->langEncode($Lang["language_code"]);
+            $LanguageCode   =   LanguagesManager::langEncode($Lang["language_code"]);
             $LanguageId     =   (int) $Lang["id_lang"];
             
             //====================================================================//
             // Product Specific - Read Full Product Name with Attribute Description
-            $Data[$LanguageCode] = \Product::getProductName((int)$Object->id, $this->AttributeId, $LanguageId);
+            $Data[$LanguageCode] = Product::getProductName((int)$Object->id, $this->AttributeId, $LanguageId);
             
             //====================================================================//
             // Catch Potential Prestashop SQL Errors
@@ -372,7 +374,7 @@ trait DescTrait
                     __FUNCTION__,
                     " Error : " . Db::getInstance()->getMsgError()
                 );
-                $Data[$LanguageCode] = \Product::getProductName(
+                $Data[$LanguageCode] = Product::getProductName(
                     (int)$Object->id,
                     null,
                     $LanguageId
@@ -404,7 +406,7 @@ trait DescTrait
         foreach ($Languages as $Lang) {
             //====================================================================//
             // Encode Language Code From Splash Format to Prestashop Format (fr_FR => fr-fr)
-            $LanguageCode   =   Splash::local()->langEncode($Lang["language_code"]);
+            $LanguageCode   =   LanguagesManager::langEncode($Lang["language_code"]);
             $LanguageId     =   (int) $Lang["id_lang"];
             
             //====================================================================//

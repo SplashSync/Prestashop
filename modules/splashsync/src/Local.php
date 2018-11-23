@@ -34,6 +34,7 @@ use TaxRule;
 use SplashSync;
 
 use Splash\Local\Traits\SplashIdTrait;
+use Splash\Local\Services\LanguagesManager;
 
 /**
  * @abstract    Splash Local Core Class - Head of Module's Local Integration
@@ -46,7 +47,7 @@ class Local implements LocalClassInterface
     /**
      * @var SplashSync
      */
-    private $SplashSyncModule = null;
+    private static $SplashSyncModule = null;
     
     use SplashIdTrait;
     
@@ -159,7 +160,7 @@ class Local implements LocalClassInterface
         if (SPLASH_SERVER_MODE) {
             //====================================================================//
             // Load Default Language
-            $this->loadDefaultLanguage();
+            LanguagesManager::loadDefaultLanguage();
             
             //====================================================================//
             // Load Default User
@@ -360,7 +361,7 @@ class Local implements LocalClassInterface
         // Server Actives Languages List
         $Parameters["Langs"] = array();
         foreach (Language::getLanguages() as $Language) {
-            $Parameters["Langs"][] =   self::langEncode($Language["language_code"]);
+            $Parameters["Langs"][] =   LanguagesManager::langEncode($Language["language_code"]);
         }
         
         return $Parameters;
@@ -414,67 +415,6 @@ class Local implements LocalClassInterface
         // Setup Remote User
         Context::getContext()->employee = $User;
         return Splash::log()->deb('Commons  - Employee Loaded from Splash Parameters => ' . $User->email);
-    }
-    
-//====================================================================//
-//  Prestashop Languages Management
-//====================================================================//
-
-    /**
-     *      @abstract       Initiate Local Language if Not Already Done
-     *
-     *      @return         bool
-     */
-    public function loadDefaultLanguage()
-    {
-//        $LangCode = Configuration::get('SPLASH_LANG_ID');
-        $LangCode = Splash::configuration()->DefaultLanguage;
-        
-        //====================================================================//
-        // Load Default Language from Local Module Configuration
-        //====================================================================//
-        if (!empty($LangCode) && Validate::isLanguageCode($LangCode)) {
-            Context::getContext()->language = Language::getLanguageByIETFCode($LangCode);
-        }
-        if (!empty(Context::getContext()->language->id)) {
-            return  Context::getContext()->language->id;
-        }
-        return  false;
-    }
-    
-    /**
-     *      @abstract       Translate Prestashop Languages Code to Splash Standard Format
-     *      @param          string      $PsCode     Language Code in Prestashop Format
-     *      @return         string      $Out        Language Code in Splash Format
-     */
-    public static function langEncode($PsCode)
-    {
-        //====================================================================//
-        // Split Language Code
-        $Tmp = explode("-", $PsCode);
-        if (count($Tmp) != 2) {
-            $Out = $PsCode;
-        } else {
-            $Out = $Tmp[0] . "_" . Tools::strtoupper($Tmp[1]);
-        }
-        return $Out;
-    }
-
-    /**
-     *      @abstract       Translate Prestashop Languages Code from Splash Standard Format
-     *      @param          string      $IsoCode         Language Code in Splash Format
-     *      @return         string      $Out        Language Code in Prestashop Format
-     */
-    public static function langDecode($IsoCode)
-    {
-        //====================================================================//
-        // Split Language Code
-        $Tmp = explode("_", $IsoCode);
-        if (count($Tmp) != 2) {
-            return $IsoCode;
-        } else {
-            return $Tmp[0] . "-" . Tools::strtolower($Tmp[1]);
-        }
     }
     
 //====================================================================//
@@ -544,11 +484,16 @@ class Local implements LocalClassInterface
     }
  
     /**
-     *      @abstract       Initiate Local SplashSync Module
-     *      @return         SplashSync
+     * @abstract       Initiate Local SplashSync Module
+     * @return         SplashSync
      */
-    public function getLocalModule()
+    public static function getLocalModule()
     {
+        //====================================================================//
+        // Load Local Splash Sync Module
+        if (!isset(static::$SplashSyncModule)) {
+            return static::$SplashSyncModule;
+        }        
         //====================================================================//
         // Safety Check
         if (!class_exists("SplashSync")) {
@@ -556,84 +501,11 @@ class Local implements LocalClassInterface
         }
         //====================================================================//
         // Create New Splash Module Instance
-        return new \SplashSync();
-    }
-    
-    /**
-    *   @abstract     Return Product Image Array from Prestashop Object Class
-    *   @param        float     $TaxRate            Product Tax Rate in Percent
-    *   @param        int       $CountryId          Country Id
-    *   @param        int                           Tax Rate Group Id
-    */
-    public function getTaxRateGroupId($TaxRate, $CountryId = null)
-    {
-        $LangId = Context::getContext()->language->id;
-        if (is_null($CountryId)) {
-            $CountryId = Configuration::get('PS_COUNTRY_DEFAULT');
-        }
+        static::$SplashSyncModule = new \SplashSync();
         
-        //====================================================================//
-        // Prepare SQL request for reading in Database
-        //====================================================================//
-        // Build query
-        $sql = new DbQuery();
-        //====================================================================//
-        // Build SELECT
-        $sql->select("t.`rate`");
-        $sql->select("g.`id_tax_rule`");
-        $sql->select("g.`id_country`");
-        $sql->select("cl.`name` as country_name");
-        $sql->select("g.`id_tax_rules_group` as id_group");
-        //====================================================================//
-        // Build FROM
-        $sql->from("tax_rule", "g");
-        //====================================================================//
-        // Build JOIN
-        $sql->leftJoin("country_lang", 'cl', '(g.`id_country` = cl.`id_country` AND `id_lang` = '. (int) $LangId .')');
-        $sql->leftJoin("tax", 't', '(g.`id_tax` = t.`id_tax`)');
-        //====================================================================//
-        // Build WHERE
-        $sql->where('t.`rate` = '. $TaxRate);
-        $sql->where('g.`id_country` = '. (int) $CountryId);
-        //====================================================================//
-        // Build ORDER BY
-        $sql->orderBy('country_name ASC');
-        //====================================================================//
-        // Execute final request
-        $result = Db::getInstance()->executeS($sql);
-        if (Db::getInstance()->getNumberError()) {
-            return false;
-        }
+        return static::$SplashSyncModule;
+    }
         
-        if (Db::getInstance()->numRows() > 0) {
-            $NewTaxRate = array_shift($result);
-            return $NewTaxRate["id_group"];
-        }
-        return false;
-    }
-    
-    /**
-     * @abstract    Identify Best Tax Rate from Raw Computed Value
-     * @param       float     $TaxRate            Product Tax Rate in Percent
-     * @param       int       $TaxRateGroupId     Product Tax Rate Group Id
-     * @return      TaxRule
-     */
-    public function getBestTaxRateInGroup($TaxRate, $TaxRateGroupId)
-    {
-        //====================================================================//
-        // Get default Language Id
-        $LangId = Context::getContext()->language->id;
-        //====================================================================//
-        // For All Tax Rules of This Group, Search for Closest Rate
-        $BestRate   =   0;
-        foreach (\TaxRule::getTaxRulesByGroupId($LangId, $TaxRateGroupId) as $TaxRule) {
-            if (abs($TaxRate - $TaxRule["rate"]) <  abs($TaxRate - $BestRate)) {
-                $BestRate   =   $TaxRule["rate"];
-            }
-        }
-        return $BestRate;
-    }
-    
 //====================================================================//
 //  Prestashop Module Testing
 //====================================================================//
@@ -648,23 +520,23 @@ class Local implements LocalClassInterface
         Splash::log()->trace(__CLASS__, __FUNCTION__);
         //====================================================================//
         // Load Local Splash Sync Module
-        if (!isset($this->SplashSyncModule)) {
-            $this->SplashSyncModule =   $this->getLocalModule();
+        if (!isset(static::$SplashSyncModule)) {
+            static::$SplashSyncModule =   $this->getLocalModule();
         }
         //====================================================================//
         // Check if Module is Installed & Enabled
-        if ($this->SplashSyncModule->isEnabled('splashsync')) {
+        if (static::$SplashSyncModule->isEnabled('splashsync')) {
             return true;
         }
         //====================================================================//
         // Execute Module is Uninstall
-        if ($this->SplashSyncModule->uninstall()) {
+        if (static::$SplashSyncModule->uninstall()) {
             Splash::log()->msg('[SPLASH] Splash Module Unintall Done');
         }
         //====================================================================//
         // Execute Module is Install
-        $this->SplashSyncModule->updateTranslationsAfterInstall(false);
-        if ($this->SplashSyncModule->install()) {
+        static::$SplashSyncModule->updateTranslationsAfterInstall(false);
+        if (static::$SplashSyncModule->install()) {
             Splash::log()->msg('[SPLASH] Splash Module Intall Done');
             echo Splash::log()->getConsoleLog(true);
             return true;
@@ -672,7 +544,7 @@ class Local implements LocalClassInterface
         //====================================================================//
         // Import & Display Errors
         Splash::log()->err('[SPLASH] Splash Module Intall Failled');
-        foreach ($this->SplashSyncModule->getErrors() as $Error) {
+        foreach (static::$SplashSyncModule->getErrors() as $Error) {
             Splash::log()->err('[SPLASH] Mod. Install : ' . $Error);
         }
         echo Splash::log()->getConsoleLog(true);

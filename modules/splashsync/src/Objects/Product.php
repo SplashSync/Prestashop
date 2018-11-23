@@ -23,6 +23,8 @@ use Splash\Models\Objects\IntelParserTrait;
 use Splash\Models\Objects\SimpleFieldsTrait;
 use Splash\Models\Objects\ObjectsTrait;
 use Splash\Models\Objects\ListsTrait;
+use Splash\Local\Local;
+use Splash\Local\Services\LanguagesManager;
 
 //====================================================================//
 // Prestashop Static Classes
@@ -48,6 +50,7 @@ class Product extends AbstractObject
     use \Splash\Local\Objects\Core\DatesTrait;
     use \Splash\Local\Objects\Core\SplashMetaTrait;
     use \Splash\Local\Objects\Core\ObjectsListCommonsTrait;
+    use \Splash\Local\Traits\SplashIdTrait;
     
     // Prestashop Products Traits
     use \Splash\Local\Objects\Product\ObjectsListTrait;
@@ -136,26 +139,18 @@ class Product extends AbstractObject
         // Set Module Context To All Shops
         if (Shop::isFeatureActive()) {
             Shop::setContext(Shop::CONTEXT_ALL);
-        }
-        
+        }        
         //====================================================================//
         //  Load Local Translation File
         Splash::translator()->load("objects@local");
-       
         //====================================================================//
         // Load Splash Module
-        $this->spl = Splash::local()->getLocalModule();
-
+        $this->spl = Local::getLocalModule();
         //====================================================================//
         // Load Default Language
-        $this->LangId   = Splash::local()->loadDefaultLanguage();
-        
+        $this->LangId   = LanguagesManager::loadDefaultLanguage();        
         //====================================================================//
-        // Load OsWs Currency
+        // Load Default Currency
         $this->Currency = new Currency(Configuration::get('PS_CURRENCY_DEFAULT'));
-
-        //====================================================================//
-        // Load User
-        Splash::local()->loadLocalUser();
     }
 }

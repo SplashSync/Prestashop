@@ -26,6 +26,7 @@ namespace   Splash\Local\Widgets;
 
 use Splash\Models\AbstractWidget;
 use Splash\Core\SplashCore      as Splash;
+use Splash\Local\Services\LanguagesManager;
 
 /**
  *  \class      Address
@@ -98,16 +99,16 @@ class Demo extends AbstractWidget
         //====================================================================//
         // Reference
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
-                ->Identifier("text_input")
-                ->Name("Text Input")
-                ->Description("Widget Specific Custom text Input");
+                ->identifier("text_input")
+                ->name("Text Input")
+                ->description("Widget Specific Custom text Input");
         
         //====================================================================//
         // Reference
         $this->fieldsFactory()->create(SPL_T_INT)
-                ->Identifier("integer_input")
-                ->Name("Numeric Input")
-                ->Description("Widget Specific Custom Numeric Input");
+                ->identifier("integer_input")
+                ->name("Numeric Input")
+                ->description("Widget Specific Custom Numeric Input");
         
         //====================================================================//
         // Publish Fields
@@ -130,7 +131,7 @@ class Demo extends AbstractWidget
         Splash::log()->trace(__CLASS__, __FUNCTION__);
         //====================================================================//
         // Load Default Language
-        Splash::local()->loadDefaultLanguage();
+        LanguagesManager::loadDefaultLanguage();
 
         //====================================================================//
         // Setup Widget Core Informations
@@ -156,7 +157,10 @@ class Demo extends AbstractWidget
 
         //====================================================================//
         // Set Blocks to Widget
-        $this->setBlocks($this->blocksFactory()->render());
+        $blocks = $this->blocksFactory()->render();
+        if (is_array($blocks)) {
+            $this->setBlocks($blocks);            
+        }
 
         //====================================================================//
         // Publish Widget

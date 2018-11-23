@@ -31,6 +31,8 @@ use AdminStatsController;
 use Configuration;
 use Currency;
 use SplashSync;
+use Splash\Local\Services\LanguagesManager;
+use Splash\Local\Local;
 
 /**
  * @abstract    Splash Widget - Display of Main Shop Activity
@@ -106,7 +108,7 @@ class Activity extends AbstractWidget
         Splash::log()->trace(__CLASS__, __FUNCTION__);
         //====================================================================//
         // Load Default Language
-        Splash::local()->loadDefaultLanguage();
+        LanguagesManager::loadDefaultLanguage();
 
         //====================================================================//
         // Setup Widget Core Informations
@@ -122,7 +124,10 @@ class Activity extends AbstractWidget
         
         //====================================================================//
         // Set Blocks to Widget
-        $this->setBlocks($this->blocksFactory()->render());
+        $blocks = $this->blocksFactory()->render();
+        if (is_array($blocks)) {
+            $this->setBlocks($blocks);            
+        }
 
         //====================================================================//
         // Publish Widget
@@ -163,7 +168,7 @@ class Activity extends AbstractWidget
         
         //====================================================================//
         // Load Splash Module
-        $this->spl = Splash::local()->getLocalModule();
+        $this->spl = Local::getLocalModule();
         if ($this->spl == false) {
             return false;
         }

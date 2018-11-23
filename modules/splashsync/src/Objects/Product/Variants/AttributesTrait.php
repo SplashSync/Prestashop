@@ -17,6 +17,7 @@
 namespace Splash\Local\Objects\Product\Variants;
 
 use Splash\Core\SplashCore      as Splash;
+use Splash\Local\Services\LanguagesManager;
 
 use DbQuery;
 use Db;
@@ -251,7 +252,7 @@ trait AttributesTrait
         foreach (Language::getLanguages() as $Lang) {
             //====================================================================//
             // Encode Language Code From Splash Format to Prestashop Format (fr_FR => fr-fr)
-            $LanguageCode   =   Splash::local()->langEncode($Lang["language_code"]);
+            $LanguageCode   =   LanguagesManager::langEncode($Lang["language_code"]);
             $LanguageId     =   (int) $Lang["id_lang"];
             //====================================================================//
             // Check if Name is Given in this Language

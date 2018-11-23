@@ -28,6 +28,7 @@ use Translate;
  */
 trait SplashMetaTrait
 {
+        
     /**
      * @var string
      */
@@ -62,7 +63,7 @@ trait SplashMetaTrait
         // READ Fields
         switch ($FieldName) {
             case 'splash_id':
-                $this->out[$FieldName] = Splash::local()->getSplashId(self::$NAME, $this->object->id);
+                $this->out[$FieldName] = self::getSplashId(self::$NAME, $this->object->id);
                 break;
             default:
                 return;
@@ -86,7 +87,7 @@ trait SplashMetaTrait
         switch ($FieldName) {
             case 'splash_id':
                 if ($this->object->id) {
-                    Splash::local()->setSplashId(self::$NAME, $this->object->id, $Data);
+                    self::setSplashId(self::$NAME, $this->object->id, $Data);
                 } else {
                     $this->NewSplashId = $Data;
                 }

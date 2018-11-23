@@ -156,7 +156,7 @@ trait CRUDTrait
         // UPDATE/CREATE SPLASH ID
         //====================================================================//
         if (!is_null($this->NewSplashId)) {
-            Splash::local()->setSplashId("Address", $this->object->id, $this->NewSplashId);
+            self::setSplashId("Address", $this->object->id, $this->NewSplashId);
             $this->NewSplashId = null;
         }
         

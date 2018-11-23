@@ -23,6 +23,8 @@ use Splash\Models\Objects\IntelParserTrait;
 use Splash\Models\Objects\SimpleFieldsTrait;
 use Splash\Models\Objects\ObjectsTrait;
 use SplashSync;
+use Splash\Local\Local;
+
 
 /**
  * @abstract    Splash Local Object Class - Customer Accounts Local Integration
@@ -40,6 +42,7 @@ class ThirdParty extends AbstractObject
     use \Splash\Local\Objects\Core\DatesTrait;
     use \Splash\Local\Objects\Core\SplashMetaTrait;
     use \Splash\Local\Objects\Core\ObjectsListCommonsTrait;
+    use \Splash\Local\Traits\SplashIdTrait;
     
     // Prestashop ThirdParty Traits
     use \Splash\Local\Objects\ThirdParty\ObjectsListTrait;
@@ -114,9 +117,8 @@ class ThirdParty extends AbstractObject
         //====================================================================//
         //  Load Local Translation File
         Splash::translator()->load("objects@local");
-       
         //====================================================================//
         // Load Splash Module
-        $this->spl = Splash::local()->getLocalModule();
+        $this->spl = Local::getLocalModule();
     }
 }

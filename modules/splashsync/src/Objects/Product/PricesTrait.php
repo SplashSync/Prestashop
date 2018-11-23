@@ -19,6 +19,7 @@ namespace Splash\Local\Objects\Product;
 use Splash\Core\SplashCore      as Splash;
 
 use Splash\Models\Objects\PricesTrait as SplashPricesTrait;
+use Splash\Local\Services\TaxManager;
 
 //====================================================================//
 // Prestashop Static Classes
@@ -280,7 +281,7 @@ trait PricesTrait
         if (abs($NewPrice["vat"] - $this->object->tax_rate) > 1E-6) {
             //====================================================================//
             // Search For Tax Id Group with Given Tax Rate and Country
-            $NewTaxRateGroupId  =   Splash::local()->getTaxRateGroupId($NewPrice["vat"]);
+            $NewTaxRateGroupId  =   TaxManager::getTaxRateGroupId($NewPrice["vat"]);
             //====================================================================//
             // If Tax Group Found, Update Product
             if (( $NewTaxRateGroupId >= 0 ) && ( $NewTaxRateGroupId != $this->object->id_tax_rules_group )) {

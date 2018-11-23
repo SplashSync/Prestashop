@@ -23,6 +23,7 @@ use Splash\Models\Objects\IntelParserTrait;
 use Splash\Models\Objects\SimpleFieldsTrait;
 use Splash\Models\Objects\ObjectsTrait;
 use SplashSync;
+use Splash\Local\Local;
 
 /**
  * @abstract    Splash Local Object Class - Customer Address Local Integration
@@ -40,6 +41,7 @@ class Address extends AbstractObject
     use \Splash\Local\Objects\Core\DatesTrait;
     use \Splash\Local\Objects\Core\SplashMetaTrait;
     use \Splash\Local\Objects\Core\ObjectsListCommonsTrait;
+    use \Splash\Local\Traits\SplashIdTrait;
     
     // Prestashop Address Traits
     use \Splash\Local\Objects\Address\ObjectsListTrait;
@@ -119,6 +121,6 @@ class Address extends AbstractObject
         
         //====================================================================//
         // Load Splash Module
-        $this->spl = Splash::local()->getLocalModule();
+        $this->spl = Local::getLocalModule();
     }
 }

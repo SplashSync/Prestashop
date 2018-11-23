@@ -22,6 +22,8 @@ use Splash\Models\AbstractObject;
 use Splash\Models\Objects\IntelParserTrait;
 use Splash\Models\Objects\SimpleFieldsTrait;
 use Splash\Models\Objects\ObjectsTrait;
+use Splash\Local\Local;
+use Splash\Local\Services\LanguagesManager;
 
 //====================================================================//
 // Prestashop Static Classes
@@ -46,6 +48,7 @@ class Invoice extends AbstractObject
     use \Splash\Local\Objects\Core\DatesTrait;
     use \Splash\Local\Objects\Core\SplashMetaTrait;
     use \Splash\Local\Objects\Core\ObjectsListCommonsTrait;
+    use \Splash\Local\Traits\SplashIdTrait;
     
     // Prestashop Order Traits
     use \Splash\Local\Objects\Order\CoreTrait;
@@ -143,10 +146,10 @@ class Invoice extends AbstractObject
         Splash::translator()->load("objects@local");
         //====================================================================//
         // Load Splash Module
-        $this->spl = Splash::local()->getLocalModule();
+        $this->spl = Local::getLocalModule();
         //====================================================================//
         // Load Default Language
-        $this->LangId   = Splash::local()->loadDefaultLanguage();
+        $this->LangId   = LanguagesManager::loadDefaultLanguage();
         //====================================================================//
         // Load OsWs Currency
         $this->Currency = new Currency(Configuration::get('PS_CURRENCY_DEFAULT'));
