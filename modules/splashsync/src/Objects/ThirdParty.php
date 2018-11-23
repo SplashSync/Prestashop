@@ -25,7 +25,6 @@ use Splash\Models\Objects\ObjectsTrait;
 use SplashSync;
 use Splash\Local\Local;
 
-
 /**
  * @abstract    Splash Local Object Class - Customer Accounts Local Integration
  * @SuppressWarnings(PHPMD.CamelCasePropertyName)

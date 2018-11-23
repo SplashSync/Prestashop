@@ -62,7 +62,7 @@ trait CRUDTrait
     {
         //====================================================================//
         // Stack Trace
-        Splash::log()->trace(__CLASS__, __FUNCTION__);      
+        Splash::log()->trace(__CLASS__, __FUNCTION__);
         //====================================================================//
         // Check Customer Name is given
         if (empty($this->in["firstname"])) {

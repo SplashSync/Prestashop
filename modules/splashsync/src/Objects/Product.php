@@ -139,7 +139,7 @@ class Product extends AbstractObject
         // Set Module Context To All Shops
         if (Shop::isFeatureActive()) {
             Shop::setContext(Shop::CONTEXT_ALL);
-        }        
+        }
         //====================================================================//
         //  Load Local Translation File
         Splash::translator()->load("objects@local");
@@ -148,7 +148,7 @@ class Product extends AbstractObject
         $this->spl = Local::getLocalModule();
         //====================================================================//
         // Load Default Language
-        $this->LangId   = LanguagesManager::loadDefaultLanguage();        
+        $this->LangId   = LanguagesManager::loadDefaultLanguage();
         //====================================================================//
         // Load Default Currency
         $this->Currency = new Currency(Configuration::get('PS_CURRENCY_DEFAULT'));

@@ -23,12 +23,12 @@ use Context;
 use Language;
 use Tools;
 
-
 /**
  * @abstract    Splash Languages Manager - Prestashop Languages Management
  */
 class LanguagesManager
-{    
+{
+
     /**
      * @abstract       Setup Local Language if Not Already Done
      *
@@ -86,5 +86,4 @@ class LanguagesManager
             return $Tmp[0] . "-" . Tools::strtolower($Tmp[1]);
         }
     }
-    
 }

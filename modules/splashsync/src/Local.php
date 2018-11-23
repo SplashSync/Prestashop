@@ -71,7 +71,7 @@ class Local implements LocalClassInterface
      *
      *      @return         array       $parameters
      */
-    public function parameters() 
+    public function parameters()
     {
         $Parameters       =     array();
 
@@ -493,7 +493,7 @@ class Local implements LocalClassInterface
         // Load Local Splash Sync Module
         if (!isset(static::$SplashSyncModule)) {
             return static::$SplashSyncModule;
-        }        
+        }
         //====================================================================//
         // Safety Check
         if (!class_exists("SplashSync")) {

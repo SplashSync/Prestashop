@@ -126,7 +126,7 @@ class Activity extends AbstractWidget
         // Set Blocks to Widget
         $blocks = $this->blocksFactory()->render();
         if (is_array($blocks)) {
-            $this->setBlocks($blocks);            
+            $this->setBlocks($blocks);
         }
 
         //====================================================================//
