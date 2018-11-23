@@ -67,8 +67,8 @@ script:
     # Run Grump Main Test Sequence
     - php modules/splashsync/vendor/bin/grumphp run --testsuite=travis
     - cd $TRAVIS_BUILD_DIR
-    # With PHP 7 => Execute Phpstan 
-    - if [[ ${TRAVIS_PHP_VERSION:0:1} == "7" ]]; then php modules/splashsync/vendor/bin/grumphp run --testsuite=phpstan; fi 
+    # With PHP 7.1 => Execute Phpstan 
+    - if [[ ${TRAVIS_PHP_VERSION:0:3} >= "7.0" ]]; then php modules/splashsync/vendor/bin/grumphp run --testsuite=phpstan; fi 
 #    # Run PhpUnit Core Test Sequence
     - phpunit -c phpunit.xml modules/splashsync/vendor/splash/phpcore/Tests/Core/
 #    # Run PhpUnit Main Test Sequence
