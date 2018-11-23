@@ -51,15 +51,15 @@ before_script:
     - export MODULE_DIR=/tmp/SplashSync
     - export MODULE_SCRIPTS_DIR=/tmp/SplashSync/build
 
-#   Move Module to Tmp Folder
+    #   Move Module to Tmp Folder
     - bash build/move_module.sh
-#   Install Prestashop
+    #   Install Prestashop
     - bash $MODULE_SCRIPTS_DIR/install_prestashop.sh
-#    Setup WebServer (Apache & PHP-Fpm)
+    #    Setup WebServer (Apache & PHP-Fpm)
     - bash $MODULE_SCRIPTS_DIR/install_webserver.sh
-#   Start Prestashop (Composer & More)
+    #   Start Prestashop (Composer & More)
     - bash $MODULE_SCRIPTS_DIR/start_prestashop.sh
-#   Install Module
+    #   Install Module
     - bash $MODULE_SCRIPTS_DIR/install_module.sh
     
 script: 
@@ -68,10 +68,10 @@ script:
     - php modules/splashsync/vendor/bin/grumphp run --testsuite=travis
     - cd $TRAVIS_BUILD_DIR
     # With PHP 7.1 => Execute Phpstan 
-    - if [[ ${TRAVIS_PHP_VERSION:0:3} >= "7.0" ]]; then php modules/splashsync/vendor/bin/grumphp run --testsuite=phpstan; fi 
-#    # Run PhpUnit Core Test Sequence
+    - if [[ ${TRAVIS_PHP_VERSION:0:3} > "7.0" ]]; then php modules/splashsync/vendor/bin/grumphp run --testsuite=phpstan; fi 
+    # Run PhpUnit Core Test Sequence
     - phpunit -c phpunit.xml modules/splashsync/vendor/splash/phpcore/Tests/Core/
-#    # Run PhpUnit Main Test Sequence
+    # Run PhpUnit Main Test Sequence
     - phpunit -c phpunit.xml
     - phpunit -c phpunit.xml
         
