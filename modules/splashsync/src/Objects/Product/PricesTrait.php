@@ -113,13 +113,13 @@ trait PricesTrait
                 //====================================================================//
                 // Read Price
                 $PriceHT    = (double) Tools::convertPrice(
-                    $this->Object->getPrice(false, $this->AttributeId),
+                    $this->object->getPrice(false, $this->AttributeId),
                     $this->Currency
                 );
-                $Tax        = (double)  $this->Object->getTaxesRate();
+                $Tax        = (double)  $this->object->getTaxesRate();
                 //====================================================================//
                 // Build Price Array
-                $this->Out[$FieldName] = self::prices()->Encode(
+                $this->out[$FieldName] = self::prices()->Encode(
                     $PriceHT,
                     $Tax,
                     null,
@@ -131,12 +131,12 @@ trait PricesTrait
             case 'price-base':
                 //====================================================================//
                 // Read Price
-                $PriceHT    = (double) Tools::convertPrice($this->Object->base_price, $this->Currency);
-//                $PriceHT    = (double) Tools::convertPrice($this->Object->price, $this->Currency);
-                $Tax        = (double) $this->Object->getTaxesRate();
+                $PriceHT    = (double) Tools::convertPrice($this->object->base_price, $this->Currency);
+//                $PriceHT    = (double) Tools::convertPrice($this->object->price, $this->Currency);
+                $Tax        = (double) $this->object->getTaxesRate();
                 //====================================================================//
                 // Build Price Array
-                $this->Out[$FieldName] = self::prices()->Encode(
+                $this->out[$FieldName] = self::prices()->Encode(
                     $PriceHT,
                     $Tax,
                     null,
@@ -151,12 +151,12 @@ trait PricesTrait
                 if ($this->AttributeId && ($this->Attribute->wholesale_price > 0)) {
                     $PriceHT = (double) Tools::convertPrice($this->Attribute->wholesale_price, $this->Currency);
                 } else {
-                    $PriceHT = (double) Tools::convertPrice($this->Object->wholesale_price, $this->Currency);
+                    $PriceHT = (double) Tools::convertPrice($this->object->wholesale_price, $this->Currency);
                 }
-                $Tax        = (double)  $this->Object->getTaxesRate();
+                $Tax        = (double)  $this->object->getTaxesRate();
                 //====================================================================//
                 // Build Price Array
-                $this->Out[$FieldName] = self::prices()->Encode(
+                $this->out[$FieldName] = self::prices()->Encode(
                     $PriceHT,
                     $Tax,
                     null,
@@ -172,7 +172,7 @@ trait PricesTrait
         }
         
         if (!is_null($Key)) {
-            unset($this->In[$Key]);
+            unset($this->in[$Key]);
         }
     }
     
@@ -203,9 +203,9 @@ trait PricesTrait
                 
                 //====================================================================//
                 // Compare Prices
-                if (!self::prices()->Compare($this->Out["price-base"], $Data)) {
-                    $this->Object->price        = $Data["ht"];
-                    $this->Object->base_price   = $Data["ht"];
+                if (!self::prices()->Compare($this->out["price-base"], $Data)) {
+                    $this->object->price        = $Data["ht"];
+                    $this->object->base_price   = $Data["ht"];
                     $this->needUpdate();
                     //====================================================================//
                     // Clear Cache
@@ -220,7 +220,7 @@ trait PricesTrait
 
                 //====================================================================//
                 // Compare Prices
-                if (self::prices()->Compare($this->Out["price-wholesale"], $Data)) {
+                if (self::prices()->Compare($this->out["price-wholesale"], $Data)) {
                     break;
                 }
                 
@@ -232,7 +232,7 @@ trait PricesTrait
                 //====================================================================//
                 // Update product Price without Attribute
                 } else {
-                    $this->Object->wholesale_price      =   $Data["ht"];
+                    $this->object->wholesale_price      =   $Data["ht"];
                     $this->needUpdate();
                 }
                 break;
@@ -241,8 +241,8 @@ trait PricesTrait
                 return;
         }
         
-        if (isset($this->In[$FieldName])) {
-            unset($this->In[$FieldName]);
+        if (isset($this->in[$FieldName])) {
+            unset($this->in[$FieldName]);
         }
     }
     
@@ -259,7 +259,7 @@ trait PricesTrait
         $this->getPricesFields(null, "price");
         //====================================================================//
         // Verify Price Need to be Updated
-        if (self::prices()->Compare($this->Out["price"], $NewPrice)) {
+        if (self::prices()->Compare($this->out["price"], $NewPrice)) {
             return;
         }
         //====================================================================//
@@ -269,23 +269,23 @@ trait PricesTrait
         //====================================================================//
         // Update product Price without Attribute
         } else {
-            if (abs($NewPrice["ht"] - $this->Object->price) > 1E-6) {
-                $this->Object->price = round($NewPrice["ht"], 9);
+            if (abs($NewPrice["ht"] - $this->object->price) > 1E-6) {
+                $this->object->price = round($NewPrice["ht"], 9);
                 $this->needUpdate();
             }
         }
         
         //====================================================================//
         // Update Price VAT Rate
-        if (abs($NewPrice["vat"] - $this->Object->tax_rate) > 1E-6) {
+        if (abs($NewPrice["vat"] - $this->object->tax_rate) > 1E-6) {
             //====================================================================//
             // Search For Tax Id Group with Given Tax Rate and Country
             $NewTaxRateGroupId  =   Splash::local()->getTaxRateGroupId($NewPrice["vat"]);
             //====================================================================//
             // If Tax Group Found, Update Product
-            if (( $NewTaxRateGroupId >= 0 ) && ( $NewTaxRateGroupId != $this->Object->id_tax_rules_group )) {
-                 $this->Object->id_tax_rules_group  = (int) $NewTaxRateGroupId;
-                 $this->Object->tax_rate            = $NewPrice["vat"];
+            if (( $NewTaxRateGroupId >= 0 ) && ( $NewTaxRateGroupId != $this->object->id_tax_rules_group )) {
+                 $this->object->id_tax_rules_group  = (int) $NewTaxRateGroupId;
+                 $this->object->tax_rate            = $NewPrice["vat"];
                  $this->needUpdate();
             } else {
                 Splash::log()->war(
@@ -310,10 +310,10 @@ trait PricesTrait
     {
         //====================================================================//
         // Detect New Base Price
-        if (isset($this->In['price-base']["ht"])) {
-            $BasePrice  =   $this->In['price-base']["ht"];
+        if (isset($this->in['price-base']["ht"])) {
+            $BasePrice  =   $this->in['price-base']["ht"];
         } else {
-            $BasePrice  =   $this->Object->base_price;
+            $BasePrice  =   $this->object->base_price;
         }
         //====================================================================//
         // Evaluate Attribute Price

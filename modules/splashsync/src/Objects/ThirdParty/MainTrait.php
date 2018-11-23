@@ -137,17 +137,17 @@ trait MainTrait
                 break;
 
             case 'company':
-                if (!empty($this->Object->$FieldName)) {
+                if (!empty($this->object->$FieldName)) {
                     $this->getSimple($FieldName);
                     break;
                 }
-                $this->Out[$FieldName] = "Prestashop("  . $this->Object->id . ")";
+                $this->out[$FieldName] = "Prestashop("  . $this->object->id . ")";
                 break;
                             
             default:
                 return;
         }
-        unset($this->In[$Key]);
+        unset($this->in[$Key]);
     }
     
     /**
@@ -166,34 +166,34 @@ trait MainTrait
             //====================================================================//
             // Gender Name
             case 'gender_name':
-                if (empty($this->Object->id_gender)) {
-                    $this->Out[$FieldName] = Splash::trans("Empty");
+                if (empty($this->object->id_gender)) {
+                    $this->out[$FieldName] = Splash::trans("Empty");
                     break;
                 }
-                $gender = new Gender($this->Object->id_gender, Context::getContext()->language->id);
+                $gender = new Gender($this->object->id_gender, Context::getContext()->language->id);
                 if ($gender->type == 0) {
-                    $this->Out[$FieldName] = $this->spl->l('Male');
+                    $this->out[$FieldName] = $this->spl->l('Male');
                 } elseif ($gender->type == 1) {
-                    $this->Out[$FieldName] = $this->spl->l('Female');
+                    $this->out[$FieldName] = $this->spl->l('Female');
                 } else {
-                    $this->Out[$FieldName] = $this->spl->l('Neutral');
+                    $this->out[$FieldName] = $this->spl->l('Neutral');
                 }
                 break;
             //====================================================================//
             // Gender Type
             case 'gender_type':
-                if (empty($this->Object->id_gender)) {
-                    $this->Out[$FieldName] = 0;
+                if (empty($this->object->id_gender)) {
+                    $this->out[$FieldName] = 0;
                     break;
                 }
-                $gender = new Gender($this->Object->id_gender);
-                $this->Out[$FieldName] = (int) $gender->type;
+                $gender = new Gender($this->object->id_gender);
+                $this->out[$FieldName] = (int) $gender->type;
                 break;
                 
             default:
                 return;
         }
-        unset($this->In[$Key]);
+        unset($this->in[$Key]);
     }
     
     /**
@@ -217,7 +217,7 @@ trait MainTrait
                 break;
                 
             case 'company':
-                if ($this->Object->$FieldName === "Prestashop("  . $this->Object->id . ")") {
+                if ($this->object->$FieldName === "Prestashop("  . $this->object->id . ")") {
                     break;
                 }
                 $this->setSimple($FieldName, $Data);
@@ -226,7 +226,7 @@ trait MainTrait
             default:
                 return;
         }
-        unset($this->In[$FieldName]);
+        unset($this->in[$FieldName]);
     }
     
     /**
@@ -270,7 +270,7 @@ trait MainTrait
             default:
                 return;
         }
-        unset($this->In[$FieldName]);
+        unset($this->in[$FieldName]);
     }
     
     /**
@@ -305,8 +305,8 @@ trait MainTrait
 
                 //====================================================================//
                 // Update Gender Type
-                if ($this->Object->id_gender != $gendertype->id_gender) {
-                    $this->Object->id_gender = $gendertype->id_gender;
+                if ($this->object->id_gender != $gendertype->id_gender) {
+                    $this->object->id_gender = $gendertype->id_gender;
                     $this->needUpdate();
                 }
                 break;
@@ -314,6 +314,6 @@ trait MainTrait
             default:
                 return;
         }
-        unset($this->In[$FieldName]);
+        unset($this->in[$FieldName]);
     }
 }

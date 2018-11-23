@@ -68,17 +68,17 @@ trait CoreTrait
         // READ Fields
         switch ($FieldName) {
             case 'number':
-                $this->Out[$FieldName] = $this->Object->getInvoiceNumberFormatted($this->LangId);
+                $this->out[$FieldName] = $this->object->getInvoiceNumberFormatted($this->LangId);
                 break;
             
             case 'id_order':
-                $this->Out[$FieldName] = self::objects()->encode("Order", $this->Object->$FieldName);
+                $this->out[$FieldName] = self::objects()->encode("Order", $this->object->$FieldName);
                 break;
             
             default:
                 return;
         }
         
-        unset($this->In[$Key]);
+        unset($this->in[$Key]);
     }
 }

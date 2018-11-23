@@ -76,13 +76,13 @@ trait MetaTrait
             case 'newsletter':
             case 'passwd':
             case 'optin':
-                $this->Out[$FieldName] = $this->Object->$FieldName;
+                $this->out[$FieldName] = $this->object->$FieldName;
                 break;
             default:
                 return;
         }
         
-        unset($this->In[$Key]);
+        unset($this->in[$Key]);
     }
 
     /**
@@ -101,14 +101,14 @@ trait MetaTrait
             case 'active':
             case 'newsletter':
             case 'optin':
-                if ($this->Object->$FieldName != $Data) {
-                    $this->Object->$FieldName = $Data;
+                if ($this->object->$FieldName != $Data) {
+                    $this->object->$FieldName = $Data;
                     $this->needUpdate();
                 }
                 break;
             default:
                 return;
         }
-        unset($this->In[$FieldName]);
+        unset($this->in[$FieldName]);
     }
 }

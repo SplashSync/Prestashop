@@ -95,17 +95,17 @@ trait CoreTrait
         switch ($FieldName) {
             case 'parent_id':
                 if ($this->AttributeId) {
-                    $this->Out[$FieldName] = self::objects()->encode("Product", $this->ProductId);
+                    $this->out[$FieldName] = self::objects()->encode("Product", $this->ProductId);
                     break;
                 }
-                $this->Out[$FieldName] = null;
+                $this->out[$FieldName] = null;
                 break;
                 
             case 'type':
                 if ($this->AttributeId) {
-                    $this->Out[$FieldName]  =   "variant";
+                    $this->out[$FieldName]  =   "variant";
                 } else {
-                    $this->Out[$FieldName]  =   "simple";
+                    $this->out[$FieldName]  =   "simple";
                 }
                 break;
                 
@@ -113,7 +113,7 @@ trait CoreTrait
                 if ($this->AttributeId) {
                     $this->getSimple($FieldName, "Attribute");
                 } else {
-                    $this->Out[$FieldName]  =   false;
+                    $this->out[$FieldName]  =   false;
                 }
                 break;
             
@@ -121,11 +121,11 @@ trait CoreTrait
                 if ($this->AttributeId) {
                     $UnikId     =   (int) $this->getUnikId(
                         $this->ProductId,
-                        $this->Object->getDefaultIdProductAttribute()
+                        $this->object->getDefaultIdProductAttribute()
                     );
-                    $this->Out[$FieldName] = self::objects()->encode("Product", $UnikId);
+                    $this->out[$FieldName] = self::objects()->encode("Product", $UnikId);
                 } else {
-                    $this->Out[$FieldName]  =   null;
+                    $this->out[$FieldName]  =   null;
                 }
                 break;
             
@@ -133,7 +133,7 @@ trait CoreTrait
                 return;
         }
 
-        unset($this->In[$Key]);
+        unset($this->in[$Key]);
     }
     
     /**
@@ -159,16 +159,16 @@ trait CoreTrait
                     break;
                 }
                 $AttributeId    =     $this->getAttribute($Data);
-                if (!$AttributeId || ($AttributeId == $this->Object->getDefaultIdProductAttribute())) {
+                if (!$AttributeId || ($AttributeId == $this->object->getDefaultIdProductAttribute())) {
                     break;
                 }
-                $this->Object->deleteDefaultAttributes();
-                $this->Object->setDefaultAttribute($AttributeId);
+                $this->object->deleteDefaultAttributes();
+                $this->object->setDefaultAttribute($AttributeId);
                 break;
             
             default:
                 return;
         }
-        unset($this->In[$FieldName]);
+        unset($this->in[$FieldName]);
     }
 }

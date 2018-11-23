@@ -65,7 +65,7 @@ trait AddressesTrait
             default:
                 return;
         }
-        unset($this->In[$Key]);
+        unset($this->in[$Key]);
     }
     
     
@@ -79,12 +79,12 @@ trait AddressesTrait
         
         //====================================================================//
         // Create List If Not Existing
-        if (!isset($this->Out["contacts"])) {
-            $this->Out["contacts"] = array();
+        if (!isset($this->out["contacts"])) {
+            $this->out["contacts"] = array();
         }
         //====================================================================//
         // Read Address List
-        $AddresList = $this->Object->getAddresses(Context::getContext()->language->id);
+        $AddresList = $this->object->getAddresses(Context::getContext()->language->id);
         //====================================================================//
         // If Address List Is Empty => Null
         if (empty($AddresList)) {
@@ -93,7 +93,7 @@ trait AddressesTrait
         //====================================================================//
         // Run Through Address List
         foreach ($AddresList as $Key => $Address) {
-            $this->Out["contacts"][$Key] = array (
+            $this->out["contacts"][$Key] = array (
                 "address" => self::objects()->Encode("Address", $Address["id_address"])
                 );
         }

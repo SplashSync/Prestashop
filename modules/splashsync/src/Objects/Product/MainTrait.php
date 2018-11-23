@@ -141,9 +141,9 @@ trait MainTrait
             //====================================================================//
             case 'weight':
                 if ($this->AttributeId) {
-                    $this->Out[$FieldName] = (float) $this->Object->weight + $this->Attribute->weight;
+                    $this->out[$FieldName] = (float) $this->object->weight + $this->Attribute->weight;
                 } else {
-                    $this->Out[$FieldName] = (float) $this->Object->weight;
+                    $this->out[$FieldName] = (float) $this->object->weight;
                 }
                 break;
             case 'height':
@@ -152,10 +152,10 @@ trait MainTrait
                 $this->getSimple($FieldName);
                 break;
             case 'surface':
-                $this->Out[$FieldName] = (float) $this->Object->depth * $this->Object->width;
+                $this->out[$FieldName] = (float) $this->object->depth * $this->object->width;
                 break;
             case 'volume':
-                $this->Out[$FieldName] = (float) $this->Object->height * $this->Object->depth * $this->Object->width;
+                $this->out[$FieldName] = (float) $this->object->height * $this->object->depth * $this->object->width;
                 break;
                 
             default:
@@ -163,7 +163,7 @@ trait MainTrait
         }
         
         if (!is_null($Key)) {
-            unset($this->In[$Key]);
+            unset($this->in[$Key]);
         }
     }
    
@@ -198,7 +198,7 @@ trait MainTrait
         }
         
         if (!is_null($Key)) {
-            unset($this->In[$Key]);
+            unset($this->in[$Key]);
         }
     }
     
@@ -221,10 +221,10 @@ trait MainTrait
             case 'weight':
                 //====================================================================//
                 // If product as attributes
-                $CurrentWeight  =   $this->Object->$FieldName;
+                $CurrentWeight  =   $this->object->$FieldName;
                 $CurrentWeight +=   isset($this->Attribute->$FieldName) ? $this->Attribute->$FieldName : 0;
                 if ($this->AttributeId && ( abs($CurrentWeight - $Data) > 1E-6 )) {
-                    $this->Attribute->$FieldName    = $Data - $this->Object->$FieldName;
+                    $this->Attribute->$FieldName    = $Data - $this->object->$FieldName;
                     $this->needUpdate("Attribute");
                     break;
                 }
@@ -241,7 +241,7 @@ trait MainTrait
             default:
                 return;
         }
-        unset($this->In[$FieldName]);
+        unset($this->in[$FieldName]);
     }
     
     /**
@@ -273,6 +273,6 @@ trait MainTrait
             default:
                 return;
         }
-        unset($this->In[$FieldName]);
+        unset($this->in[$FieldName]);
     }
 }

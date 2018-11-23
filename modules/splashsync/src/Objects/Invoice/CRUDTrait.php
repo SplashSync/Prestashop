@@ -113,14 +113,14 @@ trait CRUDTrait
         // Stack Trace
         Splash::log()->trace(__CLASS__, __FUNCTION__);
         if (!$Needed) {
-            return (int) $this->Object->id;
+            return (int) $this->object->id;
         }
         
         //====================================================================//
         // An Invoice Cannot Get deleted
         Splash::log()->err("ErrLocalTpl", __CLASS__, __FUNCTION__, "You Cannot Update Prestashop Invoices");
         
-        return (int) $this->Object->id;
+        return (int) $this->object->id;
     }
     
     /**

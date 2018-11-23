@@ -115,14 +115,14 @@ trait AttributesTrait
     {
         //====================================================================//
         // Check if List field & Init List Array
-        $FieldId = self::lists()->initOutput($this->Out, "attributes", $FieldName);
+        $FieldId = self::lists()->initOutput($this->out, "attributes", $FieldName);
         if (!$FieldId) {
             return;
         }
         
         //====================================================================//
         // READ Fields
-        foreach ($this->Object->getAttributeCombinations($this->LangId) as $Index => $Attribute) {
+        foreach ($this->object->getAttributeCombinations($this->LangId) as $Index => $Attribute) {
             if ($Attribute["id_product_attribute"] != $this->AttributeId) {
                 continue;
             }
@@ -154,9 +154,9 @@ trait AttributesTrait
                 default:
                     return;
             }
-            self::lists()->insert($this->Out, "attributes", $FieldId, $Index, $Value);
+            self::lists()->insert($this->out, "attributes", $FieldId, $Index, $Value);
         }
-        unset($this->In[$Key]);
+        unset($this->in[$Key]);
     }
 
     //====================================================================//
@@ -368,7 +368,7 @@ trait AttributesTrait
             $this->Attribute->setAttributes($AttributesIds);
         }
                 
-        unset($this->In[$FieldName]);
+        unset($this->in[$FieldName]);
     }
 
     /**

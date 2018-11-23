@@ -130,7 +130,7 @@ trait ImagesTrait
     {
         //====================================================================//
         // Check if List field & Init List Array
-        $FieldId = self::lists()->InitOutput($this->Out, "images", $FieldName);
+        $FieldId = self::lists()->InitOutput($this->out, "images", $FieldName);
         if (!$FieldId) {
             return;
         }
@@ -151,9 +151,9 @@ trait ImagesTrait
             }
             //====================================================================//
             // Insert Data in List
-            self::lists()->Insert($this->Out, "images", $FieldName, $Index, $Value);
+            self::lists()->Insert($this->out, "images", $FieldName, $Index, $Value);
         }
-        unset($this->In[$Key]);
+        unset($this->in[$Key]);
     }
     
     /**
@@ -179,7 +179,7 @@ trait ImagesTrait
             default:
                 return;
         }
-        unset($this->In[$FieldName]);
+        unset($this->in[$FieldName]);
     }
          
     /**
@@ -196,7 +196,7 @@ trait ImagesTrait
         // Load Complete Product Images List
         $ProductImages   =   Image::getImages(
             $this->LangId,
-            $this->Object->id,
+            $this->object->id,
             null
         );
         //====================================================================//
@@ -229,8 +229,8 @@ trait ImagesTrait
         $ObjectImage = new Image($ImageId, $this->LangId);
         //====================================================================//
         // Detect Image Name
-        $ImageName   =   !empty($this->Object->link_rewrite)
-                ? array_values($this->Object->link_rewrite)[0]
+        $ImageName   =   !empty($this->object->link_rewrite)
+                ? array_values($this->object->link_rewrite)[0]
                 : 'Image';
         //====================================================================//
         // Encode Image in Splash Format
@@ -269,7 +269,7 @@ trait ImagesTrait
             // If Not a Variant, Use Product Images so All Images will be Visibles
             $this->VariantImages   =   Image::getImages(
                 $this->LangId,
-                $this->Object->id,
+                $this->object->id,
                 $this->AttributeId ? $this->AttributeId : null
             );
         }
@@ -303,7 +303,7 @@ trait ImagesTrait
         }
         //====================================================================//
         // Load Object Images List for Whole Product
-        $this->ImagesCache   =   Image::getImages($this->LangId, $this->Object->id);
+        $this->ImagesCache   =   Image::getImages($this->LangId, $this->object->id);
         
         //====================================================================//
         // UPDATE IMAGES LIST

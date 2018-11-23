@@ -97,28 +97,28 @@ trait StockTrait
             //====================================================================//
             // Stock Reel
             case 'stock':
-                $this->Out[$FieldName] = $this->Object->getQuantity($this->ProductId, $this->AttributeId);
+                $this->out[$FieldName] = $this->object->getQuantity($this->ProductId, $this->AttributeId);
                 break;
             //====================================================================//
             // Out Of Stock
             case 'outofstock':
-                $Quantity = $this->Object->getQuantity($this->ProductId, $this->AttributeId);
-                $this->Out[$FieldName] = ( $Quantity > 0 ) ? false : true;
+                $Quantity = $this->object->getQuantity($this->ProductId, $this->AttributeId);
+                $this->out[$FieldName] = ( $Quantity > 0 ) ? false : true;
                 break;
             //====================================================================//
             // Minimum Order Quantity
             case 'minimal_quantity':
                 if (($this->AttributeId)) {
-                    $this->Out[$FieldName] = (int) $this->Attribute->$FieldName;
+                    $this->out[$FieldName] = (int) $this->Attribute->$FieldName;
                 } else {
-                    $this->Out[$FieldName] = (int) $this->Object->$FieldName;
+                    $this->out[$FieldName] = (int) $this->object->$FieldName;
                 }
                 break;
             default:
                 return;
         }
         
-        unset($this->In[$Key]);
+        unset($this->in[$Key]);
     }
     
     /**
@@ -144,7 +144,7 @@ trait StockTrait
             case 'stock':
                 //====================================================================//
                 // Product uses Advanced Stock Manager => Cancel Product Stock Update
-                if ($this->Object->useAdvancedStockManagement()) {
+                if ($this->object->useAdvancedStockManagement()) {
                     Splash::log()->err(
                         'Update Product Stock Using Advanced Stock Management : This Feature is not implemented Yet!!'
                     );
@@ -152,7 +152,7 @@ trait StockTrait
                 }
                 //====================================================================//
                 // Product Already Exists => Update Product Stock
-                if ($this->Object->getQuantity($this->ProductId, $this->AttributeId) != $Data) {
+                if ($this->object->getQuantity($this->ProductId, $this->AttributeId) != $Data) {
                     //====================================================================//
                     // Update Stock in DataBase
                     StockAvailable::setQuantity($this->ProductId, $this->AttributeId, $Data);
@@ -175,6 +175,6 @@ trait StockTrait
             default:
                 return;
         }
-        unset($this->In[$FieldName]);
+        unset($this->in[$FieldName]);
     }
 }

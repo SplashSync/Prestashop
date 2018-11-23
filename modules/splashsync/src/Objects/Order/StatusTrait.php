@@ -112,26 +112,26 @@ trait StatusTrait
             // ORDER STATUS
             //====================================================================//
             case 'status':
-                $this->Out[$FieldName]  = $this->getSplashStatus();
+                $this->out[$FieldName]  = $this->getSplashStatus();
                 break;
             case 'isCanceled':
-                $this->Out[$FieldName]  = !$this->Object->valid;
+                $this->out[$FieldName]  = !$this->object->valid;
                 break;
             case 'isValidated':
-                $this->Out[$FieldName]  = (bool) $this->Object->valid;
+                $this->out[$FieldName]  = (bool) $this->object->valid;
                 break;
             case 'isClosed':
-                $this->Out[$FieldName]  = (bool) $this->Object->isPaidAndShipped();
+                $this->out[$FieldName]  = (bool) $this->object->isPaidAndShipped();
                 break;
             case 'isPaid':
-                $this->Out[$FieldName]  = (bool) $this->Object->hasBeenPaid();
+                $this->out[$FieldName]  = (bool) $this->object->hasBeenPaid();
                 break;
         
             default:
                 return;
         }
         
-        unset($this->In[$Key]);
+        unset($this->in[$Key]);
     }
     
     /**
@@ -142,28 +142,28 @@ trait StatusTrait
     {
         //====================================================================//
         // If order is in  Static Status => Use Static Status
-        if ($this->Object->current_state == 1) {
+        if ($this->object->current_state == 1) {
             return "OrderPaymentDue";
-        } elseif ($this->Object->current_state == 2) {
+        } elseif ($this->object->current_state == 2) {
             return "OrderProcessing";
-        } elseif ($this->Object->current_state == 3) {
+        } elseif ($this->object->current_state == 3) {
             return "OrderProcessing";
-        } elseif ($this->Object->current_state == 4) {
+        } elseif ($this->object->current_state == 4) {
             return "OrderInTransit";
-        } elseif ($this->Object->current_state == 5) {
+        } elseif ($this->object->current_state == 5) {
             return "OrderDelivered";
         }
         //====================================================================//
         // If order is invalid => Canceled
-        if (!$this->Object->valid) {
+        if (!$this->object->valid) {
             return "OrderCanceled";
         }
         //====================================================================//
         // Other Status => Use Status Flag to Detect Current Order Status
         //====================================================================//
-        if ($this->Object->isPaidAndShipped()) {
+        if ($this->object->isPaidAndShipped()) {
             return "OrderDelivered";
-        } elseif ($this->Object->hasBeenPaid()) {
+        } elseif ($this->object->hasBeenPaid()) {
             return "OrderProcessing";
         }
         //====================================================================//

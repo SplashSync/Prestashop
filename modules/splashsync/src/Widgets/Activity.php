@@ -24,7 +24,7 @@
 
 namespace   Splash\Local\Widgets;
 
-use Splash\Models\WidgetBase;
+use Splash\Models\AbstractWidget;
 use Splash\Core\SplashCore      as Splash;
 
 use AdminStatsController;
@@ -35,7 +35,7 @@ use SplashSync;
 /**
  * @abstract    Splash Widget - Display of Main Shop Activity
  */
-class Activity extends WidgetBase
+class Activity extends AbstractWidget
 {
     /**
      * @var Currency

@@ -20,6 +20,8 @@ use ArrayObject;
 
 use Splash\Core\SplashCore      as Splash;
 
+use Splash\Models\LocalClassInterface;
+
 use Db;
 use DbQuery;
 use Configuration;
@@ -38,7 +40,7 @@ use Splash\Local\Traits\SplashIdTrait;
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Local
+class Local implements LocalClassInterface
 {
     
     /**
@@ -68,7 +70,7 @@ class Local
      *
      *      @return         array       $parameters
      */
-    public static function parameters()
+    public function parameters() 
     {
         $Parameters       =     array();
 
@@ -193,7 +195,7 @@ class Local
      *
      *      @return         bool    global test result
      */
-    public static function selfTest()
+    public function selfTest()
     {
 
         //====================================================================//
@@ -309,6 +311,32 @@ class Local
 //====================================================================//
     
     /**
+     * @abstract       Return Local Server Test Sequences as Aarray
+     *
+     *      THIS FUNCTION IS OPTIONNAL - USE IT ONLY IF REQUIRED
+     *
+     *      This function called on each initialization of module's tests sequences.
+     *      It's aim is to list different configurations for testing on local system.
+     *
+     *      If Name = List, Result must be an array including list of Sequences Names.
+     *
+     *      If Name = ASequenceName, Function will Setup Sequence on Local System.
+     *
+     * @param null|mixed $name
+     * @return         array       $Sequences
+     */
+    public function testSequences($name = null)
+    {
+        switch ($name) {
+            case "None":
+                // NOITHING TO DO FOR SEQUENCE SETUP
+                return array();
+            case "List":
+                return array("None");
+        }
+    }
+    
+    /**
      *      @abstract       Return Local Server Test Parameters as Aarray
      *
      *      THIS FUNCTION IS OPTIONNAL - USE IT ONLY IF REQUIRED
@@ -322,7 +350,7 @@ class Local
      *
      *      @return         array       $parameters
      */
-    public static function testParameters()
+    public function testParameters()
     {
         //====================================================================//
         // Init Parameters Array

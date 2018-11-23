@@ -57,10 +57,10 @@ trait CRUDTrait
         //====================================================================//
         // If $id Given => Load Product Object From DataBase
         //====================================================================//
-        $this->Object = false;
+        $this->object = false;
         if (!empty($this->ProductId)) {
-            $this->Object = new Product($this->ProductId, true);
-            if ($this->Object->id != $this->ProductId) {
+            $this->object = new Product($this->ProductId, true);
+            if ($this->object->id != $this->ProductId) {
                 return Splash::log()->err(
                     "ErrLocalTpl",
                     __CLASS__,
@@ -80,7 +80,7 @@ trait CRUDTrait
         // Flush Images Infos Cache
         $this->flushImageCache();
         
-        return $this->Object;
+        return $this->object;
     }
 
     /**
@@ -102,7 +102,7 @@ trait CRUDTrait
         
         //====================================================================//
         // Check is New Product is Variant Product
-        if (!$this->isNewVariant($this->In)) {
+        if (!$this->isNewVariant($this->in)) {
             //====================================================================//
             // Create New Simple Product
             return $this->createSimpleProduct();
@@ -110,7 +110,7 @@ trait CRUDTrait
         
         //====================================================================//
         // Create New Variant Product
-        return $this->createVariantProduct($this->In);
+        return $this->createVariantProduct($this->in);
     }
     
     /**
@@ -121,19 +121,19 @@ trait CRUDTrait
     {
         //====================================================================//
         // Check Product Ref is given
-        if (empty($this->In["ref"])) {
+        if (empty($this->in["ref"])) {
             return Splash::log()->err("ErrLocalFieldMissing", __CLASS__, __FUNCTION__, "ref");
         }
         //====================================================================//
         // Check Product Name is given
-        if (empty($this->In["name"])) {
+        if (empty($this->in["name"])) {
             return Splash::log()->err("ErrLocalFieldMissing", __CLASS__, __FUNCTION__, "name");
         }
         //====================================================================//
         // Init Product Link Rewrite Url
-        if (empty($this->In["link_rewrite"])) {
-            foreach ($this->In["name"] as $key => $value) {
-                $this->In["link_rewrite"][$key] = Tools::link_rewrite($value);
+        if (empty($this->in["link_rewrite"])) {
+            foreach ($this->in["name"] as $key => $value) {
+                $this->in["link_rewrite"][$key] = Tools::link_rewrite($value);
             }
         }
         return true;
@@ -152,15 +152,15 @@ trait CRUDTrait
         
         //====================================================================//
         // Create Empty Product
-        $this->Object = new Product();
+        $this->object = new Product();
         //====================================================================//
         // Setup Product Minimal Data
-        $this->setSimple("reference", $this->In["ref"]);
-        $this->setMultilang($this->Object, "name", $this->In["name"]);
-        $this->setMultilang($this->Object, "link_rewrite", $this->In["link_rewrite"]);
+        $this->setSimple("reference", $this->in["ref"]);
+        $this->setMultilang($this->object, "name", $this->in["name"]);
+        $this->setMultilang($this->object, "link_rewrite", $this->in["link_rewrite"]);
         //====================================================================//
         // CREATE PRODUCT
-        if ($this->Object->add() != true) {
+        if ($this->object->add() != true) {
             return Splash::log()->err(
                 "ErrLocalTpl",
                 __CLASS__,
@@ -170,12 +170,12 @@ trait CRUDTrait
         }
         //====================================================================//
         // Store New Id on SplashObject Class
-        $this->ProductId    = $this->Object->id;
+        $this->ProductId    = $this->object->id;
         $this->AttributeId  = 0;
         
         //====================================================================//
         // Create Empty Product
-        return $this->Object;
+        return $this->object;
     }
     
     /**
@@ -200,7 +200,7 @@ trait CRUDTrait
         // UPDATE MAIN INFORMATIONS
         //====================================================================//
         if ($this->ProductId && $Needed) {
-            if ($this->Object->update() != true) {
+            if ($this->object->update() != true) {
                 return Splash::log()->err(
                     "ErrLocalTpl",
                     __CLASS__,
@@ -250,8 +250,8 @@ trait CRUDTrait
         //====================================================================//
         // Load Object From DataBase
         //====================================================================//
-        $this->Object     = new Product($this->ProductId, true);
-        if ($this->Object->id != $this->ProductId) {
+        $this->object     = new Product($this->ProductId, true);
+        if ($this->object->id != $this->ProductId) {
             return Splash::log()->war(
                 "ErrLocalTpl",
                 __CLASS__,
@@ -268,7 +268,7 @@ trait CRUDTrait
         
         //====================================================================//
         // Else Delete Product From DataBase
-        return $this->Object->delete();
+        return $this->object->delete();
     }
     
     /**

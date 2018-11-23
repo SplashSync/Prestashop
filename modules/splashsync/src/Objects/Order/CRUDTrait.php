@@ -102,37 +102,37 @@ trait CRUDTrait
         
         //====================================================================//
         // Create a New Order
-        $this->Object  =   new Order();
+        $this->object  =   new Order();
         
         //====================================================================//
         // Setup Minimal Data
-        $this->Object->id_cart          =   $this->Cart->id;
-        $this->Object->id_currency      =   Configuration::get('PS_CURRENCY_DEFAULT');
-        $this->Object->conversion_rate  =   1;
-        $this->Object->id_carrier       =   1;
-        $this->Object->id_shop          =   1;
-        $this->Object->payment          =   "Payment by check";
-        $this->Object->module           =   "ps_checkpayment";
-        $this->Object->secure_key       =   md5(uniqid(rand(), true));
+        $this->object->id_cart          =   $this->Cart->id;
+        $this->object->id_currency      =   Configuration::get('PS_CURRENCY_DEFAULT');
+        $this->object->conversion_rate  =   1;
+        $this->object->id_carrier       =   1;
+        $this->object->id_shop          =   1;
+        $this->object->payment          =   "Payment by check";
+        $this->object->module           =   "ps_checkpayment";
+        $this->object->secure_key       =   md5(uniqid(rand(), true));
         
-        $this->Object->total_products       = (float) 0;
-        $this->Object->total_products_wt    = (float) 0;
-        $this->Object->total_paid_tax_excl  = (float) 0;
-        $this->Object->total_paid_tax_incl  = (float) 0;
-        $this->Object->total_paid           = 0;
-        $this->Object->total_paid_real      = 0;
-        $this->Object->round_mode           = Configuration::get('PS_PRICE_ROUND_MODE');
-        $this->Object->round_type           = Configuration::get('PS_ROUND_TYPE');
+        $this->object->total_products       = (float) 0;
+        $this->object->total_products_wt    = (float) 0;
+        $this->object->total_paid_tax_excl  = (float) 0;
+        $this->object->total_paid_tax_incl  = (float) 0;
+        $this->object->total_paid           = 0;
+        $this->object->total_paid_real      = 0;
+        $this->object->round_mode           = Configuration::get('PS_PRICE_ROUND_MODE');
+        $this->object->round_type           = Configuration::get('PS_ROUND_TYPE');
 
-        $this->setCoreFields("id_customer", $this->In["id_customer"]);
+        $this->setCoreFields("id_customer", $this->in["id_customer"]);
         
-        $this->setAddressFields("id_address_delivery", $this->In["id_address_delivery"]);
-        $this->setAddressFields("id_address_invoice", $this->In["id_address_invoice"]);
+        $this->setAddressFields("id_address_delivery", $this->in["id_address_delivery"]);
+        $this->setAddressFields("id_address_invoice", $this->in["id_address_invoice"]);
         
         
         //====================================================================//
         // Persist Order in Database
-        if ($this->Object->add() != true) {
+        if ($this->object->add() != true) {
             return Splash::log()->err("ErrLocalTpl", __CLASS__, __FUNCTION__, "Unable to Create new Order.");
         }
         
@@ -141,7 +141,7 @@ trait CRUDTrait
         $this->Products         = array();
             
         Splash::log()->deb("MsgLocalTpl", __CLASS__, __FUNCTION__, "New Order Created");
-        return $this->Object;
+        return $this->object;
     }
     
     /**
@@ -157,19 +157,19 @@ trait CRUDTrait
         // Stack Trace
         Splash::log()->trace(__CLASS__, __FUNCTION__);
         if (!$Needed) {
-            return (int) $this->Object->id;
+            return (int) $this->object->id;
         }
         
         //====================================================================//
         // If Id Given = > Update Object
         //====================================================================//
-        if (!empty($this->Object->id)) {
-            if ($this->Object->update() != true) {
+        if (!empty($this->object->id)) {
+            if ($this->object->update() != true) {
                 return Splash::log()->err(
                     "ErrLocalTpl",
                     __CLASS__,
                     __FUNCTION__,
-                    "Unable to Update Order (" . $this->Object->id . ")."
+                    "Unable to Update Order (" . $this->object->id . ")."
                 );
             }
             
@@ -180,11 +180,11 @@ trait CRUDTrait
         // UPDATE/CREATE SPLASH ID
         //====================================================================//
         if (!is_null($this->NewSplashId)) {
-            Splash::local()->setSplashId(self::$NAME, $this->Object->id, $this->NewSplashId);
+            Splash::local()->setSplashId(self::$NAME, $this->object->id, $this->NewSplashId);
             $this->NewSplashId = null;
         }
         
-        return (int) $this->Object->id;
+        return (int) $this->object->id;
     }
     
     /**
@@ -207,14 +207,14 @@ trait CRUDTrait
         //====================================================================//
         // Load Object From DataBase
         //====================================================================//
-        $this->Object     = new Order($Id);
-        if ($this->Object->id != $Id) {
+        $this->object     = new Order($Id);
+        if ($this->object->id != $Id) {
             return Splash::log()->war("ErrLocalTpl", __CLASS__, __FUNCTION__, " Unable to load Order (" . $Id . ").");
         }
         
         //====================================================================//
         // Else Delete Product From DataBase
-        $this->Object->delete();
+        $this->object->delete();
         return true;
     }
 }

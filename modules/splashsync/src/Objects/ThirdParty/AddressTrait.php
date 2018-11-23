@@ -154,13 +154,13 @@ trait AddressTrait
         
         //====================================================================//
         // Create List If Not Existing
-        if (!isset($this->Out["contacts"])) {
-            $this->Out["contacts"] = array();
+        if (!isset($this->out["contacts"])) {
+            $this->out["contacts"] = array();
         }
 
         //====================================================================//
         // Read Address List
-        $AddresList = $this->Object->getAddresses(Context::getContext()->language->id);
+        $AddresList = $this->object->getAddresses(Context::getContext()->language->id);
 
         //====================================================================//
         // If Address List Is Empty => Null
@@ -171,7 +171,7 @@ trait AddressTrait
         //====================================================================//
         // Run Through Address List
         foreach ($AddresList as $Key => $Address) {
-            $this->Out["contacts"][$Key] = array (
+            $this->out["contacts"][$Key] = array (
                 "address" => self::objects()->Encode("Address", $Address["id_address"])
                 );
         }
@@ -192,7 +192,7 @@ trait AddressTrait
     {
         //====================================================================//
         // Identify Main Address Id
-        $MainAddress = new Address(Address::getFirstCustomerAddressId($this->Object->id));
+        $MainAddress = new Address(Address::getFirstCustomerAddressId($this->object->id));
         
         //====================================================================//
         // If Empty, Create A New One
@@ -213,28 +213,28 @@ trait AddressTrait
             case 'vat_number':
                 //====================================================================//
                 // READ Directly on Class
-                $this->Out[$FieldName] = $MainAddress->$FieldName;
-                unset($this->In[$Key]);
+                $this->out[$FieldName] = $MainAddress->$FieldName;
+                unset($this->in[$Key]);
                 break;
             case 'id_country':
                 //====================================================================//
                 // READ With Convertion
-                $this->Out[$FieldName] = Country::getIsoById($MainAddress->id_country);
-                unset($this->In[$Key]);
+                $this->out[$FieldName] = Country::getIsoById($MainAddress->id_country);
+                unset($this->in[$Key]);
                 break;
             case 'state':
                 //====================================================================//
                 // READ With Convertion
                 $state = new State($MainAddress->id_state);
-                $this->Out[$FieldName] = $state->name;
-                unset($this->In[$Key]);
+                $this->out[$FieldName] = $state->name;
+                unset($this->in[$Key]);
                 break;
             case 'id_state':
                 //====================================================================//
                 // READ With Convertion
                 $state = new State($MainAddress->id_state);
-                $this->Out[$FieldName] = $state->iso_code;
-                unset($this->In[$Key]);
+                $this->out[$FieldName] = $state->iso_code;
+                unset($this->in[$Key]);
                 break;
         }
     }

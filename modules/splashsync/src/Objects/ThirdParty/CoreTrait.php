@@ -68,8 +68,8 @@ trait CoreTrait
         // READ Field
         switch ($FieldName) {
             case 'email':
-                $this->Out[$FieldName] = $this->Object->$FieldName;
-                unset($this->In[$Key]);
+                $this->out[$FieldName] = $this->object->$FieldName;
+                unset($this->in[$Key]);
                 break;
         }
     }
@@ -88,11 +88,11 @@ trait CoreTrait
         // WRITE Fields
         switch ($FieldName) {
             case 'email':
-                if ($this->Object->$FieldName != $Data) {
-                    $this->Object->$FieldName = $Data;
+                if ($this->object->$FieldName != $Data) {
+                    $this->object->$FieldName = $Data;
                     $this->needUpdate();
                 }
-                unset($this->In[$FieldName]);
+                unset($this->in[$FieldName]);
                 break;
         }
     }

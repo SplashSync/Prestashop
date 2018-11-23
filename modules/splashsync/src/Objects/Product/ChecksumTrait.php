@@ -70,18 +70,18 @@ trait ChecksumTrait
         // READ Fields
         switch ($FieldName) {
             case 'md5':
-                $this->Out[$FieldName]  =   $this->getMd5Checksum();
+                $this->out[$FieldName]  =   $this->getMd5Checksum();
                 break;
 
             case 'md5-debug':
-                $this->Out[$FieldName]  =   $this->getMd5String();
+                $this->out[$FieldName]  =   $this->getMd5String();
                 break;
 
             default:
                 return;
         }
         
-        unset($this->In[$Key]);
+        unset($this->in[$Key]);
     }
     
     /**
@@ -91,9 +91,9 @@ trait ChecksumTrait
     public function getMd5Checksum()
     {
         return self::getMd5ChecksumFromValues(
-            $this->Object->name[$this->LangId],
-            $this->Object->reference,
-            $this->getProductAttributesArray($this->Object, $this->AttributeId)
+            $this->object->name[$this->LangId],
+            $this->object->reference,
+            $this->getProductAttributesArray($this->object, $this->AttributeId)
         );
     }
     
@@ -104,9 +104,9 @@ trait ChecksumTrait
     public function getMd5String()
     {
         return self::getMd5StringFromValues(
-            $this->Object->name[$this->LangId],
-            $this->Object->reference,
-            $this->getProductAttributesArray($this->Object, $this->AttributeId)
+            $this->object->name[$this->LangId],
+            $this->object->reference,
+            $this->getProductAttributesArray($this->object, $this->AttributeId)
         );
     }
     

@@ -62,13 +62,13 @@ trait SplashMetaTrait
         // READ Fields
         switch ($FieldName) {
             case 'splash_id':
-                $this->Out[$FieldName] = Splash::local()->getSplashId(self::$NAME, $this->Object->id);
+                $this->out[$FieldName] = Splash::local()->getSplashId(self::$NAME, $this->object->id);
                 break;
             default:
                 return;
         }
         
-        unset($this->In[$Key]);
+        unset($this->in[$Key]);
     }
 
     /**
@@ -85,8 +85,8 @@ trait SplashMetaTrait
         // WRITE Fields
         switch ($FieldName) {
             case 'splash_id':
-                if ($this->Object->id) {
-                    Splash::local()->setSplashId(self::$NAME, $this->Object->id, $Data);
+                if ($this->object->id) {
+                    Splash::local()->setSplashId(self::$NAME, $this->object->id, $Data);
                 } else {
                     $this->NewSplashId = $Data;
                 }
@@ -94,6 +94,6 @@ trait SplashMetaTrait
             default:
                 return;
         }
-        unset($this->In[$FieldName]);
+        unset($this->in[$FieldName]);
     }
 }

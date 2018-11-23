@@ -59,7 +59,7 @@ trait AttributeTrait
             //====================================================================//
             // USE LOCK to Allow Base Product Loading
             $this->lock("onCombinationCreate");
-            $this->Object   =   $this->load($BaseProductId);
+            $this->object   =   $this->load($BaseProductId);
             $this->unLock("onCombinationCreate");
         } else {
             //====================================================================//
@@ -67,19 +67,19 @@ trait AttributeTrait
             $this->lock("onCombinationLock");
             //====================================================================//
             // Create New Simple Product
-            $this->Object   =    $this->createSimpleProduct();
+            $this->object   =    $this->createSimpleProduct();
             //====================================================================//
             // UNLOCK PRODUCT HOOKS
             $this->unLock("onCombinationLock");
         }
         //====================================================================//
         // Add Product Combination
-        if (!$this->Object || !$this->createAttribute()) {
+        if (!$this->object || !$this->createAttribute()) {
             return false;
         }
         //====================================================================//
         // Return Product
-        return $this->Object;
+        return $this->object;
     }
     
     //====================================================================//
@@ -105,7 +105,7 @@ trait AttributeTrait
         if (!$this->isLocked("onCombinationCreate") && empty($this->AttributeId)) {
             //====================================================================//
             // Read Product Combinations
-            $AttrList = $this->Object->getAttributesResume($this->LangId);
+            $AttrList = $this->object->getAttributesResume($this->LangId);
             //====================================================================//
             // if Product has Combinations => Cannot Read Variant Product Without AttributeId
             if (is_array($AttrList) && !empty($AttrList)) {
@@ -143,7 +143,7 @@ trait AttributeTrait
         //====================================================================//
         // Setup Combination Minimal Data
         $this->setSimple("id_product", $this->ProductId, "Attribute");
-        $this->setSimple("reference", $this->In["ref"], "Attribute");
+        $this->setSimple("reference", $this->in["ref"], "Attribute");
         //====================================================================//
         // CREATE PRODUCT ATTRIBUTE IF NEW
         if ($this->Attribute->add() != true) {
@@ -219,10 +219,10 @@ trait AttributeTrait
         Splash::log()->trace(__CLASS__, __FUNCTION__);
         //====================================================================//
         // Delete Attribute
-        $this->Object->deleteAttributeCombination($this->AttributeId);
+        $this->object->deleteAttributeCombination($this->AttributeId);
         //====================================================================//
         // Read Product Attributes Conbination
-        $AttrList = $this->Object->getAttributesResume($this->LangId);
+        $AttrList = $this->object->getAttributesResume($this->LangId);
         //====================================================================//
         // Verify if Was Last Combination
         if (!empty($AttrList)) {
@@ -230,6 +230,6 @@ trait AttributeTrait
         }
         //====================================================================//
         // Also Delete Product From DataBase
-        return $this->Object->delete();
+        return $this->object->delete();
     }
 }

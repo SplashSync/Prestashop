@@ -62,17 +62,16 @@ trait CRUDTrait
     {
         //====================================================================//
         // Stack Trace
-        Splash::log()->trace(__CLASS__, __FUNCTION__);
-        
+        Splash::log()->trace(__CLASS__, __FUNCTION__);      
         //====================================================================//
         // Check Customer Name is given
-        if (empty($this->In["firstname"])) {
+        if (empty($this->in["firstname"])) {
             return Splash::log()->err("ErrLocalFieldMissing", __CLASS__, __FUNCTION__, "firstname");
         }
-        if (empty($this->In["lastname"])) {
+        if (empty($this->in["lastname"])) {
             return Splash::log()->err("ErrLocalFieldMissing", __CLASS__, __FUNCTION__, "lastname");
         }
-        if (empty($this->In["email"])) {
+        if (empty($this->in["email"])) {
             return Splash::log()->err("ErrLocalFieldMissing", __CLASS__, __FUNCTION__, "email");
         }
         //====================================================================//
@@ -93,23 +92,23 @@ trait CRUDTrait
         // Stack Trace
         Splash::log()->trace(__CLASS__, __FUNCTION__);
         if (!$Needed) {
-            return (int) $this->Object->id;
+            return (int) $this->object->id;
         }
         //====================================================================//
         // If Id Given = > Update Object
         //====================================================================//
-        if (!empty($this->Object->id)) {
-            if ($this->Object->update() != true) {
+        if (!empty($this->object->id)) {
+            if ($this->object->update() != true) {
                 return Splash::log()->err(
                     "ErrLocalTpl",
                     __CLASS__,
                     __FUNCTION__,
-                    "Unable to update (" . $this->Object->id . ")."
+                    "Unable to update (" . $this->object->id . ")."
                 );
             }
             
             Splash::log()->deb("MsgLocalTpl", __CLASS__, __FUNCTION__, "Customer Updated");
-            return $this->Object->id;
+            return $this->object->id;
         }
         
         //====================================================================//
@@ -118,19 +117,19 @@ trait CRUDTrait
             
         //====================================================================//
         // If NO Password Given = > Create Random Password
-        if (empty($this->Object->passwd)) {
-            $this->Object->passwd = Tools::passwdGen();
+        if (empty($this->object->passwd)) {
+            $this->object->passwd = Tools::passwdGen();
             Splash::log()->war(
                 "MsgLocalTpl",
                 __CLASS__,
                 __FUNCTION__,
-                "New Customer Password Generated - " . $this->Object->passwd
+                "New Customer Password Generated - " . $this->object->passwd
             );
         }
 
         //====================================================================//
         // Create Object In Database
-        if ($this->Object->add(true, true) != true) {
+        if ($this->object->add(true, true) != true) {
             return Splash::log()->err("ErrLocalTpl", __CLASS__, __FUNCTION__, "Unable to create Customer. ");
         }
         Splash::log()->deb("MsgLocalTpl", __CLASS__, __FUNCTION__, "Customer Created");
@@ -139,11 +138,11 @@ trait CRUDTrait
         // UPDATE/CREATE SPLASH ID
         //====================================================================//
         if (!is_null($this->NewSplashId)) {
-            Splash::local()->setSplashId(self::$NAME, $this->Object->id, $this->NewSplashId);
+            Splash::local()->setSplashId(self::$NAME, $this->object->id, $this->NewSplashId);
             $this->NewSplashId = null;
         }
         
-        return $this->Object->id;
+        return $this->object->id;
     }
     
     /**

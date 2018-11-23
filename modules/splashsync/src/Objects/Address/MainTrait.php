@@ -133,27 +133,27 @@ trait MainTrait
             //====================================================================//
             // Country ISO Id - READ With Convertion
             case 'id_country':
-                $this->Out[$FieldName] = Country::getIsoById($this->Object->id_country);
+                $this->out[$FieldName] = Country::getIsoById($this->object->id_country);
                 break;
             //====================================================================//
             // State Name - READ With Convertion
             case 'state':
-                $state = new State($this->Object->id_state);
-                $this->Out[$FieldName] = $state->name;
+                $state = new State($this->object->id_state);
+                $this->out[$FieldName] = $state->name;
                 break;
             //====================================================================//
             // State ISO Id - READ With Convertion
             case 'id_state':
                 //====================================================================//
                 // READ With Convertion
-                $state = new State($this->Object->id_state);
-                $this->Out[$FieldName] = $state->iso_code;
+                $state = new State($this->object->id_state);
+                $this->out[$FieldName] = $state->iso_code;
                 break;
             
             default:
                 return;
         }
-        unset($this->In[$Key]);
+        unset($this->in[$Key]);
     }
     
     /**
@@ -183,7 +183,7 @@ trait MainTrait
             default:
                 return;
         }
-        unset($this->In[$FieldName]);
+        unset($this->in[$FieldName]);
     }
 
     /**
@@ -203,16 +203,16 @@ trait MainTrait
             //====================================================================//
             // Country ISO Id - READ With Convertion
             case 'id_country':
-                if ($this->Object->$FieldName  != Country::getByIso($Data)) {
-                    $this->Object->$FieldName  = Country::getByIso($Data);
+                if ($this->object->$FieldName  != Country::getByIso($Data)) {
+                    $this->object->$FieldName  = Country::getByIso($Data);
                     $this->needUpdate();
                 }
                 break;
             //====================================================================//
             // State ISO Id - READ With Convertion
             case 'id_state':
-                if ($this->Object->$FieldName  != State::getIdByIso($Data)) {
-                    $this->Object->$FieldName  = State::getIdByIso($Data);
+                if ($this->object->$FieldName  != State::getIdByIso($Data)) {
+                    $this->object->$FieldName  = State::getIdByIso($Data);
                     $this->needUpdate();
                 }
                 break;
@@ -220,6 +220,6 @@ trait MainTrait
             default:
                 return;
         }
-        unset($this->In[$FieldName]);
+        unset($this->in[$FieldName]);
     }
 }

@@ -128,7 +128,7 @@ trait ItemsTrait
     {
         //====================================================================//
         // Check if List field & Init List Array
-        $FieldId = self::lists()->InitOutput($this->Out, "lines", $FieldName);
+        $FieldId = self::lists()->InitOutput($this->out, "lines", $FieldName);
         if (!$FieldId) {
             return;
         }
@@ -183,9 +183,9 @@ trait ItemsTrait
             }
             //====================================================================//
             // Insert Data in List
-            self::lists()->Insert($this->Out, "lines", $FieldName, $key, $Value);
+            self::lists()->Insert($this->out, "lines", $FieldName, $key, $Value);
         }
-        unset($this->In[$Key]);
+        unset($this->in[$Key]);
     }
 
     /**
@@ -215,10 +215,10 @@ trait ItemsTrait
         // Delete Remaining Lines
         foreach ($this->Products as $ProductItem) {
             $OrderDetail    =   new OrderDetail($ProductItem["id_order_detail"]);
-            $this->Object->deleteProduct($this->Object, $OrderDetail, $ProductItem["product_quantity"]);
+            $this->object->deleteProduct($this->object, $OrderDetail, $ProductItem["product_quantity"]);
         }
         
-        unset($this->In[$FieldName]);
+        unset($this->in[$FieldName]);
     }
     
     /**
@@ -245,8 +245,8 @@ trait ItemsTrait
             //====================================================================//
             // Create New OrderDetail Item
             $OrderDetail =  new OrderDetail();
-            $OrderDetail->id_order      =    $this->Object->id;
-            $OrderDetail->id_shop       =    $this->Object->id_shop;
+            $OrderDetail->id_order      =    $this->object->id;
+            $OrderDetail->id_shop       =    $this->object->id_shop;
             $OrderDetail->id_warehouse  =    0;
         } else {
             $OrderDetail =  new OrderDetail($CurrentProduct["id_order_detail"]);
@@ -323,7 +323,7 @@ trait ItemsTrait
     {
         //====================================================================//
         // Check if List field & Init List Array
-        $FieldId = self::lists()->InitOutput($this->Out, "lines", $FieldName);
+        $FieldId = self::lists()->InitOutput($this->out, "lines", $FieldName);
         if (!$FieldId) {
             return;
         }
@@ -368,7 +368,7 @@ trait ItemsTrait
         $key = count($this->Products) + 1;
         //====================================================================//
         // Insert Data in List
-        self::lists()->Insert($this->Out, "lines", $FieldName, $key, $Value);
+        self::lists()->Insert($this->out, "lines", $FieldName, $key, $Value);
     }
     
     private function getDiscountPrice($DiscountTaxIncl, $DiscountTaxExcl)
@@ -399,9 +399,9 @@ trait ItemsTrait
     private function getDiscountTaxExcl()
     {
         if (get_class($this) ===  "Splash\Local\Objects\Invoice") {
-            return  $this->Object->total_discount_tax_excl;
+            return  $this->object->total_discount_tax_excl;
         }
-        return  $this->Object->total_discounts_tax_excl;
+        return  $this->object->total_discounts_tax_excl;
     }
 
     /**
@@ -411,9 +411,9 @@ trait ItemsTrait
     private function getDiscountTaxIncl()
     {
         if (get_class($this) ===  "Splash\Local\Objects\Invoice") {
-            return  $this->Object->total_discount_tax_incl;
+            return  $this->object->total_discount_tax_incl;
         }
-        return  $this->Object->total_discounts_tax_incl;
+        return  $this->object->total_discounts_tax_incl;
     }
     
     /**
@@ -430,11 +430,11 @@ trait ItemsTrait
     {
         //====================================================================//
         // Check if List field & Init List Array
-        $FieldId = self::lists()->InitOutput($this->Out, "lines", $FieldName);
+        $FieldId = self::lists()->InitOutput($this->out, "lines", $FieldName);
         //====================================================================//
         // Check if List field
         // Check If Order has Discounts
-        if ((!$FieldId) || (SPLASH_DEBUG && ( $this->Object->total_shipping_tax_incl == 0 ))) {
+        if ((!$FieldId) || (SPLASH_DEBUG && ( $this->object->total_shipping_tax_incl == 0 ))) {
             return;
         }
         //====================================================================//
@@ -470,14 +470,14 @@ trait ItemsTrait
         
         //====================================================================//
         // Insert Data in List
-        self::lists()->Insert($this->Out, "lines", $FieldName, count($this->Products), $Value);
+        self::lists()->Insert($this->out, "lines", $FieldName, count($this->Products), $Value);
     }
     
     private function getShippingPrice()
     {
         //====================================================================//
         // Compute Tax Rate Using Tax Calculator
-        if ($this->Object->total_shipping_tax_incl != $this->Object->total_shipping_tax_excl) {
+        if ($this->object->total_shipping_tax_incl != $this->object->total_shipping_tax_excl) {
             $Tax    =   $this->ShippingTaxCalculator->getTotalRate();
         } else {
             $Tax    =   0;
@@ -485,7 +485,7 @@ trait ItemsTrait
         //====================================================================//
         // Build Price Array
         return self::prices()->Encode(
-            (double)    Tools::convertPrice($this->Object->total_shipping_tax_excl, $this->Currency),
+            (double)    Tools::convertPrice($this->object->total_shipping_tax_excl, $this->Currency),
             (double)    $Tax,
             null,
             $this->Currency->iso_code,

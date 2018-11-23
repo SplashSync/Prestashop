@@ -65,14 +65,14 @@ trait CoreTrait
             // MAIN INFORMATIONS
             //====================================================================//
             case 'ref':
-                $this->Out[$FieldName]  =   $this->getProductReference();
+                $this->out[$FieldName]  =   $this->getProductReference();
                 break;
 
             default:
                 return;
         }
         
-        unset($this->In[$Key]);
+        unset($this->in[$Key]);
     }
     
     protected function getProductReference()
@@ -80,7 +80,7 @@ trait CoreTrait
         //====================================================================//
         // Product has No Attribute
         if (!$this->AttributeId) {
-            return  $this->Object->reference;
+            return  $this->object->reference;
         }
         //====================================================================//
         // Product has Attribute but Ref is Defined
@@ -89,7 +89,7 @@ trait CoreTrait
         //====================================================================//
         // Product has Attribute but Attribute Ref is Empty
         } else {
-            return  $this->Object->reference . "-" . $this->AttributeId;
+            return  $this->object->reference . "-" . $this->AttributeId;
         }
     }
     
@@ -121,6 +121,6 @@ trait CoreTrait
             default:
                 return;
         }
-        unset($this->In[$FieldName]);
+        unset($this->in[$FieldName]);
     }
 }

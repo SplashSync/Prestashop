@@ -109,14 +109,14 @@ trait PaymentsTrait
     {
         //====================================================================//
         // Check if List field & Init List Array
-        $FieldId = self::lists()->InitOutput($this->Out, "payments", $FieldName);
+        $FieldId = self::lists()->InitOutput($this->out, "payments", $FieldName);
         if (!$FieldId) {
             return;
         }
         //====================================================================//
         // Verify List is Not Empty
         if (!is_a($this->Payments, "PrestaShopCollection")) {
-            unset($this->In[$Key]);
+            unset($this->in[$Key]);
             return true;
         }
         //====================================================================//
@@ -150,9 +150,9 @@ trait PaymentsTrait
             }
             //====================================================================//
             // Insert Data in List
-            self::lists()->Insert($this->Out, "payments", $FieldName, $key, $Value);
+            self::lists()->Insert($this->out, "payments", $FieldName, $key, $Value);
         }
-        unset($this->In[$Key]);
+        unset($this->in[$Key]);
     }
     
     /**
@@ -217,7 +217,7 @@ trait PaymentsTrait
             $PaymentItem->delete();
         }
         
-        unset($this->In[$FieldName]);
+        unset($this->in[$FieldName]);
     }
     
     /**
@@ -237,8 +237,8 @@ trait PaymentsTrait
             //====================================================================//
             // Create New OrderDetail Item
             $OrderPayment                       =   new OrderPayment();
-            $OrderPayment->order_reference      =   $this->Object->reference;
-            $OrderPayment->id_currency          =   $this->Object->id_currency;
+            $OrderPayment->order_reference      =   $this->object->reference;
+            $OrderPayment->id_currency          =   $this->object->id_currency;
             $OrderPayment->conversion_rate      =   1;
         }
         

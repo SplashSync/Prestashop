@@ -194,7 +194,7 @@ class L03VariantsCRUDTest extends O06SetTest
     /**
      * @abstract    Override Parent Function to Add Variants Attributes
      */
-    public function prepareForTesting($ObjectType, $Field)
+    public function prepareForTesting($ObjectType, $Field, $unik = true)
     {
         //====================================================================//
         //   Verify Test is Required

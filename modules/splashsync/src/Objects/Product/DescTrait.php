@@ -144,20 +144,20 @@ trait DescTrait
             case 'link_rewrite':
             case 'meta_description':
             case 'meta_title':
-                $this->Out[$FieldName] = $this->getMultilang($this->Object, $FieldName);
+                $this->out[$FieldName] = $this->getMultilang($this->object, $FieldName);
                 break;
             case 'meta_keywords':
-                $this->Out[$FieldName] = $this->getMultilangTags($this->Object);
+                $this->out[$FieldName] = $this->getMultilangTags($this->object);
                 break;
             case 'fullname':
-                $this->Out[$FieldName] = $this->getMultilangFullName($this->Object);
+                $this->out[$FieldName] = $this->getMultilangFullName($this->object);
                 break;
                 
             default:
                 return;
         }
         
-        unset($this->In[$Key]);
+        unset($this->in[$Key]);
     }
     
     /**
@@ -179,21 +179,21 @@ trait DescTrait
             case 'name':
             case 'description':
             case 'link_rewrite':
-                $this->setMultilang($this->Object, $FieldName, $Data);
+                $this->setMultilang($this->object, $FieldName, $Data);
                 break;
             case 'meta_description':
-                $this->setMultilang($this->Object, $FieldName, $Data, 159);
+                $this->setMultilang($this->object, $FieldName, $Data, 159);
                 break;
             case 'meta_title':
-                $this->setMultilang($this->Object, $FieldName, $Data, 69);
+                $this->setMultilang($this->object, $FieldName, $Data, 69);
                 break;
             case 'description_short':
-                $this->setMultilang($this->Object, $FieldName, $Data, 1023);
+                $this->setMultilang($this->object, $FieldName, $Data, 1023);
                 break;
             default:
                 return;
         }
-        unset($this->In[$FieldName]);
+        unset($this->in[$FieldName]);
     }
 
     //====================================================================//

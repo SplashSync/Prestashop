@@ -78,16 +78,16 @@ trait DatesTrait
         switch ($FieldName) {
             case 'date_add':
             case 'date_upd':
-                if (isset($this->Object->$FieldName)) {
-                    $this->Out[$FieldName] = $this->Object->$FieldName;
+                if (isset($this->object->$FieldName)) {
+                    $this->out[$FieldName] = $this->object->$FieldName;
                 } else {
-                    $this->Out[$FieldName] = null;
+                    $this->out[$FieldName] = null;
                 }
                 break;
             default:
                 return;
         }
         
-        unset($this->In[$Key]);
+        unset($this->in[$Key]);
     }
 }

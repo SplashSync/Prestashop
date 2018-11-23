@@ -65,25 +65,25 @@ trait CRUDTrait
         
         //====================================================================//
         // Check Address Minimum Fields Are Given
-        if (empty($this->In["id_customer"])) {
+        if (empty($this->in["id_customer"])) {
             return Splash::log()->err("ErrLocalFieldMissing", __CLASS__, __FUNCTION__, "id_customer");
         }
-        if (empty($this->In["firstname"])) {
+        if (empty($this->in["firstname"])) {
             return Splash::log()->err("ErrLocalFieldMissing", __CLASS__, __FUNCTION__, "firstname");
         }
-        if (empty($this->In["lastname"])) {
+        if (empty($this->in["lastname"])) {
             return Splash::log()->err("ErrLocalFieldMissing", __CLASS__, __FUNCTION__, "lastname");
         }
-        if (empty($this->In["address1"])) {
+        if (empty($this->in["address1"])) {
             return Splash::log()->err("ErrLocalFieldMissing", __CLASS__, __FUNCTION__, "address1");
         }
-        if (empty($this->In["postcode"])) {
+        if (empty($this->in["postcode"])) {
             return Splash::log()->err("ErrLocalFieldMissing", __CLASS__, __FUNCTION__, "postcode");
         }
-        if (empty($this->In["city"])) {
+        if (empty($this->in["city"])) {
             return Splash::log()->err("ErrLocalFieldMissing", __CLASS__, __FUNCTION__, "city");
         }
-        if (empty($this->In["id_country"])) {
+        if (empty($this->in["id_country"])) {
             return Splash::log()->err("ErrLocalFieldMissing", __CLASS__, __FUNCTION__, "id_country");
         }
         
@@ -105,35 +105,35 @@ trait CRUDTrait
         // Stack Trace
         Splash::log()->trace(__CLASS__, __FUNCTION__);
         if (!$Needed) {
-            return (int) $this->Object->id;
+            return (int) $this->object->id;
         }
         
         //====================================================================//
         // Create Address Alias if Not Given
-        if (empty($this->Object->alias)) {
-            $this->Object->alias = $this->spl->l("My Address");
+        if (empty($this->object->alias)) {
+            $this->object->alias = $this->spl->l("My Address");
             Splash::log()->war(
                 "MsgLocalTpl",
                 __CLASS__,
                 __FUNCTION__,
-                "New Address Alias Generated - " . $this->Object->alias
+                "New Address Alias Generated - " . $this->object->alias
             );
         }
 
         //====================================================================//
         // If Id Given = > Update Object
         //====================================================================//
-        if (!empty($this->Object->id)) {
-            if ($this->Object->update() != true) {
+        if (!empty($this->object->id)) {
+            if ($this->object->update() != true) {
                 return Splash::log()->err(
                     "ErrLocalTpl",
                     __CLASS__,
                     __FUNCTION__,
-                    "Unable to Update Customer Address (" . $this->Object->id . ")."
+                    "Unable to Update Customer Address (" . $this->object->id . ")."
                 );
             }
             Splash::log()->deb("MsgLocalTpl", __CLASS__, __FUNCTION__, "Customer Address Updated");
-            return $this->Object->id;
+            return $this->object->id;
         }
         
         //====================================================================//
@@ -142,7 +142,7 @@ trait CRUDTrait
             
         //====================================================================//
         // Create Object In Database
-        if ($this->Object->add()  != true) {
+        if ($this->object->add()  != true) {
             return Splash::log()->err(
                 "ErrLocalTpl",
                 __CLASS__,
@@ -156,11 +156,11 @@ trait CRUDTrait
         // UPDATE/CREATE SPLASH ID
         //====================================================================//
         if (!is_null($this->NewSplashId)) {
-            Splash::local()->setSplashId("Address", $this->Object->id, $this->NewSplashId);
+            Splash::local()->setSplashId("Address", $this->object->id, $this->NewSplashId);
             $this->NewSplashId = null;
         }
         
-        return $this->Object->id;
+        return $this->object->id;
     }
     
     /**

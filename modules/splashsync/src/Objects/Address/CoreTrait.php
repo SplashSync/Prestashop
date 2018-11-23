@@ -105,13 +105,13 @@ trait CoreTrait
             //====================================================================//
             // Customer Object Id Readings
             case 'id_customer':
-                $this->Out[$FieldName] = self::objects()->encode("ThirdParty", $this->Object->$FieldName);
+                $this->out[$FieldName] = self::objects()->encode("ThirdParty", $this->object->$FieldName);
                 break;
             
             default:
                 return;
         }
-        unset($this->In[$Key]);
+        unset($this->in[$Key]);
     }
     
     /**
@@ -144,7 +144,7 @@ trait CoreTrait
             default:
                 return;
         }
-        unset($this->In[$FieldName]);
+        unset($this->in[$FieldName]);
     }
     
     /**
@@ -158,7 +158,7 @@ trait CoreTrait
         $Id = self::objects()->Id($Data);
         //====================================================================//
         // Check For Change
-        if ($Id == $this->Object->id_customer) {
+        if ($Id == $this->object->id_customer) {
             return true;
         }
         //====================================================================//

@@ -100,9 +100,9 @@ trait CoreTrait
             // Customer Object Id Readings
             case 'id_customer':
                 if (get_class($this) ===  "Splash\Local\Objects\Invoice") {
-                    $this->Out[$FieldName] = self::objects()->encode("ThirdParty", $this->Order->$FieldName);
+                    $this->out[$FieldName] = self::objects()->encode("ThirdParty", $this->Order->$FieldName);
                 } else {
-                    $this->Out[$FieldName] = self::objects()->encode("ThirdParty", $this->Object->$FieldName);
+                    $this->out[$FieldName] = self::objects()->encode("ThirdParty", $this->object->$FieldName);
                 }
                 break;
 
@@ -112,29 +112,29 @@ trait CoreTrait
                 if (get_class($this) ===  "Splash\Local\Objects\Invoice") {
                     $CustomerId = $this->Order->id_customer;
                 } else {
-                    $CustomerId = $this->Object->id_customer;
+                    $CustomerId = $this->object->id_customer;
                 }
                 //====================================================================//
                 // Load Customer
                 $Customer = new Customer($CustomerId);
                 if ($Customer->id != $CustomerId) {
-                    $this->Out[$FieldName] = null;
+                    $this->out[$FieldName] = null;
                     break;
                 }
-                $this->Out[$FieldName] = $Customer->email;
+                $this->out[$FieldName] = $Customer->email;
                 break;
                 
             //====================================================================//
             // Order Official Date
             case 'order_date':
-                $this->Out[$FieldName] = date(SPL_T_DATECAST, strtotime($this->Object->date_add));
+                $this->out[$FieldName] = date(SPL_T_DATECAST, strtotime($this->object->date_add));
                 break;
             
             default:
                 return;
         }
         
-        unset($this->In[$Key]);
+        unset($this->in[$Key]);
     }
     
     /**
@@ -172,6 +172,6 @@ trait CoreTrait
             default:
                 return;
         }
-        unset($this->In[$FieldName]);
+        unset($this->in[$FieldName]);
     }
 }

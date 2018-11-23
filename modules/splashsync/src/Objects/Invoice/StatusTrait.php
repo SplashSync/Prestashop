@@ -106,13 +106,13 @@ trait StatusTrait
             // INVOICE STATUS
             //====================================================================//
             case 'status':
-                $delta = $this->Object->getTotalPaid() - $this->Object->total_paid_tax_incl;
+                $delta = $this->object->getTotalPaid() - $this->object->total_paid_tax_incl;
                 if (!$this->Order->valid) {
-                    $this->Out[$FieldName]  = "PaymentCanceled";
+                    $this->out[$FieldName]  = "PaymentCanceled";
                 } elseif (($delta < 1E-6 ) || ($delta > 0)) {
-                    $this->Out[$FieldName]  = "PaymentComplete";
+                    $this->out[$FieldName]  = "PaymentComplete";
                 } else {
-                    $this->Out[$FieldName]  = "PaymentDue";
+                    $this->out[$FieldName]  = "PaymentDue";
                 }
                 break;
             
@@ -120,21 +120,21 @@ trait StatusTrait
             // INVOICE PAYMENT STATUS
             //====================================================================//
             case 'isCanceled':
-                $this->Out[$FieldName]  = !$this->Order->valid;
+                $this->out[$FieldName]  = !$this->Order->valid;
                 break;
             case 'isValidated':
-                $this->Out[$FieldName]  = (bool) $this->Order->valid;
+                $this->out[$FieldName]  = (bool) $this->Order->valid;
                 break;
             case 'isPaid':
-                $delta = $this->Object->getTotalPaid() - $this->Object->total_paid_tax_incl;
-                $this->Out[$FieldName]  = ( ($delta < 1E-6 ) || ($delta > 0)  );
+                $delta = $this->object->getTotalPaid() - $this->object->total_paid_tax_incl;
+                $this->out[$FieldName]  = ( ($delta < 1E-6 ) || ($delta > 0)  );
                 break;
         
             default:
                 return;
         }
         
-        unset($this->In[$Key]);
+        unset($this->in[$Key]);
     }
     
     //====================================================================//

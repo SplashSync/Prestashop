@@ -86,6 +86,6 @@ trait MainTrait
                 return;
         }
         
-        unset($this->In[$Key]);
+        unset($this->in[$Key]);
     }
 }

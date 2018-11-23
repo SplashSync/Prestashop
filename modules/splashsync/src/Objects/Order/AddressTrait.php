@@ -64,15 +64,15 @@ trait AddressTrait
             case 'id_address_invoice':
             case 'id_address_delivery':
                 if (get_class($this) ===  "Splash\Local\Objects\Invoice") {
-                    $this->Out[$FieldName] = self::objects()->encode("Address", $this->Order->$FieldName);
+                    $this->out[$FieldName] = self::objects()->encode("Address", $this->Order->$FieldName);
                 } else {
-                    $this->Out[$FieldName] = self::objects()->encode("Address", $this->Object->$FieldName);
+                    $this->out[$FieldName] = self::objects()->encode("Address", $this->object->$FieldName);
                 }
                 break;
             default:
                 return;
         }
-        unset($this->In[$Key]);
+        unset($this->in[$Key]);
     }
     
     /**
@@ -98,6 +98,6 @@ trait AddressTrait
             default:
                 return;
         }
-        unset($this->In[$FieldName]);
+        unset($this->in[$FieldName]);
     }
 }
