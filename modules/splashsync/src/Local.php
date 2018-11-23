@@ -491,7 +491,7 @@ class Local implements LocalClassInterface
     {
         //====================================================================//
         // Load Local Splash Sync Module
-        if (!isset(static::$SplashSyncModule)) {
+        if (isset(static::$SplashSyncModule)) {
             return static::$SplashSyncModule;
         }
         //====================================================================//
