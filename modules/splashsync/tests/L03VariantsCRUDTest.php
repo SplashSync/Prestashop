@@ -23,6 +23,7 @@ use AttributeGroup;
 use Language;
 
 use Splash\Tests\WsObjects\O06SetTest;
+use Splash\Local\Services\LanguagesManager;
 
 /**
  * @abstract    Local Objects Test Suite - Specific Verifications for Products Variants.
@@ -95,7 +96,7 @@ class L03VariantsCRUDTest extends O06SetTest
         foreach (Language::getLanguages() as $Lang) {
             //====================================================================//
             // Encode Language Code From Splash Format to Prestashop Format (fr_FR => fr-fr)
-            $LanguageCode   =   Splash::local()->langEncode($Lang["language_code"]);
+            $LanguageCode   =   LanguagesManager::langEncode($Lang["language_code"]);
             $Name[$LanguageCode]  =  "Variant" . uniqid() . " " . $Lang["name"];
         }
         return array(
@@ -158,7 +159,7 @@ class L03VariantsCRUDTest extends O06SetTest
         foreach (Language::getLanguages() as $Lang) {
             //====================================================================//
             // Encode Language Code From Splash Format to Prestashop Format (fr_FR => fr-fr)
-            $LanguageCode   =   Splash::local()->langEncode($Lang["language_code"]);
+            $LanguageCode   =   LanguagesManager::langEncode($Lang["language_code"]);
             $Names[$LanguageCode]  =  "CustomName" . uniqid();
             $Values[$LanguageCode]=  "CustomValue" . uniqid();
         }
@@ -206,8 +207,8 @@ class L03VariantsCRUDTest extends O06SetTest
         // Prepare Fake Object Data
         //====================================================================//
         
-        $this->Fields   =   $this->fakeFieldsList($ObjectType, array($Field->id), true);
-        $FakeData       =   $this->fakeObjectData($this->Fields);
+        $this->fields   =   $this->fakeFieldsList($ObjectType, array($Field->id), true);
+        $FakeData       =   $this->fakeObjectData($this->fields);
 
         return array_merge($FakeData, $this->CurrentVariation);
     }

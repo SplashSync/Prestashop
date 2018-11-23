@@ -25,14 +25,15 @@ use Splash\Client\Splash;
  */
 class L01InvoicesTest extends ObjectsCase
 {
+
     public function testCreateAnInvoice()
     {
         $this->assertTrue(true);
 
         //====================================================================//
         //   Create Fake Order Data
-        $this->Fields   =   $this->fakeFieldsList("Order", array("product_id@lines"), true);
-        $FakeData       =   $this->fakeObjectData($this->Fields);
+        $this->fields   =   $this->fakeFieldsList("Order", array("product_id@lines"), true);
+        $FakeData       =   $this->fakeObjectData($this->fields);
 
         //====================================================================//
         //   Execute Action Directly on Module
