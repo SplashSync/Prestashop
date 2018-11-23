@@ -194,6 +194,7 @@ class L03VariantsCRUDTest extends O06SetTest
     
     /**
      * @abstract    Override Parent Function to Add Variants Attributes
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function prepareForTesting($ObjectType, $Field, $unik = true)
     {
