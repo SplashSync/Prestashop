@@ -20,31 +20,75 @@ cache:
 sudo: required
 dist: trusty
 
-# Versions of PHP to test against
-php:
-    - "5.6"
-    - "7.0"
-    - "7.1"
-#    - "7.2"
+matrix:
+    include:
+        # Prestashop 1.7.1.x Branch       
+        - php: 5.6
+          env: PS_VERSION=1.7.1.x        
+        - php: 7.1
+          env: PS_VERSION=1.7.1.x        
+
+        # Prestashop 1.7.2.x Branch       
+        - php: 5.6
+          env: PS_VERSION=1.7.2.x        
+        - php: 7.1
+          env: PS_VERSION=1.7.2.x        
+
+        # Prestashop 1.7.3.x Branch       
+        - php: 5.6
+          env: PS_VERSION=1.7.3.x        
+        - php: 7.1
+          env: PS_VERSION=1.7.3.x        
+          
+        # Prestashop 1.7.4.x Branch       
+        - php: 5.6
+          env: PS_VERSION=1.7.4.x        
+        - php: 7.2
+          env: PS_VERSION=1.7.4.x        
+
+        # Prestashop 1.7.5.x Branch       
+        - php: 7.0
+          env: PS_VERSION=1.7.5.x        
+        - php: 7.2
+          env: PS_VERSION=1.7.5.x        
+
+        # Prestashop develop Branch       
+        - php: 7.0
+          env: PS_VERSION=develop        
+        - php: 7.2
+          env: PS_VERSION=develop        
+        
+    allow_failures:
+        - env: PS_VERSION=develop
+        
+    # Fast finish allows to set the build as "finished" even if the "allow_failures" matrix elements are not finished yet.
+    fast_finish: true
+    
+## Versions of PHP to test against
+#php:
+#    - "5.6"
+#    - "7.0"
+#    - "7.1"
+##    - "7.2"
 
 # Gloabl Env Configuration
 env:
     global:
         - SYMFONY_DEPRECATIONS_HELPER=disabled
-        
-    matrix:
-        - PS_VERSION=develop
-        - PS_VERSION=master
-        - PS_VERSION=1.7.1.x
-        - PS_VERSION=1.7.2.x
-        - PS_VERSION=1.7.3.x
-        - PS_VERSION=1.7.4.x
-        
-    allow_failures:
-        - php: 7.2       
-        
-    # Fast finish allows to set the build as "finished" even if the "allow_failures" matrix elements are not finished yet.
-    fast_finish: true        
+#        
+#    matrix:
+#        - PS_VERSION=develop
+#        - PS_VERSION=1.7.1.x
+#        - PS_VERSION=1.7.2.x
+#        - PS_VERSION=1.7.3.x
+#        - PS_VERSION=1.7.4.x
+#        - PS_VERSION=1.7.5.x
+#        
+#    allow_failures:
+#        - php: 7.2       
+#        
+#    # Fast finish allows to set the build as "finished" even if the "allow_failures" matrix elements are not finished yet.
+#    fast_finish: true        
     
 before_script:
 
