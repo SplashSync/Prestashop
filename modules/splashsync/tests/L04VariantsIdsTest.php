@@ -27,11 +27,11 @@ class L04VariantsIdsTest extends TestCase
     
     /**
      * @abstract    Test Product Ids Encoder for Compatibility & Functionnality
-     * 
+     *
      * @param int $pId Product Id
      * @param int $aId Product Id
      * @param int|string $result Expected Id for Splash
-     * 
+     *
      * @dataProvider productIdsProvider
      */
     public function testEncodeDecode($pId, $aId, $result)
@@ -41,14 +41,13 @@ class L04VariantsIdsTest extends TestCase
         //====================================================================//
         // TEST ENCODING
         $sId    =   Product::getUnikIdStatic($pId, $aId);
-        $this->assertSame($result, $sId);     
+        $this->assertSame($result, $sId);
         //====================================================================//
         // TEST DECODING
         $productId =   Product::getId($sId);
         $this->assertSame((int) $pId, $productId);
         $attrId =   Product::getAttribute($sId);
         $this->assertSame((int) $aId, $attrId);
-        
     }
     
     /**
@@ -88,5 +87,4 @@ class L04VariantsIdsTest extends TestCase
         }
         return $response;
     }
-    
 }
