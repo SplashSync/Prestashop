@@ -16,23 +16,14 @@
 
 namespace Splash\Tests;
 
-use Splash\Client\Splash;
-use Combination;
-use Attribute;
-use AttributeGroup;
-use Language;
-
-use Splash\Tests\WsObjects\O06SetTest;
-use Splash\Local\Services\LanguagesManager;
-
 use Splash\Tests\Tools\TestCase;
+use Splash\Local\Objects\Product;
 
 /**
  * @abstract    Local Objects Test Suite - Specific Verifications for Products Id Encoder.
  */
 class L04VariantsIdsTest extends TestCase
 {
-    use \Splash\Local\Objects\Product\IdEncoderTrait;
     
     /**
      * @abstract    Test Product Ids Encoder for Compatibility & Functionnality
@@ -49,13 +40,13 @@ class L04VariantsIdsTest extends TestCase
         
         //====================================================================//
         // TEST ENCODING
-        $sId    =   self::getUnikIdStatic($pId, $aId);
+        $sId    =   Product::getUnikIdStatic($pId, $aId);
         $this->assertSame($result, $sId);     
         //====================================================================//
         // TEST DECODING
-        $productId    =   self::getId($sId);
+        $productId =   Product::getId($sId);
         $this->assertSame((int) $pId, $productId);
-        $attrId    =   self::getAttribute($sId);
+        $attrId =   Product::getAttribute($sId);
         $this->assertSame((int) $aId, $attrId);
         
     }
@@ -67,26 +58,26 @@ class L04VariantsIdsTest extends TestCase
     {
         $response = array();
 
-//        //====================================================================//
-//        // NO ATTRIBUTE ID => Single Int
-//        $response[] =   array(12345, 0, 12345 );
-//        $response[] =   array(12345, "0", 12345 );
-//        $response[] =   array(12345, null, 12345 );
-//        $response[] =   array("12345", 0, 12345 );
-//        $response[] =   array("12345", "0", 12345 );
-//        $response[] =   array("12345", null, 12345 );
-//        
-//        
-//        //====================================================================//
-//        // OLD ENCODING => Both Ids on A Single Int
-//        $response[] =   array(1, 1, 1 + (1 << 20));
-//        $response[] =   array(0xFFFFF, 0x7FF, 0xFFFFF + (0x7FF << 20));
-//            
-//        for ($i=0; $i<100; $i++) {
-//            $pId    =   rand(1, 0xFFFFF);
-//            $aId    =   rand(1, 0x7FF);
-//            $response[] =   array($pId, $aId, $pId + ($aId << 20));
-//        }
+        //====================================================================//
+        // NO ATTRIBUTE ID => Single Int
+        $response[] =   array(12345, 0, 12345 );
+        $response[] =   array(12345, "0", 12345 );
+        $response[] =   array(12345, null, 12345 );
+        $response[] =   array("12345", 0, 12345 );
+        $response[] =   array("12345", "0", 12345 );
+        $response[] =   array("12345", null, 12345 );
+        
+        
+        //====================================================================//
+        // OLD ENCODING => Both Ids on A Single Int
+        $response[] =   array(1, 1, 1 + (1 << 20));
+        $response[] =   array(0xFFFFF, 0x7FF, 0xFFFFF + (0x7FF << 20));
+            
+        for ($i=0; $i<100; $i++) {
+            $pId    =   rand(1, 0xFFFFF);
+            $aId    =   rand(1, 0x7FF);
+            $response[] =   array($pId, $aId, $pId + ($aId << 20));
+        }
 
         //====================================================================//
         // NEW ENCODING => Both Ids on A Single String pId@@aId
