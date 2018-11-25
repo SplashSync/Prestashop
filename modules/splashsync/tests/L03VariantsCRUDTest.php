@@ -30,7 +30,7 @@ use Splash\Local\Services\LanguagesManager;
  */
 class L03VariantsCRUDTest extends O06SetTest
 {
-    /*ù*
+    /**
      * @type    array
      */
     private $CurrentVariation   =   null;

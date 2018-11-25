@@ -270,49 +270,4 @@ trait CRUDTrait
         // Else Delete Product From DataBase
         return $this->object->delete();
     }
-    
-    /**
-     *      @abstract       Convert id_product & id_product_attribute pair
-     *      @param          int(10)       $ProductId               Product Identifier
-     *      @param          int(10)       $AttributeId     Product Combinaison Identifier
-     *      @return         int(32)       $UnikId                   0 if KO, >0 if OK
-     */
-    public function getUnikId($ProductId = null, $AttributeId = 0)
-    {
-        if (is_null($ProductId)) {
-            return self::getUnikIdStatic($this->ProductId, $this->AttributeId);
-        }
-        return self::getUnikIdStatic($ProductId, $AttributeId);
-    }
-    
-    /**
-     *      @abstract       Convert id_product & id_product_attribute pair
-     *      @param          int(10)       $ProductId               Product Identifier
-     *      @param          int(10)       $AttributeId     Product Combinaison Identifier
-     *      @return         int(32)       $UnikId                   0 if KO, >0 if OK
-     */
-    public static function getUnikIdStatic($ProductId, $AttributeId)
-    {
-        return $ProductId + ($AttributeId << 20);
-    }
-    
-    /**
-     *      @abstract       Revert UnikId to decode id_product
-     *      @param          int(32)       $UnikId                   Product UnikId
-     *      @return         int(10)       $id_product               0 if KO, >0 if OK
-     */
-    static public function getId($UnikId)
-    {
-        return $UnikId & 0xFFFFF;
-    }
-    
-    /**
-     *      @abstract       Revert UnikId to decode id_product_attribute
-     *      @param          int(32)       $UnikId                   Product UnikId
-     *      @return         int(10)       $id_product_attribute     0 if KO, >0 if OK
-     */
-    static public function getAttribute($UnikId)
-    {
-        return $UnikId >> 20;
-    }
 }
