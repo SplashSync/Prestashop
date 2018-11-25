@@ -25,6 +25,7 @@ require_once "src/Objects/ThirdParty/HooksTrait.php";
 require_once "src/Objects/Address/HooksTrait.php";
 require_once "src/Objects/Product/HooksTrait.php";
 require_once "src/Objects/Order/HooksTrait.php";
+require_once "src/Traits/SplashIdTrait.php";
 
 /**
  * @abstract    Splash Sync Prestashop Module Main Class
