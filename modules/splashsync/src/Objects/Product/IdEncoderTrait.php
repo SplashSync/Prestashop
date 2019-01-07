@@ -19,12 +19,12 @@ namespace Splash\Local\Objects\Product;
 use Splash\Core\SplashCore      as Splash;
 
 /**
- * @abstract    Prestashop Product IDs Encoding/Decoding Functions
+ * Prestashop Product IDs Encoding/Decoding Functions
  */
 trait IdEncoderTrait
 {
     /**
-     * @abstract       Convert id_product & id_product_attribute pair
+     * Convert id_product & id_product_attribute pair
      *
      * @param int $ProductId   Product Identifier
      * @param int $AttributeId Product Combinaison Identifier
@@ -41,7 +41,7 @@ trait IdEncoderTrait
     }
 
     /**
-     * @abstract       Convert id_product & id_product_attribute pair
+     * Convert id_product & id_product_attribute pair
      *
      * @param int $ProductId   Product Identifier
      * @param int $AttributeId Product Combinaison Identifier
@@ -68,7 +68,7 @@ trait IdEncoderTrait
     }
 
     /**
-     * @abstract       Revert UnikId to decode id_product
+     * Revert UnikId to decode id_product
      *
      * @param int|string $unikId Product UnikId
      *
@@ -80,7 +80,7 @@ trait IdEncoderTrait
     }
 
     /**
-     * @abstract       Revert UnikId to decode id_product_attribute
+     * Revert UnikId to decode id_product_attribute
      *
      * @param int|string $unikId Product UnikId
      *
@@ -92,7 +92,7 @@ trait IdEncoderTrait
     }
 
     /**
-     * @abstract       Decode UnikId to array
+     * Decode UnikId to array
      *
      * @param int|string $unikId Product UnikId
      *

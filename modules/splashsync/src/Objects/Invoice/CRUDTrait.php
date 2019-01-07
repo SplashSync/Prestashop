@@ -18,16 +18,12 @@ namespace Splash\Local\Objects\Invoice;
 
 use Splash\Core\SplashCore      as Splash;
 
-//====================================================================//
-// Prestashop Static Classes
-//====================================================================//
-// Prestashop Static Classes
 use Order;
 use OrderInvoice;
 use TaxCalculator;
 
 /**
- * @abstract    Prestashop Invoices CRUD Functions
+ * Prestashop Invoices CRUD Functions
  */
 trait CRUDTrait
 {
@@ -44,7 +40,7 @@ trait CRUDTrait
     /**
      * @abstract    Load Request Object
      * @param       string  $Id               Object id
-     * @return      mixed
+     * @return      false|OrderInvoice
      */
     public function load($Id)
     {
@@ -54,24 +50,24 @@ trait CRUDTrait
         
         //====================================================================//
         // Load Object
-        $Object   = new OrderInvoice($Id);
-        if ($Object->id != $Id) {
+        $object   = new OrderInvoice($Id);
+        if ($object->id != $Id) {
             return Splash::log()->err("ErrLocalTpl", __CLASS__, __FUNCTION__, " Unable to load Invoice (" . $Id . ").");
         }
-        $this->Order    = new Order($Object->id_order);
-        if ($this->Order->id != $Object->id_order) {
+        $this->Order    = new Order($object->id_order);
+        if ($this->Order->id != $object->id_order) {
             return Splash::log()->err(
                 "ErrLocalTpl",
                 __CLASS__,
                 __FUNCTION__,
-                " Unable to load Invoice Order (" . $Object->id_order . ")."
+                " Unable to load Invoice Order (" . $object->id_order . ")."
             );
         }
         
         //====================================================================//
         // Load Order Products
-        $this->Products         = $Object->getProductsDetail();
-        $this->Payments         = $Object->getOrderPaymentCollection();
+        $this->Products         = $object->getProductsDetail();
+        $this->Payments         = $object->getOrderPaymentCollection();
         $this->PaymentMethod    = $this->Order->module;
         
         //====================================================================//
@@ -79,13 +75,13 @@ trait CRUDTrait
         $this->ShippingTaxCalculator    = (new \Carrier($this->Order->id_carrier))
                     ->getTaxCalculator(new \Address($this->Order->id_address_delivery));
 
-        return $Object;
+        return $object;
     }
 
     /**
-     * @abstract    Create Request Object
+     * Create Request Object
      *
-     * @return      object     New Object
+     * @return      null
      */
     public function create()
     {
@@ -101,37 +97,37 @@ trait CRUDTrait
     }
     
     /**
-     * @abstract    Update Request Object
+     * Update Request Object
      *
-     * @param       array   $Needed         Is This Update Needed
+     * @param       bool   $needed         Is This Update Needed
      *
      * @return      string      Object Id
      */
-    public function update($Needed)
+    public function update($needed)
     {
         //====================================================================//
         // Stack Trace
         Splash::log()->trace(__CLASS__, __FUNCTION__);
-        if (!$Needed) {
-            return (int) $this->object->id;
+        if (!$needed) {
+            return (string) $this->object->id;
         }
         
         //====================================================================//
         // An Invoice Cannot Get deleted
         Splash::log()->err("ErrLocalTpl", __CLASS__, __FUNCTION__, "You Cannot Update Prestashop Invoices");
         
-        return (int) $this->object->id;
+        return (string) $this->object->id;
     }
     
     /**
      * @abstract    Delete requested Object
      *
-     * @param       int     $Id     Object Id.  If NULL, Object needs to be created.
+     * @param       int     $objectId     Object Id.  If NULL, Object needs to be created.
      *
      * @return      bool
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function delete($Id = null)
+    public function delete($objectId = null)
     {
         //====================================================================//
         // Stack Trace

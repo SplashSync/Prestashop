@@ -17,16 +17,13 @@
 namespace Splash\Local\Objects\Order;
 
 use Splash\Core\SplashCore      as Splash;
-
-//====================================================================//
-// Prestashop Static Classes
 use Configuration;
 use Order;
 use Cart;
 use TaxCalculator;
 
 /**
- * @abstract    Prestashop Orders CRUD Functions
+ * Prestashop Orders CRUD Functions
  */
 trait CRUDTrait
 {
@@ -46,40 +43,40 @@ trait CRUDTrait
     protected $ShippingTaxCalculator = null;
     
     /**
-     * @abstract    Load Request Object
-     * @param       string  $Id               Object id
-     * @return      mixed
+     * Load Request Object
+     * @param       string  $objectId               Object id
+     * @return      false|Order
      */
-    public function load($Id)
+    public function load($objectId)
     {
         //====================================================================//
         // Stack Trace
         Splash::log()->trace(__CLASS__, __FUNCTION__);
         //====================================================================//
         // Load Object
-        $Object = new Order($Id);
-        if ($Object->id != $Id) {
-            return Splash::log()->err("ErrLocalTpl", __CLASS__, __FUNCTION__, " Unable to load Order (" . $Id . ").");
+        $object = new Order($objectId);
+        if ($object->id != $objectId) {
+            return Splash::log()->err("ErrLocalTpl", __CLASS__, __FUNCTION__, " Unable to load Order (" . $objectId . ").");
         }
         
         //====================================================================//
         // Load Order Products
-        $this->Products         = $Object->getProductsDetail();
-        $this->Payments         = $Object->getOrderPaymentCollection();
-        $this->PaymentMethod    = $Object->module;
+        $this->Products         = $object->getProductsDetail();
+        $this->Payments         = $object->getOrderPaymentCollection();
+        $this->PaymentMethod    = $object->module;
         
         //====================================================================//
         // Load Shipping Tax Calculator
-        $this->ShippingTaxCalculator    = (new \Carrier($Object->id_carrier))
-                    ->getTaxCalculator(new \Address($Object->id_address_delivery));
+        $this->ShippingTaxCalculator    = (new \Carrier($object->id_carrier))
+                    ->getTaxCalculator(new \Address($object->id_address_delivery));
 
-        return $Object;
+        return $object;
     }
 
     /**
-     * @abstract    Create Request Object
+     * Create Request Object
      *
-     * @return      object     New Object
+     * @return      false|Order     New Object
      */
     public function create()
     {
@@ -145,19 +142,19 @@ trait CRUDTrait
     }
     
     /**
-     * @abstract    Update Request Object
+     * Update Request Object
      *
-     * @param       array   $Needed         Is This Update Needed
+     * @param       bool   $needed         Is This Update Needed
      *
      * @return      string      Object Id
      */
-    public function update($Needed)
+    public function update($needed)
     {
         //====================================================================//
         // Stack Trace
         Splash::log()->trace(__CLASS__, __FUNCTION__);
-        if (!$Needed) {
-            return (int) $this->object->id;
+        if (!$needed) {
+            return (string) $this->object->id;
         }
         
         //====================================================================//
@@ -184,11 +181,11 @@ trait CRUDTrait
             $this->NewSplashId = null;
         }
         
-        return (int) $this->object->id;
+        return (string) $this->object->id;
     }
     
     /**
-     * @abstract    Delete requested Object
+     * Delete requested Object
      *
      * @param       int     $Id     Object Id.  If NULL, Object needs to be created.
      *

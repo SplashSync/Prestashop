@@ -1,62 +1,60 @@
 <?php
-/**
- * This file is part of SplashSync Project.
+
+/*
+ *  This file is part of SplashSync Project.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ *  Copyright (C) 2015-2019 Splash Sync  <www.splashsync.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
- *  @author    Splash Sync <www.splashsync.com>
- *  @copyright 2015-2018 Splash Sync
- *  @license   MIT
+ *  For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
  */
 
 namespace Splash\Local\Objects\ThirdParty;
 
-use Splash\Core\SplashCore      as Splash;
-
-//====================================================================//
-// Prestashop Static Classes
 use Customer;
+use Splash\Core\SplashCore      as Splash;
 use Tools;
 
 /**
- * @abstract    Prestashop ThirdParty CRUD Functions
+ * Prestashop ThirdParty CRUD Functions
  */
 trait CRUDTrait
 {
-    
     /**
-     * @abstract    Load Request Object
-     * @param       string  $Id               Object id
-     * @return      Customer|false
+     * Load Request Object
+     *
+     * @param string $objectId Object id
+     *
+     * @return Customer|false
      */
-    public function load($Id)
+    public function load($objectId)
     {
         //====================================================================//
         // Stack Trace
         Splash::log()->trace(__CLASS__, __FUNCTION__);
         //====================================================================//
         // Load Object
-        $Object = new Customer($Id);
-        if ($Object->id != $Id) {
+        $object = new Customer($objectId);
+        if ($object->id != $objectId) {
             return Splash::log()->err(
                 "ErrLocalTpl",
                 __CLASS__,
                 __FUNCTION__,
-                " Unable to load Customer (" . $Id . ")."
+                " Unable to load Customer (" . $objectId . ")."
             );
         }
-        return $Object;
+
+        return $object;
     }
 
     /**
-     * @abstract    Create Request Object
+     * Create Request Object
      *
-     * @return      object     New Object
+     * @return Customer New Object
      */
     public function create()
     {
@@ -80,25 +78,25 @@ trait CRUDTrait
     }
     
     /**
-     * @abstract    Update Request Object
+     * Update Request Object
      *
-     * @param       array   $Needed         Is This Update Needed
+     * @param bool $needed Is This Update Needed
      *
-     * @return      string      Object Id
+     * @return false|string Object Id
      */
-    public function update($Needed)
+    public function update($needed)
     {
         //====================================================================//
         // Stack Trace
         Splash::log()->trace(__CLASS__, __FUNCTION__);
-        if (!$Needed) {
-            return (int) $this->object->id;
+        if (!$needed) {
+            return (string) $this->object->id;
         }
         //====================================================================//
         // If Id Given = > Update Object
         //====================================================================//
         if (!empty($this->object->id)) {
-            if ($this->object->update() != true) {
+            if (true != $this->object->update()) {
                 return Splash::log()->err(
                     "ErrLocalTpl",
                     __CLASS__,
@@ -108,7 +106,8 @@ trait CRUDTrait
             }
             
             Splash::log()->deb("MsgLocalTpl", __CLASS__, __FUNCTION__, "Customer Updated");
-            return $this->object->id;
+
+            return (string) $this->object->id;
         }
         
         //====================================================================//
@@ -129,7 +128,7 @@ trait CRUDTrait
 
         //====================================================================//
         // Create Object In Database
-        if ($this->object->add(true, true) != true) {
+        if (true != $this->object->add(true, true)) {
             return Splash::log()->err("ErrLocalTpl", __CLASS__, __FUNCTION__, "Unable to create Customer. ");
         }
         Splash::log()->deb("MsgLocalTpl", __CLASS__, __FUNCTION__, "Customer Created");
@@ -142,17 +141,17 @@ trait CRUDTrait
             $this->NewSplashId = null;
         }
         
-        return $this->object->id;
+        return (string) $this->object->id;
     }
     
     /**
      * @abstract    Delete requested Object
      *
-     * @param       int     $Id     Object Id.  If NULL, Object needs to be created.
+     * @param string $objectId Object Id.  If NULL, Object needs to be created.
      *
-     * @return      bool
+     * @return bool
      */
-    public function delete($id = null)
+    public function delete($objectId= null)
     {
         //====================================================================//
         // Stack Trace
@@ -160,22 +159,22 @@ trait CRUDTrait
         
         //====================================================================//
         // Safety Checks
-        if (empty($id)) {
+        if (empty($objectId)) {
             return Splash::log()->err("ErrSchNoObjectId", __CLASS__."::".__FUNCTION__);
         }
         
         //====================================================================//
         // Load Object From DataBase
         //====================================================================//
-        $Object = new Customer($id);
-        if ($Object->id != $id) {
-            return Splash::log()->war("ErrLocalTpl", __CLASS__, __FUNCTION__, "Unable to load (" . $id . ").");
+        $object = new Customer($objectId);
+        if ($object->id != $objectId) {
+            return Splash::log()->war("ErrLocalTpl", __CLASS__, __FUNCTION__, "Unable to load (" . $objectId . ").");
         }
         //====================================================================//
         // Delete Object From DataBase
         //====================================================================//
-        if ($Object->delete() != true) {
-            return Splash::log()->err("ErrLocalTpl", __CLASS__, __FUNCTION__, "Unable to delete (" . $id . ").");
+        if (true != $object->delete()) {
+            return Splash::log()->err("ErrLocalTpl", __CLASS__, __FUNCTION__, "Unable to delete (" . $objectId . ").");
         }
         
         return true;

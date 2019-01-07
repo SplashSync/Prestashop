@@ -1,40 +1,39 @@
 <?php
-/**
- * This file is part of SplashSync Project.
+
+/*
+ *  This file is part of SplashSync Project.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ *  Copyright (C) 2015-2019 Splash Sync  <www.splashsync.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
- *  @author    Splash Sync <www.splashsync.com>
- *  @copyright 2015-2018 Splash Sync
- *  @license   MIT
+ *  For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
  */
 
 namespace Splash\Local\Objects\Product;
 
-use Splash\Core\SplashCore      as Splash;
-
+use Combination;
 //====================================================================//
 // Prestashop Static Classes
 use Product;
-use Combination;
+use Splash\Core\SplashCore      as Splash;
 use StockAvailable;
 use Tools;
 
 /**
- * @abstract    Prestashop Product CRUD Functions
+ * Prestashop Product CRUD Functions
  */
 trait CRUDTrait
 {
-    
     /**
-     * @abstract    Load Request Object
-     * @param       string  $UnikId               Object id
-     * @return      mixed
+     * Load Request Object
+     *
+     * @param string $UnikId Object id
+     *
+     * @return false|Product
      */
     public function load($UnikId)
     {
@@ -84,9 +83,9 @@ trait CRUDTrait
     }
 
     /**
-     * @abstract    Create Request Object
+     * Create Request Object
      *
-     * @return      object     New Object
+     * @return object New Object
      */
     public function create()
     {
@@ -114,76 +113,13 @@ trait CRUDTrait
     }
     
     /**
-     * @abstract    Ensure Required Fields are Available to Create a Product
-     * @return      bool
-     */
-    private function isValidForCreation()
-    {
-        //====================================================================//
-        // Check Product Ref is given
-        if (empty($this->in["ref"])) {
-            return Splash::log()->err("ErrLocalFieldMissing", __CLASS__, __FUNCTION__, "ref");
-        }
-        //====================================================================//
-        // Check Product Name is given
-        if (empty($this->in["name"])) {
-            return Splash::log()->err("ErrLocalFieldMissing", __CLASS__, __FUNCTION__, "name");
-        }
-        //====================================================================//
-        // Init Product Link Rewrite Url
-        if (empty($this->in["link_rewrite"])) {
-            foreach ($this->in["name"] as $key => $value) {
-                $this->in["link_rewrite"][$key] = Tools::link_rewrite($value);
-            }
-        }
-        return true;
-    }
-    
-    /**
-     * @abstract    Create a New Simple Product
+     * Update Request Object
      *
-     * @return      object     New Object
+     * @param bool $needed Is This Update Needed
+     *
+     * @return false|string Object Id
      */
-    private function createSimpleProduct()
-    {
-        //====================================================================//
-        // Stack Trace
-        Splash::log()->trace(__CLASS__, __FUNCTION__);
-        
-        //====================================================================//
-        // Create Empty Product
-        $this->object = new Product();
-        //====================================================================//
-        // Setup Product Minimal Data
-        $this->setSimple("reference", $this->in["ref"]);
-        $this->setMultilang($this->object, "name", $this->in["name"]);
-        $this->setMultilang($this->object, "link_rewrite", $this->in["link_rewrite"]);
-        //====================================================================//
-        // CREATE PRODUCT
-        if ($this->object->add() != true) {
-            return Splash::log()->err(
-                "ErrLocalTpl",
-                __CLASS__,
-                __FUNCTION__,
-                " Unable to create Product."
-            );
-        }
-        //====================================================================//
-        // Store New Id on SplashObject Class
-        $this->ProductId    = $this->object->id;
-        $this->AttributeId  = 0;
-        
-        //====================================================================//
-        // Create Empty Product
-        return $this->object;
-    }
-    
-    /**
-     * @abstract    Update Request Object
-     * @param       array   $Needed         Is This Update Needed
-     * @return      int|false               Object Id
-     */
-    public function update($Needed)
+    public function update($needed)
     {
         //====================================================================//
         // Stack Trace
@@ -191,16 +127,17 @@ trait CRUDTrait
         
         //====================================================================//
         // Verify Update Is requiered
-        if (!$Needed && !$this->isToUpdate("Attribute")) {
+        if (!$needed && !$this->isToUpdate("Attribute")) {
             Splash::log()->deb("MsgLocalNoUpdateReq", __CLASS__, __FUNCTION__);
-            return (int) $this->getUnikId();
+
+            return (string) $this->getUnikId();
         }
         
         //====================================================================//
         // UPDATE MAIN INFORMATIONS
         //====================================================================//
-        if ($this->ProductId && $Needed) {
-            if ($this->object->update() != true) {
+        if ($this->ProductId && $needed) {
+            if (true != $this->object->update()) {
                 return Splash::log()->err(
                     "ErrLocalTpl",
                     __CLASS__,
@@ -216,17 +153,17 @@ trait CRUDTrait
             return false;
         }
         
-        return (int) $this->getUnikId();
+        return (string) $this->getUnikId();
     }
     
     /**
-     * @abstract    Delete requested Object
+     * Delete requested Object
      *
-     * @param       int     $UnikId     Object Id.
+     * @param string $unikId Object Id.
      *
-     * @return      bool
+     * @return bool
      */
-    public function delete($UnikId = null)
+    public function delete($unikId = null)
     {
         //====================================================================//
         // Stack Trace
@@ -234,15 +171,15 @@ trait CRUDTrait
         
         //====================================================================//
         // Safety Checks
-        if (empty($UnikId)) {
+        if (empty($unikId)) {
             return Splash::log()->err("ErrSchNoObjectId", __CLASS__."::".__FUNCTION__);
         }
         
         //====================================================================//
         // Decode Product Id
-        if (!empty($UnikId)) {
-            $this->ProductId    = $this->getId($UnikId);
-            $this->AttributeId  = $this->getAttribute($UnikId);
+        if (!empty($unikId)) {
+            $this->ProductId    = $this->getId($unikId);
+            $this->AttributeId  = $this->getAttribute($unikId);
         } else {
             return Splash::log()->err("ErrSchWrongObjectId", __FUNCTION__);
         }
@@ -269,5 +206,72 @@ trait CRUDTrait
         //====================================================================//
         // Else Delete Product From DataBase
         return $this->object->delete();
+    }
+    
+    /**
+     * Ensure Required Fields are Available to Create a Product
+     *
+     * @return bool
+     */
+    private function isValidForCreation()
+    {
+        //====================================================================//
+        // Check Product Ref is given
+        if (empty($this->in["ref"])) {
+            return Splash::log()->err("ErrLocalFieldMissing", __CLASS__, __FUNCTION__, "ref");
+        }
+        //====================================================================//
+        // Check Product Name is given
+        if (empty($this->in["name"])) {
+            return Splash::log()->err("ErrLocalFieldMissing", __CLASS__, __FUNCTION__, "name");
+        }
+        //====================================================================//
+        // Init Product Link Rewrite Url
+        if (empty($this->in["link_rewrite"])) {
+            foreach ($this->in["name"] as $key => $value) {
+                $this->in["link_rewrite"][$key] = Tools::link_rewrite($value);
+            }
+        }
+
+        return true;
+    }
+    
+    /**
+     * Create a New Simple Product
+     *
+     * @return Product New Product
+     */
+    private function createSimpleProduct()
+    {
+        //====================================================================//
+        // Stack Trace
+        Splash::log()->trace(__CLASS__, __FUNCTION__);
+        
+        //====================================================================//
+        // Create Empty Product
+        $this->object = new Product();
+        //====================================================================//
+        // Setup Product Minimal Data
+        $this->setSimple("reference", $this->in["ref"]);
+        $this->setMultilang($this->object, "name", $this->in["name"]);
+        $this->setMultilang($this->object, "link_rewrite", $this->in["link_rewrite"]);
+        //====================================================================//
+        // CREATE PRODUCT
+        if (true != $this->object->add()) {
+            return Splash::log()->err(
+                "ErrLocalTpl",
+                __CLASS__,
+                __FUNCTION__,
+                " Unable to create Product."
+            );
+        }
+        //====================================================================//
+        // Store New Id on SplashObject Class
+        $this->ProductId    = $this->object->id;
+        $this->AttributeId  = 0;
+        
+        //====================================================================//
+        // Create Empty Product
+        return $this->object;
     }
 }
