@@ -123,7 +123,8 @@ script:
     - phpunit -c phpunit.xml
     - phpunit -c phpunit.xml
        
-    # Show Outdated Packages   
+    # Show Outdated Packages  
+    - cd $MODULE_DIR    
     - composer outdated
     
 notifications:
