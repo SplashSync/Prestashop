@@ -19,6 +19,7 @@ namespace Splash\Tests;
 use Splash\Tests\Tools\ObjectsCase;
 
 use Splash\Client\Splash;
+use Splash\Local\Objects\Order;
 
 /**
  * @abstract    Local Objects Test Suite - Specific Verifications for Invoices Objects.

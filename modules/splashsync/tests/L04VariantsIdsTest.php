@@ -20,16 +20,16 @@ use Splash\Tests\Tools\TestCase;
 use Splash\Local\Objects\Product;
 
 /**
- * @abstract    Local Objects Test Suite - Specific Verifications for Products Id Encoder.
+ * Local Objects Test Suite - Specific Verifications for Products Id Encoder.
  */
 class L04VariantsIdsTest extends TestCase
 {
     
     /**
-     * @abstract    Test Product Ids Encoder for Compatibility & Functionnality
+     * Test Product Ids Encoder for Compatibility & Functionnality
      *
-     * @param int $pId Product Id
-     * @param int $aId Product Id
+     * @param int|string $pId Product Id
+     * @param null|int|string $aId Product Id
      * @param int|string $result Expected Id for Splash
      *
      * @dataProvider productIdsProvider
@@ -40,7 +40,7 @@ class L04VariantsIdsTest extends TestCase
         
         //====================================================================//
         // TEST ENCODING
-        $sId    =   Product::getUnikIdStatic($pId, $aId);
+        $sId    =   Product::getUnikIdStatic((int) $pId, (int) $aId);
         $this->assertSame($result, $sId);
         //====================================================================//
         // TEST DECODING
