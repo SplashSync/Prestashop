@@ -41,7 +41,7 @@ class L04VariantsIdsTest extends TestCase
         //====================================================================//
         // TEST ENCODING
         $sId    =   Product::getUnikIdStatic((int) $pId, (int) $aId);
-        $this->assertSame($result, $sId);
+        $this->assertSame((string) $result, $sId);
         //====================================================================//
         // TEST DECODING
         $productId =   Product::getId($sId);
