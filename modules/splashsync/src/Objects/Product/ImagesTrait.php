@@ -446,7 +446,7 @@ trait ImagesTrait
      */
     private function searchImage($md5)
     {
-        if (!is_iterable($this->imagesCache)) {
+        if (!is_array($this->imagesCache)) {
             return false;
         }
         foreach ($this->imagesCache as $key => $imgArray) {
@@ -624,7 +624,7 @@ trait ImagesTrait
         // Compute Current Images Array
         $current = array();
         $currentImages = $this->Attribute->getWsImages();
-        if (is_iterable($currentImages)) {
+        if (is_array($currentImages)) {
             foreach ($currentImages as $value) {
                 $current[] = (int) $value['id'];
             }

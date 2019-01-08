@@ -396,7 +396,7 @@ trait AttributesTrait
         // Build Current Attributes Ids Table
         $oldAttributesIds = array();
         $oldAttributes = $this->Attribute->getWsProductOptionValues();
-        if (is_iterable($oldAttributes)) {
+        if (is_array($oldAttributes)) {
             foreach ($oldAttributes as $Attribute) {
                 $oldAttributesIds[] = $Attribute["id"];
             }
