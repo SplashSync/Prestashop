@@ -1,57 +1,53 @@
 <?php
-/**
- * This file is part of SplashSync Project.
+
+/*
+ *  This file is part of SplashSync Project.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ *  Copyright (C) 2015-2019 Splash Sync  <www.splashsync.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
- *  @author    Splash Sync <www.splashsync.com>
- *  @copyright 2015-2018 Splash Sync
- *  @license   MIT
+ *  For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
  */
 
 namespace Splash\Local\Services;
 
 use ArrayObject;
-
-use Splash\Core\SplashCore      as Splash;
-
-use Splash\Models\LocalClassInterface;
-
+use Configuration;
+use Context;
 use Db;
 use DbQuery;
-use Configuration;
-use Validate;
-use Context;
-use Language;
 use Employee;
-use Tools;
-use TaxRule;
-use SplashSync;
-
+use Language;
+use Splash\Core\SplashCore      as Splash;
 use Splash\Local\Traits\SplashIdTrait;
+use Splash\Models\LocalClassInterface;
+use SplashSync;
+use TaxRule;
+use Tools;
+use Validate;
 
 /**
- * @abstract    Splash Languages Manager - Prestashop Taxes Management
+ * Splash Languages Manager - Prestashop Taxes Management
  */
 class TaxManager
 {
-    
     /**
-    *   @abstract     Return Product Image Array from Prestashop Object Class
-    *   @param        float     $TaxRate            Product Tax Rate in Percent
-    *   @param        int       $CountryId          Country Id
-    *   @param        int                           Tax Rate Group Id
-    */
-    public static function getTaxRateGroupId($TaxRate, $CountryId = null)
+     * Return Product Image Array from Prestashop Object Class
+     *
+     * @param float $taxRate   Product Tax Rate in Percent
+     * @param int   $countryId Country Id
+     *
+     * @return false|int Tax Rate Group Id
+     */
+    public static function getTaxRateGroupId($taxRate, $countryId = null)
     {
-        $LangId = Context::getContext()->language->id;
-        if (is_null($CountryId)) {
-            $CountryId = Configuration::get('PS_COUNTRY_DEFAULT');
+        $langId = Context::getContext()->language->id;
+        if (is_null($countryId)) {
+            $countryId = Configuration::get('PS_COUNTRY_DEFAULT');
         }
         
         //====================================================================//
@@ -71,12 +67,12 @@ class TaxManager
         $sql->from("tax_rule", "g");
         //====================================================================//
         // Build JOIN
-        $sql->leftJoin("country_lang", 'cl', '(g.`id_country` = cl.`id_country` AND `id_lang` = '. (int) $LangId .')');
+        $sql->leftJoin("country_lang", 'cl', '(g.`id_country` = cl.`id_country` AND `id_lang` = '. (int) $langId .')');
         $sql->leftJoin("tax", 't', '(g.`id_tax` = t.`id_tax`)');
         //====================================================================//
         // Build WHERE
-        $sql->where('t.`rate` = '. $TaxRate);
-        $sql->where('g.`id_country` = '. (int) $CountryId);
+        $sql->where('t.`rate` = '. $taxRate);
+        $sql->where('g.`id_country` = '. (int) $countryId);
         //====================================================================//
         // Build ORDER BY
         $sql->orderBy('country_name ASC');
@@ -87,32 +83,37 @@ class TaxManager
             return false;
         }
         
-        if (Db::getInstance()->numRows() > 0) {
+        if (is_array($result) && (Db::getInstance()->numRows() > 0)) {
             $NewTaxRate = array_shift($result);
+
             return $NewTaxRate["id_group"];
         }
+
         return false;
     }
     
     /**
-     * @abstract    Identify Best Tax Rate from Raw Computed Value
-     * @param       float     $TaxRate            Product Tax Rate in Percent
-     * @param       int       $TaxRateGroupId     Product Tax Rate Group Id
-     * @return      TaxRule
+     * Identify Best Tax Rate from Raw Computed Value
+     *
+     * @param float $taxRate        Product Tax Rate in Percent
+     * @param int   $taxRateGroupId Product Tax Rate Group Id
+     *
+     * @return float
      */
-    public static function getBestTaxRateInGroup($TaxRate, $TaxRateGroupId)
+    public static function getBestTaxRateInGroup($taxRate, $taxRateGroupId)
     {
         //====================================================================//
         // Get default Language Id
-        $LangId = Context::getContext()->language->id;
+        $langId = Context::getContext()->language->id;
         //====================================================================//
         // For All Tax Rules of This Group, Search for Closest Rate
-        $BestRate   =   0;
-        foreach (TaxRule::getTaxRulesByGroupId($LangId, $TaxRateGroupId) as $TaxRule) {
-            if (abs($TaxRate - $TaxRule["rate"]) <  abs($TaxRate - $BestRate)) {
-                $BestRate   =   $TaxRule["rate"];
+        $bestRate   =   0;
+        foreach (TaxRule::getTaxRulesByGroupId($langId, $taxRateGroupId) as $TaxRule) {
+            if (abs($taxRate - $TaxRule["rate"]) <  abs($taxRate - $bestRate)) {
+                $bestRate   =   $TaxRule["rate"];
             }
         }
-        return $BestRate;
+
+        return $bestRate;
     }
 }

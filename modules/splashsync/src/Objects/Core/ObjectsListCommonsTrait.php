@@ -1,34 +1,35 @@
 <?php
-/**
- * This file is part of SplashSync Project.
+
+/*
+ *  This file is part of SplashSync Project.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ *  Copyright (C) 2015-2019 Splash Sync  <www.splashsync.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
- *  @author    Splash Sync <www.splashsync.com>
- *  @copyright 2015-2018 Splash Sync
- *  @license   MIT
+ *  For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
  */
 
 namespace   Splash\Local\Objects\Core;
 
+use Db;
 use Splash\Core\SplashCore      as Splash;
 
-//====================================================================//
-// Prestashop Static Classes
-use Db;
-
 /**
- * @abstract    Common Acces to Objects Lists Functions
- * @author      B. Paquier <contact@splashsync.com>
+ * Common Acces to Objects Lists Functions
  */
 trait ObjectsListCommonsTrait
 {
-    
+    /**
+     * Get Totl Number of Object for a Sql Request
+     *
+     * @param string $sql
+     *
+     * @return false|int
+     */
     protected function getObjectListTotal($sql)
     {
         //====================================================================//
@@ -42,9 +43,18 @@ trait ObjectsListCommonsTrait
         }
         //====================================================================//
         // Compute Total Number of Results
-        return (int) Db::getInstance()->numRows();
+        return Db::getInstance()->numRows();
     }
 
+    /**
+     * Get Raw Data Array for an Sql Request
+     *
+     * @param string     $sql
+     * @param string     $sortField
+     * @param null|array $params
+     *
+     * @return array|false
+     */
     protected function getObjectsListRawData($sql, $sortField, $params = null)
     {
         //====================================================================//
@@ -52,22 +62,32 @@ trait ObjectsListCommonsTrait
         Splash::log()->trace(__CLASS__, __FUNCTION__);
         //====================================================================//
         // Setup sortorder
-        $SortField = empty($params["sortfield"])    ?   $sortField  :   pSQL($params["sortfield"]);
-        $SortOrder = empty($params["sortorder"])    ?   "ASC"       :   pSQL($params["sortorder"]);
+        $sqlSortField = empty($params["sortfield"])    ?   $sortField  :   pSQL($params["sortfield"]);
+        $sqlSortOrder = empty($params["sortorder"])    ?   "ASC"       :   pSQL($params["sortorder"]);
         // Build ORDER BY
-        $sql->orderBy('`' . pSQL($SortField) . '` ' . pSQL($SortOrder));
+        $sql->orderBy('`' . pSQL($sqlSortField) . '` ' . pSQL($sqlSortOrder));
         //====================================================================//
         // Build LIMIT
         $sql->limit(pSQL($params["max"]), pSQL($params["offset"]));
         //====================================================================//
         // Execute final request
-        $Result = Db::getInstance()->executeS($sql);
-        if (Db::getInstance()->getNumberError()) {
+        $result = Db::getInstance()->executeS($sql);
+        if (!is_array($result) || Db::getInstance()->getNumberError()) {
             return Splash::log()->err("ErrLocalTpl", __CLASS__, __FUNCTION__, Db::getInstance()->getMsgError());
         }
-        return $Result;
+
+        return $result;
     }
     
+    /**
+     * Get Splash generic Data Array from a Raw Sql Request
+     *
+     * @param string     $sql
+     * @param string     $sortField
+     * @param null|array $params
+     *
+     * @return array|false
+     */
     protected function getObjectsListGenericData($sql, $sortField, $params = null)
     {
         //====================================================================//
@@ -75,26 +95,27 @@ trait ObjectsListCommonsTrait
         Splash::log()->trace(__CLASS__, __FUNCTION__);
         //====================================================================//
         // Compute Total Number of Results
-        $Total      = $this->getObjectListTotal($sql);
+        $total      = $this->getObjectListTotal($sql);
         //====================================================================//
         // Execute Generic Search
-        $Result     = $this->getObjectsListRawData($sql, $sortField, $params);
-        if ($Result === false) {
-            return $Result;
+        $result     = $this->getObjectsListRawData($sql, $sortField, $params);
+        if (false === $result) {
+            return $result;
         }
         //====================================================================//
         // Init Result Array
-        $Data       = array();
+        $data       = array();
         //====================================================================//
         // For each result, read information and add to $Data
-        foreach ($Result as $key => $ObjectArray) {
-            $Data[$key] = $ObjectArray;
+        foreach ($result as $key => $ObjectArray) {
+            $data[$key] = $ObjectArray;
         }
         //====================================================================//
         // Prepare List result meta infos
-        $Data["meta"]["current"]    =   count($Data);   // Store Current Number of results
-        $Data["meta"]["total"]      =   $Total;         // Store Total Number of results
-        Splash::log()->deb("MsgLocalTpl", __CLASS__, __FUNCTION__, (count($Data)-1)." Objects Found.");
-        return $Data;
+        $data["meta"]["current"]    =   count($data);   // Store Current Number of results
+        $data["meta"]["total"]      =   $total;         // Store Total Number of results
+        Splash::log()->deb("MsgLocalTpl", __CLASS__, __FUNCTION__, (count($data)-1)." Objects Found.");
+
+        return $data;
     }
 }

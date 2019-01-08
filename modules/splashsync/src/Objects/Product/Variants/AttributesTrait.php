@@ -52,21 +52,21 @@ trait AttributesTrait
         }
         //====================================================================//
         // For Each Available Language
-        foreach (Language::getLanguages() as $Lang) {
+        foreach (Language::getLanguages() as $lang) {
             //====================================================================//
             // Encode Language Code From Splash Format to Prestashop Format (fr_FR => fr-fr)
-            $LanguageCode   =   LanguagesManager::langEncode($Lang["language_code"]);
-            $LanguageId     =   (int) $Lang["id_lang"];
+            $langCode   =   LanguagesManager::langEncode($lang["language_code"]);
+            $langId     =   (int) $lang["id_lang"];
             //====================================================================//
             // Check if Name is Given in this Language
-            if (!isset($name[$LanguageCode])) {
+            if (!isset($name[$langCode])) {
                 continue;
             }
             //====================================================================//
             // Search for this Base Product Name
-            $BaseProductId   = $this->searchBaseProduct($LanguageId, $name[$LanguageCode]);
-            if ($BaseProductId) {
-                return $BaseProductId;
+            $baseProductId   = $this->searchBaseProduct($langId, $name[$langCode]);
+            if ($baseProductId) {
+                return $baseProductId;
             }
         }
 
@@ -306,10 +306,10 @@ trait AttributesTrait
     /**
      * Search for Base Product by Multilang Name
      *
-     * @param int    $langId Prestashop Language Id
-     * @param string $name   Input Product Name without Options
+     * @param int|string $langId Prestashop Language Id
+     * @param string     $name   Input Product Name without Options
      *
-     * @return null|int Product Id
+     * @return false|int Product Id
      */
     private function searchBaseProduct($langId, $name)
     {
@@ -319,7 +319,7 @@ trait AttributesTrait
         //====================================================================//
         // Check Name is Array
         if (empty($name)) {
-            return null;
+            return false;
         }
         //====================================================================//
         // Build query
@@ -343,7 +343,7 @@ trait AttributesTrait
             return $Result[0]["id"];
         }
 
-        return null;
+        return false;
     }
     
     //====================================================================//

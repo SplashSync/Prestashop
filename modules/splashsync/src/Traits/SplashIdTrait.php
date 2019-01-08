@@ -62,15 +62,15 @@ trait SplashIdTrait
      * Read Splash Id from Storage
      *
      * @param string $objectType Object Type
-     * @param string $objectId   Object Identifier
+     * @param int|string $objectId   Object Identifier
      *
      * @return false|string
      */
     public static function getSplashId($objectType, $objectId)
     {
         $sql     =  "SELECT spl_id FROM `"._DB_PREFIX_."splash_links`";
-        $sql    .=  " WHERE type='" . pSQL($objectType) . "' AND id='" . pSQL($objectId) . "' ";
-        $splashId = Db::getInstance()->getValue($sql, 0);
+        $sql    .=  " WHERE type='" . pSQL($objectType) . "' AND id='" . pSQL((string) $objectId) . "' ";
+        $splashId = Db::getInstance()->getValue($sql, false);
 
         return is_string($splashId) ? $splashId : false;
     }
@@ -78,36 +78,36 @@ trait SplashIdTrait
     /**
      * Write Splash Id to Storage
      *
-     * @param string $ObjectType Object Type
-     * @param string $ObjectId   Object Identifier
-     * @param string $SplashId   Splash Object Identifier
+     * @param string $objectType Object Type
+     * @param int|string $objectId   Object Identifier
+     * @param string $splashId   Splash Object Identifier
      *
      * @return bool
      */
-    public static function setSplashId($ObjectType, $ObjectId, $SplashId = null)
+    public static function setSplashId($objectType, $objectId, $splashId = null)
     {
-        if (empty($SplashId)) {
+        if (empty($splashId)) {
             return false;
         }
         
         // Read Splash Id
-        $Current = self::getSplashId($ObjectType, $ObjectId);
+        $Current = self::getSplashId($objectType, $objectId);
         // Object is Unknown
         if (!$Current) {
             return Db::getInstance()->insert("splash_links", array(
-                "id"        =>  pSQL($ObjectId),
-                "type"      =>  pSQL($ObjectType),
-                "spl_id"    =>  pSQL($SplashId),
+                "id"        =>  pSQL((string) $objectId),
+                "type"      =>  pSQL($objectType),
+                "spl_id"    =>  pSQL($splashId),
             ));
         }
         // Splash Id Changed
-        if ($Current !== $SplashId) {
+        if ($Current !== $splashId) {
             return Db::getInstance()->update(
                 "splash_links",
                 array(
-                    "spl_id"    =>  pSQL($SplashId),
+                    "spl_id"    =>  pSQL($splashId),
                 ),
-                "type='" . pSQL($ObjectType) . "' AND id='" . pSQL($ObjectId) . "' "
+                "type='" . pSQL($objectType) . "' AND id='" . pSQL((string) $objectId) . "' "
             );
         }
 

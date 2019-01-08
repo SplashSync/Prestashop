@@ -1,89 +1,92 @@
 <?php
-/**
- * This file is part of SplashSync Project.
+
+/*
+ *  This file is part of SplashSync Project.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ *  Copyright (C) 2015-2019 Splash Sync  <www.splashsync.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
- *  @author    Splash Sync <www.splashsync.com>
- *  @copyright 2015-2018 Splash Sync
- *  @license   MIT
+ *  For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
  */
 
 namespace Splash\Local\Services;
 
-use Splash\Core\SplashCore      as Splash;
-
-use Validate;
 use Context;
 use Language;
+use Splash\Core\SplashCore      as Splash;
 use Tools;
+use Validate;
 
 /**
- * @abstract    Splash Languages Manager - Prestashop Languages Management
+ * Splash Languages Manager - Prestashop Languages Management
  */
 class LanguagesManager
 {
-
     /**
-     * @abstract       Setup Local Language if Not Already Done
+     * Setup Local Language if Not Already Done
      *
-     * @return         bool
+     * @return int
      */
     public static function loadDefaultLanguage()
     {
         //====================================================================//
         // Load Default Language from Local Module Configuration
-        $LangCode = Splash::configuration()->DefaultLanguage;
+        $langCode = Splash::configuration()->DefaultLanguage;
         //====================================================================//
         // Setup Prestashop with Default Language
-        if (!empty($LangCode) && Validate::isLanguageCode($LangCode)) {
-            Context::getContext()->language = Language::getLanguageByIETFCode($LangCode);
+        if (!empty($langCode) && Validate::isLanguageCode($langCode)) {
+            Context::getContext()->language = Language::getLanguageByIETFCode($langCode);
         }
         //====================================================================//
         // Check Now Ok
         if (!empty(Context::getContext()->language->id)) {
             return  Context::getContext()->language->id;
         }
-        return  false;
+
+        return  0;
     }
     
     /**
-     *      @abstract       Translate Prestashop Languages Code to Splash Standard Format
-     *      @param          string      $PsCode     Language Code in Prestashop Format
-     *      @return         string      $Out        Language Code in Splash Format
+     * Translate Prestashop Languages Code to Splash Standard Format
+     *
+     * @param string $psCode Language Code in Prestashop Format
+     *
+     * @return string Language Code in Splash Format
      */
-    public static function langEncode($PsCode)
+    public static function langEncode($psCode)
     {
         //====================================================================//
         // Split Language Code
-        $Tmp = explode("-", $PsCode);
-        if (count($Tmp) != 2) {
-            $Out = $PsCode;
+        $tmp = explode("-", $psCode);
+        if (2 != count($tmp)) {
+            $out = $psCode;
         } else {
-            $Out = $Tmp[0] . "_" . Tools::strtoupper($Tmp[1]);
+            $out = $tmp[0] . "_" . Tools::strtoupper($tmp[1]);
         }
-        return $Out;
+
+        return $out;
     }
 
     /**
-     *      @abstract       Translate Prestashop Languages Code from Splash Standard Format
-     *      @param          string      $IsoCode         Language Code in Splash Format
-     *      @return         string      $Out        Language Code in Prestashop Format
+     * Translate Prestashop Languages Code from Splash Standard Format
+     *
+     * @param string $isoCode Language Code in Splash Format
+     *
+     * @return string Language Code in Prestashop Format
      */
-    public static function langDecode($IsoCode)
+    public static function langDecode($isoCode)
     {
         //====================================================================//
         // Split Language Code
-        $Tmp = explode("_", $IsoCode);
-        if (count($Tmp) != 2) {
-            return $IsoCode;
-        } else {
-            return $Tmp[0] . "-" . Tools::strtolower($Tmp[1]);
+        $tmp = explode("_", $isoCode);
+        if (2 != count($tmp)) {
+            return $isoCode;
         }
+
+        return $tmp[0] . "-" . Tools::strtolower($tmp[1]);
     }
 }

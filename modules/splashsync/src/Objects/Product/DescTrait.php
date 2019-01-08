@@ -198,7 +198,7 @@ trait DescTrait
             
             //====================================================================//
             // Product Specific - Read Full Product Name with Attribute Description
-            $data[$langCode] = Product::getProductName((int)$object->id, $this->AttributeId, $langId);
+            $data[$langCode] = Product::getProductName($object->id, $this->AttributeId, $langId);
             
             //====================================================================//
             // Catch Potential Prestashop SQL Errors
@@ -210,7 +210,7 @@ trait DescTrait
                     " Error : " . Db::getInstance()->getMsgError()
                 );
                 $data[$langCode] = Product::getProductName(
-                    (int)$object->id,
+                    $object->id,
                     null,
                     $langId
                 ) . " (" . $this->AttributeId . ")" ;

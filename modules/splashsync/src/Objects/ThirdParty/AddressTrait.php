@@ -190,13 +190,11 @@ trait AddressTrait
     {
         //====================================================================//
         // Identify Main Address Id
-        $mainAddress = new Address(Address::getFirstCustomerAddressId($this->object->id));
+        $mainAddressId = Address::getFirstCustomerAddressId($this->object->id);
         
         //====================================================================//
         // If Empty, Create A New One
-        if (empty($mainAddress->id)) {
-            $mainAddress = new Address();
-        }
+        $mainAddress = new Address(is_numeric($mainAddressId) ? $mainAddressId : null);
         
         //====================================================================//
         // READ Fields
