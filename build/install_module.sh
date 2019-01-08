@@ -5,6 +5,7 @@ echo Install SplashSync Module
 cd $MODULE_DIR
 # With PHP 7 => Load Phpstan   
 if [[ ${TRAVIS_PHP_VERSION:0:3} < "7.1" ]]; then composer remove phpstan/phpstan-shim --no-update --dev; fi
+if [[ ${TRAVIS_PHP_VERSION:0:3} < "7.1" ]]; then composer remove phpstan/phpstan-phpunit --no-update --dev; fi
 composer update --prefer-dist --no-interaction --no-progress
 cd $TRAVIS_BUILD_DIR
 
