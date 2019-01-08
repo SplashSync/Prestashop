@@ -16,19 +16,17 @@
 
 namespace Splash\Local\Objects\ThirdParty;
 
-//====================================================================//
-// Prestashop Static Classes
 use Translate;
 
 /**
- * @abstract    Access to thirdparty Meta Fields
+ * Access to thirdparty Meta Fields
  */
 trait MetaTrait
 {
 
 
     /**
-    *   @abstract     Build Customers Unused Fields using FieldFactory
+    * Build Customers Unused Fields using FieldFactory
     */
     private function buildMetaFields()
     {
@@ -59,56 +57,56 @@ trait MetaTrait
     }
 
     /**
-     *  @abstract     Read requested Field
+     * Read requested Field
      *
-     *  @param        string    $Key                    Input List Key
-     *  @param        string    $FieldName              Field Identifier / Name
+     * @param        string    $key                    Input List Key
+     * @param        string    $fieldName              Field Identifier / Name
      *
-     *  @return         none
+     * @return         void
      */
-    private function getMetaFields($Key, $FieldName)
+    private function getMetaFields($key, $fieldName)
     {
             
         //====================================================================//
         // READ Fields
-        switch ($FieldName) {
+        switch ($fieldName) {
             case 'active':
             case 'newsletter':
             case 'passwd':
             case 'optin':
-                $this->out[$FieldName] = $this->object->$FieldName;
+                $this->out[$fieldName] = $this->object->$fieldName;
                 break;
             default:
                 return;
         }
         
-        unset($this->in[$Key]);
+        unset($this->in[$key]);
     }
 
     /**
-     *  @abstract     Write Given Fields
+     * Write Given Fields
      *
-     *  @param        string    $FieldName              Field Identifier / Name
-     *  @param        mixed     $Data                   Field Data
+     * @param        string    $fieldName              Field Identifier / Name
+     * @param        mixed     $fieldData                   Field Data
      *
-     *  @return         none
+     * @return         void
      */
-    private function setMetaFields($FieldName, $Data)
+    private function setMetaFields($fieldName, $fieldData)
     {
         //====================================================================//
         // WRITE Fields
-        switch ($FieldName) {
+        switch ($fieldName) {
             case 'active':
             case 'newsletter':
             case 'optin':
-                if ($this->object->$FieldName != $Data) {
-                    $this->object->$FieldName = $Data;
+                if ($this->object->$fieldName != $fieldData) {
+                    $this->object->$fieldName = $fieldData;
                     $this->needUpdate();
                 }
                 break;
             default:
                 return;
         }
-        unset($this->in[$FieldName]);
+        unset($this->in[$fieldName]);
     }
 }

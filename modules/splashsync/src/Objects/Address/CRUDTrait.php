@@ -1,35 +1,34 @@
 <?php
-/**
- * This file is part of SplashSync Project.
+
+/*
+ *  This file is part of SplashSync Project.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ *  Copyright (C) 2015-2019 Splash Sync  <www.splashsync.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
- *  @author    Splash Sync <www.splashsync.com>
- *  @copyright 2015-2018 Splash Sync
- *  @license   MIT
+ *  For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
  */
 
 namespace Splash\Local\Objects\Address;
 
-use Splash\Core\SplashCore      as Splash;
-
 use Address;
+use Splash\Core\SplashCore      as Splash;
 
 /**
  * Prestashop ThirdParty CRUD Functions
  */
 trait CRUDTrait
 {
-    
     /**
      * Load Request Object
-     * @param       string  $Id               Object id
-     * @return      false|Address
+     *
+     * @param string $Id Object id
+     *
+     * @return Address|false
      */
     public function load($Id)
     {
@@ -47,13 +46,14 @@ trait CRUDTrait
                 " Unable to load Customer Address (" . $Id . ")."
             );
         }
+
         return $object;
     }
 
     /**
      * Create Request Object
      *
-     * @return      false|Address
+     * @return Address|false
      */
     public function create()
     {
@@ -93,9 +93,9 @@ trait CRUDTrait
     /**
      * Update Request Object
      *
-     * @param       bool   $needed         Is This Update Needed
+     * @param bool $needed Is This Update Needed
      *
-     * @return      string      Object Id
+     * @return false|string Object Id
      */
     public function update($needed)
     {
@@ -122,7 +122,7 @@ trait CRUDTrait
         // If Id Given = > Update Object
         //====================================================================//
         if (!empty($this->object->id)) {
-            if ($this->object->update() != true) {
+            if (true != $this->object->update()) {
                 return Splash::log()->err(
                     "ErrLocalTpl",
                     __CLASS__,
@@ -131,6 +131,7 @@ trait CRUDTrait
                 );
             }
             Splash::log()->deb("MsgLocalTpl", __CLASS__, __FUNCTION__, "Customer Address Updated");
+
             return (string) $this->object->id;
         }
         
@@ -140,7 +141,7 @@ trait CRUDTrait
             
         //====================================================================//
         // Create Object In Database
-        if ($this->object->add()  != true) {
+        if (true  != $this->object->add()) {
             return Splash::log()->err(
                 "ErrLocalTpl",
                 __CLASS__,
@@ -164,9 +165,9 @@ trait CRUDTrait
     /**
      * Delete requested Object
      *
-     * @param       string     $objectId     Object Id.  If NULL, Object needs to be created.
+     * @param string $objectId Object Id.  If NULL, Object needs to be created.
      *
-     * @return      bool
+     * @return bool
      */
     public function delete($objectId = null)
     {
@@ -190,7 +191,7 @@ trait CRUDTrait
         //====================================================================//
         // Delete Object From DataBase
         //====================================================================//
-        if ($Object->delete() != true) {
+        if (true != $Object->delete()) {
             return Splash::log()->err("ErrLocalTpl", __CLASS__, __FUNCTION__, "Unable to delete (" . $objectId . ").");
         }
         

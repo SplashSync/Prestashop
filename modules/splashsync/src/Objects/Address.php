@@ -1,37 +1,36 @@
 <?php
-/**
- * This file is part of SplashSync Project.
+
+/*
+ *  This file is part of SplashSync Project.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ *  Copyright (C) 2015-2019 Splash Sync  <www.splashsync.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
- *  @author    Splash Sync <www.splashsync.com>
- *  @copyright 2015-2018 Splash Sync
- *  @license   MIT
+ *  For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
  */
 
 namespace   Splash\Local\Objects;
 
+use Address as psAddress;
 use Splash\Core\SplashCore      as Splash;
-
+use Splash\Local\Local;
 use Splash\Models\AbstractObject;
 use Splash\Models\Objects\IntelParserTrait;
-use Splash\Models\Objects\SimpleFieldsTrait;
 use Splash\Models\Objects\ObjectsTrait;
+use Splash\Models\Objects\SimpleFieldsTrait;
 use SplashSync;
-use Splash\Local\Local;
 
 /**
- * @abstract    Splash Local Object Class - Customer Address Local Integration
+ * Splash Local Object Class - Customer Address Local Integration
+ *
  * @SuppressWarnings(PHPMD.CamelCasePropertyName)
  */
 class Address extends AbstractObject
 {
-    
     // Splash Php Core Traits
     use IntelParserTrait;
     use SimpleFieldsTrait;
@@ -105,9 +104,14 @@ class Address extends AbstractObject
     //====================================================================//
 
     /**
+     * @var psAddress
+     */
+    protected $object;
+    
+    /**
      * @var SplashSync
      */
-    private $spl = null;
+    private $spl;
     
     //====================================================================//
     // Class Constructor

@@ -1,17 +1,16 @@
 <?php
-/**
- * This file is part of SplashSync Project.
+
+/*
+ *  This file is part of SplashSync Project.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ *  Copyright (C) 2015-2019 Splash Sync  <www.splashsync.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
- *  @author    Splash Sync <www.splashsync.com>
- *  @copyright 2015-2018 Splash Sync
- *  @license   MIT
+ *  For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
  */
 
 namespace Splash\Local\Traits;
@@ -19,70 +18,71 @@ namespace Splash\Local\Traits;
 use Db;
 
 /**
- * @abstract    Prestashop Splash Id Storage Trait
+ * Prestashop Splash Id Storage Trait
  */
 trait SplashIdTrait
 {
-    
     /**
-     *      @abstract       Check Splash Id Storage Table Exists
+     * Check Splash Id Storage Table Exists
      *
-     *      @return         bool    global test result
+     * @return bool global test result
      */
     public static function checkSplashIdTable()
     {
         // List Tables
         Db::getInstance()
-                ->execute("SHOW TABLES LIKE '"._DB_PREFIX_."splash_links'");
+            ->execute("SHOW TABLES LIKE '"._DB_PREFIX_."splash_links'");
         // Check Count
-        if (Db::getInstance()->numRows() == 1) {
+        if (1 == Db::getInstance()->numRows()) {
             return true;
         }
+
         return false;
     }
     
     /**
-     *      @abstract       Create Splash Id Storage Table
+     * Create Splash Id Storage Table
      *
-     *      @return         bool    global test result
+     * @return bool global test result
      */
     public static function createSplashIdTable()
     {
+        $sql    =   "CREATE TABLE IF NOT EXISTS `"._DB_PREFIX_."splash_links`(";
+        $sql   .=   "`rowid`        INT(11)         NOT NULL AUTO_INCREMENT PRIMARY KEY ,";
+        $sql   .=   "`id`           VARCHAR(256)    NOT NULL ,";
+        $sql   .=   "`type`         VARCHAR(256)    NOT NULL ,";
+        $sql   .=   "`spl_id`       VARCHAR(256)    DEFAULT NULL ,";
+        $sql   .=   "`spl_origin`   VARCHAR(256)    DEFAULT NULL ,";
+        $sql   .=   "`extra`        TEXT            DEFAULT NULL )";
         
-        $Sql    =   "CREATE TABLE IF NOT EXISTS `"._DB_PREFIX_."splash_links`(";
-        $Sql   .=   "`rowid`        INT(11)         NOT NULL AUTO_INCREMENT PRIMARY KEY ,";
-        $Sql   .=   "`id`           VARCHAR(256)    NOT NULL ,";
-        $Sql   .=   "`type`         VARCHAR(256)    NOT NULL ,";
-        $Sql   .=   "`spl_id`       VARCHAR(256)    DEFAULT NULL ,";
-        $Sql   .=   "`spl_origin`   VARCHAR(256)    DEFAULT NULL ,";
-        $Sql   .=   "`extra`        TEXT            DEFAULT NULL )";
-        
-        return Db::getInstance()->execute($Sql);
+        return Db::getInstance()->execute($sql);
     }
     
     /**
-     * @abstract       Read Splash Id from Storage
+     * Read Splash Id from Storage
      *
-     * @param   string  $ObjectType     Object Type
-     * @param   string  $ObjectId       Object Identifier
+     * @param string $objectType Object Type
+     * @param string $objectId   Object Identifier
      *
-     * @return  string
+     * @return false|string
      */
-    public static function getSplashId($ObjectType, $ObjectId)
+    public static function getSplashId($objectType, $objectId)
     {
-        $Sql     =  "SELECT spl_id FROM `"._DB_PREFIX_."splash_links`";
-        $Sql    .=  " WHERE type='" . pSQL($ObjectType) . "' AND id='" . pSQL($ObjectId) . "' ";
-        return Db::getInstance()->getValue($Sql, 0);
+        $sql     =  "SELECT spl_id FROM `"._DB_PREFIX_."splash_links`";
+        $sql    .=  " WHERE type='" . pSQL($objectType) . "' AND id='" . pSQL($objectId) . "' ";
+        $splashId = Db::getInstance()->getValue($sql, 0);
+
+        return is_string($splashId) ? $splashId : false;
     }
     
     /**
-     * @abstract       Write Splash Id to Storage
+     * Write Splash Id to Storage
      *
-     * @param   string  $ObjectType     Object Type
-     * @param   string  $ObjectId       Object Identifier
-     * @param   string  $SplashId       Splash Object Identifier
+     * @param string $ObjectType Object Type
+     * @param string $ObjectId   Object Identifier
+     * @param string $SplashId   Splash Object Identifier
      *
-     * @return  string
+     * @return bool
      */
     public static function setSplashId($ObjectType, $ObjectId, $SplashId = null)
     {
@@ -110,6 +110,7 @@ trait SplashIdTrait
                 "type='" . pSQL($ObjectType) . "' AND id='" . pSQL($ObjectId) . "' "
             );
         }
+
         return true;
     }
 }

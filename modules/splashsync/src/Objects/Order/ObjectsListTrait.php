@@ -24,24 +24,15 @@ use DbQuery;
 use Db;
 
 /**
- * @abstract    Acces to Orders Objects Lists
+ * Acces to Orders Objects Lists
  */
 trait ObjectsListTrait
 {
 
     
     /**
-    *   @abstract     Return List Of Customer with required filters
-    *   @param        array   $filter          Filters for Customers List.
-    *   @param        array   $params              Search parameters for result List.
-    *                         $params["max"]       Maximum Number of results
-    *                         $params["offset"]    List Start Offset
-    *                         $params["sortfield"] Field name for sort list (Available fields listed below)
-    *                         $params["sortorder"] List Order Constraign (Default = ASC)
-    *   @return       array   $data             List of all customers main data
-    *                         $data["meta"]["total"]     ==> Total Number of results
-    *                         $data["meta"]["current"]   ==> Total Number of results
-    */
+     * {@inheritdoc}
+     */
     public function objectsList($filter = null, $params = null)
     {
         //====================================================================//

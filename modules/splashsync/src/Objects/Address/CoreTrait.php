@@ -24,14 +24,13 @@ use Customer;
 use Translate;
 
 /**
- * @abstract    Access to Address Core Fields
- * @author      B. Paquier <contact@splashsync.com>
+ * Access to Address Core Fields
  */
 trait CoreTrait
 {
 
     /**
-    *   @abstract     Build Address Core Fields using FieldFactory
+    * Build Address Core Fields using FieldFactory
     */
     private function buildCoreFields()
     {
@@ -81,12 +80,12 @@ trait CoreTrait
     }
     
     /**
-     *  @abstract     Read requested Field
+     * Read requested Field
      *
-     *  @param        string    $Key                    Input List Key
-     *  @param        string    $FieldName              Field Identifier / Name
+     * @param        string    $Key                    Input List Key
+     * @param        string    $FieldName              Field Identifier / Name
      *
-     *  @return         none
+     * @return       void
      */
     private function getCoreFields($Key, $FieldName)
     {
@@ -115,76 +114,76 @@ trait CoreTrait
     }
     
     /**
-     *  @abstract     Write Given Fields
+     * Write Given Fields
      *
-     *  @param        string    $FieldName              Field Identifier / Name
-     *  @param        mixed     $Data                   Field Data
+     * @param        string    $fieldName              Field Identifier / Name
+     * @param        mixed     $fieldData                   Field Data
      *
-     *  @return         none
+     * @return       void
      */
-    private function setCoreFields($FieldName, $Data)
+    private function setCoreFields($fieldName, $fieldData)
     {
         //====================================================================//
         // WRITE Field
-        switch ($FieldName) {
+        switch ($fieldName) {
             //====================================================================//
             // Direct Writtings
             case 'alias':
             case 'company':
             case 'firstname':
             case 'lastname':
-                $this->setSimple($FieldName, $Data);
+                $this->setSimple($fieldName, $fieldData);
                 break;
 
             //====================================================================//
             // Customer Object Id Writtings
             case 'id_customer':
-                $this->setIdCustomer($Data);
+                $this->setIdCustomer($fieldData);
                 break;
             default:
                 return;
         }
-        unset($this->in[$FieldName]);
+        unset($this->in[$fieldName]);
     }
     
     /**
-     *  @abstract     Write Given Fields
+     * Write Given Fields
      */
-    private function setIdCustomer($Data)
+    private function setIdCustomer($customerIdString)
     {
 
         //====================================================================//
         // Decode Customer Id
-        $Id = self::objects()->Id($Data);
+        $custoId = self::objects()->Id($customerIdString);
         //====================================================================//
         // Check For Change
-        if ($Id == $this->object->id_customer) {
+        if ($custoId == $this->object->id_customer) {
             return true;
         }
         //====================================================================//
         // Verify Object Type
-        if (self::objects()->Type($Data) !== "ThirdParty") {
+        if (!$custoId || self::objects()->Type($customerIdString) !== "ThirdParty") {
             return Splash::log()->err(
                 "ErrLocalTpl",
                 __CLASS__,
                 __FUNCTION__,
-                " Wrong Object Type (" . self::objects()->Type($Data) . ")."
+                " Wrong Object Type (" . self::objects()->Type($customerIdString) . ")."
             );
         }
         //====================================================================//
         // Verify Object Exists
-        $Customer   =   new Customer($Id);
-        if ($Customer->id != $Id) {
+        $Customer   =   new Customer($custoId);
+        if ($Customer->id != $custoId) {
             return Splash::log()->err(
                 "ErrLocalTpl",
                 __CLASS__,
                 __FUNCTION__,
-                " Unable to load Address Customer(" . $Id . ")."
+                " Unable to load Address Customer(" . $custoId . ")."
             );
         }
         //====================================================================//
         // Update Link
-        $this->setSimple("id_customer", $Id);
+        $this->setSimple("id_customer", $custoId);
         
         return true;
     }

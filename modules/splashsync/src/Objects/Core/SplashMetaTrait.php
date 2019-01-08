@@ -30,7 +30,7 @@ trait SplashMetaTrait
 {
         
     /**
-     * @var string
+     * @var null|string
      */
     protected $NewSplashId = null;
     
@@ -54,7 +54,7 @@ trait SplashMetaTrait
      *  @param        string    $Key                    Input List Key
      *  @param        string    $FieldName              Field Identifier / Name
      *
-     *  @return         none
+     * @return       void
      */
     protected function getSplashMetaFields($Key, $FieldName)
     {
@@ -78,7 +78,7 @@ trait SplashMetaTrait
      *  @param        string    $FieldName              Field Identifier / Name
      *  @param        mixed     $Data                   Field Data
      *
-     *  @return         none
+     * @return       void
      */
     protected function setSplashMetaFields($FieldName, $Data)
     {

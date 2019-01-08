@@ -25,20 +25,20 @@ use Splash\Models\Objects\ObjectsTrait;
 use Splash\Local\Local;
 use Splash\Local\Services\LanguagesManager;
 
-//====================================================================//
-// Prestashop Static Classes
 use Shop;
 use Configuration;
 use Currency;
 use SplashSync;
+use OrderInvoice;
+use Order as psOrder;
 
 /**
- * @abstract    Splash Local Object Class - Customer Orders Local Integration
+ * Splash Local Object Class - Customer Orders Local Integration
  * @SuppressWarnings(PHPMD.CamelCasePropertyName)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class Order extends AbstractObject
 {
-    
     // Splash Php Core Traits
     use IntelParserTrait;
     use SimpleFieldsTrait;
@@ -112,6 +112,11 @@ class Order extends AbstractObject
     protected $PaymentMethod  = null;
     
     /**
+     * @var psOrder
+     */
+    protected $object;
+    
+    /**
      * @var int
      */
     private $LangId = null;
@@ -125,7 +130,8 @@ class Order extends AbstractObject
      * @var SplashSync
      */
     private $spl = null;
-       
+
+    
     //====================================================================//
     // Class Constructor
     //====================================================================//

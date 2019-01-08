@@ -114,7 +114,7 @@ trait MainTrait
      *  @param        string    $Key                    Input List Key
      *  @param        string    $FieldName              Field Identifier / Name
      *
-     *  @return         none
+     * @return       void
      */
     private function getMainFields($Key, $FieldName)
     {
@@ -162,7 +162,7 @@ trait MainTrait
      *  @param        string    $FieldName              Field Identifier / Name
      *  @param        mixed     $Data                   Field Data
      *
-     *  @return         none
+     * @return       void
      */
     private function setMainFields($FieldName, $Data)
     {
@@ -192,7 +192,7 @@ trait MainTrait
      *  @param        string    $FieldName              Field Identifier / Name
      *  @param        mixed     $Data                   Field Data
      *
-     *  @return         none
+     * @return       void
      */
     private function setCountryFields($FieldName, $Data)
     {

@@ -67,7 +67,7 @@ trait MainTrait
      *  @param        string    $Key                    Input List Key
      *  @param        string    $FieldName              Field Identifier / Name
      *
-     *  @return         none
+     * @return       void
      */
     private function getMainFields($Key, $FieldName)
     {

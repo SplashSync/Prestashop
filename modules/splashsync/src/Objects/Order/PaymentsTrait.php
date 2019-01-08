@@ -1,206 +1,210 @@
 <?php
-/**
- * This file is part of SplashSync Project.
+
+/*
+ *  This file is part of SplashSync Project.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ *  Copyright (C) 2015-2019 Splash Sync  <www.splashsync.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
- *  @author    Splash Sync <www.splashsync.com>
- *  @copyright 2015-2018 Splash Sync
- *  @license   MIT
+ *  For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
  */
 
 namespace Splash\Local\Objects\Order;
 
-use Splash\Core\SplashCore      as Splash;
-
-
-//====================================================================//
-// Prestashop Static Classes
-use Translate;
 use OrderPayment;
+use Splash\Core\SplashCore      as Splash;
+use Translate;
+use Splash\Local\Objects\Invoice;
 
 /**
- * @abstract    Access to Orders Payments Fields
+ * Access to Orders Payments Fields
  */
 trait PaymentsTrait
 {
-    
-
-    private $KnownPaymentMethods = array(
-            "bankwire"          =>      "ByBankTransferInAdvance",
-            "ps_wirepayment"    =>      "ByBankTransferInAdvance",
+    /**
+     * Known Payment Method Codes Names
+     *
+     * @var array
+     */
+    private $knownPaymentMethods = array(
+        "bankwire"          =>      "ByBankTransferInAdvance",
+        "ps_wirepayment"    =>      "ByBankTransferInAdvance",
         
-            "cheque"            =>      "CheckInAdvance",
-            "ps_checkpayment"   =>      "CheckInAdvance",
+        "cheque"            =>      "CheckInAdvance",
+        "ps_checkpayment"   =>      "CheckInAdvance",
         
-            "paypal"            =>      "PayPal",
-            "amzpayments"       =>      "PayPal",
+        "paypal"            =>      "PayPal",
+        "amzpayments"       =>      "PayPal",
         
-            "cashondelivery"    =>      "COD",
+        "cashondelivery"    =>      "COD",
     );
     
-    
     /**
-    *   @abstract     Build Fields using FieldFactory
-    */
+     * Build Fields using FieldFactory
+     */
     protected function buildPaymentsFields()
     {
-        
         //====================================================================//
         // Payment Line Payment Method
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
-                ->Identifier("mode")
-                ->InList("payments")
-                ->Name(Translate::getAdminTranslation("Payment method", "AdminOrders"))
-                ->MicroData("http://schema.org/Invoice", "PaymentMethod")
-                ->Group(Translate::getAdminTranslation("Payment", "AdminPayment"))
-                ->Association("mode@payments", "amount@payments")
-                ->AddChoices(array_flip($this->KnownPaymentMethods))
+            ->Identifier("mode")
+            ->InList("payments")
+            ->Name(Translate::getAdminTranslation("Payment method", "AdminOrders"))
+            ->MicroData("http://schema.org/Invoice", "PaymentMethod")
+            ->Group(Translate::getAdminTranslation("Payment", "AdminPayment"))
+            ->Association("mode@payments", "amount@payments")
+            ->AddChoices(array_flip($this->knownPaymentMethods))
                 ;
 
         //====================================================================//
         // Payment Line Date
         $this->fieldsFactory()->create(SPL_T_DATE)
-                ->Identifier("date")
-                ->InList("payments")
-                ->Name(Translate::getAdminTranslation("Date", "AdminProducts"))
-                ->MicroData("http://schema.org/PaymentChargeSpecification", "validFrom")
-                ->Group(Translate::getAdminTranslation("Payment", "AdminPayment"))
-                ->isReadOnly()
+            ->Identifier("date")
+            ->InList("payments")
+            ->Name(Translate::getAdminTranslation("Date", "AdminProducts"))
+            ->MicroData("http://schema.org/PaymentChargeSpecification", "validFrom")
+            ->Group(Translate::getAdminTranslation("Payment", "AdminPayment"))
+            ->isReadOnly()
                 ;
 
         //====================================================================//
         // Payment Line Payment Identifier
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
-                ->Identifier("number")
-                ->InList("payments")
-                ->Name(Translate::getAdminTranslation("Transaction ID", "AdminOrders"))
-                ->MicroData("http://schema.org/Invoice", "paymentMethodId")
-                ->Association("mode@payments", "amount@payments")
-                ->Group(Translate::getAdminTranslation("Payment", "AdminPayment"))
+            ->Identifier("number")
+            ->InList("payments")
+            ->Name(Translate::getAdminTranslation("Transaction ID", "AdminOrders"))
+            ->MicroData("http://schema.org/Invoice", "paymentMethodId")
+            ->Association("mode@payments", "amount@payments")
+            ->Group(Translate::getAdminTranslation("Payment", "AdminPayment"))
                 ;
 
         //====================================================================//
         // Payment Line Amount
         $this->fieldsFactory()->create(SPL_T_DOUBLE)
-                ->Identifier("amount")
-                ->InList("payments")
-                ->Name(Translate::getAdminTranslation("Amount", "AdminOrders"))
-                ->MicroData("http://schema.org/PaymentChargeSpecification", "price")
-                ->Group(Translate::getAdminTranslation("Payment", "AdminPayment"))
-                ->Association("mode@payments", "amount@payments")
+            ->Identifier("amount")
+            ->InList("payments")
+            ->Name(Translate::getAdminTranslation("Amount", "AdminOrders"))
+            ->MicroData("http://schema.org/PaymentChargeSpecification", "price")
+            ->Group(Translate::getAdminTranslation("Payment", "AdminPayment"))
+            ->Association("mode@payments", "amount@payments")
                 ;
     }
     
     /**
-     *  @abstract     Read requested Field
+     * Read requested Field
      *
-     *  @param        string    $Key                    Input List Key
-     *  @param        string    $FieldName              Field Identifier / Name
+     * @param string $key       Input List Key
+     * @param string $fieldName Field Identifier / Name
      *
-     *  @return         none
+     * @return void
      */
-    private function getPaymentsFields($Key, $FieldName)
+    private function getPaymentsFields($key, $fieldName)
     {
         //====================================================================//
         // Check if List field & Init List Array
-        $FieldId = self::lists()->InitOutput($this->out, "payments", $FieldName);
-        if (!$FieldId) {
+        $fieldId = self::lists()->InitOutput($this->out, "payments", $fieldName);
+        if (!$fieldId) {
             return;
         }
         //====================================================================//
         // Verify List is Not Empty
         if (!is_a($this->Payments, "PrestaShopCollection")) {
-            unset($this->in[$Key]);
-            return true;
+            unset($this->in[$key]);
+
+            return;
         }
         //====================================================================//
         // Fill List with Data
-        foreach ($this->Payments as $key => $OrderPayment) {
+        /** @var OrderPayment $orderPayment */
+        foreach ($this->Payments as $index => $orderPayment) {
             //====================================================================//
             // READ Fields
-            switch ($FieldName) {
+            switch ($fieldName) {
                 //====================================================================//
                 // Payment Line - Payment Mode
                 case 'mode@payments':
-                    $Value  =   $this->getPaymentMethod($OrderPayment);
+                    $Value  =   $this->getPaymentMethod($orderPayment);
+
                     break;
                 //====================================================================//
                 // Payment Line - Payment Date
                 case 'date@payments':
-                    $Value  =   date(SPL_T_DATECAST, strtotime($OrderPayment->date_add));
+                    $Value  =   date(SPL_T_DATECAST, strtotime($orderPayment->date_add));
+
                     break;
                 //====================================================================//
                 // Payment Line - Payment Identification Number
                 case 'number@payments':
-                    $Value  =   $OrderPayment->transaction_id;
+                    $Value  =   $orderPayment->transaction_id;
+
                     break;
                 //====================================================================//
                 // Payment Line - Payment Amount
                 case 'amount@payments':
-                    $Value  =   $OrderPayment->amount;
+                    $Value  =   $orderPayment->amount;
+
                     break;
                 default:
                     return;
             }
             //====================================================================//
             // Insert Data in List
-            self::lists()->Insert($this->out, "payments", $FieldName, $key, $Value);
+            self::lists()->Insert($this->out, "payments", $fieldName, $index, $Value);
         }
-        unset($this->in[$Key]);
+        unset($this->in[$key]);
     }
     
     /**
-     *  @abstract     Try To Detect Payment method Standardized Name
+     * Try To Detect Payment method Standardized Name
      *
-     *  @param  OrderPayment    $OrderPayment
+     * @param OrderPayment $orderPayment
      *
-     *  @return         none
+     * @return string
      */
-    private function getPaymentMethod($OrderPayment)
+    private function getPaymentMethod($orderPayment)
     {
         //====================================================================//
         // If PhpUnit Mode => Read Order Payment Object
-        if (SPLASH_DEBUG) {
-            return $OrderPayment->payment_method;
+        if (true == SPLASH_DEBUG) {
+            return $orderPayment->payment_method;
         }
         //====================================================================//
         // Detect Payment Method Type from Default Payment "known" methods
-        if (array_key_exists($OrderPayment->payment_method, $this->KnownPaymentMethods)) {
-            return $this->KnownPaymentMethods[$OrderPayment->payment_method];
+        if (array_key_exists($orderPayment->payment_method, $this->knownPaymentMethods)) {
+            return $this->knownPaymentMethods[$orderPayment->payment_method];
         }
         //====================================================================//
         // Detect Payment Method is Credit Card Like Method
-        if (!empty($OrderPayment->card_brand)) {
+        if (!empty($orderPayment->card_brand)) {
             return "DirectDebit";
         }
+
         return "Unknown";
     }
     
     /**
-     *  @abstract     Write Given Fields
+     * Write Given Fields
      *
-     *  @param        string    $FieldName              Field Identifier / Name
-     *  @param        mixed     $Data                   Field Data
+     * @param string $fieldName Field Identifier / Name
+     * @param mixed  $fieldData Field Data
      *
-     *  @return         none
+     * @return void
      */
-    private function setPaymentsFields($FieldName, $Data)
+    private function setPaymentsFields($fieldName, $fieldData)
     {
         //====================================================================//
         // Safety Check
-        if ($FieldName !== "payments") {
-            return true;
+        if ("payments" !== $fieldName) {
+            return;
         }
         
         //====================================================================//
         // Verify Lines List & Update if Needed
-        foreach ($Data as $PaymentItem) {
+        foreach ($fieldData as $PaymentItem) {
             //====================================================================//
             // Update Product Line
             if (is_array($this->Payments)) {
@@ -217,81 +221,86 @@ trait PaymentsTrait
             $PaymentItem->delete();
         }
         
-        unset($this->in[$FieldName]);
+        unset($this->in[$fieldName]);
     }
     
     /**
-     *  @abstract     Write Data to Current Item
+     * Write Data to Current Item
      *
-     *  @param        array     $OrderPayment       Current Item Data Array
-     *  @param        array     $PaymentItem        Input Item Data Array
+     * @param null|OrderPayment $orderPayment Current Item Data
+     * @param array $paymentItem  Input Item Data Array
      *
-     *  @return         none
+     * @return bool
      */
-    private function updatePayment($OrderPayment, $PaymentItem)
+    private function updatePayment($orderPayment, $paymentItem)
     {
-              
+        //====================================================================//
+        // Safety Check
+        if ($this instanceof Invoice) {
+            return false;
+        }
         //====================================================================//
         // New Line ? => Create One
-        if (is_null($OrderPayment)) {
+        if (is_null($orderPayment)) {
             //====================================================================//
             // Create New OrderDetail Item
-            $OrderPayment                       =   new OrderPayment();
-            $OrderPayment->order_reference      =   $this->object->reference;
-            $OrderPayment->id_currency          =   $this->object->id_currency;
-            $OrderPayment->conversion_rate      =   1;
+            $orderPayment                       =   new OrderPayment();
+            $orderPayment->order_reference      =   $this->object->reference;
+            $orderPayment->id_currency          =   $this->object->id_currency;
+            $orderPayment->conversion_rate      =   1;
         }
         
         //====================================================================//
         // Update Payment Data & Check Update Needed
-        if (!$this->updatePaymentData($OrderPayment, $PaymentItem)) {
-            return;
+        if (!$this->updatePaymentData($orderPayment, $paymentItem)) {
+            return true;
         }
         
-        if (!$OrderPayment->id) {
-            if ($OrderPayment->add() != true) {
+        if (!$orderPayment->id) {
+            if (true != $orderPayment->add()) {
                 return Splash::log()->err("ErrLocalTpl", __CLASS__, __FUNCTION__, "Unable to Create new Payment Line.");
             }
         } else {
-            if ($OrderPayment->update() != true) {
+            if (true != $orderPayment->update()) {
                 return Splash::log()->err("ErrLocalTpl", __CLASS__, __FUNCTION__, "Unable to Update Payment Line.");
             }
         }
+        return true;
     }
     
     /**
-     *  @abstract     Write Data to Current Item
+     * Write Data to Current Item
      *
-     *  @param        array     $OrderPayment       Current Item Data Array
-     *  @param        array     $PaymentItem        Input Item Data Array
+     * @param OrderPayment $orderPayment Current Item Data
+     * @param array $paymentItem  Input Item Data Array
      *
-     *  @return       bool
+     * @return bool
      */
-    private function updatePaymentData($OrderPayment, $PaymentItem)
+    private function updatePaymentData($orderPayment, $paymentItem)
     {
-        $Update =    false;
+        $update =    false;
         
         //====================================================================//
         // Update Payment Method
-        if (isset($PaymentItem["mode"]) && ( $OrderPayment->payment_method != $PaymentItem["mode"] )) {
-            $OrderPayment->payment_method = $PaymentItem["mode"];
-            $Update =    true;
+        if (isset($paymentItem["mode"]) && ($orderPayment->payment_method != $paymentItem["mode"])) {
+            $orderPayment->payment_method = $paymentItem["mode"];
+            $update =    true;
         }
         
         //====================================================================//
         // Update Payment Amount
-        if (isset($PaymentItem["amount"]) && ( $OrderPayment->amount != $PaymentItem["amount"] )) {
-            $OrderPayment->amount = $PaymentItem["amount"];
-            $Update =    true;
+        if (isset($paymentItem["amount"]) && ($orderPayment->amount != $paymentItem["amount"])) {
+            $orderPayment->amount = $paymentItem["amount"];
+            $update =    true;
         }
         
         //====================================================================//
         // Update Payment Number
-        if (isset($PaymentItem["number"]) && ( $OrderPayment->transaction_id != $PaymentItem["number"] )) {
-            $OrderPayment->transaction_id = $PaymentItem["number"];
-            $Update =    true;
+        if (isset($paymentItem["number"]) && ($orderPayment->transaction_id != $paymentItem["number"])) {
+            $orderPayment->transaction_id = $paymentItem["number"];
+            $update =    true;
         }
  
-        return $Update;
+        return $update;
     }
 }

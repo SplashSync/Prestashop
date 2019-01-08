@@ -101,7 +101,7 @@ trait StatusTrait
      *  @param        string    $Key                    Input List Key
      *  @param        string    $FieldName              Field Identifier / Name
      *
-     *  @return         none
+     * @return       void
      */
     private function getStatusFields($Key, $FieldName)
     {
@@ -118,10 +118,10 @@ trait StatusTrait
                 $this->out[$FieldName]  = !$this->object->valid;
                 break;
             case 'isValidated':
-                $this->out[$FieldName]  = (bool) $this->object->valid;
+                $this->out[$FieldName]  = $this->object->valid;
                 break;
             case 'isClosed':
-                $this->out[$FieldName]  = (bool) $this->object->isPaidAndShipped();
+                $this->out[$FieldName]  = $this->object->isPaidAndShipped();
                 break;
             case 'isPaid':
                 $this->out[$FieldName]  = (bool) $this->object->hasBeenPaid();

@@ -1,105 +1,108 @@
 <?php
-/**
- * This file is part of SplashSync Project.
+
+/*
+ *  This file is part of SplashSync Project.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ *  Copyright (C) 2015-2019 Splash Sync  <www.splashsync.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
- *  @author    Splash Sync <www.splashsync.com>
- *  @copyright 2015-2018 Splash Sync
- *  @license   MIT
+ *  For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
  */
 
 namespace Splash\Local\Objects\Product\Variants;
 
-use Splash\Core\SplashCore      as Splash;
-
-use Language;
+use ArrayObject;
 use Attribute;
 use AttributeGroup;
+use Language;
+use Splash\Core\SplashCore      as Splash;
 
 /**
- * @abstract    Prestashop Product Variants Attribute Values management
+ * Prestashop Product Variants Attribute Values management
  */
 trait AttributeValueTrait
 {
-    
     /**
-     * @abstract    Identify Attribute Value Using Multilang Codes
-     * @return      int         $GroupId    Attribute Group Id
-     * @param       array       $Names       Attribute Value Names Array
-     * @return      int|false               Attribute Id
+     * Identify Attribute Value Using Multilang Codes
+     *
+     * @param mixed $groupId Attribute Group Id
+     * @param mixed $names   Attribute Value Names Array
+     *
+     * @return false|int Attribute Id
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    public function getAttributeByCode($GroupId, $Names)
+    public function getAttributeByCode($groupId, $names)
     {
         //====================================================================//
         // Ensure Group Id is Valid
-        if (!is_numeric($GroupId) || empty($GroupId)) {
+        if (!is_numeric($groupId) || empty($groupId)) {
             return false;
         }
         //====================================================================//
         // Ensure Code is Valid
-        if ((!is_array($Names) && !is_a($Names, "ArrayObject") ) || empty($Names)) {
+        if ((!is_array($names) && !is_a($names, "ArrayObject")) || empty($names)) {
             return false;
         }
-        if (is_a($Names, "ArrayObject")) {
-            $Names  =    $Names->getArrayCopy();
+        if ($names instanceof ArrayObject) {
+            $names  =    $names->getArrayCopy();
         }
         //====================================================================//
         // For Each Available Language
         foreach (Language::getLanguages() as $Lang) {
             //====================================================================//
             // Load List of Attributes Values
-            $Values = AttributeGroup::getAttributes($Lang["id_lang"], $GroupId);
+            $Values = AttributeGroup::getAttributes($Lang["id_lang"], $groupId);
             if (empty($Values)) {
                 continue;
             }
             //====================================================================//
             // Search for this Attribute Group Code
             foreach ($Values as $Value) {
-                if (in_array($Value["name"], $Names)) {
+                if (in_array($Value["name"], $names, true)) {
                     return $Value["id_attribute"];
                 }
             }
         }
+
         return false;
     }
 
     /**
-     * @abstract    Identify Attribute Value Using Multilang Names Array
-     * @return      int         $GroupId    Attribute Group Id
-     * @param       array       $Names      Multilang Attribute Names
-     * @param       bool        $Color      Attribute Color Attribute
-     * @return      AttributeGroup|false           Attribute Group Id
+     * Identify Attribute Value Using Multilang Names Array
+     *
+     * @param mixed  $groupId Attribute Group Id
+     * @param mixed  $names   Multilang Attribute Names
+     * @param string $color   Attribute Color Attribute
+     *
+     * @return Attribute|false Attribute Group Id
      */
-    public function addAttributeValue($GroupId, $Names, $Color = "#FFFFFF")
+    public function addAttributeValue($groupId, $names, $color = "#FFFFFF")
     {
         //====================================================================//
         // Ensure Group Id is Valid
-        if (!is_numeric($GroupId) || empty($GroupId)) {
+        if (!is_numeric($groupId) || empty($groupId)) {
             return false;
         }
         //====================================================================//
         // Ensure Names is MultiLanguage Array
-        if ((!is_array($Names) && !is_a($Names, "ArrayObject") ) || empty($Names)) {
+        if ((!is_array($names) && !is_a($names, "ArrayObject")) || empty($names)) {
             return false;
         }
         //====================================================================//
         // Create New Attribute Value
-        $Attribute                      =   new Attribute();
-        $Attribute->id_attribute_group  =   $GroupId;
-        $Attribute->color               =   $Color;
+        $attribute                      =   new Attribute();
+        $attribute->id_attribute_group  =   $groupId;
+        $attribute->color               =   $color;
         //====================================================================//
         // Setup Names
-        $this->setMultilang($Attribute, "name", $Names);
+        $this->setMultilang($attribute, "name", $names);
         //====================================================================//
         // CREATE Attribute Group
-        if ($Attribute->add() != true) {
+        if (true != $attribute->add()) {
             return Splash::log()->err(
                 "ErrLocalTpl",
                 __CLASS__,
@@ -107,6 +110,7 @@ trait AttributeValueTrait
                 " Unable to create Product Variant Attribute Value."
             );
         }
-        return $Attribute;
+
+        return $attribute;
     }
 }

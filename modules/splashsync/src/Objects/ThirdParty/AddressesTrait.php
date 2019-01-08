@@ -50,7 +50,7 @@ trait AddressesTrait
      *  @param        string    $Key                    Input List Key
      *  @param        string    $FieldName              Field Identifier / Name
      *
-     *  @return         none
+     * @return       void
      */
     private function getAddressesFields($Key, $FieldName)
     {

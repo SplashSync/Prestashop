@@ -85,7 +85,7 @@ trait CRUDTrait
     /**
      * Create Request Object
      *
-     * @return object New Object
+     * @return false|Product New Object
      */
     public function create()
     {
@@ -239,7 +239,7 @@ trait CRUDTrait
     /**
      * Create a New Simple Product
      *
-     * @return Product New Product
+     * @return false|Product New Product
      */
     private function createSimpleProduct()
     {

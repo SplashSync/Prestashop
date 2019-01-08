@@ -1,25 +1,24 @@
 <?php
-/**
- * This file is part of SplashSync Project.
+
+/*
+ *  This file is part of SplashSync Project.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ *  Copyright (C) 2015-2019 Splash Sync  <www.splashsync.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
- *  @author    Splash Sync <www.splashsync.com>
- *  @copyright 2015-2018 Splash Sync
- *  @license   MIT
+ *  For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
  */
 
 namespace Splash\Local\Objects\Order;
 
-use Splash\Core\SplashCore      as Splash;
+use Cart;
 use Configuration;
 use Order;
-use Cart;
+use Splash\Core\SplashCore      as Splash;
 use TaxCalculator;
 
 /**
@@ -28,24 +27,25 @@ use TaxCalculator;
 trait CRUDTrait
 {
     /**
-     * @var Cart
-     */
-    private $Cart = null;
-    
-    /**
      * @var Order
      */
-    protected $Order          = null;
+    protected $Order;
     
     /**
      * @var TaxCalculator
      */
-    protected $ShippingTaxCalculator = null;
+    protected $ShippingTaxCalculator;
+    /**
+     * @var Cart
+     */
+    private $Cart;
     
     /**
      * Load Request Object
-     * @param       string  $objectId               Object id
-     * @return      false|Order
+     *
+     * @param string $objectId Object id
+     *
+     * @return false|Order
      */
     public function load($objectId)
     {
@@ -56,7 +56,8 @@ trait CRUDTrait
         // Load Object
         $object = new Order($objectId);
         if ($object->id != $objectId) {
-            return Splash::log()->err("ErrLocalTpl", __CLASS__, __FUNCTION__, " Unable to load Order (" . $objectId . ").");
+            return Splash::log()
+                    ->err("ErrLocalTpl", __CLASS__, __FUNCTION__, " Unable to load Order (" . $objectId . ").");
         }
         
         //====================================================================//
@@ -68,7 +69,7 @@ trait CRUDTrait
         //====================================================================//
         // Load Shipping Tax Calculator
         $this->ShippingTaxCalculator    = (new \Carrier($object->id_carrier))
-                    ->getTaxCalculator(new \Address($object->id_address_delivery));
+            ->getTaxCalculator(new \Address($object->id_address_delivery));
 
         return $object;
     }
@@ -76,7 +77,7 @@ trait CRUDTrait
     /**
      * Create Request Object
      *
-     * @return      false|Order     New Object
+     * @return false|Order New Object
      */
     public function create()
     {
@@ -93,7 +94,7 @@ trait CRUDTrait
         // Create a New Cart
         $this->Cart =   new Cart();
         $this->Cart->id_currency      =   Configuration::get('PS_CURRENCY_DEFAULT');
-        if ($this->Cart->add() != true) {
+        if (true != $this->Cart->add()) {
             return Splash::log()->err("ErrLocalTpl", __CLASS__, __FUNCTION__, "Unable to Create new Order Cart.");
         }
         
@@ -126,10 +127,9 @@ trait CRUDTrait
         $this->setAddressFields("id_address_delivery", $this->in["id_address_delivery"]);
         $this->setAddressFields("id_address_invoice", $this->in["id_address_invoice"]);
         
-        
         //====================================================================//
         // Persist Order in Database
-        if ($this->object->add() != true) {
+        if (true != $this->object->add()) {
             return Splash::log()->err("ErrLocalTpl", __CLASS__, __FUNCTION__, "Unable to Create new Order.");
         }
         
@@ -138,15 +138,16 @@ trait CRUDTrait
         $this->Products         = array();
             
         Splash::log()->deb("MsgLocalTpl", __CLASS__, __FUNCTION__, "New Order Created");
+
         return $this->object;
     }
     
     /**
      * Update Request Object
      *
-     * @param       bool   $needed         Is This Update Needed
+     * @param bool $needed Is This Update Needed
      *
-     * @return      string      Object Id
+     * @return false|string Object Id
      */
     public function update($needed)
     {
@@ -161,7 +162,7 @@ trait CRUDTrait
         // If Id Given = > Update Object
         //====================================================================//
         if (!empty($this->object->id)) {
-            if ($this->object->update() != true) {
+            if (true != $this->object->update()) {
                 return Splash::log()->err(
                     "ErrLocalTpl",
                     __CLASS__,
@@ -187,9 +188,9 @@ trait CRUDTrait
     /**
      * Delete requested Object
      *
-     * @param       int     $Id     Object Id.  If NULL, Object needs to be created.
+     * @param int $Id Object Id.  If NULL, Object needs to be created.
      *
-     * @return      bool
+     * @return bool
      */
     public function delete($Id = null)
     {
@@ -212,6 +213,7 @@ trait CRUDTrait
         //====================================================================//
         // Else Delete Product From DataBase
         $this->object->delete();
+
         return true;
     }
 }

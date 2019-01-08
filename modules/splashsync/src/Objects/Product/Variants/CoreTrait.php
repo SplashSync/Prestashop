@@ -20,7 +20,7 @@ use Translate;
 use Combination;
 
 /**
- * @abstract    Prestashop Product Variant Core Data Access
+ * Prestashop Product Variant Core Data Access
  */
 trait CoreTrait
 {
@@ -30,7 +30,7 @@ trait CoreTrait
     //====================================================================//
 
     /**
-    *   @abstract     Build Fields using FieldFactory
+    * Build Fields using FieldFactory
     */
     private function buildVariantsCoreFields()
     {
@@ -86,7 +86,7 @@ trait CoreTrait
      *  @param        string    $Key                    Input List Key
      *  @param        string    $FieldName              Field Identifier / Name
      *
-     *  @return         none
+     * @return       void
      */
     private function getVariantsCoreFields($Key, $FieldName)
     {
@@ -137,38 +137,38 @@ trait CoreTrait
     }
     
     /**
-     *  @abstract     Write Given Fields
+     * Write Given Fields
      *
-     *  @param        string    $FieldName              Field Identifier / Name
-     *  @param        mixed     $Data                   Field Data
+     * @param        string    $fieldName              Field Identifier / Name
+     * @param        mixed     $fieldData                   Field Data
      *
-     *  @return         none
+     * @return       void
      */
-    private function setVariantsCoreFields($FieldName, $Data)
+    private function setVariantsCoreFields($fieldName, $fieldData)
     {
         //====================================================================//
         // WRITE Field
-        switch ($FieldName) {
+        switch ($fieldName) {
             case 'default_on':
                 break;
             
             case 'default_id':
                 //====================================================================//
                 // Check if Valid Data
-                if (!$this->AttributeId || ($this->ProductId != $this->getId($Data))) {
+                if (!$this->AttributeId || ($this->ProductId != $this->getId($fieldData))) {
                     break;
                 }
-                $AttributeId    =     $this->getAttribute($Data);
-                if (!$AttributeId || ($AttributeId == $this->object->getDefaultIdProductAttribute())) {
+                $attributeId    =     $this->getAttribute($fieldData);
+                if (!$attributeId || ($attributeId == $this->object->getDefaultIdProductAttribute())) {
                     break;
                 }
                 $this->object->deleteDefaultAttributes();
-                $this->object->setDefaultAttribute($AttributeId);
+                $this->object->setDefaultAttribute($attributeId);
                 break;
             
             default:
                 return;
         }
-        unset($this->in[$FieldName]);
+        unset($this->in[$fieldName]);
     }
 }

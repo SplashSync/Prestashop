@@ -20,15 +20,16 @@ namespace Splash\Local\Objects\Order;
 // Prestashop Static Classes
 use Customer;
 use Translate;
+use Splash\Local\Objects\Invoice;
 
 /**
- * @abstract    Access to Orders Core Fields
+ * Access to Orders Core Fields
  */
 trait CoreTrait
 {
     
     /**
-    *   @abstract     Build Core Fields using FieldFactory
+    * Build Core Fields using FieldFactory
     */
     private function buildCoreFields()
     {
@@ -74,12 +75,12 @@ trait CoreTrait
     }
     
     /**
-     *  @abstract     Read requested Field
+     * Read requested Field
      *
-     *  @param        string    $Key                    Input List Key
-     *  @param        string    $FieldName              Field Identifier / Name
+     * @param        string    $Key                    Input List Key
+     * @param        string    $FieldName              Field Identifier / Name
      *
-     *  @return         none
+     * @return       void
      */
     private function getCoreFields($Key, $FieldName)
     {
@@ -89,7 +90,7 @@ trait CoreTrait
             //====================================================================//
             // Direct Readings
             case 'reference':
-                if (get_class($this) ===  "Splash\Local\Objects\Invoice") {
+                if ($this instanceof Invoice) {
                     $this->getSimple($FieldName, "Order");
                 } else {
                     $this->getSimple($FieldName);
@@ -99,7 +100,7 @@ trait CoreTrait
             //====================================================================//
             // Customer Object Id Readings
             case 'id_customer':
-                if (get_class($this) ===  "Splash\Local\Objects\Invoice") {
+                if ($this instanceof Invoice) {
                     $this->out[$FieldName] = self::objects()->encode("ThirdParty", $this->Order->$FieldName);
                 } else {
                     $this->out[$FieldName] = self::objects()->encode("ThirdParty", $this->object->$FieldName);
@@ -109,19 +110,19 @@ trait CoreTrait
             //====================================================================//
             // Customer Email
             case 'email':
-                if (get_class($this) ===  "Splash\Local\Objects\Invoice") {
-                    $CustomerId = $this->Order->id_customer;
+                if ($this instanceof Invoice) {
+                    $customerId = $this->Order->id_customer;
                 } else {
-                    $CustomerId = $this->object->id_customer;
+                    $customerId = $this->object->id_customer;
                 }
                 //====================================================================//
                 // Load Customer
-                $Customer = new Customer($CustomerId);
-                if ($Customer->id != $CustomerId) {
+                $customer = new Customer($customerId);
+                if ($customer->id != $customerId) {
                     $this->out[$FieldName] = null;
                     break;
                 }
-                $this->out[$FieldName] = $Customer->email;
+                $this->out[$FieldName] = $customer->email;
                 break;
                 
             //====================================================================//
@@ -138,40 +139,40 @@ trait CoreTrait
     }
     
     /**
-     *  @abstract     Write Given Fields
+     * Write Given Fields
      *
-     *  @param        string    $FieldName              Field Identifier / Name
-     *  @param        mixed     $Data                   Field Data
+     * @param        string    $fieldName              Field Identifier / Name
+     * @param        mixed     $fieldData                   Field Data
      *
-     *  @return         none
+     * @return       void
      */
-    private function setCoreFields($FieldName, $Data)
+    private function setCoreFields($fieldName, $fieldData)
     {
         //====================================================================//
         // WRITE Field
-        switch ($FieldName) {
+        switch ($fieldName) {
             //====================================================================//
             // Direct Writing
             case 'reference':
-                if (get_class($this) ===  "Splash\Local\Objects\Invoice") {
-                    $this->setSimple($FieldName, $Data, "Order");
+                if ($this instanceof Invoice) {
+                    $this->setSimple($fieldName, $fieldData, "Order");
                 } else {
-                    $this->setSimple($FieldName, $Data);
+                    $this->setSimple($fieldName, $fieldData);
                 }
                 break;
                     
             //====================================================================//
             // Customer Object Id
             case 'id_customer':
-                if (get_class($this) ===  "Splash\Local\Objects\Invoice") {
-                    $this->setSimple($FieldName, self::objects()->Id($Data), "Order");
+                if ($this instanceof Invoice) {
+                    $this->setSimple($fieldName, self::objects()->Id($fieldData), "Order");
                 } else {
-                    $this->setSimple($FieldName, self::objects()->Id($Data));
+                    $this->setSimple($fieldName, self::objects()->Id($fieldData));
                 }
                 break;
             default:
                 return;
         }
-        unset($this->in[$FieldName]);
+        unset($this->in[$fieldName]);
     }
 }

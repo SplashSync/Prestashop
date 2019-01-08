@@ -24,6 +24,7 @@ use Splash\Models\Objects\SimpleFieldsTrait;
 use Splash\Models\Objects\ObjectsTrait;
 use SplashSync;
 use Splash\Local\Local;
+use Customer;
 
 /**
  * @abstract    Splash Local Object Class - Customer Accounts Local Integration
@@ -56,6 +57,11 @@ class ThirdParty extends AbstractObject
      * @var SplashSync
      */
     private $spl = null;
+    
+    /**
+     * @var Customer
+     */
+    protected $object;
     
     //====================================================================//
     // Object Definition Parameters

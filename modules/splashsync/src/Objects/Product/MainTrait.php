@@ -1,40 +1,34 @@
 <?php
-/**
- * This file is part of SplashSync Project.
+
+/*
+ *  This file is part of SplashSync Project.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ *  Copyright (C) 2015-2019 Splash Sync  <www.splashsync.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
- *  @author    Splash Sync <www.splashsync.com>
- *  @copyright 2015-2018 Splash Sync
- *  @license   MIT
+ *  For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
  */
 
 namespace Splash\Local\Objects\Product;
 
 use Splash\Core\SplashCore      as Splash;
-
-//====================================================================//
-// Prestashop Static Classes
 use Translate;
 
 /**
- * @abstract    Access to Product Main Fields
+ * Access to Product Main Fields
  */
 trait MainTrait
 {
-    
     /**
-    *   @abstract     Build Address Fields using FieldFactory
-    */
+     * Build Address Fields using FieldFactory
+     */
     private function buildMainFields()
     {
-        
-        $GroupName  = Translate::getAdminTranslation("Shipping", "AdminProducts");
+        $groupName  = Translate::getAdminTranslation("Shipping", "AdminProducts");
         
         //====================================================================//
         // PRODUCT SPECIFICATIONS
@@ -43,34 +37,34 @@ trait MainTrait
         //====================================================================//
         // Weight
         $this->fieldsFactory()->create(SPL_T_DOUBLE)
-                ->Identifier("weight")
-                ->Name(Translate::getAdminTranslation("Package weight", "AdminProducts"))
-                ->Group($GroupName)
-                ->MicroData("http://schema.org/Product", "weight");
+            ->Identifier("weight")
+            ->Name(Translate::getAdminTranslation("Package weight", "AdminProducts"))
+            ->Group($groupName)
+            ->MicroData("http://schema.org/Product", "weight");
         
         //====================================================================//
         // Height
         $this->fieldsFactory()->create(SPL_T_DOUBLE)
-                ->Identifier("height")
-                ->Name(Translate::getAdminTranslation("Package height", "AdminProducts"))
-                ->Group($GroupName)
-                ->MicroData("http://schema.org/Product", "height");
+            ->Identifier("height")
+            ->Name(Translate::getAdminTranslation("Package height", "AdminProducts"))
+            ->Group($groupName)
+            ->MicroData("http://schema.org/Product", "height");
         
         //====================================================================//
         // Depth
         $this->fieldsFactory()->create(SPL_T_DOUBLE)
-                ->Identifier("depth")
-                ->Name(Translate::getAdminTranslation("Package depth", "AdminProducts"))
-                ->Group($GroupName)
-                ->MicroData("http://schema.org/Product", "depth");
+            ->Identifier("depth")
+            ->Name(Translate::getAdminTranslation("Package depth", "AdminProducts"))
+            ->Group($groupName)
+            ->MicroData("http://schema.org/Product", "depth");
         
         //====================================================================//
         // Width
         $this->fieldsFactory()->create(SPL_T_DOUBLE)
-                ->Identifier("width")
-                ->Name(Translate::getAdminTranslation("Package width", "AdminProducts"))
-                ->Group($GroupName)
-                ->MicroData("http://schema.org/Product", "width");
+            ->Identifier("width")
+            ->Name(Translate::getAdminTranslation("Package width", "AdminProducts"))
+            ->Group($groupName)
+            ->MicroData("http://schema.org/Product", "width");
         
         //====================================================================//
         // COMPUTED INFORMATIONS
@@ -79,20 +73,20 @@ trait MainTrait
         //====================================================================//
         // Surface
         $this->fieldsFactory()->create(SPL_T_DOUBLE)
-                ->Identifier("surface")
-                ->Name($this->spl->l("Surface"))
-                ->Group($GroupName)
-                ->MicroData("http://schema.org/Product", "surface")
-                ->isReadOnly();
+            ->Identifier("surface")
+            ->Name($this->spl->l("Surface"))
+            ->Group($groupName)
+            ->MicroData("http://schema.org/Product", "surface")
+            ->isReadOnly();
         
         //====================================================================//
         // Volume
         $this->fieldsFactory()->create(SPL_T_DOUBLE)
-                ->Identifier("volume")
-                ->Name($this->spl->l("Volume"))
-                ->Group($GroupName)
-                ->MicroData("http://schema.org/Product", "volume")
-                ->isReadOnly();
+            ->Identifier("volume")
+            ->Name($this->spl->l("Volume"))
+            ->Group($groupName)
+            ->MicroData("http://schema.org/Product", "volume")
+            ->isReadOnly();
        
         //====================================================================//
         // PRODUCT BARCODES
@@ -101,85 +95,88 @@ trait MainTrait
         //====================================================================//
         // UPC
         $this->fieldsFactory()->create(SPL_T_INT)
-                ->Identifier("upc")
-                ->Name(Translate::getAdminTranslation("UPC Code", "AdminProducts"))
-                ->Group($GroupName)
-                ->MicroData("http://schema.org/Product", "gtin12");
+            ->Identifier("upc")
+            ->Name(Translate::getAdminTranslation("UPC Code", "AdminProducts"))
+            ->Group($groupName)
+            ->MicroData("http://schema.org/Product", "gtin12");
 
         //====================================================================//
         // EAN
         $this->fieldsFactory()->create(SPL_T_INT)
-                ->Identifier("ean13")
-                ->Name(Translate::getAdminTranslation("EAN Code", "AdminProducts"))
-                ->Group($GroupName)
-                ->MicroData("http://schema.org/Product", "gtin13");
+            ->Identifier("ean13")
+            ->Name(Translate::getAdminTranslation("EAN Code", "AdminProducts"))
+            ->Group($groupName)
+            ->MicroData("http://schema.org/Product", "gtin13");
         
         //====================================================================//
         // ISBN
         $this->fieldsFactory()->create(SPL_T_INT)
-                ->Identifier("isbn")
-                ->Name(Translate::getAdminTranslation("ISBN Code", "AdminProducts"))
-                ->Group($GroupName)
-                ->MicroData("http://schema.org/Product", "gtin14");
+            ->Identifier("isbn")
+            ->Name(Translate::getAdminTranslation("ISBN Code", "AdminProducts"))
+            ->Group($groupName)
+            ->MicroData("http://schema.org/Product", "gtin14");
     }
 
     /**
-     *  @abstract     Read requested Field
+     * Read requested Field
      *
-     *  @param        string    $Key                    Input List Key
-     *  @param        string    $FieldName              Field Identifier / Name
+     * @param string $key       Input List Key
+     * @param string $fieldName Field Identifier / Name
      *
-     *  @return         none
+     * @return void
      */
-    private function getMainFields($Key, $FieldName)
+    private function getMainFields($key, $fieldName)
     {
         //====================================================================//
         // READ Fields
-        switch ($FieldName) {
+        switch ($fieldName) {
             //====================================================================//
             // PRODUCT SPECIFICATIONS
             //====================================================================//
             case 'weight':
                 if ($this->AttributeId) {
-                    $this->out[$FieldName] = (float) $this->object->weight + $this->Attribute->weight;
+                    $this->out[$fieldName] = (float) $this->object->weight + $this->Attribute->weight;
                 } else {
-                    $this->out[$FieldName] = (float) $this->object->weight;
+                    $this->out[$fieldName] = (float) $this->object->weight;
                 }
+
                 break;
             case 'height':
             case 'depth':
             case 'width':
-                $this->getSimple($FieldName);
+                $this->getSimple($fieldName);
+
                 break;
             case 'surface':
-                $this->out[$FieldName] = (float) $this->object->depth * $this->object->width;
+                $this->out[$fieldName] = (float) $this->object->depth * $this->object->width;
+
                 break;
             case 'volume':
-                $this->out[$FieldName] = (float) $this->object->height * $this->object->depth * $this->object->width;
+                $this->out[$fieldName] = (float) $this->object->height * $this->object->depth * $this->object->width;
+
                 break;
-                
             default:
                 return;
         }
         
-        if (!is_null($Key)) {
-            unset($this->in[$Key]);
+        if (isset($this->in[$key])) {
+            unset($this->in[$key]);
         }
     }
    
     /**
-     *  @abstract     Read requested Field
+     * Read requested Field
      *
-     *  @param        string    $Key                    Input List Key
-     *  @param        string    $FieldName              Field Identifier / Name
+     * @param string $key       Input List Key
+     * @param string $fieldName Field Identifier / Name
      *
-     *  @return         none
+     * @return void
      */
-    private function getBarCodeFields($Key, $FieldName)
+    private function getBarCodeFields($key, $fieldName)
     {
         //====================================================================//
         // READ Fields
-        switch ($FieldName) {
+        switch ($fieldName) {
             //====================================================================//
             // PRODUCT BARCODES
             //====================================================================//
@@ -187,76 +184,78 @@ trait MainTrait
             case 'ean13':
             case 'isbn':
                 if ($this->AttributeId) {
-                    $this->getSimple($FieldName, "Attribute");
+                    $this->getSimple($fieldName, "Attribute");
                 } else {
-                    $this->getSimple($FieldName);
+                    $this->getSimple($fieldName);
                 }
+
                 break;
-                
             default:
                 return;
         }
         
-        if (!is_null($Key)) {
-            unset($this->in[$Key]);
+        if (isset($this->in[$key])) {
+            unset($this->in[$key]);
         }
     }
     
     /**
-     *  @abstract     Write Given Fields
+     * Write Given Fields
      *
-     *  @param        string    $FieldName              Field Identifier / Name
-     *  @param        mixed     $Data                   Field Data
+     * @param string $fieldName Field Identifier / Name
+     * @param mixed  $fieldData Field Data
      *
-     *  @return         none
+     * @return void
      */
-    private function setMainFields($FieldName, $Data)
+    private function setMainFields($fieldName, $fieldData)
     {
         //====================================================================//
         // WRITE Field
-        switch ($FieldName) {
+        switch ($fieldName) {
             //====================================================================//
             // PRODUCT SPECIFICATIONS
             //====================================================================//
             case 'weight':
                 //====================================================================//
                 // If product as attributes
-                $CurrentWeight  =   $this->object->$FieldName;
-                $CurrentWeight +=   isset($this->Attribute->$FieldName) ? $this->Attribute->$FieldName : 0;
-                if ($this->AttributeId && ( abs($CurrentWeight - $Data) > 1E-6 )) {
-                    $this->Attribute->$FieldName    = $Data - $this->object->$FieldName;
+                $currentWeight  =   $this->object->{$fieldName};
+                $currentWeight +=   isset($this->Attribute->{$fieldName}) ? $this->Attribute->{$fieldName} : 0;
+                if ($this->AttributeId && (abs($currentWeight - $fieldData) > 1E-6)) {
+                    $this->Attribute->{$fieldName}    = $fieldData - $this->object->{$fieldName};
                     $this->needUpdate("Attribute");
+
                     break;
                 }
                 //====================================================================//
                 // If product as NO attributes
-                $this->setSimpleFloat($FieldName, $Data);
+                $this->setSimpleFloat($fieldName, $fieldData);
+
                 break;
             case 'height':
             case 'depth':
             case 'width':
-                $this->setSimpleFloat($FieldName, $Data);
+                $this->setSimpleFloat($fieldName, $fieldData);
+
                 break;
-            
             default:
                 return;
         }
-        unset($this->in[$FieldName]);
+        unset($this->in[$fieldName]);
     }
     
     /**
-     *  @abstract     Write Given Fields
+     * Write Given Fields
      *
-     *  @param        string    $FieldName              Field Identifier / Name
-     *  @param        mixed     $Data                   Field Data
+     * @param string $fieldName Field Identifier / Name
+     * @param mixed  $fieldData Field Data
      *
-     *  @return         none
+     * @return void
      */
-    private function setBarCodeFields($FieldName, $Data)
+    private function setBarCodeFields($fieldName, $fieldData)
     {
         //====================================================================//
         // WRITE Field
-        switch ($FieldName) {
+        switch ($fieldName) {
                 //====================================================================//
                 // PRODUCT BARCODES
                 //====================================================================//
@@ -264,15 +263,15 @@ trait MainTrait
             case 'ean13':
             case 'isbn':
                 if ($this->AttributeId) {
-                    $this->setSimple($FieldName, $Data, "Attribute");
+                    $this->setSimple($fieldName, $fieldData, "Attribute");
                 } else {
-                    $this->setSimple($FieldName, $Data);
+                    $this->setSimple($fieldName, $fieldData);
                 }
+
                 break;
-                    
             default:
                 return;
         }
-        unset($this->in[$FieldName]);
+        unset($this->in[$fieldName]);
     }
 }

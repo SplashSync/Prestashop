@@ -16,8 +16,6 @@
 
 namespace Splash\Local\Objects\ThirdParty;
 
-//====================================================================//
-// Prestashop Static Classes
 use Address;
 use Context;
 use State;
@@ -25,34 +23,34 @@ use Country;
 use Translate;
 
 /**
- * @abstract    Access to thirdparty Primary Address Fields
+ * Access to thirdparty Primary Address Fields
  */
 trait AddressTrait
 {
 
     /**
-     * @abstract    Build Fields using FieldFactory
+     * Build Fields using FieldFactory
      */
     private function buildPrimaryAddressPart1Fields()
     {
-        $GroupName  =   Translate::getAdminTranslation("Address", "AdminCustomers");
+        $groupName  =   Translate::getAdminTranslation("Address", "AdminCustomers");
 
         //====================================================================//
         // Addess
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
                 ->Identifier("address1")
-                ->Name($GroupName)
+                ->Name($groupName)
                 ->MicroData("http://schema.org/PostalAddress", "streetAddress")
-                ->Group($GroupName)
+                ->Group($groupName)
                 ->isReadOnly();
 
         //====================================================================//
         // Addess Complement
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
                 ->Identifier("address2")
-                ->Name($GroupName . " (2)")
+                ->Name($groupName . " (2)")
                 ->MicroData("http://schema.org/PostalAddress", "postOfficeBoxNumber")
-                ->Group($GroupName)
+                ->Group($groupName)
                 ->isReadOnly();
         
         //====================================================================//
@@ -61,7 +59,7 @@ trait AddressTrait
                 ->Identifier("postcode")
                 ->Name(Translate::getAdminTranslation("Zip/Postal Code", "AdminAddresses"))
                 ->MicroData("http://schema.org/PostalAddress", "postalCode")
-                ->Group($GroupName)
+                ->Group($groupName)
                 ->isReadOnly();
         
         //====================================================================//
@@ -70,7 +68,7 @@ trait AddressTrait
                 ->Identifier("city")
                 ->Name(Translate::getAdminTranslation("City", "AdminAddresses"))
                 ->MicroData("http://schema.org/PostalAddress", "addressLocality")
-                ->Group($GroupName)
+                ->Group($groupName)
                 ->isReadOnly();
         
         //====================================================================//
@@ -79,7 +77,7 @@ trait AddressTrait
                 ->Identifier("state")
                 ->Name(Translate::getAdminTranslation("State", "AdminAddresses"))
                 ->MicroData("http://schema.org/PostalAddress", "addressRegion")
-                ->Group($GroupName)
+                ->Group($groupName)
                 ->isReadOnly();
         
         //====================================================================//
@@ -88,7 +86,7 @@ trait AddressTrait
                 ->Identifier("id_state")
                 ->Name(Translate::getAdminTranslation("State", "AdminAddresses") . " (Code)")
                 ->MicroData("http://schema.org/PostalAddress", "addressRegion")
-                ->Group($GroupName)
+                ->Group($groupName)
                 ->isReadOnly();
         
         //====================================================================//
@@ -97,7 +95,7 @@ trait AddressTrait
                 ->Identifier("country")
                 ->Name(Translate::getAdminTranslation("Country", "AdminAddresses"))
                 ->MicroData("http://schema.org/PostalAddress", "addressCountry")
-                ->Group($GroupName)
+                ->Group($groupName)
                 ->isReadOnly();
         
         //====================================================================//
@@ -106,12 +104,12 @@ trait AddressTrait
                 ->Identifier("id_country")
                 ->Name(Translate::getAdminTranslation("Country", "AdminAddresses") . " (Code)")
                 ->MicroData("http://schema.org/PostalAddress", "addressCountry")
-                ->Group($GroupName)
+                ->Group($groupName)
                 ->isReadOnly();
     }
 
     /**
-     * @abstract    Build Fields using FieldFactory
+     * Build Fields using FieldFactory
      */
     private function buildPrimaryAddressPart2Fields()
     {
@@ -145,9 +143,9 @@ trait AddressTrait
     }
     
     /**
-     *  @abstract     Read requested Field
+     * Read requested Field
      *
-     *  @return void
+     * @return void
      */
     private function getAddressList()
     {
@@ -180,29 +178,29 @@ trait AddressTrait
     }
     
     /**
-     * @abstract     Read requested Field
+     * Read requested Field
      *
-     * @param       string    $Key                    Input List Key
-     * @param       string    $FieldName              Field Identifier / Name
+     * @param       string    $key                    Input List Key
+     * @param       string    $fieldName              Field Identifier / Name
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @return         none
+     * @return         void
      */
-    private function getPrimaryAddressFields($Key, $FieldName)
+    private function getPrimaryAddressFields($key, $fieldName)
     {
         //====================================================================//
         // Identify Main Address Id
-        $MainAddress = new Address(Address::getFirstCustomerAddressId($this->object->id));
+        $mainAddress = new Address(Address::getFirstCustomerAddressId($this->object->id));
         
         //====================================================================//
         // If Empty, Create A New One
-        if (!$MainAddress) {
-            $MainAddress = new Address();
+        if (empty($mainAddress->id)) {
+            $mainAddress = new Address();
         }
         
         //====================================================================//
         // READ Fields
-        switch ($FieldName) {
+        switch ($fieldName) {
             case 'address1':
             case 'address2':
             case 'postcode':
@@ -213,28 +211,28 @@ trait AddressTrait
             case 'vat_number':
                 //====================================================================//
                 // READ Directly on Class
-                $this->out[$FieldName] = $MainAddress->$FieldName;
-                unset($this->in[$Key]);
+                $this->out[$fieldName] = $mainAddress->$fieldName;
+                unset($this->in[$key]);
                 break;
             case 'id_country':
                 //====================================================================//
                 // READ With Convertion
-                $this->out[$FieldName] = Country::getIsoById($MainAddress->id_country);
-                unset($this->in[$Key]);
+                $this->out[$fieldName] = Country::getIsoById($mainAddress->id_country);
+                unset($this->in[$key]);
                 break;
             case 'state':
                 //====================================================================//
                 // READ With Convertion
-                $state = new State($MainAddress->id_state);
-                $this->out[$FieldName] = $state->name;
-                unset($this->in[$Key]);
+                $state = new State($mainAddress->id_state);
+                $this->out[$fieldName] = $state->name;
+                unset($this->in[$key]);
                 break;
             case 'id_state':
                 //====================================================================//
                 // READ With Convertion
-                $state = new State($MainAddress->id_state);
-                $this->out[$FieldName] = $state->iso_code;
-                unset($this->in[$Key]);
+                $state = new State($mainAddress->id_state);
+                $this->out[$fieldName] = $state->iso_code;
+                unset($this->in[$key]);
                 break;
         }
     }

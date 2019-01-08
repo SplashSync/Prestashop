@@ -33,7 +33,7 @@ trait AttributeTrait
     //====================================================================//
 
     /**
-     * @var Attribute
+     * @var Combination
      */
     protected $Attribute      = null;     // Prestashop Product Attribute Class
     
@@ -47,7 +47,7 @@ trait AttributeTrait
     //====================================================================//
     
     /**
-     * @abstract    Create a New Variant Product
+     * Create a New Variant Product
      * @param       mixed       $Data       Input Field Data
      * @return      Product|false
      */
@@ -59,7 +59,7 @@ trait AttributeTrait
             //====================================================================//
             // USE LOCK to Allow Base Product Loading
             $this->lock("onCombinationCreate");
-            $this->object   =   $this->load($BaseProductId);
+            $product   =   $this->load($BaseProductId);
             $this->unLock("onCombinationCreate");
         } else {
             //====================================================================//
@@ -67,19 +67,19 @@ trait AttributeTrait
             $this->lock("onCombinationLock");
             //====================================================================//
             // Create New Simple Product
-            $this->object   =    $this->createSimpleProduct();
+            $product   =    $this->createSimpleProduct();
             //====================================================================//
             // UNLOCK PRODUCT HOOKS
             $this->unLock("onCombinationLock");
         }
         //====================================================================//
         // Add Product Combination
-        if (!$this->object || !$this->createAttribute()) {
+        if (!$product || !$this->createAttribute()) {
             return false;
         }
         //====================================================================//
         // Return Product
-        return $this->object;
+        return $product;
     }
     
     //====================================================================//
@@ -88,7 +88,7 @@ trait AttributeTrait
 
     
     /**
-     * @abstract    Load Request Product Attribute Object
+     * Load Request Product Attribute Object
      * @param       string  $UnikId               Object id
      * @return      bool
      */
@@ -129,7 +129,7 @@ trait AttributeTrait
     }
     
     /**
-     * @abstract    Create Product Attribute (Combination)
+     * Create Product Attribute (Combination)
      * @return      bool
      */
     public function createAttribute()
@@ -164,7 +164,7 @@ trait AttributeTrait
     }
     
     /**
-     * @abstract    Update Product Attribute if Needed
+     * Update Product Attribute if Needed
      * @return      int|false               Object Id
      */
     public function updateAttribute()
@@ -200,7 +200,7 @@ trait AttributeTrait
         }
         //====================================================================//
         // UPDATE ATTRIBUTE IMAGES
-        if (!is_null($this->AttrImageIds)) {
+        if (isset($this->AttrImageIds)) {
             $this->Attribute->setImages($this->AttrImageIds);
         }
         $this->isUpdated("Attribute");
@@ -208,8 +208,8 @@ trait AttributeTrait
     }
     
     /**
-     * @abstract    Delete Product Combination & Product if Was Last Combination
-     * @param       array   $Needed         Is This Update Needed
+     * Delete Product Combination & Product if Was Last Combination
+     *
      * @return      int|false               Object Id
      */
     public function deleteAttribute()

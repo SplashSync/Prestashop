@@ -25,16 +25,17 @@ use Splash\Models\Objects\ObjectsTrait;
 use Splash\Local\Local;
 use Splash\Local\Services\LanguagesManager;
 
-//====================================================================//
-// Prestashop Static Classes
 use Shop;
 use Configuration;
 use Currency;
 use SplashSync;
+use OrderInvoice;
+use Order as psOrder;
 
 /**
  * @abstract    Splash Local Object Class - Customer Invoices Local Integration
  * @SuppressWarnings(PHPMD.CamelCasePropertyName)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class Invoice extends AbstractObject
 {
@@ -114,7 +115,12 @@ class Invoice extends AbstractObject
     protected $Products       = null;
     protected $Payments       = null;
     protected $PaymentMethod  = null;
-
+    
+    /**
+     * @var OrderInvoice
+     */
+    protected $object;
+    
     /**
      * @var int
      */

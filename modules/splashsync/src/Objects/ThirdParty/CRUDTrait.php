@@ -54,7 +54,7 @@ trait CRUDTrait
     /**
      * Create Request Object
      *
-     * @return Customer New Object
+     * @return false|Customer New Object
      */
     public function create()
     {
@@ -151,7 +151,7 @@ trait CRUDTrait
      *
      * @return bool
      */
-    public function delete($objectId= null)
+    public function delete($objectId = null)
     {
         //====================================================================//
         // Stack Trace

@@ -1,84 +1,77 @@
 <?php
-/**
- * This file is part of SplashSync Project.
+
+/*
+ *  This file is part of SplashSync Project.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ *  Copyright (C) 2015-2019 Splash Sync  <www.splashsync.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
- *  @author    Splash Sync <www.splashsync.com>
- *  @copyright 2015-2018 Splash Sync
- *  @license   MIT
+ *  For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
  */
 
 namespace Splash\Local\Objects\Invoice;
 
-//use Splash\Core\SplashCore      as Splash;
-
-//====================================================================//
-// Prestashop Static Classes
 use Translate;
 
 /**
- * @abstract    Access to Orders Core Fields
+ * Access to Orders Core Fields
  */
 trait CoreTrait
 {
-    
     /**
-    *   @abstract     Build Core Fields using FieldFactory
-    */
+     * Build Core Fields using FieldFactory
+     */
     private function buildInvoiceCoreFields()
     {
-        
         //====================================================================//
         // Order Object
         $this->fieldsFactory()->create(self::objects()->encode("Order", SPL_T_ID))
-                ->Identifier("id_order")
-                ->Name($this->spl->l('Order'))
-                ->MicroData("http://schema.org/Invoice", "referencesOrder")
-                ->isReadOnly()
+            ->Identifier("id_order")
+            ->Name($this->spl->l('Order'))
+            ->MicroData("http://schema.org/Invoice", "referencesOrder")
+            ->isReadOnly()
                 ;
         
         //====================================================================//
         // Invoice Reference
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
-                ->Identifier("number")
-                ->Name(Translate::getAdminTranslation("Invoice number", "AdminInvoices"))
-                ->MicroData("http://schema.org/Invoice", "confirmationNumber")
-                ->isReadOnly()
-                ->isListed()
+            ->Identifier("number")
+            ->Name(Translate::getAdminTranslation("Invoice number", "AdminInvoices"))
+            ->MicroData("http://schema.org/Invoice", "confirmationNumber")
+            ->isReadOnly()
+            ->isListed()
                 ;
     }
     
     /**
-     *  @abstract     Read requested Field
+     * Read requested Field
      *
-     *  @param        string    $Key                    Input List Key
-     *  @param        string    $FieldName              Field Identifier / Name
+     * @param string $key       Input List Key
+     * @param string $fieldName Field Identifier / Name
      *
-     *  @return         none
+     * @return void
      */
-    private function getInvoiceCoreFields($Key, $FieldName)
+    private function getInvoiceCoreFields($key, $fieldName)
     {
         //====================================================================//
         // READ Fields
-        switch ($FieldName) {
+        switch ($fieldName) {
             case 'number':
-                $this->out[$FieldName] = $this->object->getInvoiceNumberFormatted($this->LangId);
+                $this->out[$fieldName] = $this->object->getInvoiceNumberFormatted($this->LangId);
+
                 break;
-            
             case 'id_order':
-                $this->out[$FieldName] = self::objects()->encode("Order", $this->object->$FieldName);
+                $this->out[$fieldName] = self::objects()->encode("Order", $this->object->{$fieldName});
+
                 break;
-            
             default:
                 return;
         }
         
-        unset($this->in[$Key]);
+        unset($this->in[$key]);
     }
 }

@@ -1,82 +1,84 @@
 <?php
-/**
- * This file is part of SplashSync Project.
+
+/*
+ *  This file is part of SplashSync Project.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ *  Copyright (C) 2015-2019 Splash Sync  <www.splashsync.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
- *  @author    Splash Sync <www.splashsync.com>
- *  @copyright 2015-2018 Splash Sync
- *  @license   MIT
+ *  For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
  */
 
 namespace Splash\Local\Objects\Product\Variants;
 
-use Splash\Core\SplashCore      as Splash;
-
-use Tools;
-use Language;
 use AttributeGroup;
+use Language;
+use Splash\Core\SplashCore      as Splash;
+use Tools;
 
 /**
- * @abstract    Prestashop Product Variants Attribute Values management
+ * Prestashop Product Variants Attribute Values management
  */
 trait AttributeGroupTrait
 {
-    
     /**
-     * @abstract    Identify Attribute Group Using Multilang Codes
-     * @param       string      $Code   Attribute Group Code
-     * @return      int|false           Attribute Group Id
+     * Identify Attribute Group Using Multilang Codes
+     *
+     * @param string $code Attribute Group Code
+     *
+     * @return false|int Attribute Group Id
      */
-    public function getAttributeGroupByCode($Code)
+    public function getAttributeGroupByCode($code)
     {
         //====================================================================//
         // Ensure Code is Valid
-        if (!is_string($Code) || empty($Code)) {
+        if (!is_string($code) || empty($code)) {
             return false;
         }
         //====================================================================//
         // For Each Available Language
-        foreach (Language::getLanguages() as $Lang) {
+        foreach (Language::getLanguages() as $lang) {
             //====================================================================//
             // Load List of Attributes Groups
-            $Groups = AttributeGroup::getAttributesGroups($Lang["id_lang"]);
-            if (empty($Groups)) {
+            $groups = AttributeGroup::getAttributesGroups($lang["id_lang"]);
+            if (empty($groups)) {
                 continue;
             }
             //====================================================================//
             // Search for this Attribute Group Code
-            foreach ($Groups as $Group) {
-                if (Tools::strtolower($Group["name"]) == Tools::strtolower($Code)) {
-                    return $Group["id_attribute_group"];
+            foreach ($groups as $group) {
+                if (Tools::strtolower($group["name"]) == Tools::strtolower($code)) {
+                    return $group["id_attribute_group"];
                 }
             }
         }
+
         return false;
     }
 
     /**
-     * @abstract    Identify Attribute Group Using Multilang Code Array
-     * @param       string      $Code       Attribute Group Code
-     * @param       array       $Names      Multilang Attribute Group Names
-     * @param       bool        $isColor    Attribute Group is A Color Attribute
-     * @return      AttributeGroup|false           Attribute Group Id
+     * Identify Attribute Group Using Multilang Code Array
+     *
+     * @param string $code    Attribute Group Code
+     * @param mixed  $names   Multilang Attribute Group Names
+     * @param bool   $isColor Attribute Group is A Color Attribute
+     *
+     * @return AttributeGroup|false Attribute Group Id
      */
-    public function addAttributeGroup($Code, $Names, $isColor = false)
+    public function addAttributeGroup($code, $names, $isColor = false)
     {
         //====================================================================//
         // Ensure Code is Valid
-        if (!is_string($Code) || empty($Code)) {
+        if (!is_string($code) || empty($code)) {
             return false;
         }
         //====================================================================//
         // Ensure Names is MultiLanguage Array
-        if ((!is_array($Names) && !is_a($Names, "ArrayObject") ) || empty($Names)) {
+        if ((!is_array($names) && !is_a($names, "ArrayObject")) || empty($names)) {
             return Splash::log()->err(
                 "ErrLocalTpl",
                 __CLASS__,
@@ -87,22 +89,22 @@ trait AttributeGroupTrait
         
         //====================================================================//
         // Create New Attribute Group
-        $AttributeGroup                 =   new AttributeGroup();
-        $AttributeGroup->group_type     =   "select";
-        $AttributeGroup->is_color_group =   $isColor;
+        $attributeGroup                 =   new AttributeGroup();
+        $attributeGroup->group_type     =   "select";
+        $attributeGroup->is_color_group =   $isColor;
         //====================================================================//
         // Setup Codes => Same Code for Each Languages
-        $AttributeGroup->name = array();
-        foreach (Language::getLanguages() as $Lang) {
-            $AttributeGroup->name[$Lang["id_lang"]] = $Code;
+        $attributeGroup->name = array();
+        foreach (Language::getLanguages() as $lang) {
+            $attributeGroup->name[$lang["id_lang"]] = $code;
         }
         //====================================================================//
         // Setup Names
-        $this->setMultilang($AttributeGroup, "public_name", $Names);
+        $this->setMultilang($attributeGroup, "public_name", $names);
         
         //====================================================================//
         // CREATE Attribute Group
-        if ($AttributeGroup->add() != true) {
+        if (true != $attributeGroup->add()) {
             return Splash::log()->err(
                 "ErrLocalTpl",
                 __CLASS__,
@@ -111,6 +113,6 @@ trait AttributeGroupTrait
             );
         }
         
-        return $AttributeGroup;
+        return $attributeGroup;
     }
 }

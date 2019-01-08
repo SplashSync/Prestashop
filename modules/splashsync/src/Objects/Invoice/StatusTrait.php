@@ -23,14 +23,13 @@ namespace   Splash\Local\Objects\Invoice;
 use Translate;
 
 /**
- * @abstract    Access to Invoice Status Fields
- * @author      B. Paquier <contact@splashsync.com>
+ * Access to Invoice Status Fields
  */
 trait StatusTrait
 {
 
     /**
-    *   @abstract     Build Fields using FieldFactory
+    * Build Fields using FieldFactory
     */
     private function buildStatusFields()
     {
@@ -90,29 +89,29 @@ trait StatusTrait
     //====================================================================//
     
     /**
-     *  @abstract     Read requested Field
+     * Read requested Field
      *
-     *  @param        string    $Key                    Input List Key
-     *  @param        string    $FieldName              Field Identifier / Name
+     * @param        string    $key                    Input List Key
+     * @param        string    $fieldName              Field Identifier / Name
      *
-     *  @return         none
+     * @return       void
      */
-    private function getStatusFields($Key, $FieldName)
+    private function getStatusFields($key, $fieldName)
     {
         //====================================================================//
         // READ Fields
-        switch ($FieldName) {
+        switch ($fieldName) {
             //====================================================================//
             // INVOICE STATUS
             //====================================================================//
             case 'status':
                 $delta = $this->object->getTotalPaid() - $this->object->total_paid_tax_incl;
                 if (!$this->Order->valid) {
-                    $this->out[$FieldName]  = "PaymentCanceled";
+                    $this->out[$fieldName]  = "PaymentCanceled";
                 } elseif (($delta < 1E-6 ) || ($delta > 0)) {
-                    $this->out[$FieldName]  = "PaymentComplete";
+                    $this->out[$fieldName]  = "PaymentComplete";
                 } else {
-                    $this->out[$FieldName]  = "PaymentDue";
+                    $this->out[$fieldName]  = "PaymentDue";
                 }
                 break;
             
@@ -120,21 +119,21 @@ trait StatusTrait
             // INVOICE PAYMENT STATUS
             //====================================================================//
             case 'isCanceled':
-                $this->out[$FieldName]  = !$this->Order->valid;
+                $this->out[$fieldName]  = !$this->Order->valid;
                 break;
             case 'isValidated':
-                $this->out[$FieldName]  = (bool) $this->Order->valid;
+                $this->out[$fieldName]  = $this->Order->valid;
                 break;
             case 'isPaid':
                 $delta = $this->object->getTotalPaid() - $this->object->total_paid_tax_incl;
-                $this->out[$FieldName]  = ( ($delta < 1E-6 ) || ($delta > 0)  );
+                $this->out[$fieldName]  = ( ($delta < 1E-6 ) || ($delta > 0)  );
                 break;
         
             default:
                 return;
         }
         
-        unset($this->in[$Key]);
+        unset($this->in[$key]);
     }
     
     //====================================================================//

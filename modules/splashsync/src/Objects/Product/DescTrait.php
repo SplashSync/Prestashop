@@ -1,48 +1,264 @@
 <?php
-/**
- * This file is part of SplashSync Project.
+
+/*
+ *  This file is part of SplashSync Project.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ *  Copyright (C) 2015-2019 Splash Sync  <www.splashsync.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
- *  @author    Splash Sync <www.splashsync.com>
- *  @copyright 2015-2018 Splash Sync
- *  @license   MIT
+ *  For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
  */
 
 namespace Splash\Local\Objects\Product;
 
+use ArrayObject;
+use Db;
+use Language;
+use Product;
 use Splash\Core\SplashCore      as Splash;
 use Splash\Local\Services\LanguagesManager;
-
-//====================================================================//
-// Prestashop Static Classes
-use Language;
+use Tools;
 use Translate;
 use Validate;
-use Tools;
-use Db;
-use Product;
 
 /**
- * @abstract    Access to Product Descriptions Fields
- * @author      B. Paquier <contact@splashsync.com>
+ * Access to Product Descriptions Fields
  */
 trait DescTrait
 {
+    //====================================================================//
+    //  Multilanguage Getters & Setters
+    //====================================================================//
     
     /**
-    *   @abstract     Build Description Fields using FieldFactory
-    */
+     * Read Multilangual Fields of an Object
+     *
+     * @param object $object Pointer to Prestashop Object
+     * @param string $key    Id of a Multilangual Contents
+     *
+     * @return array
+     */
+    public function getMultilang(&$object = null, $key = null)
+    {
+        //====================================================================//
+        // Native Multilangs Descriptions
+        $languages = Language::getLanguages();
+        if (empty($languages)) {
+            return array();
+        }
+        //====================================================================//
+        // Read Multilangual Contents
+        $Contents   =   $object->{$key};
+        $data       =   array();
+        //====================================================================//
+        // For Each Available Language
+        foreach ($languages as $Lang) {
+            //====================================================================//
+            // Encode Language Code From Splash Format to Prestashop Format (fr_FR => fr-fr)
+            $LanguageCode   =   LanguagesManager::langEncode($Lang["language_code"]);
+            $LanguageId     =   $Lang["id_lang"];
+
+            //====================================================================//
+            // If Data is Available in this language
+            if (isset($Contents[$LanguageId])) {
+                $data[$LanguageCode] = $Contents[$LanguageId];
+
+                continue;
+            }
+            //====================================================================//
+            // Else insert empty value
+            $data[$LanguageCode] = "";
+        }
+
+        return $data;
+    }
+
+    /**
+     * Update Multilangual Fields of an Object
+     *
+     * @param object            $object    Pointer to Prestashop Object
+     * @param string            $key       Id of a Multilangual Contents
+     * @param array|ArrayObject $data      New Multilangual Contents
+     * @param int               $maxLength Maximum Contents Lenght
+     *
+     * @return bool
+     */
+    public function setMultilang($object = null, $key = null, $data = null, $maxLength = null)
+    {
+        //====================================================================//
+        // Check Received Data Are Valid
+        if (!is_array($data) && !is_a($data, "ArrayObject")) {
+            return false;
+        }
+
+        //====================================================================//
+        // Update Multilangual Contents
+        foreach ($data as $IsoCode => $Content) {
+            $this->setMultilangContents($object, $key, $IsoCode, $Content, $maxLength);
+        }
+
+        return true;
+    }
+    
+    /**
+     * Update Multilangual Contents For an Object
+     *
+     * @param object $object    Pointer to Prestashop Object
+     * @param string $key       Id of a Multilangual Contents
+     * @param string $isoCode   New Multilangual Content
+     * @param array  $data      New Multilangual Content
+     * @param int    $maxLength Maximum Contents Lenght
+     *
+     * @return void
+     */
+    public function setMultilangContents($object = null, $key = null, $isoCode = null, $data = null, $maxLength = null)
+    {
+        //====================================================================//
+        // Check Language Is Valid
+        $languageCode = LanguagesManager::langDecode($isoCode);
+        if (!Validate::isLanguageCode($languageCode)) {
+            return;
+        }
+        //====================================================================//
+        // Load Language
+        $language = Language::getLanguageByIETFCode($languageCode);
+        if (empty($language)) {
+            Splash::log()->war(
+                "MsgLocalTpl",
+                __CLASS__,
+                __FUNCTION__,
+                "Language " . $languageCode . " not available on this server."
+            );
+
+            return;
+        }
+        //====================================================================//
+        // Store Contents
+        //====================================================================//
+        //====================================================================//
+        // Extract Contents
+        $current   =   &$object->{$key};
+        //====================================================================//
+        // Create Array if Needed
+        if (!is_array($current)) {
+            $current = array();
+        }
+        //====================================================================//
+        // Compare Data
+        if (array_key_exists($language->id, $current) && ($current[$language->id] === $data)) {
+            return;
+        }
+        //====================================================================//
+        // Verify Data Lenght
+        if ($maxLength &&  (Tools::strlen($data) > $maxLength)) {
+            Splash::log()->war(
+                "MsgLocalTpl",
+                __CLASS__,
+                __FUNCTION__,
+                "Text is too long for field " . $key . ", modification skipped."
+            );
+
+            return;
+        }
+
+        //====================================================================//
+        // Update Data
+        $current[$language->id]     = $data;
+        $this->needUpdate();
+    }
+    
+    /**
+     * Read Multilangual Fields of an Object
+     *
+     * @param Product $object Pointer to Prestashop Object
+     *
+     * @return array
+     */
+    public function getMultilangFullName(&$object)
+    {
+        //====================================================================//
+        // Native Multilangs Descriptions
+        $languages = Language::getLanguages();
+        if (empty($languages)) {
+            return array();
+        }
+        
+        //====================================================================//
+        // For Each Available Language
+        $data = array();
+        foreach ($languages as $lang) {
+            //====================================================================//
+            // Encode Language Code From Splash Format to Prestashop Format (fr_FR => fr-fr)
+            $langCode   =   LanguagesManager::langEncode($lang["language_code"]);
+            $langId     =   (int) $lang["id_lang"];
+            
+            //====================================================================//
+            // Product Specific - Read Full Product Name with Attribute Description
+            $data[$langCode] = Product::getProductName((int)$object->id, $this->AttributeId, $langId);
+            
+            //====================================================================//
+            // Catch Potential Prestashop SQL Errors
+            if (Db::getInstance()->getNumberError()) {
+                Splash::log()->err(
+                    "ErrLocalTpl",
+                    __CLASS__,
+                    __FUNCTION__,
+                    " Error : " . Db::getInstance()->getMsgError()
+                );
+                $data[$langCode] = Product::getProductName(
+                    (int)$object->id,
+                    null,
+                    $langId
+                ) . " (" . $this->AttributeId . ")" ;
+            }
+        }
+
+        return $data;
+    }
+    
+    /**
+     * Read Multilangual Fields of an Object
+     *
+     * @param Product $Object Pointer to Prestashop Object
+     *
+     * @return array
+     */
+    public function getMultilangTags(&$Object)
+    {
+        //====================================================================//
+        // Native Multilangs Descriptions
+        $languages = Language::getLanguages();
+        if (empty($languages)) {
+            return array();
+        }
+        
+        //====================================================================//
+        // For Each Available Language
+        $data = array();
+        foreach ($languages as $lang) {
+            //====================================================================//
+            // Encode Language Code From Splash Format to Prestashop Format (fr_FR => fr-fr)
+            $langCode   =   LanguagesManager::langEncode($lang["language_code"]);
+            $langId     =   (int) $lang["id_lang"];
+            //====================================================================//
+            // Product Specific - Read Meta Keywords
+            $data[$langCode] = $Object->getTags($langId);
+        }
+
+        return $data;
+    }
+    
+    /**
+     * Build Description Fields using FieldFactory
+     */
     private function buildDescFields()
     {
-        
-        $GroupName  = Translate::getAdminTranslation("Information", "AdminProducts");
-        $GroupName2 = Translate::getAdminTranslation("SEO", "AdminProducts");
+        $groupName  = Translate::getAdminTranslation("Information", "AdminProducts");
+        $groupName2 = Translate::getAdminTranslation("SEO", "AdminProducts");
         
         //====================================================================//
         // PRODUCT DESCRIPTIONS
@@ -51,90 +267,90 @@ trait DescTrait
         //====================================================================//
         // Name without Options
         $this->fieldsFactory()->create(SPL_T_MVARCHAR)
-                ->Identifier("name")
-                ->Name($this->spl->l("Product Name without Options"))
-                ->MicroData("http://schema.org/Product", "alternateName")
-                ->Group($GroupName)
-                ->isRequired();
+            ->Identifier("name")
+            ->Name($this->spl->l("Product Name without Options"))
+            ->MicroData("http://schema.org/Product", "alternateName")
+            ->Group($groupName)
+            ->isRequired();
 
         //====================================================================//
         // Name with Options
         $this->fieldsFactory()->create(SPL_T_MVARCHAR)
-                ->Identifier("fullname")
-                ->Name($this->spl->l("Product Name with Options"))
-                ->Group($GroupName)
-                ->MicroData("http://schema.org/Product", "name")
-                ->isListed()
-                ->isReadOnly()
+            ->Identifier("fullname")
+            ->Name($this->spl->l("Product Name with Options"))
+            ->Group($groupName)
+            ->MicroData("http://schema.org/Product", "name")
+            ->isListed()
+            ->isReadOnly()
                 ;
 
         //====================================================================//
         // Long Description
         $this->fieldsFactory()->create(SPL_T_MTEXT)
-                ->Identifier("description")
-                ->Name(Translate::getAdminTranslation("description", "AdminProducts"))
-                ->Group($GroupName)
-                ->MicroData("http://schema.org/Article", "articleBody");
+            ->Identifier("description")
+            ->Name(Translate::getAdminTranslation("description", "AdminProducts"))
+            ->Group($groupName)
+            ->MicroData("http://schema.org/Article", "articleBody");
         
         //====================================================================//
         // Short Description
         $this->fieldsFactory()->create(SPL_T_MVARCHAR)
-                ->Identifier("description_short")
-                ->Name(Translate::getAdminTranslation("Short Description", "AdminProducts"))
-                ->Group($GroupName)
-                ->MicroData("http://schema.org/Product", "description");
+            ->Identifier("description_short")
+            ->Name(Translate::getAdminTranslation("Short Description", "AdminProducts"))
+            ->Group($groupName)
+            ->MicroData("http://schema.org/Product", "description");
 
         //====================================================================//
         // Meta Description
         $this->fieldsFactory()->create(SPL_T_MVARCHAR)
-                ->Identifier("meta_description")
-                ->Name(Translate::getAdminTranslation("Meta description", "AdminProducts"))
-                ->Description($GroupName2 . " " . Translate::getAdminTranslation("Meta description", "AdminProducts"))
-                ->Group($GroupName2)
-                ->MicroData("http://schema.org/Article", "headline");
+            ->Identifier("meta_description")
+            ->Name(Translate::getAdminTranslation("Meta description", "AdminProducts"))
+            ->Description($groupName2 . " " . Translate::getAdminTranslation("Meta description", "AdminProducts"))
+            ->Group($groupName2)
+            ->MicroData("http://schema.org/Article", "headline");
 
         //====================================================================//
         // Meta Title
         $this->fieldsFactory()->create(SPL_T_MVARCHAR)
-                ->Identifier("meta_title")
-                ->Name(Translate::getAdminTranslation("Meta title", "AdminProducts"))
-                ->Description($GroupName2 . " " . Translate::getAdminTranslation("Meta title", "AdminProducts"))
-                ->Group($GroupName2)
-                ->MicroData("http://schema.org/Article", "name");
+            ->Identifier("meta_title")
+            ->Name(Translate::getAdminTranslation("Meta title", "AdminProducts"))
+            ->Description($groupName2 . " " . Translate::getAdminTranslation("Meta title", "AdminProducts"))
+            ->Group($groupName2)
+            ->MicroData("http://schema.org/Article", "name");
         
         //====================================================================//
         // Meta KeyWords
         $this->fieldsFactory()->create(SPL_T_MVARCHAR)
-                ->Identifier("meta_keywords")
-                ->Name(Translate::getAdminTranslation("Meta keywords", "AdminProducts"))
-                ->Description($GroupName2 . " " . Translate::getAdminTranslation("Meta keywords", "AdminProducts"))
-                ->MicroData("http://schema.org/Article", "keywords")
-                ->Group($GroupName2)
-                ->isReadOnly();
+            ->Identifier("meta_keywords")
+            ->Name(Translate::getAdminTranslation("Meta keywords", "AdminProducts"))
+            ->Description($groupName2 . " " . Translate::getAdminTranslation("Meta keywords", "AdminProducts"))
+            ->MicroData("http://schema.org/Article", "keywords")
+            ->Group($groupName2)
+            ->isReadOnly();
 
         //====================================================================//
         // Meta KeyWords
         $this->fieldsFactory()->create(SPL_T_MVARCHAR)
-                ->Identifier("link_rewrite")
-                ->Name(Translate::getAdminTranslation("Friendly URL", "AdminProducts"))
-                ->Description($GroupName2 . " " . Translate::getAdminTranslation("Friendly URL", "AdminProducts"))
-                ->Group($GroupName2)
-                ->MicroData("http://schema.org/Product", "urlRewrite");
+            ->Identifier("link_rewrite")
+            ->Name(Translate::getAdminTranslation("Friendly URL", "AdminProducts"))
+            ->Description($groupName2 . " " . Translate::getAdminTranslation("Friendly URL", "AdminProducts"))
+            ->Group($groupName2)
+            ->MicroData("http://schema.org/Product", "urlRewrite");
     }
     
     /**
-     *  @abstract     Read requested Field
+     * Read requested Field
      *
-     *  @param        string    $Key                    Input List Key
-     *  @param        string    $FieldName              Field Identifier / Name
+     * @param string $key       Input List Key
+     * @param string $fieldName Field Identifier / Name
      *
-     *  @return         none
+     * @return void
      */
-    private function getDescFields($Key, $FieldName)
+    private function getDescFields($key, $fieldName)
     {
         //====================================================================//
         // READ Fields
-        switch ($FieldName) {
+        switch ($fieldName) {
             //====================================================================//
             // PRODUCT MULTILANGUAGES CONTENTS
             //====================================================================//
@@ -146,273 +362,61 @@ trait DescTrait
             case 'link_rewrite':
             case 'meta_description':
             case 'meta_title':
-                $this->out[$FieldName] = $this->getMultilang($this->object, $FieldName);
+                $this->out[$fieldName] = $this->getMultilang($this->object, $fieldName);
+
                 break;
             case 'meta_keywords':
-                $this->out[$FieldName] = $this->getMultilangTags($this->object);
+                $this->out[$fieldName] = $this->getMultilangTags($this->object);
+
                 break;
             case 'fullname':
-                $this->out[$FieldName] = $this->getMultilangFullName($this->object);
+                $this->out[$fieldName] = $this->getMultilangFullName($this->object);
+
                 break;
-                
             default:
                 return;
         }
         
-        unset($this->in[$Key]);
+        unset($this->in[$key]);
     }
     
     /**
-     *  @abstract     Write Given Fields
+     * Write Given Fields
      *
-     *  @param        string    $FieldName              Field Identifier / Name
-     *  @param        mixed     $Data                   Field Data
+     * @param string $fieldName Field Identifier / Name
+     * @param mixed  $fieldData Field Data
      *
-     *  @return         none
+     * @return void
      */
-    private function setDescFields($FieldName, $Data)
+    private function setDescFields($fieldName, $fieldData)
     {
         //====================================================================//
         // WRITE Field
-        switch ($FieldName) {
+        switch ($fieldName) {
             //====================================================================//
             // PRODUCT MULTILANGUAGES CONTENTS
             //====================================================================//
             case 'name':
             case 'description':
             case 'link_rewrite':
-                $this->setMultilang($this->object, $FieldName, $Data);
+                $this->setMultilang($this->object, $fieldName, $fieldData);
+
                 break;
             case 'meta_description':
-                $this->setMultilang($this->object, $FieldName, $Data, 159);
+                $this->setMultilang($this->object, $fieldName, $fieldData, 159);
+
                 break;
             case 'meta_title':
-                $this->setMultilang($this->object, $FieldName, $Data, 69);
+                $this->setMultilang($this->object, $fieldName, $fieldData, 69);
+
                 break;
             case 'description_short':
-                $this->setMultilang($this->object, $FieldName, $Data, 1023);
+                $this->setMultilang($this->object, $fieldName, $fieldData, 1023);
+
                 break;
             default:
                 return;
         }
-        unset($this->in[$FieldName]);
-    }
-
-    //====================================================================//
-    //  Multilanguage Getters & Setters
-    //====================================================================//
-    
-    /**
-     *      @abstract       Read Multilangual Fields of an Object
-     *
-     *      @param          object      $Object     Pointer to Prestashop Object
-     *      @param          array       $key        Id of a Multilangual Contents
-     *
-     *      @return         mixed
-     */
-    public function getMultilang(&$Object = null, $key = null)
-    {
-        //====================================================================//
-        // Native Multilangs Descriptions
-        $Languages = Language::getLanguages();
-        if (empty($Languages)) {
-            return "";
-        }
-        //====================================================================//
-        // Read Multilangual Contents
-        $Contents   =   $Object->$key;
-        $Data       =   array();
-        //====================================================================//
-        // For Each Available Language
-        foreach ($Languages as $Lang) {
-            //====================================================================//
-            // Encode Language Code From Splash Format to Prestashop Format (fr_FR => fr-fr)
-            $LanguageCode   =   LanguagesManager::langEncode($Lang["language_code"]);
-            $LanguageId     =   $Lang["id_lang"];
-
-            //====================================================================//
-            // If Data is Available in this language
-            if (isset($Contents[$LanguageId])) {
-                $Data[$LanguageCode] = $Contents[$LanguageId];
-                continue;
-            }
-            //====================================================================//
-            // Else insert empty value
-            $Data[$LanguageCode] = "";
-        }
-        return $Data;
-    }
-
-    /**
-     *      @abstract       Update Multilangual Fields of an Object
-     *
-     *      @param          object      $Object     Pointer to Prestashop Object
-     *      @param          array       $key        Id of a Multilangual Contents
-     *      @param          array       $Data       New Multilangual Contents
-     *      @param          int         $MaxLength  Maximum Contents Lenght
-     *
-     *      @return         bool                     0 if no update needed, 1 if update needed
-     */
-    public function setMultilang($Object = null, $key = null, $Data = null, $MaxLength = null)
-    {
-        //====================================================================//
-        // Check Received Data Are Valid
-        if (!is_array($Data) && !is_a($Data, "ArrayObject")) {
-            return false;
-        }
-
-        //====================================================================//
-        // Update Multilangual Contents
-        foreach ($Data as $IsoCode => $Content) {
-            $this->setMultilangContents($Object, $key, $IsoCode, $Content, $MaxLength);
-        }
-
-        return true;
-    }
-    
-    /**
-     *      @abstract       Update Multilangual Contents For an Object
-     *
-     *      @param          object      $Object     Pointer to Prestashop Object
-     *      @param          array       $key        Id of a Multilangual Contents
-     *      @param          string      $IsoCode    New Multilangual Content
-     *      @param          array       $Data       New Multilangual Content
-     *      @param          int         $MaxLength  Maximum Contents Lenght
-     *
-     *      @return         bool                     0 if no update needed, 1 if update needed
-     */
-    public function setMultilangContents($Object = null, $key = null, $IsoCode = null, $Data = null, $MaxLength = null)
-    {
-        //====================================================================//
-        // Check Language Is Valid
-        $LanguageCode = LanguagesManager::langDecode($IsoCode);
-        if (!Validate::isLanguageCode($LanguageCode)) {
-            return;
-        }
-        //====================================================================//
-        // Load Language
-        $Language = Language::getLanguageByIETFCode($LanguageCode);
-        if (empty($Language)) {
-            Splash::log()->war(
-                "MsgLocalTpl",
-                __CLASS__,
-                __FUNCTION__,
-                "Language " . $LanguageCode . " not available on this server."
-            );
-            return;
-        }
-        //====================================================================//
-        // Store Contents
-        //====================================================================//
-        //====================================================================//
-        // Extract Contents
-        $Current   =   &$Object->$key;
-        //====================================================================//
-        // Create Array if Needed
-        if (!is_array($Current)) {
-            $Current = array();
-        }
-        //====================================================================//
-        // Compare Data
-        if (array_key_exists($Language->id, $Current) && ( $Current[$Language->id] === $Data)) {
-            return;
-        }
-        //====================================================================//
-        // Verify Data Lenght
-        if ($MaxLength &&  ( Tools::strlen($Data) > $MaxLength)) {
-            Splash::log()->war(
-                "MsgLocalTpl",
-                __CLASS__,
-                __FUNCTION__,
-                "Text is too long for field " . $key . ", modification skipped."
-            );
-            return;
-        }
-
-
-        //====================================================================//
-        // Update Data
-        $Current[$Language->id]     = $Data;
-        $this->needUpdate();
-    }
-    
-    /**
-     *      @abstract       Read Multilangual Fields of an Object
-     *
-     *      @param          object      $Object     Pointer to Prestashop Object
-     *
-     *      @return         int                     0 if KO, 1 if OK
-     */
-    public function getMultilangFullName(&$Object = null)
-    {
-        //====================================================================//
-        // Native Multilangs Descriptions
-        $Languages = Language::getLanguages();
-        if (empty($Languages)) {
-            return "";
-        }
-        
-        //====================================================================//
-        // For Each Available Language
-        $Data = array();
-        foreach ($Languages as $Lang) {
-            //====================================================================//
-            // Encode Language Code From Splash Format to Prestashop Format (fr_FR => fr-fr)
-            $LanguageCode   =   LanguagesManager::langEncode($Lang["language_code"]);
-            $LanguageId     =   (int) $Lang["id_lang"];
-            
-            //====================================================================//
-            // Product Specific - Read Full Product Name with Attribute Description
-            $Data[$LanguageCode] = Product::getProductName((int)$Object->id, $this->AttributeId, $LanguageId);
-            
-            //====================================================================//
-            // Catch Potential Prestashop SQL Errors
-            if (Db::getInstance()->getNumberError()) {
-                Splash::log()->err(
-                    "ErrLocalTpl",
-                    __CLASS__,
-                    __FUNCTION__,
-                    " Error : " . Db::getInstance()->getMsgError()
-                );
-                $Data[$LanguageCode] = Product::getProductName(
-                    (int)$Object->id,
-                    null,
-                    $LanguageId
-                ) . " (" . $this->AttributeId . ")" ;
-            }
-        }
-        return $Data;
-    }
-    
-    /**
-     *      @abstract       Read Multilangual Fields of an Object
-     *
-     *      @param          object      $Object     Pointer to Prestashop Object
-     *
-     *      @return         int                     0 if KO, 1 if OK
-     */
-    public function getMultilangTags(&$Object = null)
-    {
-        //====================================================================//
-        // Native Multilangs Descriptions
-        $Languages = Language::getLanguages();
-        if (empty($Languages)) {
-            return "";
-        }
-        
-        //====================================================================//
-        // For Each Available Language
-        $Data = array();
-        foreach ($Languages as $Lang) {
-            //====================================================================//
-            // Encode Language Code From Splash Format to Prestashop Format (fr_FR => fr-fr)
-            $LanguageCode   =   LanguagesManager::langEncode($Lang["language_code"]);
-            $LanguageId     =   (int) $Lang["id_lang"];
-            
-            //====================================================================//
-            // Product Specific - Read Meta Keywords
-            $Data[$LanguageCode] = $Object->getTags($LanguageId);
-        }
-        return $Data;
+        unset($this->in[$fieldName]);
     }
 }

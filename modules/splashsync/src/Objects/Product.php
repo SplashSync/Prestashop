@@ -32,6 +32,7 @@ use Shop;
 use Configuration;
 use Currency;
 use SplashSync;
+use Product as psProduct;
 
 /**
  * @abstract    Splash Local Object Class - Products Local Integration
@@ -71,6 +72,11 @@ class Product extends AbstractObject
      * @var SplashSync
      */
     private $spl = null;
+    
+    /**
+     * @var psProduct
+     */
+    protected $object;
     
     //====================================================================//
     // Object Definition Parameters

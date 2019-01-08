@@ -157,7 +157,7 @@ class Local implements LocalClassInterface
         //====================================================================//
         // When Library is called in server mode ONLY
         //====================================================================//
-        if (SPLASH_SERVER_MODE) {
+        if (!empty(SPLASH_SERVER_MODE)) {
             //====================================================================//
             // Load Default Language
             LanguagesManager::loadDefaultLanguage();
