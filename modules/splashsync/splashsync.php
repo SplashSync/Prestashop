@@ -1,21 +1,20 @@
 <?php
-/**
- * This file is part of SplashSync Project.
+
+/*
+ *  This file is part of SplashSync Project.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ *  Copyright (C) 2015-2019 Splash Sync  <www.splashsync.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
- *  @author    Splash Sync <www.splashsync.com>
- *  @copyright 2015-2018 Splash Sync
- *  @license   MIT
+ *  For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
  */
 
 /**
- * @abstract    Splash Sync Prestahop Module - Noty Notifications
+ * Splash Sync Prestahop Module - Noty Notifications
  */
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -28,18 +27,24 @@ require_once "src/Objects/Order/HooksTrait.php";
 require_once "src/Traits/SplashIdTrait.php";
 
 /**
- * @abstract    Splash Sync Prestashop Module Main Class
+ * Splash Sync Prestashop Module Main Class
  *
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class SplashSync extends Module
 {
+    use \Splash\Local\Objects\ThirdParty\HooksTrait;
+    use \Splash\Local\Objects\Address\HooksTrait;
+    use \Splash\Local\Objects\Product\HooksTrait;
+//    use \Splash\Local\Objects\Category\HooksTrait;
+    use \Splash\Local\Objects\Order\HooksTrait;
+    use \Splash\Local\Traits\SplashIdTrait;
     /** @var bool */
     public $bootstrap = true;
 
     /** @var string */
-    public $confirmUninstall = null;
+    public $confirmUninstall;
     
     /** @var array */
     private $dataList = array();
@@ -47,23 +52,15 @@ class SplashSync extends Module
     /** @var array */
     private $fieldsList = array();
     
-    use \Splash\Local\Objects\ThirdParty\HooksTrait;
-    use \Splash\Local\Objects\Address\HooksTrait;
-    use \Splash\Local\Objects\Product\HooksTrait;
-//    use \Splash\Local\Objects\Category\HooksTrait;
-    use \Splash\Local\Objects\Order\HooksTrait;
-    use \Splash\Local\Traits\SplashIdTrait;
-    
-//====================================================================//
-// *******************************************************************//
-//  MODULE CONSTRUCTOR
-// *******************************************************************//
-//====================================================================//
+    //====================================================================//
+    // *******************************************************************//
+    //  MODULE CONSTRUCTOR
+    // *******************************************************************//
+    //====================================================================//
     
     /**
-    *  @abstract    Splash Module Class Constructor
-    *  @return      None
-    */
+     * Splash Module Class Constructor
+     */
     public function __construct()
     {
         //====================================================================//
@@ -110,15 +107,16 @@ class SplashSync extends Module
         self::initContext();
     }
 
-//====================================================================//
-// *******************************************************************//
-//  MODULE INSTALLATION
-// *******************************************************************//
-//====================================================================//
+    //====================================================================//
+    // *******************************************************************//
+    //  MODULE INSTALLATION
+    // *******************************************************************//
+    //====================================================================//
     
     /**
-     * @abstract    Splash Module Install Function
-     * @return      bool
+     * Splash Module Install Function
+     *
+     * @return bool
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
@@ -183,12 +181,12 @@ class SplashSync extends Module
         if (!$this->registerHook('actionObjectProductAddAfter') ||
                 !$this->registerHook('actionObjectProductUpdateAfter') ||
                 !$this->registerHook('actionObjectProductDeleteAfter') ||
-                !$this->registerHook('actionProductAttributeDelete') ) {
+                !$this->registerHook('actionProductAttributeDelete')) {
             return false;
         }
         if (!$this->registerHook('actionObjectCombinationAddAfter') ||
                 !$this->registerHook('actionObjectCombinationUpdateAfter') ||
-                !$this->registerHook('actionObjectCombinationDeleteAfter') ) {
+                !$this->registerHook('actionObjectCombinationDeleteAfter')) {
             return false;
         }
         //====================================================================//
@@ -212,43 +210,29 @@ class SplashSync extends Module
                 !$this->registerHook('actionObjectOrderInvoiceDeleteAfter')) {
             return false;
         }
+
         return true;
     }
 
     /**
-    *  @abstract    Splash Module UnInstall Function
-    *  @return      bool                True if OK, False if Errors
-    */
+     * Splash Module UnInstall Function
+     *
+     * @return      bool                True if OK, False if Errors
+     */
     public function uninstall()
     {
         if (!parent::uninstall()) {
             return false;
         }
-        return true;
-    }
-    
-    /**
-    *  @abstract    Init Splash Parameters in structure in Global Context
-    *  @return      bool                True if OK, False if Errors
-    */
-    private function initContext()
-    {
-        //====================================================================//
-        //  Init Splash Parameters in structure if empty
-        if (!isset(Context::getContext()->splash)) {
-            Context::getContext()->splash = new ArrayObject(array(), ArrayObject::ARRAY_AS_PROPS);
-        }
-        //====================================================================//
-        //  Init Cookie structure if empty
-        Context::getContext()->cookie->update();
+
         return true;
     }
   
-//====================================================================//
-// *******************************************************************//
-//  MODULE SETUP PAGE MANAGEMENT
-// *******************************************************************//
-//====================================================================//
+    //====================================================================//
+    // *******************************************************************//
+    //  MODULE SETUP PAGE MANAGEMENT
+    // *******************************************************************//
+    //====================================================================//
         
     public function getContent()
     {
@@ -314,13 +298,167 @@ class SplashSync extends Module
         $helper->fields_value['SPLASH_LANG_ID']     = Configuration::get('SPLASH_LANG_ID');
         $helper->fields_value['SPLASH_USER_ID']     = Configuration::get('SPLASH_USER_ID');
         
-
         return $helper->generateForm($fields_form);
+    }
+    
+    //====================================================================//
+    // *******************************************************************//
+    //  MODULE BACK OFFICE (ADMIN) HOOKS
+    // *******************************************************************//
+    //====================================================================//
+    
+    /**
+     * admin <Header> Hook
+     */
+    public function hookDisplayBackOfficeHeader()
+    {
+        //====================================================================//
+        // Register Module JS
+        $this->context->controller->addJS($this->_path.'views/js/splash.js');
+        if (\Tools::version_compare(_PS_VERSION_, "1.7", '<')) {
+            $this->context->controller->addJquery();
+        }
+        $this->context->controller->addJS($this->_path.'views/js/jquery.noty.packaged.min.js');
+    }
+
+    /**
+     * admin <Footer> Hook
+     */
+    public function hookDisplayBackOfficeFooter()
+    {
+        //====================================================================//
+        // Read Cookie String
+        $Cookie         =   Context::getContext()->cookie;
+        $Notifications  =   $Cookie->__get("spl_notify");
+
+        //====================================================================//
+        // Assign Smarty Variables
+        $this->context->smarty->assign('notifications', json_decode($Notifications, true));
+        $this->context->smarty->assign(
+            'url',
+            \Splash\Client\Splash::ws()->getServerScheme()
+                . "://" . Configuration::get('PS_SHOP_DOMAIN')
+                . __PS_BASE_URI__
+        );
+        
+        //====================================================================//
+        //  Generate Ajax Token
+        $Token  = Tools::getAdminToken(
+            'AdminModules'.Tab::getIdFromClassName('AdminModules').(int)$Cookie->__get("id_employee")
+        );
+        $this->context->smarty->assign('token', $Token);
+
+        //====================================================================//
+        // Render Footer
+        return $this->display(__FILE__, 'footer.tpl');
+    }
+    
+    //====================================================================//
+    // *******************************************************************//
+    //  NODES MANAGEMENT FUNCTIONS
+    // *******************************************************************//
+    //====================================================================//
+          
+    /**
+     * Commit Change Actions or Other on OsWs Node Network
+     *
+     * @param string       $objectType OsWs Object Type
+     * @param array|string $objectId   Object Id or Array of Object Id
+     * @param string       $action     Action to Commit
+     * @param string       $comment    Comment For this action
+     *
+     * @return bool
+     *
+     * @SuppressWarnings(PHPMD.DevelopmentCodeFragment)
+     */
+    protected function doCommit($objectType, $objectId, $action, $comment)
+    {
+        //====================================================================//
+        // Safety Checks
+        if (is_numeric($objectId)) {
+            Splash\Client\Splash::log()
+                ->deb("Splash Commit => " . $objectType . " Action = " . $action . " Id = " . $objectId, " : " . $comment);
+        } elseif (is_array($objectId) && empty($objectId)) {
+            return true;
+        } elseif (is_array($objectId)) {
+            Splash\Client\Splash::log()
+                ->deb("Splash Commit => " . $objectType . " Action = " . $action . " Ids (x" . implode(", ", $objectId) . ") " . $comment);
+        } else {
+            return Splash\Client\Splash::log()
+                ->err("Splash Hook Error : Wrong Id List Given => " . print_r($objectId, true));
+        }
+        
+        //====================================================================//
+        // Check if Object is in Remote Create Mode
+        if (Splash\Client\Splash::object($objectType)->isLocked() && (SPL_A_UPDATE == $action)) {
+            //====================================================================//
+            // Overide Action For Create
+            $action = SPL_A_CREATE;
+        }
+        
+        //====================================================================//
+        // Prepare User Name for Logging
+        if (!empty(Context::getContext()->employee)) {
+            $UserName   = Context::getContext()->employee->firstname;
+            $UserName  .= " " . Context::getContext()->employee->lastname;
+        }
+        if (!isset($UserName)) {
+            $UserName   = $this->l('Unknown') . $this->l('Employee');
+        }
+        //====================================================================//
+        // Commit Action on remotes nodes (Master & Slaves)
+        $result = Splash\Client\Splash::commit($objectType, $objectId, $action, $UserName, $comment);
+        //====================================================================//
+        // Post Splash Messages
+        $this->importMessages();
+
+        return $result;
+    }
+   
+    /**
+     * Post User Debug
+     * 
+     * @SuppressWarnings(PHPMD.DevelopmentCodeFragment)
+     *
+     * @param string      $name
+     * @param string      $objectId
+     * @param null|mixed $other
+     */
+    protected function debugHook($name, $objectId, $other = null)
+    {
+        if (_PS_MODE_DEV_ == true) {
+            Splash\Client\Splash::log()->war("Hook => " . $name . " => Id " . $objectId);
+            if (!empty($other)) {
+                Splash\Client\Splash::log()->war("Raw => " . print_r($other, true));
+            }
+
+            return true;
+        }
+
+        return true;
+    }
+    
+    /**
+     * Init Splash Parameters in structure in Global Context
+     *
+     * @return      bool                True if OK, False if Errors
+     */
+    private function initContext()
+    {
+        //====================================================================//
+        //  Init Splash Parameters in structure if empty
+        if (!isset(Context::getContext()->splash)) {
+            Context::getContext()->splash = new ArrayObject(array(), ArrayObject::ARRAY_AS_PROPS);
+        }
+        //====================================================================//
+        //  Init Cookie structure if empty
+        Context::getContext()->cookie->update();
+
+        return true;
     }
     
     private function getMainFormArray()
     {
-
         //====================================================================//
         // Init Fields List
         $Fields = array();
@@ -328,75 +466,75 @@ class SplashSync extends Module
         //====================================================================//
         // User Id
         $Fields[] = array(
-                    'type' => 'text',
-                    'label' => $this->l('Server Id'),
-                    'name' => 'SPLASH_WS_ID',
-                    'size' => 20,
-                    'required' => true
-                );
+            'type' => 'text',
+            'label' => $this->l('Server Id'),
+            'name' => 'SPLASH_WS_ID',
+            'size' => 20,
+            'required' => true
+        );
         //====================================================================//
         // User Key
         $Fields[] = array(
-                    'type' => 'text',
-                    'label' => $this->l('Server Private Key'),
-                    'name' => 'SPLASH_WS_KEY',
-                    'size' => 60,
-                    'required' => true
-                );
+            'type' => 'text',
+            'label' => $this->l('Server Private Key'),
+            'name' => 'SPLASH_WS_KEY',
+            'size' => 60,
+            'required' => true
+        );
         
         //====================================================================//
         // Expert Mode
         $Fields[] = array(
-                    'type' => 'checkbox',
-                    'name' => 'SPLASH_WS',
-                    'label' => $this->l('Enable Expert Mode'),
-                    'hint' => $this->l('Enable this option only if requested by Splash Team.'),
-                    'values' => array(
-                        'query' => array(
-                            array(
-                                'id' => 'EXPERT',
-                                'name' => $this->l('Yes'),
-                                'val' => '1'
-                            ),
-                        ),
-                        'id' => 'id',
-                        'name' => 'name'
-                    )
-            );
+            'type' => 'checkbox',
+            'name' => 'SPLASH_WS',
+            'label' => $this->l('Enable Expert Mode'),
+            'hint' => $this->l('Enable this option only if requested by Splash Team.'),
+            'values' => array(
+                'query' => array(
+                    array(
+                        'id' => 'EXPERT',
+                        'name' => $this->l('Yes'),
+                        'val' => '1'
+                    ),
+                ),
+                'id' => 'id',
+                'name' => 'name'
+            )
+        );
 
         if (Configuration::get('SPLASH_WS_EXPERT')) {
             //====================================================================//
             // Webservice SOAP Protocol
             $Fields[] = array(
-                        'label' => $this->l('Webservice'),
-                        'hint' => $this->l('Webservice libary used for communication.'),
-                        'type' => 'select',
-                        'name' => 'SPLASH_WS_METHOD',
-                        'options' => array(
-                            'query' => array(
-                                array(
-                                    'id' => 'SOAP',
-                                    'name' => "Generic PHP SOAP",
-                                ),
-                                array(
-                                    'id' => 'NuSOAP',
-                                    'name' => "NuSOAP Library",
-                                ),
-                            ),
-                            'id'    => 'id',
-                            'name'  => 'name'
-                        )
-                    );
+                'label' => $this->l('Webservice'),
+                'hint' => $this->l('Webservice libary used for communication.'),
+                'type' => 'select',
+                'name' => 'SPLASH_WS_METHOD',
+                'options' => array(
+                    'query' => array(
+                        array(
+                            'id' => 'SOAP',
+                            'name' => "Generic PHP SOAP",
+                        ),
+                        array(
+                            'id' => 'NuSOAP',
+                            'name' => "NuSOAP Library",
+                        ),
+                    ),
+                    'id'    => 'id',
+                    'name'  => 'name'
+                )
+            );
         
             //====================================================================//
             // Server Host Url
             $Fields[] = array(
-                        'type' => 'text',
-                        'label' => $this->l('Server Host Url'),
-                        'name' => 'SPLASH_WS_HOST',
-                        'size' => 60,
-                        'required' => false
-                    );
+                'type' => 'text',
+                'label' => $this->l('Server Host Url'),
+                'name' => 'SPLASH_WS_HOST',
+                'size' => 60,
+                'required' => false
+            );
         }
         
         //====================================================================//
@@ -419,7 +557,6 @@ class SplashSync extends Module
     
     private function getOptionFormArray()
     {
-
         //====================================================================//
         // Init Fields List
         $Fields = array();
@@ -427,34 +564,34 @@ class SplashSync extends Module
         //====================================================================//
         // Default Language Code
         $Fields[] = array(
-                    'label' => $this->l('Default language'),
-                    'hint' => $this->l('The default language used for synchronisation.'),
-                    'cast' => 'intval',
-                    'type' => 'select',
-                    'identifier' => 'id_lang',
-                    'name' => 'SPLASH_LANG_ID',
-                    'options' => array(
-                          'query' => Language::getLanguages(false),
-                          'id' => 'language_code',
-                          'name' => 'name'
-                    )
-                );
+            'label' => $this->l('Default language'),
+            'hint' => $this->l('The default language used for synchronisation.'),
+            'cast' => 'intval',
+            'type' => 'select',
+            'identifier' => 'id_lang',
+            'name' => 'SPLASH_LANG_ID',
+            'options' => array(
+                'query' => Language::getLanguages(false),
+                'id' => 'language_code',
+                'name' => 'name'
+            )
+        );
 
         //====================================================================//
         // Default User Id
         $Fields[] = array(
-                    'label' => $this->l('Default user'),
-                    'hint' => $this->l('The default user used for synchronisation log.'),
-                    'cast' => 'intval',
-                    'type' => 'select',
-                    'identifier' => 'id_employee',
-                    'name' => 'SPLASH_USER_ID',
-                    'options' => array(
-                          'query' => Employee::getEmployees(),
-                          'id' => 'id_employee',
-                          'name' => 'firstname'
-                    )
-                );
+            'label' => $this->l('Default user'),
+            'hint' => $this->l('The default user used for synchronisation log.'),
+            'cast' => 'intval',
+            'type' => 'select',
+            'identifier' => 'id_employee',
+            'name' => 'SPLASH_USER_ID',
+            'options' => array(
+                'query' => Employee::getEmployees(),
+                'id' => 'id_employee',
+                'name' => 'firstname'
+            )
+        );
 
         //====================================================================//
         // Init Form array
@@ -531,11 +668,11 @@ class SplashSync extends Module
             
             //====================================================================//
             // Verify WS Method
-            if (empty($WsMethod) || !Validate::isString($WsMethod) || !in_array($WsMethod, array("NuSOAP", "SOAP"))) {
+            if (empty($WsMethod) || !Validate::isString($WsMethod) || !in_array($WsMethod, array("NuSOAP", "SOAP"), true)) {
                 $output .= $this->displayError($this->l('Invalid WebService Protocol'));
             }
 
-            if ($output == null) {
+            if (null == $output) {
                 Configuration::updateValue('SPLASH_WS_EXPERT', trim($expert));
                 Configuration::updateValue('SPLASH_WS_HOST', trim($WsHost));
                 Configuration::updateValue('SPLASH_WS_ID', trim($ServerId));
@@ -546,6 +683,7 @@ class SplashSync extends Module
                 $output .= $this->displayConfirmation($this->l('Settings updated'));
             }
         }
+
         return $output;
     }
 
@@ -554,7 +692,6 @@ class SplashSync extends Module
      */
     private function displayTest()
     {
-        
         $this->displayTestHead();
         $this->displayTestSelfTests();
         $this->displayTestObjectList();
@@ -574,6 +711,7 @@ class SplashSync extends Module
 
         $helper->token = Tools::getAdminTokenLite('AdminModules');
         $helper->currentIndex = AdminController::$currentIndex.'&configure='.$this->name;
+
         return $helper->generateList($this->dataList, $this->fieldsList);
     }
     
@@ -606,7 +744,6 @@ class SplashSync extends Module
                 'type' => 'text',
             ),
         );
-        
         
         $this->dataList = array();
     }
@@ -695,134 +832,25 @@ class SplashSync extends Module
         // Post Splash Messages
         $this->importMessages();
     }
-    
-//====================================================================//
-// *******************************************************************//
-//  NODES MANAGEMENT FUNCTIONS
-// *******************************************************************//
-//====================================================================//
-          
-    /**
-     *  @abstract       Commit Change Actions or Other on OsWs Node Network
-     *  @param          string      $_Type          OsWs Object Type
-     *  @param          mixed       $_Id            Object Id or Array of Object Id
-     *  @param          string      $_Action        Action to Commit
-     *  @param          string      $_Comment       Comment For this action
-     *  @return         int                         0 if KO, 1 if OK
-     * @SuppressWarnings(PHPMD.DevelopmentCodeFragment)
-     */
-    protected function doCommit($_Type, $_Id, $_Action, $_Comment)
-    {
-        //====================================================================//
-        // Safety Checks
-        if (is_numeric($_Id)) {
-            Splash\Client\Splash::log()
-                    ->deb("Splash Commit => " . $_Type . " Action = " . $_Action . " Id = " . $_Id, " : " . $_Comment);
-        } elseif (is_array($_Id) && empty($_Id)) {
-            return true;
-        } elseif (is_array($_Id)) {
-            Splash\Client\Splash::log()
-                    ->deb("Splash Commit => " . $_Type . " Action = " . $_Action . " Ids (x" . implode(", ", $_Id) . ") " . $_Comment);
-        } else {
-            return Splash\Client\Splash::log()
-                    ->err("Splash Hook Error : Wrong Id List Given => " . print_r($_Id, 1));
-        }
-        
-        //====================================================================//
-        // Check if Object is in Remote Create Mode
-        if (Splash\Client\Splash::object($_Type)->isLocked() && ($_Action == SPL_A_UPDATE)) {
-            //====================================================================//
-            // Overide Action For Create
-            $_Action = SPL_A_CREATE;
-        }
-        
-        //====================================================================//
-        // Prepare User Name for Logging
-        if (!empty(Context::getContext()->employee)) {
-            $UserName   = Context::getContext()->employee->firstname;
-            $UserName  .= " " . Context::getContext()->employee->lastname;
-        }
-        if (!isset($UserName)) {
-            $UserName   = $this->l('Unknown') . $this->l('Employee');
-        }
-        //====================================================================//
-        // Commit Action on remotes nodes (Master & Slaves)
-        $result = Splash\Client\Splash::commit($_Type, $_Id, $_Action, $UserName, $_Comment);
-        //====================================================================//
-        // Post Splash Messages
-        $this->importMessages();
-        return $result;
-    }
-    
-//====================================================================//
-// *******************************************************************//
-//  MODULE BACK OFFICE (ADMIN) HOOKS
-// *******************************************************************//
-//====================================================================//
-    
-    /**
-     * admin <Header> Hook
-     */
-    public function hookDisplayBackOfficeHeader()
-    {
-        //====================================================================//
-        // Register Module JS
-        $this->context->controller->addJS($this->_path.'views/js/splash.js');
-        if (\Tools::version_compare(_PS_VERSION_, "1.7", '<')) {
-            $this->context->controller->addJquery();
-        }
-        $this->context->controller->addJS($this->_path.'views/js/jquery.noty.packaged.min.js');
-    }
 
-    /**
-     * admin <Footer> Hook
-     */
-    public function hookDisplayBackOfficeFooter()
-    {
-        //====================================================================//
-        // Read Cookie String
-        $Cookie         =   Context::getContext()->cookie;
-        $Notifications  =   $Cookie->__get("spl_notify");
-
-        //====================================================================//
-        // Assign Smarty Variables
-        $this->context->smarty->assign('notifications', json_decode($Notifications, true));
-        $this->context->smarty->assign(
-            'url',
-            \Splash\Client\Splash::ws()->getServerScheme()
-                . "://" . Configuration::get('PS_SHOP_DOMAIN')
-                . __PS_BASE_URI__
-        );
-        
-        //====================================================================//
-        //  Generate Ajax Token
-        $Token  = Tools::getAdminToken(
-            'AdminModules'.Tab::getIdFromClassName('AdminModules').(int)$Cookie->__get("id_employee")
-        );
-        $this->context->smarty->assign('token', $Token);
-
-        //====================================================================//
-        // Render Footer
-        return $this->display(__FILE__, 'footer.tpl');
-    }
-
-//====================================================================//
-// *******************************************************************//
-//  MODULE FRONT OFFICE (SHOP) HOOKS
-// *******************************************************************//
-//====================================================================//
+    //====================================================================//
+    // *******************************************************************//
+    //  MODULE FRONT OFFICE (SHOP) HOOKS
+    // *******************************************************************//
+    //====================================================================//
             
-//  NO FRONT OFFICE HOOKS FOR THIS MODULE
+    //  NO FRONT OFFICE HOOKS FOR THIS MODULE
         
-//====================================================================//
-// *******************************************************************//
-//  MODULE VARIOUS DISPLAYS
-// *******************************************************************//
-//====================================================================//
+    //====================================================================//
+    // *******************************************************************//
+    //  MODULE VARIOUS DISPLAYS
+    // *******************************************************************//
+    //====================================================================//
        
     /**
      * @abstract    Read all log messages posted by OsWs and post it
-     * @return    void
+     *
+     * @return void
      */
     private function importMessages()
     {
@@ -837,27 +865,11 @@ class SplashSync extends Module
         //====================================================================//
         // Encode & Compare
         $NewRaw = json_encode(Splash\Client\Splash::log());
-        if (strcmp($RawNotifications, (string) $NewRaw) != 0) {
+        if (0 != strcmp($RawNotifications, (string) $NewRaw)) {
             //====================================================================//
             // Save new Cookie String
             Context::getContext()->cookie->__set("spl_notify", $NewRaw);
             Context::getContext()->cookie->write();
         }
-    }
-   
-    /**
-     * @abstract    Post User Debug
-     * @SuppressWarnings(PHPMD.DevelopmentCodeFragment)
-     */
-    protected function debugHook($name, $Id, $Other = null)
-    {
-        if (_PS_MODE_DEV_ == true) {
-            Splash\Client\Splash::log()->war("Hook => " . $name . " => Id " . $Id);
-            if (!empty($Other)) {
-                Splash\Client\Splash::log()->war("Raw => " . print_r($Other, 1));
-            }
-            return true;
-        }
-        return true;
     }
 }
