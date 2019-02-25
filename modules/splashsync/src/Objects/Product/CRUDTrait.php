@@ -130,7 +130,7 @@ trait CRUDTrait
         if (!$needed && !$this->isToUpdate("Attribute")) {
             Splash::log()->deb("MsgLocalNoUpdateReq", __CLASS__, __FUNCTION__);
 
-            return (string) $this->getUnikId();
+            return $this->getObjectIdentifier();
         }
         
         //====================================================================//
@@ -153,7 +153,7 @@ trait CRUDTrait
             return false;
         }
         
-        return (string) $this->getUnikId();
+        return $this->getObjectIdentifier();
     }
     
     /**
@@ -206,6 +206,18 @@ trait CRUDTrait
         //====================================================================//
         // Else Delete Product From DataBase
         return $this->object->delete();
+    }
+    
+    /**
+     * {@inheritdoc}
+     */
+    public function getObjectIdentifier()
+    {
+        if (!isset($this->object->id)) {
+            return false;
+        }
+
+        return (string) $this->getUnikId();
     }
     
     /**

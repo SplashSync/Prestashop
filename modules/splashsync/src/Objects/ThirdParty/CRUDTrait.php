@@ -54,7 +54,7 @@ trait CRUDTrait
     /**
      * Create Request Object
      *
-     * @return false|Customer New Object
+     * @return Customer|false New Object
      */
     public function create()
     {
@@ -90,7 +90,7 @@ trait CRUDTrait
         // Stack Trace
         Splash::log()->trace(__CLASS__, __FUNCTION__);
         if (!$needed) {
-            return (string) $this->object->id;
+            return $this->getObjectIdentifier();
         }
         //====================================================================//
         // If Id Given = > Update Object
@@ -107,7 +107,7 @@ trait CRUDTrait
             
             Splash::log()->deb("MsgLocalTpl", __CLASS__, __FUNCTION__, "Customer Updated");
 
-            return (string) $this->object->id;
+            return $this->getObjectIdentifier();
         }
         
         //====================================================================//
@@ -141,7 +141,7 @@ trait CRUDTrait
             $this->NewSplashId = null;
         }
         
-        return (string) $this->object->id;
+        return $this->getObjectIdentifier();
     }
     
     /**
@@ -178,5 +178,17 @@ trait CRUDTrait
         }
         
         return true;
+    }
+    
+    /**
+     * {@inheritdoc}
+     */
+    public function getObjectIdentifier()
+    {
+        if (!isset($this->object->id)) {
+            return false;
+        }
+
+        return (string) $this->object->id;
     }
 }

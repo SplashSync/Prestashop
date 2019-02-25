@@ -57,7 +57,7 @@ trait CRUDTrait
         $object = new Order($objectId);
         if ($object->id != $objectId) {
             return Splash::log()
-                    ->err("ErrLocalTpl", __CLASS__, __FUNCTION__, " Unable to load Order (" . $objectId . ").");
+                ->err("ErrLocalTpl", __CLASS__, __FUNCTION__, " Unable to load Order (" . $objectId . ").");
         }
         
         //====================================================================//
@@ -155,7 +155,7 @@ trait CRUDTrait
         // Stack Trace
         Splash::log()->trace(__CLASS__, __FUNCTION__);
         if (!$needed) {
-            return (string) $this->object->id;
+            return $this->getObjectIdentifier();
         }
         
         //====================================================================//
@@ -182,7 +182,7 @@ trait CRUDTrait
             $this->NewSplashId = null;
         }
         
-        return (string) $this->object->id;
+        return $this->getObjectIdentifier();
     }
     
     /**
@@ -215,5 +215,17 @@ trait CRUDTrait
         $this->object->delete();
 
         return true;
+    }
+    
+    /**
+     * {@inheritdoc}
+     */
+    public function getObjectIdentifier()
+    {
+        if (!isset($this->object->id)) {
+            return false;
+        }
+
+        return (string) $this->object->id;
     }
 }

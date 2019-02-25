@@ -38,7 +38,7 @@ trait CRUDTrait
     protected $ShippingTaxCalculator = null;
     
     /**
-     * @abstract    Load Request Object
+     * Load Request Object
      * @param       string  $Id               Object id
      * @return      false|OrderInvoice
      */
@@ -120,9 +120,9 @@ trait CRUDTrait
     }
     
     /**
-     * @abstract    Delete requested Object
+     * Delete requested Object
      *
-     * @param       int     $objectId     Object Id.  If NULL, Object needs to be created.
+     * @param       string     $objectId     Object Id.  If NULL, Object needs to be created.
      *
      * @return      bool
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
@@ -138,5 +138,17 @@ trait CRUDTrait
         Splash::log()->err("ErrLocalTpl", __CLASS__, __FUNCTION__, "You Cannot Delete Prestashop Invoices");
         
         return true;
+    }
+    
+    /**
+     * {@inheritdoc}
+     */
+    public function getObjectIdentifier()
+    {
+        if (!isset($this->object->id)) {
+            return false;
+        }
+
+        return (string) $this->object->id;
     }
 }
