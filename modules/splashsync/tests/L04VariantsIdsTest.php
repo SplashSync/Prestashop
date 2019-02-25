@@ -1,36 +1,34 @@
 <?php
-/**
- * This file is part of SplashSync Project.
+
+/*
+ *  This file is part of SplashSync Project.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ *  Copyright (C) 2015-2019 Splash Sync  <www.splashsync.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
- *  @author    Splash Sync <www.splashsync.com>
- *  @copyright 2015-2018 Splash Sync
- *  @license   MIT
+ *  For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
  */
 
 namespace Splash\Tests;
 
-use Splash\Tests\Tools\TestCase;
 use Splash\Local\Objects\Product;
+use Splash\Tests\Tools\TestCase;
 
 /**
  * Local Objects Test Suite - Specific Verifications for Products Id Encoder.
  */
 class L04VariantsIdsTest extends TestCase
 {
-    
     /**
      * Test Product Ids Encoder for Compatibility & Functionnality
      *
-     * @param int|string $pId Product Id
-     * @param null|int|string $aId Product Id
-     * @param int|string $result Expected Id for Splash
+     * @param int|string      $pId    Product Id
+     * @param null|int|string $aId    Product Id
+     * @param int|string      $result Expected Id for Splash
      *
      * @dataProvider productIdsProvider
      */
@@ -66,7 +64,6 @@ class L04VariantsIdsTest extends TestCase
         $response[] =   array("12345", "0", 12345 );
         $response[] =   array("12345", null, 12345 );
         
-        
         //====================================================================//
         // OLD ENCODING => Both Ids on A Single Int
         $response[] =   array(1, 1, 1 + (1 << 20));
@@ -85,6 +82,7 @@ class L04VariantsIdsTest extends TestCase
             $aId    =   rand(0x7FF + 1, PHP_INT_MAX);
             $response[] =   array($pId, $aId, $pId . "@@" . $aId);
         }
+
         return $response;
     }
 }

@@ -1,34 +1,31 @@
 <?php
-/**
- * This file is part of SplashSync Project.
+
+/*
+ *  This file is part of SplashSync Project.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ *  Copyright (C) 2015-2019 Splash Sync  <www.splashsync.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
- *  @author    Splash Sync <www.splashsync.com>
- *  @copyright 2015-2018 Splash Sync
- *  @license   MIT
+ *  For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
  */
 
 namespace Splash\Tests;
 
-use Splash\Tests\Tools\ObjectsCase;
-
-use Splash\Client\Splash;
-use Combination;
 use Attribute;
 use AttributeGroup;
+use Combination;
+use Splash\Client\Splash;
+use Splash\Tests\Tools\ObjectsCase;
 
 /**
  * @abstract    Local Objects Test Suite - Specific Verifications for Products Variants Attributes.
  */
 class L02VariantsAttributesTest extends ObjectsCase
 {
-    
     public function testFeatureIsActive()
     {
         $this->assertNotEmpty(Combination::isFeatureActive(), "Combination feature is Not Active");
@@ -88,7 +85,7 @@ class L02VariantsAttributesTest extends ObjectsCase
                 "en_US" => "CustomValueUs" . $i
             );
             $Attribute = Splash::object("Product")
-                    ->addAttributeValue($AttributeGroup->id, $Values);
+                ->addAttributeValue($AttributeGroup->id, $Values);
             $this->assertNotEmpty($Attribute);
             $this->assertNotEmpty($Attribute->id);
             foreach ($Values as $Value) {
