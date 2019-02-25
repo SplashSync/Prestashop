@@ -1,21 +1,44 @@
 parameters:
+    
+    #############################################        
+    #   Local Config 
+    #############################################        
+    #   Path to Php Core Module
+    core_dir:       "./modules/splashsync/vendor/splash/phpcore/Resources/grumphp"     
+    #   Testing Mode (core|module)
+    mode:           "module"
+    level:          7
+    
+    #############################################        
+    #   Base Configs 
     git_dir: .
     bin_dir:        "modules/splashsync/vendor/bin"
     ascii:
-        failed:     "./modules/splashsync/vendor/splash/phpcore/Resources/grumphp/grumphp-grumpy.txt"
-        succeeded:  "./modules/splashsync/vendor/splash/phpcore/Resources/grumphp/grumphp-happy.txt"
+        failed:     "%core_dir%/grumphp-grumpy.txt"
+        succeeded:  "%core_dir%/grumphp-happy.txt"
+    process_timeout: 180    
+    
     tasks:
+        
+        #############################################        
+        #   Composer Verifs           
         composer:
             file:           "./composer.json"
+            
+        #############################################        
+        #   Syntax Errors Detection                 
+        xmllint: ~
+        yamllint: ~
+        jsonlint:
+            ignore_patterns:        [ "docs" ]
+            detect_key_conflicts:   true
+            
         phplint:
             exclude:        ['splash/vendor']
             triggered_by:   ['php']
-        phpcs:
-            standard:       "PSR2"
-            triggered_by:   [php]
-            ignore_patterns:
-                - phpstan.php
-                - modules/splashsync/splashsync.php
+                
+        #############################################        
+        #   Blacklist Codes Detection                
         git_blacklist:
             keywords:
                 - "var_dump"
@@ -24,20 +47,35 @@ parameters:
                 - "print_r"
                 - "die("
             triggered_by: [php, js, twig]
-        jsonlint:
-            ignore_patterns:        [ "docs" ]
-            detect_key_conflicts:   true
-        xmllint: ~
-        yamllint: ~
-        phpmd:
-            ruleset:        ["./build/phpmd.xml"]          
+            
+        #############################################        
+        #   Security Checks             
         securitychecker: ~
+                
+        #############################################        
+        #   Code Quality   
+        phpcsfixer:     ~ 
+        phpcsfixer2:    
+            allow_risky:    true
+            config:         "build/php_cs.dist"                
+            
+        phpcs:
+            standard:       "PSR2"
+            triggered_by:   [php]
+            ignore_patterns:
+                - phpstan.php
+                - modules/splashsync/splashsync.php
+                
+        phpmd:
+            ruleset:        ["./build/phpmd.xml"]       
+                
         phpcpd:
             exclude:        
                 - "docs"
-                - "modules/splashsync/vendor"               
+                - "modules/splashsync/vendor"    
+                
         phpstan:
-            level: 7
+            level:          "%level%"
             configuration:  "build/phpstan.neon"           
 
     testsuites:
@@ -53,6 +91,10 @@ parameters:
                 - xmllint
                 - yamllint
                 
+        csfixer:
+            tasks: 
+                - phpcsfixer
+                - phpcsfixer2                
         phpstan:
             tasks: 
                 - phpstan 
