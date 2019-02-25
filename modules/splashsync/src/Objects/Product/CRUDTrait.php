@@ -20,7 +20,6 @@ use Combination;
 // Prestashop Static Classes
 use Product;
 use Splash\Core\SplashCore      as Splash;
-use StockAvailable;
 use Tools;
 
 /**
@@ -31,11 +30,11 @@ trait CRUDTrait
     /**
      * Load Request Object
      *
-     * @param string $UnikId Object id
+     * @param string $unikId Object id
      *
      * @return false|Product
      */
-    public function load($UnikId)
+    public function load($unikId)
     {
         //====================================================================//
         // Stack Trace
@@ -43,11 +42,11 @@ trait CRUDTrait
         
         //====================================================================//
         // Decode Product Id
-        $this->ProductId        = self::getId($UnikId);
+        $this->ProductId        = self::getId($unikId);
 
         //====================================================================//
         // Safety Checks
-        if (empty($UnikId)  || empty($this->ProductId)) {
+        if (empty($unikId)  || empty($this->ProductId)) {
             return Splash::log()->err("ErrLocalTpl", __CLASS__, __FUNCTION__, " Missing Id.");
         }
         //====================================================================//
@@ -71,7 +70,7 @@ trait CRUDTrait
         //====================================================================//
         // If $id_attribute Given => Load Product Attribute Combinaisons From DataBase
         //====================================================================//
-        if (!$this->loadAttribute($UnikId)) {
+        if (!$this->loadAttribute($unikId)) {
             return false;
         }
         

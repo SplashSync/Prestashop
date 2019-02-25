@@ -107,8 +107,8 @@ trait ObjectsListCommonsTrait
         $data       = array();
         //====================================================================//
         // For each result, read information and add to $Data
-        foreach ($result as $key => $ObjectArray) {
-            $data[$key] = $ObjectArray;
+        foreach ($result as $key => $objectArray) {
+            $data[$key] = $objectArray;
         }
         //====================================================================//
         // Prepare List result meta infos

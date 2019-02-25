@@ -1,29 +1,28 @@
 <?php
-/**
- * This file is part of SplashSync Project.
+
+/*
+ *  This file is part of SplashSync Project.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ *  Copyright (C) 2015-2019 Splash Sync  <www.splashsync.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
- *  @author    Splash Sync <www.splashsync.com>
- *  @copyright 2015-2018 Splash Sync
- *  @license   MIT
+ *  For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
  */
 
 namespace Splash\Local\Objects\Product;
 
 use Splash\Core\SplashCore      as Splash;
-
 //====================================================================//
 // Prestashop Static Classes
 use Translate;
 
 /**
- * @abstract    Access to Product Identification CheckSum
+ * Access to Product Identification CheckSum
+ *
  * @author      B. Paquier <contact@splashsync.com>
  */
 trait ChecksumTrait
@@ -31,62 +30,9 @@ trait ChecksumTrait
     use \Splash\Models\Objects\ChecksumTrait;
     
     /**
-    *   @abstract     Build Fields using FieldFactory
-    */
-    private function buildChecksumFields()
-    {
-        //====================================================================//
-        // Product CheckSum
-        $this->fieldsFactory()->create(SPL_T_VARCHAR)
-                ->Identifier("md5")
-                ->Name("Md5")
-                ->Description("Unik Md5 Object Checksum")
-                ->Group(Translate::getAdminTranslation("Meta", "AdminThemes"))
-                ->isListed()
-                ->MicroData("http://schema.org/Thing", "identifier")
-                ->isReadOnly();
-        
-        //====================================================================//
-        // Product CheckSum Debug String
-        $this->fieldsFactory()->create(SPL_T_VARCHAR)
-                ->Identifier("md5-debug")
-                ->Name("Md5 Debug")
-                ->Description("Unik Checksum String fro Debug")
-                ->Group(Translate::getAdminTranslation("Meta", "AdminThemes"))
-                ->isReadOnly();
-    }
-    
-    /**
-     *  @abstract     Read requested Field
+     * Compute Md5 CheckSum from Product & Attributes Objects
      *
-     *  @param        string    $Key                    Input List Key
-     *  @param        string    $FieldName              Field Identifier / Name
-     *
-     * @return       void
-     */
-    private function getChecksumFields($Key, $FieldName)
-    {
-        //====================================================================//
-        // READ Fields
-        switch ($FieldName) {
-            case 'md5':
-                $this->out[$FieldName]  =   $this->getMd5Checksum();
-                break;
-
-            case 'md5-debug':
-                $this->out[$FieldName]  =   $this->getMd5String();
-                break;
-
-            default:
-                return;
-        }
-        
-        unset($this->in[$Key]);
-    }
-    
-    /**
-     *      @abstract       Compute Md5 CheckSum from Product & Attributes Objects
-     *      @return         string        $Md5              Unik Checksum
+     * @return string $Md5              Unik Checksum
      */
     public function getMd5Checksum()
     {
@@ -98,8 +44,9 @@ trait ChecksumTrait
     }
     
     /**
-     *      @abstract       Compute Md5 String from Product & Attributes Objects
-     *      @return         string        $Md5              Unik Checksum
+     * Compute Md5 String from Product & Attributes Objects
+     *
+     * @return string $Md5              Unik Checksum
      */
     public function getMd5String()
     {
@@ -111,34 +58,94 @@ trait ChecksumTrait
     }
     
     /**
-     *      @abstract       Compute Md5 CheckSum from Product Informations
-     *      @param          string        $Title            Product Title without Options
-     *      @param          string        $Sku              Product Reference
-     *      @param          array         $Attributes       Array of Product Attributes ($Code => $Value)
-     *      @return         string        $Md5              Unik Checksum
+     * Build Fields using FieldFactory
      */
-    private static function getMd5ChecksumFromValues($Title, $Sku = null, $Attributes = array())
+    private function buildChecksumFields()
     {
-        $Md5Array  = array_merge_recursive(
-            array("title" => $Title, "sku" => $Sku),
-            $Attributes
-        );
-        return self::md5()->fromArray($Md5Array);
+        //====================================================================//
+        // Product CheckSum
+        $this->fieldsFactory()->create(SPL_T_VARCHAR)
+            ->Identifier("md5")
+            ->Name("Md5")
+            ->Description("Unik Md5 Object Checksum")
+            ->Group(Translate::getAdminTranslation("Meta", "AdminThemes"))
+            ->isListed()
+            ->MicroData("http://schema.org/Thing", "identifier")
+            ->isReadOnly();
+        
+        //====================================================================//
+        // Product CheckSum Debug String
+        $this->fieldsFactory()->create(SPL_T_VARCHAR)
+            ->Identifier("md5-debug")
+            ->Name("Md5 Debug")
+            ->Description("Unik Checksum String fro Debug")
+            ->Group(Translate::getAdminTranslation("Meta", "AdminThemes"))
+            ->isReadOnly();
     }
     
     /**
-     *      @abstract       Compute Md5 String from Product Informations
-     *      @param          string        $Title            Product Title without Options
-     *      @param          string        $Sku              Product Reference
-     *      @param          array         $Attributes       Array of Product Attributes ($Code => $Value)
-     *      @return         string        $Md5              Unik Checksum
+     * Read requested Field
+     *
+     * @param string $key       Input List Key
+     * @param string $fieldName Field Identifier / Name
+     *
+     * @return void
      */
-    private static function getMd5StringFromValues($Title, $Sku = null, $Attributes = array())
+    private function getChecksumFields($key, $fieldName)
     {
-        $Md5Array  = array_merge_recursive(
-            array("title" => $Title, "sku" => $Sku),
-            $Attributes
+        //====================================================================//
+        // READ Fields
+        switch ($fieldName) {
+            case 'md5':
+                $this->out[$fieldName]  =   $this->getMd5Checksum();
+
+                break;
+            case 'md5-debug':
+                $this->out[$fieldName]  =   $this->getMd5String();
+
+                break;
+            default:
+                return;
+        }
+        
+        unset($this->in[$key]);
+    }
+    
+    /**
+     * Compute Md5 CheckSum from Product Informations
+     *
+     * @param string $title      Product Title without Options
+     * @param string $sku        Product Reference
+     * @param array  $attributes Array of Product Attributes ($Code => $Value)
+     *
+     * @return string $Md5              Unik Checksum
+     */
+    private static function getMd5ChecksumFromValues($title, $sku = null, $attributes = array())
+    {
+        $md5Array  = array_merge_recursive(
+            array("title" => $title, "sku" => $sku),
+            $attributes
         );
-        return self::md5()->debugFromArray($Md5Array);
+
+        return self::md5()->fromArray($md5Array);
+    }
+    
+    /**
+     * Compute Md5 String from Product Informations
+     *
+     * @param string $title      Product Title without Options
+     * @param string $sku        Product Reference
+     * @param array  $attributes Array of Product Attributes ($Code => $Value)
+     *
+     * @return string $Md5              Unik Checksum
+     */
+    private static function getMd5StringFromValues($title, $sku = null, $attributes = array())
+    {
+        $md5Array  = array_merge_recursive(
+            array("title" => $title, "sku" => $sku),
+            $attributes
+        );
+
+        return self::md5()->debugFromArray($md5Array);
     }
 }

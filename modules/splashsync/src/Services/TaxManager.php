@@ -15,20 +15,11 @@
 
 namespace Splash\Local\Services;
 
-use ArrayObject;
 use Configuration;
 use Context;
 use Db;
 use DbQuery;
-use Employee;
-use Language;
-use Splash\Core\SplashCore      as Splash;
-use Splash\Local\Traits\SplashIdTrait;
-use Splash\Models\LocalClassInterface;
-use SplashSync;
 use TaxRule;
-use Tools;
-use Validate;
 
 /**
  * Splash Languages Manager - Prestashop Taxes Management
@@ -84,9 +75,9 @@ class TaxManager
         }
         
         if (is_array($result) && (Db::getInstance()->numRows() > 0)) {
-            $NewTaxRate = array_shift($result);
+            $newTaxRate = array_shift($result);
 
-            return $NewTaxRate["id_group"];
+            return $newTaxRate["id_group"];
         }
 
         return false;
@@ -108,9 +99,9 @@ class TaxManager
         //====================================================================//
         // For All Tax Rules of This Group, Search for Closest Rate
         $bestRate   =   0;
-        foreach (TaxRule::getTaxRulesByGroupId($langId, $taxRateGroupId) as $TaxRule) {
-            if (abs($taxRate - $TaxRule["rate"]) <  abs($taxRate - $bestRate)) {
-                $bestRate   =   $TaxRule["rate"];
+        foreach (TaxRule::getTaxRulesByGroupId($langId, $taxRateGroupId) as $taxRule) {
+            if (abs($taxRate - $taxRule["rate"]) <  abs($taxRate - $bestRate)) {
+                $bestRate   =   $taxRule["rate"];
             }
         }
 

@@ -1,46 +1,40 @@
 <?php
-/**
- * This file is part of SplashSync Project.
+
+/*
+ *  This file is part of SplashSync Project.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ *  Copyright (C) 2015-2019 Splash Sync  <www.splashsync.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
- *  @author    Splash Sync <www.splashsync.com>
- *  @copyright 2015-2018 Splash Sync
- *  @license   MIT
+ *  For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
  */
 
 namespace Splash\Local\Objects\Product;
 
 use Splash\Core\SplashCore      as Splash;
-
-//====================================================================//
-// Prestashop Static Classes
 use StockAvailable;
 use Translate;
 
 /**
- * @abstract    Access to Product Stock Fields
+ * Access to Product Stock Fields
  */
 trait StockTrait
 {
-    
     /**
      * @var string
      */
-    private $NewStock = null;
+    private $NewStock;
     
     /**
-    *   @abstract     Build Fields using FieldFactory
-    */
+     * Build Fields using FieldFactory
+     */
     private function buildStockFields()
     {
-        
-        $GroupName  = Translate::getAdminTranslation("Quantities", "AdminProducts");
+        $groupName  = Translate::getAdminTranslation("Quantities", "AdminProducts");
         
         //====================================================================//
         // PRODUCT STOCKS
@@ -49,92 +43,94 @@ trait StockTrait
         //====================================================================//
         // Stock Reel
         $this->fieldsFactory()->create(SPL_T_INT)
-                ->Identifier("stock")
-                ->Name(Translate::getAdminTranslation("Stock", "AdminProducts"))
-                ->MicroData("http://schema.org/Offer", "inventoryLevel")
-                ->Group($GroupName)
-                ->isListed();
+            ->Identifier("stock")
+            ->Name(Translate::getAdminTranslation("Stock", "AdminProducts"))
+            ->MicroData("http://schema.org/Offer", "inventoryLevel")
+            ->Group($groupName)
+            ->isListed();
 
         //====================================================================//
         // Out of Stock Flag
         $this->fieldsFactory()->create(SPL_T_BOOL)
-                ->Identifier("outofstock")
-                ->Name(Translate::getAdminTranslation("This product is out of stock", "AdminOrders"))
-                ->MicroData("http://schema.org/ItemAvailability", "OutOfStock")
-                ->Group($GroupName)
-                ->isReadOnly();
+            ->Identifier("outofstock")
+            ->Name(Translate::getAdminTranslation("This product is out of stock", "AdminOrders"))
+            ->MicroData("http://schema.org/ItemAvailability", "OutOfStock")
+            ->Group($groupName)
+            ->isReadOnly();
                 
         //====================================================================//
         // Minimum Order Quantity
         $this->fieldsFactory()->create(SPL_T_INT)
-                ->Identifier("minimal_quantity")
-                ->Name(Translate::getAdminTranslation("Minimum quantity", "AdminProducts"))
-                ->Description(
-                    Translate::getAdminTranslation(
-                        "The minimum quantity to buy this product (set to 1 to disable this feature).",
-                        "AdminProducts"
-                    )
+            ->Identifier("minimal_quantity")
+            ->Name(Translate::getAdminTranslation("Minimum quantity", "AdminProducts"))
+            ->Description(
+                Translate::getAdminTranslation(
+                    "The minimum quantity to buy this product (set to 1 to disable this feature).",
+                    "AdminProducts"
                 )
-                ->Group($GroupName)
-                ->MicroData("http://schema.org/Offer", "eligibleTransactionVolume");
+            )
+            ->Group($groupName)
+            ->MicroData("http://schema.org/Offer", "eligibleTransactionVolume");
     }
     
     /**
-     *  @abstract     Read requested Field
+     * Read requested Field
      *
-     *  @param        string    $Key                    Input List Key
-     *  @param        string    $FieldName              Field Identifier / Name
+     * @param string $key       Input List Key
+     * @param string $fieldName Field Identifier / Name
      *
-     * @return       void
+     * @return void
      */
-    private function getStockFields($Key, $FieldName)
+    private function getStockFields($key, $fieldName)
     {
         //====================================================================//
         // READ Fields
-        switch ($FieldName) {
+        switch ($fieldName) {
             //====================================================================//
             // PRODUCT STOCKS
             //====================================================================//
             // Stock Reel
             case 'stock':
-                $this->out[$FieldName] = $this->object->getQuantity($this->ProductId, $this->AttributeId);
+                $this->out[$fieldName] = $this->object->getQuantity($this->ProductId, $this->AttributeId);
+
                 break;
             //====================================================================//
             // Out Of Stock
             case 'outofstock':
-                $Quantity = $this->object->getQuantity($this->ProductId, $this->AttributeId);
-                $this->out[$FieldName] = ( $Quantity > 0 ) ? false : true;
+                $quantity = $this->object->getQuantity($this->ProductId, $this->AttributeId);
+                $this->out[$fieldName] = ($quantity > 0) ? false : true;
+
                 break;
             //====================================================================//
             // Minimum Order Quantity
             case 'minimal_quantity':
                 if (($this->AttributeId)) {
-                    $this->out[$FieldName] = (int) $this->Attribute->$FieldName;
+                    $this->out[$fieldName] = (int) $this->Attribute->{$fieldName};
                 } else {
-                    $this->out[$FieldName] = (int) $this->object->$FieldName;
+                    $this->out[$fieldName] = (int) $this->object->{$fieldName};
                 }
+
                 break;
             default:
                 return;
         }
         
-        unset($this->in[$Key]);
+        unset($this->in[$key]);
     }
     
     /**
-     *  @abstract     Write Given Fields
+     * Write Given Fields
      *
-     *  @param        string    $FieldName              Field Identifier / Name
-     *  @param        mixed     $Data                   Field Data
+     * @param string $fieldName Field Identifier / Name
+     * @param mixed  $fieldData Field Data
      *
-     * @return       void
+     * @return void
      */
-    private function setStockFields($FieldName, $Data)
+    private function setStockFields($fieldName, $fieldData)
     {
-
         //====================================================================//
         // WRITE Field
-        switch ($FieldName) {
+        switch ($fieldName) {
             //====================================================================//
             // PRODUCT STOCKS
             //====================================================================//
@@ -148,33 +144,36 @@ trait StockTrait
                     Splash::log()->err(
                         'Update Product Stock Using Advanced Stock Management : This Feature is not implemented Yet!!'
                     );
+
                     break;
                 }
                 //====================================================================//
                 // Product Already Exists => Update Product Stock
-                if ($this->object->getQuantity($this->ProductId, $this->AttributeId) != $Data) {
+                if ($this->object->getQuantity($this->ProductId, $this->AttributeId) != $fieldData) {
                     //====================================================================//
                     // Update Stock in DataBase
-                    StockAvailable::setQuantity($this->ProductId, $this->AttributeId, $Data);
+                    StockAvailable::setQuantity($this->ProductId, $this->AttributeId, $fieldData);
                     if ($this->AttributeId) {
                         $this->needUpdate("Attribute");
                     } else {
                         $this->needUpdate();
                     }
                 }
+
                 break;
             //====================================================================//
             // Minimum Order Quantity
             case 'minimal_quantity':
                 if ($this->AttributeId) {
-                    $this->setSimple($FieldName, $Data, "Attribute");
+                    $this->setSimple($fieldName, $fieldData, "Attribute");
                 } else {
-                    $this->setSimple($FieldName, $Data);
+                    $this->setSimple($fieldName, $fieldData);
                 }
+
                 break;
             default:
                 return;
         }
-        unset($this->in[$FieldName]);
+        unset($this->in[$fieldName]);
     }
 }

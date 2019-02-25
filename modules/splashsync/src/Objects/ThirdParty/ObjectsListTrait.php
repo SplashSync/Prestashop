@@ -1,34 +1,30 @@
 <?php
-/**
- * This file is part of SplashSync Project.
+
+/*
+ *  This file is part of SplashSync Project.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ *  Copyright (C) 2015-2019 Splash Sync  <www.splashsync.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
- *  @author    Splash Sync <www.splashsync.com>
- *  @copyright 2015-2018 Splash Sync
- *  @license   MIT
+ *  For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
  */
 
 namespace   Splash\Local\Objects\ThirdParty;
 
-use Splash\Core\SplashCore      as Splash;
-
 //====================================================================//
 // Prestashop Static Classes
 use DbQuery;
-use Db;
+use Splash\Core\SplashCore      as Splash;
 
 /**
- * @abstract    Acces to ThirdParty Objects Lists
+ * Acces to ThirdParty Objects Lists
  */
 trait ObjectsListTrait
 {
-
     /**
      * {@inheritdoc}
      */
@@ -59,17 +55,17 @@ trait ObjectsListTrait
         if (!empty($filter) && is_string($filter)) {
             //====================================================================//
             // Search in Customer Company
-            $Where  = " LOWER( c.`company` )        LIKE LOWER( '%" . pSQL($filter) ."%') ";
+            $where  = " LOWER( c.`company` )        LIKE LOWER( '%" . pSQL($filter) ."%') ";
             //====================================================================//
             // Search in Customer FirstName
-            $Where .= " OR LOWER( c.`firstname` )   LIKE LOWER( '%" . pSQL($filter) ."%') ";
+            $where .= " OR LOWER( c.`firstname` )   LIKE LOWER( '%" . pSQL($filter) ."%') ";
             //====================================================================//
             // Search in Customer LastName
-            $Where .= " OR LOWER( c.`lastname` )    LIKE LOWER( '%" . pSQL($filter) ."%') ";
+            $where .= " OR LOWER( c.`lastname` )    LIKE LOWER( '%" . pSQL($filter) ."%') ";
             //====================================================================//
             // Search in Customer Email
-            $Where .= " OR LOWER( c.`email` )       LIKE LOWER( '%" . pSQL($filter) ."%') ";
-            $sql->where($Where);
+            $where .= " OR LOWER( c.`email` )       LIKE LOWER( '%" . pSQL($filter) ."%') ";
+            $sql->where($where);
         }
         
         //====================================================================//

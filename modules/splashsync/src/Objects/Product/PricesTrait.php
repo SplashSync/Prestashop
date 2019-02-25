@@ -92,7 +92,7 @@ trait PricesTrait
      * Read requested Field
      *
      * @param null|string $key       Input List Key
-     * @param string $fieldName Field Identifier / Name
+     * @param string      $fieldName Field Identifier / Name
      *
      * @return void
      */

@@ -35,7 +35,7 @@ trait ImagesTrait
     /**
      * @var array
      */
-    protected $AttrImageIds;
+    protected $attrImageIds;
     
     /**
      * @var int
@@ -60,185 +60,6 @@ trait ImagesTrait
      * @var array
      */
     private $newImagesArray;
-         
-    /**
-     * Return Product Images Informations Array from Prestashop Object Class
-     */
-    public function getImagesInfoArray()
-    {
-        //====================================================================//
-        // Get Images Infos From Cache
-        if (!is_null($this->imagesCache)) {
-            return $this->imagesCache;
-        }
-        //====================================================================//
-        // Load Complete Product Images List
-        $productImages   =   Image::getImages(
-            $this->LangId,
-            $this->object->id,
-            null
-        );
-        //====================================================================//
-        // Images List is Empty
-        if (!count($productImages)) {
-            return $this->imagesCache;
-        }
-        //====================================================================//
-        // Create Images List
-        foreach ($productImages as $imgArray) {
-            //====================================================================//
-            // Add Image t o Cache
-            $this->imagesCache[]    = $this->buildInfo($imgArray["id_image"]);
-        }
-
-        return $this->imagesCache;
-    }
-    
-    /**
-     * Update Product Image Array from Server Data
-     *
-     * @param mixed $data Input Image List for Update
-     *
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @SuppressWarnings(PHPMD.NPathComplexity)
-     */
-    public function setImgArray($data)
-    {
-        //====================================================================//
-        // Safety Check
-        if (!is_array($data) && !is_a($data, "ArrayObject")) {
-            return false;
-        }
-        //====================================================================//
-        // Load Object Images List for Whole Product
-        $this->imagesCache   =   Image::getImages($this->LangId, $this->object->id);
-        
-        //====================================================================//
-        // UPDATE IMAGES LIST
-        //====================================================================//
-
-        $this->imgPosition  =   0;
-        $VisibleImageIds    =   array();
-        //====================================================================//
-        // Given List Is Not Empty
-        foreach ($data as $InValue) {
-            //====================================================================//
-            // Check Image Array is here
-            if (!isset($InValue["image"]) || empty($InValue["image"])) {
-                continue;
-            }
-            $this->imgPosition++;
-            //====================================================================//
-            // Search For Image In Current List
-            $PsImage = $this->searchImage($InValue["image"]["md5"]);
-            if (false == $PsImage) {
-                //====================================================================//
-                // If Not found, Add this object to list
-                $PsImage = $this->addImageToProduct(
-                    $InValue["image"],
-                    $this->getImagePosition($InValue),
-                    $this->getImageCoverFlag($InValue)
-                );
-            }
-            //====================================================================//
-            // Update Image Position in List
-            $this->updateImagePosition($PsImage, $InValue);
-            $this->updateImageCoverFlag($PsImage, $InValue);
-            //====================================================================//
-            // Update Image Object in Database
-            $this->updateImage($PsImage);
-            //====================================================================//
-            // Add Ps Image Id to Visible
-            if ($this->getImageVisibleFlag($InValue)) {
-                $VisibleImageIds[] = $PsImage->id;
-            }
-        }
-        
-        //====================================================================//
-        // Update Combination Images List
-        $this->updateAttributeImages($VisibleImageIds);
-
-        //====================================================================//
-        // If Current Image List Is Empty => Clear Remaining Local Images
-        $this->cleanImages($this->imagesCache);
-
-        //====================================================================//
-        // Generate Images Thumbnail
-        $this->updateImgThumbnail();
-
-        //====================================================================//
-        // Flush Images Infos Cache
-        $this->flushImageCache();
-        
-        return true;
-    }
-    
-    /**
-     * Import a Product Image from Server Data
-     *
-     * @param array $ImgArray Splash Image Definition Array
-     * @param int   $Position Image Position (On Base Product Sheet)
-     * @param bool  $isCover  Image is Cover Image
-     *
-     * @return false|Image
-     */
-    public function addImageToProduct($ImgArray, $Position, $isCover)
-    {
-        //====================================================================//
-        // Read File from Splash Server
-        $NewImageFile    =   Splash::file()->getFile($ImgArray["file"], $ImgArray["md5"]);
-        //====================================================================//
-        // File Imported => Write it Here
-        if (false == $NewImageFile) {
-            return false;
-        }
-        $this->needUpdate();
-        //====================================================================//
-        // Create New Image Object
-        $ObjectImage                = new Image();
-        $ObjectImage->legend        = isset($NewImageFile["name"]) ? $NewImageFile["name"] : $NewImageFile["filename"];
-        $ObjectImage->id_product    = $this->ProductId;
-        $ObjectImage->position      = $Position;
-        $ObjectImage->cover         = $isCover;
-        //====================================================================//
-        // Write Image To Database
-        if (!$ObjectImage->add()) {
-            return false;
-        }
-        //====================================================================//
-        // Write Image On Folder
-        $Path       = dirname($ObjectImage->getPathForCreation());
-        $Filename   = "/" . $ObjectImage->id . "." . $ObjectImage->image_format;
-        Splash::file()->writeFile($Path, $Filename, $NewImageFile["md5"], $NewImageFile["raw"]);
-
-        return $ObjectImage;
-    }
-    
-    /**
-     * CleanUp Product Images List
-     *
-     * @param array $ObjectImagesList Array Of Remaining Product Images
-     *
-     * @return void
-     */
-    public function cleanImages($ObjectImagesList)
-    {
-        //====================================================================//
-        // If Variant Product Mode => Skip
-        if (empty($ObjectImagesList)) {
-            return;
-        }
-        //====================================================================//
-        // If Current Image List Is Empty => Clear Remaining Local Images
-        foreach ($ObjectImagesList as $ImageArray) {
-            //====================================================================//
-            // Fetch Images Object
-            $ObjectImage = new Image($ImageArray["id_image"]);
-            $ObjectImage->deleteImage(true);
-            $ObjectImage->delete();
-            $this->needUpdate();
-        }
-    }
     
     /**
      * Build Fields using FieldFactory
@@ -317,7 +138,7 @@ trait ImagesTrait
                 case "position":
                 case "visible":
                 case "cover":
-                    $Value  =   $image[$fieldId];
+                    $value  =   $image[$fieldId];
 
                     break;
                 default:
@@ -325,7 +146,7 @@ trait ImagesTrait
             }
             //====================================================================//
             // Insert Data in List
-            self::lists()->Insert($this->out, "images", $fieldName, $index, $Value);
+            self::lists()->Insert($this->out, "images", $fieldName, $index, $value);
         }
         unset($this->in[$key]);
     }
@@ -556,13 +377,13 @@ trait ImagesTrait
     /**
      * @abstract    Update Image Cover Flag (Using AttributeId, Given Position or List Index)
      *
-     * @param Image $PsImage  Prestashop Image Object
-     * @param array $ImgArray Splash Image Value Definition Array
+     * @param Image $psImage  Prestashop Image Object
+     * @param array $imgArray Splash Image Value Definition Array
      * @retrurn     void
      */
-    private function updateImageCoverFlag(&$PsImage, $ImgArray)
+    private function updateImageCoverFlag(&$psImage, $imgArray)
     {
-        $isCover    =   $this->getImageCoverFlag($ImgArray);
+        $isCover    =   $this->getImageCoverFlag($imgArray);
         //====================================================================//
         // Cover Flag is Available
         if (is_null($isCover)) {
@@ -570,8 +391,8 @@ trait ImagesTrait
         }
         //====================================================================//
         // Update Image is Cover Flag
-        if ($PsImage->cover !== $isCover) {
-            $PsImage->cover = $isCover;
+        if ($psImage->cover !== $isCover) {
+            $psImage->cover = $isCover;
             $this->needUpdate("Image");
         }
     }
@@ -632,7 +453,7 @@ trait ImagesTrait
         //====================================================================//
         // Compare & Update Images Array
         if ($current != $psImageIds) {
-            $this->AttrImageIds = $psImageIds;
+            $this->attrImageIds = $psImageIds;
             $this->Attribute->setImages($psImageIds);
             $this->needUpdate("Attribute");
         }
@@ -652,12 +473,12 @@ trait ImagesTrait
                 continue;
             }
             foreach (ImageType::getImagesTypes("products") as $imageType) {
-                $ImageThumb = _PS_PROD_IMG_DIR_.$imageObj->getExistingImgPath();
-                $ImageThumb.= '-'.Tools::stripslashes($imageType['name']).'.jpg';
-                if (!file_exists($ImageThumb)) {
+                $imgThumb = _PS_PROD_IMG_DIR_.$imageObj->getExistingImgPath();
+                $imgThumb.= '-'.Tools::stripslashes($imageType['name']).'.jpg';
+                if (!file_exists($imgThumb)) {
                     ImageManager::resize(
                         $imagePath.'.jpg',
-                        $ImageThumb,
+                        $imgThumb,
                         (int)($imageType['width']),
                         (int)($imageType['height'])
                     );
@@ -675,5 +496,184 @@ trait ImagesTrait
     {
         $this->imagesCache      = null;
         $this->variantImages    = null;
+    }
+    
+    /**
+     * Return Product Images Informations Array from Prestashop Object Class
+     */
+    private function getImagesInfoArray()
+    {
+        //====================================================================//
+        // Get Images Infos From Cache
+        if (!is_null($this->imagesCache)) {
+            return $this->imagesCache;
+        }
+        //====================================================================//
+        // Load Complete Product Images List
+        $productImages   =   Image::getImages(
+            $this->LangId,
+            $this->object->id,
+            null
+        );
+        //====================================================================//
+        // Images List is Empty
+        if (!count($productImages)) {
+            return $this->imagesCache;
+        }
+        //====================================================================//
+        // Create Images List
+        foreach ($productImages as $imgArray) {
+            //====================================================================//
+            // Add Image t o Cache
+            $this->imagesCache[]    = $this->buildInfo($imgArray["id_image"]);
+        }
+
+        return $this->imagesCache;
+    }
+    
+    /**
+     * Update Product Image Array from Server Data
+     *
+     * @param mixed $data Input Image List for Update
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     */
+    private function setImgArray($data)
+    {
+        //====================================================================//
+        // Safety Check
+        if (!is_array($data) && !is_a($data, "ArrayObject")) {
+            return false;
+        }
+        //====================================================================//
+        // Load Object Images List for Whole Product
+        $this->imagesCache   =   Image::getImages($this->LangId, $this->object->id);
+        
+        //====================================================================//
+        // UPDATE IMAGES LIST
+        //====================================================================//
+
+        $this->imgPosition  =   0;
+        $visibleImageIds    =   array();
+        //====================================================================//
+        // Given List Is Not Empty
+        foreach ($data as $inValue) {
+            //====================================================================//
+            // Check Image Array is here
+            if (!isset($inValue["image"]) || empty($inValue["image"])) {
+                continue;
+            }
+            $this->imgPosition++;
+            //====================================================================//
+            // Search For Image In Current List
+            $psImage = $this->searchImage($inValue["image"]["md5"]);
+            if (false == $psImage) {
+                //====================================================================//
+                // If Not found, Add this object to list
+                $psImage = $this->addImageToProduct(
+                    $inValue["image"],
+                    $this->getImagePosition($inValue),
+                    $this->getImageCoverFlag($inValue)
+                );
+            }
+            //====================================================================//
+            // Update Image Position in List
+            $this->updateImagePosition($psImage, $inValue);
+            $this->updateImageCoverFlag($psImage, $inValue);
+            //====================================================================//
+            // Update Image Object in Database
+            $this->updateImage($psImage);
+            //====================================================================//
+            // Add Ps Image Id to Visible
+            if ($this->getImageVisibleFlag($inValue)) {
+                $visibleImageIds[] = $psImage->id;
+            }
+        }
+        
+        //====================================================================//
+        // Update Combination Images List
+        $this->updateAttributeImages($visibleImageIds);
+
+        //====================================================================//
+        // If Current Image List Is Empty => Clear Remaining Local Images
+        $this->cleanImages($this->imagesCache);
+
+        //====================================================================//
+        // Generate Images Thumbnail
+        $this->updateImgThumbnail();
+
+        //====================================================================//
+        // Flush Images Infos Cache
+        $this->flushImageCache();
+        
+        return true;
+    }
+    
+    /**
+     * Import a Product Image from Server Data
+     *
+     * @param array $imgArray Splash Image Definition Array
+     * @param int   $position Image Position (On Base Product Sheet)
+     * @param bool  $isCover  Image is Cover Image
+     *
+     * @return false|Image
+     */
+    private function addImageToProduct($imgArray, $position, $isCover)
+    {
+        //====================================================================//
+        // Read File from Splash Server
+        $newImageFile    =   Splash::file()->getFile($imgArray["file"], $imgArray["md5"]);
+        //====================================================================//
+        // File Imported => Write it Here
+        if (false == $newImageFile) {
+            return false;
+        }
+        $this->needUpdate();
+        //====================================================================//
+        // Create New Image Object
+        $objectImage                = new Image();
+        $objectImage->legend        = isset($newImageFile["name"]) ? $newImageFile["name"] : $newImageFile["filename"];
+        $objectImage->id_product    = $this->ProductId;
+        $objectImage->position      = $position;
+        $objectImage->cover         = $isCover;
+        //====================================================================//
+        // Write Image To Database
+        if (!$objectImage->add()) {
+            return false;
+        }
+        //====================================================================//
+        // Write Image On Folder
+        $path       = dirname($objectImage->getPathForCreation());
+        $filename   = "/" . $objectImage->id . "." . $objectImage->image_format;
+        Splash::file()->writeFile($path, $filename, $newImageFile["md5"], $newImageFile["raw"]);
+
+        return $objectImage;
+    }
+    
+    /**
+     * CleanUp Product Images List
+     *
+     * @param array $objectImagesList Array Of Remaining Product Images
+     *
+     * @return void
+     */
+    private function cleanImages($objectImagesList)
+    {
+        //====================================================================//
+        // If Variant Product Mode => Skip
+        if (empty($objectImagesList)) {
+            return;
+        }
+        //====================================================================//
+        // If Current Image List Is Empty => Clear Remaining Local Images
+        foreach ($objectImagesList as $imgArray) {
+            //====================================================================//
+            // Fetch Images Object
+            $psImage = new Image($imgArray["id_image"]);
+            $psImage->deleteImage(true);
+            $psImage->delete();
+            $this->needUpdate();
+        }
     }
 }

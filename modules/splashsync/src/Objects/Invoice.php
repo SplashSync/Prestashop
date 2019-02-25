@@ -1,36 +1,33 @@
 <?php
-/**
- * This file is part of SplashSync Project.
+
+/*
+ *  This file is part of SplashSync Project.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ *  Copyright (C) 2015-2019 Splash Sync  <www.splashsync.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
- *  @author    Splash Sync <www.splashsync.com>
- *  @copyright 2015-2018 Splash Sync
- *  @license   MIT
+ *  For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
  */
 
 namespace   Splash\Local\Objects;
 
-use Splash\Core\SplashCore      as Splash;
-
-use Splash\Models\AbstractObject;
-use Splash\Models\Objects\IntelParserTrait;
-use Splash\Models\Objects\SimpleFieldsTrait;
-use Splash\Models\Objects\ObjectsTrait;
-use Splash\Local\Local;
-use Splash\Local\Services\LanguagesManager;
-
-use Shop;
 use Configuration;
 use Currency;
-use SplashSync;
-use OrderInvoice;
 use Order as psOrder;
+use OrderInvoice;
+use Shop;
+use Splash\Core\SplashCore      as Splash;
+use Splash\Local\Local;
+use Splash\Local\Services\LanguagesManager;
+use Splash\Models\AbstractObject;
+use Splash\Models\Objects\IntelParserTrait;
+use Splash\Models\Objects\ObjectsTrait;
+use Splash\Models\Objects\SimpleFieldsTrait;
+use SplashSync;
 
 /**
  * @abstract    Splash Local Object Class - Customer Invoices Local Integration
@@ -39,7 +36,6 @@ use Order as psOrder;
  */
 class Invoice extends AbstractObject
 {
-
     // Splash Php Core Traits
     use IntelParserTrait;
     use SimpleFieldsTrait;
@@ -64,7 +60,6 @@ class Invoice extends AbstractObject
     use \Splash\Local\Objects\Invoice\CoreTrait;
     use \Splash\Local\Objects\Invoice\StatusTrait;
 
-    
     //====================================================================//
     // Object Definition Parameters
     //====================================================================//
@@ -112,9 +107,9 @@ class Invoice extends AbstractObject
     // General Class Variables
     //====================================================================//
    
-    protected $Products       = null;
-    protected $Payments       = null;
-    protected $PaymentMethod  = null;
+    protected $Products;
+    protected $Payments;
+    protected $PaymentMethod;
     
     /**
      * @var OrderInvoice
@@ -124,17 +119,17 @@ class Invoice extends AbstractObject
     /**
      * @var int
      */
-    private $LangId = null;
+    private $LangId;
 
     /**
      * @var Currency
      */
-    private $Currency = null;
+    private $Currency;
     
     /**
      * @var SplashSync
      */
-    private $spl = null;
+    private $spl;
     
     //====================================================================//
     // Class Constructor

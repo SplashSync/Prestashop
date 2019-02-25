@@ -46,27 +46,27 @@ trait AttributeTrait
     /**
      * Load Request Product Attribute Object
      *
-     * @param string $UnikId Object id
+     * @param string $unikId Object id
      *
      * @return bool
      */
-    public function loadAttribute($UnikId)
+    public function loadAttribute($unikId)
     {
         //====================================================================//
         // Stack Trace
         Splash::log()->trace(__CLASS__, __FUNCTION__);
         //====================================================================//
         // Decode Product Id
-        $this->AttributeId      = self::getAttribute($UnikId);
+        $this->AttributeId      = self::getAttribute($unikId);
         //====================================================================//
         // Safety Checks
         if (!$this->isLocked("onCombinationCreate") && empty($this->AttributeId)) {
             //====================================================================//
             // Read Product Combinations
-            $AttrList = $this->object->getAttributesResume($this->LangId);
+            $attrList = $this->object->getAttributesResume($this->LangId);
             //====================================================================//
             // if Product has Combinations => Cannot Read Variant Product Without AttributeId
-            if (is_array($AttrList) && !empty($AttrList)) {
+            if (is_array($attrList) && !empty($attrList)) {
                 return false;
             }
 
@@ -164,8 +164,8 @@ trait AttributeTrait
         }
         //====================================================================//
         // UPDATE ATTRIBUTE IMAGES
-        if (isset($this->AttrImageIds)) {
-            $this->Attribute->setImages($this->AttrImageIds);
+        if (isset($this->attrImageIds)) {
+            $this->Attribute->setImages($this->attrImageIds);
         }
         $this->isUpdated("Attribute");
 
@@ -187,10 +187,10 @@ trait AttributeTrait
         $this->object->deleteAttributeCombination($this->AttributeId);
         //====================================================================//
         // Read Product Attributes Conbination
-        $AttrList = $this->object->getAttributesResume($this->LangId);
+        $attrList = $this->object->getAttributesResume($this->LangId);
         //====================================================================//
         // Verify if Was Last Combination
-        if (!empty($AttrList)) {
+        if (!empty($attrList)) {
             return true;
         }
         //====================================================================//
@@ -205,19 +205,19 @@ trait AttributeTrait
     /**
      * Create a New Variant Product
      *
-     * @param mixed $Data Input Field Data
+     * @param mixed $fieldData Input Field Data
      *
      * @return false|Product
      */
-    private function createVariantProduct($Data)
+    private function createVariantProduct($fieldData)
     {
         //====================================================================//
         // Create or Load Base Product
-        if (($BaseProductId  = $this->getBaseProduct($Data["name"]))) {
+        if (($baseProductId  = $this->getBaseProduct($fieldData["name"]))) {
             //====================================================================//
             // USE LOCK to Allow Base Product Loading
             $this->lock("onCombinationCreate");
-            $product   =   $this->load($BaseProductId);
+            $product   =   $this->load($baseProductId);
             $this->unLock("onCombinationCreate");
         } else {
             //====================================================================//

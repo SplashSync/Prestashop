@@ -188,11 +188,11 @@ trait CRUDTrait
     /**
      * Delete requested Object
      *
-     * @param int $Id Object Id.  If NULL, Object needs to be created.
+     * @param string $objectId Object Id.  If NULL, Object needs to be created.
      *
      * @return bool
      */
-    public function delete($Id = null)
+    public function delete($objectId = null)
     {
         //====================================================================//
         // Stack Trace
@@ -205,9 +205,14 @@ trait CRUDTrait
         //====================================================================//
         // Load Object From DataBase
         //====================================================================//
-        $this->object     = new Order($Id);
-        if ($this->object->id != $Id) {
-            return Splash::log()->war("ErrLocalTpl", __CLASS__, __FUNCTION__, " Unable to load Order (" . $Id . ").");
+        $this->object     = new Order($objectId);
+        if ($this->object->id != $objectId) {
+            return Splash::log()->war(
+                "ErrLocalTpl",
+                __CLASS__,
+                __FUNCTION__,
+                " Unable to load Order (" . $objectId . ")."
+            );
         }
         
         //====================================================================//

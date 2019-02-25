@@ -198,7 +198,7 @@ trait MainTrait
      * @param string $fieldName Field Identifier / Name
      * @param mixed  $fieldData Field Data
      *
-     * @return       void
+     * @return void
      */
     private function setMainFields($fieldName, $fieldData)
     {

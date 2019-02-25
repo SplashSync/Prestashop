@@ -1,17 +1,16 @@
 <?php
-/**
- * This file is part of SplashSync Project.
+
+/*
+ *  This file is part of SplashSync Project.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ *  Copyright (C) 2015-2019 Splash Sync  <www.splashsync.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
- *  @author    Splash Sync <www.splashsync.com>
- *  @copyright 2015-2018 Splash Sync
- *  @license   MIT
+ *  For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
  */
                     
 //====================================================================//
@@ -24,16 +23,22 @@
 
 namespace   Splash\Local\Widgets;
 
-use Splash\Models\AbstractWidget;
+use ArrayObject;
 use Splash\Core\SplashCore      as Splash;
 use Splash\Local\Services\LanguagesManager;
+use Splash\Models\AbstractWidget;
 
 /**
- *  \class      Address
- *  \brief      Address - Thirdparty Contacts Management Class
+ *  Demo Widget for Prestashop
  */
 class Demo extends AbstractWidget
 {
+    //====================================================================//
+    // Define Standard Options for this Widget
+    // Override this array to change default options for your widget
+    public static $OPTIONS       = array(
+        "Width"     =>      self::SIZE_XL
+    );
     
     //====================================================================//
     // Object Definition Parameters
@@ -60,55 +65,27 @@ class Demo extends AbstractWidget
     protected static $ICO            =  "fa fa-magic";
     
     //====================================================================//
-    // Define Standard Options for this Widget
-    // Override this array to change default options for your widget
-    public static $OPTIONS       = array(
-        "Width"     =>      self::SIZE_XL
-    );
-    
-    //====================================================================//
-    // General Class Variables
-    //====================================================================//
-
-    //====================================================================//
-    // Class Constructor
-    //====================================================================//
-        
-//    /**
-//     *      @abstract       Class Constructor (Used only if localy necessary)
-//     *      @return         int                     0 if KO, >0 if OK
-//     */
-//    function __construct()
-//    {
-//        //====================================================================//
-//        // Place Here Any SPECIFIC Initialisation Code
-//        //====================================================================//
-//
-//        return True;
-//    }
-    
-    //====================================================================//
     // Class Main Functions
     //====================================================================//
     
     /**
-     *      @abstract   Return Widget Customs Parameters
+     * Return Widget Customs Parameters
      */
     public function getParameters()
     {
         //====================================================================//
         // Reference
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
-                ->identifier("text_input")
-                ->name("Text Input")
-                ->description("Widget Specific Custom text Input");
+            ->identifier("text_input")
+            ->name("Text Input")
+            ->description("Widget Specific Custom text Input");
         
         //====================================================================//
         // Reference
         $this->fieldsFactory()->create(SPL_T_INT)
-                ->identifier("integer_input")
-                ->name("Numeric Input")
-                ->description("Widget Specific Custom Numeric Input");
+            ->identifier("integer_input")
+            ->name("Numeric Input")
+            ->description("Widget Specific Custom Numeric Input");
         
         //====================================================================//
         // Publish Fields
@@ -116,15 +93,9 @@ class Demo extends AbstractWidget
     }
     
     /**
-     *  @abstract     Return requested Customer Data
-     *
-     *  @param        array   $params               Search parameters for result List.
-     *                        $params["start"]      Maximum Number of results
-     *                        $params["end"]        List Start Offset
-     *                        $params["groupby"]    Field name for sort list (Available fields listed below)
-
+     * {@inheritdoc}
      */
-    public function get($params = null)
+    public function get($params = array())
     {
         //====================================================================//
         // Stack Trace
@@ -167,14 +138,13 @@ class Demo extends AbstractWidget
         return $this->render();
     }
         
-
     //====================================================================//
     // Blocks Generation Functions
     //====================================================================//
 
     /**
-    *   @abstract     Block Building - Text Intro
-    */
+     * Block Building - Text Intro
+     */
     private function buildIntroBlock()
     {
         //====================================================================//
@@ -183,50 +153,42 @@ class Demo extends AbstractWidget
     }
   
     /**
-    *   @abstract     Block Building - Inputs Parameters
-    */
-    private function buildParametersBlock($Inputs = array())
+     * Block Building - Inputs Parameters
+     *
+     * @param null|array|ArrayObject $inputs
+     */
+    private function buildParametersBlock($inputs = array())
     {
-
         //====================================================================//
         // verify Inputs
-        if (!is_array($Inputs) && !is_a($Inputs, "ArrayObject")) {
+        if (!is_array($inputs) && !is_a($inputs, "ArrayObject")) {
             $this->blocksFactory()
-                    ->addNotificationsBlock(array("warning" => "Inputs is not an Array! Is " . get_class($Inputs)));
+                ->addNotificationsBlock(array("warning" => "Inputs is not an Array!"));
         }
-        
         //====================================================================//
         // Parameters Table Block
-        $TableContents = array();
-        $TableContents[]    =   array("Received " . count($Inputs) .  " inputs parameters","Value");
-        foreach ($Inputs as $key => $value) {
-            $TableContents[]    =   array($key, $value);
+        $tableContents = array();
+        $tableContents[]    =   array("Received " . count($inputs) .  " inputs parameters","Value");
+        foreach ($inputs as $key => $value) {
+            $tableContents[]    =   array($key, $value);
         }
-        
-        $this->blocksFactory()->addTableBlock($TableContents, array("Width" => self::SIZE_M));
+        $this->blocksFactory()->addTableBlock($tableContents, array("Width" => self::SIZE_M));
     }
     
     /**
-    *   @abstract     Block Building - Notifications Parameters
-    */
+     * Block Building - Notifications Parameters
+     */
     private function buildNotificationsBlock()
     {
-
         //====================================================================//
         // Notifications Block
-        
-        $Notifications = array(
+        $notifications = array(
             "error" =>  "This is a Sample Error Notification",
             "warning" =>  "This is a Sample Warning Notification",
             "success" =>  "This is a Sample Success Notification",
             "info" =>  "This is a Sample Infomation Notification",
         );
         
-        
-        $this->blocksFactory()->addNotificationsBlock($Notifications, array("Width" => self::SIZE_M));
+        $this->blocksFactory()->addNotificationsBlock($notifications, array("Width" => self::SIZE_M));
     }
-    
-    //====================================================================//
-    // Class Tooling Functions
-    //====================================================================//
 }

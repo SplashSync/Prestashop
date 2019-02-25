@@ -91,9 +91,9 @@ trait SplashIdTrait
         }
         
         // Read Splash Id
-        $Current = self::getSplashId($objectType, $objectId);
+        $current = self::getSplashId($objectType, $objectId);
         // Object is Unknown
-        if (!$Current) {
+        if (!$current) {
             return Db::getInstance()->insert("splash_links", array(
                 "id"        =>  pSQL((string) $objectId),
                 "type"      =>  pSQL($objectType),
@@ -101,7 +101,7 @@ trait SplashIdTrait
             ));
         }
         // Splash Id Changed
-        if ($Current !== $splashId) {
+        if ($current !== $splashId) {
             return Db::getInstance()->update(
                 "splash_links",
                 array(

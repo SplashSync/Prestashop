@@ -1,17 +1,16 @@
 <?php
-/**
- * This file is part of SplashSync Project.
+
+/*
+ *  This file is part of SplashSync Project.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ *  Copyright (C) 2015-2019 Splash Sync  <www.splashsync.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
- *  @author    Splash Sync <www.splashsync.com>
- *  @copyright 2015-2018 Splash Sync
- *  @license   MIT
+ *  For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
  */
 
 namespace Splash\Local\Objects\ThirdParty;
@@ -19,67 +18,73 @@ namespace Splash\Local\Objects\ThirdParty;
 use Splash\Client\Splash;
 
 /**
- * @abstract Prestashop Hooks for ThirdParty
+ * Prestashop Hooks for ThirdParty
  */
 trait HooksTrait
 {
-    
-//====================================================================//
-// *******************************************************************//
-//  MODULE BACK OFFICE (CUSTOMERS) HOOKS
-// *******************************************************************//
-//====================================================================//
+    //====================================================================//
+    // *******************************************************************//
+    //  MODULE BACK OFFICE (CUSTOMERS) HOOKS
+    // *******************************************************************//
+    //====================================================================//
     
     /**
-    *   @abstract       This hook is displayed after a customer is created
-    */
+     * This hook is displayed after a customer is created
+     *
+     * @param array $params
+     */
     public function hookactionObjectCustomerAddAfter($params)
     {
         return $this->hookactionCustomer($params["object"], SPL_A_CREATE, $this->l('Customer Created on Prestashop'));
     }
         
     /**
-    *   @abstract       This hook is displayed after a customer is created
-    */
+     * This hook is displayed after a customer is created
+     *
+     * @param array $params
+     */
     public function hookactionObjectCustomerUpdateAfter($params)
     {
         return $this->hookactionCustomer($params["object"], SPL_A_UPDATE, $this->l('Customer Updated on Prestashop'));
     }
     
     /**
-    *   @abstract       This hook is displayed after a customer is created
-    */
+     * This hook is displayed after a customer is created
+     *
+     * @param array $params
+     */
     public function hookactionObjectCustomerDeleteAfter($params)
     {
         return $this->hookactionCustomer($params["object"], SPL_A_DELETE, $this->l('Customer Deleted on Prestashop'));
     }
 
     /**
-     *      @abstract   This function is called after each action on a customer object
-     *      @param      object   $customer          Prestashop Customers Object
-     *      @param      string   $action            Performed Action
-     *      @param      string   $comment           Action Comment
+     * This function is called after each action on a customer object
+     *
+     * @param object $customer Prestashop Customers Object
+     * @param string $action   Performed Action
+     * @param string $comment  Action Comment
      */
     private function hookactionCustomer($customer, $action, $comment)
     {
         //====================================================================//
         // Retrieve Customer Id
-        $id_customer = null;
+        $customerId = null;
         if (isset($customer->id_customer)) {
-            $id_customer = $customer->id_customer;
+            $customerId = $customer->id_customer;
         } elseif (isset($customer->id)) {
-            $id_customer = $customer->id;
+            $customerId = $customer->id;
         }
         //====================================================================//
         // Log
-        $this->debugHook(__FUNCTION__, $id_customer . " >> " . $comment);
+        $this->debugHook(__FUNCTION__, $customerId . " >> " . $comment);
         //====================================================================//
         // Safety Check
-        if (empty($id_customer)) {
+        if (empty($customerId)) {
             Splash::log()->err("ErrLocalTpl", __CLASS__, __FUNCTION__, "Unable to Read Customer Id.");
         }
         //====================================================================//
         // Commit Update For Product
-        return $this->doCommit("ThirdParty", $id_customer, $action, $comment);
+        return $this->doCommit("ThirdParty", $customerId, $action, $comment);
     }
 }

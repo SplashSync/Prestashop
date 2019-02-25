@@ -145,7 +145,7 @@ trait CRUDTrait
     }
     
     /**
-     * @abstract    Delete requested Object
+     * Delete requested Object
      *
      * @param string $objectId Object Id.  If NULL, Object needs to be created.
      *

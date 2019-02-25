@@ -1,93 +1,79 @@
 <?php
-/**
- * This file is part of SplashSync Project.
+
+/*
+ *  This file is part of SplashSync Project.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ *  Copyright (C) 2015-2019 Splash Sync  <www.splashsync.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
- *  @author    Splash Sync <www.splashsync.com>
- *  @copyright 2015-2018 Splash Sync
- *  @license   MIT
+ *  For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
  */
 
 namespace Splash\Local\Objects\Core;
 
-//====================================================================//
-// Prestashop Static Classes
-use Address;
-use Gender;
-use Context;
-use State;
-use Country;
 use Translate;
-use Validate;
-use DbQuery;
-use Db;
-use Customer;
-use Tools;
 
 /**
- * @abstract    Access to Objects Dates Fields
+ * Access to Objects Dates Fields
+ *
  * @author      B. Paquier <contact@splashsync.com>
  */
 trait DatesTrait
 {
-
-
     /**
-    *   @abstract     Build Fields using FieldFactory
-    */
+     * Build Fields using FieldFactory
+     */
     private function buildDatesFields()
     {
         //====================================================================//
         // Creation Date
         $this->fieldsFactory()->create(SPL_T_DATETIME)
-                ->Identifier("date_add")
-                ->Name(Translate::getAdminTranslation("Creation", "AdminSupplyOrders"))
-                ->Group(Translate::getAdminTranslation("Meta", "AdminThemes"))
-                ->MicroData("http://schema.org/DataFeedItem", "dateCreated")
-                ->isReadOnly();
+            ->Identifier("date_add")
+            ->Name(Translate::getAdminTranslation("Creation", "AdminSupplyOrders"))
+            ->Group(Translate::getAdminTranslation("Meta", "AdminThemes"))
+            ->MicroData("http://schema.org/DataFeedItem", "dateCreated")
+            ->isReadOnly();
         
         //====================================================================//
         // Last Change Date
         $this->fieldsFactory()->create(SPL_T_DATETIME)
-                ->Identifier("date_upd")
-                ->Name(Translate::getAdminTranslation("Last modification", "AdminSupplyOrders"))
-                ->Group(Translate::getAdminTranslation("Meta", "AdminThemes"))
-                ->MicroData("http://schema.org/DataFeedItem", "dateCreated")
-                ->isReadOnly();
+            ->Identifier("date_upd")
+            ->Name(Translate::getAdminTranslation("Last modification", "AdminSupplyOrders"))
+            ->Group(Translate::getAdminTranslation("Meta", "AdminThemes"))
+            ->MicroData("http://schema.org/DataFeedItem", "dateCreated")
+            ->isReadOnly();
     }
 
     /**
-     *  @abstract     Read requested Field
+     * Read requested Field
      *
-     *  @param        string    $Key                    Input List Key
-     *  @param        string    $FieldName              Field Identifier / Name
+     * @param string $key       Input List Key
+     * @param string $fieldName Field Identifier / Name
      *
-     * @return       void
+     * @return void
      */
-    private function getDatesFields($Key, $FieldName)
+    private function getDatesFields($key, $fieldName)
     {
-            
         //====================================================================//
         // READ Fields
-        switch ($FieldName) {
+        switch ($fieldName) {
             case 'date_add':
             case 'date_upd':
-                if (isset($this->object->$FieldName)) {
-                    $this->out[$FieldName] = $this->object->$FieldName;
+                if (isset($this->object->{$fieldName})) {
+                    $this->out[$fieldName] = $this->object->{$fieldName};
                 } else {
-                    $this->out[$FieldName] = null;
+                    $this->out[$fieldName] = null;
                 }
+
                 break;
             default:
                 return;
         }
         
-        unset($this->in[$Key]);
+        unset($this->in[$key]);
     }
 }

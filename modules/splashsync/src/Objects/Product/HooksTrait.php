@@ -147,8 +147,8 @@ trait HooksTrait
         //====================================================================//
         // Walk on Products
         foreach ($products as $product) {
-            foreach ($this->getActionProductIds($product) as $ProductId) {
-                array_push($unikId, $ProductId);
+            foreach ($this->getActionProductIds($product) as $productId) {
+                array_push($unikId, $productId);
             }
         }
         //====================================================================//
@@ -248,18 +248,18 @@ trait HooksTrait
     {
         //====================================================================//
         // Retrieve Combination Id
-        $id_combination = null;
+        $combinationId = null;
         if (isset($combination->id)) {
-            $id_combination = $combination->id;
+            $combinationId = $combination->id;
         } elseif (isset($combination->id_product_attribute)) {
-            $id_combination = $combination->id_product_attribute;
+            $combinationId = $combination->id_product_attribute;
         }
         //====================================================================//
         // Log
-        $this->debugHook(__FUNCTION__, $id_combination . " >> " . $comment);
+        $this->debugHook(__FUNCTION__, $combinationId . " >> " . $comment);
         //====================================================================//
         // Safety Check
-        if (empty($id_combination)) {
+        if (empty($combinationId)) {
             return Splash::log()
                 ->err("ErrLocalTpl", "Combination", __FUNCTION__, "Unable to Read Product Attribute Id.");
         }
@@ -269,10 +269,10 @@ trait HooksTrait
         }
         //====================================================================//
         // Generate Unik Product Id
-        $UnikId       =   (int) Product::getUnikIdStatic($combination->id_product, $id_combination);
+        $unikId       =   (int) Product::getUnikIdStatic($combination->id_product, $combinationId);
         //====================================================================//
         // Commit Update For Product Attribute
-        $this->doCommit("Product", $UnikId, $action, $comment);
+        $this->doCommit("Product", $unikId, $action, $comment);
         if (SPL_A_CREATE ==  $action) {
             //====================================================================//
             // Commit Update For Product Attribute

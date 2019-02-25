@@ -1,17 +1,16 @@
 <?php
-/**
- * This file is part of SplashSync Project.
+
+/*
+ *  This file is part of SplashSync Project.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ *  Copyright (C) 2015-2019 Splash Sync  <www.splashsync.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
- *  @author    Splash Sync <www.splashsync.com>
- *  @copyright 2015-2018 Splash Sync
- *  @license   MIT
+ *  For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
  */
 
 namespace Splash\Local\Objects\ThirdParty;
@@ -23,50 +22,46 @@ use Translate;
  */
 trait MetaTrait
 {
-
-
     /**
-    * Build Customers Unused Fields using FieldFactory
-    */
+     * Build Customers Unused Fields using FieldFactory
+     */
     private function buildMetaFields()
     {
-
         //====================================================================//
         // Active
         $this->fieldsFactory()->create(SPL_T_BOOL)
-                ->Identifier("active")
-                ->Name(Translate::getAdminTranslation("Enabled", "AdminCustomers"))
-                ->MicroData("http://schema.org/Organization", "active")
-                ->isListed();
+            ->Identifier("active")
+            ->Name(Translate::getAdminTranslation("Enabled", "AdminCustomers"))
+            ->MicroData("http://schema.org/Organization", "active")
+            ->isListed();
         
         //====================================================================//
         // Newsletter
         $this->fieldsFactory()->create(SPL_T_BOOL)
-                ->Identifier("newsletter")
-                ->Name(Translate::getAdminTranslation("Newsletter", "AdminCustomers"))
-                ->Group(Translate::getAdminTranslation("Meta", "AdminThemes"))
-                ->MicroData("http://schema.org/Organization", "newsletter");
+            ->Identifier("newsletter")
+            ->Name(Translate::getAdminTranslation("Newsletter", "AdminCustomers"))
+            ->Group(Translate::getAdminTranslation("Meta", "AdminThemes"))
+            ->MicroData("http://schema.org/Organization", "newsletter");
         
         //====================================================================//
         // Adverstising
         $this->fieldsFactory()->create(SPL_T_BOOL)
-                ->Identifier("optin")
-                ->Name(Translate::getAdminTranslation("Opt-in", "AdminCustomers"))
-                ->Group(Translate::getAdminTranslation("Meta", "AdminThemes"))
-                ->MicroData("http://schema.org/Organization", "advertising");
+            ->Identifier("optin")
+            ->Name(Translate::getAdminTranslation("Opt-in", "AdminCustomers"))
+            ->Group(Translate::getAdminTranslation("Meta", "AdminThemes"))
+            ->MicroData("http://schema.org/Organization", "advertising");
     }
 
     /**
      * Read requested Field
      *
-     * @param        string    $key                    Input List Key
-     * @param        string    $fieldName              Field Identifier / Name
+     * @param string $key       Input List Key
+     * @param string $fieldName Field Identifier / Name
      *
-     * @return         void
+     * @return void
      */
     private function getMetaFields($key, $fieldName)
     {
-            
         //====================================================================//
         // READ Fields
         switch ($fieldName) {
@@ -74,7 +69,8 @@ trait MetaTrait
             case 'newsletter':
             case 'passwd':
             case 'optin':
-                $this->out[$fieldName] = $this->object->$fieldName;
+                $this->out[$fieldName] = $this->object->{$fieldName};
+
                 break;
             default:
                 return;
@@ -86,10 +82,10 @@ trait MetaTrait
     /**
      * Write Given Fields
      *
-     * @param        string    $fieldName              Field Identifier / Name
-     * @param        mixed     $fieldData                   Field Data
+     * @param string $fieldName Field Identifier / Name
+     * @param mixed  $fieldData Field Data
      *
-     * @return         void
+     * @return void
      */
     private function setMetaFields($fieldName, $fieldData)
     {
@@ -99,10 +95,11 @@ trait MetaTrait
             case 'active':
             case 'newsletter':
             case 'optin':
-                if ($this->object->$fieldName != $fieldData) {
-                    $this->object->$fieldName = $fieldData;
+                if ($this->object->{$fieldName} != $fieldData) {
+                    $this->object->{$fieldName} = $fieldData;
                     $this->needUpdate();
                 }
+
                 break;
             default:
                 return;

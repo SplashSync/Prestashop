@@ -1,25 +1,20 @@
 <?php
-/**
- * This file is part of SplashSync Project.
+
+/*
+ *  This file is part of SplashSync Project.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ *  Copyright (C) 2015-2019 Splash Sync  <www.splashsync.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
- *  @author    Splash Sync <www.splashsync.com>
- *  @copyright 2015-2018 Splash Sync
- *  @license   MIT
+ *  For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
  */
 
 namespace   Splash\Local\Objects\Invoice;
 
-//use Splash\Core\SplashCore      as Splash;
-
-//====================================================================//
-// Prestashop Static Classes
 use Translate;
 
 /**
@@ -27,61 +22,57 @@ use Translate;
  */
 trait StatusTrait
 {
-
     /**
-    * Build Fields using FieldFactory
-    */
+     * Build Fields using FieldFactory
+     */
     private function buildStatusFields()
     {
-        
-       //====================================================================//
+        //====================================================================//
         // Order Current Status
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
-                ->Identifier("status")
-                ->Name(Translate::getAdminTranslation("Status", "AdminOrders"))
-                ->MicroData("http://schema.org/Invoice", "paymentStatus")
-                ->isReadOnly()
-                ->isNotTested();
+            ->Identifier("status")
+            ->Name(Translate::getAdminTranslation("Status", "AdminOrders"))
+            ->MicroData("http://schema.org/Invoice", "paymentStatus")
+            ->isReadOnly()
+            ->isNotTested();
         
         //====================================================================//
         // INVOICE STATUS FLAGS
         //====================================================================//
         
-        $Prefix = Translate::getAdminTranslation("Status", "AdminOrders") . " ";
+        $prefix = Translate::getAdminTranslation("Status", "AdminOrders") . " ";
         
         //====================================================================//
         // Is Canceled
         // => There is no Diffrence Between a Draft & Canceled Order on Prestashop.
         //      Any Non Validated Order is considered as Canceled
         $this->fieldsFactory()->create(SPL_T_BOOL)
-                ->Identifier("isCanceled")
-                ->Name($Prefix . $this->spl->l("Canceled"))
-                ->MicroData("http://schema.org/PaymentStatusType", "PaymentDeclined")
-                ->Association("isCanceled", "isValidated")
-                ->Group(Translate::getAdminTranslation("Meta", "AdminThemes"))
-                ->isReadOnly();
+            ->Identifier("isCanceled")
+            ->Name($prefix . $this->spl->l("Canceled"))
+            ->MicroData("http://schema.org/PaymentStatusType", "PaymentDeclined")
+            ->Association("isCanceled", "isValidated")
+            ->Group(Translate::getAdminTranslation("Meta", "AdminThemes"))
+            ->isReadOnly();
         
         //====================================================================//
         // Is Validated
         $this->fieldsFactory()->create(SPL_T_BOOL)
-                ->Identifier("isValidated")
-                ->Name($Prefix . Translate::getAdminTranslation("Valid", "AdminCartRules"))
-                ->MicroData("http://schema.org/PaymentStatusType", "PaymentDue")
-                ->Association("isCanceled", "isValidated")
-                ->Group(Translate::getAdminTranslation("Meta", "AdminThemes"))
-                ->isReadOnly();
+            ->Identifier("isValidated")
+            ->Name($prefix . Translate::getAdminTranslation("Valid", "AdminCartRules"))
+            ->MicroData("http://schema.org/PaymentStatusType", "PaymentDue")
+            ->Association("isCanceled", "isValidated")
+            ->Group(Translate::getAdminTranslation("Meta", "AdminThemes"))
+            ->isReadOnly();
 
         //====================================================================//
         // Is Paid
         $this->fieldsFactory()->create(SPL_T_BOOL)
-                ->Identifier("isPaid")
-                ->Name($Prefix . $this->spl->l("Paid"))
-                ->MicroData("http://schema.org/PaymentStatusType", "PaymentComplete")
-                ->isReadOnly()
-                ->Group(Translate::getAdminTranslation("Meta", "AdminThemes"))
-                ->isNotTested();
-        
-        return;
+            ->Identifier("isPaid")
+            ->Name($prefix . $this->spl->l("Paid"))
+            ->MicroData("http://schema.org/PaymentStatusType", "PaymentComplete")
+            ->isReadOnly()
+            ->Group(Translate::getAdminTranslation("Meta", "AdminThemes"))
+            ->isNotTested();
     }
         
     //====================================================================//
@@ -91,10 +82,10 @@ trait StatusTrait
     /**
      * Read requested Field
      *
-     * @param        string    $key                    Input List Key
-     * @param        string    $fieldName              Field Identifier / Name
+     * @param string $key       Input List Key
+     * @param string $fieldName Field Identifier / Name
      *
-     * @return       void
+     * @return void
      */
     private function getStatusFields($key, $fieldName)
     {
@@ -108,27 +99,29 @@ trait StatusTrait
                 $delta = $this->object->getTotalPaid() - $this->object->total_paid_tax_incl;
                 if (!$this->Order->valid) {
                     $this->out[$fieldName]  = "PaymentCanceled";
-                } elseif (($delta < 1E-6 ) || ($delta > 0)) {
+                } elseif (($delta < 1E-6) || ($delta > 0)) {
                     $this->out[$fieldName]  = "PaymentComplete";
                 } else {
                     $this->out[$fieldName]  = "PaymentDue";
                 }
+
                 break;
-            
             //====================================================================//
             // INVOICE PAYMENT STATUS
             //====================================================================//
             case 'isCanceled':
                 $this->out[$fieldName]  = !$this->Order->valid;
+
                 break;
             case 'isValidated':
                 $this->out[$fieldName]  = $this->Order->valid;
+
                 break;
             case 'isPaid':
                 $delta = $this->object->getTotalPaid() - $this->object->total_paid_tax_incl;
-                $this->out[$fieldName]  = ( ($delta < 1E-6 ) || ($delta > 0)  );
+                $this->out[$fieldName]  = (($delta < 1E-6) || ($delta > 0));
+
                 break;
-        
             default:
                 return;
         }

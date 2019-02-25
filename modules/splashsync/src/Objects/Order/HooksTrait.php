@@ -1,157 +1,169 @@
 <?php
-/**
- * This file is part of SplashSync Project.
+
+/*
+ *  This file is part of SplashSync Project.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ *  Copyright (C) 2015-2019 Splash Sync  <www.splashsync.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
- *  @author    Splash Sync <www.splashsync.com>
- *  @copyright 2015-2018 Splash Sync
- *  @license   MIT
+ *  For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
  */
 
 namespace Splash\Local\Objects\Order;
 
+use PrestaShopCollection;
 use Splash\Core\SplashCore      as Splash;
 
-use PrestaShopCollection;
-
 /**
- * @abstract Prestashop Hooks for Order & Invoices
+ * Prestashop Hooks for Order & Invoices
  */
 trait HooksTrait
 {
-    
-//====================================================================//
-// *******************************************************************//
-//  MODULE BACK OFFICE (ORDERS) HOOKS
-// *******************************************************************//
-//====================================================================//
+    //====================================================================//
+    // *******************************************************************//
+    //  MODULE BACK OFFICE (ORDERS) HOOKS
+    // *******************************************************************//
+    //====================================================================//
     
     /**
-    *   @abstract       This hook is called after a order is created
-    */
+     * This hook is called after a order is created
+     *
+     * @param array $params
+     */
     public function hookactionObjectOrderAddAfter($params)
     {
         return $this->hookactionOrder($params["object"], SPL_A_CREATE, $this->l('Order Created on Prestashop'));
     }
     
     /**
-    *   @abstract       This hook is called after a order is updated
-    */
+     * This hook is called after a order is updated
+     *
+     * @param array $params
+     */
     public function hookactionObjectOrderUpdateAfter($params)
     {
         return $this->hookactionOrder($params["object"], SPL_A_UPDATE, $this->l('Order Updated on Prestashop'));
     }
     
     /**
-    *   @abstract       This hook is called after a order is deleted
-    */
+     * This hook is called after a order is deleted
+     *
+     * @param array $params
+     */
     public function hookactionObjectOrderDeleteAfter($params)
     {
         return $this->hookactionOrder($params["object"], SPL_A_DELETE, $this->l('Order Deleted on Prestashop'));
     }
     
+    //====================================================================//
+    // *******************************************************************//
+    //  MODULE BACK OFFICE (INVOICES) HOOKS
+    // *******************************************************************//
+    //====================================================================//
+    
     /**
-     *      @abstract   This function is called after each action on a order object
-     *      @param      object   $order             Prestashop Order Object
-     *      @param      string   $action            Performed Action
-     *      @param      string   $comment           Action Comment
+     * This hook is called after a Invoice is created
+     *
+     * @param array $params
      */
-    private function hookactionOrder($order, $action, $comment)
-    {
-        $Errors = 0;
-        //====================================================================//
-        // Retrieve Customer Id
-        $id_order = null;
-        if (isset($order->id_order)) {
-            $id_order = $order->id_order;
-        } elseif (isset($order->id)) {
-            $id_order = $order->id;
-        }
-        //====================================================================//
-        // Log
-        $this->debugHook(__FUNCTION__, $id_order . " >> " . $comment);
-        //====================================================================//
-        // Safety Check
-        if (empty($id_order)) {
-            Splash::log()->err("ErrLocalTpl", "Order", __FUNCTION__, "Unable to Read Order Id.");
-        }
-        //====================================================================//
-        // Commit Update For Order
-        $Errors += !$this->doCommit("Order", $id_order, $action, $comment);
-        if ($action == SPL_A_UPDATE) {
-            //====================================================================//
-            // Commit Update For Order Invoices
-            $Invoices = new PrestaShopCollection('OrderInvoice');
-            $Invoices->where('id_order', '=', $id_order);
-            foreach ($Invoices as $Invoice) {
-                $Errors += !$this->doCommit("Invoice", $Invoice->id, $action, $comment);
-            }
-        }
-        return $Errors?false:true;
-    }
-    
-//====================================================================//
-// *******************************************************************//
-//  MODULE BACK OFFICE (INVOICES) HOOKS
-// *******************************************************************//
-//====================================================================//
-    
-    /**
-    *   @abstract       This hook is called after a Invoice is created
-    */
     public function hookactionObjectOrderInvoiceAddAfter($params)
     {
         return $this->hookactionInvoice($params["object"], SPL_A_CREATE, $this->l('Invoice Created on Prestashop'));
     }
     
     /**
-    *   @abstract       This hook is called after a Invoice is updated
-    */
+     * This hook is called after a Invoice is updated
+     *
+     * @param array $params
+     */
     public function hookactionObjectOrderInvoiceUpdateAfter($params)
     {
         return $this->hookactionInvoice($params["object"], SPL_A_UPDATE, $this->l('Invoice Updated on Prestashop'));
     }
     
     /**
-    *   @abstract       This hook is called after a Invoice is deleted
-    */
+     * This hook is called after a Invoice is deleted
+     *
+     * @param array $params
+     */
     public function hookactionObjectOrderInvoiceDeleteAfter($params)
     {
         return $this->hookactionInvoice($params["object"], SPL_A_DELETE, $this->l('Invoice Deleted on Prestashop'));
     }
     
     /**
-     *      @abstract   This function is called after each action on a order object
-     *      @param      object   $order             Prestashop Order Object
-     *      @param      string   $action            Performed Action
-     *      @param      string   $comment           Action Comment
+     * This function is called after each action on a order object
+     *
+     * @param object $order   Prestashop Order Object
+     * @param string $action  Performed Action
+     * @param string $comment Action Comment
+     */
+    private function hookactionOrder($order, $action, $comment)
+    {
+        $errors = 0;
+        //====================================================================//
+        // Retrieve Customer Id
+        $orderId = null;
+        if (isset($order->id_order)) {
+            $orderId = $order->id_order;
+        } elseif (isset($order->id)) {
+            $orderId = $order->id;
+        }
+        //====================================================================//
+        // Log
+        $this->debugHook(__FUNCTION__, $orderId . " >> " . $comment);
+        //====================================================================//
+        // Safety Check
+        if (empty($orderId)) {
+            Splash::log()->err("ErrLocalTpl", "Order", __FUNCTION__, "Unable to Read Order Id.");
+        }
+        //====================================================================//
+        // Commit Update For Order
+        $errors += !$this->doCommit("Order", $orderId, $action, $comment);
+        if (SPL_A_UPDATE == $action) {
+            //====================================================================//
+            // Commit Update For Order Invoices
+            $invoices = new PrestaShopCollection('OrderInvoice');
+            $invoices->where('id_order', '=', $orderId);
+            foreach ($invoices as $invoice) {
+                $errors += !$this->doCommit("Invoice", $invoice->id, $action, $comment);
+            }
+        }
+
+        return $errors?false:true;
+    }
+    
+    /**
+     * This function is called after each action on a order object
+     *
+     * @param object $order   Prestashop Order Object
+     * @param string $action  Performed Action
+     * @param string $comment Action Comment
      */
     private function hookactionInvoice($order, $action, $comment)
     {
         //====================================================================//
         // Retrieve Customer Id
-        $id = null;
+        $objectId = null;
         if (isset($order->id_order_invoice)) {
-            $id = $order->id_order_invoice;
+            $objectId = $order->id_order_invoice;
         } elseif (isset($order->id)) {
-            $id = $order->id;
+            $objectId = $order->id;
         }
         //====================================================================//
         // Log
-        $this->debugHook(__FUNCTION__, $id . " >> " . $comment);
+        $this->debugHook(__FUNCTION__, $objectId . " >> " . $comment);
         //====================================================================//
         // Safety Check
-        if (empty($id)) {
+        if (empty($objectId)) {
             Splash::log()->err("ErrLocalTpl", "Invoice", __FUNCTION__, "Unable to Read Order Invoice Id.");
         }
         //====================================================================//
         // Commit Update For Invoice
-        return $this->doCommit("Invoice", $id, $action, $comment);
+        return $this->doCommit("Invoice", $objectId, $action, $comment);
     }
 }

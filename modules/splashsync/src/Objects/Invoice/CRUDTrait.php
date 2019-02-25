@@ -1,25 +1,23 @@
 <?php
-/**
- * This file is part of SplashSync Project.
+
+/*
+ *  This file is part of SplashSync Project.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ *  Copyright (C) 2015-2019 Splash Sync  <www.splashsync.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
- *  @author    Splash Sync <www.splashsync.com>
- *  @copyright 2015-2018 Splash Sync
- *  @license   MIT
+ *  For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
  */
 
 namespace Splash\Local\Objects\Invoice;
 
-use Splash\Core\SplashCore      as Splash;
-
 use Order;
 use OrderInvoice;
+use Splash\Core\SplashCore      as Splash;
 use TaxCalculator;
 
 /**
@@ -30,19 +28,21 @@ trait CRUDTrait
     /**
      * @var Order
      */
-    protected $Order          = null;
+    protected $Order;
     
     /**
      * @var TaxCalculator
      */
-    protected $ShippingTaxCalculator = null;
+    protected $ShippingTaxCalculator;
     
     /**
      * Load Request Object
-     * @param       string  $Id               Object id
-     * @return      false|OrderInvoice
+     *
+     * @param string $objectId Object id
+     *
+     * @return false|OrderInvoice
      */
-    public function load($Id)
+    public function load($objectId)
     {
         //====================================================================//
         // Stack Trace
@@ -50,9 +50,14 @@ trait CRUDTrait
         
         //====================================================================//
         // Load Object
-        $object   = new OrderInvoice($Id);
-        if ($object->id != $Id) {
-            return Splash::log()->err("ErrLocalTpl", __CLASS__, __FUNCTION__, " Unable to load Invoice (" . $Id . ").");
+        $object   = new OrderInvoice($objectId);
+        if ($object->id != $objectId) {
+            return Splash::log()->err(
+                "ErrLocalTpl",
+                __CLASS__,
+                __FUNCTION__,
+                " Unable to load Invoice (" . $objectId . ")."
+            );
         }
         $this->Order    = new Order($object->id_order);
         if ($this->Order->id != $object->id_order) {
@@ -73,7 +78,7 @@ trait CRUDTrait
         //====================================================================//
         // Load Shipping Tax Calculator
         $this->ShippingTaxCalculator    = (new \Carrier($this->Order->id_carrier))
-                    ->getTaxCalculator(new \Address($this->Order->id_address_delivery));
+            ->getTaxCalculator(new \Address($this->Order->id_address_delivery));
 
         return $object;
     }
@@ -81,7 +86,7 @@ trait CRUDTrait
     /**
      * Create Request Object
      *
-     * @return      null
+     * @return null
      */
     public function create()
     {
@@ -99,9 +104,9 @@ trait CRUDTrait
     /**
      * Update Request Object
      *
-     * @param       bool   $needed         Is This Update Needed
+     * @param bool $needed Is This Update Needed
      *
-     * @return      string      Object Id
+     * @return string Object Id
      */
     public function update($needed)
     {
@@ -122,9 +127,9 @@ trait CRUDTrait
     /**
      * Delete requested Object
      *
-     * @param       string     $objectId     Object Id.  If NULL, Object needs to be created.
+     * @param string $objectId Object Id.  If NULL, Object needs to be created.
      *
-     * @return      bool
+     * @return bool
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function delete($objectId = null)

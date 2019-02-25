@@ -1,36 +1,31 @@
 <?php
-/**
- * This file is part of SplashSync Project.
+
+/*
+ *  This file is part of SplashSync Project.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ *  Copyright (C) 2015-2019 Splash Sync  <www.splashsync.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
- *  @author    Splash Sync <www.splashsync.com>
- *  @copyright 2015-2018 Splash Sync
- *  @license   MIT
+ *  For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
  */
 
 namespace   Splash\Local\Objects\Invoice;
 
+use DbQuery;
+use OrderInvoice;
 use Splash\Core\SplashCore      as Splash;
 
-//====================================================================//
-// Prestashop Static Classes
-use DbQuery;
-use Db;
-use OrderInvoice;
-
 /**
- * @abstract    Acces to Invoices Objects Lists
+ * Acces to Invoices Objects Lists
+ *
  * @author      B. Paquier <contact@splashsync.com>
  */
 trait ObjectsListTrait
 {
-
     /**
      * {@inheritdoc}
      */
@@ -63,37 +58,38 @@ trait ObjectsListTrait
         //====================================================================//
         // Setup filters
         if (!empty($filter)) {
-            $Where = " LOWER( i.number )        LIKE LOWER( '%" . pSQL($filter) ."%') ";
-            $Where.= " OR LOWER( o.reference )  LIKE LOWER( '%" . pSQL($filter) ."%') ";
-            $Where.= " OR LOWER( c.firstname )  LIKE LOWER( '%" . pSQL($filter) ."%') ";
-            $Where.= " OR LOWER( c.lastname )   LIKE LOWER( '%" . pSQL($filter) ."%') ";
-            $Where.= " OR LOWER( o.date_add )   LIKE LOWER( '%" . pSQL($filter) ."%') ";
-            $sql->where($Where);
+            $where = " LOWER( i.number )        LIKE LOWER( '%" . pSQL($filter) ."%') ";
+            $where.= " OR LOWER( o.reference )  LIKE LOWER( '%" . pSQL($filter) ."%') ";
+            $where.= " OR LOWER( c.firstname )  LIKE LOWER( '%" . pSQL($filter) ."%') ";
+            $where.= " OR LOWER( c.lastname )   LIKE LOWER( '%" . pSQL($filter) ."%') ";
+            $where.= " OR LOWER( o.date_add )   LIKE LOWER( '%" . pSQL($filter) ."%') ";
+            $sql->where($where);
         }
         //====================================================================//
         // Compute Total Number of Results
-        $Total      = $this->getObjectListTotal($sql);
+        $total      = $this->getObjectListTotal($sql);
         //====================================================================//
         // Execute Generic Search
-        $Result     = $this->getObjectsListRawData($sql, "order_date", $params);
-        if ($Result === false) {
-            return $Result;
+        $result     = $this->getObjectsListRawData($sql, "order_date", $params);
+        if (false === $result) {
+            return $result;
         }
         //====================================================================//
         // Init Result Array
-        $Data       = array();
+        $data       = array();
         //====================================================================//
         // For each result, read information and add to $Data
-        foreach ($Result as $key => $Invoice) {
-            $Object = new OrderInvoice($Invoice["id"]);
-            $Invoice["number"] = $Object->getInvoiceNumberFormatted($this->LangId);
-            $Data[$key] = $Invoice;
+        foreach ($result as $key => $invoice) {
+            $object = new OrderInvoice($invoice["id"]);
+            $invoice["number"] = $object->getInvoiceNumberFormatted($this->LangId);
+            $data[$key] = $invoice;
         }
         //====================================================================//
         // Prepare List result meta infos
-        $Data["meta"]["current"]    =   count($Data);   // Store Current Number of results
-        $Data["meta"]["total"]      =   $Total;         // Store Total Number of results
-        Splash::log()->deb("MsgLocalTpl", __CLASS__, __FUNCTION__, (count($Data)-1)." Invoices Found.");
-        return $Data;
+        $data["meta"]["current"]    =   count($data);   // Store Current Number of results
+        $data["meta"]["total"]      =   $total;         // Store Total Number of results
+        Splash::log()->deb("MsgLocalTpl", __CLASS__, __FUNCTION__, (count($data)-1)." Invoices Found.");
+
+        return $data;
     }
 }

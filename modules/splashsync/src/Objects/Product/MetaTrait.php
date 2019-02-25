@@ -1,36 +1,33 @@
 <?php
-/**
- * This file is part of SplashSync Project.
+
+/*
+ *  This file is part of SplashSync Project.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ *  Copyright (C) 2015-2019 Splash Sync  <www.splashsync.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
- *  @author    Splash Sync <www.splashsync.com>
- *  @copyright 2015-2018 Splash Sync
- *  @license   MIT
+ *  For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
  */
 
 namespace Splash\Local\Objects\Product;
 
 use Splash\Core\SplashCore      as Splash;
-
 //====================================================================//
 // Prestashop Static Classes
 use Translate;
 
 /**
- * @abstract    Access to Product Meta Fields
+ * Access to Product Meta Fields
  */
 trait MetaTrait
 {
-    
     /**
-    *   @abstract     Build Meta Fields using FieldFactory
-    */
+     * Build Meta Fields using FieldFactory
+     */
     private function buildMetaFields()
     {
         //====================================================================//
@@ -40,79 +37,79 @@ trait MetaTrait
         //====================================================================//
         // Active => Product Is Enables & Visible
         $this->fieldsFactory()->create(SPL_T_BOOL)
-                ->Identifier("active")
-                ->Name(Translate::getAdminTranslation("Enabled", "AdminProducts"))
-                ->MicroData("http://schema.org/Product", "active");
+            ->Identifier("active")
+            ->Name(Translate::getAdminTranslation("Enabled", "AdminProducts"))
+            ->MicroData("http://schema.org/Product", "active");
         
         //====================================================================//
         // Active => Product Is available_for_order
         $this->fieldsFactory()->create(SPL_T_BOOL)
-                ->Identifier("available_for_order")
-                ->Name(Translate::getAdminTranslation("Available for order", "AdminProducts"))
-                ->MicroData("http://schema.org/Product", "offered")
-                ->isListed();
+            ->Identifier("available_for_order")
+            ->Name(Translate::getAdminTranslation("Available for order", "AdminProducts"))
+            ->MicroData("http://schema.org/Product", "offered")
+            ->isListed();
         
         //====================================================================//
         // On Sale
         $this->fieldsFactory()->create(SPL_T_BOOL)
-                ->Identifier("on_sale")
-                ->Name($this->spl->l("On Sale"))
-                ->MicroData("http://schema.org/Product", "onsale");
+            ->Identifier("on_sale")
+            ->Name($this->spl->l("On Sale"))
+            ->MicroData("http://schema.org/Product", "onsale");
     }
     
-    
     /**
-     *  @abstract     Read requested Field
+     * Read requested Field
      *
-     *  @param        string    $Key                    Input List Key
-     *  @param        string    $FieldName              Field Identifier / Name
+     * @param string $key       Input List Key
+     * @param string $fieldName Field Identifier / Name
      *
-     * @return       void
+     * @return void
      */
-    private function getMetaFields($Key, $FieldName)
+    private function getMetaFields($key, $fieldName)
     {
-
         //====================================================================//
         // READ Fields
-        switch ($FieldName) {
+        switch ($fieldName) {
             //====================================================================//
             // OTHERS INFORMATIONS
             //====================================================================//
             case 'active':
             case 'available_for_order':
             case 'on_sale':
-                $this->getSimpleBool($FieldName);
+                $this->getSimpleBool($fieldName);
+
                 break;
             default:
                 return;
         }
         
-        unset($this->in[$Key]);
+        unset($this->in[$key]);
     }
     
     /**
-     *  @abstract     Write Given Fields
+     * Write Given Fields
      *
-     *  @param        string    $FieldName              Field Identifier / Name
-     *  @param        mixed     $Data                   Field Data
+     * @param string $fieldName Field Identifier / Name
+     * @param mixed  $fieldData Field Data
      *
-     * @return       void
+     * @return void
      */
-    private function setMetaFields($FieldName, $Data)
+    private function setMetaFields($fieldName, $fieldData)
     {
         //====================================================================//
         // WRITE Field
-        switch ($FieldName) {
+        switch ($fieldName) {
             //====================================================================//
             // Direct Writtings
             case 'active':
             case 'available_for_order':
             case 'on_sale':
-                $this->setSimple($FieldName, $Data);
+                $this->setSimple($fieldName, $fieldData);
+
                 break;
             default:
                 return;
         }
-        unset($this->in[$FieldName]);
+        unset($this->in[$fieldName]);
     }
 }

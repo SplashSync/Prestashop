@@ -52,18 +52,18 @@ trait AttributeValueTrait
         }
         //====================================================================//
         // For Each Available Language
-        foreach (Language::getLanguages() as $Lang) {
+        foreach (Language::getLanguages() as $lang) {
             //====================================================================//
             // Load List of Attributes Values
-            $Values = AttributeGroup::getAttributes($Lang["id_lang"], $groupId);
-            if (empty($Values)) {
+            $values = AttributeGroup::getAttributes($lang["id_lang"], $groupId);
+            if (empty($values)) {
                 continue;
             }
             //====================================================================//
             // Search for this Attribute Group Code
-            foreach ($Values as $Value) {
-                if (in_array($Value["name"], $names, true)) {
-                    return $Value["id_attribute"];
+            foreach ($values as $value) {
+                if (in_array($value["name"], $names, true)) {
+                    return $value["id_attribute"];
                 }
             }
         }

@@ -1,17 +1,16 @@
 <?php
-/**
- * This file is part of SplashSync Project.
+
+/*
+ *  This file is part of SplashSync Project.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ *  Copyright (C) 2015-2019 Splash Sync  <www.splashsync.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
- *  @author    Splash Sync <www.splashsync.com>
- *  @copyright 2015-2018 Splash Sync
- *  @license   MIT
+ *  For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
  */
 
 namespace Splash\Local\Objects\Category;
@@ -21,16 +20,17 @@ namespace Splash\Local\Objects\Category;
  */
 trait HooksTrait
 {
-    
-//====================================================================//
-// *******************************************************************//
-//  MODULE BACK OFFICE (CATEGORY) HOOKS
-// *******************************************************************//
-//====================================================================//
+    //====================================================================//
+    // *******************************************************************//
+    //  MODULE BACK OFFICE (CATEGORY) HOOKS
+    // *******************************************************************//
+    //====================================================================//
     
     /**
-    *   @abstract       This hook is displayed after a product is created
-    */
+     *   @abstract       This hook is displayed after a product is created
+     *
+     * @param mixed $params
+     */
     public function hookactionCategoryAdd($params)
     {
         $this->debugHook(__FUNCTION__, $params["category"]->id);
@@ -46,12 +46,15 @@ trait HooksTrait
         if ($error) {
             return false;
         }
+
         return true;
     }
     
     /**
-    *   @abstract       This hook is called while saving products
-    */
+     *   @abstract       This hook is called while saving products
+     *
+     * @param mixed $params
+     */
     public function hookactionCategoryUpdate($params)
     {
         $this->debugHook(__FUNCTION__, $params["category"]->id, $params);
@@ -70,12 +73,15 @@ trait HooksTrait
         if ($error) {
             return false;
         }
+
         return true;
     }
     
     /**
-    *   @abstract       This hook is called when a product is deleted
-    */
+     *   @abstract       This hook is called when a product is deleted
+     *
+     * @param mixed $params
+     */
     public function hookactionCategoryDelete($params)
     {
         $this->debugHook(__FUNCTION__, $params["category"]->id, $params);
@@ -91,6 +97,7 @@ trait HooksTrait
         if ($error) {
             return false;
         }
+
         return true;
     }
 }

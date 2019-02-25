@@ -1,17 +1,16 @@
 <?php
-/**
- * This file is part of SplashSync Project.
+
+/*
+ *  This file is part of SplashSync Project.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ *  Copyright (C) 2015-2019 Splash Sync  <www.splashsync.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
- *  @author    Splash Sync <www.splashsync.com>
- *  @copyright 2015-2018 Splash Sync
- *  @license   MIT
+ *  For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
  */
 
 namespace Splash\Local\Objects\Order;
@@ -23,17 +22,15 @@ namespace Splash\Local\Objects\Order;
 use Translate;
 
 /**
- * @abstract    Access to Orders Status Fields
+ * Access to Orders Status Fields
  */
 trait StatusTrait
 {
-
     /**
-    *   @abstract     Build Fields using FieldFactory
-    */
+     * Build Fields using FieldFactory
+     */
     private function buildStatusFields()
     {
-                
         //====================================================================//
         // ORDER STATUS
         //====================================================================//
@@ -41,116 +38,126 @@ trait StatusTrait
         //====================================================================//
         // Order Current Status
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
-                ->Identifier("status")
-                ->Name(Translate::getAdminTranslation("Order status", "AdminStatuses"))
-                ->Description(Translate::getAdminTranslation("Status of the order", "AdminSupplyOrdersChangeState"))
-                ->MicroData("http://schema.org/Order", "orderStatus")
-                ->isReadOnly();
+            ->Identifier("status")
+            ->Name(Translate::getAdminTranslation("Order status", "AdminStatuses"))
+            ->Description(Translate::getAdminTranslation("Status of the order", "AdminSupplyOrdersChangeState"))
+            ->MicroData("http://schema.org/Order", "orderStatus")
+            ->isReadOnly();
 
         //====================================================================//
         // ORDER STATUS FLAGS
         //====================================================================//
         
-        $Prefix = Translate::getAdminTranslation("Order status", "AdminOrders") . " ";
+        $prefix = Translate::getAdminTranslation("Order status", "AdminOrders") . " ";
         
         //====================================================================//
         // Is Canceled
         // => There is no Diffrence Between a Draft & Canceled Order on Prestashop.
         //      Any Non Validated Order is considered as Canceled
         $this->fieldsFactory()->create(SPL_T_BOOL)
-                ->Identifier("isCanceled")
-                ->Name($Prefix . $this->spl->l("Canceled"))
-                ->MicroData("http://schema.org/OrderStatus", "OrderCancelled")
-                ->Group(Translate::getAdminTranslation("Meta", "AdminThemes"))
-                ->Association("isCanceled", "isValidated", "isClosed")
-                ->isReadOnly();
+            ->Identifier("isCanceled")
+            ->Name($prefix . $this->spl->l("Canceled"))
+            ->MicroData("http://schema.org/OrderStatus", "OrderCancelled")
+            ->Group(Translate::getAdminTranslation("Meta", "AdminThemes"))
+            ->Association("isCanceled", "isValidated", "isClosed")
+            ->isReadOnly();
         
         //====================================================================//
         // Is Validated
         $this->fieldsFactory()->create(SPL_T_BOOL)
-                ->Identifier("isValidated")
-                ->Name($Prefix . Translate::getAdminTranslation("Valid", "AdminCartRules"))
-                ->MicroData("http://schema.org/OrderStatus", "OrderProcessing")
-                ->Group(Translate::getAdminTranslation("Meta", "AdminThemes"))
-                ->Association("isCanceled", "isValidated", "isClosed")
-                ->isReadOnly();
+            ->Identifier("isValidated")
+            ->Name($prefix . Translate::getAdminTranslation("Valid", "AdminCartRules"))
+            ->MicroData("http://schema.org/OrderStatus", "OrderProcessing")
+            ->Group(Translate::getAdminTranslation("Meta", "AdminThemes"))
+            ->Association("isCanceled", "isValidated", "isClosed")
+            ->isReadOnly();
         
         //====================================================================//
         // Is Closed
         $this->fieldsFactory()->create(SPL_T_BOOL)
-                ->Identifier("isClosed")
-                ->Name($Prefix . Translate::getAdminTranslation("Closed", "AdminCustomers"))
-                ->MicroData("http://schema.org/OrderStatus", "OrderDelivered")
-                ->Group(Translate::getAdminTranslation("Meta", "AdminThemes"))
-                ->Association("isCanceled", "isValidated", "isClosed")
-                ->isReadOnly();
+            ->Identifier("isClosed")
+            ->Name($prefix . Translate::getAdminTranslation("Closed", "AdminCustomers"))
+            ->MicroData("http://schema.org/OrderStatus", "OrderDelivered")
+            ->Group(Translate::getAdminTranslation("Meta", "AdminThemes"))
+            ->Association("isCanceled", "isValidated", "isClosed")
+            ->isReadOnly();
 
         //====================================================================//
         // Is Paid
         $this->fieldsFactory()->create(SPL_T_BOOL)
-                ->Identifier("isPaid")
-                ->Name($Prefix . $this->spl->l("Paid"))
-                ->Group(Translate::getAdminTranslation("Meta", "AdminThemes"))
-                ->MicroData("http://schema.org/OrderStatus", "OrderPaid")
-                ->isReadOnly();
+            ->Identifier("isPaid")
+            ->Name($prefix . $this->spl->l("Paid"))
+            ->Group(Translate::getAdminTranslation("Meta", "AdminThemes"))
+            ->MicroData("http://schema.org/OrderStatus", "OrderPaid")
+            ->isReadOnly();
     }
     
     /**
-     *  @abstract     Read requested Field
+     * Read requested Field
      *
-     *  @param        string    $Key                    Input List Key
-     *  @param        string    $FieldName              Field Identifier / Name
+     * @param string $key       Input List Key
+     * @param string $fieldName Field Identifier / Name
      *
-     * @return       void
+     * @return void
      */
-    private function getStatusFields($Key, $FieldName)
+    private function getStatusFields($key, $fieldName)
     {
         //====================================================================//
         // READ Fields
-        switch ($FieldName) {
+        switch ($fieldName) {
             //====================================================================//
             // ORDER STATUS
             //====================================================================//
             case 'status':
-                $this->out[$FieldName]  = $this->getSplashStatus();
+                $this->out[$fieldName]  = $this->getSplashStatus();
+
                 break;
             case 'isCanceled':
-                $this->out[$FieldName]  = !$this->object->valid;
+                $this->out[$fieldName]  = !$this->object->valid;
+
                 break;
             case 'isValidated':
-                $this->out[$FieldName]  = $this->object->valid;
+                $this->out[$fieldName]  = $this->object->valid;
+
                 break;
             case 'isClosed':
-                $this->out[$FieldName]  = $this->object->isPaidAndShipped();
+                $this->out[$fieldName]  = $this->object->isPaidAndShipped();
+
                 break;
             case 'isPaid':
-                $this->out[$FieldName]  = (bool) $this->object->hasBeenPaid();
+                $this->out[$fieldName]  = (bool) $this->object->hasBeenPaid();
+
                 break;
-        
             default:
                 return;
         }
         
-        unset($this->in[$Key]);
+        unset($this->in[$key]);
     }
     
     /**
-     *  @abstract     Read Order Status
-     *  @return       string
+     * Read Order Status
+     *
+     * @return string
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     private function getSplashStatus()
     {
         //====================================================================//
         // If order is in  Static Status => Use Static Status
-        if ($this->object->current_state == 1) {
+        if (1 == $this->object->current_state) {
             return "OrderPaymentDue";
-        } elseif ($this->object->current_state == 2) {
+        }
+        if (2 == $this->object->current_state) {
             return "OrderProcessing";
-        } elseif ($this->object->current_state == 3) {
+        }
+        if (3 == $this->object->current_state) {
             return "OrderProcessing";
-        } elseif ($this->object->current_state == 4) {
+        }
+        if (4 == $this->object->current_state) {
             return "OrderInTransit";
-        } elseif ($this->object->current_state == 5) {
+        }
+        if (5 == $this->object->current_state) {
             return "OrderDelivered";
         }
         //====================================================================//
@@ -163,7 +170,8 @@ trait StatusTrait
         //====================================================================//
         if ($this->object->isPaidAndShipped()) {
             return "OrderDelivered";
-        } elseif ($this->object->hasBeenPaid()) {
+        }
+        if ($this->object->hasBeenPaid()) {
             return "OrderProcessing";
         }
         //====================================================================//

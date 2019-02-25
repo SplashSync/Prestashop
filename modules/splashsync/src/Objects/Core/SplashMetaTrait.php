@@ -1,100 +1,98 @@
 <?php
-/**
- * This file is part of SplashSync Project.
+
+/*
+ *  This file is part of SplashSync Project.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ *  Copyright (C) 2015-2019 Splash Sync  <www.splashsync.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
- *  @author    Splash Sync <www.splashsync.com>
- *  @copyright 2015-2018 Splash Sync
- *  @license   MIT
+ *  For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
  */
 
 namespace Splash\Local\Objects\Core;
 
-use Splash\Core\SplashCore      as Splash;
-
-//====================================================================//
-// Prestashop Static Classes
 use Translate;
 
 /**
- * @abstract    Access to Objects Splash Meta Fields
+ * Access to Objects Splash Meta Fields
+ *
  * @author      B. Paquier <contact@splashsync.com>
  */
 trait SplashMetaTrait
 {
-        
     /**
      * @var null|string
      */
-    protected $NewSplashId = null;
+    protected $NewSplashId;
     
     /**
-    *   @abstract     Build Fields using FieldFactory
-    */
+     * Build Fields using FieldFactory
+     */
     protected function buildSplashMetaFields()
     {
         //====================================================================//
         // Splash Unique Object Id
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
-                ->Identifier("splash_id")
-                ->Name("Splash Id")
-                ->Group(Translate::getAdminTranslation("Meta", "AdminThemes"))
-                ->MicroData("http://splashync.com/schemas", "ObjectId");
+            ->Identifier("splash_id")
+            ->Name("Splash Id")
+            ->Group(Translate::getAdminTranslation("Meta", "AdminThemes"))
+            ->MicroData("http://splashync.com/schemas", "ObjectId");
     }
 
     /**
-     *  @abstract     Read requested Field
+     * Read requested Field
      *
-     *  @param        string    $Key                    Input List Key
-     *  @param        string    $FieldName              Field Identifier / Name
+     * @param string $key       Input List Key
+     * @param string $fieldName Field Identifier / Name
      *
-     * @return       void
+     * @return void
      */
-    protected function getSplashMetaFields($Key, $FieldName)
-    {
-            
+    protected function getSplashMetaFields(
+        $key,
+        $fieldName
+    ) {
         //====================================================================//
         // READ Fields
-        switch ($FieldName) {
+        switch ($fieldName) {
             case 'splash_id':
-                $this->out[$FieldName] = self::getSplashId(self::$NAME, $this->object->id);
+                $this->out[$fieldName] = self::getSplashId(self::$NAME, $this->object->id);
+
                 break;
             default:
                 return;
         }
         
-        unset($this->in[$Key]);
+        unset($this->in[$key]);
     }
 
     /**
-     *  @abstract     Write Given Fields
+     * Write Given Fields
      *
-     *  @param        string    $FieldName              Field Identifier / Name
-     *  @param        mixed     $Data                   Field Data
+     * @param string $fieldName Field Identifier / Name
+     * @param mixed  $fieldData Field Data
      *
-     * @return       void
+     * @return void
      */
-    protected function setSplashMetaFields($FieldName, $Data)
+    protected function setSplashMetaFields($fieldName, $fieldData)
     {
         //====================================================================//
         // WRITE Fields
-        switch ($FieldName) {
+        switch ($fieldName) {
             case 'splash_id':
                 if ($this->object->id) {
-                    self::setSplashId(self::$NAME, $this->object->id, $Data);
+                    self::setSplashId(self::$NAME, $this->object->id, $fieldData);
                 } else {
-                    $this->NewSplashId = $Data;
+                    $this->NewSplashId = $fieldData;
                 }
+
                 break;
             default:
                 return;
         }
-        unset($this->in[$FieldName]);
+        unset($this->in[$fieldName]);
     }
 }

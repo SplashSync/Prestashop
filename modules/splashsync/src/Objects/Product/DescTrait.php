@@ -52,26 +52,26 @@ trait DescTrait
         }
         //====================================================================//
         // Read Multilangual Contents
-        $Contents   =   $object->{$key};
+        $contents   =   $object->{$key};
         $data       =   array();
         //====================================================================//
         // For Each Available Language
-        foreach ($languages as $Lang) {
+        foreach ($languages as $lang) {
             //====================================================================//
             // Encode Language Code From Splash Format to Prestashop Format (fr_FR => fr-fr)
-            $LanguageCode   =   LanguagesManager::langEncode($Lang["language_code"]);
-            $LanguageId     =   $Lang["id_lang"];
+            $languageCode   =   LanguagesManager::langEncode($lang["language_code"]);
+            $languageId     =   $lang["id_lang"];
 
             //====================================================================//
             // If Data is Available in this language
-            if (isset($Contents[$LanguageId])) {
-                $data[$LanguageCode] = $Contents[$LanguageId];
+            if (isset($contents[$languageId])) {
+                $data[$languageCode] = $contents[$languageId];
 
                 continue;
             }
             //====================================================================//
             // Else insert empty value
-            $data[$LanguageCode] = "";
+            $data[$languageCode] = "";
         }
 
         return $data;
@@ -97,8 +97,8 @@ trait DescTrait
 
         //====================================================================//
         // Update Multilangual Contents
-        foreach ($data as $IsoCode => $Content) {
-            $this->setMultilangContents($object, $key, $IsoCode, $Content, $maxLength);
+        foreach ($data as $isoCode => $content) {
+            $this->setMultilangContents($object, $key, $isoCode, $content, $maxLength);
         }
 
         return true;
@@ -223,11 +223,11 @@ trait DescTrait
     /**
      * Read Multilangual Fields of an Object
      *
-     * @param Product $Object Pointer to Prestashop Object
+     * @param Product $object Pointer to Prestashop Object
      *
      * @return array
      */
-    public function getMultilangTags(&$Object)
+    public function getMultilangTags(&$object)
     {
         //====================================================================//
         // Native Multilangs Descriptions
@@ -246,7 +246,7 @@ trait DescTrait
             $langId     =   (int) $lang["id_lang"];
             //====================================================================//
             // Product Specific - Read Meta Keywords
-            $data[$langCode] = $Object->getTags($langId);
+            $data[$langCode] = $object->getTags($langId);
         }
 
         return $data;

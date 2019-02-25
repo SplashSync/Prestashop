@@ -1,128 +1,97 @@
 <?php
-/**
- * This file is part of SplashSync Project.
+
+/*
+ *  This file is part of SplashSync Project.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ *  Copyright (C) 2015-2019 Splash Sync  <www.splashsync.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
- *  @author    Splash Sync <www.splashsync.com>
- *  @copyright 2015-2018 Splash Sync
- *  @license   MIT
+ *  For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
  */
 
 namespace Splash\Local;
 
 use ArrayObject;
-
-use Splash\Core\SplashCore      as Splash;
-
-use Splash\Models\LocalClassInterface;
-
-use Db;
-use DbQuery;
 use Configuration;
-use Validate;
 use Context;
-use Language;
 use Employee;
-use Tools;
-use TaxRule;
-use SplashSync;
-
-use Splash\Local\Traits\SplashIdTrait;
+use Language;
+use Splash\Core\SplashCore      as Splash;
 use Splash\Local\Services\LanguagesManager;
+use Splash\Local\Traits\SplashIdTrait;
+use Splash\Models\LocalClassInterface;
+use SplashSync;
+use Validate;
 
 /**
- * @abstract    Splash Local Core Class - Head of Module's Local Integration
+ * Splash Local Core Class - Head of Module's Local Integration
+ *
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Local implements LocalClassInterface
 {
+    use SplashIdTrait;
     
     /**
      * @var SplashSync
      */
     private static $SplashSyncModule = null;
     
-    use SplashIdTrait;
-    
-//====================================================================//
-// *******************************************************************//
-//  MANDATORY CORE MODULE LOCAL FUNCTIONS
-// *******************************************************************//
-//====================================================================//
+    //====================================================================//
+    // *******************************************************************//
+    //  MANDATORY CORE MODULE LOCAL FUNCTIONS
+    // *******************************************************************//
+    //====================================================================//
     
     /**
-     *      @abstract       Return Local Server Parameters as Array
-     *
-     *      THIS FUNCTION IS MANDATORY
-     *
-     *      This function called on each initialization of the module
-     *
-     *      Result must be an array including mandatory parameters as strings
-     *         ["WsIdentifier"]         =>>  Name of Module Default Language
-     *         ["WsEncryptionKey"]      =>>  Name of Module Default Language
-     *         ["DefaultLanguage"]      =>>  Name of Module Default Language
-     *
-     *      @return         array       $parameters
+     * {@inheritdoc}
      */
     public function parameters()
     {
-        $Parameters       =     array();
+        $parameters       =     array();
 
         //====================================================================//
         // Server Identification Parameters
-        $Parameters["WsIdentifier"]         =   Configuration::get('SPLASH_WS_ID');
-        $Parameters["WsEncryptionKey"]      =   Configuration::get('SPLASH_WS_KEY');
+        $parameters["WsIdentifier"]         =   Configuration::get('SPLASH_WS_ID');
+        $parameters["WsEncryptionKey"]      =   Configuration::get('SPLASH_WS_KEY');
 
         //====================================================================//
         // If Expert Mode => Allow Overide of Communication Protocol
         if ((Configuration::get('SPLASH_WS_EXPERT')) && !empty(Configuration::get('SPLASH_WS_METHOD'))) {
-            $Parameters["WsMethod"]         =   Configuration::get('SPLASH_WS_METHOD');
+            $parameters["WsMethod"]         =   Configuration::get('SPLASH_WS_METHOD');
         }
         
         //====================================================================//
         // If Expert Mode => Allow Overide of Server Host Address
         if ((Configuration::get('SPLASH_WS_EXPERT')) && !empty(Configuration::get('SPLASH_WS_HOST'))) {
-            $Parameters["WsHost"]           =   Configuration::get('SPLASH_WS_HOST');
+            $parameters["WsHost"]           =   Configuration::get('SPLASH_WS_HOST');
         }
         
         //====================================================================//
         // Overide Module Parameters with Local User Selected Lang
         if (Configuration::get('SPLASH_LANG_ID')) {
-            $Parameters["DefaultLanguage"]      =   Configuration::get('SPLASH_LANG_ID');
+            $parameters["DefaultLanguage"]      =   Configuration::get('SPLASH_LANG_ID');
         //====================================================================//
         // Overide Module Parameters with Local Default System Lang
         } elseif (Configuration::get('PS_LANG_DEFAULT')) {
-            $Language = new Language(Configuration::get('PS_LANG_DEFAULT'));
-            $Parameters["DefaultLanguage"]      =   $Language->language_code;
+            $language = new Language(Configuration::get('PS_LANG_DEFAULT'));
+            $parameters["DefaultLanguage"]      =   $language->language_code;
         }
         
         //====================================================================//
         // Overide Module Local Name in Logs
-        $Parameters["localname"]        =   Configuration::get('PS_SHOP_NAME');
+        $parameters["localname"]        =   Configuration::get('PS_SHOP_NAME');
         
-        
-        return $Parameters;
+        return $parameters;
     }
     
     /**
-     *      @abstract       Include Local Includes Files
-     *
-     *      Include here any local files required by local functions.
-     *      This Function is called each time the module is loaded
-     *
-     *      There may be differents scenarios depending if module is
-     *      loaded as a library or as a NuSOAP Server.
-     *
-     *      This is triggered by global constant SPLASH_SERVER_MODE.
-     *
-     *      @return         bool
+     * {@inheritdoc}
      */
     public function includes()
     {
@@ -165,13 +134,12 @@ class Local implements LocalClassInterface
             //====================================================================//
             // Load Default User
             $this->loadLocalUser();
-        //====================================================================//
+            //====================================================================//
         // When Library is called in client mode ONLY
         //====================================================================//
-        } else {
-            // NOTHING TO DO
         }
-
+        // NOTHING TO DO
+        
         //====================================================================//
         // When Library is called in TRAVIS CI mode ONLY
         //====================================================================//
@@ -183,22 +151,10 @@ class Local implements LocalClassInterface
     }
 
     /**
-     *      @abstract       Return Local Server Self Test Result
-     *
-     *      THIS FUNCTION IS MANDATORY
-     *
-     *      This function called during Server Validation Process
-     *
-     *      We recommand using this function to validate all functions or parameters
-     *      that may be required by Objects, Widgets or any other modul specific action.
-     *
-     *      Use Module Logging system & translation tools to retrun test results Logs
-     *
-     *      @return         bool    global test result
+     * {@inheritdoc}
      */
     public function selfTest()
     {
-
         //====================================================================//
         //  Load Local Translation File
         Splash::translator()->load("main@local");
@@ -229,10 +185,10 @@ class Local implements LocalClassInterface
 
         //====================================================================//
         //  Verify - Languages Codes Are in Valid Format
-        foreach (Language::getLanguages() as $Language) {
-            $Tmp = explode("-", $Language["language_code"]);
-            if (count($Tmp) != 2) {
-                return Splash::log()->err("ErrSelfTestLangCode", $Language["language_code"]);
+        foreach (Language::getLanguages() as $language) {
+            $tmp = explode("-", $language["language_code"]);
+            if (2 != count($tmp)) {
+                return Splash::log()->err("ErrSelfTestLangCode", $language["language_code"]);
             }
         }
                 
@@ -251,80 +207,64 @@ class Local implements LocalClassInterface
     }
     
     /**
-     *  @abstract   Update Server Informations with local Data
-     *
-     *  @param      ArrayObject  $Informations   Informations Inputs
-     *
-     *  @return     ArrayObject
+     * {@inheritdoc}
      */
-    public function informations($Informations)
+    public function informations($informations)
     {
         //====================================================================//
         // Init Response Object
-        $Response = $Informations;
+        $response = $informations;
 
         //====================================================================//
         // Server General Description
-        $Response->shortdesc        = "Splash for Prestashop " . _PS_VERSION_;
-        $Response->longdesc         = "Splash Connector Module for Prestashop Open Source e-commerce solution.";
+        $response->shortdesc        = "Splash for Prestashop " . _PS_VERSION_;
+        $response->longdesc         = "Splash Connector Module for Prestashop Open Source e-commerce solution.";
         
         //====================================================================//
         // Company Informations
-        $Response->company          = Configuration::get('PS_SHOP_NAME')    ?
+        $response->company          = Configuration::get('PS_SHOP_NAME')    ?
                 Configuration::get('PS_SHOP_NAME')      :   "...";
-        $Response->address          = Configuration::get('PS_SHOP_ADDR1')   ?
+        $response->address          = Configuration::get('PS_SHOP_ADDR1')   ?
                 Configuration::get('PS_SHOP_ADDR1') . "</br>" . Configuration::get('PS_SHOP_ADDR2')   :   "...";
-        $Response->zip              = Configuration::get('PS_SHOP_CODE')    ?
+        $response->zip              = Configuration::get('PS_SHOP_CODE')    ?
                 Configuration::get('PS_SHOP_CODE')      :   "...";
-        $Response->town             = Configuration::get('PS_SHOP_CITY')    ?
+        $response->town             = Configuration::get('PS_SHOP_CITY')    ?
                 Configuration::get('PS_SHOP_CITY')      :   "...";
-        $Response->country          = Configuration::get('PS_SHOP_COUNTRY') ?
+        $response->country          = Configuration::get('PS_SHOP_COUNTRY') ?
                 Configuration::get('PS_SHOP_COUNTRY')   :   "...";
-        $Response->www              = Configuration::get('PS_SHOP_DOMAIN') . __PS_BASE_URI__;
-        $Response->email            = Configuration::get('PS_SHOP_EMAIL')   ?
+        $response->www              = Configuration::get('PS_SHOP_DOMAIN') . __PS_BASE_URI__;
+        $response->email            = Configuration::get('PS_SHOP_EMAIL')   ?
                 Configuration::get('PS_SHOP_EMAIL')     :   "...";
-        $Response->phone            = Configuration::get('PS_SHOP_PHONE')   ?
+        $response->phone            = Configuration::get('PS_SHOP_PHONE')   ?
                 Configuration::get('PS_SHOP_PHONE')     :   "...";
         
         //====================================================================//
         // Server Logo & Images
-        $Response->icoraw           = Splash::file()->readFileContents(_PS_IMG_DIR_ . "favicon.ico");
-        $Response->logourl          = "http://" . Configuration::get('PS_SHOP_DOMAIN') . __PS_BASE_URI__;
-        $Response->logourl         .= "img/" . Configuration::get('PS_LOGO');
-        $Response->logoraw          = Splash::file()->readFileContents(_PS_IMG_DIR_ . Configuration::get('PS_LOGO'));
+        $response->icoraw           = Splash::file()->readFileContents(_PS_IMG_DIR_ . "favicon.ico");
+        $response->logourl          = "http://" . Configuration::get('PS_SHOP_DOMAIN') . __PS_BASE_URI__;
+        $response->logourl         .= "img/" . Configuration::get('PS_LOGO');
+        $response->logoraw          = Splash::file()->readFileContents(_PS_IMG_DIR_ . Configuration::get('PS_LOGO'));
         
         //====================================================================//
         // Server Informations
-        $Response->servertype       =   "Prestashop " . _PS_VERSION_;
-        $Response->serverurl        =   Configuration::get('PS_SHOP_DOMAIN') . __PS_BASE_URI__;
+        $response->servertype       =   "Prestashop " . _PS_VERSION_;
+        $response->serverurl        =   Configuration::get('PS_SHOP_DOMAIN') . __PS_BASE_URI__;
         
         //====================================================================//
         // Current Module Version
-        $Response->moduleversion    =   $this->getLocalModule()->version;
+        $response->moduleversion    =   $this->getLocalModule()->version;
         
-        return $Response;
+        return $response;
     }
     
-//====================================================================//
-// *******************************************************************//
-//  OPTIONNAl CORE MODULE LOCAL FUNCTIONS
-// *******************************************************************//
-//====================================================================//
+    //====================================================================//
+    // *******************************************************************//
+    //  OPTIONNAl CORE MODULE LOCAL FUNCTIONS
+    // *******************************************************************//
+    //====================================================================//
     
     /**
-     * @abstract       Return Local Server Test Sequences as Aarray
-     *
-     *      THIS FUNCTION IS OPTIONNAL - USE IT ONLY IF REQUIRED
-     *
-     *      This function called on each initialization of module's tests sequences.
-     *      It's aim is to list different configurations for testing on local system.
-     *
-     *      If Name = List, Result must be an array including list of Sequences Names.
-     *
-     *      If Name = ASequenceName, Function will Setup Sequence on Local System.
-     *
-     * @param null|mixed $name
-     * @return         array       $Sequences
+     * {@inheritdoc}
      */
     public function testSequences($name = null)
     {
@@ -338,48 +278,37 @@ class Local implements LocalClassInterface
     }
     
     /**
-     *      @abstract       Return Local Server Test Parameters as Aarray
-     *
-     *      THIS FUNCTION IS OPTIONNAL - USE IT ONLY IF REQUIRED
-     *
-     *      This function called on each initialisation of module's tests sequences.
-     *      It's aim is to overide general Tests settings to be adjusted to local system.
-     *
-     *      Result must be an array including parameters as strings or array.
-     *
-     *      @see Splash\Tests\Tools\ObjectsCase::settings for objects tests settings
-     *
-     *      @return         array       $parameters
+     * {@inheritdoc}
      */
     public function testParameters()
     {
         //====================================================================//
         // Init Parameters Array
-        $Parameters       =     array();
+        $parameters       =     array();
 
         //====================================================================//
         // Server Actives Languages List
-        $Parameters["Langs"] = array();
-        foreach (Language::getLanguages() as $Language) {
-            $Parameters["Langs"][] =   LanguagesManager::langEncode($Language["language_code"]);
+        $parameters["Langs"] = array();
+        foreach (Language::getLanguages() as $language) {
+            $parameters["Langs"][] =   LanguagesManager::langEncode($language["language_code"]);
         }
         
-        return $Parameters;
+        return $parameters;
     }
     
-//====================================================================//
-// *******************************************************************//
-// Place Here Any SPECIFIC ro COMMON Local Functions
-// *******************************************************************//
-//====================================================================//
+    //====================================================================//
+    // *******************************************************************//
+    // Place Here Any SPECIFIC ro COMMON Local Functions
+    // *******************************************************************//
+    //====================================================================//
     
     /**
-     * @abstract    Initiate Local Request User if not already defined
-     * @return      bool
+     * Initiate Local Request User if not already defined
+     *
+     * @return bool
      */
     public function loadLocalUser()
     {
-        
         //====================================================================//
         // CHECK USER ALREADY LOADED
         //====================================================================//
@@ -399,32 +328,57 @@ class Local implements LocalClassInterface
         
         //====================================================================//
         // Load Remote User Parameters
-        $UserId = Configuration::get('SPLASH_USER_ID');
-        if (empty($UserId) || !Validate::isInt($UserId)) {
+        $userId = Configuration::get('SPLASH_USER_ID');
+        if (empty($userId) || !Validate::isInt($userId)) {
             return false;
         }
 
         //====================================================================//
         // Fetch Remote User
-        $User = new Employee($UserId);
-        if ($User->id != $UserId) {
+        $user = new Employee($userId);
+        if ($user->id != $userId) {
             return Splash::log()->err('Commons  - Unable To Load Employee from Splash Parameters.');
         }
 
         //====================================================================//
         // Setup Remote User
-        Context::getContext()->employee = $User;
-        return Splash::log()->deb('Commons  - Employee Loaded from Splash Parameters => ' . $User->email);
+        Context::getContext()->employee = $user;
+
+        return Splash::log()->deb('Commons  - Employee Loaded from Splash Parameters => ' . $user->email);
+    }
+ 
+    /**
+     * Initiate Local SplashSync Module
+     *
+     * @return SplashSync
+     */
+    public static function getLocalModule()
+    {
+        //====================================================================//
+        // Load Local Splash Sync Module
+        if (isset(static::$SplashSyncModule)) {
+            return static::$SplashSyncModule;
+        }
+        //====================================================================//
+        // Safety Check
+        if (!class_exists("SplashSync")) {
+            Splash::log()->err('Commons  - Unable To Load Splash Module Class Definition.');
+        }
+        //====================================================================//
+        // Create New Splash Module Instance
+        static::$SplashSyncModule = new \SplashSync();
+        
+        return static::$SplashSyncModule;
     }
     
-//====================================================================//
-//  Prestashop Specific Tools
-//====================================================================//
+    //====================================================================//
+    //  Prestashop Specific Tools
+    //====================================================================//
 
     /**
-     *      @abstract       Search for Prestashop Admin Folder in upper folders
+     * Search for Prestashop Admin Folder in upper folders
      *
-     *      @return         string|false
+     * @return false|string
      */
     private function getAdminFolder()
     {
@@ -440,7 +394,7 @@ class Local implements LocalClassInterface
         //====================================================================//
         // Scan All Folders from Root Directory
         $scan = array_diff(scandir($homedir, 1), array('..', '.'));
-        if ($scan == false) {
+        if (false == $scan) {
             return false;
         }
         
@@ -465,6 +419,7 @@ class Local implements LocalClassInterface
             //====================================================================//
             // Define Folder As Admin Folder
             define('_PS_ADMIN_DIR_', $homedir."/".$filename);
+
             return _PS_ADMIN_DIR_;
         }
         
@@ -472,9 +427,9 @@ class Local implements LocalClassInterface
     }
     
     /**
-     *      @abstract       Return Prestashop Root Folder in upper folders
+     * Return Prestashop Root Folder in upper folders
      *
-     *      @return         string
+     * @return string
      */
     private function getHomeFolder()
     {
@@ -482,36 +437,13 @@ class Local implements LocalClassInterface
         // Compute Prestashop Home Folder Address
         return dirname(dirname(dirname(dirname(__FILE__))));
     }
- 
-    /**
-     * @abstract       Initiate Local SplashSync Module
-     * @return         SplashSync
-     */
-    public static function getLocalModule()
-    {
-        //====================================================================//
-        // Load Local Splash Sync Module
-        if (isset(static::$SplashSyncModule)) {
-            return static::$SplashSyncModule;
-        }
-        //====================================================================//
-        // Safety Check
-        if (!class_exists("SplashSync")) {
-            Splash::log()->err('Commons  - Unable To Load Splash Module Class Definition.');
-        }
-        //====================================================================//
-        // Create New Splash Module Instance
-        static::$SplashSyncModule = new \SplashSync();
         
-        return static::$SplashSyncModule;
-    }
-        
-//====================================================================//
-//  Prestashop Module Testing
-//====================================================================//
+    //====================================================================//
+    //  Prestashop Module Testing
+    //====================================================================//
 
     /**
-     * @abstract    When Module is Loaded by Travis Ci, Check Module is Installed
+     * When Module is Loaded by Travis Ci, Check Module is Installed
      */
     private function onTravisIncludes()
     {
@@ -539,15 +471,17 @@ class Local implements LocalClassInterface
         if (static::$SplashSyncModule->install()) {
             Splash::log()->msg('[SPLASH] Splash Module Intall Done');
             echo Splash::log()->getConsoleLog(true);
+
             return true;
         }
         //====================================================================//
         // Import & Display Errors
         Splash::log()->err('[SPLASH] Splash Module Intall Failled');
-        foreach (static::$SplashSyncModule->getErrors() as $Error) {
-            Splash::log()->err('[SPLASH] Mod. Install : ' . $Error);
+        foreach (static::$SplashSyncModule->getErrors() as $error) {
+            Splash::log()->err('[SPLASH] Mod. Install : ' . $error);
         }
         echo Splash::log()->getConsoleLog(true);
+
         return false;
     }
 }

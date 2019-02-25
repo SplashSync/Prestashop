@@ -76,27 +76,27 @@ trait AttributesTrait
     /**
      * Build Product Attribute Definition Array
      *
-     * @param Product $Product     Product Object
-     * @param int     $AttributeId Product Combinaison Id
+     * @param Product $product     Product Object
+     * @param int     $attributeId Product Combinaison Id
      *
      * @return false|int
      */
-    public function getProductAttributesArray($Product, $AttributeId)
+    public function getProductAttributesArray($product, $attributeId)
     {
-        $Result =   array();
+        $result =   array();
         
-        foreach ($Product->getAttributeCombinations($this->LangId) as $Attribute) {
+        foreach ($product->getAttributeCombinations($this->LangId) as $attribute) {
             //====================================================================//
             // Filter on a Specific Product Attribute
-            if ($Attribute["id_product_attribute"] != $AttributeId) {
+            if ($attribute["id_product_attribute"] != $attributeId) {
                 continue;
             }
             //====================================================================//
             // Add Attribute Value to Definition Array
-            $Result[$Attribute["group_name"]]   =   $Attribute["attribute_name"];
+            $result[$attribute["group_name"]]   =   $attribute["attribute_name"];
         }
 
-        return $Result;
+        return $result;
     }
     
     //====================================================================//
@@ -188,39 +188,39 @@ trait AttributesTrait
         
         //====================================================================//
         // READ Fields
-        foreach ($this->object->getAttributeCombinations($this->LangId) as $Index => $attribute) {
+        foreach ($this->object->getAttributeCombinations($this->LangId) as $index => $attribute) {
             if ($attribute["id_product_attribute"] != $this->AttributeId) {
                 continue;
             }
             
             switch ($fieldId) {
                 case 'code':
-                    $Value = $attribute["group_name"];
+                    $value = $attribute["group_name"];
 
                     break;
                 case 'public_name_s':
-                    $AttributeGroup = new AttributeGroup($attribute["id_attribute_group"], $this->LangId);
-                    $Value = $AttributeGroup->public_name;
+                    $attributeGroup = new AttributeGroup($attribute["id_attribute_group"], $this->LangId);
+                    $value = $attributeGroup->public_name;
 
                     break;
                 case 'public_name':
-                    $AttributeGroup = new AttributeGroup($attribute["id_attribute_group"]);
-                    $Value = $this->getMultilang($AttributeGroup, $fieldId);
+                    $attributeGroup = new AttributeGroup($attribute["id_attribute_group"]);
+                    $value = $this->getMultilang($attributeGroup, $fieldId);
 
                     break;
                 case 'name_s':
-                    $Value = $attribute["attribute_name"];
+                    $value = $attribute["attribute_name"];
 
                     break;
                 case 'name':
-                    $AttributeClass = new Attribute($attribute["id_attribute"]);
-                    $Value = $this->getMultilang($AttributeClass, $fieldId);
+                    $attributeClass = new Attribute($attribute["id_attribute"]);
+                    $value = $this->getMultilang($attributeClass, $fieldId);
 
                     break;
                 default:
                     return;
             }
-            self::lists()->insert($this->out, "attributes", $fieldId, $Index, $Value);
+            self::lists()->insert($this->out, "attributes", $fieldId, $index, $value);
         }
         unset($this->in[$key]);
     }
@@ -232,21 +232,21 @@ trait AttributesTrait
     /**
      * Check if New Product is a Variant Product
      *
-     * @param array $Data Input Field Data
+     * @param array $variantData Input Field Data
      *
      * @return bool
      */
-    private function isNewVariant($Data)
+    private function isNewVariant($variantData)
     {
         //====================================================================//
         // Check Product Attributes are given
-        if (!isset($Data["attributes"]) || empty($Data["attributes"])) {
+        if (!isset($variantData["attributes"]) || empty($variantData["attributes"])) {
             return false;
         }
         //====================================================================//
         // Check Product Attributes are Valid
-        foreach ($Data["attributes"] as $AttributeArray) {
-            if (!$this->isValidAttributeDefinition($AttributeArray)) {
+        foreach ($variantData["attributes"] as $attributeArray) {
+            if (!$this->isValidAttributeDefinition($attributeArray)) {
                 return false;
             }
         }
@@ -257,21 +257,21 @@ trait AttributesTrait
     /**
      * Check if Attribute Array is Valid for Writing
      *
-     * @param array|ArrayObject $data Attribute Array
+     * @param array|ArrayObject $fieldData Attribute Array
      *
      * @return bool
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    private function isValidAttributeDefinition($data)
+    private function isValidAttributeDefinition($fieldData)
     {
         //====================================================================//
         // Check Attribute is Array
-        if ((!is_array($data) && !is_a($data, "ArrayObject")) || empty($data)) {
+        if ((!is_array($fieldData) && !is_a($fieldData, "ArrayObject")) || empty($fieldData)) {
             return false;
         }
         //====================================================================//
         // Check Attributes Code is Given
-        if (!isset($data["code"]) || !is_string($data["code"]) || empty($data["code"])) {
+        if (!isset($fieldData["code"]) || !is_string($fieldData["code"]) || empty($fieldData["code"])) {
             return Splash::log()->err(
                 "ErrLocalTpl",
                 __CLASS__,
@@ -281,7 +281,7 @@ trait AttributesTrait
         }
         //====================================================================//
         // Check Attributes Names are Given
-        if (!isset($data["public_name"]) || empty($data["public_name"])) {
+        if (!isset($fieldData["public_name"]) || empty($fieldData["public_name"])) {
             return Splash::log()->err(
                 "ErrLocalTpl",
                 __CLASS__,
@@ -291,7 +291,7 @@ trait AttributesTrait
         }
         //====================================================================//
         // Check Attributes Values are Given
-        if (!isset($data["name"]) || empty($data["name"])) {
+        if (!isset($fieldData["name"]) || empty($fieldData["name"])) {
             return Splash::log()->err(
                 "ErrLocalTpl",
                 __CLASS__,
@@ -333,14 +333,14 @@ trait AttributesTrait
         $sql->where(" LOWER( pl.name )         LIKE LOWER( '%" . pSQL($name) ."%') ");
         //====================================================================//
         // Execute final request
-        $Result = Db::getInstance()->executeS($sql);
+        $result = Db::getInstance()->executeS($sql);
         if (Db::getInstance()->getNumberError()) {
             return Splash::log()->err("ErrLocalTpl", __CLASS__, __FUNCTION__, Db::getInstance()->getMsgError());
         }
         //====================================================================//
         // Analyse Resuslts
-        if (isset($Result[0]["id"])) {
-            return $Result[0]["id"];
+        if (isset($result[0]["id"])) {
+            return $result[0]["id"];
         }
 
         return false;
@@ -397,8 +397,8 @@ trait AttributesTrait
         $oldAttributesIds = array();
         $oldAttributes = $this->Attribute->getWsProductOptionValues();
         if (is_array($oldAttributes)) {
-            foreach ($oldAttributes as $Attribute) {
-                $oldAttributesIds[] = $Attribute["id"];
+            foreach ($oldAttributes as $attribute) {
+                $oldAttributesIds[] = $attribute["id"];
             }
         }
 
@@ -414,21 +414,21 @@ trait AttributesTrait
     /**
      * Ensure Product Attribute Group Exists
      *
-     * @param array|ArrayObject $Data Field Data
+     * @param array|ArrayObject $fieldData Field Data
      *
      * @return false|int
      */
-    private function getVariantsAttributeGroup($Data)
+    private function getVariantsAttributeGroup($fieldData)
     {
         //====================================================================//
         // Load Product Attribute Group
-        $attributeGroupId   =   $this->getAttributeGroupByCode($Data["code"]);
+        $attributeGroupId   =   $this->getAttributeGroupByCode($fieldData["code"]);
         if ($attributeGroupId) {
             //====================================================================//
             // DEBUG MODE => Update Group Names
             if (true == SPLASH_DEBUG) {
                 $attributeGroup                 =   new AttributeGroup($attributeGroupId);
-                $this->setMultilang($attributeGroup, "public_name", $Data["public_name"]);
+                $this->setMultilang($attributeGroup, "public_name", $fieldData["public_name"]);
                 $attributeGroup->save();
             }
 
@@ -436,7 +436,7 @@ trait AttributesTrait
         }
         //====================================================================//
         // Add Product Attribute Group
-        $attributeGroup = $this->addAttributeGroup($Data["code"], $Data["public_name"]);
+        $attributeGroup = $this->addAttributeGroup($fieldData["code"], $fieldData["public_name"]);
         if ($attributeGroup) {
             return $attributeGroup->id;
         }
@@ -447,22 +447,22 @@ trait AttributesTrait
     /**
      * Ensure Product Attribute Group Exists
      *
-     * @param int               $GroupId
-     * @param array|ArrayObject $Data    Field Data
+     * @param int               $groupId
+     * @param array|ArrayObject $fieldData Field Data
      *
      * @return false|int Attribute Group Id
      */
-    private function getVariantsAttributeValue($GroupId, $Data)
+    private function getVariantsAttributeValue($groupId, $fieldData)
     {
         //====================================================================//
         // Load Product Attribute Value
-        $attributeId   =   $this->getAttributeByCode($GroupId, $Data["name"]);
+        $attributeId   =   $this->getAttributeByCode($groupId, $fieldData["name"]);
         if ($attributeId) {
             //====================================================================//
             // DEBUG MODE => Update Group Names
             if (true == SPLASH_DEBUG) {
                 $attribute                      =   new Attribute($attributeId);
-                $this->setMultilang($attribute, "name", $Data["name"]);
+                $this->setMultilang($attribute, "name", $fieldData["name"]);
                 $attribute->save();
             }
 
@@ -470,7 +470,7 @@ trait AttributesTrait
         }
         //====================================================================//
         // Add Product Attribute Value
-        $attribute = $this->addAttributeValue($GroupId, $Data["name"]);
+        $attribute = $this->addAttributeValue($groupId, $fieldData["name"]);
         if ($attribute) {
             return $attribute->id;
         }

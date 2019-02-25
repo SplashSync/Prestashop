@@ -1,38 +1,35 @@
 <?php
-/**
- * This file is part of SplashSync Project.
+
+/*
+ *  This file is part of SplashSync Project.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ *  Copyright (C) 2015-2019 Splash Sync  <www.splashsync.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
- *  @author    Splash Sync <www.splashsync.com>
- *  @copyright 2015-2018 Splash Sync
- *  @license   MIT
+ *  For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
  */
 
 namespace   Splash\Local\Objects;
 
-use Splash\Core\SplashCore      as Splash;
-
-use Splash\Models\AbstractObject;
-use Splash\Models\Objects\IntelParserTrait;
-use Splash\Models\Objects\SimpleFieldsTrait;
-use Splash\Models\Objects\ObjectsTrait;
-use Splash\Models\Objects\ListsTrait;
-use Splash\Local\Local;
-use Splash\Local\Services\LanguagesManager;
-
-//====================================================================//
-// Prestashop Static Classes
-use Shop;
 use Configuration;
 use Currency;
-use SplashSync;
 use Product as psProduct;
+use Shop;
+use Splash\Core\SplashCore      as Splash;
+use Splash\Local\Local;
+use Splash\Local\Services\LanguagesManager;
+use Splash\Models\AbstractObject;
+//====================================================================//
+// Prestashop Static Classes
+use Splash\Models\Objects\IntelParserTrait;
+use Splash\Models\Objects\ListsTrait;
+use Splash\Models\Objects\ObjectsTrait;
+use Splash\Models\Objects\SimpleFieldsTrait;
+use SplashSync;
 
 /**
  * @abstract    Splash Local Object Class - Products Local Integration
@@ -40,7 +37,6 @@ use Product as psProduct;
  */
 class Product extends AbstractObject
 {
-    
     // Splash Php Core Traits
     use IntelParserTrait;
     use SimpleFieldsTrait;
@@ -67,11 +63,6 @@ class Product extends AbstractObject
     use \Splash\Local\Objects\Product\VariantsTrait;
     use \Splash\Local\Objects\Product\ChecksumTrait;
     use Product\IdEncoderTrait;
-    
-    /**
-     * @var SplashSync
-     */
-    private $spl = null;
     
     /**
      * @var psProduct
@@ -128,13 +119,17 @@ class Product extends AbstractObject
 //    // Enable Delete Of Remotes Objects when Deleted Localy
 //    protected static $ENABLE_PULL_DELETED       =  true;
     
-    
     //====================================================================//
     // General Class Variables
     //====================================================================//
-    protected $ProductId      = null;     // Prestashop Product Class Id
-    protected $LangId         = null;     // Prestashop Language Class Id
-    protected $Currency       = null;     // Prestashop Currency Class
+    protected $ProductId;     // Prestashop Product Class Id
+    protected $LangId;     // Prestashop Language Class Id
+    protected $Currency;     // Prestashop Currency Class
+    
+    /**
+     * @var SplashSync
+     */
+    private $spl;
     
     //====================================================================//
     // Class Constructor

@@ -74,23 +74,23 @@ trait CoreTrait
     /**
      * Read requested Field
      *
-     * @param string $Key       Input List Key
-     * @param string $FieldName Field Identifier / Name
+     * @param string $key       Input List Key
+     * @param string $fieldName Field Identifier / Name
      *
      * @return void
      */
-    private function getCoreFields($Key, $FieldName)
+    private function getCoreFields($key, $fieldName)
     {
         //====================================================================//
         // READ Fields
-        switch ($FieldName) {
+        switch ($fieldName) {
             //====================================================================//
             // Direct Readings
             case 'reference':
                 if ($this instanceof Invoice) {
-                    $this->getSimple($FieldName, "Order");
+                    $this->getSimple($fieldName, "Order");
                 } else {
-                    $this->getSimple($FieldName);
+                    $this->getSimple($fieldName);
                 }
 
                 break;
@@ -98,9 +98,9 @@ trait CoreTrait
             // Customer Object Id Readings
             case 'id_customer':
                 if ($this instanceof Invoice) {
-                    $this->out[$FieldName] = self::objects()->encode("ThirdParty", $this->Order->{$FieldName});
+                    $this->out[$fieldName] = self::objects()->encode("ThirdParty", $this->Order->{$fieldName});
                 } else {
-                    $this->out[$FieldName] = self::objects()->encode("ThirdParty", $this->object->{$FieldName});
+                    $this->out[$fieldName] = self::objects()->encode("ThirdParty", $this->object->{$fieldName});
                 }
 
                 break;
@@ -116,24 +116,24 @@ trait CoreTrait
                 // Load Customer
                 $customer = new Customer($customerId);
                 if ($customer->id != $customerId) {
-                    $this->out[$FieldName] = null;
+                    $this->out[$fieldName] = null;
 
                     break;
                 }
-                $this->out[$FieldName] = $customer->email;
+                $this->out[$fieldName] = $customer->email;
 
                 break;
             //====================================================================//
             // Order Official Date
             case 'order_date':
-                $this->out[$FieldName] = date(SPL_T_DATECAST, (int) strtotime($this->object->date_add));
+                $this->out[$fieldName] = date(SPL_T_DATECAST, (int) strtotime($this->object->date_add));
 
                 break;
             default:
                 return;
         }
         
-        unset($this->in[$Key]);
+        unset($this->in[$key]);
     }
     
     /**

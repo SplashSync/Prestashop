@@ -1,37 +1,33 @@
 <?php
-/**
- * This file is part of SplashSync Project.
+
+/*
+ *  This file is part of SplashSync Project.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ *  Copyright (C) 2015-2019 Splash Sync  <www.splashsync.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
- *  @author    Splash Sync <www.splashsync.com>
- *  @copyright 2015-2018 Splash Sync
- *  @license   MIT
+ *  For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
  */
 
 namespace   Splash\Local\Objects\Address;
 
-use Splash\Core\SplashCore      as Splash;
-
-
+use Context;
 //====================================================================//
 // Prestashop Static Classes
 use DbQuery;
-use Db;
-use Context;
+use Splash\Core\SplashCore      as Splash;
 
 /**
- * @abstract    Acces to Address Objects Lists
+ * Acces to Address Objects Lists
+ *
  * @author      B. Paquier <contact@splashsync.com>
  */
 trait ObjectsListTrait
 {
-    
     /**
      * {@inheritdoc}
      */

@@ -1,103 +1,100 @@
 <?php
-/**
- * This file is part of SplashSync Project.
+
+/*
+ *  This file is part of SplashSync Project.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ *  Copyright (C) 2015-2019 Splash Sync  <www.splashsync.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
- *  @author    Splash Sync <www.splashsync.com>
- *  @copyright 2015-2018 Splash Sync
- *  @license   MIT
+ *  For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
  */
 
 namespace Splash\Local\Objects\Order;
 
 /**
- * @abstract    Access to Order Address Fields
+ * Access to Order Address Fields
  */
 trait AddressTrait
 {
-
     /**
-    *   @abstract     Build Fields using FieldFactory
-    */
+     * Build Fields using FieldFactory
+     */
     private function buildAddressFields()
     {
-        
         //====================================================================//
         // Billing Address
         $this->fieldsFactory()->create(self::objects()->encode("Address", SPL_T_ID))
-                ->Identifier("id_address_invoice")
-                ->Name('Billing Address ID')
-                ->MicroData("http://schema.org/Order", "billingAddress")
-                ->isRequired();
+            ->Identifier("id_address_invoice")
+            ->Name('Billing Address ID')
+            ->MicroData("http://schema.org/Order", "billingAddress")
+            ->isRequired();
         
         //====================================================================//
         // Shipping Address
         $this->fieldsFactory()->create(self::objects()->encode("Address", SPL_T_ID))
-                ->Identifier("id_address_delivery")
-                ->Name('Shipping Address ID')
-                ->MicroData("http://schema.org/Order", "orderDelivery")
-                ->isRequired();
+            ->Identifier("id_address_delivery")
+            ->Name('Shipping Address ID')
+            ->MicroData("http://schema.org/Order", "orderDelivery")
+            ->isRequired();
     }
   
-    
     /**
-     *  @abstract     Read requested Field
+     * Read requested Field
      *
-     *  @param        string    $Key                    Input List Key
-     *  @param        string    $FieldName              Field Identifier / Name
+     * @param string $key       Input List Key
+     * @param string $fieldName Field Identifier / Name
      *
-     * @return       void
+     * @return void
      */
-    private function getAddressFields($Key, $FieldName)
+    private function getAddressFields($key, $fieldName)
     {
         //====================================================================//
         // READ Fields
-        switch ($FieldName) {
+        switch ($fieldName) {
             //====================================================================//
             // Customer Address Ids
             case 'id_address_invoice':
             case 'id_address_delivery':
-                if (get_class($this) ===  "Splash\Local\Objects\Invoice") {
-                    $this->out[$FieldName] = self::objects()->encode("Address", $this->Order->$FieldName);
+                if ("Splash\\Local\\Objects\\Invoice" ===  get_class($this)) {
+                    $this->out[$fieldName] = self::objects()->encode("Address", $this->Order->{$fieldName});
                 } else {
-                    $this->out[$FieldName] = self::objects()->encode("Address", $this->object->$FieldName);
+                    $this->out[$fieldName] = self::objects()->encode("Address", $this->object->{$fieldName});
                 }
+
                 break;
             default:
                 return;
         }
-        unset($this->in[$Key]);
+        unset($this->in[$key]);
     }
     
     /**
-     *  @abstract     Write Given Fields
+     * Write Given Fields
      *
-     *  @param        string    $FieldName              Field Identifier / Name
-     *  @param        mixed     $Data                   Field Data
+     * @param string $fieldName Field Identifier / Name
+     * @param mixed  $fieldData Field Data
      *
-     * @return       void
+     * @return void
      */
-    private function setAddressFields($FieldName, $Data)
+    private function setAddressFields($fieldName, $fieldData)
     {
         //====================================================================//
         // WRITE Field
-        switch ($FieldName) {
+        switch ($fieldName) {
             //====================================================================//
             // Customer Address Ids
             case 'id_address_invoice':
             case 'id_address_delivery':
-                $this->setSimple($FieldName, self::objects()->Id($Data));
+                $this->setSimple($fieldName, self::objects()->Id($fieldData));
+
                 break;
-                
             default:
                 return;
         }
-        unset($this->in[$FieldName]);
+        unset($this->in[$fieldName]);
     }
 }

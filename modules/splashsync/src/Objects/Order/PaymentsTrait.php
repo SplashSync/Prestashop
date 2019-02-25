@@ -17,8 +17,8 @@ namespace Splash\Local\Objects\Order;
 
 use OrderPayment;
 use Splash\Core\SplashCore      as Splash;
-use Translate;
 use Splash\Local\Objects\Invoice;
+use Translate;
 
 /**
  * Access to Orders Payments Fields
@@ -127,25 +127,25 @@ trait PaymentsTrait
                 //====================================================================//
                 // Payment Line - Payment Mode
                 case 'mode@payments':
-                    $Value  =   $this->getPaymentMethod($orderPayment);
+                    $value  =   $this->getPaymentMethod($orderPayment);
 
                     break;
                 //====================================================================//
                 // Payment Line - Payment Date
                 case 'date@payments':
-                    $Value  =   date(SPL_T_DATECAST, strtotime($orderPayment->date_add));
+                    $value  =   date(SPL_T_DATECAST, strtotime($orderPayment->date_add));
 
                     break;
                 //====================================================================//
                 // Payment Line - Payment Identification Number
                 case 'number@payments':
-                    $Value  =   $orderPayment->transaction_id;
+                    $value  =   $orderPayment->transaction_id;
 
                     break;
                 //====================================================================//
                 // Payment Line - Payment Amount
                 case 'amount@payments':
-                    $Value  =   $orderPayment->amount;
+                    $value  =   $orderPayment->amount;
 
                     break;
                 default:
@@ -153,7 +153,7 @@ trait PaymentsTrait
             }
             //====================================================================//
             // Insert Data in List
-            self::lists()->Insert($this->out, "payments", $fieldName, $index, $Value);
+            self::lists()->Insert($this->out, "payments", $fieldName, $index, $value);
         }
         unset($this->in[$key]);
     }
@@ -204,21 +204,21 @@ trait PaymentsTrait
         
         //====================================================================//
         // Verify Lines List & Update if Needed
-        foreach ($fieldData as $PaymentItem) {
+        foreach ($fieldData as $paymentItem) {
             //====================================================================//
             // Update Product Line
             if (is_array($this->Payments)) {
-                $this->updatePayment(array_shift($this->Payments), $PaymentItem);
+                $this->updatePayment(array_shift($this->Payments), $paymentItem);
             } else {
-                $this->updatePayment($this->Payments->current(), $PaymentItem);
+                $this->updatePayment($this->Payments->current(), $paymentItem);
                 $this->Payments->next();
             }
         }
         
         //====================================================================//
         // Delete Remaining Lines
-        foreach ($this->Payments as $PaymentItem) {
-            $PaymentItem->delete();
+        foreach ($this->Payments as $paymentItem) {
+            $paymentItem->delete();
         }
         
         unset($this->in[$fieldName]);
@@ -228,7 +228,7 @@ trait PaymentsTrait
      * Write Data to Current Item
      *
      * @param null|OrderPayment $orderPayment Current Item Data
-     * @param array $paymentItem  Input Item Data Array
+     * @param array             $paymentItem  Input Item Data Array
      *
      * @return bool
      */
@@ -265,6 +265,7 @@ trait PaymentsTrait
                 return Splash::log()->err("ErrLocalTpl", __CLASS__, __FUNCTION__, "Unable to Update Payment Line.");
             }
         }
+
         return true;
     }
     
@@ -272,7 +273,7 @@ trait PaymentsTrait
      * Write Data to Current Item
      *
      * @param OrderPayment $orderPayment Current Item Data
-     * @param array $paymentItem  Input Item Data Array
+     * @param array        $paymentItem  Input Item Data Array
      *
      * @return bool
      */

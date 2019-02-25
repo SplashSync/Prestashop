@@ -1,80 +1,30 @@
 <?php
-/**
- * This file is part of SplashSync Project.
+
+/*
+ *  This file is part of SplashSync Project.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ *  Copyright (C) 2015-2019 Splash Sync  <www.splashsync.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
- *  @author    Splash Sync <www.splashsync.com>
- *  @copyright 2015-2018 Splash Sync
- *  @license   MIT
+ *  For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
  */
 
 namespace Splash\Local\Objects\Product;
 
 use Splash\Core\SplashCore      as Splash;
-
-//====================================================================//
-// Prestashop Static Classes
 use Translate;
 
 /**
- * @abstract    Access to Product Core Fields
+ * Access to Product Core Fields
+ *
  * @author      B. Paquier <contact@splashsync.com>
  */
 trait CoreTrait
 {
-    
-    /**
-    *   @abstract     Build Core Fields using FieldFactory
-    */
-    private function buildCoreFields()
-    {
-        //====================================================================//
-        // Reference
-        $this->fieldsFactory()->create(SPL_T_VARCHAR)
-                ->Identifier("ref")
-                ->Name(Translate::getAdminTranslation("Reference", "AdminProducts"))
-                ->Description(Translate::getAdminTranslation(
-                    'Your internal reference code for this product.',
-                    "AdminProducts"
-                ))
-                ->isListed()
-                ->MicroData("http://schema.org/Product", "model")
-                ->isRequired();
-    }
-    
-    /**
-     *  @abstract     Read requested Field
-     *
-     *  @param        string    $Key                    Input List Key
-     *  @param        string    $FieldName              Field Identifier / Name
-     *
-     * @return       void
-     */
-    private function getCoreFields($Key, $FieldName)
-    {
-        //====================================================================//
-        // READ Fields
-        switch ($FieldName) {
-            //====================================================================//
-            // MAIN INFORMATIONS
-            //====================================================================//
-            case 'ref':
-                $this->out[$FieldName]  =   $this->getProductReference();
-                break;
-
-            default:
-                return;
-        }
-        
-        unset($this->in[$Key]);
-    }
-    
     protected function getProductReference()
     {
         //====================================================================//
@@ -86,41 +36,84 @@ trait CoreTrait
         // Product has Attribute but Ref is Defined
         if (!empty($this->Attribute->reference)) {
             return  $this->Attribute->reference;
-        //====================================================================//
-        // Product has Attribute but Attribute Ref is Empty
-        } else {
-            return  $this->object->reference . "-" . $this->AttributeId;
         }
+
+        return  $this->object->reference . "-" . $this->AttributeId;
     }
     
     /**
-     *  @abstract     Write Given Fields
-     *
-     *  @param        string    $FieldName              Field Identifier / Name
-     *  @param        mixed     $Data                   Field Data
-     *
-     * @return       void
+     * Build Core Fields using FieldFactory
      */
-    private function setCoreFields($FieldName, $Data)
+    private function buildCoreFields()
     {
+        //====================================================================//
+        // Reference
+        $this->fieldsFactory()->create(SPL_T_VARCHAR)
+            ->Identifier("ref")
+            ->Name(Translate::getAdminTranslation("Reference", "AdminProducts"))
+            ->Description(Translate::getAdminTranslation(
+                'Your internal reference code for this product.',
+                "AdminProducts"
+            ))
+            ->isListed()
+            ->MicroData("http://schema.org/Product", "model")
+            ->isRequired();
+    }
+    
+    /**
+     * Read requested Field
+     *
+     * @param string $key       Input List Key
+     * @param string $fieldName Field Identifier / Name
+     *
+     * @return void
+     */
+    private function getCoreFields($key, $fieldName)
+    {
+        //====================================================================//
+        // READ Fields
+        switch ($fieldName) {
+            //====================================================================//
+            // MAIN INFORMATIONS
+            //====================================================================//
+            case 'ref':
+                $this->out[$fieldName]  =   $this->getProductReference();
 
+                break;
+            default:
+                return;
+        }
+        
+        unset($this->in[$key]);
+    }
+    
+    /**
+     * Write Given Fields
+     *
+     * @param string $fieldName Field Identifier / Name
+     * @param mixed  $fieldData Field Data
+     *
+     * @return void
+     */
+    private function setCoreFields($fieldName, $fieldData)
+    {
         //====================================================================//
         // WRITE Field
-        switch ($FieldName) {
+        switch ($fieldName) {
             //====================================================================//
             // MAIN INFORMATIONS
             //====================================================================//
             case 'ref':
                 if ($this->AttributeId) {
-                    $this->setSimple("reference", $Data, "Attribute");
+                    $this->setSimple("reference", $fieldData, "Attribute");
                 } else {
-                    $this->setSimple("reference", $Data);
+                    $this->setSimple("reference", $fieldData);
                 }
+
                 break;
-                
             default:
                 return;
         }
-        unset($this->in[$FieldName]);
+        unset($this->in[$fieldName]);
     }
 }

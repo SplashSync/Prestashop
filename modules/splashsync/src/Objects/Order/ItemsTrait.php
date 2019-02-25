@@ -24,8 +24,6 @@ use Splash\Models\Objects\PricesTrait;
 use Tools;
 use Translate;
 
-//use OrderInvoice;
-
 /**
  * Access to Orders Items Fields
  */
@@ -133,7 +131,7 @@ trait ItemsTrait
         }
         //====================================================================//
         // Fill List with Data
-        foreach ($this->Products as $index => $Product) {
+        foreach ($this->Products as $index => $product) {
             //====================================================================//
             // READ Fields
             switch ($fieldId) {
@@ -141,7 +139,7 @@ trait ItemsTrait
                 // Order Line Direct Reading Data
                 case 'product_name':
                 case 'product_quantity':
-                    $value = $Product[$fieldId];
+                    $value = $product[$fieldId];
 
                     break;
                 case 'reduction_percent':
@@ -151,8 +149,8 @@ trait ItemsTrait
                 //====================================================================//
                 // Order Line Product Id
                 case 'product_id':
-                    $UnikId = Product::getUnikIdStatic($Product["product_id"], $Product["product_attribute_id"]);
-                    $value = self::objects()->Encode("Product", $UnikId);
+                    $unikId = Product::getUnikIdStatic($product["product_id"], $product["product_attribute_id"]);
+                    $value = self::objects()->Encode("Product", $unikId);
 
                     break;
                 //====================================================================//
@@ -161,8 +159,8 @@ trait ItemsTrait
                     //====================================================================//
                     // Build Price Array
                     $value = self::prices()->Encode(
-                        (double)    Tools::convertPrice($Product["unit_price_tax_excl"], $this->Currency),
-                        (double)    OrderDetail::getTaxCalculatorStatic($Product["id_order_detail"])->getTotalRate(),
+                        (double)    Tools::convertPrice($product["unit_price_tax_excl"], $this->Currency),
+                        (double)    OrderDetail::getTaxCalculatorStatic($product["id_order_detail"])->getTotalRate(),
                         null,
                         $this->Currency->iso_code,
                         $this->Currency->sign,
@@ -173,7 +171,7 @@ trait ItemsTrait
                 //====================================================================//
                 // Order Line Tax Name
                 case 'tax_name':
-                    $value = OrderDetail::getTaxCalculatorStatic($Product["id_order_detail"])->getTaxesName();
+                    $value = OrderDetail::getTaxCalculatorStatic($product["id_order_detail"])->getTaxesName();
 
                     break;
                 default:
@@ -204,17 +202,17 @@ trait ItemsTrait
         }
         //====================================================================//
         // Verify Lines List & Update if Needed
-        foreach ($fieldData as $ProductItem) {
+        foreach ($fieldData as $productItem) {
             //====================================================================//
             // Update Product Line
-            $this->updateProduct(array_shift($this->Products), $ProductItem);
+            $this->updateProduct(array_shift($this->Products), $productItem);
         }
         
         //====================================================================//
         // Delete Remaining Lines
-        foreach ($this->Products as $ProductItem) {
-            $OrderDetail    =   new OrderDetail($ProductItem["id_order_detail"]);
-            $this->object->deleteProduct($this->object, $OrderDetail, $ProductItem["product_quantity"]);
+        foreach ($this->Products as $productItem) {
+            $orderDetail    =   new OrderDetail($productItem["id_order_detail"]);
+            $this->object->deleteProduct($this->object, $orderDetail, $productItem["product_quantity"]);
         }
         
         unset($this->in[$fieldName]);

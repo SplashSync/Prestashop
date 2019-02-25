@@ -1,17 +1,16 @@
 <?php
-/**
- * This file is part of SplashSync Project.
+
+/*
+ *  This file is part of SplashSync Project.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ *  Copyright (C) 2015-2019 Splash Sync  <www.splashsync.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
- *  @author    Splash Sync <www.splashsync.com>
- *  @copyright 2015-2018 Splash Sync
- *  @license   MIT
+ *  For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
  */
 
 namespace Splash\Local\Objects\Address;
@@ -21,16 +20,17 @@ namespace Splash\Local\Objects\Address;
  */
 trait HooksTrait
 {
-    
-//====================================================================//
-// *******************************************************************//
-//  MODULE BACK OFFICE (CUSTOMERS) HOOKS
-// *******************************************************************//
-//====================================================================//
+    //====================================================================//
+    // *******************************************************************//
+    //  MODULE BACK OFFICE (CUSTOMERS) HOOKS
+    // *******************************************************************//
+    //====================================================================//
     
     /**
-    *   @abstract       This hook is displayed after an Address is created
-    */
+     * This hook is displayed after an Address is created
+     *
+     * @param array $params
+     */
     public function hookactionObjectAddressAddAfter($params)
     {
         return $this->doCommit(
@@ -42,8 +42,10 @@ trait HooksTrait
     }
     
     /**
-    *   @abstract       This hook is displayed after an Address is updated
-    */
+     * This hook is displayed after an Address is updated
+     *
+     * @param array $params
+     */
     public function hookactionObjectAddressUpdateAfter($params)
     {
         return $this->doCommit(
@@ -54,8 +56,10 @@ trait HooksTrait
         );
     }
     /**
-    *   @abstract       This hook is displayed after an Address is deleted
-    */
+     * This hook is displayed after an Address is deleted
+     *
+     * @param array $params
+     */
     public function hookactionObjectAddressDeleteAfter($params)
     {
         return $this->doCommit(
