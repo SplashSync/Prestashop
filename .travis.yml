@@ -114,8 +114,6 @@ script:
     - php modules/splashsync/vendor/bin/grumphp run --testsuite=travis
     - cd $TRAVIS_BUILD_DIR
 
-    # Remove Php Cs Fixer Cache Files from Root Directory
-    - rm .php_cs.cache
     # With PHP 7.2 => Execute CsFixer
     - if [[ ${TRAVIS_PHP_VERSION:0:3} > "7.1" ]]; then php modules/splashsync/vendor/bin/grumphp run --testsuite=csfixer; fi    
     # With PHP 7.2 => Execute Phpstan 
