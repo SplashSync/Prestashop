@@ -20,10 +20,13 @@ use Splash\Local\Objects\Order;
 use Splash\Tests\Tools\ObjectsCase;
 
 /**
- * @abstract    Local Objects Test Suite - Specific Verifications for Invoices Objects.
+ * Local Objects Test Suite - Specific Verifications for Invoices Objects.
  */
 class L01InvoicesTest extends ObjectsCase
 {
+    /**
+     * Test Creation of An Invoice
+     */
     public function testCreateAnInvoice()
     {
         $this->assertTrue(true);
@@ -31,20 +34,20 @@ class L01InvoicesTest extends ObjectsCase
         //====================================================================//
         //   Create Fake Order Data
         $this->fields   =   $this->fakeFieldsList("Order", array("product_id@lines"), true);
-        $FakeData       =   $this->fakeObjectData($this->fields);
+        $fakeData       =   $this->fakeObjectData($this->fields);
 
         //====================================================================//
         //   Execute Action Directly on Module
-        $ObjectId = Splash::object("Order")->set(null, $FakeData);
+        $objectId = Splash::object("Order")->set(null, $fakeData);
 
         //====================================================================//
         //   Load Order Object
-        $Order  =   Splash::object("Order")->load($ObjectId);
-        $this->assertNotEmpty($Order);
+        $order  =   Splash::object("Order")->load($objectId);
+        $this->assertNotEmpty($order);
 
         //====================================================================//
         //   Set Order State to Delivered
-        $Order->setCurrentState(5);
-        $Order->update();
+        $order->setCurrentState(5);
+        $order->update();
     }
 }

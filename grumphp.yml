@@ -34,7 +34,7 @@ parameters:
             detect_key_conflicts:   true
             
         phplint:
-            exclude:        ['splash/vendor']
+            exclude:        ['modules/splashsync/vendor']
             triggered_by:   ['php']
                 
         #############################################        
@@ -57,17 +57,16 @@ parameters:
         phpcsfixer:     ~ 
         phpcsfixer2:    
             allow_risky:    true
-            config:         "build/php_cs.dist"                
+            config:         "travis/php_cs.dist"                
             
         phpcs:
             standard:       "PSR2"
             triggered_by:   [php]
             ignore_patterns:
-                - phpstan.php
                 - modules/splashsync/splashsync.php
                 
         phpmd:
-            ruleset:        ["./build/phpmd.xml"]       
+            ruleset:        ["%core_dir%/phpmd.xml"]  
                 
         phpcpd:
             exclude:        
@@ -76,7 +75,7 @@ parameters:
                 
         phpstan:
             level:          "%level%"
-            configuration:  "build/phpstan.neon"           
+            configuration:  "travis/phpstan.neon"           
 
     testsuites:
         travis:

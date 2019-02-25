@@ -94,7 +94,7 @@ env:
 before_script:
 
     - export MODULE_DIR=/tmp/SplashSync
-    - export MODULE_SCRIPTS_DIR=/tmp/SplashSync/build
+    - export MODULE_SCRIPTS_DIR=/tmp/SplashSync/travis
 
     #   Move Module to Tmp Folder
     - bash build/move_module.sh
@@ -120,16 +120,12 @@ script:
     - if [[ ${TRAVIS_PHP_VERSION:0:3} > "7.1" ]]; then php modules/splashsync/vendor/bin/grumphp run --testsuite=phpstan; fi 
     
     # Run PhpUnit Core Test Sequence
-    - modules/splashsync/vendor/bin/phpunit -c phpunit.xml modules/splashsync/vendor/splash/phpcore/Tests/Core/
+    - modules/splashsync/vendor/bin/phpunit -c travis/phpunit.xml modules/splashsync/vendor/splash/phpcore/Tests/Core/
     
     # PHP7+     =>  Run PhpUnit Main Sequence
-    - if [[ ${TRAVIS_PHP_VERSION:0:1} > "5" ]]; then phpdbg -qrr -d memory_limit=-1 modules/splashsync/vendor/bin/phpunit -c phpunit.xml.dist; fi  
+    - if [[ ${TRAVIS_PHP_VERSION:0:1} > "5" ]]; then phpdbg -qrr -d memory_limit=-1 modules/splashsync/vendor/bin/phpunit -c travis/phpunit.xml.dist; fi  
     # PHP5.6    =>  Without Php Debugger (Coverage x2 Faster)
-    - if [[ ${TRAVIS_PHP_VERSION:0:1} < "7" ]]; then splash/vendor/bin/phpunit -c phpunit.xml.dist; fi  
-    
-#    # Run PhpUnit Main Test Sequence
-#    - phpunit -c phpunit.xml
-#    - phpunit -c phpunit.xml
+    - if [[ ${TRAVIS_PHP_VERSION:0:1} < "7" ]]; then splash/vendor/bin/phpunit -c travis/phpunit.xml.dist; fi  
        
     # Show Outdated Packages  
     - cd $MODULE_DIR    

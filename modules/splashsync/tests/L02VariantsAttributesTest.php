@@ -26,99 +26,113 @@ use Splash\Tests\Tools\ObjectsCase;
  */
 class L02VariantsAttributesTest extends ObjectsCase
 {
+    /**
+     * Ensure Products Combinations Feature is Active on Prestashop Install
+     */
     public function testFeatureIsActive()
     {
         $this->assertNotEmpty(Combination::isFeatureActive(), "Combination feature is Not Active");
     }
     
+    /**
+     * Test Identification of Attributes Groups
+     */
     public function testIdentifyAttributeGroup()
     {
         //====================================================================//
         //   Load Known Attribute Group
-        $AttributeGroupId   =   Splash::object("Product")->getAttributeGroupByCode("Size");
-        $AttributeGroup     =   new AttributeGroup($AttributeGroupId);
-        $this->assertNotEmpty($AttributeGroupId);
-        $this->assertContains("Size", $AttributeGroup->name);
+        $attributeGroupId   =   Splash::object("Product")->getAttributeGroupByCode("Size");
+        $attributeGroup     =   new AttributeGroup($attributeGroupId);
+        $this->assertNotEmpty($attributeGroupId);
+        $this->assertContains("Size", $attributeGroup->name);
         //====================================================================//
         //   Load UnKnown Attribute Group
-        $UnknownGroupId     =   Splash::object("Product")->getAttributeGroupByCode(uniqid());
-        $this->assertFalse($UnknownGroupId);
+        $unknownGroupId     =   Splash::object("Product")->getAttributeGroupByCode(uniqid());
+        $this->assertFalse($unknownGroupId);
     }
     
+    /**
+     * Test Creation of Attributes Groups & Values
+     */
     public function testCreateAttributeGroup()
     {
         //====================================================================//
         //   Load Known Attribute Group
-        $Code   =   "CustomVariant";
-        $Names  =   array("fr_FR" => "CustomVariantFr", "en_US" => "CustomVariantUs");
+        $code   =   "CustomVariant";
+        $names  =   array("fr_FR" => "CustomVariantFr", "en_US" => "CustomVariantUs");
 
         //====================================================================//
         //   Ensure Attribute Group is Deleted
-        $this->ensureAttributeGroupIsDeleted($Code);
+        $this->ensureAttributeGroupIsDeleted($code);
         
         //====================================================================//
         //   Create a New Attribute Group
-        $AttributeGroup = Splash::object("Product")->addAttributeGroup($Code, $Names);
+        $attributeGroup = Splash::object("Product")->addAttributeGroup($code, $names);
         
         //====================================================================//
         //   Verify Attribute Group
-        $this->assertNotEmpty($AttributeGroup->id);
-        foreach ($AttributeGroup->name as $Name) {
-            $this->assertEquals($Code, $Name);
+        $this->assertNotEmpty($attributeGroup->id);
+        foreach ($attributeGroup->name as $name) {
+            $this->assertEquals($code, $name);
         }
-        foreach ($Names as $Name) {
-            $this->assertContains($Name, $AttributeGroup->public_name);
+        foreach ($names as $name) {
+            $this->assertContains($name, $attributeGroup->public_name);
         }
 
         //====================================================================//
         //   Verify Attributes Group Identification
         $this->assertEquals(
-            $AttributeGroup->id,
-            Splash::object("Product")->getAttributeGroupByCode($Code)
+            $attributeGroup->id,
+            Splash::object("Product")->getAttributeGroupByCode($code)
         );
         
         //====================================================================//
         //   Create a New Attribute Values
         for ($i=0; $i<5; $i++) {
-            $Values     =   array(
+            $values     =   array(
                 "fr_FR" => "CustomValueFr" . $i,
                 "en_US" => "CustomValueUs" . $i
             );
-            $Attribute = Splash::object("Product")
-                ->addAttributeValue($AttributeGroup->id, $Values);
-            $this->assertNotEmpty($Attribute);
-            $this->assertNotEmpty($Attribute->id);
-            foreach ($Values as $Value) {
-                $this->assertContains($Value, $Attribute->name);
+            $attribute = Splash::object("Product")
+                ->addAttributeValue($attributeGroup->id, $values);
+            $this->assertNotEmpty($attribute);
+            $this->assertNotEmpty($attribute->id);
+            foreach ($values as $value) {
+                $this->assertContains($value, $attribute->name);
             }
             
             //====================================================================//
             //   Verify Attributes Value Identification
             $this->assertEquals(
-                $Attribute->id,
-                Splash::object("Product")->getAttributeByCode($AttributeGroup->id, array("CustomValueFr" . $i))
+                $attribute->id,
+                Splash::object("Product")->getAttributeByCode($attributeGroup->id, array("CustomValueFr" . $i))
             );
             $this->assertEquals(
-                $Attribute->id,
-                Splash::object("Product")->getAttributeByCode($AttributeGroup->id, array("CustomValueUs" . $i))
+                $attribute->id,
+                Splash::object("Product")->getAttributeByCode($attributeGroup->id, array("CustomValueUs" . $i))
             );
         }
     }
     
-    private function ensureAttributeGroupIsDeleted($Codes)
+    /**
+     * Ensure Attributes Group is Deleted
+     *
+     * @param string $code
+     */
+    private function ensureAttributeGroupIsDeleted($code)
     {
         //====================================================================//
         //   Load Known Attribute Group
-        $AttributeGroupId   =   Splash::object("Product")->getAttributeGroupByCode($Codes);
+        $attributeGroupId   =   Splash::object("Product")->getAttributeGroupByCode($code);
         //====================================================================//
         //   Delete Attribute Group
-        if ($AttributeGroupId) {
-            $AttributeGroup     =   new AttributeGroup($AttributeGroupId);
-            $AttributeGroup->delete();
+        if ($attributeGroupId) {
+            $attributeGroup     =   new AttributeGroup($attributeGroupId);
+            $attributeGroup->delete();
         }
         //====================================================================//
         //   Load Known Attribute Group
-        $DeletedGroupId   =   Splash::object("Product")->getAttributeGroupByCode($Codes);
-        $this->assertFalse($DeletedGroupId);
+        $deletedGroupId   =   Splash::object("Product")->getAttributeGroupByCode($code);
+        $this->assertFalse($deletedGroupId);
     }
 }

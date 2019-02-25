@@ -1,5 +1,9 @@
+includes:
+#    - '../modules/splashsync/vendor/phpstan/phpstan-phpunit/extension.neon'
+#    - '../modules/splashsync/vendor/phpstan/phpstan-phpunit/rules.neon'
+
 parameters:
-    bootstrap: "./build/phpstan.php"
+    bootstrap: "./travis/phpstan.php"
     universalObjectCratesClasses:
             - ArrayObject
     ignoreErrors:

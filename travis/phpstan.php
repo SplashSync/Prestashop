@@ -13,12 +13,10 @@
  *  file that was distributed with this source code.
  */
 
-header('Expires: Sat, 01 Jan 2000 00:00:00 GMT');
-header('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT');
+require_once dirname(__DIR__) . "/modules/splashsync/vendor/autoload.php";
+require_once dirname(__DIR__) . "/vendor/autoload.php";
 
-header('Cache-Control: no-store, no-cache, must-revalidate');
-header('Cache-Control: post-check=0, pre-check=0', false);
-header('Pragma: no-cache');
-
-header('Location: ../');
-exit;
+//====================================================================//
+// Init Splash for Local Includes
+Splash\Client\Splash::core();
+Splash\Client\Splash::local();

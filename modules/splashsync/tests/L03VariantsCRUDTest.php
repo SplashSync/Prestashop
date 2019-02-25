@@ -49,8 +49,8 @@ class L03VariantsCRUDTest extends O06SetTest
      */
     public function testSetSingleFieldFromModule($sequence, $objectType, $field, $forceObjectId = null)
     {
-        foreach ($this->objectVariantsProvider() as $VariationData) {
-            $this->currentVariation =   $VariationData;
+        foreach ($this->objectVariantsProvider() as $variationData) {
+            $this->currentVariation =   $variationData;
             parent::testSetSingleFieldFromModule($sequence, $objectType, $field, $forceObjectId);
         }
     }
@@ -65,8 +65,8 @@ class L03VariantsCRUDTest extends O06SetTest
      */
     public function testSetSingleFieldFromService($sequence, $objectType, $field, $forceObjectId = null)
     {
-        foreach ($this->objectVariantsProvider() as $VariationData) {
-            $this->currentVariation =   $VariationData;
+        foreach ($this->objectVariantsProvider() as $variationData) {
+            $this->currentVariation =   $variationData;
             parent::testSetSingleFieldFromService($sequence, $objectType, $field, $forceObjectId);
         }
     }
