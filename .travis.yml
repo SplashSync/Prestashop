@@ -97,7 +97,7 @@ before_script:
     - export MODULE_SCRIPTS_DIR=/tmp/SplashSync/travis
 
     #   Move Module to Tmp Folder
-    - bash $MODULE_SCRIPTS_DIR/move_module.sh
+    - bash travis/move_module.sh
     #   Install Prestashop
     - bash $MODULE_SCRIPTS_DIR/install_prestashop.sh
     #    Setup WebServer (Apache & PHP-Fpm)
