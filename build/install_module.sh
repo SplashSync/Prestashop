@@ -3,9 +3,10 @@ echo Install SplashSync Module
 
 # Build Module Dependencies
 cd $MODULE_DIR
-# With PHP 7 => Load Phpstan   
-if [[ ${TRAVIS_PHP_VERSION:0:3} < "7.1" ]]; then composer remove phpstan/phpstan-shim --no-update --dev; fi
-if [[ ${TRAVIS_PHP_VERSION:0:3} < "7.1" ]]; then composer remove phpstan/phpstan-phpunit --no-update --dev; fi
+# With PHP 7.2 => Load Phpstan   
+if [[ ${TRAVIS_PHP_VERSION:0:3} < "7.2" ]]; then composer remove friendsofphp/php-cs-fixer --no-update --dev; fi
+if [[ ${TRAVIS_PHP_VERSION:0:3} < "7.2" ]]; then composer remove phpstan/phpstan --no-update --dev; fi
+if [[ ${TRAVIS_PHP_VERSION:0:3} < "7.2" ]]; then composer remove phpstan/phpstan-phpunit --no-update --dev; fi
 composer update --prefer-dist --no-interaction --no-progress
 cd $TRAVIS_BUILD_DIR
 
