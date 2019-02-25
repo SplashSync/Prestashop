@@ -119,8 +119,8 @@ script:
     # With PHP 7.2 => Execute Phpstan 
     - if [[ ${TRAVIS_PHP_VERSION:0:3} > "7.1" ]]; then php modules/splashsync/vendor/bin/grumphp run --testsuite=phpstan; fi 
     
-    # Run PhpUnit Core Test Sequence
-    - modules/splashsync/vendor/bin/phpunit -c travis/phpunit.xml modules/splashsync/vendor/splash/phpcore/Tests/Core/
+    # Run PhpUnit Core Test Sequence (Will Enable the Module)
+    - modules/splashsync/vendor/bin/phpunit -c travis/phpunit.xml.dist modules/splashsync/vendor/splash/phpcore/Tests/Core/
     
     # PHP7+     =>  Run PhpUnit Main Sequence
     - if [[ ${TRAVIS_PHP_VERSION:0:1} > "5" ]]; then phpdbg -qrr -d memory_limit=-1 modules/splashsync/vendor/bin/phpunit -c travis/phpunit.xml.dist; fi  
