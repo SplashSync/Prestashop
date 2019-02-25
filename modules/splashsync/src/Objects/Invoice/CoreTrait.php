@@ -35,7 +35,7 @@ trait CoreTrait
             ->MicroData("http://schema.org/Invoice", "referencesOrder")
             ->isReadOnly()
                 ;
-        
+
         //====================================================================//
         // Invoice Reference
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
@@ -46,14 +46,12 @@ trait CoreTrait
             ->isListed()
                 ;
     }
-    
+
     /**
      * Read requested Field
      *
      * @param string $key       Input List Key
      * @param string $fieldName Field Identifier / Name
-     *
-     * @return void
      */
     private function getInvoiceCoreFields($key, $fieldName)
     {
@@ -71,7 +69,7 @@ trait CoreTrait
             default:
                 return;
         }
-        
+
         unset($this->in[$key]);
     }
 }

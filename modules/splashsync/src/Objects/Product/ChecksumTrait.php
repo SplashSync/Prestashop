@@ -28,7 +28,7 @@ use Translate;
 trait ChecksumTrait
 {
     use \Splash\Models\Objects\ChecksumTrait;
-    
+
     /**
      * Compute Md5 CheckSum from Product & Attributes Objects
      *
@@ -42,7 +42,7 @@ trait ChecksumTrait
             $this->getProductAttributesArray($this->object, $this->AttributeId)
         );
     }
-    
+
     /**
      * Compute Md5 String from Product & Attributes Objects
      *
@@ -56,7 +56,7 @@ trait ChecksumTrait
             $this->getProductAttributesArray($this->object, $this->AttributeId)
         );
     }
-    
+
     /**
      * Build Fields using FieldFactory
      */
@@ -72,7 +72,7 @@ trait ChecksumTrait
             ->isListed()
             ->MicroData("http://schema.org/Thing", "identifier")
             ->isReadOnly();
-        
+
         //====================================================================//
         // Product CheckSum Debug String
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
@@ -82,14 +82,12 @@ trait ChecksumTrait
             ->Group(Translate::getAdminTranslation("Meta", "AdminThemes"))
             ->isReadOnly();
     }
-    
+
     /**
      * Read requested Field
      *
      * @param string $key       Input List Key
      * @param string $fieldName Field Identifier / Name
-     *
-     * @return void
      */
     private function getChecksumFields($key, $fieldName)
     {
@@ -97,20 +95,20 @@ trait ChecksumTrait
         // READ Fields
         switch ($fieldName) {
             case 'md5':
-                $this->out[$fieldName]  =   $this->getMd5Checksum();
+                $this->out[$fieldName] = $this->getMd5Checksum();
 
                 break;
             case 'md5-debug':
-                $this->out[$fieldName]  =   $this->getMd5String();
+                $this->out[$fieldName] = $this->getMd5String();
 
                 break;
             default:
                 return;
         }
-        
+
         unset($this->in[$key]);
     }
-    
+
     /**
      * Compute Md5 CheckSum from Product Informations
      *
@@ -122,14 +120,14 @@ trait ChecksumTrait
      */
     private static function getMd5ChecksumFromValues($title, $sku = null, $attributes = array())
     {
-        $md5Array  = array_merge_recursive(
+        $md5Array = array_merge_recursive(
             array("title" => $title, "sku" => $sku),
             $attributes
         );
 
         return self::md5()->fromArray($md5Array);
     }
-    
+
     /**
      * Compute Md5 String from Product Informations
      *
@@ -141,7 +139,7 @@ trait ChecksumTrait
      */
     private static function getMd5StringFromValues($title, $sku = null, $attributes = array())
     {
-        $md5Array  = array_merge_recursive(
+        $md5Array = array_merge_recursive(
             array("title" => $title, "sku" => $sku),
             $attributes
         );

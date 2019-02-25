@@ -16,7 +16,6 @@
 namespace Splash\Local\Objects\ThirdParty;
 
 use Address;
-use Context;
 use Country;
 use State;
 use Translate;
@@ -31,7 +30,7 @@ trait AddressTrait
      */
     private function buildPrimaryAddressPart1Fields()
     {
-        $groupName  =   Translate::getAdminTranslation("Address", "AdminCustomers");
+        $groupName = Translate::getAdminTranslation("Address", "AdminCustomers");
 
         //====================================================================//
         // Addess
@@ -46,11 +45,11 @@ trait AddressTrait
         // Addess Complement
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
             ->Identifier("address2")
-            ->Name($groupName . " (2)")
+            ->Name($groupName." (2)")
             ->MicroData("http://schema.org/PostalAddress", "postOfficeBoxNumber")
             ->Group($groupName)
             ->isReadOnly();
-        
+
         //====================================================================//
         // Zip Code
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
@@ -59,7 +58,7 @@ trait AddressTrait
             ->MicroData("http://schema.org/PostalAddress", "postalCode")
             ->Group($groupName)
             ->isReadOnly();
-        
+
         //====================================================================//
         // City Name
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
@@ -68,7 +67,7 @@ trait AddressTrait
             ->MicroData("http://schema.org/PostalAddress", "addressLocality")
             ->Group($groupName)
             ->isReadOnly();
-        
+
         //====================================================================//
         // State Name
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
@@ -77,16 +76,16 @@ trait AddressTrait
             ->MicroData("http://schema.org/PostalAddress", "addressRegion")
             ->Group($groupName)
             ->isReadOnly();
-        
+
         //====================================================================//
         // State code
         $this->fieldsFactory()->create(SPL_T_STATE)
             ->Identifier("id_state")
-            ->Name(Translate::getAdminTranslation("State", "AdminAddresses") . " (Code)")
+            ->Name(Translate::getAdminTranslation("State", "AdminAddresses")." (Code)")
             ->MicroData("http://schema.org/PostalAddress", "addressRegion")
             ->Group($groupName)
             ->isReadOnly();
-        
+
         //====================================================================//
         // Country Name
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
@@ -95,12 +94,12 @@ trait AddressTrait
             ->MicroData("http://schema.org/PostalAddress", "addressCountry")
             ->Group($groupName)
             ->isReadOnly();
-        
+
         //====================================================================//
         // Country ISO Code
         $this->fieldsFactory()->create(SPL_T_COUNTRY)
             ->Identifier("id_country")
-            ->Name(Translate::getAdminTranslation("Country", "AdminAddresses") . " (Code)")
+            ->Name(Translate::getAdminTranslation("Country", "AdminAddresses")." (Code)")
             ->MicroData("http://schema.org/PostalAddress", "addressCountry")
             ->Group($groupName)
             ->isReadOnly();
@@ -111,8 +110,8 @@ trait AddressTrait
      */
     private function buildPrimaryAddressPart2Fields()
     {
-        $groupName  =   Translate::getAdminTranslation("Address", "AdminCustomers");
-        
+        $groupName = Translate::getAdminTranslation("Address", "AdminCustomers");
+
         //====================================================================//
         // Phone
         $this->fieldsFactory()->create(SPL_T_PHONE)
@@ -121,7 +120,7 @@ trait AddressTrait
             ->MicroData("http://schema.org/PostalAddress", "telephone")
             ->Group($groupName)
             ->isReadOnly();
-        
+
         //====================================================================//
         // Mobile Phone
         $this->fieldsFactory()->create(SPL_T_PHONE)
@@ -139,7 +138,7 @@ trait AddressTrait
             ->MicroData("http://schema.org/Organization", "vatID")
             ->isReadOnly();
     }
-    
+
     /**
      * Read requested Field
      *
@@ -147,19 +146,17 @@ trait AddressTrait
      * @param string $fieldName Field Identifier / Name
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     *
-     * @return void
      */
     private function getPrimaryAddressFields($key, $fieldName)
     {
         //====================================================================//
         // Identify Main Address Id
         $mainAddressId = Address::getFirstCustomerAddressId($this->object->id);
-        
+
         //====================================================================//
         // If Empty, Create A New One
         $mainAddress = new Address(is_numeric($mainAddressId) ? $mainAddressId : null);
-        
+
         //====================================================================//
         // READ Fields
         switch ($fieldName) {

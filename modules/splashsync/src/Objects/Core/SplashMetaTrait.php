@@ -28,7 +28,7 @@ trait SplashMetaTrait
      * @var null|string
      */
     protected $NewSplashId;
-    
+
     /**
      * Build Fields using FieldFactory
      */
@@ -48,8 +48,6 @@ trait SplashMetaTrait
      *
      * @param string $key       Input List Key
      * @param string $fieldName Field Identifier / Name
-     *
-     * @return void
      */
     protected function getSplashMetaFields(
         $key,
@@ -65,7 +63,7 @@ trait SplashMetaTrait
             default:
                 return;
         }
-        
+
         unset($this->in[$key]);
     }
 
@@ -74,8 +72,6 @@ trait SplashMetaTrait
      *
      * @param string $fieldName Field Identifier / Name
      * @param mixed  $fieldData Field Data
-     *
-     * @return void
      */
     protected function setSplashMetaFields($fieldName, $fieldData)
     {

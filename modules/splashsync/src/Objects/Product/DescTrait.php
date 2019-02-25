@@ -33,7 +33,7 @@ trait DescTrait
     //====================================================================//
     //  Multilanguage Getters & Setters
     //====================================================================//
-    
+
     /**
      * Read Multilangual Fields of an Object
      *
@@ -52,15 +52,15 @@ trait DescTrait
         }
         //====================================================================//
         // Read Multilangual Contents
-        $contents   =   $object->{$key};
-        $data       =   array();
+        $contents = $object->{$key};
+        $data = array();
         //====================================================================//
         // For Each Available Language
         foreach ($languages as $lang) {
             //====================================================================//
             // Encode Language Code From Splash Format to Prestashop Format (fr_FR => fr-fr)
-            $languageCode   =   LanguagesManager::langEncode($lang["language_code"]);
-            $languageId     =   $lang["id_lang"];
+            $languageCode = LanguagesManager::langEncode($lang["language_code"]);
+            $languageId = $lang["id_lang"];
 
             //====================================================================//
             // If Data is Available in this language
@@ -103,7 +103,7 @@ trait DescTrait
 
         return true;
     }
-    
+
     /**
      * Update Multilangual Contents For an Object
      *
@@ -112,8 +112,6 @@ trait DescTrait
      * @param string $isoCode   New Multilangual Content
      * @param array  $data      New Multilangual Content
      * @param int    $maxLength Maximum Contents Lenght
-     *
-     * @return void
      */
     public function setMultilangContents($object = null, $key = null, $isoCode = null, $data = null, $maxLength = null)
     {
@@ -131,7 +129,7 @@ trait DescTrait
                 "MsgLocalTpl",
                 __CLASS__,
                 __FUNCTION__,
-                "Language " . $languageCode . " not available on this server."
+                "Language ".$languageCode." not available on this server."
             );
 
             return;
@@ -141,7 +139,7 @@ trait DescTrait
         //====================================================================//
         //====================================================================//
         // Extract Contents
-        $current   =   &$object->{$key};
+        $current = &$object->{$key};
         //====================================================================//
         // Create Array if Needed
         if (!is_array($current)) {
@@ -154,12 +152,12 @@ trait DescTrait
         }
         //====================================================================//
         // Verify Data Lenght
-        if ($maxLength &&  (Tools::strlen($data) > $maxLength)) {
+        if ($maxLength && (Tools::strlen($data) > $maxLength)) {
             Splash::log()->war(
                 "MsgLocalTpl",
                 __CLASS__,
                 __FUNCTION__,
-                "Text is too long for field " . $key . ", modification skipped."
+                "Text is too long for field ".$key.", modification skipped."
             );
 
             return;
@@ -167,10 +165,10 @@ trait DescTrait
 
         //====================================================================//
         // Update Data
-        $current[$language->id]     = $data;
+        $current[$language->id] = $data;
         $this->needUpdate();
     }
-    
+
     /**
      * Read Multilangual Fields of an Object
      *
@@ -186,20 +184,20 @@ trait DescTrait
         if (empty($languages)) {
             return array();
         }
-        
+
         //====================================================================//
         // For Each Available Language
         $data = array();
         foreach ($languages as $lang) {
             //====================================================================//
             // Encode Language Code From Splash Format to Prestashop Format (fr_FR => fr-fr)
-            $langCode   =   LanguagesManager::langEncode($lang["language_code"]);
-            $langId     =   (int) $lang["id_lang"];
-            
+            $langCode = LanguagesManager::langEncode($lang["language_code"]);
+            $langId = (int) $lang["id_lang"];
+
             //====================================================================//
             // Product Specific - Read Full Product Name with Attribute Description
             $data[$langCode] = Product::getProductName($object->id, $this->AttributeId, $langId);
-            
+
             //====================================================================//
             // Catch Potential Prestashop SQL Errors
             if (Db::getInstance()->getNumberError()) {
@@ -207,19 +205,19 @@ trait DescTrait
                     "ErrLocalTpl",
                     __CLASS__,
                     __FUNCTION__,
-                    " Error : " . Db::getInstance()->getMsgError()
+                    " Error : ".Db::getInstance()->getMsgError()
                 );
                 $data[$langCode] = Product::getProductName(
                     $object->id,
                     null,
                     $langId
-                ) . " (" . $this->AttributeId . ")" ;
+                )." (".$this->AttributeId.")" ;
             }
         }
 
         return $data;
     }
-    
+
     /**
      * Read Multilangual Fields of an Object
      *
@@ -235,15 +233,15 @@ trait DescTrait
         if (empty($languages)) {
             return array();
         }
-        
+
         //====================================================================//
         // For Each Available Language
         $data = array();
         foreach ($languages as $lang) {
             //====================================================================//
             // Encode Language Code From Splash Format to Prestashop Format (fr_FR => fr-fr)
-            $langCode   =   LanguagesManager::langEncode($lang["language_code"]);
-            $langId     =   (int) $lang["id_lang"];
+            $langCode = LanguagesManager::langEncode($lang["language_code"]);
+            $langId = (int) $lang["id_lang"];
             //====================================================================//
             // Product Specific - Read Meta Keywords
             $data[$langCode] = $object->getTags($langId);
@@ -251,15 +249,15 @@ trait DescTrait
 
         return $data;
     }
-    
+
     /**
      * Build Description Fields using FieldFactory
      */
     private function buildDescFields()
     {
-        $groupName  = Translate::getAdminTranslation("Information", "AdminProducts");
+        $groupName = Translate::getAdminTranslation("Information", "AdminProducts");
         $groupName2 = Translate::getAdminTranslation("SEO", "AdminProducts");
-        
+
         //====================================================================//
         // PRODUCT DESCRIPTIONS
         //====================================================================//
@@ -291,7 +289,7 @@ trait DescTrait
             ->Name(Translate::getAdminTranslation("description", "AdminProducts"))
             ->Group($groupName)
             ->MicroData("http://schema.org/Article", "articleBody");
-        
+
         //====================================================================//
         // Short Description
         $this->fieldsFactory()->create(SPL_T_MVARCHAR)
@@ -305,7 +303,7 @@ trait DescTrait
         $this->fieldsFactory()->create(SPL_T_MVARCHAR)
             ->Identifier("meta_description")
             ->Name(Translate::getAdminTranslation("Meta description", "AdminProducts"))
-            ->Description($groupName2 . " " . Translate::getAdminTranslation("Meta description", "AdminProducts"))
+            ->Description($groupName2." ".Translate::getAdminTranslation("Meta description", "AdminProducts"))
             ->Group($groupName2)
             ->MicroData("http://schema.org/Article", "headline");
 
@@ -314,16 +312,16 @@ trait DescTrait
         $this->fieldsFactory()->create(SPL_T_MVARCHAR)
             ->Identifier("meta_title")
             ->Name(Translate::getAdminTranslation("Meta title", "AdminProducts"))
-            ->Description($groupName2 . " " . Translate::getAdminTranslation("Meta title", "AdminProducts"))
+            ->Description($groupName2." ".Translate::getAdminTranslation("Meta title", "AdminProducts"))
             ->Group($groupName2)
             ->MicroData("http://schema.org/Article", "name");
-        
+
         //====================================================================//
         // Meta KeyWords
         $this->fieldsFactory()->create(SPL_T_MVARCHAR)
             ->Identifier("meta_keywords")
             ->Name(Translate::getAdminTranslation("Meta keywords", "AdminProducts"))
-            ->Description($groupName2 . " " . Translate::getAdminTranslation("Meta keywords", "AdminProducts"))
+            ->Description($groupName2." ".Translate::getAdminTranslation("Meta keywords", "AdminProducts"))
             ->MicroData("http://schema.org/Article", "keywords")
             ->Group($groupName2)
             ->isReadOnly();
@@ -333,18 +331,16 @@ trait DescTrait
         $this->fieldsFactory()->create(SPL_T_MVARCHAR)
             ->Identifier("link_rewrite")
             ->Name(Translate::getAdminTranslation("Friendly URL", "AdminProducts"))
-            ->Description($groupName2 . " " . Translate::getAdminTranslation("Friendly URL", "AdminProducts"))
+            ->Description($groupName2." ".Translate::getAdminTranslation("Friendly URL", "AdminProducts"))
             ->Group($groupName2)
             ->MicroData("http://schema.org/Product", "urlRewrite");
     }
-    
+
     /**
      * Read requested Field
      *
      * @param string $key       Input List Key
      * @param string $fieldName Field Identifier / Name
-     *
-     * @return void
      */
     private function getDescFields($key, $fieldName)
     {
@@ -376,17 +372,15 @@ trait DescTrait
             default:
                 return;
         }
-        
+
         unset($this->in[$key]);
     }
-    
+
     /**
      * Write Given Fields
      *
      * @param string $fieldName Field Identifier / Name
      * @param mixed  $fieldData Field Data
-     *
-     * @return void
      */
     private function setDescFields($fieldName, $fieldData)
     {

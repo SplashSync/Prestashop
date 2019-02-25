@@ -28,8 +28,8 @@ trait MainTrait
      */
     private function buildMainFields()
     {
-        $groupName  = Translate::getAdminTranslation("Shipping", "AdminProducts");
-        
+        $groupName = Translate::getAdminTranslation("Shipping", "AdminProducts");
+
         //====================================================================//
         // PRODUCT SPECIFICATIONS
         //====================================================================//
@@ -41,7 +41,7 @@ trait MainTrait
             ->Name(Translate::getAdminTranslation("Package weight", "AdminProducts"))
             ->Group($groupName)
             ->MicroData("http://schema.org/Product", "weight");
-        
+
         //====================================================================//
         // Height
         $this->fieldsFactory()->create(SPL_T_DOUBLE)
@@ -49,7 +49,7 @@ trait MainTrait
             ->Name(Translate::getAdminTranslation("Package height", "AdminProducts"))
             ->Group($groupName)
             ->MicroData("http://schema.org/Product", "height");
-        
+
         //====================================================================//
         // Depth
         $this->fieldsFactory()->create(SPL_T_DOUBLE)
@@ -57,7 +57,7 @@ trait MainTrait
             ->Name(Translate::getAdminTranslation("Package depth", "AdminProducts"))
             ->Group($groupName)
             ->MicroData("http://schema.org/Product", "depth");
-        
+
         //====================================================================//
         // Width
         $this->fieldsFactory()->create(SPL_T_DOUBLE)
@@ -65,11 +65,11 @@ trait MainTrait
             ->Name(Translate::getAdminTranslation("Package width", "AdminProducts"))
             ->Group($groupName)
             ->MicroData("http://schema.org/Product", "width");
-        
+
         //====================================================================//
         // COMPUTED INFORMATIONS
         //====================================================================//
-        
+
         //====================================================================//
         // Surface
         $this->fieldsFactory()->create(SPL_T_DOUBLE)
@@ -78,7 +78,7 @@ trait MainTrait
             ->Group($groupName)
             ->MicroData("http://schema.org/Product", "surface")
             ->isReadOnly();
-        
+
         //====================================================================//
         // Volume
         $this->fieldsFactory()->create(SPL_T_DOUBLE)
@@ -87,7 +87,7 @@ trait MainTrait
             ->Group($groupName)
             ->MicroData("http://schema.org/Product", "volume")
             ->isReadOnly();
-       
+
         //====================================================================//
         // PRODUCT BARCODES
         //====================================================================//
@@ -107,7 +107,7 @@ trait MainTrait
             ->Name(Translate::getAdminTranslation("EAN Code", "AdminProducts"))
             ->Group($groupName)
             ->MicroData("http://schema.org/Product", "gtin13");
-        
+
         //====================================================================//
         // ISBN
         $this->fieldsFactory()->create(SPL_T_INT)
@@ -122,8 +122,6 @@ trait MainTrait
      *
      * @param string $key       Input List Key
      * @param string $fieldName Field Identifier / Name
-     *
-     * @return void
      */
     private function getMainFields($key, $fieldName)
     {
@@ -158,19 +156,17 @@ trait MainTrait
             default:
                 return;
         }
-        
+
         if (isset($this->in[$key])) {
             unset($this->in[$key]);
         }
     }
-   
+
     /**
      * Read requested Field
      *
      * @param string $key       Input List Key
      * @param string $fieldName Field Identifier / Name
-     *
-     * @return void
      */
     private function getBarCodeFields($key, $fieldName)
     {
@@ -193,19 +189,17 @@ trait MainTrait
             default:
                 return;
         }
-        
+
         if (isset($this->in[$key])) {
             unset($this->in[$key]);
         }
     }
-    
+
     /**
      * Write Given Fields
      *
      * @param string $fieldName Field Identifier / Name
      * @param mixed  $fieldData Field Data
-     *
-     * @return void
      */
     private function setMainFields($fieldName, $fieldData)
     {
@@ -218,10 +212,10 @@ trait MainTrait
             case 'weight':
                 //====================================================================//
                 // If product as attributes
-                $currentWeight  =   $this->object->{$fieldName};
-                $currentWeight +=   isset($this->Attribute->{$fieldName}) ? $this->Attribute->{$fieldName} : 0;
+                $currentWeight = $this->object->{$fieldName};
+                $currentWeight += isset($this->Attribute->{$fieldName}) ? $this->Attribute->{$fieldName} : 0;
                 if ($this->AttributeId && (abs($currentWeight - $fieldData) > 1E-6)) {
-                    $this->Attribute->{$fieldName}    = $fieldData - $this->object->{$fieldName};
+                    $this->Attribute->{$fieldName} = $fieldData - $this->object->{$fieldName};
                     $this->needUpdate("Attribute");
 
                     break;
@@ -242,14 +236,12 @@ trait MainTrait
         }
         unset($this->in[$fieldName]);
     }
-    
+
     /**
      * Write Given Fields
      *
      * @param string $fieldName Field Identifier / Name
      * @param mixed  $fieldData Field Data
-     *
-     * @return void
      */
     private function setBarCodeFields($fieldName, $fieldData)
     {

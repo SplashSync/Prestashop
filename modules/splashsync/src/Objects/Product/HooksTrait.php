@@ -37,7 +37,7 @@ trait HooksTrait
     {
         return $this->hookactionProduct($params["object"], SPL_A_CREATE, $this->l('Product Created on Prestashop'));
     }
-        
+
     /**
      * This hook is called after a Product is Updated
      *
@@ -49,7 +49,7 @@ trait HooksTrait
     {
         return $this->hookactionProduct($params["object"], SPL_A_UPDATE, $this->l('Product Updated on Prestashop'));
     }
-    
+
     /**
      * This hook is called after a Product is Deleted
      *
@@ -61,7 +61,7 @@ trait HooksTrait
     {
         return $this->hookactionProduct($params["object"], SPL_A_DELETE, $this->l('Product Deleted on Prestashop'));
     }
-    
+
     /**
      * This hook is called after a Product Combination is Created
      *
@@ -77,7 +77,7 @@ trait HooksTrait
             $this->l('Product Variant Created on Prestashop')
         );
     }
-        
+
     /**
      * This hook is called after a Product Combination is Updated
      *
@@ -93,7 +93,7 @@ trait HooksTrait
             $this->l('Product Variant Updated on Prestashop')
         );
     }
-    
+
     /**
      * This hook is called after a Product Combination is Deleted
      *
@@ -109,7 +109,7 @@ trait HooksTrait
             $this->l('Product Variant Deleted on Prestashop')
         );
     }
-        
+
     /**
      * This hook is called after a customer effectively places their order
      *
@@ -155,7 +155,7 @@ trait HooksTrait
         // Commit Update For Product
         return $this->doCommit("Product", $unikId, SPL_A_UPDATE, $this->l('Product Stock Updated on Prestashop'));
     }
-      
+
     /**
      * Get Product Impacted Ids to Commit
      *
@@ -178,7 +178,7 @@ trait HooksTrait
         if (!is_array($attrList) || empty($attrList)) {
             return array($product->id);
         }
-        
+
         //====================================================================//
         // JUST FOR TRAVIS => Only Commit Id of Curent Impacted Combination
         if (defined("SPLASH_DEBUG")) {
@@ -194,12 +194,12 @@ trait HooksTrait
         // Add Product Combinations to Commit Update List
         $productIds = array();
         foreach ($attrList as $attr) {
-            $productIds[] =   (int) Product::getUnikIdStatic($product->id, $attr["id_product_attribute"]);
+            $productIds[] = (int) Product::getUnikIdStatic($product->id, $attr["id_product_attribute"]);
         }
 
         return  $productIds;
     }
-    
+
     /**
      * This function is called after each action on a product object
      *
@@ -218,7 +218,7 @@ trait HooksTrait
         }
         //====================================================================//
         // Log
-        $this->debugHook(__FUNCTION__, $product->id . " >> " . $comment);
+        $this->debugHook(__FUNCTION__, $product->id." >> ".$comment);
         //====================================================================//
         // Combination Lock Mode => Splash is Creating a Variant Product
         if (Splash::object("Product")->isLocked("onCombinationLock")) {
@@ -234,7 +234,7 @@ trait HooksTrait
         // Commit Update For Product
         return $this->doCommit("Product", $idList, $action, $comment);
     }
-    
+
     /**
      * This function is called after each action on a Combination object
      *
@@ -256,7 +256,7 @@ trait HooksTrait
         }
         //====================================================================//
         // Log
-        $this->debugHook(__FUNCTION__, $combinationId . " >> " . $comment);
+        $this->debugHook(__FUNCTION__, $combinationId." >> ".$comment);
         //====================================================================//
         // Safety Check
         if (empty($combinationId)) {
@@ -269,11 +269,11 @@ trait HooksTrait
         }
         //====================================================================//
         // Generate Unik Product Id
-        $unikId       =   (int) Product::getUnikIdStatic($combination->id_product, $combinationId);
+        $unikId = (int) Product::getUnikIdStatic($combination->id_product, $combinationId);
         //====================================================================//
         // Commit Update For Product Attribute
         $this->doCommit("Product", $unikId, $action, $comment);
-        if (SPL_A_CREATE ==  $action) {
+        if (SPL_A_CREATE == $action) {
             //====================================================================//
             // Commit Update For Product Attribute
             $this->doCommit("Product", $combination->id_product, SPL_A_DELETE, $comment);

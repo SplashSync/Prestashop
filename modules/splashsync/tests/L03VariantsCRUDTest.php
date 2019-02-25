@@ -33,12 +33,12 @@ class L03VariantsCRUDTest extends O06SetTest
      * @var array
      */
     private $currentVariation;
-    
+
     public function testFeatureIsActive()
     {
         $this->assertNotEmpty(Combination::isFeatureActive(), "Combination feature is Not Active");
     }
-    
+
     /**
      * @dataProvider objectFieldsProvider
      *
@@ -50,11 +50,11 @@ class L03VariantsCRUDTest extends O06SetTest
     public function testSetSingleFieldFromModule($sequence, $objectType, $field, $forceObjectId = null)
     {
         foreach ($this->objectVariantsProvider() as $variationData) {
-            $this->currentVariation =   $variationData;
+            $this->currentVariation = $variationData;
             parent::testSetSingleFieldFromModule($sequence, $objectType, $field, $forceObjectId);
         }
     }
-    
+
     /**
      * @dataProvider objectFieldsProvider
      *
@@ -66,11 +66,11 @@ class L03VariantsCRUDTest extends O06SetTest
     public function testSetSingleFieldFromService($sequence, $objectType, $field, $forceObjectId = null)
     {
         foreach ($this->objectVariantsProvider() as $variationData) {
-            $this->currentVariation =   $variationData;
+            $this->currentVariation = $variationData;
             parent::testSetSingleFieldFromService($sequence, $objectType, $field, $forceObjectId);
         }
     }
-    
+
     /**
      * Generate Fields Variations Attributes
      *
@@ -79,17 +79,17 @@ class L03VariantsCRUDTest extends O06SetTest
     public function objectVariantsProvider()
     {
         $result = array();
-        
+
 //        $Name   =  $this->getVariantName();
 //        for ($i=0 ; $i<3 ; $i++) {
 //            $Result[]   =   array_merge($Name, $this->getVariantAttributes(['Size','Color']));
 //        }
 
-        $name   =  $this->getVariantName();
-        for ($i=0; $i<2; $i++) {
-            $result[]   =   array_merge($name, $this->getVariantAttributes(array('Size','CustomVariant')));
+        $name = $this->getVariantName();
+        for ($i = 0; $i < 2; $i++) {
+            $result[] = array_merge($name, $this->getVariantAttributes(array('Size','CustomVariant')));
         }
-        
+
         return $result;
     }
 
@@ -102,18 +102,18 @@ class L03VariantsCRUDTest extends O06SetTest
     {
         //====================================================================//
         //   Generate Random Attribute Name Values
-        $name   =   array();
+        $name = array();
         //====================================================================//
         // For Each Available Language
         foreach (Language::getLanguages() as $lang) {
             //====================================================================//
             // Encode Language Code From Splash Format to Prestashop Format (fr_FR => fr-fr)
-            $langCode   =   LanguagesManager::langEncode($lang["language_code"]);
-            $name[$langCode]  =  "Variant" . uniqid() . " " . $lang["name"];
+            $langCode = LanguagesManager::langEncode($lang["language_code"]);
+            $name[$langCode] = "Variant".uniqid()." ".$lang["name"];
         }
 
         return array(
-            "name"          =>  $name,
+            "name" => $name,
         );
     }
 
@@ -135,7 +135,7 @@ class L03VariantsCRUDTest extends O06SetTest
 
         return array("attributes" => $result);
     }
-    
+
     /**
      * Generate Variations Attribute
      *
@@ -145,24 +145,24 @@ class L03VariantsCRUDTest extends O06SetTest
     {
         //====================================================================//
         //   Load Known Attribute Group
-        $attributeGroupId   =   Splash::object("Product")->getAttributeGroupByCode($attributesCode);
-        $attributeGroup     =   new AttributeGroup($attributeGroupId);
+        $attributeGroupId = Splash::object("Product")->getAttributeGroupByCode($attributesCode);
+        $attributeGroup = new AttributeGroup($attributeGroupId);
         //====================================================================//
         //   Select Random Attribute
-        $attributeList  =   $attributeGroup->getWsProductOptionValues();
+        $attributeList = $attributeGroup->getWsProductOptionValues();
         if (is_array($attributeList)) {
-            $attributeId    =   $attributeList[rand(1, count($attributeList))-1]["id"];
+            $attributeId = $attributeList[rand(1, count($attributeList)) - 1]["id"];
         } else {
-            $attributeId    =   null;
+            $attributeId = null;
             var_dump($attributeList);
 //            $attributeId    =   $attributeList[1]["id"];
         }
-        $attribute      =   new Attribute($attributeId);
+        $attribute = new Attribute($attributeId);
 
         return array(
-            "code"          =>  $attributesCode,
-            "public_name"   =>  Splash::object("Product")->getMultilang($attributeGroup, "public_name"),
-            "name"          =>  Splash::object("Product")->getMultilang($attribute, "name"),
+            "code" => $attributesCode,
+            "public_name" => Splash::object("Product")->getMultilang($attributeGroup, "public_name"),
+            "name" => Splash::object("Product")->getMultilang($attribute, "name"),
         );
     }
 
@@ -175,24 +175,24 @@ class L03VariantsCRUDTest extends O06SetTest
     {
         //====================================================================//
         //   Generate Random Attribute Name Values
-        $names  =   $values =   array();
+        $names = $values = array();
         //====================================================================//
         // For Each Available Language
         foreach (Language::getLanguages() as $lang) {
             //====================================================================//
             // Encode Language Code From Splash Format to Prestashop Format (fr_FR => fr-fr)
-            $langCode   =   LanguagesManager::langEncode($lang["language_code"]);
-            $names[$langCode]  =  "CustomName" . uniqid();
-            $values[$langCode]=  "CustomValue" . uniqid();
+            $langCode = LanguagesManager::langEncode($lang["language_code"]);
+            $names[$langCode] = "CustomName".uniqid();
+            $values[$langCode] = "CustomValue".uniqid();
         }
 
         return array(
-            "code"          =>  $attributesCode,
-            "public_name"   =>  $names,
-            "name"          =>  $values,
+            "code" => $attributesCode,
+            "public_name" => $names,
+            "name" => $values,
         );
     }
-    
+
     /**
      * Override Parent Function to Filter on Products Fields
      *
@@ -217,7 +217,7 @@ class L03VariantsCRUDTest extends O06SetTest
 
         return $fields;
     }
-    
+
     /**
      * Override Parent Function to Add Variants Attributes
      *
@@ -234,13 +234,13 @@ class L03VariantsCRUDTest extends O06SetTest
         if (!$this->verifyTestIsAllowed($objectType, $field)) {
             return false;
         }
-        
+
         //====================================================================//
         // Prepare Fake Object Data
         //====================================================================//
-        
-        $this->fields   =   $this->fakeFieldsList($objectType, array($field->id), true);
-        $fakeData       =   $this->fakeObjectData($this->fields);
+
+        $this->fields = $this->fakeFieldsList($objectType, array($field->id), true);
+        $fakeData = $this->fakeObjectData($this->fields);
 
         return array_merge($fakeData, $this->currentVariation);
     }

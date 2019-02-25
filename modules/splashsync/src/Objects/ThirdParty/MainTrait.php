@@ -40,7 +40,7 @@ trait MainTrait
             ->Association("firstname", "lastname")
             ->isRequired()
             ->isListed();
-        
+
         //====================================================================//
         // Lastname
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
@@ -50,7 +50,7 @@ trait MainTrait
             ->Association("firstname", "lastname")
             ->isRequired()
             ->isListed();
-        
+
         //====================================================================//
         // Gender Name
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
@@ -62,10 +62,10 @@ trait MainTrait
         //====================================================================//
         // Gender Type
         $desc = Translate::getAdminTranslation("Social title", "AdminCustomers");
-        $desc.= " ; 0 => Male // 1 => Female // 2 => Neutral";
+        $desc .= " ; 0 => Male // 1 => Female // 2 => Neutral";
         $this->fieldsFactory()->create(SPL_T_INT)
             ->Identifier("gender_type")
-            ->Name(Translate::getAdminTranslation("Social title", "AdminCustomers") . " (ID)")
+            ->Name(Translate::getAdminTranslation("Social title", "AdminCustomers")." (ID)")
             ->MicroData("http://schema.org/Person", "gender")
             ->Description($desc)
             ->Group(Translate::getAdminTranslation("Meta", "AdminThemes"))
@@ -79,7 +79,7 @@ trait MainTrait
             ->Name(Translate::getAdminTranslation("Company", "AdminCustomers"))
             ->MicroData("http://schema.org/Organization", "legalName")
             ->isListed();
-        
+
         //====================================================================//
         // SIRET
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
@@ -88,7 +88,7 @@ trait MainTrait
             ->MicroData("http://schema.org/Organization", "taxID")
             ->Group("ID")
             ->isNotTested();
-        
+
         //====================================================================//
         // APE
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
@@ -97,7 +97,7 @@ trait MainTrait
             ->MicroData("http://schema.org/Organization", "naics")
             ->Group("ID")
             ->isNotTested();
-        
+
         //====================================================================//
         // WebSite
         $this->fieldsFactory()->create(SPL_T_URL)
@@ -105,14 +105,12 @@ trait MainTrait
             ->Name(Translate::getAdminTranslation("Website", "AdminCustomers"))
             ->MicroData("http://schema.org/Organization", "url");
     }
-    
+
     /**
      * Read requested Field
      *
      * @param string $key       Input List Key
      * @param string $fieldName Field Identifier / Name
-     *
-     * @return void
      */
     private function getMainFields($key, $fieldName)
     {
@@ -134,7 +132,7 @@ trait MainTrait
 
                     break;
                 }
-                $this->out[$fieldName] = "Prestashop("  . $this->object->id . ")";
+                $this->out[$fieldName] = "Prestashop(".$this->object->id.")";
 
                 break;
             default:
@@ -142,14 +140,12 @@ trait MainTrait
         }
         unset($this->in[$key]);
     }
-    
+
     /**
      * Read requested Field
      *
      * @param string $key       Input List Key
      * @param string $fieldName Field Identifier / Name
-     *
-     * @return void
      */
     private function getGenderFields($key, $fieldName)
     {
@@ -191,14 +187,12 @@ trait MainTrait
         }
         unset($this->in[$key]);
     }
-    
+
     /**
      * Write Given Fields
      *
      * @param string $fieldName Field Identifier / Name
      * @param mixed  $fieldData Field Data
-     *
-     * @return void
      */
     private function setMainFields($fieldName, $fieldData)
     {
@@ -213,7 +207,7 @@ trait MainTrait
 
                 break;
             case 'company':
-                if ($this->object->{$fieldName} === "Prestashop("  . $this->object->id . ")") {
+                if ($this->object->{$fieldName} === "Prestashop(".$this->object->id.")") {
                     break;
                 }
                 $this->setSimple($fieldName, $fieldData);
@@ -224,14 +218,12 @@ trait MainTrait
         }
         unset($this->in[$fieldName]);
     }
-    
+
     /**
      * Write Given Fields
      *
      * @param string $fieldName Field Identifier / Name
      * @param mixed  $fieldData Field Data
-     *
-     * @return void
      */
     private function setIdentificationFields($fieldName, $fieldData)
     {
@@ -270,14 +262,12 @@ trait MainTrait
         }
         unset($this->in[$fieldName]);
     }
-    
+
     /**
      * Write Given Fields
      *
      * @param string $fieldName Field Identifier / Name
      * @param mixed  $fieldData Field Data
-     *
-     * @return void
      */
     private function setGenderFields($fieldName, $fieldData)
     {

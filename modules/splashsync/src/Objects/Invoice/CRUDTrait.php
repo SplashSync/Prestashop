@@ -29,12 +29,12 @@ trait CRUDTrait
      * @var Order
      */
     protected $Order;
-    
+
     /**
      * @var TaxCalculator
      */
     protected $ShippingTaxCalculator;
-    
+
     /**
      * Load Request Object
      *
@@ -47,37 +47,37 @@ trait CRUDTrait
         //====================================================================//
         // Stack Trace
         Splash::log()->trace(__CLASS__, __FUNCTION__);
-        
+
         //====================================================================//
         // Load Object
-        $object   = new OrderInvoice($objectId);
+        $object = new OrderInvoice($objectId);
         if ($object->id != $objectId) {
             return Splash::log()->err(
                 "ErrLocalTpl",
                 __CLASS__,
                 __FUNCTION__,
-                " Unable to load Invoice (" . $objectId . ")."
+                " Unable to load Invoice (".$objectId.")."
             );
         }
-        $this->Order    = new Order($object->id_order);
+        $this->Order = new Order($object->id_order);
         if ($this->Order->id != $object->id_order) {
             return Splash::log()->err(
                 "ErrLocalTpl",
                 __CLASS__,
                 __FUNCTION__,
-                " Unable to load Invoice Order (" . $object->id_order . ")."
+                " Unable to load Invoice Order (".$object->id_order.")."
             );
         }
-        
+
         //====================================================================//
         // Load Order Products
-        $this->Products         = $object->getProductsDetail();
-        $this->Payments         = $object->getOrderPaymentCollection();
-        $this->PaymentMethod    = $this->Order->module;
-        
+        $this->Products = $object->getProductsDetail();
+        $this->Payments = $object->getOrderPaymentCollection();
+        $this->PaymentMethod = $this->Order->module;
+
         //====================================================================//
         // Load Shipping Tax Calculator
-        $this->ShippingTaxCalculator    = (new \Carrier($this->Order->id_carrier))
+        $this->ShippingTaxCalculator = (new \Carrier($this->Order->id_carrier))
             ->getTaxCalculator(new \Address($this->Order->id_address_delivery));
 
         return $object;
@@ -85,22 +85,20 @@ trait CRUDTrait
 
     /**
      * Create Request Object
-     *
-     * @return null
      */
     public function create()
     {
         //====================================================================//
         // Stack Trace
         Splash::log()->trace(__CLASS__, __FUNCTION__);
-        
+
         //====================================================================//
         // An Invoice Cannot Get deleted
         Splash::log()->err("ErrLocalTpl", __CLASS__, __FUNCTION__, "You Cannot Create Prestashop Invoices");
-        
+
         return null;
     }
-    
+
     /**
      * Update Request Object
      *
@@ -116,14 +114,14 @@ trait CRUDTrait
         if (!$needed) {
             return (string) $this->object->id;
         }
-        
+
         //====================================================================//
         // An Invoice Cannot Get deleted
         Splash::log()->err("ErrLocalTpl", __CLASS__, __FUNCTION__, "You Cannot Update Prestashop Invoices");
-        
+
         return (string) $this->object->id;
     }
-    
+
     /**
      * Delete requested Object
      *
@@ -137,14 +135,14 @@ trait CRUDTrait
         //====================================================================//
         // Stack Trace
         Splash::log()->trace(__CLASS__, __FUNCTION__);
-        
+
         //====================================================================//
         // An Invoice Cannot Get deleted
         Splash::log()->err("ErrLocalTpl", __CLASS__, __FUNCTION__, "You Cannot Delete Prestashop Invoices");
-        
+
         return true;
     }
-    
+
     /**
      * {@inheritdoc}
      */

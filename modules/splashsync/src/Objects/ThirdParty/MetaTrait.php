@@ -34,7 +34,7 @@ trait MetaTrait
             ->Name(Translate::getAdminTranslation("Enabled", "AdminCustomers"))
             ->MicroData("http://schema.org/Organization", "active")
             ->isListed();
-        
+
         //====================================================================//
         // Newsletter
         $this->fieldsFactory()->create(SPL_T_BOOL)
@@ -42,7 +42,7 @@ trait MetaTrait
             ->Name(Translate::getAdminTranslation("Newsletter", "AdminCustomers"))
             ->Group(Translate::getAdminTranslation("Meta", "AdminThemes"))
             ->MicroData("http://schema.org/Organization", "newsletter");
-        
+
         //====================================================================//
         // Adverstising
         $this->fieldsFactory()->create(SPL_T_BOOL)
@@ -57,8 +57,6 @@ trait MetaTrait
      *
      * @param string $key       Input List Key
      * @param string $fieldName Field Identifier / Name
-     *
-     * @return void
      */
     private function getMetaFields($key, $fieldName)
     {
@@ -75,7 +73,7 @@ trait MetaTrait
             default:
                 return;
         }
-        
+
         unset($this->in[$key]);
     }
 
@@ -84,8 +82,6 @@ trait MetaTrait
      *
      * @param string $fieldName Field Identifier / Name
      * @param mixed  $fieldData Field Data
-     *
-     * @return void
      */
     private function setMetaFields($fieldName, $fieldData)
     {

@@ -17,7 +17,6 @@ namespace   Splash\Local\Objects;
 
 use Configuration;
 use Currency;
-use Order as psOrder;
 use OrderInvoice;
 use Shop;
 use Splash\Core\SplashCore      as Splash;
@@ -46,7 +45,7 @@ class Invoice extends AbstractObject
     use \Splash\Local\Objects\Core\SplashMetaTrait;
     use \Splash\Local\Objects\Core\ObjectsListCommonsTrait;
     use \Splash\Local\Traits\SplashIdTrait;
-    
+
     // Prestashop Order Traits
     use \Splash\Local\Objects\Order\CoreTrait;
     use \Splash\Local\Objects\Order\MainTrait;
@@ -63,59 +62,59 @@ class Invoice extends AbstractObject
     //====================================================================//
     // Object Definition Parameters
     //====================================================================//
-    
+
     /**
      *  Object Disable Flag. Uncomment this line to Override this flag and disable Object.
      */
 //    protected static    $DISABLED        =  True;
-    
+
     /**
      *  Object Name (Translated by Module)
      */
-    protected static $NAME            =  "Customer Invoice";
-    
+    protected static $NAME = "Customer Invoice";
+
     /**
      *  Object Description (Translated by Module)
      */
-    protected static $DESCRIPTION     =  "Prestashop Customers Invoice Object";
-    
+    protected static $DESCRIPTION = "Prestashop Customers Invoice Object";
+
     /**
      *  Object Icon (FontAwesome or Glyph ico tag)
      */
-    protected static $ICO     =  "fa fa-money";
-    
+    protected static $ICO = "fa fa-money";
+
     /**
      *  Object Synchronistion Limitations
      *
      *  This Flags are Used by Splash Server to Prevent Unexpected Operations on Remote Server
      */
-    protected static $ALLOW_PUSH_CREATED         =  false;       // Allow Creation Of New Local Objects
-    protected static $ALLOW_PUSH_UPDATED         =  false;       // Allow Update Of Existing Local Objects
-    protected static $ALLOW_PUSH_DELETED         =  false;       // Allow Delete Of Existing Local Objects
-    
+    protected static $ALLOW_PUSH_CREATED = false;       // Allow Creation Of New Local Objects
+    protected static $ALLOW_PUSH_UPDATED = false;       // Allow Update Of Existing Local Objects
+    protected static $ALLOW_PUSH_DELETED = false;       // Allow Delete Of Existing Local Objects
+
     /**
      *  Object Synchronistion Recommended Configuration
      */
     // Enable Creation Of New Local Objects when Not Existing
-    protected static $ENABLE_PUSH_CREATED       =  false;
+    protected static $ENABLE_PUSH_CREATED = false;
     // Enable Update Of Existing Local Objects when Modified Remotly
-    protected static $ENABLE_PUSH_UPDATED       =  false;
+    protected static $ENABLE_PUSH_UPDATED = false;
     // Enable Delete Of Existing Local Objects when Deleted Remotly
-    protected static $ENABLE_PUSH_DELETED       =  false;
+    protected static $ENABLE_PUSH_DELETED = false;
 
     //====================================================================//
     // General Class Variables
     //====================================================================//
-   
+
     protected $Products;
     protected $Payments;
     protected $PaymentMethod;
-    
+
     /**
      * @var OrderInvoice
      */
     protected $object;
-    
+
     /**
      * @var int
      */
@@ -125,16 +124,16 @@ class Invoice extends AbstractObject
      * @var Currency
      */
     private $Currency;
-    
+
     /**
      * @var SplashSync
      */
     private $spl;
-    
+
     //====================================================================//
     // Class Constructor
     //====================================================================//
-        
+
     public function __construct()
     {
         //====================================================================//
@@ -150,7 +149,7 @@ class Invoice extends AbstractObject
         $this->spl = Local::getLocalModule();
         //====================================================================//
         // Load Default Language
-        $this->LangId   = LanguagesManager::loadDefaultLanguage();
+        $this->LangId = LanguagesManager::loadDefaultLanguage();
         //====================================================================//
         // Load OsWs Currency
         $this->Currency = new Currency(Configuration::get('PS_CURRENCY_DEFAULT'));

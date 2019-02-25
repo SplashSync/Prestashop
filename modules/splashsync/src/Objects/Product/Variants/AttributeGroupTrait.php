@@ -86,12 +86,12 @@ trait AttributeGroupTrait
                 " Unable to create Attribute Group, No Group Names Provided."
             );
         }
-        
+
         //====================================================================//
         // Create New Attribute Group
-        $attributeGroup                 =   new AttributeGroup();
-        $attributeGroup->group_type     =   "select";
-        $attributeGroup->is_color_group =   $isColor;
+        $attributeGroup = new AttributeGroup();
+        $attributeGroup->group_type = "select";
+        $attributeGroup->is_color_group = $isColor;
         //====================================================================//
         // Setup Codes => Same Code for Each Languages
         $attributeGroup->name = array();
@@ -101,7 +101,7 @@ trait AttributeGroupTrait
         //====================================================================//
         // Setup Names
         $this->setMultilang($attributeGroup, "public_name", $names);
-        
+
         //====================================================================//
         // CREATE Attribute Group
         if (true != $attributeGroup->add()) {
@@ -112,7 +112,7 @@ trait AttributeGroupTrait
                 " Unable to create Product Variant Attribute Group."
             );
         }
-        
+
         return $attributeGroup;
     }
 }

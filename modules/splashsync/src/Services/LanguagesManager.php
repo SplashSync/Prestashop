@@ -49,7 +49,7 @@ class LanguagesManager
 
         return  0;
     }
-    
+
     /**
      * Translate Prestashop Languages Code to Splash Standard Format
      *
@@ -65,7 +65,7 @@ class LanguagesManager
         if (2 != count($tmp)) {
             $out = $psCode;
         } else {
-            $out = $tmp[0] . "_" . Tools::strtoupper($tmp[1]);
+            $out = $tmp[0]."_".Tools::strtoupper($tmp[1]);
         }
 
         return $out;
@@ -87,6 +87,6 @@ class LanguagesManager
             return $isoCode;
         }
 
-        return $tmp[0] . "-" . Tools::strtolower($tmp[1]);
+        return $tmp[0]."-".Tools::strtolower($tmp[1]);
     }
 }

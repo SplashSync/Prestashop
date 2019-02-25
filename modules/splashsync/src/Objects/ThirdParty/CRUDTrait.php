@@ -44,7 +44,7 @@ trait CRUDTrait
                 "ErrLocalTpl",
                 __CLASS__,
                 __FUNCTION__,
-                " Unable to load Customer (" . $objectId . ")."
+                " Unable to load Customer (".$objectId.")."
             );
         }
 
@@ -76,7 +76,7 @@ trait CRUDTrait
         // Create Empty Customer
         return new Customer();
     }
-    
+
     /**
      * Update Request Object
      *
@@ -101,19 +101,19 @@ trait CRUDTrait
                     "ErrLocalTpl",
                     __CLASS__,
                     __FUNCTION__,
-                    "Unable to update (" . $this->object->id . ")."
+                    "Unable to update (".$this->object->id.")."
                 );
             }
-            
+
             Splash::log()->deb("MsgLocalTpl", __CLASS__, __FUNCTION__, "Customer Updated");
 
             return $this->getObjectIdentifier();
         }
-        
+
         //====================================================================//
         // If NO Id Given = > Create Object
         //====================================================================//
-            
+
         //====================================================================//
         // If NO Password Given = > Create Random Password
         if (empty($this->object->passwd)) {
@@ -122,7 +122,7 @@ trait CRUDTrait
                 "MsgLocalTpl",
                 __CLASS__,
                 __FUNCTION__,
-                "New Customer Password Generated - " . $this->object->passwd
+                "New Customer Password Generated - ".$this->object->passwd
             );
         }
 
@@ -132,7 +132,7 @@ trait CRUDTrait
             return Splash::log()->err("ErrLocalTpl", __CLASS__, __FUNCTION__, "Unable to create Customer. ");
         }
         Splash::log()->deb("MsgLocalTpl", __CLASS__, __FUNCTION__, "Customer Created");
-        
+
         //====================================================================//
         // UPDATE/CREATE SPLASH ID
         //====================================================================//
@@ -140,10 +140,10 @@ trait CRUDTrait
             self::setSplashId(self::$NAME, $this->object->id, $this->NewSplashId);
             $this->NewSplashId = null;
         }
-        
+
         return $this->getObjectIdentifier();
     }
-    
+
     /**
      * Delete requested Object
      *
@@ -156,30 +156,30 @@ trait CRUDTrait
         //====================================================================//
         // Stack Trace
         Splash::log()->trace(__CLASS__, __FUNCTION__);
-        
+
         //====================================================================//
         // Safety Checks
         if (empty($objectId)) {
             return Splash::log()->err("ErrSchNoObjectId", __CLASS__."::".__FUNCTION__);
         }
-        
+
         //====================================================================//
         // Load Object From DataBase
         //====================================================================//
         $object = new Customer($objectId);
         if ($object->id != $objectId) {
-            return Splash::log()->war("ErrLocalTpl", __CLASS__, __FUNCTION__, "Unable to load (" . $objectId . ").");
+            return Splash::log()->war("ErrLocalTpl", __CLASS__, __FUNCTION__, "Unable to load (".$objectId.").");
         }
         //====================================================================//
         // Delete Object From DataBase
         //====================================================================//
         if (true != $object->delete()) {
-            return Splash::log()->err("ErrLocalTpl", __CLASS__, __FUNCTION__, "Unable to delete (" . $objectId . ").");
+            return Splash::log()->err("ErrLocalTpl", __CLASS__, __FUNCTION__, "Unable to delete (".$objectId.").");
         }
-        
+
         return true;
     }
-    
+
     /**
      * {@inheritdoc}
      */

@@ -48,7 +48,7 @@ class Product extends AbstractObject
     use \Splash\Local\Objects\Core\SplashMetaTrait;
     use \Splash\Local\Objects\Core\ObjectsListCommonsTrait;
     use \Splash\Local\Traits\SplashIdTrait;
-    
+
     // Prestashop Products Traits
     use \Splash\Local\Objects\Product\ObjectsListTrait;
     use \Splash\Local\Objects\Product\CRUDTrait;
@@ -63,50 +63,50 @@ class Product extends AbstractObject
     use \Splash\Local\Objects\Product\VariantsTrait;
     use \Splash\Local\Objects\Product\ChecksumTrait;
     use Product\IdEncoderTrait;
-    
+
     /**
      * @var psProduct
      */
     protected $object;
-    
+
     //====================================================================//
     // Object Definition Parameters
     //====================================================================//
-    
+
     /**
      *  Object Disable Flag. Uncomment thius line to Override this flag and disable Object.
      */
 //    protected static    $DISABLED        =  True;
-    
+
     /**
      *  Object Name (Translated by Module)
      */
-    protected static $NAME            =  "Product";
-    
+    protected static $NAME = "Product";
+
     /**
      *  Object Description (Translated by Module)
      */
-    protected static $DESCRIPTION     =  "Prestashop Product Object";
-    
+    protected static $DESCRIPTION = "Prestashop Product Object";
+
     /**
      *  Object Icon (FontAwesome or Glyph ico tag)
      */
-    protected static $ICO     =  "fa fa-product-hunt";
-    
+    protected static $ICO = "fa fa-product-hunt";
+
     /**
      *  Object Synchronistion Limitations
      *
      *  This Flags are Used by Splash Server to Prevent Unexpected Operations on Remote Server
      */
-    protected static $ALLOW_PUSH_CREATED         =  true;        // Allow Creation Of New Local Objects
-    protected static $ALLOW_PUSH_UPDATED         =  true;        // Allow Update Of Existing Local Objects
-    protected static $ALLOW_PUSH_DELETED         =  true;        // Allow Delete Of Existing Local Objects
-    
+    protected static $ALLOW_PUSH_CREATED = true;        // Allow Creation Of New Local Objects
+    protected static $ALLOW_PUSH_UPDATED = true;        // Allow Update Of Existing Local Objects
+    protected static $ALLOW_PUSH_DELETED = true;        // Allow Delete Of Existing Local Objects
+
     /**
      *  Object Synchronistion Recommended Configuration
      */
     // Enable Creation Of New Local Objects when Not Existing
-    protected static $ENABLE_PUSH_CREATED       =  false;
+    protected static $ENABLE_PUSH_CREATED = false;
 //    // Enable Update Of Existing Local Objects when Modified Remotly
 //    protected static $ENABLE_PUSH_UPDATED       =  true;
 //    // Enable Delete Of Existing Local Objects when Deleted Remotly
@@ -118,23 +118,23 @@ class Product extends AbstractObject
 //    protected static $ENABLE_PULL_UPDATED       =  true;
 //    // Enable Delete Of Remotes Objects when Deleted Localy
 //    protected static $ENABLE_PULL_DELETED       =  true;
-    
+
     //====================================================================//
     // General Class Variables
     //====================================================================//
     protected $ProductId;     // Prestashop Product Class Id
     protected $LangId;     // Prestashop Language Class Id
     protected $Currency;     // Prestashop Currency Class
-    
+
     /**
      * @var SplashSync
      */
     private $spl;
-    
+
     //====================================================================//
     // Class Constructor
     //====================================================================//
-        
+
     public function __construct()
     {
         //====================================================================//
@@ -150,7 +150,7 @@ class Product extends AbstractObject
         $this->spl = Local::getLocalModule();
         //====================================================================//
         // Load Default Language
-        $this->LangId   = LanguagesManager::loadDefaultLanguage();
+        $this->LangId = LanguagesManager::loadDefaultLanguage();
         //====================================================================//
         // Load Default Currency
         $this->Currency = new Currency(Configuration::get('PS_CURRENCY_DEFAULT'));

@@ -29,23 +29,23 @@ use Translate;
 trait PricesTrait
 {
     use SplashPricesTrait;
-    
+
     /**
      * @var string
      */
     private $NewPrice;
-    
+
     /**
      * Build Fields using FieldFactory
      */
     private function buildPricesFields()
     {
         $groupName = Translate::getAdminTranslation("Prices", "AdminProducts");
-        
+
         //====================================================================//
         // PRICES INFORMATIONS
         //====================================================================//
-        
+
         //====================================================================//
         // Product Selling Price
         $this->fieldsFactory()->create(SPL_T_PRICE)
@@ -54,12 +54,12 @@ trait PricesTrait
                 Translate::getAdminTranslation(
                     "Price (tax excl.)",
                     "AdminProducts"
-                ) . " (" . $this->Currency->sign . ")"
+                )." (".$this->Currency->sign.")"
             )
             ->MicroData("http://schema.org/Product", "price")
             ->Group($groupName)
             ->isListed();
-        
+
         //====================================================================//
         // Product Selling Base Price
         $this->fieldsFactory()->create(SPL_T_PRICE)
@@ -68,12 +68,12 @@ trait PricesTrait
                 Translate::getAdminTranslation(
                     "Price (tax excl.)",
                     "AdminProducts"
-                ) . " Base (" . $this->Currency->sign . ")"
+                )." Base (".$this->Currency->sign.")"
             )
             ->MicroData("http://schema.org/Product", "basePrice")
             ->Group($groupName)
             ->isListed();
-        
+
         //====================================================================//
         // WholeSale Price
         $this->fieldsFactory()->create(SPL_T_PRICE)
@@ -82,7 +82,7 @@ trait PricesTrait
                 Translate::getAdminTranslation(
                     "Wholesale price",
                     "AdminProducts"
-                ) . " Base (" . $this->Currency->sign . ")"
+                )." Base (".$this->Currency->sign.")"
             )
             ->Group($groupName)
             ->MicroData("http://schema.org/Product", "wholesalePrice");
@@ -93,8 +93,6 @@ trait PricesTrait
      *
      * @param null|string $key       Input List Key
      * @param string      $fieldName Field Identifier / Name
-     *
-     * @return void
      */
     private function getPricesFields($key, $fieldName)
     {
@@ -108,11 +106,11 @@ trait PricesTrait
             case 'price':
                 //====================================================================//
                 // Read Price
-                $priceHT    = (double) Tools::convertPrice(
+                $priceHT = (double) Tools::convertPrice(
                     $this->object->getPrice(false, $this->AttributeId),
                     $this->Currency
                 );
-                $taxPercent        = (double)  $this->object->getTaxesRate();
+                $taxPercent = (double)  $this->object->getTaxesRate();
                 //====================================================================//
                 // Build Price Array
                 $this->out[$fieldName] = self::prices()->Encode(
@@ -128,9 +126,9 @@ trait PricesTrait
             case 'price-base':
                 //====================================================================//
                 // Read Price
-                $priceHT    = (double) Tools::convertPrice($this->object->base_price, $this->Currency);
+                $priceHT = (double) Tools::convertPrice($this->object->base_price, $this->Currency);
 //                $PriceHT    = (double) Tools::convertPrice($this->object->price, $this->Currency);
-                $taxPercent        = (double) $this->object->getTaxesRate();
+                $taxPercent = (double) $this->object->getTaxesRate();
                 //====================================================================//
                 // Build Price Array
                 $this->out[$fieldName] = self::prices()->Encode(
@@ -151,7 +149,7 @@ trait PricesTrait
                 } else {
                     $priceHT = (double) Tools::convertPrice($this->object->wholesale_price, $this->Currency);
                 }
-                $taxPercent        = (double)  $this->object->getTaxesRate();
+                $taxPercent = (double)  $this->object->getTaxesRate();
                 //====================================================================//
                 // Build Price Array
                 $this->out[$fieldName] = self::prices()->Encode(
@@ -167,19 +165,17 @@ trait PricesTrait
             default:
                 return;
         }
-        
+
         if (!is_null($key)) {
             unset($this->in[$key]);
         }
     }
-    
+
     /**
      * Write Given Fields
      *
      * @param string $fieldName Field Identifier / Name
      * @param mixed  $fieldData Field Data
-     *
-     * @return void
      */
     private function setPricesFields($fieldName, $fieldData)
     {
@@ -197,12 +193,12 @@ trait PricesTrait
                 //====================================================================//
                 // Read Current Product Price (Via Out Buffer)
                 $this->getPricesFields(null, "price-base");
-                
+
                 //====================================================================//
                 // Compare Prices
                 if (!self::prices()->Compare($this->out["price-base"], $fieldData)) {
-                    $this->object->price        = $fieldData["ht"];
-                    $this->object->base_price   = $fieldData["ht"];
+                    $this->object->price = $fieldData["ht"];
+                    $this->object->base_price = $fieldData["ht"];
                     $this->needUpdate();
                     //====================================================================//
                     // Clear Cache
@@ -220,16 +216,16 @@ trait PricesTrait
                 if (self::prices()->Compare($this->out["price-wholesale"], $fieldData)) {
                     break;
                 }
-                
+
                 //====================================================================//
                 // Update product Wholesale Price with Attribute
                 if ($this->AttributeId) {
-                    $this->Attribute->wholesale_price   =   $fieldData["ht"];
+                    $this->Attribute->wholesale_price = $fieldData["ht"];
                     $this->needUpdate("Attribute");
                 //====================================================================//
                 // Update product Price without Attribute
                 } else {
-                    $this->object->wholesale_price      =   $fieldData["ht"];
+                    $this->object->wholesale_price = $fieldData["ht"];
                     $this->needUpdate();
                 }
 
@@ -237,18 +233,16 @@ trait PricesTrait
             default:
                 return;
         }
-        
+
         if (isset($this->in[$fieldName])) {
             unset($this->in[$fieldName]);
         }
     }
-    
+
     /**
      * Write New Price
      *
      * @param array $newPrice New Product Price Array
-     *
-     * @return void
      */
     private function updateProductPrice($newPrice)
     {
@@ -272,31 +266,31 @@ trait PricesTrait
                 $this->needUpdate();
             }
         }
-        
+
         //====================================================================//
         // Update Price VAT Rate
         if (abs($newPrice["vat"] - $this->object->tax_rate) > 1E-6) {
             //====================================================================//
             // Search For Tax Id Group with Given Tax Rate and Country
-            $newTaxRateGroupId  =   TaxManager::getTaxRateGroupId($newPrice["vat"]);
+            $newTaxRateGroupId = TaxManager::getTaxRateGroupId($newPrice["vat"]);
             //====================================================================//
             // If Tax Group Found, Update Product
             if (($newTaxRateGroupId >= 0) && ($newTaxRateGroupId != $this->object->id_tax_rules_group)) {
-                $this->object->id_tax_rules_group  = (int) $newTaxRateGroupId;
-                $this->object->tax_rate            = $newPrice["vat"];
+                $this->object->id_tax_rules_group = (int) $newTaxRateGroupId;
+                $this->object->tax_rate = $newPrice["vat"];
                 $this->needUpdate();
             } else {
                 Splash::log()->war(
-                    "VAT Rate Update : Unable to find this tax rate localy (" . $newPrice["vat"] . ")"
+                    "VAT Rate Update : Unable to find this tax rate localy (".$newPrice["vat"].")"
                 );
             }
         }
-        
+
         //====================================================================//
         // Clear Cache
         \Product::flushPriceCache();
     }
-    
+
     /**
      * Update Combination Price Impact
      *
@@ -309,9 +303,9 @@ trait PricesTrait
         //====================================================================//
         // Detect New Base Price
         if (isset($this->in['price-base']["ht"])) {
-            $basePrice  =   $this->in['price-base']["ht"];
+            $basePrice = $this->in['price-base']["ht"];
         } else {
-            $basePrice  =   $this->object->base_price;
+            $basePrice = $this->object->base_price;
         }
         //====================================================================//
         // Evaluate Attribute Price
@@ -319,7 +313,7 @@ trait PricesTrait
         //====================================================================//
         // Update Attribute Price if Required
         if (abs($priceHT - $this->Attribute->price) > 1E-6) {
-            $this->Attribute->price     =   round($priceHT, 9);
+            $this->Attribute->price = round($priceHT, 9);
             $this->needUpdate("Attribute");
         }
     }

@@ -37,7 +37,7 @@ trait OptionalTrait
             ->Identifier("phone")
             ->Name(Translate::getAdminTranslation("Home phone", "AdminAddresses"))
             ->MicroData("http://schema.org/PostalAddress", "telephone");
-        
+
         //====================================================================//
         // Mobile Phone
         $this->fieldsFactory()->create(SPL_T_PHONE)
@@ -53,7 +53,7 @@ trait OptionalTrait
             ->MicroData("http://schema.org/Organization", "taxID")
             ->Group("ID")
             ->isNotTested();
-        
+
         //====================================================================//
         // VAT Number
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
@@ -62,7 +62,7 @@ trait OptionalTrait
             ->MicroData("http://schema.org/Organization", "vatID")
             ->Group("ID")
             ->isNotTested();
-        
+
         //====================================================================//
         // Note
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
@@ -71,14 +71,12 @@ trait OptionalTrait
             ->MicroData("http://schema.org/PostalAddress", "description")
             ->Group("Notes");
     }
-     
+
     /**
      * Read requested Field
      *
      * @param string $key       Input List Key
      * @param string $fieldName Field Identifier / Name
-     *
-     * @return void
      */
     private function getOptionalFields($key, $fieldName)
     {
@@ -98,17 +96,15 @@ trait OptionalTrait
             default:
                 return;
         }
-        
+
         unset($this->in[$key]);
     }
-    
+
     /**
      * Write Given Fields
      *
      * @param string $fieldName Field Identifier / Name
      * @param mixed  $fieldData Field Data
-     *
-     * @return void
      */
     private function setOptionalFields($fieldName, $fieldData)
     {
@@ -128,7 +124,7 @@ trait OptionalTrait
             default:
                 return;
         }
-        
+
         unset($this->in[$fieldName]);
     }
 }

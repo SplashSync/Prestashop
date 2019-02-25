@@ -32,7 +32,7 @@ trait AddressTrait
             ->Name('Billing Address ID')
             ->MicroData("http://schema.org/Order", "billingAddress")
             ->isRequired();
-        
+
         //====================================================================//
         // Shipping Address
         $this->fieldsFactory()->create(self::objects()->encode("Address", SPL_T_ID))
@@ -41,14 +41,12 @@ trait AddressTrait
             ->MicroData("http://schema.org/Order", "orderDelivery")
             ->isRequired();
     }
-  
+
     /**
      * Read requested Field
      *
      * @param string $key       Input List Key
      * @param string $fieldName Field Identifier / Name
-     *
-     * @return void
      */
     private function getAddressFields($key, $fieldName)
     {
@@ -59,7 +57,7 @@ trait AddressTrait
             // Customer Address Ids
             case 'id_address_invoice':
             case 'id_address_delivery':
-                if ("Splash\\Local\\Objects\\Invoice" ===  get_class($this)) {
+                if ("Splash\\Local\\Objects\\Invoice" === get_class($this)) {
                     $this->out[$fieldName] = self::objects()->encode("Address", $this->Order->{$fieldName});
                 } else {
                     $this->out[$fieldName] = self::objects()->encode("Address", $this->object->{$fieldName});
@@ -71,14 +69,12 @@ trait AddressTrait
         }
         unset($this->in[$key]);
     }
-    
+
     /**
      * Write Given Fields
      *
      * @param string $fieldName Field Identifier / Name
      * @param mixed  $fieldData Field Data
-     *
-     * @return void
      */
     private function setAddressFields($fieldName, $fieldData)
     {

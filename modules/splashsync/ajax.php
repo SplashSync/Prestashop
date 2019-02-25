@@ -25,7 +25,7 @@ include_once('../../init.php');
 $cookie = new Cookie('psAdmin'); // Use "psAdmin" to read an employee's cookie.
 //====================================================================//
 //  Validate Ajax Token
-$Token  = Tools::getAdminToken(
+$Token = Tools::getAdminToken(
     'AdminModules'.Tab::getIdFromClassName('AdminModules').(int)$cookie->__get("id_employee")
 );
 if (Tools::getValue("token") != $Token) {

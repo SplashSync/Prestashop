@@ -28,7 +28,7 @@ trait HooksTrait
     //  MODULE BACK OFFICE (ORDERS) HOOKS
     // *******************************************************************//
     //====================================================================//
-    
+
     /**
      * This hook is called after a order is created
      *
@@ -38,7 +38,7 @@ trait HooksTrait
     {
         return $this->hookactionOrder($params["object"], SPL_A_CREATE, $this->l('Order Created on Prestashop'));
     }
-    
+
     /**
      * This hook is called after a order is updated
      *
@@ -48,7 +48,7 @@ trait HooksTrait
     {
         return $this->hookactionOrder($params["object"], SPL_A_UPDATE, $this->l('Order Updated on Prestashop'));
     }
-    
+
     /**
      * This hook is called after a order is deleted
      *
@@ -58,13 +58,13 @@ trait HooksTrait
     {
         return $this->hookactionOrder($params["object"], SPL_A_DELETE, $this->l('Order Deleted on Prestashop'));
     }
-    
+
     //====================================================================//
     // *******************************************************************//
     //  MODULE BACK OFFICE (INVOICES) HOOKS
     // *******************************************************************//
     //====================================================================//
-    
+
     /**
      * This hook is called after a Invoice is created
      *
@@ -74,7 +74,7 @@ trait HooksTrait
     {
         return $this->hookactionInvoice($params["object"], SPL_A_CREATE, $this->l('Invoice Created on Prestashop'));
     }
-    
+
     /**
      * This hook is called after a Invoice is updated
      *
@@ -84,7 +84,7 @@ trait HooksTrait
     {
         return $this->hookactionInvoice($params["object"], SPL_A_UPDATE, $this->l('Invoice Updated on Prestashop'));
     }
-    
+
     /**
      * This hook is called after a Invoice is deleted
      *
@@ -94,7 +94,7 @@ trait HooksTrait
     {
         return $this->hookactionInvoice($params["object"], SPL_A_DELETE, $this->l('Invoice Deleted on Prestashop'));
     }
-    
+
     /**
      * This function is called after each action on a order object
      *
@@ -115,7 +115,7 @@ trait HooksTrait
         }
         //====================================================================//
         // Log
-        $this->debugHook(__FUNCTION__, $orderId . " >> " . $comment);
+        $this->debugHook(__FUNCTION__, $orderId." >> ".$comment);
         //====================================================================//
         // Safety Check
         if (empty($orderId)) {
@@ -136,7 +136,7 @@ trait HooksTrait
 
         return $errors?false:true;
     }
-    
+
     /**
      * This function is called after each action on a order object
      *
@@ -156,7 +156,7 @@ trait HooksTrait
         }
         //====================================================================//
         // Log
-        $this->debugHook(__FUNCTION__, $objectId . " >> " . $comment);
+        $this->debugHook(__FUNCTION__, $objectId." >> ".$comment);
         //====================================================================//
         // Safety Check
         if (empty($objectId)) {

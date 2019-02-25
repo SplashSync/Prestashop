@@ -37,12 +37,12 @@ trait CoreTrait
             ->Identifier("id_customer")
             ->Name(Translate::getAdminTranslation("Customer ID", "AdminCustomerThreads"))
             ->isRequired();
-        if ("Splash\\Local\\Objects\\Invoice" ===  get_class($this)) {
+        if ("Splash\\Local\\Objects\\Invoice" === get_class($this)) {
             $this->fieldsFactory()->MicroData("http://schema.org/Invoice", "customer");
         } else {
             $this->fieldsFactory()->MicroData("http://schema.org/Organization", "ID");
         }
-        
+
         //====================================================================//
         // Customer Email
         $this->fieldsFactory()->create(SPL_T_EMAIL)
@@ -50,7 +50,7 @@ trait CoreTrait
             ->Name(Translate::getAdminTranslation("Email address", "AdminCustomers"))
             ->MicroData("http://schema.org/ContactPoint", "email")
             ->isReadOnly();
-        
+
         //====================================================================//
         // Reference
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
@@ -70,14 +70,12 @@ trait CoreTrait
             ->isReadOnly()
             ->isListed();
     }
-    
+
     /**
      * Read requested Field
      *
      * @param string $key       Input List Key
      * @param string $fieldName Field Identifier / Name
-     *
-     * @return void
      */
     private function getCoreFields($key, $fieldName)
     {
@@ -132,17 +130,15 @@ trait CoreTrait
             default:
                 return;
         }
-        
+
         unset($this->in[$key]);
     }
-    
+
     /**
      * Write Given Fields
      *
      * @param string $fieldName Field Identifier / Name
      * @param mixed  $fieldData Field Data
-     *
-     * @return void
      */
     private function setCoreFields($fieldName, $fieldData)
     {

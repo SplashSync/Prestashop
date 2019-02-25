@@ -28,18 +28,18 @@ trait StockTrait
      * @var string
      */
     private $NewStock;
-    
+
     /**
      * Build Fields using FieldFactory
      */
     private function buildStockFields()
     {
-        $groupName  = Translate::getAdminTranslation("Quantities", "AdminProducts");
-        
+        $groupName = Translate::getAdminTranslation("Quantities", "AdminProducts");
+
         //====================================================================//
         // PRODUCT STOCKS
         //====================================================================//
-        
+
         //====================================================================//
         // Stock Reel
         $this->fieldsFactory()->create(SPL_T_INT)
@@ -57,7 +57,7 @@ trait StockTrait
             ->MicroData("http://schema.org/ItemAvailability", "OutOfStock")
             ->Group($groupName)
             ->isReadOnly();
-                
+
         //====================================================================//
         // Minimum Order Quantity
         $this->fieldsFactory()->create(SPL_T_INT)
@@ -72,14 +72,12 @@ trait StockTrait
             ->Group($groupName)
             ->MicroData("http://schema.org/Offer", "eligibleTransactionVolume");
     }
-    
+
     /**
      * Read requested Field
      *
      * @param string $key       Input List Key
      * @param string $fieldName Field Identifier / Name
-     *
-     * @return void
      */
     private function getStockFields($key, $fieldName)
     {
@@ -114,17 +112,15 @@ trait StockTrait
             default:
                 return;
         }
-        
+
         unset($this->in[$key]);
     }
-    
+
     /**
      * Write Given Fields
      *
      * @param string $fieldName Field Identifier / Name
      * @param mixed  $fieldData Field Data
-     *
-     * @return void
      */
     private function setStockFields($fieldName, $fieldData)
     {

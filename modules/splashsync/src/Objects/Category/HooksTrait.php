@@ -25,7 +25,7 @@ trait HooksTrait
     //  MODULE BACK OFFICE (CATEGORY) HOOKS
     // *******************************************************************//
     //====================================================================//
-    
+
     /**
      *   @abstract       This hook is displayed after a product is created
      *
@@ -36,7 +36,7 @@ trait HooksTrait
         $this->debugHook(__FUNCTION__, $params["category"]->id);
         //====================================================================//
         // Commit Update For Base Product
-        $error =    0;
+        $error = 0;
         $error += 1 - $this->doCommit(
             SPL_O_PRODCAT,
             $params["category"]->id,
@@ -49,7 +49,7 @@ trait HooksTrait
 
         return true;
     }
-    
+
     /**
      *   @abstract       This hook is called while saving products
      *
@@ -63,7 +63,7 @@ trait HooksTrait
         }
         //====================================================================//
         // Commit Update For Base Product
-        $error =    0;
+        $error = 0;
         $error += 1 - $this->doCommit(
             SPL_O_PRODCAT,
             $params["category"]->id,
@@ -76,7 +76,7 @@ trait HooksTrait
 
         return true;
     }
-    
+
     /**
      *   @abstract       This hook is called when a product is deleted
      *
@@ -87,7 +87,7 @@ trait HooksTrait
         $this->debugHook(__FUNCTION__, $params["category"]->id, $params);
         //====================================================================//
         // Commit Update For Base Product
-        $error =    0;
+        $error = 0;
         $error += 1 - $this->doCommit(
             SPL_O_PRODCAT,
             $params["category"]->id,

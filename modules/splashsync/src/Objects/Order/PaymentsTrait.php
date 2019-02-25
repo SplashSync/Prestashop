@@ -31,18 +31,18 @@ trait PaymentsTrait
      * @var array
      */
     private $knownPaymentMethods = array(
-        "bankwire"          =>      "ByBankTransferInAdvance",
-        "ps_wirepayment"    =>      "ByBankTransferInAdvance",
-        
-        "cheque"            =>      "CheckInAdvance",
-        "ps_checkpayment"   =>      "CheckInAdvance",
-        
-        "paypal"            =>      "PayPal",
-        "amzpayments"       =>      "PayPal",
-        
-        "cashondelivery"    =>      "COD",
+        "bankwire" => "ByBankTransferInAdvance",
+        "ps_wirepayment" => "ByBankTransferInAdvance",
+
+        "cheque" => "CheckInAdvance",
+        "ps_checkpayment" => "CheckInAdvance",
+
+        "paypal" => "PayPal",
+        "amzpayments" => "PayPal",
+
+        "cashondelivery" => "COD",
     );
-    
+
     /**
      * Build Fields using FieldFactory
      */
@@ -93,14 +93,12 @@ trait PaymentsTrait
             ->Association("mode@payments", "amount@payments")
                 ;
     }
-    
+
     /**
      * Read requested Field
      *
      * @param string $key       Input List Key
      * @param string $fieldName Field Identifier / Name
-     *
-     * @return void
      */
     private function getPaymentsFields($key, $fieldName)
     {
@@ -127,25 +125,25 @@ trait PaymentsTrait
                 //====================================================================//
                 // Payment Line - Payment Mode
                 case 'mode@payments':
-                    $value  =   $this->getPaymentMethod($orderPayment);
+                    $value = $this->getPaymentMethod($orderPayment);
 
                     break;
                 //====================================================================//
                 // Payment Line - Payment Date
                 case 'date@payments':
-                    $value  =   date(SPL_T_DATECAST, strtotime($orderPayment->date_add));
+                    $value = date(SPL_T_DATECAST, strtotime($orderPayment->date_add));
 
                     break;
                 //====================================================================//
                 // Payment Line - Payment Identification Number
                 case 'number@payments':
-                    $value  =   $orderPayment->transaction_id;
+                    $value = $orderPayment->transaction_id;
 
                     break;
                 //====================================================================//
                 // Payment Line - Payment Amount
                 case 'amount@payments':
-                    $value  =   $orderPayment->amount;
+                    $value = $orderPayment->amount;
 
                     break;
                 default:
@@ -157,7 +155,7 @@ trait PaymentsTrait
         }
         unset($this->in[$key]);
     }
-    
+
     /**
      * Try To Detect Payment method Standardized Name
      *
@@ -185,14 +183,12 @@ trait PaymentsTrait
 
         return "Unknown";
     }
-    
+
     /**
      * Write Given Fields
      *
      * @param string $fieldName Field Identifier / Name
      * @param mixed  $fieldData Field Data
-     *
-     * @return void
      */
     private function setPaymentsFields($fieldName, $fieldData)
     {
@@ -201,7 +197,7 @@ trait PaymentsTrait
         if ("payments" !== $fieldName) {
             return;
         }
-        
+
         //====================================================================//
         // Verify Lines List & Update if Needed
         foreach ($fieldData as $paymentItem) {
@@ -214,16 +210,16 @@ trait PaymentsTrait
                 $this->Payments->next();
             }
         }
-        
+
         //====================================================================//
         // Delete Remaining Lines
         foreach ($this->Payments as $paymentItem) {
             $paymentItem->delete();
         }
-        
+
         unset($this->in[$fieldName]);
     }
-    
+
     /**
      * Write Data to Current Item
      *
@@ -244,18 +240,18 @@ trait PaymentsTrait
         if (is_null($orderPayment)) {
             //====================================================================//
             // Create New OrderDetail Item
-            $orderPayment                       =   new OrderPayment();
-            $orderPayment->order_reference      =   $this->object->reference;
-            $orderPayment->id_currency          =   $this->object->id_currency;
-            $orderPayment->conversion_rate      =   1;
+            $orderPayment = new OrderPayment();
+            $orderPayment->order_reference = $this->object->reference;
+            $orderPayment->id_currency = $this->object->id_currency;
+            $orderPayment->conversion_rate = 1;
         }
-        
+
         //====================================================================//
         // Update Payment Data & Check Update Needed
         if (!$this->updatePaymentData($orderPayment, $paymentItem)) {
             return true;
         }
-        
+
         if (!$orderPayment->id) {
             if (true != $orderPayment->add()) {
                 return Splash::log()->err("ErrLocalTpl", __CLASS__, __FUNCTION__, "Unable to Create new Payment Line.");
@@ -268,7 +264,7 @@ trait PaymentsTrait
 
         return true;
     }
-    
+
     /**
      * Write Data to Current Item
      *
@@ -279,29 +275,29 @@ trait PaymentsTrait
      */
     private function updatePaymentData($orderPayment, $paymentItem)
     {
-        $update =    false;
-        
+        $update = false;
+
         //====================================================================//
         // Update Payment Method
         if (isset($paymentItem["mode"]) && ($orderPayment->payment_method != $paymentItem["mode"])) {
             $orderPayment->payment_method = $paymentItem["mode"];
-            $update =    true;
+            $update = true;
         }
-        
+
         //====================================================================//
         // Update Payment Amount
         if (isset($paymentItem["amount"]) && ($orderPayment->amount != $paymentItem["amount"])) {
             $orderPayment->amount = $paymentItem["amount"];
-            $update =    true;
+            $update = true;
         }
-        
+
         //====================================================================//
         // Update Payment Number
         if (isset($paymentItem["number"]) && ($orderPayment->transaction_id != $paymentItem["number"])) {
             $orderPayment->transaction_id = $paymentItem["number"];
-            $update =    true;
+            $update = true;
         }
- 
+
         return $update;
     }
 }

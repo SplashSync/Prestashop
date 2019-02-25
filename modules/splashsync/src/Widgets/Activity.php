@@ -12,7 +12,7 @@
  *  For the full copyright and license information, please view the LICENSE
  *  file that was distributed with this source code.
  */
-                    
+
 //====================================================================//
 // *******************************************************************//
 //                     SPLASH FOR PRESTASHOP                          //
@@ -23,8 +23,8 @@
 
 namespace   Splash\Local\Widgets;
 
-use ArrayObject;
 use AdminStatsController;
+use ArrayObject;
 use Configuration;
 use Currency;
 use Splash\Core\SplashCore      as Splash;
@@ -44,35 +44,35 @@ class Activity extends AbstractWidget
      *
      * @var array
      */
-    public static $OPTIONS       = array(
-        "Width"     =>      self::SIZE_XL
+    public static $OPTIONS = array(
+        "Width" => self::SIZE_XL
     );
 
     //====================================================================//
     // Object Definition Parameters
     //====================================================================//
-    
+
     /**
      * Widget Name (Translated by Module)
      *
      * @var string
      */
-    protected static $NAME          =  "Prestashop Activity Widget";
-    
+    protected static $NAME = "Prestashop Activity Widget";
+
     /**
      * Widget Description (Translated by Module)
      *
      * @var string
      */
-    protected static $DESCRIPTION   =  "Display Main Activity of your E-Commerce";
-    
+    protected static $DESCRIPTION = "Display Main Activity of your E-Commerce";
+
     /**
      * Widget Icon (FontAwesome or Glyph ico tag)
      *
      * @var string
      */
-    protected static $ICO            =  "fa fa-map-signs";
-    
+    protected static $ICO = "fa fa-map-signs";
+
     /**
      * @var Currency
      */
@@ -87,14 +87,14 @@ class Activity extends AbstractWidget
      * @var array
      */
     private $sparkOptions = array(
-        "AllowHtml"         =>  true,
-        "Width"             =>  self::SIZE_XS
+        "AllowHtml" => true,
+        "Width" => self::SIZE_XS
     );
-    
+
     //====================================================================//
     // Class Main Functions
     //====================================================================//
-    
+
     /**
      * {@inheritdoc}
      */
@@ -113,12 +113,12 @@ class Activity extends AbstractWidget
 
         $this->setTitle($this->getName());
         $this->setIcon($this->getIcon());
-        
+
         //====================================================================//
         // Build Activity Block
         //====================================================================//
         $this->buildActivityBlock($params);
-        
+
         //====================================================================//
         // Set Blocks to Widget
         $blocks = $this->blocksFactory()->render();
@@ -130,7 +130,7 @@ class Activity extends AbstractWidget
         // Publish Widget
         return $this->render();
     }
-        
+
     //====================================================================//
     // Blocks Generation Functions
     //====================================================================//
@@ -153,15 +153,15 @@ class Activity extends AbstractWidget
 
             return;
         }
-        
+
         //====================================================================//
         // Init Dates
         $this->importDates($inputs);
-        
+
         //====================================================================//
         // Load Default Currency
         $this->currency = new Currency(Configuration::get('PS_CURRENCY_DEFAULT'));
-        
+
         //====================================================================//
         // Load Splash Module
         $this->spl = Local::getLocalModule();
@@ -171,40 +171,40 @@ class Activity extends AbstractWidget
 
         //====================================================================//
         // Build data Array
-        $rawData                =   $this->getData($this->DateStart, $this->DateEnd);
-        $refineData             =   $this->refineData($this->DateStart, $this->DateEnd, $rawData);
-        $activityData           =   $this->addupData($refineData);
+        $rawData = $this->getData($this->DateStart, $this->DateEnd);
+        $refineData = $this->refineData($this->DateStart, $this->DateEnd, $rawData);
+        $activityData = $this->addupData($refineData);
 
         //====================================================================//
         // Build SparkInfo Options
         //====================================================================//
         $this->sparkOptions = array(
-            "AllowHtml"         =>  true,
-            "Width"             =>  self::SIZE_XS
+            "AllowHtml" => true,
+            "Width" => self::SIZE_XS
         );
-            
+
         //====================================================================//
         // Add SparkInfo Blocks
         $this->blocksFactory()
             ->addSparkInfoBlock(array(
-                "title"     =>      $this->spl->l('Sales'),
-                "fa_icon"   =>      "line-chart",
-                "value"     =>      \Tools::displayPrice($activityData["sales"], $this->currency),
+                "title" => $this->spl->l('Sales'),
+                "fa_icon" => "line-chart",
+                "value" => \Tools::displayPrice($activityData["sales"], $this->currency),
             ), $this->sparkOptions)
             ->addSparkInfoBlock(array(
-                "title"     =>      $this->spl->l('Orders'),
-                "fa_icon"   =>      "shopping-cart ",
-                "value"     =>      $activityData["orders"],
+                "title" => $this->spl->l('Orders'),
+                "fa_icon" => "shopping-cart ",
+                "value" => $activityData["orders"],
             ), $this->sparkOptions)
             ->addSparkInfoBlock(array(
-                "title"     =>      $this->spl->l('Average Cart Value'),
-                "fa_icon"   =>      "shopping-cart ",
-                "value"     =>      $activityData["average_cart_value"],
+                "title" => $this->spl->l('Average Cart Value'),
+                "fa_icon" => "shopping-cart ",
+                "value" => $activityData["average_cart_value"],
             ), $this->sparkOptions)
             ->addSparkInfoBlock(array(
-                "title"     =>      $this->spl->l('Net Profit'),
-                "fa_icon"   =>      "money",
-                "value"     =>      \Tools::displayPrice($activityData["net_profits"], $this->currency),
+                "title" => $this->spl->l('Net Profit'),
+                "fa_icon" => "money",
+                "value" => \Tools::displayPrice($activityData["net_profits"], $this->currency),
             ), $this->sparkOptions)
                 ;
     }
@@ -244,8 +244,8 @@ class Activity extends AbstractWidget
             'net_profits' => array()
         );
 
-        $rawDateFrom   = strtotime($dateFrom);
-        $rawDateTo     = min(time(), strtotime($dateTo));
+        $rawDateFrom = strtotime($dateFrom);
+        $rawDateTo = min(time(), strtotime($dateTo));
         for ($date = $rawDateFrom; $date <= $rawDateTo; $date = strtotime('+1 day', $date)) {
             $this->getRefinedSales($refinedData, $date, $grossData);
             $this->getRefinedProfits($refinedData, $date, $grossData);
@@ -253,7 +253,7 @@ class Activity extends AbstractWidget
 
         return $refinedData;
     }
-    
+
     private function addupData($data)
     {
         $summing = array(
@@ -274,7 +274,7 @@ class Activity extends AbstractWidget
 
         return $summing;
     }
-    
+
     private function getRefinedSales(&$refinedData, $date, $grossData)
     {
         $refinedData['sales'][$date] = 0;
@@ -292,7 +292,7 @@ class Activity extends AbstractWidget
         $refinedData['conversion_rate'][$date] = $refinedData['visits'][$date]
                 ? $refinedData['orders'][$date] / $refinedData['visits'][$date] : 0;
     }
-    
+
     private function getRefinedProfits(&$refinedData, $date, $grossData)
     {
         $refinedData['net_profits'][$date] = 0;

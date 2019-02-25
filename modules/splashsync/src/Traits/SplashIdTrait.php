@@ -39,7 +39,7 @@ trait SplashIdTrait
 
         return false;
     }
-    
+
     /**
      * Create Splash Id Storage Table
      *
@@ -47,17 +47,17 @@ trait SplashIdTrait
      */
     public static function createSplashIdTable()
     {
-        $sql    =   "CREATE TABLE IF NOT EXISTS `"._DB_PREFIX_."splash_links`(";
-        $sql   .=   "`rowid`        INT(11)         NOT NULL AUTO_INCREMENT PRIMARY KEY ,";
-        $sql   .=   "`id`           VARCHAR(256)    NOT NULL ,";
-        $sql   .=   "`type`         VARCHAR(256)    NOT NULL ,";
-        $sql   .=   "`spl_id`       VARCHAR(256)    DEFAULT NULL ,";
-        $sql   .=   "`spl_origin`   VARCHAR(256)    DEFAULT NULL ,";
-        $sql   .=   "`extra`        TEXT            DEFAULT NULL )";
-        
+        $sql = "CREATE TABLE IF NOT EXISTS `"._DB_PREFIX_."splash_links`(";
+        $sql .= "`rowid`        INT(11)         NOT NULL AUTO_INCREMENT PRIMARY KEY ,";
+        $sql .= "`id`           VARCHAR(256)    NOT NULL ,";
+        $sql .= "`type`         VARCHAR(256)    NOT NULL ,";
+        $sql .= "`spl_id`       VARCHAR(256)    DEFAULT NULL ,";
+        $sql .= "`spl_origin`   VARCHAR(256)    DEFAULT NULL ,";
+        $sql .= "`extra`        TEXT            DEFAULT NULL )";
+
         return Db::getInstance()->execute($sql);
     }
-    
+
     /**
      * Read Splash Id from Storage
      *
@@ -68,13 +68,13 @@ trait SplashIdTrait
      */
     public static function getSplashId($objectType, $objectId)
     {
-        $sql     =  "SELECT spl_id FROM `"._DB_PREFIX_."splash_links`";
-        $sql    .=  " WHERE type='" . pSQL($objectType) . "' AND id='" . pSQL((string) $objectId) . "' ";
+        $sql = "SELECT spl_id FROM `"._DB_PREFIX_."splash_links`";
+        $sql .= " WHERE type='".pSQL($objectType)."' AND id='".pSQL((string) $objectId)."' ";
         $splashId = Db::getInstance()->getValue($sql, false);
 
         return is_string($splashId) ? $splashId : false;
     }
-    
+
     /**
      * Write Splash Id to Storage
      *
@@ -89,15 +89,15 @@ trait SplashIdTrait
         if (empty($splashId)) {
             return false;
         }
-        
+
         // Read Splash Id
         $current = self::getSplashId($objectType, $objectId);
         // Object is Unknown
         if (!$current) {
             return Db::getInstance()->insert("splash_links", array(
-                "id"        =>  pSQL((string) $objectId),
-                "type"      =>  pSQL($objectType),
-                "spl_id"    =>  pSQL($splashId),
+                "id" => pSQL((string) $objectId),
+                "type" => pSQL($objectType),
+                "spl_id" => pSQL($splashId),
             ));
         }
         // Splash Id Changed
@@ -105,9 +105,9 @@ trait SplashIdTrait
             return Db::getInstance()->update(
                 "splash_links",
                 array(
-                    "spl_id"    =>  pSQL($splashId),
+                    "spl_id" => pSQL($splashId),
                 ),
-                "type='" . pSQL($objectType) . "' AND id='" . pSQL((string) $objectId) . "' "
+                "type='".pSQL($objectType)."' AND id='".pSQL((string) $objectId)."' "
             );
         }
 

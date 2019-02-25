@@ -36,7 +36,7 @@ trait ObjectsListTrait
         //====================================================================//
         // Stack Trace
         Splash::log()->trace(__CLASS__, __FUNCTION__);
-        
+
         //====================================================================//
         // Build query
         $sql = new DbQuery();
@@ -55,16 +55,16 @@ trait ObjectsListTrait
         $sql->leftJoin(
             "country_lang",
             'c',
-            'c.id_country = a.id_country AND id_lang = ' . Context::getContext()->language->id . " "
+            'c.id_country = a.id_country AND id_lang = '.Context::getContext()->language->id." "
         );
         //====================================================================//
         // Setup filters
         if (!empty($filter)) {
             // Add filters with names convertions. Added LOWER function to be NON case sensitive
-            $sqlfilter = " LOWER( a.firstname )     LIKE LOWER( '%" . pSQL($filter) . "%') ";
-            $sqlfilter.= " OR LOWER( a.lastname )   LIKE LOWER( '%" . pSQL($filter) . "%') ";
-            $sqlfilter.= " OR LOWER( a.company )    LIKE LOWER( '%" . pSQL($filter) . "%') ";
-            $sqlfilter.= " OR LOWER( c.name )       LIKE LOWER( '%" . pSQL($filter) . "%') ";
+            $sqlfilter = " LOWER( a.firstname )     LIKE LOWER( '%".pSQL($filter)."%') ";
+            $sqlfilter .= " OR LOWER( a.lastname )   LIKE LOWER( '%".pSQL($filter)."%') ";
+            $sqlfilter .= " OR LOWER( a.company )    LIKE LOWER( '%".pSQL($filter)."%') ";
+            $sqlfilter .= " OR LOWER( c.name )       LIKE LOWER( '%".pSQL($filter)."%') ";
             $sql->where($sqlfilter);
         }
         //====================================================================//

@@ -40,7 +40,7 @@ class ThirdParty extends AbstractObject
     use \Splash\Local\Objects\Core\SplashMetaTrait;
     use \Splash\Local\Objects\Core\ObjectsListCommonsTrait;
     use \Splash\Local\Traits\SplashIdTrait;
-    
+
     // Prestashop ThirdParty Traits
     use \Splash\Local\Objects\ThirdParty\ObjectsListTrait;
     use \Splash\Local\Objects\ThirdParty\CRUDTrait;
@@ -49,71 +49,71 @@ class ThirdParty extends AbstractObject
     use \Splash\Local\Objects\ThirdParty\AddressTrait;
     use \Splash\Local\Objects\ThirdParty\AddressesTrait;
     use \Splash\Local\Objects\ThirdParty\MetaTrait;
-    
+
     /**
      * @var Customer
      */
     protected $object;
-    
+
     //====================================================================//
     // Object Definition Parameters
     //====================================================================//
-    
+
     /**
      *  Object Disable Flag. Uncomment thius line to Override this flag and disable Object.
      */
 //    protected static    $DISABLED        =  True;
-    
+
     /**
      *  Object Name (Translated by Module)
      */
-    protected static $NAME            =  "ThirdParty";
-    
+    protected static $NAME = "ThirdParty";
+
     /**
      *  Object Description (Translated by Module)
      */
-    protected static $DESCRIPTION     =  "Prestashop Customer Object";
-    
+    protected static $DESCRIPTION = "Prestashop Customer Object";
+
     /**
      *  Object Icon (FontAwesome or Glyph ico tag)
      */
-    protected static $ICO     =  "fa fa-user";
+    protected static $ICO = "fa fa-user";
 
     /**
      *  Object Synchronization Limitations
      *
      *  This Flags are Used by Splash Server to Prevent Unexpected Operations on Remote Server
      */
-    protected static $ALLOW_PUSH_CREATED         =  true;        // Allow Creation Of New Local Objects
-    protected static $ALLOW_PUSH_UPDATED         =  true;        // Allow Update Of Existing Local Objects
-    protected static $ALLOW_PUSH_DELETED         =  true;        // Allow Delete Of Existing Local Objects
-    
+    protected static $ALLOW_PUSH_CREATED = true;        // Allow Creation Of New Local Objects
+    protected static $ALLOW_PUSH_UPDATED = true;        // Allow Update Of Existing Local Objects
+    protected static $ALLOW_PUSH_DELETED = true;        // Allow Delete Of Existing Local Objects
+
     /**
      *  Object Synchronization Recommended Configuration
      */
     // Enable Creation Of New Local Objects when Not Existing
-    protected static $ENABLE_PUSH_CREATED       =  false;
+    protected static $ENABLE_PUSH_CREATED = false;
     // Enable Update Of Existing Local Objects when Modified Remotly
-    protected static $ENABLE_PUSH_UPDATED       =  true;
+    protected static $ENABLE_PUSH_UPDATED = true;
     // Enable Delete Of Existing Local Objects when Deleted Remotly
-    protected static $ENABLE_PUSH_DELETED       =  true;
+    protected static $ENABLE_PUSH_DELETED = true;
 
     // Enable Import Of New Local Objects
-    protected static $ENABLE_PULL_CREATED       =  true;
+    protected static $ENABLE_PULL_CREATED = true;
     // Enable Import of Updates of Local Objects when Modified Localy
-    protected static $ENABLE_PULL_UPDATED       =  true;
+    protected static $ENABLE_PULL_UPDATED = true;
     // Enable Delete Of Remotes Objects when Deleted Localy
-    protected static $ENABLE_PULL_DELETED       =  true;
-    
+    protected static $ENABLE_PULL_DELETED = true;
+
     /**
      * @var SplashSync
      */
     private $spl;
-        
+
     //====================================================================//
     // Class Constructor
     //====================================================================//
-    
+
     public function __construct()
     {
         //====================================================================//

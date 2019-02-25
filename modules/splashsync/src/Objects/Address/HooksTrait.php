@@ -25,7 +25,7 @@ trait HooksTrait
     //  MODULE BACK OFFICE (CUSTOMERS) HOOKS
     // *******************************************************************//
     //====================================================================//
-    
+
     /**
      * This hook is displayed after an Address is created
      *
@@ -40,7 +40,7 @@ trait HooksTrait
             $this->l('Customer Address Created on Prestashop')
         );
     }
-    
+
     /**
      * This hook is displayed after an Address is updated
      *

@@ -34,7 +34,7 @@ trait ObjectsListTrait
         //====================================================================//
         // Stack Trace
         Splash::log()->trace(__CLASS__, __FUNCTION__);
-        
+
         //===============================customer=====================================//
         // Build query
         $sql = new DbQuery();
@@ -58,25 +58,25 @@ trait ObjectsListTrait
         //====================================================================//
         // Setup filters
         if (!empty($filter)) {
-            $where = " LOWER( i.number )        LIKE LOWER( '%" . pSQL($filter) ."%') ";
-            $where.= " OR LOWER( o.reference )  LIKE LOWER( '%" . pSQL($filter) ."%') ";
-            $where.= " OR LOWER( c.firstname )  LIKE LOWER( '%" . pSQL($filter) ."%') ";
-            $where.= " OR LOWER( c.lastname )   LIKE LOWER( '%" . pSQL($filter) ."%') ";
-            $where.= " OR LOWER( o.date_add )   LIKE LOWER( '%" . pSQL($filter) ."%') ";
+            $where = " LOWER( i.number )        LIKE LOWER( '%".pSQL($filter)."%') ";
+            $where .= " OR LOWER( o.reference )  LIKE LOWER( '%".pSQL($filter)."%') ";
+            $where .= " OR LOWER( c.firstname )  LIKE LOWER( '%".pSQL($filter)."%') ";
+            $where .= " OR LOWER( c.lastname )   LIKE LOWER( '%".pSQL($filter)."%') ";
+            $where .= " OR LOWER( o.date_add )   LIKE LOWER( '%".pSQL($filter)."%') ";
             $sql->where($where);
         }
         //====================================================================//
         // Compute Total Number of Results
-        $total      = $this->getObjectListTotal($sql);
+        $total = $this->getObjectListTotal($sql);
         //====================================================================//
         // Execute Generic Search
-        $result     = $this->getObjectsListRawData($sql, "order_date", $params);
+        $result = $this->getObjectsListRawData($sql, "order_date", $params);
         if (false === $result) {
             return $result;
         }
         //====================================================================//
         // Init Result Array
-        $data       = array();
+        $data = array();
         //====================================================================//
         // For each result, read information and add to $Data
         foreach ($result as $key => $invoice) {
@@ -86,9 +86,9 @@ trait ObjectsListTrait
         }
         //====================================================================//
         // Prepare List result meta infos
-        $data["meta"]["current"]    =   count($data);   // Store Current Number of results
-        $data["meta"]["total"]      =   $total;         // Store Total Number of results
-        Splash::log()->deb("MsgLocalTpl", __CLASS__, __FUNCTION__, (count($data)-1)." Invoices Found.");
+        $data["meta"]["current"] = count($data);   // Store Current Number of results
+        $data["meta"]["total"] = $total;         // Store Total Number of results
+        Splash::log()->deb("MsgLocalTpl", __CLASS__, __FUNCTION__, (count($data) - 1)." Invoices Found.");
 
         return $data;
     }

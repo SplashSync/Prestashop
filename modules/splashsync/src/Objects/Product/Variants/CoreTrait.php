@@ -35,7 +35,7 @@ trait CoreTrait
         if (!Combination::isFeatureActive()) {
             return;
         }
-        
+
         //====================================================================//
         // Product Type Name
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
@@ -45,7 +45,7 @@ trait CoreTrait
             ->addChoices(array("simple" => "Simple", "variant" => "Variant"))
             ->MicroData("http://schema.org/Product", "type")
             ->isReadOnly();
-        
+
         //====================================================================//
         // Is Default Product Variant
         $this->fieldsFactory()->create(SPL_T_BOOL)
@@ -63,7 +63,7 @@ trait CoreTrait
             ->Group(Translate::getAdminTranslation("Meta", "AdminThemes"))
             ->MicroData("http://schema.org/Product", "DefaultVariation")
             ->isNotTested();
-        
+
         //====================================================================//
         // Product Variation Parent Link
         $this->fieldsFactory()->create(self::objects()->encode("Product", SPL_T_ID))
@@ -77,14 +77,12 @@ trait CoreTrait
     //====================================================================//
     // Fields Reading Functions
     //====================================================================//
-    
+
     /**
      * Read requested Field
      *
      * @param string $key       Input List Key
      * @param string $fieldName Field Identifier / Name
-     *
-     * @return void
      */
     private function getVariantsCoreFields($key, $fieldName)
     {
@@ -102,9 +100,9 @@ trait CoreTrait
                 break;
             case 'type':
                 if ($this->AttributeId) {
-                    $this->out[$fieldName]  =   "variant";
+                    $this->out[$fieldName] = "variant";
                 } else {
-                    $this->out[$fieldName]  =   "simple";
+                    $this->out[$fieldName] = "simple";
                 }
 
                 break;
@@ -112,19 +110,19 @@ trait CoreTrait
                 if ($this->AttributeId) {
                     $this->getSimple($fieldName, "Attribute");
                 } else {
-                    $this->out[$fieldName]  =   false;
+                    $this->out[$fieldName] = false;
                 }
 
                 break;
             case 'default_id':
                 if ($this->AttributeId) {
-                    $unikId     =   (int) $this->getUnikId(
+                    $unikId = (int) $this->getUnikId(
                         $this->ProductId,
                         $this->object->getDefaultIdProductAttribute()
                     );
                     $this->out[$fieldName] = self::objects()->encode("Product", $unikId);
                 } else {
-                    $this->out[$fieldName]  =   null;
+                    $this->out[$fieldName] = null;
                 }
 
                 break;
@@ -134,14 +132,12 @@ trait CoreTrait
 
         unset($this->in[$key]);
     }
-    
+
     /**
      * Write Given Fields
      *
      * @param string $fieldName Field Identifier / Name
      * @param mixed  $fieldData Field Data
-     *
-     * @return void
      */
     private function setVariantsCoreFields($fieldName, $fieldData)
     {
@@ -156,7 +152,7 @@ trait CoreTrait
                 if (!$this->AttributeId || ($this->ProductId != $this->getId($fieldData))) {
                     break;
                 }
-                $attributeId    =     $this->getAttribute($fieldData);
+                $attributeId = $this->getAttribute($fieldData);
                 if (!$attributeId || ($attributeId == $this->object->getDefaultIdProductAttribute())) {
                     break;
                 }

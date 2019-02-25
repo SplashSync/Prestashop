@@ -35,70 +35,70 @@ class Address extends AbstractObject
     use IntelParserTrait;
     use SimpleFieldsTrait;
     use ObjectsTrait;
-    
+
     // Prestashop Common Traits
     use \Splash\Local\Objects\Core\DatesTrait;
     use \Splash\Local\Objects\Core\SplashMetaTrait;
     use \Splash\Local\Objects\Core\ObjectsListCommonsTrait;
     use \Splash\Local\Traits\SplashIdTrait;
-    
+
     // Prestashop Address Traits
     use \Splash\Local\Objects\Address\ObjectsListTrait;
     use \Splash\Local\Objects\Address\CRUDTrait;
     use \Splash\Local\Objects\Address\CoreTrait;
     use \Splash\Local\Objects\Address\MainTrait;
     use \Splash\Local\Objects\Address\OptionalTrait;
-    
+
     //====================================================================//
     // Object Definition Parameters
     //====================================================================//
-    
+
     /**
      *  Object Disable Flag. Uncomment this line to Override this flag and disable Object.
      */
 //    protected static    $DISABLED        =  True;
-    
+
     /**
      *  Object Name (Translated by Module)
      */
-    protected static $NAME            =  "Address";
-    
+    protected static $NAME = "Address";
+
     /**
      *  Object Description (Translated by Module)
      */
-    protected static $DESCRIPTION     =  "Prestashop Customers Address Object";
-    
+    protected static $DESCRIPTION = "Prestashop Customers Address Object";
+
     /**
      *  Object Icon (FontAwesome or Glyph ico tag)
      */
-    protected static $ICO     =  "fa fa-envelope-o";
+    protected static $ICO = "fa fa-envelope-o";
 
     /**
      *  Object Synchronistion Limitations
      *
      *  This Flags are Used by Splash Server to Prevent Unexpected Operations on Remote Server
      */
-    protected static $ALLOW_PUSH_CREATED         =  true;        // Allow Creation Of New Local Objects
-    protected static $ALLOW_PUSH_UPDATED         =  true;        // Allow Update Of Existing Local Objects
-    protected static $ALLOW_PUSH_DELETED         =  true;        // Allow Delete Of Existing Local Objects
-    
+    protected static $ALLOW_PUSH_CREATED = true;        // Allow Creation Of New Local Objects
+    protected static $ALLOW_PUSH_UPDATED = true;        // Allow Update Of Existing Local Objects
+    protected static $ALLOW_PUSH_DELETED = true;        // Allow Delete Of Existing Local Objects
+
     /**
      *  Object Synchronistion Recommended Configuration
      */
     // Enable Creation Of New Local Objects when Not Existing
-    protected static $ENABLE_PUSH_CREATED       =  false;
+    protected static $ENABLE_PUSH_CREATED = false;
     // Enable Update Of Existing Local Objects when Modified Remotly
-    protected static $ENABLE_PUSH_UPDATED       =  true;
+    protected static $ENABLE_PUSH_UPDATED = true;
     // Enable Delete Of Existing Local Objects when Deleted Remotly
-    protected static $ENABLE_PUSH_DELETED       =  true;
+    protected static $ENABLE_PUSH_DELETED = true;
 
     // Enable Import Of New Local Objects
-    protected static $ENABLE_PULL_CREATED       =  true;
+    protected static $ENABLE_PULL_CREATED = true;
     // Enable Import of Updates of Local Objects when Modified Localy
-    protected static $ENABLE_PULL_UPDATED       =  true;
+    protected static $ENABLE_PULL_UPDATED = true;
     // Enable Delete Of Remotes Objects when Deleted Localy
-    protected static $ENABLE_PULL_DELETED       =  true;
-    
+    protected static $ENABLE_PULL_DELETED = true;
+
     //====================================================================//
     // General Class Variables
     //====================================================================//
@@ -107,22 +107,22 @@ class Address extends AbstractObject
      * @var psAddress
      */
     protected $object;
-    
+
     /**
      * @var SplashSync
      */
     private $spl;
-    
+
     //====================================================================//
     // Class Constructor
     //====================================================================//
-        
+
     public function __construct()
     {
         //====================================================================//
         //  Load Local Translation File
         Splash::translator()->load("objects@local");
-        
+
         //====================================================================//
         // Load Splash Module
         $this->spl = Local::getLocalModule();

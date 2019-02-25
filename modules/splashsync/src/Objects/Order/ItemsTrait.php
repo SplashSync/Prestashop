@@ -92,7 +92,7 @@ trait ItemsTrait
             ->Group(Translate::getAdminTranslation("Products", "AdminOrders"))
             ->Association("product_name@lines", "product_quantity@lines", "product_id@lines", "unit_price@lines")
                 ;
-        
+
         //====================================================================//
         // Order Line Tax Name
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
@@ -105,14 +105,12 @@ trait ItemsTrait
             ->isReadOnly()
                 ;
     }
-    
+
     /**
      * Read requested Field
      *
      * @param string $key       Input List Key
      * @param string $fieldName Field Identifier / Name
-     *
-     * @return void
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
@@ -181,7 +179,7 @@ trait ItemsTrait
             // Insert Data in List
             self::lists()->Insert($this->out, "lines", $fieldName, $index, $value);
         }
-        
+
         unset($this->in[$key]);
     }
 
@@ -190,8 +188,6 @@ trait ItemsTrait
      *
      * @param string $fieldName Field Identifier / Name
      * @param mixed  $fieldData Field Data
-     *
-     * @return void
      */
     private function setProductsFields($fieldName, $fieldData)
     {
@@ -207,24 +203,23 @@ trait ItemsTrait
             // Update Product Line
             $this->updateProduct(array_shift($this->Products), $productItem);
         }
-        
+
         //====================================================================//
         // Delete Remaining Lines
         foreach ($this->Products as $productItem) {
-            $orderDetail    =   new OrderDetail($productItem["id_order_detail"]);
+            $orderDetail = new OrderDetail($productItem["id_order_detail"]);
             $this->object->deleteProduct($this->object, $orderDetail, $productItem["product_quantity"]);
         }
-        
+
         unset($this->in[$fieldName]);
     }
-    
+
     /**
      * Write Data to Current Item
      *
      * @param null|array $currentProduct Current Item Data Array
      * @param array      $productItem    Input Item Data Array
      *
-     * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
@@ -240,61 +235,61 @@ trait ItemsTrait
         if (is_null($currentProduct) || empty($currentProduct["id_order_detail"])) {
             //====================================================================//
             // Create New OrderDetail Item
-            $orderDetail =  new OrderDetail();
-            $orderDetail->id_order      =    $this->object->id;
-            $orderDetail->id_shop       =    $this->object->id_shop;
-            $orderDetail->id_warehouse  =    0;
+            $orderDetail = new OrderDetail();
+            $orderDetail->id_order = $this->object->id;
+            $orderDetail->id_shop = $this->object->id_shop;
+            $orderDetail->id_warehouse = 0;
         } else {
-            $orderDetail =  new OrderDetail($currentProduct["id_order_detail"]);
+            $orderDetail = new OrderDetail($currentProduct["id_order_detail"]);
         }
-        $update =    false;
-        
+        $update = false;
+
         //====================================================================//
         // Update Line Description
         if ($orderDetail->product_name != $productItem["product_name"]) {
             $orderDetail->product_name = $productItem["product_name"];
-            $update =    true;
+            $update = true;
         }
-        
+
         //====================================================================//
         // Update Quantity
         if ($orderDetail->product_quantity != $productItem["product_quantity"]) {
             $orderDetail->product_quantity = $productItem["product_quantity"];
-            $update =    true;
+            $update = true;
         }
-        
+
         //====================================================================//
         // Update Price
         if ($orderDetail->unit_price_tax_incl != self::prices()->TaxIncluded($productItem["unit_price"])) {
-            $orderDetail->unit_price_tax_incl   = self::prices()->TaxIncluded($productItem["unit_price"]);
-            $update =    true;
+            $orderDetail->unit_price_tax_incl = self::prices()->TaxIncluded($productItem["unit_price"]);
+            $update = true;
         }
         if ($orderDetail->unit_price_tax_excl != self::prices()->TaxExcluded($productItem["unit_price"])) {
-            $orderDetail->unit_price_tax_excl   = self::prices()->TaxExcluded($productItem["unit_price"]);
-            $orderDetail->product_price         = self::prices()->TaxExcluded($productItem["unit_price"]);
-            $update =    true;
+            $orderDetail->unit_price_tax_excl = self::prices()->TaxExcluded($productItem["unit_price"]);
+            $orderDetail->product_price = self::prices()->TaxExcluded($productItem["unit_price"]);
+            $update = true;
         }
-        
+
         //====================================================================//
         // Update Product Link
-        $unikId         = self::objects()->Id($productItem["product_id"]);
-        $productId      = Product::getId($unikId);
-        $attributeId    = Product::getAttribute($unikId);
+        $unikId = self::objects()->Id($productItem["product_id"]);
+        $productId = Product::getId($unikId);
+        $attributeId = Product::getAttribute($unikId);
         if ($orderDetail->product_id != $productId) {
             $orderDetail->product_id = $productId;
-            $update =    true;
+            $update = true;
         }
         if ($orderDetail->product_attribute_id != $attributeId) {
             $orderDetail->product_attribute_id = $attributeId;
-            $update =    true;
+            $update = true;
         }
-        
+
         //====================================================================//
         // Commit Line Update
         if (!$update) {
             return;
         }
-        
+
         if (!$orderDetail->id) {
             if (true != $orderDetail->add()) {
                 Splash::log()->err("ErrLocalTpl", __CLASS__, __FUNCTION__, "Unable to Create new Order Line.");
@@ -305,14 +300,12 @@ trait ItemsTrait
             }
         }
     }
-    
+
     /**
      * Read requested Field
      *
      * @param string $key       Input List Key
      * @param string $fieldName Field Identifier / Name
-     *
-     * @return void
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -365,7 +358,7 @@ trait ItemsTrait
             default:
                 return;
         }
-        
+
         //====================================================================//
         // Create Line Array If Needed
         $index = count($this->Products) + 1;
@@ -373,7 +366,7 @@ trait ItemsTrait
         // Insert Data in List
         self::lists()->Insert($this->out, "lines", $fieldName, $index, $value);
     }
-    
+
     /**
      * Get product Discount Price
      *
@@ -387,9 +380,9 @@ trait ItemsTrait
         //====================================================================//
         // Manually Compute Tax Rate
         if ($priceTaxIncl != $priceTaxExcl) {
-            $taxPercent    =   round(100 * (($priceTaxIncl - $priceTaxExcl) /  $priceTaxExcl), 3);
+            $taxPercent = round(100 * (($priceTaxIncl - $priceTaxExcl) / $priceTaxExcl), 3);
         } else {
-            $taxPercent    =   0;
+            $taxPercent = 0;
         }
         //====================================================================//
         // Build Price Array
@@ -402,7 +395,7 @@ trait ItemsTrait
             $this->Currency->name
         );
     }
-    
+
     /**
      * Get Total Discount Tax Excluded
      *
@@ -430,14 +423,12 @@ trait ItemsTrait
 
         return  $this->object->total_discounts_tax_incl;
     }
-    
+
     /**
      * Read requested Field
      *
      * @param string $key       Input List Key
      * @param string $fieldName Field Identifier / Name
-     *
-     * @return void
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
@@ -489,12 +480,12 @@ trait ItemsTrait
             default:
                 return;
         }
-        
+
         //====================================================================//
         // Insert Data in List
         self::lists()->Insert($this->out, "lines", $fieldName, count($this->Products), $value);
     }
-    
+
     /**
      * Get Order Shipping Price
      *
@@ -505,9 +496,9 @@ trait ItemsTrait
         //====================================================================//
         // Compute Tax Rate Using Tax Calculator
         if ($this->object->total_shipping_tax_incl != $this->object->total_shipping_tax_excl) {
-            $taxPercent    =   $this->ShippingTaxCalculator->getTotalRate();
+            $taxPercent = $this->ShippingTaxCalculator->getTotalRate();
         } else {
-            $taxPercent    =   0;
+            $taxPercent = 0;
         }
         //====================================================================//
         // Build Price Array

@@ -55,8 +55,8 @@ trait AttributesTrait
         foreach (Language::getLanguages() as $lang) {
             //====================================================================//
             // Encode Language Code From Splash Format to Prestashop Format (fr_FR => fr-fr)
-            $langCode   =   LanguagesManager::langEncode($lang["language_code"]);
-            $langId     =   (int) $lang["id_lang"];
+            $langCode = LanguagesManager::langEncode($lang["language_code"]);
+            $langId = (int) $lang["id_lang"];
             //====================================================================//
             // Check if Name is Given in this Language
             if (!isset($name[$langCode])) {
@@ -64,7 +64,7 @@ trait AttributesTrait
             }
             //====================================================================//
             // Search for this Base Product Name
-            $baseProductId   = $this->searchBaseProduct($langId, $name[$langCode]);
+            $baseProductId = $this->searchBaseProduct($langId, $name[$langCode]);
             if ($baseProductId) {
                 return $baseProductId;
             }
@@ -72,7 +72,7 @@ trait AttributesTrait
 
         return null;
     }
-    
+
     /**
      * Build Product Attribute Definition Array
      *
@@ -83,8 +83,8 @@ trait AttributesTrait
      */
     public function getProductAttributesArray($product, $attributeId)
     {
-        $result =   array();
-        
+        $result = array();
+
         foreach ($product->getAttributeCombinations($this->LangId) as $attribute) {
             //====================================================================//
             // Filter on a Specific Product Attribute
@@ -93,12 +93,12 @@ trait AttributesTrait
             }
             //====================================================================//
             // Add Attribute Value to Definition Array
-            $result[$attribute["group_name"]]   =   $attribute["attribute_name"];
+            $result[$attribute["group_name"]] = $attribute["attribute_name"];
         }
 
         return $result;
     }
-    
+
     //====================================================================//
     // Fields Generation Functions
     //====================================================================//
@@ -111,9 +111,9 @@ trait AttributesTrait
         if (!Combination::isFeatureActive()) {
             return;
         }
-        
-        $groupName  =  Translate::getAdminTranslation("Combinations", "AdminProducts");
-        
+
+        $groupName = Translate::getAdminTranslation("Combinations", "AdminProducts");
+
         //====================================================================//
         // Product Variation List - Variation Attribute Code
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
@@ -133,17 +133,17 @@ trait AttributesTrait
             ->Group($groupName)
             ->MicroData("http://schema.org/Product", "VariantAttributeNameSimple")
             ->isReadOnly();
-        
+
         //====================================================================//
         // Product Variation List - Variation Attribute Name (MultiLang)
         $this->fieldsFactory()->create(SPL_T_MVARCHAR)
             ->Identifier("public_name")
-            ->Name(Translate::getAdminTranslation("Name", "AdminCatalogFeature") . " (M)")
+            ->Name(Translate::getAdminTranslation("Name", "AdminCatalogFeature")." (M)")
             ->InList("attributes")
             ->Group($groupName)
             ->MicroData("http://schema.org/Product", "VariantAttributeName")
             ->isNotTested();
-        
+
         //====================================================================//
         // Product Variation List - Variation Attribute Value
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
@@ -153,12 +153,12 @@ trait AttributesTrait
             ->Group($groupName)
             ->MicroData("http://schema.org/Product", "VariantAttributeValueSimple")
             ->isReadOnly();
-        
+
         //====================================================================//
         // Product Variation List - Variation Attribute Value (MultiLang)
         $this->fieldsFactory()->create(SPL_T_MVARCHAR)
             ->Identifier("name")
-            ->Name(Translate::getAdminTranslation("Value", "AdminCatalogFeature") . " (M)")
+            ->Name(Translate::getAdminTranslation("Value", "AdminCatalogFeature")." (M)")
             ->InList("attributes")
             ->Group($groupName)
             ->MicroData("http://schema.org/Product", "VariantAttributeValue")
@@ -168,14 +168,12 @@ trait AttributesTrait
     //====================================================================//
     // Fields Reading Functions
     //====================================================================//
-        
+
     /**
      * Read requested Field
      *
      * @param string $key       Input List Key
      * @param string $fieldName Field Identifier / Name
-     *
-     * @return void
      */
     private function getVariantsAttributesFields($key, $fieldName)
     {
@@ -185,14 +183,14 @@ trait AttributesTrait
         if (!$fieldId) {
             return;
         }
-        
+
         //====================================================================//
         // READ Fields
         foreach ($this->object->getAttributeCombinations($this->LangId) as $index => $attribute) {
             if ($attribute["id_product_attribute"] != $this->AttributeId) {
                 continue;
             }
-            
+
             switch ($fieldId) {
                 case 'code':
                     $value = $attribute["group_name"];
@@ -253,7 +251,7 @@ trait AttributesTrait
 
         return true;
     }
-    
+
     /**
      * Check if Attribute Array is Valid for Writing
      *
@@ -302,7 +300,7 @@ trait AttributesTrait
 
         return true;
     }
-    
+
     /**
      * Search for Base Product by Multilang Name
      *
@@ -328,9 +326,9 @@ trait AttributesTrait
         $sql->select("pl.`name` as name");
         $sql->from("product", 'p');
         $sqlWhere = '(pl.id_product = p.id_product AND pl.id_lang = ';
-        $sqlWhere.= (int)  $langId.Shop::addSqlRestrictionOnLang('pl').')';
+        $sqlWhere .= (int)  $langId.Shop::addSqlRestrictionOnLang('pl').')';
         $sql->leftJoin("product_lang", 'pl', $sqlWhere);
-        $sql->where(" LOWER( pl.name )         LIKE LOWER( '%" . pSQL($name) ."%') ");
+        $sql->where(" LOWER( pl.name )         LIKE LOWER( '%".pSQL($name)."%') ");
         //====================================================================//
         // Execute final request
         $result = Db::getInstance()->executeS($sql);
@@ -345,18 +343,16 @@ trait AttributesTrait
 
         return false;
     }
-    
+
     //====================================================================//
     // Fields Writting Functions
     //====================================================================//
-      
+
     /**
      * Write Given Fields
      *
      * @param string $fieldName Field Identifier / Name
      * @param mixed  $fieldData Field Data
-     *
-     * @return void
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
@@ -367,7 +363,7 @@ trait AttributesTrait
         if (("attributes" !== $fieldName) || empty($this->Attribute)) {
             return;
         }
-        
+
         //====================================================================//
         // Identify Products Attributes Ids
         $attributesIds = array();
@@ -379,19 +375,19 @@ trait AttributesTrait
             }
             //====================================================================//
             // Identify or Add Attribute Group Id
-            $attributeGroupId   =   $this->getVariantsAttributeGroup($value);
+            $attributeGroupId = $this->getVariantsAttributeGroup($value);
             if (!$attributeGroupId) {
                 continue;
             }
             //====================================================================//
             // Identify or Add Attribute Id
-            $attributeId   =   $this->getVariantsAttributeValue($attributeGroupId, $value);
+            $attributeId = $this->getVariantsAttributeValue($attributeGroupId, $value);
             if (!$attributeId) {
                 continue;
             }
             $attributesIds[] = $attributeId;
         }
-     
+
         //====================================================================//
         // Build Current Attributes Ids Table
         $oldAttributesIds = array();
@@ -407,7 +403,7 @@ trait AttributesTrait
         if (!empty(array_diff($attributesIds, $oldAttributesIds))) {
             $this->Attribute->setAttributes($attributesIds);
         }
-                
+
         unset($this->in[$fieldName]);
     }
 
@@ -422,12 +418,12 @@ trait AttributesTrait
     {
         //====================================================================//
         // Load Product Attribute Group
-        $attributeGroupId   =   $this->getAttributeGroupByCode($fieldData["code"]);
+        $attributeGroupId = $this->getAttributeGroupByCode($fieldData["code"]);
         if ($attributeGroupId) {
             //====================================================================//
             // DEBUG MODE => Update Group Names
             if (true == SPLASH_DEBUG) {
-                $attributeGroup                 =   new AttributeGroup($attributeGroupId);
+                $attributeGroup = new AttributeGroup($attributeGroupId);
                 $this->setMultilang($attributeGroup, "public_name", $fieldData["public_name"]);
                 $attributeGroup->save();
             }
@@ -443,7 +439,7 @@ trait AttributesTrait
 
         return false;
     }
-    
+
     /**
      * Ensure Product Attribute Group Exists
      *
@@ -456,12 +452,12 @@ trait AttributesTrait
     {
         //====================================================================//
         // Load Product Attribute Value
-        $attributeId   =   $this->getAttributeByCode($groupId, $fieldData["name"]);
+        $attributeId = $this->getAttributeByCode($groupId, $fieldData["name"]);
         if ($attributeId) {
             //====================================================================//
             // DEBUG MODE => Update Group Names
             if (true == SPLASH_DEBUG) {
-                $attribute                      =   new Attribute($attributeId);
+                $attribute = new Attribute($attributeId);
                 $this->setMultilang($attribute, "name", $fieldData["name"]);
                 $attribute->save();
             }

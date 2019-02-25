@@ -38,7 +38,7 @@ trait CoreTrait
             ->Name($this->spl->l("Address alias"))
             ->Name(Translate::getAdminTranslation("Address alias", "AdminAddresses"))
             ->MicroData("http://schema.org/PostalAddress", "name");
-        
+
         //====================================================================//
         // Customer
         $this->fieldsFactory()->create(self::objects()->encode("ThirdParty", SPL_T_ID))
@@ -46,7 +46,7 @@ trait CoreTrait
             ->Name(Translate::getAdminTranslation("Customer ID", "AdminCustomerThreads"))
             ->MicroData("http://schema.org/Organization", "ID")
             ->isRequired();
-        
+
         //====================================================================//
         // Company
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
@@ -54,7 +54,7 @@ trait CoreTrait
             ->Name(Translate::getAdminTranslation("Company", "AdminCustomers"))
             ->MicroData("http://schema.org/Organization", "legalName")
             ->isListed();
-        
+
         //====================================================================//
         // Firstname
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
@@ -64,7 +64,7 @@ trait CoreTrait
             ->Association("firstname", "lastname")
             ->isRequired()
             ->isListed();
-        
+
         //====================================================================//
         // Lastname
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
@@ -75,14 +75,12 @@ trait CoreTrait
             ->isRequired()
             ->isListed();
     }
-    
+
     /**
      * Read requested Field
      *
      * @param string $key       Input List Key
      * @param string $fieldName Field Identifier / Name
-     *
-     * @return void
      */
     private function getCoreFields($key, $fieldName)
     {
@@ -109,14 +107,12 @@ trait CoreTrait
         }
         unset($this->in[$key]);
     }
-    
+
     /**
      * Write Given Fields
      *
      * @param string $fieldName Field Identifier / Name
      * @param mixed  $fieldData Field Data
-     *
-     * @return void
      */
     private function setCoreFields($fieldName, $fieldData)
     {
@@ -143,7 +139,7 @@ trait CoreTrait
         }
         unset($this->in[$fieldName]);
     }
-    
+
     /**
      * Write Given Fields
      *
@@ -166,24 +162,24 @@ trait CoreTrait
                 "ErrLocalTpl",
                 __CLASS__,
                 __FUNCTION__,
-                " Wrong Object Type (" . self::objects()->Type($customerIdString) . ")."
+                " Wrong Object Type (".self::objects()->Type($customerIdString).")."
             );
         }
         //====================================================================//
         // Verify Object Exists
-        $customer   =   new Customer($custoId);
+        $customer = new Customer($custoId);
         if ($customer->id != $custoId) {
             return Splash::log()->err(
                 "ErrLocalTpl",
                 __CLASS__,
                 __FUNCTION__,
-                " Unable to load Address Customer(" . $custoId . ")."
+                " Unable to load Address Customer(".$custoId.")."
             );
         }
         //====================================================================//
         // Update Link
         $this->setSimple("id_customer", $custoId);
-        
+
         return true;
     }
 }

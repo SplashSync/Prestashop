@@ -36,7 +36,7 @@ trait ImagesTrait
      * @var array
      */
     protected $attrImageIds;
-    
+
     /**
      * @var int
      */
@@ -55,23 +55,23 @@ trait ImagesTrait
      * @var null|array
      */
     private $variantImages;
-    
+
     /**
      * @var array
      */
     private $newImagesArray;
-    
+
     /**
      * Build Fields using FieldFactory
      */
     private function buildImagesFields()
     {
         $groupName = Translate::getAdminTranslation("Images", "AdminProducts");
-        
+
         //====================================================================//
         // PRODUCT IMAGES
         //====================================================================//
-        
+
         //====================================================================//
         // Product Images List
         $this->fieldsFactory()->create(SPL_T_IMG)
@@ -80,7 +80,7 @@ trait ImagesTrait
             ->Name(Translate::getAdminTranslation("Images", "AdminProducts"))
             ->Group($groupName)
             ->MicroData("http://schema.org/Product", "image");
-        
+
         //====================================================================//
         // Product Images => Position
         $this->fieldsFactory()->create(SPL_T_INT)
@@ -90,7 +90,7 @@ trait ImagesTrait
             ->MicroData("http://schema.org/Product", "positionImage")
             ->Group($groupName)
             ->isNotTested();
-        
+
         //====================================================================//
         // Product Images => Is Cover
         $this->fieldsFactory()->create(SPL_T_BOOL)
@@ -100,7 +100,7 @@ trait ImagesTrait
             ->MicroData("http://schema.org/Product", "isCover")
             ->Group($groupName)
             ->isNotTested();
-        
+
         //====================================================================//
         // Product Images => Is Visible Image
         $this->fieldsFactory()->create(SPL_T_BOOL)
@@ -117,8 +117,6 @@ trait ImagesTrait
      *
      * @param string $key       Input List Key
      * @param string $fieldName Field Identifier / Name
-     *
-     * @return void
      */
     private function getImagesFields($key, $fieldName)
     {
@@ -138,7 +136,7 @@ trait ImagesTrait
                 case "position":
                 case "visible":
                 case "cover":
-                    $value  =   $image[$fieldId];
+                    $value = $image[$fieldId];
 
                     break;
                 default:
@@ -150,14 +148,12 @@ trait ImagesTrait
         }
         unset($this->in[$key]);
     }
-    
+
     /**
      * Write Given Fields
      *
      * @param string $fieldName Field Identifier / Name
      * @param mixed  $fieldData Field Data
-     *
-     * @return void
      */
     private function setImagesFields($fieldName, $fieldData)
     {
@@ -176,7 +172,7 @@ trait ImagesTrait
         }
         unset($this->in[$fieldName]);
     }
-    
+
     /**
      * Prepare Information Array for An Image
      *
@@ -188,39 +184,39 @@ trait ImagesTrait
     {
         //====================================================================//
         // Get Images Link from Context
-        $publicUrl       = Context::getContext()->link;
+        $publicUrl = Context::getContext()->link;
         //====================================================================//
         // Fetch Images Object
         $objectImage = new Image($imageId, $this->LangId);
         //====================================================================//
         // Detect Image Name
         /** @var array $linkRewrite */
-        $linkRewrite =   $this->object->link_rewrite;
-        $imageName   =   !empty($linkRewrite)
+        $linkRewrite = $this->object->link_rewrite;
+        $imageName = !empty($linkRewrite)
                 ? array_values($linkRewrite)[0]
                 : 'Image';
         //====================================================================//
         // Encode Image in Splash Format
         $splashImage = self::images()->Encode(
-            ($objectImage->legend?$objectImage->legend:$objectImage->id . "." . $objectImage->image_format),
-            $objectImage->id . "." . $objectImage->image_format,
-            _PS_PROD_IMG_DIR_ . $objectImage->getImgFolder(),
+            ($objectImage->legend?$objectImage->legend:$objectImage->id.".".$objectImage->image_format),
+            $objectImage->id.".".$objectImage->image_format,
+            _PS_PROD_IMG_DIR_.$objectImage->getImgFolder(),
             $publicUrl->getImageLink($imageName, $imageId)
         );
         //====================================================================//
         // Encode Image Information Array
         return new ArrayObject(
             array(
-                "id"        => $imageId,
-                "image"     => $splashImage,
-                "position"  => $objectImage->position,
-                "cover"     => $objectImage->cover,
-                "visible"   => $this->isVisibleImage($imageId),
+                "id" => $imageId,
+                "image" => $splashImage,
+                "position" => $objectImage->position,
+                "cover" => $objectImage->cover,
+                "visible" => $this->isVisibleImage($imageId),
             ),
             ArrayObject::ARRAY_AS_PROPS
         );
     }
-     
+
     /**
      * Check if An Image is Visible
      *
@@ -236,7 +232,7 @@ trait ImagesTrait
             //====================================================================//
             // Load Variant Product Images List
             // If Not a Variant, Use Product Images so All Images will be Visibles
-            $this->variantImages   =   Image::getImages(
+            $this->variantImages = Image::getImages(
                 $this->LangId,
                 $this->object->id,
                 $this->AttributeId ? $this->AttributeId : null
@@ -286,7 +282,7 @@ trait ImagesTrait
 
         return false;
     }
-        
+
     /**
      * Load Image & Verify if is Searched Image
      *
@@ -299,14 +295,14 @@ trait ImagesTrait
     {
         //====================================================================//
         // Fetch Images Object
-        $psImage    =   new Image($psImageId, $this->LangId);
+        $psImage = new Image($psImageId, $this->LangId);
         //====================================================================//
         // Compute Md5 CheckSum for this Image
         $checkSum = md5_file(
             _PS_PROD_IMG_DIR_
-            . $psImage->getImgFolder()
-            . $psImage->id . "."
-            . $psImage->image_format
+            .$psImage->getImgFolder()
+            .$psImage->id."."
+            .$psImage->image_format
         );
         //====================================================================//
         // If CheckSum are Different => Continue
@@ -338,7 +334,7 @@ trait ImagesTrait
 
         return $position;
     }
-    
+
     /**
      * Update Image Position (Using AttributeId, Given Position or List Index)
      *
@@ -373,7 +369,7 @@ trait ImagesTrait
 
         return (bool) $imgArray["cover"];
     }
-    
+
     /**
      * @abstract    Update Image Cover Flag (Using AttributeId, Given Position or List Index)
      *
@@ -383,7 +379,7 @@ trait ImagesTrait
      */
     private function updateImageCoverFlag(&$psImage, $imgArray)
     {
-        $isCover    =   $this->getImageCoverFlag($imgArray);
+        $isCover = $this->getImageCoverFlag($imgArray);
         //====================================================================//
         // Cover Flag is Available
         if (is_null($isCover)) {
@@ -427,7 +423,7 @@ trait ImagesTrait
 
         return (bool) $imgArray["visible"];
     }
-    
+
     /**
      * Update Combination Images List
      *
@@ -458,7 +454,7 @@ trait ImagesTrait
             $this->needUpdate("Attribute");
         }
     }
-    
+
     /**
      * Update Product Image Thumbnail
      */
@@ -467,14 +463,14 @@ trait ImagesTrait
         //====================================================================//
         // Load Object Images List
         foreach (Image::getImages($this->LangId, $this->ProductId) as $image) {
-            $imageObj   = new Image($image['id_image']);
-            $imagePath  = _PS_PROD_IMG_DIR_.$imageObj->getExistingImgPath();
+            $imageObj = new Image($image['id_image']);
+            $imagePath = _PS_PROD_IMG_DIR_.$imageObj->getExistingImgPath();
             if (!file_exists($imagePath.'.jpg')) {
                 continue;
             }
             foreach (ImageType::getImagesTypes("products") as $imageType) {
                 $imgThumb = _PS_PROD_IMG_DIR_.$imageObj->getExistingImgPath();
-                $imgThumb.= '-'.Tools::stripslashes($imageType['name']).'.jpg';
+                $imgThumb .= '-'.Tools::stripslashes($imageType['name']).'.jpg';
                 if (!file_exists($imgThumb)) {
                     ImageManager::resize(
                         $imagePath.'.jpg',
@@ -486,7 +482,7 @@ trait ImagesTrait
             }
         }
     }
-    
+
     /**
      * Flush Product Images Reading Cache
      *
@@ -494,10 +490,10 @@ trait ImagesTrait
      */
     private function flushImageCache()
     {
-        $this->imagesCache      = null;
-        $this->variantImages    = null;
+        $this->imagesCache = null;
+        $this->variantImages = null;
     }
-    
+
     /**
      * Return Product Images Informations Array from Prestashop Object Class
      */
@@ -510,7 +506,7 @@ trait ImagesTrait
         }
         //====================================================================//
         // Load Complete Product Images List
-        $productImages   =   Image::getImages(
+        $productImages = Image::getImages(
             $this->LangId,
             $this->object->id,
             null
@@ -525,12 +521,12 @@ trait ImagesTrait
         foreach ($productImages as $imgArray) {
             //====================================================================//
             // Add Image t o Cache
-            $this->imagesCache[]    = $this->buildInfo($imgArray["id_image"]);
+            $this->imagesCache[] = $this->buildInfo($imgArray["id_image"]);
         }
 
         return $this->imagesCache;
     }
-    
+
     /**
      * Update Product Image Array from Server Data
      *
@@ -548,14 +544,14 @@ trait ImagesTrait
         }
         //====================================================================//
         // Load Object Images List for Whole Product
-        $this->imagesCache   =   Image::getImages($this->LangId, $this->object->id);
-        
+        $this->imagesCache = Image::getImages($this->LangId, $this->object->id);
+
         //====================================================================//
         // UPDATE IMAGES LIST
         //====================================================================//
 
-        $this->imgPosition  =   0;
-        $visibleImageIds    =   array();
+        $this->imgPosition = 0;
+        $visibleImageIds = array();
         //====================================================================//
         // Given List Is Not Empty
         foreach ($data as $inValue) {
@@ -590,7 +586,7 @@ trait ImagesTrait
                 $visibleImageIds[] = $psImage->id;
             }
         }
-        
+
         //====================================================================//
         // Update Combination Images List
         $this->updateAttributeImages($visibleImageIds);
@@ -606,10 +602,10 @@ trait ImagesTrait
         //====================================================================//
         // Flush Images Infos Cache
         $this->flushImageCache();
-        
+
         return true;
     }
-    
+
     /**
      * Import a Product Image from Server Data
      *
@@ -623,7 +619,7 @@ trait ImagesTrait
     {
         //====================================================================//
         // Read File from Splash Server
-        $newImageFile    =   Splash::file()->getFile($imgArray["file"], $imgArray["md5"]);
+        $newImageFile = Splash::file()->getFile($imgArray["file"], $imgArray["md5"]);
         //====================================================================//
         // File Imported => Write it Here
         if (false == $newImageFile) {
@@ -632,11 +628,11 @@ trait ImagesTrait
         $this->needUpdate();
         //====================================================================//
         // Create New Image Object
-        $objectImage                = new Image();
-        $objectImage->legend        = isset($newImageFile["name"]) ? $newImageFile["name"] : $newImageFile["filename"];
-        $objectImage->id_product    = $this->ProductId;
-        $objectImage->position      = $position;
-        $objectImage->cover         = $isCover;
+        $objectImage = new Image();
+        $objectImage->legend = isset($newImageFile["name"]) ? $newImageFile["name"] : $newImageFile["filename"];
+        $objectImage->id_product = $this->ProductId;
+        $objectImage->position = $position;
+        $objectImage->cover = $isCover;
         //====================================================================//
         // Write Image To Database
         if (!$objectImage->add()) {
@@ -644,19 +640,17 @@ trait ImagesTrait
         }
         //====================================================================//
         // Write Image On Folder
-        $path       = dirname($objectImage->getPathForCreation());
-        $filename   = "/" . $objectImage->id . "." . $objectImage->image_format;
+        $path = dirname($objectImage->getPathForCreation());
+        $filename = "/".$objectImage->id.".".$objectImage->image_format;
         Splash::file()->writeFile($path, $filename, $newImageFile["md5"], $newImageFile["raw"]);
 
         return $objectImage;
     }
-    
+
     /**
      * CleanUp Product Images List
      *
      * @param array $objectImagesList Array Of Remaining Product Images
-     *
-     * @return void
      */
     private function cleanImages($objectImagesList)
     {

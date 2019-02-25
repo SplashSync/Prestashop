@@ -34,35 +34,33 @@ trait MainTrait
         //====================================================================//
         // PRICES INFORMATIONS
         //====================================================================//
-        
-        $currencySuffix = " (" . $this->Currency->sign . ")";
-                
+
+        $currencySuffix = " (".$this->Currency->sign.")";
+
         //====================================================================//
         // Order Total Price HT
         $this->fieldsFactory()->create(SPL_T_DOUBLE)
             ->Identifier("total_paid_tax_excl")
-            ->Name(Translate::getAdminTranslation("Total (Tax excl.)", "AdminOrders") . $currencySuffix)
+            ->Name(Translate::getAdminTranslation("Total (Tax excl.)", "AdminOrders").$currencySuffix)
             ->MicroData("http://schema.org/Invoice", "totalPaymentDue")
             ->isListed()
             ->isReadOnly();
-        
+
         //====================================================================//
         // Order Total Price TTC
         $this->fieldsFactory()->create(SPL_T_DOUBLE)
             ->Identifier("total_paid_tax_incl")
-            ->Name(Translate::getAdminTranslation("Total (Tax incl.)", "AdminOrders") . $currencySuffix)
+            ->Name(Translate::getAdminTranslation("Total (Tax incl.)", "AdminOrders").$currencySuffix)
             ->MicroData("http://schema.org/Invoice", "totalPaymentDueTaxIncluded")
             ->isListed()
             ->isReadOnly();
     }
-    
+
     /**
      * Read requested Field
      *
      * @param string $key       Input List Key
      * @param string $fieldName Field Identifier / Name
-     *
-     * @return void
      */
     private function getMainFields($key, $fieldName)
     {
@@ -80,7 +78,7 @@ trait MainTrait
             default:
                 return;
         }
-        
+
         unset($this->in[$key]);
     }
 }

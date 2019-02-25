@@ -35,30 +35,30 @@ trait StatusTrait
             ->MicroData("http://schema.org/Invoice", "paymentStatus")
             ->isReadOnly()
             ->isNotTested();
-        
+
         //====================================================================//
         // INVOICE STATUS FLAGS
         //====================================================================//
-        
-        $prefix = Translate::getAdminTranslation("Status", "AdminOrders") . " ";
-        
+
+        $prefix = Translate::getAdminTranslation("Status", "AdminOrders")." ";
+
         //====================================================================//
         // Is Canceled
         // => There is no Diffrence Between a Draft & Canceled Order on Prestashop.
         //      Any Non Validated Order is considered as Canceled
         $this->fieldsFactory()->create(SPL_T_BOOL)
             ->Identifier("isCanceled")
-            ->Name($prefix . $this->spl->l("Canceled"))
+            ->Name($prefix.$this->spl->l("Canceled"))
             ->MicroData("http://schema.org/PaymentStatusType", "PaymentDeclined")
             ->Association("isCanceled", "isValidated")
             ->Group(Translate::getAdminTranslation("Meta", "AdminThemes"))
             ->isReadOnly();
-        
+
         //====================================================================//
         // Is Validated
         $this->fieldsFactory()->create(SPL_T_BOOL)
             ->Identifier("isValidated")
-            ->Name($prefix . Translate::getAdminTranslation("Valid", "AdminCartRules"))
+            ->Name($prefix.Translate::getAdminTranslation("Valid", "AdminCartRules"))
             ->MicroData("http://schema.org/PaymentStatusType", "PaymentDue")
             ->Association("isCanceled", "isValidated")
             ->Group(Translate::getAdminTranslation("Meta", "AdminThemes"))
@@ -68,24 +68,22 @@ trait StatusTrait
         // Is Paid
         $this->fieldsFactory()->create(SPL_T_BOOL)
             ->Identifier("isPaid")
-            ->Name($prefix . $this->spl->l("Paid"))
+            ->Name($prefix.$this->spl->l("Paid"))
             ->MicroData("http://schema.org/PaymentStatusType", "PaymentComplete")
             ->isReadOnly()
             ->Group(Translate::getAdminTranslation("Meta", "AdminThemes"))
             ->isNotTested();
     }
-        
+
     //====================================================================//
     // Fields Reading Functions
     //====================================================================//
-    
+
     /**
      * Read requested Field
      *
      * @param string $key       Input List Key
      * @param string $fieldName Field Identifier / Name
-     *
-     * @return void
      */
     private function getStatusFields($key, $fieldName)
     {
@@ -98,11 +96,11 @@ trait StatusTrait
             case 'status':
                 $delta = $this->object->getTotalPaid() - $this->object->total_paid_tax_incl;
                 if (!$this->Order->valid) {
-                    $this->out[$fieldName]  = "PaymentCanceled";
+                    $this->out[$fieldName] = "PaymentCanceled";
                 } elseif (($delta < 1E-6) || ($delta > 0)) {
-                    $this->out[$fieldName]  = "PaymentComplete";
+                    $this->out[$fieldName] = "PaymentComplete";
                 } else {
-                    $this->out[$fieldName]  = "PaymentDue";
+                    $this->out[$fieldName] = "PaymentDue";
                 }
 
                 break;
@@ -110,25 +108,25 @@ trait StatusTrait
             // INVOICE PAYMENT STATUS
             //====================================================================//
             case 'isCanceled':
-                $this->out[$fieldName]  = !$this->Order->valid;
+                $this->out[$fieldName] = !$this->Order->valid;
 
                 break;
             case 'isValidated':
-                $this->out[$fieldName]  = $this->Order->valid;
+                $this->out[$fieldName] = $this->Order->valid;
 
                 break;
             case 'isPaid':
                 $delta = $this->object->getTotalPaid() - $this->object->total_paid_tax_incl;
-                $this->out[$fieldName]  = (($delta < 1E-6) || ($delta > 0));
+                $this->out[$fieldName] = (($delta < 1E-6) || ($delta > 0));
 
                 break;
             default:
                 return;
         }
-        
+
         unset($this->in[$key]);
     }
-    
+
     //====================================================================//
     // Fields Writting Functions
     //====================================================================//

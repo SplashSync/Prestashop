@@ -43,7 +43,7 @@ trait CRUDTrait
                 "ErrLocalTpl",
                 __CLASS__,
                 __FUNCTION__,
-                " Unable to load Customer Address (" . $objectId . ")."
+                " Unable to load Customer Address (".$objectId.")."
             );
         }
 
@@ -60,7 +60,7 @@ trait CRUDTrait
         //====================================================================//
         // Stack Trace
         Splash::log()->trace(__CLASS__, __FUNCTION__);
-        
+
         //====================================================================//
         // Check Address Minimum Fields Are Given
         if (empty($this->in["id_customer"])) {
@@ -84,12 +84,12 @@ trait CRUDTrait
         if (empty($this->in["id_country"])) {
             return Splash::log()->err("ErrLocalFieldMissing", __CLASS__, __FUNCTION__, "id_country");
         }
-        
+
         //====================================================================//
         // Create Empty Customer
         return new Address();
     }
-    
+
     /**
      * Update Request Object
      *
@@ -105,7 +105,7 @@ trait CRUDTrait
         if (!$needed) {
             return $this->getObjectIdentifier();
         }
-        
+
         //====================================================================//
         // Create Address Alias if Not Given
         if (empty($this->object->alias)) {
@@ -114,7 +114,7 @@ trait CRUDTrait
                 "MsgLocalTpl",
                 __CLASS__,
                 __FUNCTION__,
-                "New Address Alias Generated - " . $this->object->alias
+                "New Address Alias Generated - ".$this->object->alias
             );
         }
 
@@ -127,21 +127,21 @@ trait CRUDTrait
                     "ErrLocalTpl",
                     __CLASS__,
                     __FUNCTION__,
-                    "Unable to Update Customer Address (" . $this->object->id . ")."
+                    "Unable to Update Customer Address (".$this->object->id.")."
                 );
             }
             Splash::log()->deb("MsgLocalTpl", __CLASS__, __FUNCTION__, "Customer Address Updated");
 
             return $this->getObjectIdentifier();
         }
-        
+
         //====================================================================//
         // If NO Id Given = > Create Object
         //====================================================================//
-            
+
         //====================================================================//
         // Create Object In Database
-        if (true  != $this->object->add()) {
+        if (true != $this->object->add()) {
             return Splash::log()->err(
                 "ErrLocalTpl",
                 __CLASS__,
@@ -150,7 +150,7 @@ trait CRUDTrait
             );
         }
         Splash::log()->deb("MsgLocalTpl", __CLASS__, __FUNCTION__, "Customer Address Created");
-        
+
         //====================================================================//
         // UPDATE/CREATE SPLASH ID
         //====================================================================//
@@ -158,10 +158,10 @@ trait CRUDTrait
             self::setSplashId("Address", $this->object->id, $this->NewSplashId);
             $this->NewSplashId = null;
         }
-        
+
         return $this->getObjectIdentifier();
     }
-    
+
     /**
      * Delete requested Object
      *
@@ -174,30 +174,30 @@ trait CRUDTrait
         //====================================================================//
         // Stack Trace
         Splash::log()->trace(__CLASS__, __FUNCTION__);
-        
+
         //====================================================================//
         // Safety Checks
         if (empty($objectId)) {
             return Splash::log()->err("ErrSchNoObjectId", __CLASS__."::".__FUNCTION__);
         }
-        
+
         //====================================================================//
         // Load Object From DataBase
         //====================================================================//
         $address = new Address($objectId);
         if ($address->id != $objectId) {
-            return Splash::log()->war("ErrLocalTpl", __CLASS__, __FUNCTION__, "Unable to load (" . $objectId . ").");
+            return Splash::log()->war("ErrLocalTpl", __CLASS__, __FUNCTION__, "Unable to load (".$objectId.").");
         }
         //====================================================================//
         // Delete Object From DataBase
         //====================================================================//
         if (true != $address->delete()) {
-            return Splash::log()->err("ErrLocalTpl", __CLASS__, __FUNCTION__, "Unable to delete (" . $objectId . ").");
+            return Splash::log()->err("ErrLocalTpl", __CLASS__, __FUNCTION__, "Unable to delete (".$objectId.").");
         }
-        
+
         return true;
     }
-    
+
     /**
      * {@inheritdoc}
      */

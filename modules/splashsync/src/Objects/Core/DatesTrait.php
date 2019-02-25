@@ -37,7 +37,7 @@ trait DatesTrait
             ->Group(Translate::getAdminTranslation("Meta", "AdminThemes"))
             ->MicroData("http://schema.org/DataFeedItem", "dateCreated")
             ->isReadOnly();
-        
+
         //====================================================================//
         // Last Change Date
         $this->fieldsFactory()->create(SPL_T_DATETIME)
@@ -53,8 +53,6 @@ trait DatesTrait
      *
      * @param string $key       Input List Key
      * @param string $fieldName Field Identifier / Name
-     *
-     * @return void
      */
     private function getDatesFields($key, $fieldName)
     {
@@ -73,7 +71,7 @@ trait DatesTrait
             default:
                 return;
         }
-        
+
         unset($this->in[$key]);
     }
 }

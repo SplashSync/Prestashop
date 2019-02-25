@@ -38,9 +38,9 @@ trait CoreTrait
             return  $this->Attribute->reference;
         }
 
-        return  $this->object->reference . "-" . $this->AttributeId;
+        return  $this->object->reference."-".$this->AttributeId;
     }
-    
+
     /**
      * Build Core Fields using FieldFactory
      */
@@ -59,14 +59,12 @@ trait CoreTrait
             ->MicroData("http://schema.org/Product", "model")
             ->isRequired();
     }
-    
+
     /**
      * Read requested Field
      *
      * @param string $key       Input List Key
      * @param string $fieldName Field Identifier / Name
-     *
-     * @return void
      */
     private function getCoreFields($key, $fieldName)
     {
@@ -77,23 +75,21 @@ trait CoreTrait
             // MAIN INFORMATIONS
             //====================================================================//
             case 'ref':
-                $this->out[$fieldName]  =   $this->getProductReference();
+                $this->out[$fieldName] = $this->getProductReference();
 
                 break;
             default:
                 return;
         }
-        
+
         unset($this->in[$key]);
     }
-    
+
     /**
      * Write Given Fields
      *
      * @param string $fieldName Field Identifier / Name
      * @param mixed  $fieldData Field Data
-     *
-     * @return void
      */
     private function setCoreFields($fieldName, $fieldData)
     {

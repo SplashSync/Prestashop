@@ -33,7 +33,7 @@ trait ObjectsListTrait
         //====================================================================//
         // Stack Trace
         Splash::log()->trace(__CLASS__, __FUNCTION__);
-        
+
         //====================================================================//
         // Build query
         $sql = new DbQuery();
@@ -55,19 +55,19 @@ trait ObjectsListTrait
         if (!empty($filter) && is_string($filter)) {
             //====================================================================//
             // Search in Customer Company
-            $where  = " LOWER( c.`company` )        LIKE LOWER( '%" . pSQL($filter) ."%') ";
+            $where = " LOWER( c.`company` )        LIKE LOWER( '%".pSQL($filter)."%') ";
             //====================================================================//
             // Search in Customer FirstName
-            $where .= " OR LOWER( c.`firstname` )   LIKE LOWER( '%" . pSQL($filter) ."%') ";
+            $where .= " OR LOWER( c.`firstname` )   LIKE LOWER( '%".pSQL($filter)."%') ";
             //====================================================================//
             // Search in Customer LastName
-            $where .= " OR LOWER( c.`lastname` )    LIKE LOWER( '%" . pSQL($filter) ."%') ";
+            $where .= " OR LOWER( c.`lastname` )    LIKE LOWER( '%".pSQL($filter)."%') ";
             //====================================================================//
             // Search in Customer Email
-            $where .= " OR LOWER( c.`email` )       LIKE LOWER( '%" . pSQL($filter) ."%') ";
+            $where .= " OR LOWER( c.`email` )       LIKE LOWER( '%".pSQL($filter)."%') ";
             $sql->where($where);
         }
-        
+
         //====================================================================//
         // Execute Generic Search
         return $this->getObjectsListGenericData($sql, "lastname", $params);

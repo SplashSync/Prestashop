@@ -40,14 +40,12 @@ trait AddressesTrait
             ->Group(Translate::getAdminTranslation("Addresses", "AdminCustomers"))
             ->isReadOnly();
     }
-  
+
     /**
      * Read requested Field
      *
      * @param string $key       Input List Key
      * @param string $fieldName Field Identifier / Name
-     *
-     * @return void
      */
     private function getAddressesFields($key, $fieldName)
     {
@@ -65,11 +63,9 @@ trait AddressesTrait
         }
         unset($this->in[$key]);
     }
-    
+
     /**
      * Read requested Field
-     *
-     * @return void
      */
     private function getAddressesList()
     {

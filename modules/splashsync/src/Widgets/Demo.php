@@ -12,7 +12,7 @@
  *  For the full copyright and license information, please view the LICENSE
  *  file that was distributed with this source code.
  */
-                    
+
 //====================================================================//
 // *******************************************************************//
 //                     SPLASH FOR DOLIBARR                            //
@@ -36,38 +36,38 @@ class Demo extends AbstractWidget
     //====================================================================//
     // Define Standard Options for this Widget
     // Override this array to change default options for your widget
-    public static $OPTIONS       = array(
-        "Width"     =>      self::SIZE_XL
+    public static $OPTIONS = array(
+        "Width" => self::SIZE_XL
     );
-    
+
     //====================================================================//
     // Object Definition Parameters
     //====================================================================//
-    
+
     /**
      *  Widget Disable Flag. Uncomment thius line to Override this flag and disable Object.
      */
-    protected static $DISABLED        =  true;
-    
+    protected static $DISABLED = true;
+
     /**
      *  Widget Name (Translated by Module)
      */
-    protected static $NAME            =  "Demo Widget";
-    
+    protected static $NAME = "Demo Widget";
+
     /**
      *  Widget Description (Translated by Module)
      */
-    protected static $DESCRIPTION     =  "TEST & DEMONSTRATION WIDGET";
-    
+    protected static $DESCRIPTION = "TEST & DEMONSTRATION WIDGET";
+
     /**
      *  Widget Icon (FontAwesome or Glyph ico tag)
      */
-    protected static $ICO            =  "fa fa-magic";
-    
+    protected static $ICO = "fa fa-magic";
+
     //====================================================================//
     // Class Main Functions
     //====================================================================//
-    
+
     /**
      * Return Widget Customs Parameters
      */
@@ -79,19 +79,19 @@ class Demo extends AbstractWidget
             ->identifier("text_input")
             ->name("Text Input")
             ->description("Widget Specific Custom text Input");
-        
+
         //====================================================================//
         // Reference
         $this->fieldsFactory()->create(SPL_T_INT)
             ->identifier("integer_input")
             ->name("Numeric Input")
             ->description("Widget Specific Custom Numeric Input");
-        
+
         //====================================================================//
         // Publish Fields
         return $this->fieldsFactory()->publish();
     }
-    
+
     /**
      * {@inheritdoc}
      */
@@ -110,17 +110,17 @@ class Demo extends AbstractWidget
 
         $this->setTitle($this->getName());
         $this->setIcon($this->getIcon());
-        
+
         //====================================================================//
         // Build Intro Text Block
         //====================================================================//
         $this->buildIntroBlock();
-          
+
         //====================================================================//
         // Build Inputs Block
         //====================================================================//
         $this->buildParametersBlock($params);
-        
+
         //====================================================================//
         // Build Inputs Block
         //====================================================================//
@@ -137,7 +137,7 @@ class Demo extends AbstractWidget
         // Publish Widget
         return $this->render();
     }
-        
+
     //====================================================================//
     // Blocks Generation Functions
     //====================================================================//
@@ -149,9 +149,9 @@ class Demo extends AbstractWidget
     {
         //====================================================================//
         // Into Text Block
-        $this->blocksFactory()->addTextBlock("This is a Demo Text Block!!" . "You can repeat me as much as you want!");
+        $this->blocksFactory()->addTextBlock("This is a Demo Text Block!!"."You can repeat me as much as you want!");
     }
-  
+
     /**
      * Block Building - Inputs Parameters
      *
@@ -170,13 +170,13 @@ class Demo extends AbstractWidget
         //====================================================================//
         // Parameters Table Block
         $tableContents = array();
-        $tableContents[]    =   array("Received " . count($inputs) .  " inputs parameters","Value");
+        $tableContents[] = array("Received ".count($inputs)." inputs parameters","Value");
         foreach ($inputs as $key => $value) {
-            $tableContents[]    =   array($key, $value);
+            $tableContents[] = array($key, $value);
         }
         $this->blocksFactory()->addTableBlock($tableContents, array("Width" => self::SIZE_M));
     }
-    
+
     /**
      * Block Building - Notifications Parameters
      */
@@ -185,12 +185,12 @@ class Demo extends AbstractWidget
         //====================================================================//
         // Notifications Block
         $notifications = array(
-            "error" =>  "This is a Sample Error Notification",
-            "warning" =>  "This is a Sample Warning Notification",
-            "success" =>  "This is a Sample Success Notification",
-            "info" =>  "This is a Sample Infomation Notification",
+            "error" => "This is a Sample Error Notification",
+            "warning" => "This is a Sample Warning Notification",
+            "success" => "This is a Sample Success Notification",
+            "info" => "This is a Sample Infomation Notification",
         );
-        
+
         $this->blocksFactory()->addNotificationsBlock($notifications, array("Width" => self::SIZE_M));
     }
 }

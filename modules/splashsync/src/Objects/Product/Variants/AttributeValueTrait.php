@@ -48,7 +48,7 @@ trait AttributeValueTrait
             return false;
         }
         if ($names instanceof ArrayObject) {
-            $names  =    $names->getArrayCopy();
+            $names = $names->getArrayCopy();
         }
         //====================================================================//
         // For Each Available Language
@@ -94,9 +94,9 @@ trait AttributeValueTrait
         }
         //====================================================================//
         // Create New Attribute Value
-        $attribute                      =   new Attribute();
-        $attribute->id_attribute_group  =   $groupId;
-        $attribute->color               =   $color;
+        $attribute = new Attribute();
+        $attribute->id_attribute_group = $groupId;
+        $attribute->color = $color;
         //====================================================================//
         // Setup Names
         $this->setMultilang($attribute, "name", $names);

@@ -40,7 +40,7 @@ trait MetaTrait
             ->Identifier("active")
             ->Name(Translate::getAdminTranslation("Enabled", "AdminProducts"))
             ->MicroData("http://schema.org/Product", "active");
-        
+
         //====================================================================//
         // Active => Product Is available_for_order
         $this->fieldsFactory()->create(SPL_T_BOOL)
@@ -48,7 +48,7 @@ trait MetaTrait
             ->Name(Translate::getAdminTranslation("Available for order", "AdminProducts"))
             ->MicroData("http://schema.org/Product", "offered")
             ->isListed();
-        
+
         //====================================================================//
         // On Sale
         $this->fieldsFactory()->create(SPL_T_BOOL)
@@ -56,14 +56,12 @@ trait MetaTrait
             ->Name($this->spl->l("On Sale"))
             ->MicroData("http://schema.org/Product", "onsale");
     }
-    
+
     /**
      * Read requested Field
      *
      * @param string $key       Input List Key
      * @param string $fieldName Field Identifier / Name
-     *
-     * @return void
      */
     private function getMetaFields($key, $fieldName)
     {
@@ -82,17 +80,15 @@ trait MetaTrait
             default:
                 return;
         }
-        
+
         unset($this->in[$key]);
     }
-    
+
     /**
      * Write Given Fields
      *
      * @param string $fieldName Field Identifier / Name
      * @param mixed  $fieldData Field Data
-     *
-     * @return void
      */
     private function setMetaFields($fieldName, $fieldData)
     {

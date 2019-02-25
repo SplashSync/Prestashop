@@ -47,36 +47,36 @@ trait StatusTrait
         //====================================================================//
         // ORDER STATUS FLAGS
         //====================================================================//
-        
-        $prefix = Translate::getAdminTranslation("Order status", "AdminOrders") . " ";
-        
+
+        $prefix = Translate::getAdminTranslation("Order status", "AdminOrders")." ";
+
         //====================================================================//
         // Is Canceled
         // => There is no Diffrence Between a Draft & Canceled Order on Prestashop.
         //      Any Non Validated Order is considered as Canceled
         $this->fieldsFactory()->create(SPL_T_BOOL)
             ->Identifier("isCanceled")
-            ->Name($prefix . $this->spl->l("Canceled"))
+            ->Name($prefix.$this->spl->l("Canceled"))
             ->MicroData("http://schema.org/OrderStatus", "OrderCancelled")
             ->Group(Translate::getAdminTranslation("Meta", "AdminThemes"))
             ->Association("isCanceled", "isValidated", "isClosed")
             ->isReadOnly();
-        
+
         //====================================================================//
         // Is Validated
         $this->fieldsFactory()->create(SPL_T_BOOL)
             ->Identifier("isValidated")
-            ->Name($prefix . Translate::getAdminTranslation("Valid", "AdminCartRules"))
+            ->Name($prefix.Translate::getAdminTranslation("Valid", "AdminCartRules"))
             ->MicroData("http://schema.org/OrderStatus", "OrderProcessing")
             ->Group(Translate::getAdminTranslation("Meta", "AdminThemes"))
             ->Association("isCanceled", "isValidated", "isClosed")
             ->isReadOnly();
-        
+
         //====================================================================//
         // Is Closed
         $this->fieldsFactory()->create(SPL_T_BOOL)
             ->Identifier("isClosed")
-            ->Name($prefix . Translate::getAdminTranslation("Closed", "AdminCustomers"))
+            ->Name($prefix.Translate::getAdminTranslation("Closed", "AdminCustomers"))
             ->MicroData("http://schema.org/OrderStatus", "OrderDelivered")
             ->Group(Translate::getAdminTranslation("Meta", "AdminThemes"))
             ->Association("isCanceled", "isValidated", "isClosed")
@@ -86,19 +86,17 @@ trait StatusTrait
         // Is Paid
         $this->fieldsFactory()->create(SPL_T_BOOL)
             ->Identifier("isPaid")
-            ->Name($prefix . $this->spl->l("Paid"))
+            ->Name($prefix.$this->spl->l("Paid"))
             ->Group(Translate::getAdminTranslation("Meta", "AdminThemes"))
             ->MicroData("http://schema.org/OrderStatus", "OrderPaid")
             ->isReadOnly();
     }
-    
+
     /**
      * Read requested Field
      *
      * @param string $key       Input List Key
      * @param string $fieldName Field Identifier / Name
-     *
-     * @return void
      */
     private function getStatusFields($key, $fieldName)
     {
@@ -109,32 +107,32 @@ trait StatusTrait
             // ORDER STATUS
             //====================================================================//
             case 'status':
-                $this->out[$fieldName]  = $this->getSplashStatus();
+                $this->out[$fieldName] = $this->getSplashStatus();
 
                 break;
             case 'isCanceled':
-                $this->out[$fieldName]  = !$this->object->valid;
+                $this->out[$fieldName] = !$this->object->valid;
 
                 break;
             case 'isValidated':
-                $this->out[$fieldName]  = $this->object->valid;
+                $this->out[$fieldName] = $this->object->valid;
 
                 break;
             case 'isClosed':
-                $this->out[$fieldName]  = $this->object->isPaidAndShipped();
+                $this->out[$fieldName] = $this->object->isPaidAndShipped();
 
                 break;
             case 'isPaid':
-                $this->out[$fieldName]  = (bool) $this->object->hasBeenPaid();
+                $this->out[$fieldName] = (bool) $this->object->hasBeenPaid();
 
                 break;
             default:
                 return;
         }
-        
+
         unset($this->in[$key]);
     }
-    
+
     /**
      * Read Order Status
      *

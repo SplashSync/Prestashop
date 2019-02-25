@@ -40,7 +40,7 @@ class TaxManager
         if (is_null($countryId)) {
             $countryId = Configuration::get('PS_COUNTRY_DEFAULT');
         }
-        
+
         //====================================================================//
         // Prepare SQL request for reading in Database
         //====================================================================//
@@ -58,12 +58,12 @@ class TaxManager
         $sql->from("tax_rule", "g");
         //====================================================================//
         // Build JOIN
-        $sql->leftJoin("country_lang", 'cl', '(g.`id_country` = cl.`id_country` AND `id_lang` = '. (int) $langId .')');
+        $sql->leftJoin("country_lang", 'cl', '(g.`id_country` = cl.`id_country` AND `id_lang` = '.(int) $langId.')');
         $sql->leftJoin("tax", 't', '(g.`id_tax` = t.`id_tax`)');
         //====================================================================//
         // Build WHERE
-        $sql->where('t.`rate` = '. $taxRate);
-        $sql->where('g.`id_country` = '. (int) $countryId);
+        $sql->where('t.`rate` = '.$taxRate);
+        $sql->where('g.`id_country` = '.(int) $countryId);
         //====================================================================//
         // Build ORDER BY
         $sql->orderBy('country_name ASC');
@@ -73,7 +73,7 @@ class TaxManager
         if (Db::getInstance()->getNumberError()) {
             return false;
         }
-        
+
         if (is_array($result) && (Db::getInstance()->numRows() > 0)) {
             $newTaxRate = array_shift($result);
 
@@ -82,7 +82,7 @@ class TaxManager
 
         return false;
     }
-    
+
     /**
      * Identify Best Tax Rate from Raw Computed Value
      *
@@ -98,10 +98,10 @@ class TaxManager
         $langId = Context::getContext()->language->id;
         //====================================================================//
         // For All Tax Rules of This Group, Search for Closest Rate
-        $bestRate   =   0;
+        $bestRate = 0;
         foreach (TaxRule::getTaxRulesByGroupId($langId, $taxRateGroupId) as $taxRule) {
-            if (abs($taxRate - $taxRule["rate"]) <  abs($taxRate - $bestRate)) {
-                $bestRate   =   $taxRule["rate"];
+            if (abs($taxRate - $taxRule["rate"]) < abs($taxRate - $bestRate)) {
+                $bestRate = $taxRule["rate"];
             }
         }
 

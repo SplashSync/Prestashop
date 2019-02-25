@@ -29,7 +29,7 @@ trait AttributeTrait
      * @var int
      */
     public $AttributeId;     // Prestashop Product Attribute Class Id
-    
+
     //====================================================================//
     // General Class Variables
     //====================================================================//
@@ -38,7 +38,7 @@ trait AttributeTrait
      * @var Combination
      */
     protected $Attribute;     // Prestashop Product Attribute Class
-    
+
     //====================================================================//
     //  Product Attribute CRUD
     //====================================================================//
@@ -57,7 +57,7 @@ trait AttributeTrait
         Splash::log()->trace(__CLASS__, __FUNCTION__);
         //====================================================================//
         // Decode Product Id
-        $this->AttributeId      = self::getAttribute($unikId);
+        $this->AttributeId = self::getAttribute($unikId);
         //====================================================================//
         // Safety Checks
         if (!$this->isLocked("onCombinationCreate") && empty($this->AttributeId)) {
@@ -81,13 +81,13 @@ trait AttributeTrait
                 "ErrLocalTpl",
                 __CLASS__,
                 __FUNCTION__,
-                "Unable to fetch Product Attribute (" . $this->AttributeId . ")"
+                "Unable to fetch Product Attribute (".$this->AttributeId.")"
             );
         }
 
         return true;
     }
-    
+
     /**
      * Create Product Attribute (Combination)
      *
@@ -117,14 +117,14 @@ trait AttributeTrait
         }
         //====================================================================//
         // Store New Id on SplashObject Class
-        $this->AttributeId  = $this->Attribute->id;
+        $this->AttributeId = $this->Attribute->id;
         //====================================================================//
         // LOCK PRODUCT to prevent triggered actions on Price or Stock Update
         $this->lock($this->getUnikId());
 
         return true;
     }
-    
+
     /**
      * Update Product Attribute if Needed
      *
@@ -171,7 +171,7 @@ trait AttributeTrait
 
         return true;
     }
-    
+
     /**
      * Delete Product Combination & Product if Was Last Combination
      *
@@ -197,11 +197,11 @@ trait AttributeTrait
         // Also Delete Product From DataBase
         return $this->object->delete();
     }
-    
+
     //====================================================================//
     //  Variant Product CRUD
     //====================================================================//
-    
+
     /**
      * Create a New Variant Product
      *
@@ -213,11 +213,11 @@ trait AttributeTrait
     {
         //====================================================================//
         // Create or Load Base Product
-        if (($baseProductId  = $this->getBaseProduct($fieldData["name"]))) {
+        if (($baseProductId = $this->getBaseProduct($fieldData["name"]))) {
             //====================================================================//
             // USE LOCK to Allow Base Product Loading
             $this->lock("onCombinationCreate");
-            $product   =   $this->load($baseProductId);
+            $product = $this->load($baseProductId);
             $this->unLock("onCombinationCreate");
         } else {
             //====================================================================//
@@ -225,7 +225,7 @@ trait AttributeTrait
             $this->lock("onCombinationLock");
             //====================================================================//
             // Create New Simple Product
-            $product   =    $this->createSimpleProduct();
+            $product = $this->createSimpleProduct();
             //====================================================================//
             // UNLOCK PRODUCT HOOKS
             $this->unLock("onCombinationLock");

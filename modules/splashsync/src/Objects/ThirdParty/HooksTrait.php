@@ -27,7 +27,7 @@ trait HooksTrait
     //  MODULE BACK OFFICE (CUSTOMERS) HOOKS
     // *******************************************************************//
     //====================================================================//
-    
+
     /**
      * This hook is displayed after a customer is created
      *
@@ -37,7 +37,7 @@ trait HooksTrait
     {
         return $this->hookactionCustomer($params["object"], SPL_A_CREATE, $this->l('Customer Created on Prestashop'));
     }
-        
+
     /**
      * This hook is displayed after a customer is created
      *
@@ -47,7 +47,7 @@ trait HooksTrait
     {
         return $this->hookactionCustomer($params["object"], SPL_A_UPDATE, $this->l('Customer Updated on Prestashop'));
     }
-    
+
     /**
      * This hook is displayed after a customer is created
      *
@@ -77,7 +77,7 @@ trait HooksTrait
         }
         //====================================================================//
         // Log
-        $this->debugHook(__FUNCTION__, $customerId . " >> " . $comment);
+        $this->debugHook(__FUNCTION__, $customerId." >> ".$comment);
         //====================================================================//
         // Safety Check
         if (empty($customerId)) {

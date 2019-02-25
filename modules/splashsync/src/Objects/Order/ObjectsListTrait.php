@@ -31,7 +31,7 @@ trait ObjectsListTrait
         //====================================================================//
         // Stack Trace
         Splash::log()->trace(__CLASS__, __FUNCTION__);
-        
+
         //====================================================================//
         // Build query
         $sql = new DbQuery();
@@ -55,11 +55,11 @@ trait ObjectsListTrait
         //====================================================================//
         // Setup filters
         if (!empty($filter)) {
-            $where = " LOWER( o.id_order )      LIKE LOWER( '%" . pSQL($filter) ."%') ";
-            $where.= " OR LOWER( o.reference )  LIKE LOWER( '%" . pSQL($filter) ."%') ";
-            $where.= " OR LOWER( c.firstname )  LIKE LOWER( '%" . pSQL($filter) ."%') ";
-            $where.= " OR LOWER( c.lastname )   LIKE LOWER( '%" . pSQL($filter) ."%') ";
-            $where.= " OR LOWER( o.date_add )   LIKE LOWER( '%" . pSQL($filter) ."%') ";
+            $where = " LOWER( o.id_order )      LIKE LOWER( '%".pSQL($filter)."%') ";
+            $where .= " OR LOWER( o.reference )  LIKE LOWER( '%".pSQL($filter)."%') ";
+            $where .= " OR LOWER( c.firstname )  LIKE LOWER( '%".pSQL($filter)."%') ";
+            $where .= " OR LOWER( c.lastname )   LIKE LOWER( '%".pSQL($filter)."%') ";
+            $where .= " OR LOWER( o.date_add )   LIKE LOWER( '%".pSQL($filter)."%') ";
             $sql->where($where);
         }
         //====================================================================//
