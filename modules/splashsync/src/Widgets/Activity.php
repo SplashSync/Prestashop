@@ -23,6 +23,7 @@
 
 namespace   Splash\Local\Widgets;
 
+use ArrayObject;
 use AdminStatsController;
 use Configuration;
 use Currency;
@@ -145,7 +146,7 @@ class Activity extends AbstractWidget
         // Verify Inputs
         if (!is_array($inputs) && !is_a($inputs, "ArrayObject")) {
             $this->blocksFactory()
-                ->addNotificationsBlock(array("warning" => "Inputs is not an Array! Is " . get_class($inputs)));
+                ->addNotificationsBlock(array("warning" => "Inputs is not an Array!"));
         }
         if (!isset($inputs["DateStart"]) || !isset($inputs["DateEnd"])) {
             $this->blocksFactory()->addNotificationsBlock(array("warning" => "No Date Range Defined!"));

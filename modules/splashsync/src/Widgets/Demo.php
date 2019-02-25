@@ -164,6 +164,8 @@ class Demo extends AbstractWidget
         if (!is_array($inputs) && !is_a($inputs, "ArrayObject")) {
             $this->blocksFactory()
                 ->addNotificationsBlock(array("warning" => "Inputs is not an Array!"));
+
+            return;
         }
         //====================================================================//
         // Parameters Table Block
