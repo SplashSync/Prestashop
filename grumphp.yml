@@ -92,7 +92,7 @@ parameters:
                 
         csfixer:
             tasks: 
-                - phpcsfixer
+#                - phpcsfixer
                 - phpcsfixer2                
         phpstan:
             tasks: 
