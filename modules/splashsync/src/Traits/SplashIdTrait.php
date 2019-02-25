@@ -61,7 +61,7 @@ trait SplashIdTrait
     /**
      * Read Splash Id from Storage
      *
-     * @param string $objectType Object Type
+     * @param string     $objectType Object Type
      * @param int|string $objectId   Object Identifier
      *
      * @return false|string
@@ -78,9 +78,9 @@ trait SplashIdTrait
     /**
      * Write Splash Id to Storage
      *
-     * @param string $objectType Object Type
+     * @param string     $objectType Object Type
      * @param int|string $objectId   Object Identifier
-     * @param string $splashId   Splash Object Identifier
+     * @param string     $splashId   Splash Object Identifier
      *
      * @return bool
      */
