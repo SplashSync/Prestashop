@@ -21,13 +21,13 @@ cp -f     $MODULE_DIR/grumphp.yml                       $TRAVIS_BUILD_DIR/grumph
 mkdir     $TRAVIS_BUILD_DIR/travis
 cp -f     $MODULE_DIR/travis/*                          $TRAVIS_BUILD_DIR/travis/           
 
-#echo Move Git Files to Prestashop Root Directory
+# Move Git Files to Prestashop Root Directory
 #rm -Rf    $TRAVIS_BUILD_DIR/.git      
 cp -Rf    $MODULE_DIR/.git/*                            $TRAVIS_BUILD_DIR/.git/
 
 #ls -al    $TRAVIS_BUILD_DIR/modules/splashsync
 #ls -al    $MODULE_DIR/
-ls -al    $TRAVIS_BUILD_DIR/.git/
+#ls -al    $TRAVIS_BUILD_DIR/.git/
 
 # Change Default Language Code to ISO format
 mysql -D prestashop -e "UPDATE ps_lang SET language_code = 'fr-fr' WHERE ps_lang.language_code = 'fr';"

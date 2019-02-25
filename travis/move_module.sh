@@ -15,5 +15,5 @@ rm -Rf    $TRAVIS_BUILD_DIR/.gitignore
 rm -Rf    $TRAVIS_BUILD_DIR/.travis.yml
 rm -Rf    $TRAVIS_BUILD_DIR/*
 
-ls -al    $MODULE_DIR
+# ls -al    $MODULE_DIR
 

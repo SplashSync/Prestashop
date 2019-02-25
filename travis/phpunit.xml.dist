@@ -10,19 +10,17 @@
     convertWarningsToExceptions = "true"
     processIsolation            = "false"
     stopOnFailure               = "true"
-    syntaxCheck                 = "false"
     bootstrap                   = "../modules/splashsync/vendor/autoload.php" 
-    verbose                     = "false"
-    debug                       = "false"    
+    verbose                     = "true"
     timeoutForLargeTests        = "120"  
 >
 
     <testsuites>
         <testsuite name="Core">
-            <directory>modules/splashsync/vendor/splash/phpcore/Tests</directory>
+            <directory>../modules/splashsync/vendor/splash/phpcore/Tests</directory>
         </testsuite>
         <testsuite name="Local">
-            <directory>modules/splashsync/tests</directory>
+            <directory>../modules/splashsync/tests</directory>
         </testsuite>
     </testsuites>
 
