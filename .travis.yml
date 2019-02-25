@@ -22,39 +22,39 @@ dist: trusty
 
 matrix:
     include:
-        # Prestashop 1.7.1.x Branch       
-        - php: 5.6
-          env: PS_VERSION=1.7.1.x        
-        - php: 7.1
-          env: PS_VERSION=1.7.1.x        
-
-        # Prestashop 1.7.2.x Branch       
-        - php: 5.6
-          env: PS_VERSION=1.7.2.x        
-        - php: 7.1
-          env: PS_VERSION=1.7.2.x        
-
-        # Prestashop 1.7.3.x Branch       
-        - php: 5.6
-          env: PS_VERSION=1.7.3.x        
-        - php: 7.1
-          env: PS_VERSION=1.7.3.x        
-          
-        # Prestashop 1.7.4.x Branch       
-        - php: 5.6
-          env: PS_VERSION=1.7.4.x        
-        - php: 7.2
-          env: PS_VERSION=1.7.4.x        
-
-        # Prestashop 1.7.5.x Branch       
-        - php: 7.0
-          env: PS_VERSION=1.7.5.x        
-        - php: 7.2
-          env: PS_VERSION=1.7.5.x        
+#        # Prestashop 1.7.1.x Branch       
+#        - php: 5.6
+#          env: PS_VERSION=1.7.1.x        
+#        - php: 7.1
+#          env: PS_VERSION=1.7.1.x        
+#
+#        # Prestashop 1.7.2.x Branch       
+#        - php: 5.6
+#          env: PS_VERSION=1.7.2.x        
+#        - php: 7.1
+#          env: PS_VERSION=1.7.2.x        
+#
+#        # Prestashop 1.7.3.x Branch       
+#        - php: 5.6
+#          env: PS_VERSION=1.7.3.x        
+#        - php: 7.1
+#          env: PS_VERSION=1.7.3.x        
+#          
+#        # Prestashop 1.7.4.x Branch       
+#        - php: 5.6
+#          env: PS_VERSION=1.7.4.x        
+#        - php: 7.2
+#          env: PS_VERSION=1.7.4.x        
+#
+#        # Prestashop 1.7.5.x Branch       
+#        - php: 7.0
+#          env: PS_VERSION=1.7.5.x        
+#        - php: 7.2
+#          env: PS_VERSION=1.7.5.x        
 
         # Prestashop develop Branch       
-        - php: 7.0
-          env: PS_VERSION=develop        
+#        - php: 7.0
+#          env: PS_VERSION=develop        
         - php: 7.2
           env: PS_VERSION=develop        
         
@@ -112,16 +112,23 @@ script:
     # Run Grump Main Test Sequence
     - php modules/splashsync/vendor/bin/grumphp run --testsuite=travis
     - cd $TRAVIS_BUILD_DIR
-    
-    # With PHP 7.1 => Execute Phpstan 
-    - if [[ ${TRAVIS_PHP_VERSION:0:3} > "7.0" ]]; then php modules/splashsync/vendor/bin/grumphp run --testsuite=phpstan; fi 
+
+    # With PHP 7.2 => Execute CsFixer
+    - if [[ ${TRAVIS_PHP_VERSION:0:3} > "7.1" ]]; then php modules/splashsync/vendor/bin/grumphp run --testsuite=csfixer; fi    
+    # With PHP 7.2 => Execute Phpstan 
+    - if [[ ${TRAVIS_PHP_VERSION:0:3} > "7.1" ]]; then php modules/splashsync/vendor/bin/grumphp run --testsuite=phpstan; fi 
     
     # Run PhpUnit Core Test Sequence
-    - phpunit -c phpunit.xml modules/splashsync/vendor/splash/phpcore/Tests/Core/
+    - modules/splashsync/vendor/bin/phpunit -c phpunit.xml modules/splashsync/vendor/splash/phpcore/Tests/Core/
     
-    # Run PhpUnit Main Test Sequence
-    - phpunit -c phpunit.xml
-    - phpunit -c phpunit.xml
+    # PHP7+     =>  Run PhpUnit Main Sequence
+    - if [[ ${TRAVIS_PHP_VERSION:0:1} > "5" ]]; then phpdbg -qrr -d memory_limit=-1 modules/splashsync/vendor/bin/phpunit -c phpunit.xml.dist; fi  
+    # PHP5.6    =>  Without Php Debugger (Coverage x2 Faster)
+    - if [[ ${TRAVIS_PHP_VERSION:0:1} < "7" ]]; then splash/vendor/bin/phpunit -c phpunit.xml.dist; fi  
+    
+#    # Run PhpUnit Main Test Sequence
+#    - phpunit -c phpunit.xml
+#    - phpunit -c phpunit.xml
        
     # Show Outdated Packages  
     - cd $MODULE_DIR    
@@ -132,4 +139,8 @@ notifications:
     on_success: never # default: change
     on_failure: never # default: always
 
+after_success:
+    # Display Full List of Executed Tests    
+    - cat coverage/executed.txt
+    
 after_failure:
