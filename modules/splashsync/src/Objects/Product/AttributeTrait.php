@@ -213,7 +213,7 @@ trait AttributeTrait
     {
         //====================================================================//
         // Create or Load Base Product
-        if (($baseProductId = $this->getBaseProduct($fieldData["name"]))) {
+        if (($baseProductId = $this->getBaseProduct($fieldData["variants"]))) {
             //====================================================================//
             // USE LOCK to Allow Base Product Loading
             $this->lock("onCombinationCreate");

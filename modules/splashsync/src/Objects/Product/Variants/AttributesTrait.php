@@ -25,7 +25,6 @@ use Language;
 use Product;
 use Shop;
 use Splash\Core\SplashCore      as Splash;
-use Splash\Local\Services\LanguagesManager;
 use Translate;
 
 /**
@@ -34,39 +33,36 @@ use Translate;
 trait AttributesTrait
 {
     /**
-     * Search for Base Product by Multilang Name
+     * Search for Base Product by Existing Variants Ids
      *
-     * @param array|ArrayObject $name Input Product Name without Options Array
+     * @param array|ArrayObject $variants Input Product Variants Array
      *
      * @return null|int Product Id
      */
-    public function getBaseProduct($name)
+    public function getBaseProduct($variants)
     {
         //====================================================================//
         // Stack Trace
         Splash::log()->trace(__CLASS__, __FUNCTION__);
         //====================================================================//
         // Check Name is Array
-        if ((!is_array($name) && !is_a($name, "ArrayObject")) || empty($name)) {
+        if ((!is_array($variants) && !is_a($variants, "ArrayObject")) || empty($variants)) {
             return null;
         }
         //====================================================================//
-        // For Each Available Language
-        foreach (Language::getLanguages() as $lang) {
+        // For Each Available Variants
+        $variantProductId = false;
+        foreach ($variants as $variant) {
             //====================================================================//
-            // Encode Language Code From Splash Format to Prestashop Format (fr_FR => fr-fr)
-            $langCode = LanguagesManager::langEncode($lang["language_code"]);
-            $langId = (int) $lang["id_lang"];
-            //====================================================================//
-            // Check if Name is Given in this Language
-            if (!isset($name[$langCode])) {
+            // Check Product Id is here
+            if (!isset($variant["id"]) || !is_string($variant["id"])) {
                 continue;
             }
             //====================================================================//
-            // Search for this Base Product Name
-            $baseProductId = $this->searchBaseProduct($langId, $name[$langCode]);
-            if ($baseProductId) {
-                return $baseProductId;
+            // Extract Variable Product Id
+            $variantProductId = self::objects()->id($variant["id"]);
+            if (false !== $variantProductId) {
+                return $variantProductId;
             }
         }
 
@@ -359,8 +355,15 @@ trait AttributesTrait
     private function setVariantsAttributesFields($fieldName, $fieldData)
     {
         //====================================================================//
-        // Safety Check
-        if (("attributes" !== $fieldName) || empty($this->Attribute)) {
+        // Check is Attribute Field
+        if (("attributes" !== $fieldName)) {
+            return;
+        }
+        //====================================================================//
+        // Safety Check => Not a Variant product? => Skip Attributes Update
+        if (empty($this->Attribute)) {
+            unset($this->in[$fieldName]);
+
             return;
         }
 

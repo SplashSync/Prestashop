@@ -16,6 +16,8 @@
 namespace Splash\Local\Objects\Product\Variants;
 
 use Combination;
+use Context;
+use Splash\Core\SplashCore      as Splash;
 use Translate;
 
 /**
@@ -30,7 +32,7 @@ trait CoreTrait
     /**
      * Build Fields using FieldFactory
      */
-    private function buildVariantsCoreFields()
+    protected function buildVariantsCoreFields()
     {
         if (!Combination::isFeatureActive()) {
             return;
@@ -66,11 +68,33 @@ trait CoreTrait
 
         //====================================================================//
         // Product Variation Parent Link
-        $this->fieldsFactory()->create(self::objects()->encode("Product", SPL_T_ID))
+        $this->fieldsFactory()->create(SPL_T_VARCHAR)
             ->Identifier("parent_id")
             ->Name("Parent")
             ->Group(Translate::getAdminTranslation("Meta", "AdminThemes"))
             ->MicroData("http://schema.org/Product", "isVariationOf")
+            ->isReadOnly();
+
+        //====================================================================//
+        // CHILD PRODUCTS INFORMATIONS
+        //====================================================================//
+
+        //====================================================================//
+        // Product Variation List - Product Link
+        $this->fieldsFactory()->Create((string) self::objects()->Encode("Product", SPL_T_ID))
+            ->Identifier("id")
+            ->Name("Variants")
+            ->InList("variants")
+            ->MicroData("http://schema.org/Product", "Variants")
+            ->isNotTested();
+
+        //====================================================================//
+        // Product Variation List - Product SKU
+        $this->fieldsFactory()->Create(SPL_T_VARCHAR)
+            ->Identifier("sku")
+            ->Name("SKU")
+            ->InList("variants")
+            ->MicroData("http://schema.org/Product", "VariationName")
             ->isReadOnly();
     }
 
@@ -84,18 +108,13 @@ trait CoreTrait
      * @param string $key       Input List Key
      * @param string $fieldName Field Identifier / Name
      */
-    private function getVariantsCoreFields($key, $fieldName)
+    protected function getVariantsCoreFields($key, $fieldName)
     {
         //====================================================================//
         // READ Fields
         switch ($fieldName) {
             case 'parent_id':
-                if ($this->AttributeId) {
-                    $this->out[$fieldName] = self::objects()->encode("Product", $this->ProductId);
-
-                    break;
-                }
-                $this->out[$fieldName] = null;
+                $this->out[$fieldName] = $this->AttributeId ? $this->ProductId : null;
 
                 break;
             case 'type':
@@ -134,6 +153,58 @@ trait CoreTrait
     }
 
     /**
+     * Read requested Field
+     *
+     * @param string $key       Input List Key
+     * @param string $fieldName Field Identifier / Name
+     */
+    protected function getVariantChildsFields($key, $fieldName)
+    {
+        //====================================================================//
+        // Check if List field & Init List Array
+        $fieldId = self::lists()->initOutput($this->out, "variants", $fieldName);
+        if (!$fieldId) {
+            return;
+        }
+        //====================================================================//
+        // Load Product Variants
+        $variants = $this->object->getAttributeCombinations(Context::getContext()->language->id);
+        /** @var array $variant */
+        foreach ($variants as $index => $variant) {
+            //====================================================================//
+            // SKIP Current Variant When in PhpUnit/Travis Mode
+            // Only Existing Variant will be Returned
+            if (!empty(Splash::input('SPLASH_TRAVIS'))) {
+                if (($variant["id_product"] == $this->ProductId) && ($variant["id_product_attribute"] == $this->AttributeId)) {
+                    continue;
+                }
+            }
+            //====================================================================//
+            // Get Variant Infos
+            switch ($fieldId) {
+                case 'id':
+                    $unikId = self::getUnikIdStatic($variant["id_product"], $variant["id_product_attribute"]);
+                    $value = self::objects()->encode("Product", $unikId);
+
+                    break;
+                case 'sku':
+                    $value = $variant["reference"];
+
+                    break;
+                default:
+                    return;
+            }
+
+            self::lists()->insert($this->out, "variants", $fieldId, $index, $value);
+        }
+
+        unset($this->in[$key]);
+        //====================================================================//
+        // Sort Attributes by Code
+        ksort($this->out["variants"]);
+    }
+
+    /**
      * Write Given Fields
      *
      * @param string $fieldName Field Identifier / Name
@@ -145,6 +216,7 @@ trait CoreTrait
         // WRITE Field
         switch ($fieldName) {
             case 'default_on':
+            case 'variants':
                 break;
             case 'default_id':
                 //====================================================================//

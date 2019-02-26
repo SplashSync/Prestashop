@@ -15,72 +15,70 @@
 
 namespace Splash\Local\Objects\Product;
 
-use Configuration;
-use Language;
-use Product;
-use Splash\Core\SplashCore      as Splash;
 use Splash\Local\Services\LanguagesManager;
 use Translate;
 
 /**
- * Access to Product Descriptions Fields
+ * Access to Product Meta Data Fields
  */
-trait DescTrait
+trait MetaDataTrait
 {
     //====================================================================//
-    //  Multilanguage Fields
+    //  Multilanguage Metadata Fields
     //====================================================================//
 
     /**
-     * Build Description Fields using FieldFactory
+     * Build Fields using FieldFactory
      */
-    protected function buildDescFields()
+    protected function buildMetaDataFields()
     {
-        $groupName = Translate::getAdminTranslation("Information", "AdminProducts");
+        $groupName = Translate::getAdminTranslation("SEO", "AdminProducts");
         $this->fieldsFactory()->setDefaultLanguage(LanguagesManager::getDefaultLanguage());
 
         //====================================================================//
-        // PRODUCT DESCRIPTIONS
+        // PRODUCT METADATA
         //====================================================================//
 
         foreach (LanguagesManager::getAvailableLanguages() as $isoLang) {
             //====================================================================//
-            // Name without Options
+            // Meta Description
             $this->fieldsFactory()->create(SPL_T_VARCHAR)
-                ->Identifier("name")
-                ->Name($this->spl->l("Product Name without Options"))
+                ->Identifier("meta_description")
+                ->Name(Translate::getAdminTranslation("Meta description", "AdminProducts"))
+                ->Description($groupName." ".Translate::getAdminTranslation("Meta description", "AdminProducts"))
                 ->Group($groupName)
-                ->MicroData("http://schema.org/Product", "alternateName")
-                ->setMultilang($isoLang)
-                ->isRequired();
-
-            //====================================================================//
-            // Name with Options
-            $this->fieldsFactory()->create(SPL_T_VARCHAR)
-                ->Identifier("fullname")
-                ->Name($this->spl->l("Product Name with Options"))
-                ->Group($groupName)
-                ->MicroData("http://schema.org/Product", "name")
-                ->setMultilang($isoLang)
-                ->isListed(LanguagesManager::isDefaultLanguage($isoLang))
-                ->isReadOnly();
-
-            //====================================================================//
-            // Long Description
-            $this->fieldsFactory()->create(SPL_T_TEXT)
-                ->Identifier("description")
-                ->Name(Translate::getAdminTranslation("description", "AdminProducts"))
-                ->Group($groupName)
-                ->MicroData("http://schema.org/Article", "articleBody")
+                ->MicroData("http://schema.org/Article", "headline")
                 ->setMultilang($isoLang);
 
             //====================================================================//
-            // Short Description
+            // Meta Title
             $this->fieldsFactory()->create(SPL_T_VARCHAR)
-                ->Identifier("description_short")
-                ->Name(Translate::getAdminTranslation("Short Description", "AdminProducts"))
+                ->Identifier("meta_title")
+                ->Name(Translate::getAdminTranslation("Meta title", "AdminProducts"))
+                ->Description($groupName." ".Translate::getAdminTranslation("Meta title", "AdminProducts"))
                 ->Group($groupName)
-                ->MicroData("http://schema.org/Product", "description")
+                ->MicroData("http://schema.org/Article", "name")
+                ->setMultilang($isoLang);
+
+            //====================================================================//
+            // Meta KeyWords
+            $this->fieldsFactory()->create(SPL_T_VARCHAR)
+                ->Identifier("meta_keywords")
+                ->Name(Translate::getAdminTranslation("Meta keywords", "AdminProducts"))
+                ->Description($groupName." ".Translate::getAdminTranslation("Meta keywords", "AdminProducts"))
+                ->Group($groupName)
+                ->MicroData("http://schema.org/Article", "keywords")
+                ->setMultilang($isoLang)
+                ->isReadOnly();
+
+            //====================================================================//
+            // Rewrite Url
+            $this->fieldsFactory()->create(SPL_T_VARCHAR)
+                ->Identifier("link_rewrite")
+                ->Name(Translate::getAdminTranslation("Friendly URL", "AdminProducts"))
+                ->Description($groupName." ".Translate::getAdminTranslation("Friendly URL", "AdminProducts"))
+                ->Group($groupName)
+                ->MicroData("http://schema.org/Product", "urlRewrite")
                 ->setMultilang($isoLang);
         }
     }
@@ -91,7 +89,7 @@ trait DescTrait
      * @param string $key       Input List Key
      * @param string $fieldName Field Identifier / Name
      */
-    protected function getDescFields($key, $fieldName)
+    protected function getMetaDataFields($key, $fieldName)
     {
         //====================================================================//
         // Walk on Available Languages
@@ -102,17 +100,17 @@ trait DescTrait
             //====================================================================//
             // READ Fields
             switch ($baseFieldName) {
-                case 'name':
-                case 'description':
-                case 'description_short':
+                case 'link_rewrite':
+                case 'meta_description':
+                case 'meta_title':
                     $this->out[$fieldName] = $this->getMultilang($baseFieldName, $idLang);
                     unset($this->in[$key]);
 
                     break;
-                case 'fullname':
+                case 'meta_keywords':
                     //====================================================================//
-                    // Product Specific - Read Full Product Name with Attribute Description
-                    $this->out[$fieldName] = Product::getProductName($this->object->id, $this->AttributeId, $idLang);
+                    // Product Specific - Read Meta Keywords
+                    $this->out[$fieldName] = $this->object->getTags($idLang);
                     unset($this->in[$key]);
 
                     break;
@@ -126,9 +124,9 @@ trait DescTrait
      * @param string $fieldName Field Identifier / Name
      * @param mixed  $fieldData Field Data
      */
-    protected function setDescFields($fieldName, $fieldData)
+    protected function setMetaDataFields($fieldName, $fieldData)
     {
-        //====================================================================//prod
+        //====================================================================//
         // Walk on Available Languages
         foreach (LanguagesManager::getAvailableLanguages() as $idLang => $isoLang) {
             //====================================================================//
@@ -137,17 +135,10 @@ trait DescTrait
             //====================================================================//
             // WRITE Field
             switch ($baseFieldName) {
-                case 'name':
-                case 'description':
+                case 'link_rewrite':
+                case 'meta_description':
+                case 'meta_title':
                     $this->setMultilang($baseFieldName, $idLang, $fieldData);
-
-                    break;
-                case 'description_short':
-                    $this->setMultilang(
-                        $fieldName,
-                        $fieldData,
-                        Configuration::get('PS_PRODUCT_SHORT_DESC_LIMIT')
-                    );
 
                     break;
                 default:
@@ -155,37 +146,5 @@ trait DescTrait
             }
             unset($this->in[$fieldName]);
         }
-    }
-
-    /**
-     * Read Multilangual Fields of an Object
-     *
-     * @param Product $object Pointer to Prestashop Object
-     *
-     * @return array
-     */
-    private function getMultilangTags(&$object)
-    {
-        //====================================================================//
-        // Native Multilangs Descriptions
-        $languages = Language::getLanguages();
-        if (empty($languages)) {
-            return array();
-        }
-
-        //====================================================================//
-        // For Each Available Language
-        $data = array();
-        foreach ($languages as $lang) {
-            //====================================================================//
-            // Encode Language Code From Splash Format to Prestashop Format (fr_FR => fr-fr)
-            $langCode = LanguagesManager::langEncode($lang["language_code"]);
-            $langId = (int) $lang["id_lang"];
-            //====================================================================//
-            // Product Specific - Read Meta Keywords
-            $data[$langCode] = $object->getTags($langId);
-        }
-
-        return $data;
     }
 }

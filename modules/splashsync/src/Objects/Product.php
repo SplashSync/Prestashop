@@ -44,9 +44,10 @@ class Product extends AbstractObject
     use ListsTrait;
 
     // Prestashop Common Traits
-    use \Splash\Local\Objects\Core\DatesTrait;
-    use \Splash\Local\Objects\Core\SplashMetaTrait;
-    use \Splash\Local\Objects\Core\ObjectsListCommonsTrait;
+    use Core\DatesTrait;
+    use Core\SplashMetaTrait;
+    use Core\ObjectsListCommonsTrait;
+    use Core\MultilangTrait;
     use \Splash\Local\Traits\SplashIdTrait;
 
     // Prestashop Products Traits
@@ -62,6 +63,7 @@ class Product extends AbstractObject
     use \Splash\Local\Objects\Product\AttributeTrait;
     use \Splash\Local\Objects\Product\VariantsTrait;
     use \Splash\Local\Objects\Product\ChecksumTrait;
+    use Product\MetaDataTrait;
     use Product\IdEncoderTrait;
 
     /**

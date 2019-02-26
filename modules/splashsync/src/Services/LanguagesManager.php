@@ -27,6 +27,47 @@ use Validate;
 class LanguagesManager
 {
     /**
+     * List of Known Languages ShortCodes
+     *
+     * @var array
+     */
+    const KNOW_LANGS = array(
+        "en" => "en_US",
+        "fr" => "fr_FR",
+        "es" => "es_ES",
+        "it" => "it_IT",
+    );
+
+    /**
+     * List of Available Languages (Encoded)
+     *
+     * @var array
+     */
+    private static $languages;
+
+    /**
+     * Get Default Local Language if Not Already Done
+     *
+     * @return string
+     */
+    public static function getDefaultLanguage()
+    {
+        return self::langEncode(Context::getContext()->language->language_code);
+    }
+
+    /**
+     * Check if is Default Local Language
+     *
+     * @param string $isoCode language ISO Code (i.e en_US | fr_FR)
+     *
+     * @return bool
+     */
+    public static function isDefaultLanguage($isoCode)
+    {
+        return ($isoCode == self::getDefaultLanguage());
+    }
+
+    /**
      * Setup Local Language if Not Already Done
      *
      * @return int
@@ -48,6 +89,55 @@ class LanguagesManager
         }
 
         return  0;
+    }
+
+    /**
+     * Get All Available Languages
+     *
+     * @return array
+     */
+    public static function getAvailableLanguages()
+    {
+        //====================================================================//
+        // Load From Cache
+        if (isset(static::$languages)) {
+            return static::$languages;
+        }
+
+        //====================================================================//
+        // Build ISO Languages Array
+        static::$languages = array();
+        //====================================================================//
+        // For Each Available Language
+        foreach (Language::getLanguages() as $psLanguage) {
+            static::$languages[$psLanguage["id_lang"]] = self::langEncode($psLanguage["language_code"]);
+        }
+
+        return static::$languages;
+    }
+
+    /**
+     * Decode Multilang FieldName with ISO Code
+     *
+     * @param string $fieldName Complete Field Name
+     * @param string $isoCode   Language Code in Splash Format
+     *
+     * @return string Base Field Name or Empty String
+     */
+    public static function fieldNameDecode($fieldName, $isoCode)
+    {
+        //====================================================================//
+        // Default Language => No code in FieldName
+        if (self::isDefaultLanguage($isoCode)) {
+            return $fieldName;
+        }
+        //====================================================================//
+        // Other Languages => Check if Code is in FieldName
+        if (false === strpos($fieldName, $isoCode)) {
+            return "";
+        }
+
+        return substr($fieldName, 0, strlen($fieldName) - strlen($isoCode) - 1);
     }
 
     /**
