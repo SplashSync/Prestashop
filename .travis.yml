@@ -123,7 +123,7 @@ script:
     - modules/splashsync/vendor/bin/phpunit -c travis/phpunit.xml.dist modules/splashsync/vendor/splash/phpcore/Tests/Core/
     
     # ALL PHP   =>  Run PhpUnit Main Sequence with No Data Inside
-    - splash/vendor/bin/phpunit -c travis/phpunit.xml.dist
+    - modules/splashsync/vendor/bin/phpunit -c travis/phpunit.xml.dist
     
     # PHP7+     =>  Run PhpUnit Main Sequence
     - if [[ ${TRAVIS_PHP_VERSION:0:1} > "5" ]]; then phpdbg -qrr -d memory_limit=-1 modules/splashsync/vendor/bin/phpunit -c travis/phpunit.xml.dist; fi  
