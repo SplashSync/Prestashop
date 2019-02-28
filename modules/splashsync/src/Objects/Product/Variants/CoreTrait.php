@@ -114,7 +114,7 @@ trait CoreTrait
         // READ Fields
         switch ($fieldName) {
             case 'parent_id':
-                $this->out[$fieldName] = $this->AttributeId ? $this->ProductId : null;
+                $this->out[$fieldName] = $this->AttributeId ? (string) $this->ProductId : "";
 
                 break;
             case 'type':
