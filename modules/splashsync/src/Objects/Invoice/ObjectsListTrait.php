@@ -18,6 +18,7 @@ namespace   Splash\Local\Objects\Invoice;
 use DbQuery;
 use OrderInvoice;
 use Splash\Core\SplashCore      as Splash;
+use Splash\Local\Services\LanguagesManager as SLM;
 
 /**
  * Acces to Invoices Objects Lists
@@ -81,7 +82,7 @@ trait ObjectsListTrait
         // For each result, read information and add to $Data
         foreach ($result as $key => $invoice) {
             $object = new OrderInvoice($invoice["id"]);
-            $invoice["number"] = $object->getInvoiceNumberFormatted($this->LangId);
+            $invoice["number"] = $object->getInvoiceNumberFormatted(SLM::getDefaultLangId());
             $data[$key] = $invoice;
         }
         //====================================================================//
