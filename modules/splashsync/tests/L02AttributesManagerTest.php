@@ -143,7 +143,7 @@ class L02AttributesManagerTest extends ObjectsCase
         //   Create a New Attribute Values Names
         $values = array();
         foreach (SLM::getAvailableLanguages() as $isoCode) {
-            $values[$isoCode] = implode("-", array($code, SLM::langDecode($isoCode), rand(100, 999)));
+            $values[$isoCode] = implode("-", array($code, SLM::getPsLangId($isoCode), rand(100, 999)));
         }
         $dfValue = $values[SLM::getDefaultLanguage()];
 

@@ -39,7 +39,7 @@ class LanguagesManager
 
     /**
      * List of All Available Languages (Encoded)
-     * 
+     *
      * @var array
      */
     private static $languages;
@@ -185,7 +185,7 @@ class LanguagesManager
     {
         //====================================================================//
         // PreSetuped Install => Know Languages Code
-        if(isset(self::KNOW_LANGS[$psCode])) {
+        if (isset(self::KNOW_LANGS[$psCode])) {
             return self::KNOW_LANGS[$psCode];
         }
         //====================================================================//

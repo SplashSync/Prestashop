@@ -39,7 +39,7 @@ class AttributesManager
     /**
      * Static cache for Attributes Group Values
      *
-     * @var null|Attribute[]
+     * @var null|array
      */
     private static $attributes;
 

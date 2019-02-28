@@ -191,7 +191,7 @@ trait AttributesTrait
      * @param Product $product     Product Object
      * @param int     $attributeId Product Combinaison Id
      *
-     * @return false|int
+     * @return array
      */
     protected function getProductAttributesArray($product, $attributeId)
     {
@@ -380,7 +380,7 @@ trait AttributesTrait
         //====================================================================//
         // Load Product Attribute Group
         $attributeGroup = Manager::touchGroup($attrItem["code"], $attrItem["public_name"]);
-        if ($attributeGroup) {
+        if (!$attributeGroup) {
             return false;
         }
         //====================================================================//
@@ -409,7 +409,7 @@ trait AttributesTrait
     {
         //====================================================================//
         // Load Product Attribute Value
-        $attribute = $this->getAttributeByCode($group, $attrItem["name"]);
+        $attribute = Manager::touchAttribute($group, $attrItem["name"]);
         if (!$attribute) {
             return false;
         }
@@ -420,7 +420,7 @@ trait AttributesTrait
             // Check if Name Exists
             $key = "name_".$isoCode;
             if (isset($attrItem[$key]) && is_scalar($attrItem[$key])) {
-                Manager::updateAttribute($group, $attrItem[$key], $isoCode);
+                Manager::updateAttribute($attribute, $attrItem[$key], $isoCode);
             }
         }
 

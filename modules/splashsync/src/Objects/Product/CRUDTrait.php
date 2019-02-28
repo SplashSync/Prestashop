@@ -16,10 +16,9 @@
 namespace Splash\Local\Objects\Product;
 
 use Combination;
-//====================================================================//
-// Prestashop Static Classes
 use Product;
 use Splash\Core\SplashCore      as Splash;
+use Splash\Local\Services\LanguagesManager as SLM;
 use Tools;
 
 /**
@@ -128,12 +127,7 @@ trait CRUDTrait
         //====================================================================//
         if ($this->ProductId && $needed) {
             if (true != $this->object->update()) {
-                return Splash::log()->err(
-                    "ErrLocalTpl",
-                    __CLASS__,
-                    __FUNCTION__,
-                    " Unable to update Product."
-                );
+                return Splash::log()->errTrace("Unable to update Product.");
             }
         }
 
@@ -179,12 +173,7 @@ trait CRUDTrait
         //====================================================================//
         $this->object = new Product($this->ProductId, true);
         if ($this->object->id != $this->ProductId) {
-            return Splash::log()->war(
-                "ErrLocalTpl",
-                __CLASS__,
-                __FUNCTION__,
-                " Unable to load Product (".$this->ProductId.")."
-            );
+            return Splash::log()->warTrace("Unable to load Product (".$this->ProductId.").");
         }
 
         //====================================================================//
@@ -228,10 +217,28 @@ trait CRUDTrait
             return Splash::log()->err("ErrLocalFieldMissing", __CLASS__, __FUNCTION__, "name");
         }
         //====================================================================//
-        // Init Product Link Rewrite Url
-        if (empty($this->in["link_rewrite"])) {
-            foreach ($this->in["name"] as $key => $value) {
-                $this->in["link_rewrite"][$key] = Tools::link_rewrite($value);
+        // Init Product Link Rewrite Url if Empty
+        foreach (SLM::getAvailableLanguages() as $isoCode) {
+            //====================================================================//
+            // Default language
+            if (SLM::isDefaultLanguage($isoCode)) {
+                if (empty($this->in["link_rewrite"])) {
+                    $this->in["link_rewrite"] = Tools::link_rewrite($this->in["name"]);
+                }
+
+                continue;
+            }
+            //====================================================================//
+            // Extra Languages
+            if (empty($this->in["link_rewrite_".$isoCode])) {
+                //====================================================================//
+                // Detect Multilang Name or Fallback to Default
+                $value = isset($this->in["name_".$isoCode])
+                        ? $this->in["name_".$isoCode]
+                        : $this->in["name"];
+                //====================================================================//
+                // Setup Multilang Url Rewrite
+                $this->in["link_rewrite_".$isoCode] = Tools::link_rewrite($value);
             }
         }
 
@@ -260,12 +267,7 @@ trait CRUDTrait
         //====================================================================//
         // CREATE PRODUCT
         if (true != $this->object->add()) {
-            return Splash::log()->err(
-                "ErrLocalTpl",
-                __CLASS__,
-                __FUNCTION__,
-                " Unable to create Product."
-            );
+            return Splash::log()->errTrace(" Unable to create Simple Product.");
         }
         //====================================================================//
         // Store New Id on SplashObject Class

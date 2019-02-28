@@ -87,7 +87,7 @@ trait ObjectsListTrait
         // Execute Generic Search
         $result = $this->getObjectsListRawData($sql, "ref", $params);
         if (false === $result) {
-            return $result;
+            return array();
         }
         //====================================================================//
         // Init Result Array

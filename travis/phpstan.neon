@@ -1,6 +1,5 @@
 includes:
     - '../modules/splashsync/vendor/phpstan/phpstan-phpunit/extension.neon'
-#    - '../modules/splashsync/vendor/phpstan/phpstan-phpunit/rules.neon'
 
 parameters:
     bootstrap: "./travis/phpstan.php"
@@ -10,6 +9,7 @@ parameters:
             # Know Prestashop Issues
             - '#Parameter \#1 \$id of class [a-zA-Z0-9]+ constructor expects null\, string given.#'
             - '#Parameter \#1 \$id of class [a-zA-Z0-9]+ constructor expects null\, int given.#'
+            - '#Parameter \#2 \$idLang of class Image constructor expects null\, int given.#'
 #            - '#[a-zA-Z0-9\\_\#]+ class Currency constructor expects null, string given#'
 #            - '#[a-zA-Z0-9\\_\#]+ class Address constructor expects int|null, bool|int|null given#'
             - "#Property CustomerCore::\\$passwd \\(int\\) does not accept bool|string.#"
