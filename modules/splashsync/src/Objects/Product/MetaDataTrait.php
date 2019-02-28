@@ -139,12 +139,12 @@ trait MetaDataTrait
                 case 'meta_description':
                 case 'meta_title':
                     $this->setMultilang($baseFieldName, $idLang, $fieldData);
+                    unset($this->in[$fieldName]);
 
                     break;
                 default:
                     continue;
             }
-            unset($this->in[$fieldName]);
         }
     }
 }

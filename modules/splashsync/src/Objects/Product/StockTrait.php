@@ -32,7 +32,7 @@ trait StockTrait
     /**
      * Build Fields using FieldFactory
      */
-    private function buildStockFields()
+    protected function buildStockFields()
     {
         $groupName = Translate::getAdminTranslation("Quantities", "AdminProducts");
 
@@ -79,7 +79,7 @@ trait StockTrait
      * @param string $key       Input List Key
      * @param string $fieldName Field Identifier / Name
      */
-    private function getStockFields($key, $fieldName)
+    protected function getStockFields($key, $fieldName)
     {
         //====================================================================//
         // READ Fields
@@ -122,7 +122,7 @@ trait StockTrait
      * @param string $fieldName Field Identifier / Name
      * @param mixed  $fieldData Field Data
      */
-    private function setStockFields($fieldName, $fieldData)
+    protected function setStockFields($fieldName, $fieldData)
     {
         //====================================================================//
         // WRITE Field
@@ -149,11 +149,7 @@ trait StockTrait
                     //====================================================================//
                     // Update Stock in DataBase
                     StockAvailable::setQuantity($this->ProductId, $this->AttributeId, $fieldData);
-                    if ($this->AttributeId) {
-                        $this->needUpdate("Attribute");
-                    } else {
-                        $this->needUpdate();
-                    }
+                    $this->needUpdate($this->AttributeId ? "Attribute" : "object");
                 }
 
                 break;

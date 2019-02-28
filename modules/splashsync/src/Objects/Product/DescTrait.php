@@ -140,20 +140,18 @@ trait DescTrait
                 case 'name':
                 case 'description':
                     $this->setMultilang($baseFieldName, $idLang, $fieldData);
+                    unset($this->in[$fieldName]);
 
                     break;
                 case 'description_short':
-                    $this->setMultilang(
-                        $fieldName,
-                        $fieldData,
-                        Configuration::get('PS_PRODUCT_SHORT_DESC_LIMIT')
-                    );
+                    $maxLength = Configuration::get('PS_PRODUCT_SHORT_DESC_LIMIT');
+                    $this->setMultilang($baseFieldName, $idLang, $fieldData, $maxLength);
+                    unset($this->in[$fieldName]);
 
                     break;
                 default:
                     continue;
             }
-            unset($this->in[$fieldName]);
         }
     }
 
