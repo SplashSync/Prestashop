@@ -75,6 +75,7 @@ trait AttributesTrait
             ->Name(Translate::getAdminTranslation("Code", "AdminCatalogFeature"))
             ->InList("attributes")
             ->Group($groupName)
+            ->addOption("isLowerCase", true)
             ->MicroData("http://schema.org/Product", "VariantAttributeCode")
             ->isNotTested();
 
@@ -264,6 +265,8 @@ trait AttributesTrait
 
             return false;
         }
+
+        return true;
     }
 
     /**
