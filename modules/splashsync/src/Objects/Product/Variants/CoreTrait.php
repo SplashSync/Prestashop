@@ -16,8 +16,8 @@
 namespace Splash\Local\Objects\Product\Variants;
 
 use Combination;
-use Context;
 use Splash\Core\SplashCore      as Splash;
+use Splash\Local\Services\LanguagesManager as SLM;
 use Translate;
 
 /**
@@ -168,16 +168,13 @@ trait CoreTrait
         }
         //====================================================================//
         // Load Product Variants
-        $variants = $this->object->getAttributeCombinations(Context::getContext()->language->id);
+        $variants = $this->object->getAttributeCombinations(SLM::getDefaultLangId());
         /** @var array $variant */
         foreach ($variants as $index => $variant) {
             //====================================================================//
             // SKIP Current Variant When in PhpUnit/Travis Mode
-            // Only Existing Variant will be Returned
-            if (!empty(Splash::input('SPLASH_TRAVIS'))) {
-                if (($variant["id_product"] == $this->ProductId) && ($variant["id_product_attribute"] == $this->AttributeId)) {
-                    continue;
-                }
+            if (!$this->isAllowedVariantChild($variant)) {
+                continue;
             }
             //====================================================================//
             // Get Variant Infos
@@ -203,6 +200,10 @@ trait CoreTrait
         // Sort Attributes by Code
         ksort($this->out["variants"]);
     }
+
+    //====================================================================//
+    // Fields Writting Functions
+    //====================================================================//
 
     /**
      * Write Given Fields
@@ -236,5 +237,36 @@ trait CoreTrait
                 return;
         }
         unset($this->in[$fieldName]);
+    }
+
+    //====================================================================//
+    // PRIVATE - Tooling Functions
+    //====================================================================//
+
+    /**
+     * Check if Product Variant Should be Listed
+     *
+     * @param array $attribute Combination Resume Array
+     *
+     * @return bool
+     */
+    private function isAllowedVariantChild($attribute)
+    {
+        //====================================================================//
+        // Not in PhpUnit/Travis Mode => Return All
+        if (empty(Splash::input('SPLASH_TRAVIS'))) {
+            return true;
+        }
+
+        //====================================================================//
+        // Travis Mode => Skip Current Product Variant
+        if ($attribute["id_product"] != $this->ProductId) {
+            return true;
+        }
+        if ($attribute["id_product_attribute"] != $this->AttributeId) {
+            return true;
+        }
+
+        return false;
     }
 }

@@ -21,7 +21,7 @@ use Product;
 use Splash\Core\SplashCore      as Splash;
 
 /**
- * @abstract    Prestashop Product Attribute Data Access
+ * Prestashop Product Attribute Data Access
  */
 trait AttributeTrait
 {
@@ -77,12 +77,7 @@ trait AttributeTrait
         //====================================================================//
         $this->Attribute = new Combination($this->AttributeId);
         if ($this->Attribute->id != $this->AttributeId) {
-            return Splash::log()->err(
-                "ErrLocalTpl",
-                __CLASS__,
-                __FUNCTION__,
-                "Unable to fetch Product Attribute (".$this->AttributeId.")"
-            );
+            return Splash::log()->errTrace("Unable to fetch Product Attribute (".$this->AttributeId.")");
         }
 
         return true;
@@ -108,12 +103,7 @@ trait AttributeTrait
         //====================================================================//
         // CREATE PRODUCT ATTRIBUTE IF NEW
         if (true != $this->Attribute->add()) {
-            return Splash::log()->err(
-                "ErrLocalTpl",
-                __CLASS__,
-                __FUNCTION__,
-                " Unable to create Product Combination."
-            );
+            return Splash::log()->errTrace("Unable to create Product Combination.");
         }
         //====================================================================//
         // Store New Id on SplashObject Class
@@ -145,22 +135,12 @@ trait AttributeTrait
         //====================================================================//
         // Verify Attribute Already Exists
         if (!$this->AttributeId) {
-            return Splash::log()->err(
-                "ErrLocalTpl",
-                __CLASS__,
-                __FUNCTION__,
-                " Unable to update Product Attribute that doesn't Exists."
-            );
+            return Splash::log()->errTrace("Unable to update Product Attribute that doesn't Exists.");
         }
         //====================================================================//
         // UPDATE ATTRIBUTE INFORMATIONS
         if (true != $this->Attribute->update()) {
-            return Splash::log()->err(
-                "ErrLocalTpl",
-                __CLASS__,
-                __FUNCTION__,
-                " Unable to update Product Attribute."
-            );
+            return Splash::log()->errTrace("Unable to update Product Attribute.");
         }
         //====================================================================//
         // UPDATE ATTRIBUTE IMAGES
@@ -196,47 +176,5 @@ trait AttributeTrait
         //====================================================================//
         // Also Delete Product From DataBase
         return $this->object->delete();
-    }
-
-    //====================================================================//
-    //  Variant Product CRUD
-    //====================================================================//
-
-    /**
-     * Create a New Variant Product
-     *
-     * @param mixed $fieldData Input Field Data
-     *
-     * @return false|Product
-     */
-    private function createVariantProduct($fieldData)
-    {
-        //====================================================================//
-        // Create or Load Base Product
-        if (($baseProductId = $this->getBaseProduct($fieldData["variants"]))) {
-            //====================================================================//
-            // USE LOCK to Allow Base Product Loading
-            $this->lock("onCombinationCreate");
-            $product = $this->load($baseProductId);
-            $this->unLock("onCombinationCreate");
-        } else {
-            //====================================================================//
-            // LOCK PRODUCT HOOKS to prevent triggered Actions on Product
-            $this->lock("onCombinationLock");
-            //====================================================================//
-            // Create New Simple Product
-            $product = $this->createSimpleProduct();
-            //====================================================================//
-            // UNLOCK PRODUCT HOOKS
-            $this->unLock("onCombinationLock");
-        }
-        //====================================================================//
-        // Add Product Combination
-        if (!$product || !$this->createAttribute()) {
-            return false;
-        }
-        //====================================================================//
-        // Return Product
-        return $product;
     }
 }
