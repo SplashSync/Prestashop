@@ -183,7 +183,7 @@ trait CoreTrait
             }
             //====================================================================//
             // Add Variant Infos
-            if(isset($attr[$fieldId])) {
+            if (isset($attr[$fieldId])) {
                 self::lists()->insert($this->out, "variants", $fieldId, $index, $attr[$fieldId]);
             }
         }
