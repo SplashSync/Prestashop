@@ -39,7 +39,7 @@ class LanguagesManager
 
     /**
      * List of All Available Languages (Encoded)
-     *
+     * 
      * @var array
      */
     private static $languages;
@@ -184,6 +184,11 @@ class LanguagesManager
     public static function langEncode($psCode)
     {
         //====================================================================//
+        // PreSetuped Install => Know Languages Code
+        if(isset(self::KNOW_LANGS[$psCode])) {
+            return self::KNOW_LANGS[$psCode];
+        }
+        //====================================================================//
         // Split Language Code
         $tmp = explode("-", $psCode);
         if (2 != count($tmp)) {
@@ -193,24 +198,5 @@ class LanguagesManager
         }
 
         return $out;
-    }
-
-    /**
-     * Translate Prestashop Languages Code from Splash Standard Format
-     *
-     * @param string $isoCode Language Code in Splash Format
-     *
-     * @return string Language Code in Prestashop Format
-     */
-    public static function langDecode($isoCode)
-    {
-        //====================================================================//
-        // Split Language Code
-        $tmp = explode("_", $isoCode);
-        if (2 != count($tmp)) {
-            return $isoCode;
-        }
-
-        return $tmp[0]."-".Tools::strtolower($tmp[1]);
     }
 }

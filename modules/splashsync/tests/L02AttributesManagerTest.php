@@ -74,7 +74,7 @@ class L02AttributesManagerTest extends ObjectsCase
         $code = "tstVariant".rand(100, 999);
         $names = array();
         foreach (SLM::getAvailableLanguages() as $isoCode) {
-            $names[$isoCode] = implode("-", array($code, SLM::langDecode($isoCode), rand(100, 999)));
+            $names[$isoCode] = implode("-", array($code, SLM::getPsLangId($isoCode), rand(100, 999)));
         }
         $dfName = $names[SLM::getDefaultLanguage()];
 
