@@ -21,6 +21,7 @@ use Image;
 use ImageManager;
 use ImageType;
 use Splash\Core\SplashCore      as Splash;
+use Splash\Local\Services\LanguagesManager as SLM;
 use Splash\Models\Objects\ImagesTrait as SplashImagesTrait;
 use Tools;
 use Translate;
@@ -187,7 +188,7 @@ trait ImagesTrait
         $publicUrl = Context::getContext()->link;
         //====================================================================//
         // Fetch Images Object
-        $objectImage = new Image($imageId, $this->LangId);
+        $objectImage = new Image($imageId, SLM::getDefaultLangId());
         //====================================================================//
         // Detect Image Name
         /** @var array $linkRewrite */
@@ -233,7 +234,7 @@ trait ImagesTrait
             // Load Variant Product Images List
             // If Not a Variant, Use Product Images so All Images will be Visibles
             $this->variantImages = Image::getImages(
-                $this->LangId,
+                SLM::getDefaultLangId(),
                 $this->object->id,
                 $this->AttributeId ? $this->AttributeId : null
             );
@@ -295,7 +296,7 @@ trait ImagesTrait
     {
         //====================================================================//
         // Fetch Images Object
-        $psImage = new Image($psImageId, $this->LangId);
+        $psImage = new Image($psImageId, SLM::getDefaultLangId());
         //====================================================================//
         // Compute Md5 CheckSum for this Image
         $checkSum = md5_file(
@@ -462,7 +463,7 @@ trait ImagesTrait
     {
         //====================================================================//
         // Load Object Images List
-        foreach (Image::getImages($this->LangId, $this->ProductId) as $image) {
+        foreach (Image::getImages(SLM::getDefaultLangId(), $this->ProductId) as $image) {
             $imageObj = new Image($image['id_image']);
             $imagePath = _PS_PROD_IMG_DIR_.$imageObj->getExistingImgPath();
             if (!file_exists($imagePath.'.jpg')) {
@@ -507,7 +508,7 @@ trait ImagesTrait
         //====================================================================//
         // Load Complete Product Images List
         $productImages = Image::getImages(
-            $this->LangId,
+            SLM::getDefaultLangId(),
             $this->object->id,
             null
         );
@@ -544,7 +545,7 @@ trait ImagesTrait
         }
         //====================================================================//
         // Load Object Images List for Whole Product
-        $this->imagesCache = Image::getImages($this->LangId, $this->object->id);
+        $this->imagesCache = Image::getImages(SLM::getDefaultLangId(), $this->object->id);
 
         //====================================================================//
         // UPDATE IMAGES LIST

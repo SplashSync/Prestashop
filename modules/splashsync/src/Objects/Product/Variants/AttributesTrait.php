@@ -297,10 +297,7 @@ trait AttributesTrait
     /**
      * Build Product Attribute Definition Array
      *
-     * @param Product $product     Product Object
-     * @param int     $attributeId Product Combinaison Id
-     *
-     * @return false|int
+     * @return array
      */
     private function getAttributesResume()
     {

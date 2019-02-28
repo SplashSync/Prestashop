@@ -38,7 +38,7 @@ trait CRUDTrait
     {
         //====================================================================//
         // Stack Trace
-        Splash::log()->trace(__CLASS__, __FUNCTION__);
+        Splash::log()->trace();
 
         //====================================================================//
         // Decode Product Id
@@ -47,7 +47,7 @@ trait CRUDTrait
         //====================================================================//
         // Safety Checks
         if (empty($unikId) || empty($this->ProductId)) {
-            return Splash::log()->err("ErrLocalTpl", __CLASS__, __FUNCTION__, " Missing Id.");
+            return Splash::log()->errTrace("Product Unik Id is Missing.");
         }
         //====================================================================//
         // Clear Cache
@@ -55,17 +55,9 @@ trait CRUDTrait
         //====================================================================//
         // If $id Given => Load Product Object From DataBase
         //====================================================================//
-        $this->object = false;
-        if (!empty($this->ProductId)) {
-            $this->object = new Product($this->ProductId, true);
-            if ($this->object->id != $this->ProductId) {
-                return Splash::log()->err(
-                    "ErrLocalTpl",
-                    __CLASS__,
-                    __FUNCTION__,
-                    "Unable to fetch Product (".$this->ProductId.")"
-                );
-            }
+        $this->object = new Product($this->ProductId, true);
+        if ($this->object->id != $this->ProductId) {
+            return Splash::log()->errTrace("Unable to fetch Product (".$this->ProductId.")");
         }
         //====================================================================//
         // If $id_attribute Given => Load Product Attribute Combinaisons From DataBase
@@ -73,7 +65,6 @@ trait CRUDTrait
         if (!$this->loadAttribute($unikId)) {
             return false;
         }
-
         //====================================================================//
         // Flush Images Infos Cache
         $this->flushImageCache();
@@ -90,7 +81,7 @@ trait CRUDTrait
     {
         //====================================================================//
         // Stack Trace
-        Splash::log()->trace(__CLASS__, __FUNCTION__);
+        Splash::log()->trace();
 
         //====================================================================//
         // Check Required Fields are Given
@@ -122,7 +113,7 @@ trait CRUDTrait
     {
         //====================================================================//
         // Stack Trace
-        Splash::log()->trace(__CLASS__, __FUNCTION__);
+        Splash::log()->trace();
 
         //====================================================================//
         // Verify Update Is requiered
@@ -166,7 +157,7 @@ trait CRUDTrait
     {
         //====================================================================//
         // Stack Trace
-        Splash::log()->trace(__CLASS__, __FUNCTION__);
+        Splash::log()->trace();
 
         //====================================================================//
         // Safety Checks
@@ -256,7 +247,7 @@ trait CRUDTrait
     {
         //====================================================================//
         // Stack Trace
-        Splash::log()->trace(__CLASS__, __FUNCTION__);
+        Splash::log()->trace();
 
         //====================================================================//
         // Create Empty Product

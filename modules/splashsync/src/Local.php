@@ -430,7 +430,7 @@ class Local implements LocalClassInterface
     {
         //====================================================================//
         // Stack Trace
-        Splash::log()->trace(__CLASS__, __FUNCTION__);
+        Splash::log()->trace();
         //====================================================================//
         // Load Local Splash Sync Module
         if (!isset(static::$SplashSyncModule)) {

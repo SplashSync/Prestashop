@@ -33,7 +33,7 @@ trait ObjectsListTrait
     {
         //====================================================================//
         // Stack Trace
-        Splash::log()->trace(__CLASS__, __FUNCTION__);
+        Splash::log()->trace();
 
         //===============================customer=====================================//
         // Build query
@@ -72,7 +72,7 @@ trait ObjectsListTrait
         // Execute Generic Search
         $result = $this->getObjectsListRawData($sql, "order_date", $params);
         if (false === $result) {
-            return $result;
+            return array();
         }
         //====================================================================//
         // Init Result Array

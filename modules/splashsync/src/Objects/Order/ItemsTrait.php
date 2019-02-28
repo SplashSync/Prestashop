@@ -260,13 +260,15 @@ trait ItemsTrait
 
         //====================================================================//
         // Update Price
-        if ($orderDetail->unit_price_tax_incl != self::prices()->TaxIncluded($productItem["unit_price"])) {
-            $orderDetail->unit_price_tax_incl = self::prices()->TaxIncluded($productItem["unit_price"]);
+        $ttcPrice = (float) self::prices()->TaxIncluded($productItem["unit_price"]);
+        if ($orderDetail->unit_price_tax_incl != $ttcPrice) {
+            $orderDetail->unit_price_tax_incl = $ttcPrice;
             $update = true;
         }
-        if ($orderDetail->unit_price_tax_excl != self::prices()->TaxExcluded($productItem["unit_price"])) {
-            $orderDetail->unit_price_tax_excl = self::prices()->TaxExcluded($productItem["unit_price"]);
-            $orderDetail->product_price = self::prices()->TaxExcluded($productItem["unit_price"]);
+        $htPrice = (float) self::prices()->TaxExcluded($productItem["unit_price"]);
+        if ($orderDetail->unit_price_tax_excl != $htPrice) {
+            $orderDetail->unit_price_tax_excl = $htPrice;
+            $orderDetail->product_price = $htPrice;
             $update = true;
         }
 

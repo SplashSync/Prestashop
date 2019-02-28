@@ -19,7 +19,6 @@ use Context;
 use Language;
 use Splash\Core\SplashCore      as Splash;
 use Tools;
-use Validate;
 
 /**
  * Splash Languages Manager - Prestashop Languages Management
@@ -89,7 +88,7 @@ class LanguagesManager
      *
      * @param string $isoCode Language Code in Splash ISO Format
      *
-     * @return fakse|int
+     * @return false|int
      */
     public static function getPsLangId($isoCode)
     {

@@ -20,9 +20,10 @@ use DbQuery;
 use Product;
 use Shop;
 use Splash\Core\SplashCore      as Splash;
+use Splash\Local\Services\LanguagesManager as SLM;
 
 /**
- * Acces to Product Objects Lists
+ * Access to Product Objects Lists
  */
 trait ObjectsListTrait
 {
@@ -58,7 +59,7 @@ trait ObjectsListTrait
         //====================================================================//
         // Build JOIN
         $sqlWhere = '(pl.id_product = p.id_product AND pl.id_lang = ';
-        $sqlWhere .= (int)  $this->LangId.Shop::addSqlRestrictionOnLang('pl').')';
+        $sqlWhere .= (int)  SLM::getDefaultLangId().Shop::addSqlRestrictionOnLang('pl').')';
         $sql->leftJoin("product_lang", 'pl', $sqlWhere);
         $sql->leftJoin("product_attribute", 'pa', '(pa.id_product = p.id_product) ');
         //====================================================================//

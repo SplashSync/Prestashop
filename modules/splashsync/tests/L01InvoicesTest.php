@@ -42,7 +42,9 @@ class L01InvoicesTest extends ObjectsCase
 
         //====================================================================//
         //   Load Order Object
-        $order = Splash::object("Order")->load($objectId);
+        $splashOrder = Splash::object("Order")->load($objectId);
+        $this->assertInstanceOf(Order::class, $splashOrder);
+        $order = $splashOrder->load($objectId);
         $this->assertNotEmpty($order);
 
         //====================================================================//

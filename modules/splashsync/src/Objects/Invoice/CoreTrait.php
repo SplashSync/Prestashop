@@ -15,6 +15,7 @@
 
 namespace Splash\Local\Objects\Invoice;
 
+use Splash\Local\Services\LanguagesManager as SLM;
 use Translate;
 
 /**
@@ -59,7 +60,7 @@ trait CoreTrait
         // READ Fields
         switch ($fieldName) {
             case 'number':
-                $this->out[$fieldName] = $this->object->getInvoiceNumberFormatted($this->LangId);
+                $this->out[$fieldName] = $this->object->getInvoiceNumberFormatted(SLM::getDefaultLangId());
 
                 break;
             case 'id_order':

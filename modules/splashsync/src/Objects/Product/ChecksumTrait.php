@@ -16,8 +16,7 @@
 namespace Splash\Local\Objects\Product;
 
 use Splash\Core\SplashCore      as Splash;
-//====================================================================//
-// Prestashop Static Classes
+use Splash\Local\Services\LanguagesManager as SLM;
 use Translate;
 
 /**
@@ -37,7 +36,7 @@ trait ChecksumTrait
     public function getMd5Checksum()
     {
         return self::getMd5ChecksumFromValues(
-            $this->object->name[$this->LangId],
+            $this->object->name[SLM::getDefaultLangId()],
             $this->object->reference,
             $this->getProductAttributesArray($this->object, $this->AttributeId)
         );
@@ -51,7 +50,7 @@ trait ChecksumTrait
     public function getMd5String()
     {
         return self::getMd5StringFromValues(
-            $this->object->name[$this->LangId],
+            $this->object->name[SLM::getDefaultLangId()],
             $this->object->reference,
             $this->getProductAttributesArray($this->object, $this->AttributeId)
         );

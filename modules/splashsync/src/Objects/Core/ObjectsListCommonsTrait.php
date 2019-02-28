@@ -24,7 +24,7 @@ use Splash\Core\SplashCore      as Splash;
 trait ObjectsListCommonsTrait
 {
     /**
-     * Get Totl Number of Object for a Sql Request
+     * Get Total Number of Object for a Sql Request
      *
      * @param string $sql
      *
@@ -34,7 +34,7 @@ trait ObjectsListCommonsTrait
     {
         //====================================================================//
         // Stack Trace
-        Splash::log()->trace(__CLASS__, __FUNCTION__);
+        Splash::log()->trace();
         //====================================================================//
         // Execute count request
         Db::getInstance()->executeS($sql);
@@ -59,7 +59,7 @@ trait ObjectsListCommonsTrait
     {
         //====================================================================//
         // Stack Trace
-        Splash::log()->trace(__CLASS__, __FUNCTION__);
+        Splash::log()->trace();
         //====================================================================//
         // Setup sortorder
         $sqlSortField = empty($params["sortfield"])    ?   $sortField  :   pSQL($params["sortfield"]);
@@ -86,13 +86,13 @@ trait ObjectsListCommonsTrait
      * @param string     $sortField
      * @param null|array $params
      *
-     * @return array|false
+     * @return array
      */
     protected function getObjectsListGenericData($sql, $sortField, $params = null)
     {
         //====================================================================//
         // Stack Trace
-        Splash::log()->trace(__CLASS__, __FUNCTION__);
+        Splash::log()->trace();
         //====================================================================//
         // Compute Total Number of Results
         $total = $this->getObjectListTotal($sql);
@@ -100,7 +100,7 @@ trait ObjectsListCommonsTrait
         // Execute Generic Search
         $result = $this->getObjectsListRawData($sql, $sortField, $params);
         if (false === $result) {
-            return $result;
+            return array();
         }
         //====================================================================//
         // Init Result Array

@@ -19,6 +19,7 @@ use Attribute;
 use Combination;
 use Product;
 use Splash\Core\SplashCore      as Splash;
+use Splash\Local\Services\LanguagesManager as SLM;
 
 /**
  * Prestashop Product Attribute Data Access
@@ -54,7 +55,7 @@ trait AttributeTrait
     {
         //====================================================================//
         // Stack Trace
-        Splash::log()->trace(__CLASS__, __FUNCTION__);
+        Splash::log()->trace();
         //====================================================================//
         // Decode Product Id
         $this->AttributeId = self::getAttribute($unikId);
@@ -63,7 +64,7 @@ trait AttributeTrait
         if (!$this->isLocked("onCombinationCreate") && empty($this->AttributeId)) {
             //====================================================================//
             // Read Product Combinations
-            $attrList = $this->object->getAttributesResume($this->LangId);
+            $attrList = $this->object->getAttributesResume(SLM::getDefaultLangId());
             //====================================================================//
             // if Product has Combinations => Cannot Read Variant Product Without AttributeId
             if (is_array($attrList) && !empty($attrList)) {
@@ -92,7 +93,7 @@ trait AttributeTrait
     {
         //====================================================================//
         // Stack Trace
-        Splash::log()->trace(__CLASS__, __FUNCTION__);
+        Splash::log()->trace();
         //====================================================================//
         // Create Empty Product
         $this->Attribute = new Combination();
@@ -124,7 +125,7 @@ trait AttributeTrait
     {
         //====================================================================//
         // Stack Trace
-        Splash::log()->trace(__CLASS__, __FUNCTION__);
+        Splash::log()->trace();
         //====================================================================//
         // Verify Update Is requiered
         if (!$this->isToUpdate("Attribute")) {
@@ -161,13 +162,13 @@ trait AttributeTrait
     {
         //====================================================================//
         // Stack Trace
-        Splash::log()->trace(__CLASS__, __FUNCTION__);
+        Splash::log()->trace();
         //====================================================================//
         // Delete Attribute
         $this->object->deleteAttributeCombination($this->AttributeId);
         //====================================================================//
         // Read Product Attributes Conbination
-        $attrList = $this->object->getAttributesResume($this->LangId);
+        $attrList = $this->object->getAttributesResume(SLM::getDefaultLangId());
         //====================================================================//
         // Verify if Was Last Combination
         if (!empty($attrList)) {

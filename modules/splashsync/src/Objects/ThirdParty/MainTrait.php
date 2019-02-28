@@ -281,6 +281,7 @@ trait MainTrait
                 // Identify Gender Type
                 $genders = Gender::getGenders(Context::getContext()->language->id);
                 $genders->where("type", "=", $fieldData);
+                /** @var false|Gender */
                 $gendertype = $genders->getFirst();
 
                 //====================================================================//

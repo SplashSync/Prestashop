@@ -16,7 +16,6 @@
 namespace Splash\Local\Objects\Product\Variants;
 
 use ArrayObject;
-use Combination;
 use Product;
 use Splash\Core\SplashCore      as Splash;
 
@@ -32,7 +31,7 @@ trait CRUDTrait
     /**
      * Check if New Product is a Variant Product
      *
-     * @param array $variantData Input Field Data
+     * @param array|ArrayObject $variantData Input Field Data
      *
      * @return bool
      */
@@ -111,7 +110,7 @@ trait CRUDTrait
     {
         //====================================================================//
         // Stack Trace
-        Splash::log()->trace(__CLASS__, __FUNCTION__);
+        Splash::log()->trace();
         //====================================================================//
         // Check Name is Array
         if ((!is_array($variants) && !is_a($variants, "ArrayObject")) || empty($variants)) {

@@ -98,7 +98,7 @@ class AttributesManager
      * @param null|string $code Attribute Group Name in Default Language
      * @param null|string $name Attribute Group Name in Default Language
      *
-     * @return Attribute|false
+     * @return AttributeGroup|false
      */
     public static function touchGroup($code, $name)
     {
@@ -219,7 +219,9 @@ class AttributesManager
         //====================================================================//
         // Ensure Loading of Attribute Values List
         self::getAllAttributes($group);
-
+        if (is_null(static::$attributes)) {
+            return false;
+        }
         //====================================================================//
         // Return Attribute Values
         return isset(static::$attributes[$group->id][$attributeId])
@@ -266,7 +268,7 @@ class AttributesManager
      * @param string         $name      Attribute Name
      * @param string         $isoCode   Language ISO Code
      *
-     * @return AttributeGroup|false
+     * @return Attribute|false
      */
     public static function updateAttribute($attribute, $name, $isoCode)
     {
@@ -452,7 +454,9 @@ class AttributesManager
         }
         //====================================================================//
         // ADD to Attribute Values Cache
-        static::$attributes[$group->id][$attribute->id] = $attribute;
+        if (!is_null(static::$attributes)) {
+            static::$attributes[$group->id][$attribute->id] = $attribute;
+        }
 
         return $attribute;
     }
