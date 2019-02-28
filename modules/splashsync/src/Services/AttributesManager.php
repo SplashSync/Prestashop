@@ -65,7 +65,8 @@ class AttributesManager
             foreach (AttributeGroup::getAttributesGroups(SLM::getDefaultLangId()) as $groupArray) {
                 //====================================================================//
                 // Load List of Attributes Groups
-                static::$groups[$groupArray["id_attribute_group"]] = new AttributeGroup($groupArray["id_attribute_group"]);
+                $groupId = $groupArray["id_attribute_group"];
+                static::$groups[$groupId] = new AttributeGroup($groupId);
             }
         }
 
