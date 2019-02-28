@@ -21,7 +21,6 @@ use Product as psProduct;
 use Shop;
 use Splash\Core\SplashCore      as Splash;
 use Splash\Local\Local;
-use Splash\Local\Services\LanguagesManager;
 use Splash\Models\AbstractObject;
 //====================================================================//
 // Prestashop Static Classes
@@ -124,9 +123,8 @@ class Product extends AbstractObject
     //====================================================================//
     // General Class Variables
     //====================================================================//
-    protected $ProductId;     // Prestashop Product Class Id
-    protected $LangId;     // Prestashop Language Class Id
-    protected $Currency;     // Prestashop Currency Class
+    protected $ProductId;       // Prestashop Product Class Id
+    protected $Currency;        // Prestashop Currency Class
 
     /**
      * @var SplashSync
@@ -150,9 +148,6 @@ class Product extends AbstractObject
         //====================================================================//
         // Load Splash Module
         $this->spl = Local::getLocalModule();
-        //====================================================================//
-        // Load Default Language
-        $this->LangId = LanguagesManager::loadDefaultLanguage();
         //====================================================================//
         // Load Default Currency
         $this->Currency = new Currency(Configuration::get('PS_CURRENCY_DEFAULT'));

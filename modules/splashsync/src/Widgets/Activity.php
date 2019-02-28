@@ -29,7 +29,6 @@ use Configuration;
 use Currency;
 use Splash\Core\SplashCore      as Splash;
 use Splash\Local\Local;
-use Splash\Local\Services\LanguagesManager;
 use Splash\Models\AbstractWidget;
 use SplashSync;
 
@@ -103,9 +102,6 @@ class Activity extends AbstractWidget
         //====================================================================//
         // Stack Trace
         Splash::log()->trace(__CLASS__, __FUNCTION__);
-        //====================================================================//
-        // Load Default Language
-        LanguagesManager::loadDefaultLanguage();
 
         //====================================================================//
         // Setup Widget Core Informations

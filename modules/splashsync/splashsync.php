@@ -297,7 +297,6 @@ class SplashSync extends Module
         $helper->fields_value['SPLASH_WS_METHOD'] = Configuration::get('SPLASH_WS_METHOD');
         $helper->fields_value['SPLASH_WS_EXPERT'] = Configuration::get('SPLASH_WS_EXPERT');
         $helper->fields_value['SPLASH_WS_HOST'] = Configuration::get('SPLASH_WS_HOST');
-        $helper->fields_value['SPLASH_LANG_ID'] = Configuration::get('SPLASH_LANG_ID');
         $helper->fields_value['SPLASH_USER_ID'] = Configuration::get('SPLASH_USER_ID');
 
         return $helper->generateForm($fieldsForm);
@@ -490,6 +489,29 @@ class SplashSync extends Module
         );
 
         //====================================================================//
+        // Webservice SOAP Protocol
+        $fields[] = array(
+            'label' => $this->l('Webservice'),
+            'hint' => $this->l('Webservice libary used for communication.'),
+            'type' => 'select',
+            'name' => 'SPLASH_WS_METHOD',
+            'options' => array(
+                'query' => array(
+                    array(
+                        'id' => 'SOAP',
+                        'name' => "Generic PHP SOAP",
+                    ),
+                    array(
+                        'id' => 'NuSOAP',
+                        'name' => "NuSOAP Library",
+                    ),
+                ),
+                'id' => 'id',
+                'name' => 'name'
+            )
+        );
+
+        //====================================================================//
         // Expert Mode
         $fields[] = array(
             'type' => 'checkbox',
@@ -510,29 +532,6 @@ class SplashSync extends Module
         );
 
         if (Configuration::get('SPLASH_WS_EXPERT')) {
-            //====================================================================//
-            // Webservice SOAP Protocol
-            $fields[] = array(
-                'label' => $this->l('Webservice'),
-                'hint' => $this->l('Webservice libary used for communication.'),
-                'type' => 'select',
-                'name' => 'SPLASH_WS_METHOD',
-                'options' => array(
-                    'query' => array(
-                        array(
-                            'id' => 'SOAP',
-                            'name' => "Generic PHP SOAP",
-                        ),
-                        array(
-                            'id' => 'NuSOAP',
-                            'name' => "NuSOAP Library",
-                        ),
-                    ),
-                    'id' => 'id',
-                    'name' => 'name'
-                )
-            );
-
             //====================================================================//
             // Server Host Url
             $fields[] = array(
@@ -572,22 +571,6 @@ class SplashSync extends Module
         //====================================================================//
         // Init Fields List
         $fields = array();
-
-        //====================================================================//
-        // Default Language Code
-        $fields[] = array(
-            'label' => $this->l('Default language'),
-            'hint' => $this->l('The default language used for synchronisation.'),
-            'cast' => 'intval',
-            'type' => 'select',
-            'identifier' => 'id_lang',
-            'name' => 'SPLASH_LANG_ID',
-            'options' => array(
-                'query' => Language::getLanguages(false),
-                'id' => 'language_code',
-                'name' => 'name'
-            )
-        );
 
         //====================================================================//
         // Default User Id
@@ -649,13 +632,6 @@ class SplashSync extends Module
             }
 
             //====================================================================//
-            // Verify Language Id
-            $langId = Tools::getValue('SPLASH_LANG_ID');
-            if (empty($langId) || !Validate::isLanguageCode($langId) || !Language::getLanguageByIETFCode($langId)) {
-                $output .= $this->displayError($this->l('Invalid Language'));
-            }
-
-            //====================================================================//
             // Verify User Id
             $userId = Tools::getValue('SPLASH_USER_ID');
             if (empty($userId) || !Validate::isInt($userId)) {
@@ -691,7 +667,6 @@ class SplashSync extends Module
                 Configuration::updateValue('SPLASH_WS_ID', trim($serverId));
                 Configuration::updateValue('SPLASH_WS_METHOD', trim($wsMethod));
                 Configuration::updateValue('SPLASH_WS_KEY', trim($userKey));
-                Configuration::updateValue('SPLASH_LANG_ID', trim($langId));
                 Configuration::updateValue('SPLASH_USER_ID', trim($userId));
                 $output .= $this->displayConfirmation($this->l('Settings updated'));
             }

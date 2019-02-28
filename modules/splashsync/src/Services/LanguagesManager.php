@@ -39,20 +39,37 @@ class LanguagesManager
     );
 
     /**
-     * List of Available Languages (Encoded)
+     * List of All Available Languages (Encoded)
      *
      * @var array
      */
     private static $languages;
 
     /**
-     * Get Default Local Language if Not Already Done
+     * List of All Extra Languages (All - Default)
+     *
+     * @var array
+     */
+    private static $extra;
+
+    /**
+     * Get Default Local Language ISO Code
      *
      * @return string
      */
     public static function getDefaultLanguage()
     {
         return self::langEncode(Context::getContext()->language->language_code);
+    }
+
+    /**
+     * Get Default Prestashop Language Id
+     *
+     * @return int
+     */
+    public static function getDefaultLangId()
+    {
+        return Context::getContext()->language->id;
     }
 
     /**
@@ -68,27 +85,23 @@ class LanguagesManager
     }
 
     /**
-     * Setup Local Language if Not Already Done
+     * Get Default Prestashop Language Id
      *
-     * @return int
+     * @param string $isoCode Language Code in Splash ISO Format
+     *
+     * @return fakse|int
      */
-    public static function loadDefaultLanguage()
+    public static function getPsLangId($isoCode)
     {
         //====================================================================//
-        // Load Default Language from Local Module Configuration
-        $langCode = Splash::configuration()->DefaultLanguage;
-        //====================================================================//
-        // Setup Prestashop with Default Language
-        if (!empty($langCode) && Validate::isLanguageCode($langCode)) {
-            Context::getContext()->language = Language::getLanguageByIETFCode($langCode);
-        }
-        //====================================================================//
-        // Check Now Ok
-        if (!empty(Context::getContext()->language->id)) {
-            return  Context::getContext()->language->id;
+        // For Each Available Language
+        foreach (self::getAvailableLanguages() as $langid => $langCode) {
+            if ($langCode == $isoCode) {
+                return $langid;
+            }
         }
 
-        return  0;
+        return false;
     }
 
     /**
@@ -114,6 +127,28 @@ class LanguagesManager
         }
 
         return static::$languages;
+    }
+
+    /**
+     * Get All Available Languages
+     *
+     * @return array
+     */
+    public static function getExtraLanguages()
+    {
+        //====================================================================//
+        // Load From Cache
+        if (isset(static::$extra)) {
+            return static::$extra;
+        }
+        //====================================================================//
+        // Load All
+        static::$extra = static::$languages;
+        //====================================================================//
+        // Remove Default
+        unset(static::$extra[self::getDefaultLangId()]);
+
+        return static::$extra;
     }
 
     /**

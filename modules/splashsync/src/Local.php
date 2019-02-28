@@ -20,7 +20,7 @@ use Context;
 use Employee;
 use Language;
 use Splash\Core\SplashCore      as Splash;
-use Splash\Local\Services\LanguagesManager;
+use Splash\Local\Services\LanguagesManager as SLM;
 use Splash\Local\Traits\SplashIdTrait;
 use Splash\Models\LocalClassInterface;
 use SplashSync;
@@ -72,15 +72,8 @@ class Local implements LocalClassInterface
         }
 
         //====================================================================//
-        // Overide Module Parameters with Local User Selected Lang
-        if (Configuration::get('SPLASH_LANG_ID')) {
-            $parameters["DefaultLanguage"] = Configuration::get('SPLASH_LANG_ID');
-        //====================================================================//
-        // Overide Module Parameters with Local Default System Lang
-        } elseif (Configuration::get('PS_LANG_DEFAULT')) {
-            $language = new Language(Configuration::get('PS_LANG_DEFAULT'));
-            $parameters["DefaultLanguage"] = $language->language_code;
-        }
+        // Overide Module Parameters with Local User Selected Default Lang
+        $parameters["DefaultLanguage"] = SLM::getDefaultLanguage();
 
         //====================================================================//
         // Overide Module Local Name in Logs
@@ -127,17 +120,9 @@ class Local implements LocalClassInterface
         //====================================================================//
         if (!empty(SPLASH_SERVER_MODE)) {
             //====================================================================//
-            // Load Default Language
-            LanguagesManager::loadDefaultLanguage();
-
-            //====================================================================//
             // Load Default User
             $this->loadLocalUser();
-            //====================================================================//
-        // When Library is called in client mode ONLY
-        //====================================================================//
         }
-        // NOTHING TO DO
 
         //====================================================================//
         // When Library is called in TRAVIS CI mode ONLY
@@ -287,10 +272,7 @@ class Local implements LocalClassInterface
 
         //====================================================================//
         // Server Actives Languages List
-        $parameters["Langs"] = array();
-        foreach (Language::getLanguages() as $language) {
-            $parameters["Langs"][] = LanguagesManager::langEncode($language["language_code"]);
-        }
+        $parameters["Langs"] = SLM::getAvailableLanguages();
 
         return $parameters;
     }

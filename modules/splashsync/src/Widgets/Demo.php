@@ -25,7 +25,6 @@ namespace   Splash\Local\Widgets;
 
 use ArrayObject;
 use Splash\Core\SplashCore      as Splash;
-use Splash\Local\Services\LanguagesManager;
 use Splash\Models\AbstractWidget;
 
 /**
@@ -100,9 +99,6 @@ class Demo extends AbstractWidget
         //====================================================================//
         // Stack Trace
         Splash::log()->trace(__CLASS__, __FUNCTION__);
-        //====================================================================//
-        // Load Default Language
-        LanguagesManager::loadDefaultLanguage();
 
         //====================================================================//
         // Setup Widget Core Informations

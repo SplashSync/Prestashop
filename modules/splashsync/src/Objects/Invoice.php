@@ -21,7 +21,6 @@ use OrderInvoice;
 use Shop;
 use Splash\Core\SplashCore      as Splash;
 use Splash\Local\Local;
-use Splash\Local\Services\LanguagesManager;
 use Splash\Models\AbstractObject;
 use Splash\Models\Objects\IntelParserTrait;
 use Splash\Models\Objects\ObjectsTrait;
@@ -116,11 +115,6 @@ class Invoice extends AbstractObject
     protected $object;
 
     /**
-     * @var int
-     */
-    private $LangId;
-
-    /**
      * @var Currency
      */
     private $Currency;
@@ -147,9 +141,6 @@ class Invoice extends AbstractObject
         //====================================================================//
         // Load Splash Module
         $this->spl = Local::getLocalModule();
-        //====================================================================//
-        // Load Default Language
-        $this->LangId = LanguagesManager::loadDefaultLanguage();
         //====================================================================//
         // Load OsWs Currency
         $this->Currency = new Currency(Configuration::get('PS_CURRENCY_DEFAULT'));
