@@ -25,6 +25,13 @@ use Translate;
  */
 trait CoreTrait
 {
+    /**
+     * Product Combination Resume Array
+     *
+     * @var array
+     */
+    private $combinations;
+
     //====================================================================//
     // Fields Generation Functions
     //====================================================================//
@@ -168,36 +175,22 @@ trait CoreTrait
         }
         //====================================================================//
         // Load Product Variants
-        $variants = $this->object->getAttributeCombinations(SLM::getDefaultLangId());
-        /** @var array $variant */
-        foreach ($variants as $index => $variant) {
+        foreach ($this->getCombinationResume() as $index => $attr) {
             //====================================================================//
             // SKIP Current Variant When in PhpUnit/Travis Mode
-            if (!$this->isAllowedVariantChild($variant)) {
+            if (!$this->isAllowedVariantChild($attr)) {
                 continue;
             }
             //====================================================================//
-            // Get Variant Infos
-            switch ($fieldId) {
-                case 'id':
-                    $unikId = self::getUnikIdStatic($variant["id_product"], $variant["id_product_attribute"]);
-                    $value = self::objects()->encode("Product", $unikId);
-
-                    break;
-                case 'sku':
-                    $value = $variant["reference"];
-
-                    break;
-                default:
-                    return;
+            // Add Variant Infos
+            if(isset($attr[$fieldId])) {
+                self::lists()->insert($this->out, "variants", $fieldId, $index, $attr[$fieldId]);
             }
-
-            self::lists()->insert($this->out, "variants", $fieldId, $index, $value);
         }
 
         unset($this->in[$key]);
         //====================================================================//
-        // Sort Attributes by Code
+        // Sort Variants by Code
         ksort($this->out["variants"]);
     }
 
@@ -268,5 +261,45 @@ trait CoreTrait
         }
 
         return false;
+    }
+
+    /**
+     * Build Product Combination Resume Array
+     *
+     * @return array
+     */
+    private function getCombinationResume()
+    {
+        //====================================================================//
+        // Already Loaded
+        if (isset($this->combinations)) {
+            return $this->combinations;
+        }
+        //====================================================================//
+        // Init List
+        $this->combinations = array();
+        //====================================================================//
+        // READ Product Combinations List
+        foreach ($this->object->getAttributeCombinations(SLM::getDefaultLangId()) as $attr) {
+            //====================================================================//
+            // Extract Product Attribute Id
+            $attrId = $attr["id_product_attribute"];
+            //====================================================================//
+            // Already Added
+            if (isset($this->combinations[$attrId])) {
+                continue;
+            }
+            //====================================================================//
+            // Parse Simple Data
+            $this->combinations[$attrId]["id_product"] = $attr["id_product"];
+            $this->combinations[$attrId]["id_product_attribute"] = $attr["id_product_attribute"];
+            $this->combinations[$attrId]["sku"] = $attr["reference"];
+            //====================================================================//
+            // Parse Computed Data
+            $unikId = self::getUnikIdStatic($attr["id_product"], $attr["id_product_attribute"]);
+            $this->combinations[$attrId]["id"] = self::objects()->encode("Product", $unikId);
+        }
+
+        return $this->combinations;
     }
 }

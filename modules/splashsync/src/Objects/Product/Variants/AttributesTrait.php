@@ -241,59 +241,6 @@ trait AttributesTrait
     }
 
     //====================================================================//
-    // PRIVATE - Fields Writting Functions
-    //====================================================================//
-
-    /**
-     * Check if Given Field Name is Attributes List Field
-     *
-     * @param string $fieldName Field Identifier
-     *
-     * @return bool
-     */
-    private function isVariantsAttributesField($fieldName)
-    {
-        //====================================================================//
-        // Check is Attribute Field
-        if (("attributes" !== $fieldName)) {
-            return false;
-        }
-        //====================================================================//
-        // Safety Check => Not a Variant product? => Skip Attributes Update
-        if (empty($this->Attribute)) {
-            unset($this->in[$fieldName]);
-
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
-     * Update Product Attributes Ids
-     *
-     * @param array $attributesIds Product Attributes Ids Array
-     */
-    private function updateVariantsAttributesIds($attributesIds)
-    {
-        //====================================================================//
-        // Build Current Attributes Ids Table
-        $oldAttributesIds = array();
-        $oldAttributes = $this->Attribute->getWsProductOptionValues();
-        if (is_array($oldAttributes)) {
-            foreach ($oldAttributes as $attribute) {
-                $oldAttributesIds[] = $attribute["id"];
-            }
-        }
-
-        //====================================================================//
-        // Update Combination if Modified
-        if (!empty(array_diff($attributesIds, $oldAttributesIds))) {
-            $this->Attribute->setAttributes($attributesIds);
-        }
-    }
-
-    //====================================================================//
     // PRIVATE - Fields Reading Functions
     //====================================================================//
 
@@ -368,6 +315,38 @@ trait AttributesTrait
             self::lists()->insert($this->out, "attributes", $fieldId, $index, $value);
         }
         unset($this->in[$key]);
+        //====================================================================//
+        // Sort Attributes by Code
+        ksort($this->out["attributes"]);
+    }
+
+    //====================================================================//
+    // PRIVATE - Fields Writting Functions
+    //====================================================================//
+
+    /**
+     * Check if Given Field Name is Attributes List Field
+     *
+     * @param string $fieldName Field Identifier
+     *
+     * @return bool
+     */
+    private function isVariantsAttributesField($fieldName)
+    {
+        //====================================================================//
+        // Check is Attribute Field
+        if (("attributes" !== $fieldName)) {
+            return false;
+        }
+        //====================================================================//
+        // Safety Check => Not a Variant product? => Skip Attributes Update
+        if (empty($this->Attribute)) {
+            unset($this->in[$fieldName]);
+
+            return false;
+        }
+
+        return true;
     }
 
     /**
@@ -387,11 +366,11 @@ trait AttributesTrait
             return false;
         }
         //====================================================================//
-        // Update Group Names in Extra Languages
-        foreach (SLM::getExtraLanguages() as $isoCode) {
+        // Update Group Names in All Languages
+        foreach (SLM::getAvailableLanguages() as $isoCode) {
             //====================================================================//
             // Check if Name Exists
-            $key = "public_name_".$isoCode;
+            $key = SLM::isDefaultLanguage($isoCode) ? "public_name" : "public_name_".$isoCode;
             if (isset($attrItem[$key]) && is_scalar($attrItem[$key])) {
                 Manager::updateGroup($attributeGroup, $attrItem[$key], $isoCode);
             }
@@ -428,5 +407,29 @@ trait AttributesTrait
         }
 
         return $attribute;
+    }
+
+    /**
+     * Update Product Attributes Ids
+     *
+     * @param array $attributesIds Product Attributes Ids Array
+     */
+    private function updateVariantsAttributesIds($attributesIds)
+    {
+        //====================================================================//
+        // Build Current Attributes Ids Table
+        $oldAttributesIds = array();
+        $oldAttributes = $this->Attribute->getWsProductOptionValues();
+        if (is_array($oldAttributes)) {
+            foreach ($oldAttributes as $attribute) {
+                $oldAttributesIds[] = $attribute["id"];
+            }
+        }
+        //====================================================================//
+        // Update Combination if Modified
+        if (!empty(array_diff($attributesIds, $oldAttributesIds))) {
+            $this->Attribute->setAttributes($attributesIds);
+            $this->variants = null;
+        }
     }
 }
