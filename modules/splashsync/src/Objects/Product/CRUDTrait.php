@@ -262,8 +262,8 @@ trait CRUDTrait
         //====================================================================//
         // Setup Product Minimal Data
         $this->setSimple("reference", $this->in["ref"]);
-        $this->setMultilang($this->object, "name", $this->in["name"]);
-        $this->setMultilang($this->object, "link_rewrite", $this->in["link_rewrite"]);
+        $this->setMultilang("name", SLM::getDefaultLangId(), $this->in["name"]);
+        $this->setMultilang("link_rewrite", SLM::getDefaultLangId(), $this->in["link_rewrite"]);
         //====================================================================//
         // CREATE PRODUCT
         if (true != $this->object->add()) {

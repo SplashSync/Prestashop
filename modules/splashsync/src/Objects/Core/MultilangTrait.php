@@ -74,12 +74,7 @@ trait MultilangTrait
         //====================================================================//
         // Verify Data Length
         if (!is_null($maxLength) && (Tools::strlen($data) > $maxLength)) {
-            Splash::log()->war(
-                "MsgLocalTpl",
-                __CLASS__,
-                __FUNCTION__,
-                "Text is too long for field ".$fieldName.", modification skipped."
-            );
+            Splash::log()->warTrace("Text is too long for field ".$fieldName.", modification skipped.");
 
             return;
         }
