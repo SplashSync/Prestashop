@@ -33,7 +33,7 @@ trait AttributesTrait
     /**
      * Product Combination Resume Array
      *
-     * @var array
+     * @var null|array
      */
     private $variants;
 

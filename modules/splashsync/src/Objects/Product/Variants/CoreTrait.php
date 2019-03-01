@@ -28,7 +28,7 @@ trait CoreTrait
     /**
      * Product Combination Resume Array
      *
-     * @var array
+     * @var null|array
      */
     private $combinations;
 
