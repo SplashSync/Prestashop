@@ -52,21 +52,11 @@ trait CRUDTrait
         // Load Object
         $object = new OrderInvoice($objectId);
         if ($object->id != $objectId) {
-            return Splash::log()->err(
-                "ErrLocalTpl",
-                __CLASS__,
-                __FUNCTION__,
-                " Unable to load Invoice (".$objectId.")."
-            );
+            return Splash::log()->errTrace("Unable to load Invoice (".$objectId.").");
         }
         $this->Order = new Order($object->id_order);
         if ($this->Order->id != $object->id_order) {
-            return Splash::log()->err(
-                "ErrLocalTpl",
-                __CLASS__,
-                __FUNCTION__,
-                " Unable to load Invoice Order (".$object->id_order.")."
-            );
+            return Splash::log()->errTrace("Unable to load Invoice Order (".$object->id_order.").");
         }
 
         //====================================================================//
@@ -94,7 +84,7 @@ trait CRUDTrait
 
         //====================================================================//
         // An Invoice Cannot Get deleted
-        Splash::log()->err("ErrLocalTpl", __CLASS__, __FUNCTION__, "You Cannot Create Prestashop Invoices");
+        Splash::log()->errTrace("You Cannot Create Prestashop Invoices");
 
         return null;
     }
@@ -117,7 +107,7 @@ trait CRUDTrait
 
         //====================================================================//
         // An Invoice Cannot Get deleted
-        Splash::log()->err("ErrLocalTpl", __CLASS__, __FUNCTION__, "You Cannot Update Prestashop Invoices");
+        Splash::log()->errTrace("You Cannot Update Prestashop Invoices");
 
         return (string) $this->object->id;
     }
@@ -138,7 +128,7 @@ trait CRUDTrait
 
         //====================================================================//
         // An Invoice Cannot Get deleted
-        Splash::log()->err("ErrLocalTpl", __CLASS__, __FUNCTION__, "You Cannot Delete Prestashop Invoices");
+        Splash::log()->errTrace("You Cannot Delete Prestashop Invoices");
 
         return true;
     }
