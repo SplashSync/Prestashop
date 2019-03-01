@@ -99,7 +99,7 @@ trait MainTrait
             ->Name(Translate::getAdminTranslation("Supplier reference", "AdminProducts"))
             ->Group($groupName)
             ->MicroData("http://schema.org/Product", "mpn");
-        
+
         //====================================================================//
         // UPC
         $this->fieldsFactory()->create(SPL_T_INT)
@@ -161,7 +161,6 @@ trait MainTrait
                 $this->out[$fieldName] = (float) $this->object->height * $this->object->depth * $this->object->width;
 
                 break;
-            
             default:
                 return;
         }

@@ -119,7 +119,7 @@ trait PricesTrait
                     $this->Currency->sign,
                     $this->Currency->name
                 );
-                
+
                 break;
             case 'price-base':
                 //====================================================================//
@@ -196,7 +196,7 @@ trait PricesTrait
                 if (!self::prices()->Compare($this->out["price-base"], $fieldData)) {
                     $this->object->price = $fieldData["ht"];
                     $this->object->base_price = $fieldData["ht"];
-                    $this->needUpdate();                    
+                    $this->needUpdate();
                     //====================================================================//
                     // Clear Cache
                     \Product::flushPriceCache();
@@ -304,7 +304,7 @@ trait PricesTrait
         } else {
             $basePrice = $this->object->base_price;
         }
-        
+
         //====================================================================//
         // Evaluate Attribute Price
         $priceHT = $newPrice["ht"] - $basePrice;

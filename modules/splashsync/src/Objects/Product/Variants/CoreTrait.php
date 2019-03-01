@@ -194,6 +194,14 @@ trait CoreTrait
         ksort($this->out["variants"]);
     }
 
+    /**
+     * Delete Product Combination Resume Array
+     */
+    protected function deleteCombinationResume()
+    {
+        $this->combinations = null;
+    }
+
     //====================================================================//
     // Fields Writting Functions
     //====================================================================//
@@ -302,12 +310,4 @@ trait CoreTrait
 
         return $this->combinations;
     }
-    
-    /**
-     * Delete Product Combination Resume Array
-     */
-    protected function deleteCombinationResume()
-    {
-        $this->combinations = null;
-    }    
 }
