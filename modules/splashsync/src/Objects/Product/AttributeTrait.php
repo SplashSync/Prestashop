@@ -80,6 +80,12 @@ trait AttributeTrait
         if ($this->Attribute->id != $this->AttributeId) {
             return Splash::log()->errTrace("Unable to fetch Product Attribute (".$this->AttributeId.")");
         }
+        
+        //====================================================================//
+        // On Attribute Context Ensure Base Product Price Remain Like Base Product
+        if ($this->AttributeId > 0) {
+            $this->object->price = $this->object->base_price;
+        }
 
         return true;
     }
@@ -166,6 +172,9 @@ trait AttributeTrait
         //====================================================================//
         // Delete Attribute
         $this->object->deleteAttributeCombination($this->AttributeId);
+        //====================================================================//
+        // Invalidate Combinations Cache
+        $this->deleteCombinationResume();        
         //====================================================================//
         // Read Product Attributes Conbination
         $attrList = $this->object->getAttributesResume(SLM::getDefaultLangId());

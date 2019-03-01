@@ -196,7 +196,7 @@ trait PricesTrait
                 if (!self::prices()->Compare($this->out["price-base"], $fieldData)) {
                     $this->object->price = $fieldData["ht"];
                     $this->object->base_price = $fieldData["ht"];
-                    $this->needUpdate();
+                    $this->needUpdate();                    
                     //====================================================================//
                     // Clear Cache
                     \Product::flushPriceCache();
@@ -301,14 +301,10 @@ trait PricesTrait
         // Detect New Base Price
         if (isset($this->in['price-base']["ht"])) {
             $basePrice = $this->in['price-base']["ht"];
-Splash::log()->www("new base price", $basePrice);
         } else {
             $basePrice = $this->object->base_price;
-Splash::log()->www("extisting base price", $basePrice);
         }
         
-Splash::log()->www("current  price", $newPrice);
-
         //====================================================================//
         // Evaluate Attribute Price
         $priceHT = $newPrice["ht"] - $basePrice;

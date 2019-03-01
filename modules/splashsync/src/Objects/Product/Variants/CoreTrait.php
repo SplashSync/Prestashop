@@ -302,4 +302,12 @@ trait CoreTrait
 
         return $this->combinations;
     }
+    
+    /**
+     * Delete Product Combination Resume Array
+     */
+    protected function deleteCombinationResume()
+    {
+        $this->combinations = null;
+    }    
 }
