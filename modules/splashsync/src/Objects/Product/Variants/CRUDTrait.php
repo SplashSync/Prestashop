@@ -67,8 +67,12 @@ trait CRUDTrait
     private function createVariantProduct($fieldData)
     {
         //====================================================================//
+        // Safe Load Product Variants List
+        $variants = isset($fieldData["variants"]) ? $fieldData["variants"] : array();
+        //====================================================================//
         // Create or Load Base Product
-        if (($baseProductId = $this->getBaseProduct($fieldData["variants"]))) {
+        $baseProductId = $this->getBaseProduct($variants);
+        if ($baseProductId) {
             //====================================================================//
             // USE LOCK to Allow Base Product Loading
             $this->lock("onCombinationCreate");
