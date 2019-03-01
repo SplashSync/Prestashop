@@ -158,23 +158,13 @@ trait CoreTrait
         //====================================================================//
         // Verify Object Type
         if (!$custoId || "ThirdParty" !== self::objects()->Type($customerIdString)) {
-            return Splash::log()->err(
-                "ErrLocalTpl",
-                __CLASS__,
-                __FUNCTION__,
-                " Wrong Object Type (".self::objects()->Type($customerIdString).")."
-            );
+            return Splash::log()->errTrace("Wrong Object Type (".self::objects()->Type($customerIdString).").");
         }
         //====================================================================//
         // Verify Object Exists
         $customer = new Customer($custoId);
         if ($customer->id != $custoId) {
-            return Splash::log()->err(
-                "ErrLocalTpl",
-                __CLASS__,
-                __FUNCTION__,
-                " Unable to load Address Customer(".$custoId.")."
-            );
+            return Splash::log()->errTrace("Unable to load Address Customer(".$custoId.").");
         }
         //====================================================================//
         // Update Link
