@@ -185,7 +185,7 @@ class LanguagesManager
     {
         //====================================================================//
         // PreSetuped Install => Know Languages Code
-        if (isset(self::KNOW_LANGS[$psCode])) {
+        if (array_key_exists($psCode, self::KNOW_LANGS)) {
             return self::KNOW_LANGS[$psCode];
         }
         //====================================================================//
