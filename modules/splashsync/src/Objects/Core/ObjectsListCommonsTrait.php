@@ -39,7 +39,7 @@ trait ObjectsListCommonsTrait
         // Execute count request
         Db::getInstance()->executeS($sql);
         if (Db::getInstance()->getNumberError()) {
-            return Splash::log()->err("ErrLocalTpl", __CLASS__, __FUNCTION__, Db::getInstance()->getMsgError());
+            return Splash::log()->errTrace(Db::getInstance()->getMsgError());
         }
         //====================================================================//
         // Compute Total Number of Results
@@ -73,7 +73,7 @@ trait ObjectsListCommonsTrait
         // Execute final request
         $result = Db::getInstance()->executeS($sql);
         if (!is_array($result) || Db::getInstance()->getNumberError()) {
-            return Splash::log()->err("ErrLocalTpl", __CLASS__, __FUNCTION__, Db::getInstance()->getMsgError());
+            return Splash::log()->errTrace(Db::getInstance()->getMsgError());
         }
 
         return $result;
