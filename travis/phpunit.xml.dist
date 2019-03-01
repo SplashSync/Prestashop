@@ -32,13 +32,15 @@
 
     <logging>
         <log type="coverage-html" target="../coverage" lowUpperBound="35" highLowerBound="70" />
-        <log type="coverage-text" target="php://stdout" showUncoveredFiles="true"/>
+        <log type="coverage-text" target="php://stdout" showUncoveredFiles="false"/>
         <log type="testdox-text" target="../coverage/executed.txt"/>        
     </logging> 
     
     <php>
         <const  name="SPLASH_DEBUG"     value="true"/>
         <server name="SPLASH_TRAVIS"    value="true" />
-        <server name="SERVER_NAME"      value="127.0.0.1:9000"/>        
+        <server name="SERVER_NAME"      value="127.0.0.1:9000"/> 
+        <!-- Only Test Specified Types -->
+        <!--<const  name="SPLASH_TYPES"     value="Product" />-->           
     </php>
 </phpunit>
