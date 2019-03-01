@@ -93,6 +93,14 @@ trait MainTrait
         //====================================================================//
 
         //====================================================================//
+        // Supplier Reference
+        $this->fieldsFactory()->create(SPL_T_VARCHAR)
+            ->Identifier("supplier_reference")
+            ->Name(Translate::getAdminTranslation("Supplier reference", "AdminProducts"))
+            ->Group($groupName)
+            ->MicroData("http://schema.org/Product", "mpn");
+        
+        //====================================================================//
         // UPC
         $this->fieldsFactory()->create(SPL_T_INT)
             ->Identifier("upc")
@@ -153,6 +161,7 @@ trait MainTrait
                 $this->out[$fieldName] = (float) $this->object->height * $this->object->depth * $this->object->width;
 
                 break;
+            
             default:
                 return;
         }
@@ -176,6 +185,7 @@ trait MainTrait
             //====================================================================//
             // PRODUCT BARCODES
             //====================================================================//
+            case 'supplier_reference':
             case 'upc':
             case 'ean13':
             case 'isbn':
@@ -248,9 +258,10 @@ trait MainTrait
         //====================================================================//
         // WRITE Field
         switch ($fieldName) {
-                //====================================================================//
-                // PRODUCT BARCODES
-                //====================================================================//
+            //====================================================================//
+            // PRODUCT BARCODES
+            //====================================================================//
+            case 'supplier_reference':
             case 'upc':
             case 'ean13':
             case 'isbn':
