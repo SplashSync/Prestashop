@@ -143,7 +143,7 @@ trait MetaDataTrait
 
                     break;
                 default:
-                    continue;
+                    break;
             }
         }
     }

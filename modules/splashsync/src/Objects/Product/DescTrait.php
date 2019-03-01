@@ -150,7 +150,7 @@ trait DescTrait
 
                     break;
                 default:
-                    continue;
+                    break;
             }
         }
     }
