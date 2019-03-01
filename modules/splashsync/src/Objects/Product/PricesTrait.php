@@ -18,8 +18,6 @@ namespace Splash\Local\Objects\Product;
 use Splash\Core\SplashCore      as Splash;
 use Splash\Local\Services\TaxManager;
 use Splash\Models\Objects\PricesTrait as SplashPricesTrait;
-//====================================================================//
-// Prestashop Static Classes
 use Tools;
 use Translate;
 
@@ -107,10 +105,10 @@ trait PricesTrait
                 //====================================================================//
                 // Read Price
                 $priceHT = (double) Tools::convertPrice(
-                    $this->object->getPrice(false, $this->AttributeId),
+                    $this->object->getPrice(false, $this->AttributeId, 6, null, false, false, 1),
                     $this->Currency
                 );
-                $taxPercent = (double)  $this->object->getTaxesRate();
+                $taxPercent = (double) $this->object->getTaxesRate();
                 //====================================================================//
                 // Build Price Array
                 $this->out[$fieldName] = self::prices()->Encode(
@@ -121,13 +119,12 @@ trait PricesTrait
                     $this->Currency->sign,
                     $this->Currency->name
                 );
-
+                
                 break;
             case 'price-base':
                 //====================================================================//
                 // Read Price
                 $priceHT = (double) Tools::convertPrice($this->object->base_price, $this->Currency);
-//                $PriceHT    = (double) Tools::convertPrice($this->object->price, $this->Currency);
                 $taxPercent = (double) $this->object->getTaxesRate();
                 //====================================================================//
                 // Build Price Array
@@ -304,9 +301,14 @@ trait PricesTrait
         // Detect New Base Price
         if (isset($this->in['price-base']["ht"])) {
             $basePrice = $this->in['price-base']["ht"];
+Splash::log()->www("new base price", $basePrice);
         } else {
             $basePrice = $this->object->base_price;
+Splash::log()->www("extisting base price", $basePrice);
         }
+        
+Splash::log()->www("current  price", $newPrice);
+
         //====================================================================//
         // Evaluate Attribute Price
         $priceHT = $newPrice["ht"] - $basePrice;
