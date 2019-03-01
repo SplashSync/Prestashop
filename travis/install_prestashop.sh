@@ -8,4 +8,5 @@ ls -al  $TRAVIS_BUILD_DIR
 
 
 # PrestaShop configuration
-cp tests/parameters.yml.travis app/config/parameters.yml
+# cp tests/parameters.yml.travis app/config/parameters.yml
+cp app/config/parameters.yml.dist app/config/parameters.yml
