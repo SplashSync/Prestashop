@@ -56,8 +56,7 @@ trait CRUDTrait
         // Load Object
         $object = new Order($objectId);
         if ($object->id != $objectId) {
-            return Splash::log()
-                ->err("ErrLocalTpl", __CLASS__, __FUNCTION__, " Unable to load Order (".$objectId.").");
+            return Splash::log()->errTrace("Unable to load Order (".$objectId.").");
         }
 
         //====================================================================//
@@ -95,7 +94,7 @@ trait CRUDTrait
         $this->Cart = new Cart();
         $this->Cart->id_currency = Configuration::get('PS_CURRENCY_DEFAULT');
         if (true != $this->Cart->add()) {
-            return Splash::log()->err("ErrLocalTpl", __CLASS__, __FUNCTION__, "Unable to Create new Order Cart.");
+            return Splash::log()->errTrace("Unable to Create new Order Cart.");
         }
 
         //====================================================================//
@@ -130,14 +129,14 @@ trait CRUDTrait
         //====================================================================//
         // Persist Order in Database
         if (true != $this->object->add()) {
-            return Splash::log()->err("ErrLocalTpl", __CLASS__, __FUNCTION__, "Unable to Create new Order.");
+            return Splash::log()->errTrace("Unable to Create new Order.");
         }
 
         //====================================================================//
         // Create Empty Order Products List
         $this->Products = array();
 
-        Splash::log()->deb("MsgLocalTpl", __CLASS__, __FUNCTION__, "New Order Created");
+        Splash::log()->deb("New Order Created");
 
         return $this->object;
     }
@@ -163,15 +162,9 @@ trait CRUDTrait
         //====================================================================//
         if (!empty($this->object->id)) {
             if (true != $this->object->update()) {
-                return Splash::log()->err(
-                    "ErrLocalTpl",
-                    __CLASS__,
-                    __FUNCTION__,
-                    "Unable to Update Order (".$this->object->id.")."
-                );
+                return Splash::log()->errTrace("Unable to Update Order (".$this->object->id.").");
             }
-
-            Splash::log()->deb("MsgLocalTpl", __CLASS__, __FUNCTION__, "Order Updated");
+            Splash::log()->deb("Order Updated");
         }
 
         //====================================================================//
@@ -199,20 +192,15 @@ trait CRUDTrait
         Splash::log()->trace();
 
         //====================================================================//
-        // An Order Cannot Get deleted
-        Splash::log()->err("ErrLocalTpl", __CLASS__, __FUNCTION__, "You Cannot Delete Prestashop Orders");
+        // An Order Cannot Get Deleted
+        Splash::log()->errTrace("You Cannot Delete Prestashop Orders");
 
         //====================================================================//
         // Load Object From DataBase
         //====================================================================//
         $this->object = new Order($objectId);
         if ($this->object->id != $objectId) {
-            return Splash::log()->war(
-                "ErrLocalTpl",
-                __CLASS__,
-                __FUNCTION__,
-                " Unable to load Order (".$objectId.")."
-            );
+            return Splash::log()->warTrace("Unable to load Order (".$objectId.").");
         }
 
         //====================================================================//
