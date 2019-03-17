@@ -242,7 +242,7 @@ class Activity extends AbstractWidget
 
         $rawDateFrom = strtotime($dateFrom);
         $rawDateTo = min(time(), strtotime($dateTo));
-        for ($date = $rawDateFrom; $date <= $rawDateTo; $date = strtotime('+1 day', $date)) {
+        for ($date = $rawDateFrom; $date <= $rawDateTo; $date = strtotime('+1 day', (int) $date)) {
             $this->getRefinedSales($refinedData, $date, $grossData);
             $this->getRefinedProfits($refinedData, $date, $grossData);
         }
