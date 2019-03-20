@@ -52,7 +52,7 @@ trait DescTrait
                 ->Group($groupName)
                 ->MicroData("http://schema.org/Product", "alternateName")
                 ->setMultilang($isoLang)
-                ->isRequired();
+                ->isRequired(LanguagesManager::isDefaultLanguage($isoLang));
 
             //====================================================================//
             // Name with Options
