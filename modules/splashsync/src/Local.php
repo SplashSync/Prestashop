@@ -70,11 +70,11 @@ class Local implements LocalClassInterface
         if ((Configuration::get('SPLASH_WS_EXPERT')) && !empty(Configuration::get('SPLASH_WS_HOST'))) {
             $parameters["WsHost"] = Configuration::get('SPLASH_WS_HOST');
         }
-        
+
         //====================================================================//
         // Setup Custom Json Configuration Path to (../config/splash.json)
-        $parameters["ConfiguratorPath"] = $this->getHomeFolder()."/config/splash.json";        
-        
+        $parameters["ConfiguratorPath"] = $this->getHomeFolder()."/config/splash.json";
+
         //====================================================================//
         // Overide Module Parameters with Local User Selected Default Lang
         $parameters["DefaultLanguage"] = SLM::getDefaultLanguage();
