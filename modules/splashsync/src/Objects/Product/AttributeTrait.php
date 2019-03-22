@@ -18,7 +18,7 @@ namespace Splash\Local\Objects\Product;
 use Attribute;
 use Combination;
 use Product;
-use Splash\Core\SplashCore      as Splash;
+use Splash\Client\Splash      as Splash;
 use Splash\Local\Services\LanguagesManager as SLM;
 
 /**
@@ -66,9 +66,11 @@ trait AttributeTrait
             // Read Product Combinations
             $attrList = $this->object->getAttributesResume(SLM::getDefaultLangId());
             //====================================================================//
-            // if Product has Combinations => Cannot Read Variant Product Without AttributeId
+            // If Product has Combinations => Cannot Read Variant Product Without AttributeId
             if (is_array($attrList) && !empty($attrList)) {
-                return false;
+                Splash::commit("Product", $this->ProductId, SPL_A_DELETE);
+
+                return Splash::log()->err("Trying to fetch a Base Product, this is now forbideen.");
             }
 
             return true;
