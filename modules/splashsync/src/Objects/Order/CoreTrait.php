@@ -18,8 +18,6 @@ namespace Splash\Local\Objects\Order;
 //====================================================================//
 // Prestashop Static Classes
 use Customer;
-use Splash\Local\Objects\CreditNote;
-use Splash\Local\Objects\Invoice;
 use Translate;
 
 /**
@@ -34,7 +32,7 @@ trait CoreTrait
      */
     protected function isOrderObject()
     {
-        if (($this instanceof Invoice) || ($this instanceof CreditNote)) {
+        if ("Splash\\Local\\Objects\\Order" !== get_class($this)) {
             return false;
         }
 

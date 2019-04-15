@@ -60,7 +60,7 @@ trait AddressTrait
             // Customer Address Ids
             case 'id_address_invoice':
             case 'id_address_delivery':
-                if (($this instanceof Invoice) || ($this instanceof CreditNote)) {
+                if ("Splash\\Local\\Objects\\Order" !== get_class($this)) {
                     $this->out[$fieldName] = self::objects()->encode("Address", $this->Order->{$fieldName});
                 } else {
                     $this->out[$fieldName] = self::objects()->encode("Address", $this->object->{$fieldName});
