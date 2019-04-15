@@ -159,11 +159,11 @@ class Local implements LocalClassInterface
             return Splash::log()->err("ErrSelfTestNoWsKey");
         }
 
-        //====================================================================//
-        //  Verify - Default Language is Given
-        if (empty(Configuration::get('SPLASH_LANG_ID'))) {
-            return Splash::log()->err("ErrSelfTestDfLang");
-        }
+//        //====================================================================//
+//        //  Verify - Default Language is Given
+//        if (empty(Configuration::get('SPLASH_LANG_ID'))) {
+//            return Splash::log()->err("ErrSelfTestDfLang");
+//        }
 
         //====================================================================//
         //  Verify - User Selected
