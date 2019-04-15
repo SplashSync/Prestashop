@@ -40,7 +40,7 @@ trait CRUDTrait
      *
      * @param string $objectId Object id
      *
-     * @return false|OrderInvoice
+     * @return false|OrderSlip
      */
     public function load($objectId)
     {
