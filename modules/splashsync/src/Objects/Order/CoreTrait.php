@@ -18,8 +18,8 @@ namespace Splash\Local\Objects\Order;
 //====================================================================//
 // Prestashop Static Classes
 use Customer;
+use Splash\Local\Objects\Order;
 use Translate;
-Use Splash\Local\Objects\Order;
 
 /**
  * Access to Orders Core Fields
