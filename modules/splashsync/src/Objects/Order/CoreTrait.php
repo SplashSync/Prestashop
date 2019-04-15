@@ -30,9 +30,6 @@ trait CoreTrait
     /**
      * Check if We Are in Order Mode
      *
-     * @param string $fieldName Field Identifier / Name
-     * @param mixed  $fieldData Field Data
-     *
      * @return bool
      */
     protected function isOrderObject()
