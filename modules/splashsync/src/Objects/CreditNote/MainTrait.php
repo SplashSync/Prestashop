@@ -31,7 +31,7 @@ trait MainTrait
         // PRICES INFORMATIONS
         //====================================================================//
 
-        $currencySuffix = " (".$this->Currency->sign.")";
+        $currencySuffix = " (".$this->currency->sign.")";
 
         //====================================================================//
         // Order Total Price HT
