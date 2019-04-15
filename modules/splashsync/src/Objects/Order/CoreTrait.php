@@ -19,6 +19,7 @@ namespace Splash\Local\Objects\Order;
 // Prestashop Static Classes
 use Customer;
 use Translate;
+Use Splash\Local\Objects\Order;
 
 /**
  * Access to Orders Core Fields
@@ -118,7 +119,7 @@ trait CoreTrait
             //====================================================================//
             // Customer Email
             case 'email':
-                if ("Splash\\Local\\Objects\\Order" === get_class($this)) {
+                if ($this instanceof Order) {
                     $customerId = $this->object->id_customer;
                 } else {
                     $customerId = $this->Order->id_customer;
