@@ -17,6 +17,7 @@ namespace   Splash\Local\Objects;
 
 use Configuration;
 use Currency;
+use OrderSlip;
 use Shop;
 use Splash\Core\SplashCore      as Splash;
 use Splash\Local\Local;
