@@ -214,7 +214,7 @@ trait ItemsTrait
         $sql .= ' AND `reduction_amount` = '.$this->object->amount;
         //====================================================================//
         // Execute Query
-        $result = Db::getInstance(_PS_USE_SQL_SLAVE_)->executeS($sql);
+        $result = Db::getInstance()->executeS($sql);
         //====================================================================//
         // We found a Rule ? Has Cart Rule
         $this->hasCartRule = !empty($result);
