@@ -69,8 +69,8 @@ trait CRUDTrait
 
         //====================================================================//
         // Load Shipping Tax Calculator
-        $this->shippingTaxCalculator = (new \Carrier($this->order->id_carrier))
-            ->getTaxCalculator(new \Address($this->order->id_address_delivery));
+        $this->shippingTaxCalculator = (new \Carrier($this->Order->id_carrier))
+            ->getTaxCalculator(new \Address($this->Order->id_address_delivery));
 
         return $this->object;
     }
