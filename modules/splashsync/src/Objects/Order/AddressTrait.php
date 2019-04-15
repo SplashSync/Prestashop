@@ -15,9 +15,6 @@
 
 namespace Splash\Local\Objects\Order;
 
-use Splash\Local\Objects\CreditNote;
-use Splash\Local\Objects\Invoice;
-
 /**
  * Access to Order Address Fields
  */
