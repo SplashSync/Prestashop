@@ -15,6 +15,9 @@
 
 namespace Splash\Local\Objects\Order;
 
+use Splash\Local\Objects\CreditNote;
+use Splash\Local\Objects\Invoice;
+
 /**
  * Access to Order Address Fields
  */
@@ -57,7 +60,7 @@ trait AddressTrait
             // Customer Address Ids
             case 'id_address_invoice':
             case 'id_address_delivery':
-                if ("Splash\\Local\\Objects\\Invoice" === get_class($this)) {
+                if (($this instanceof Invoice) || ($this instanceof CreditNote)) {
                     $this->out[$fieldName] = self::objects()->encode("Address", $this->Order->{$fieldName});
                 } else {
                     $this->out[$fieldName] = self::objects()->encode("Address", $this->object->{$fieldName});

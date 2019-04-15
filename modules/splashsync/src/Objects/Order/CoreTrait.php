@@ -18,6 +18,7 @@ namespace Splash\Local\Objects\Order;
 //====================================================================//
 // Prestashop Static Classes
 use Customer;
+use Splash\Local\Objects\CreditNote;
 use Splash\Local\Objects\Invoice;
 use Translate;
 
@@ -26,6 +27,23 @@ use Translate;
  */
 trait CoreTrait
 {
+    /**
+     * Check if We Are in Order Mode
+     *
+     * @param string $fieldName Field Identifier / Name
+     * @param mixed  $fieldData Field Data
+     *
+     * @return bool
+     */
+    protected function isOrderObject()
+    {
+        if (($this instanceof Invoice) || ($this instanceof CreditNote)) {
+            return false;
+        }
+
+        return true;
+    }
+
     /**
      * Build Core Fields using FieldFactory
      */
@@ -37,7 +55,7 @@ trait CoreTrait
             ->Identifier("id_customer")
             ->Name(Translate::getAdminTranslation("Customer ID", "AdminCustomerThreads"))
             ->isRequired();
-        if ("Splash\\Local\\Objects\\Invoice" === get_class($this)) {
+        if (!$this->isOrderObject()) {
             $this->fieldsFactory()->MicroData("http://schema.org/Invoice", "customer");
         } else {
             $this->fieldsFactory()->MicroData("http://schema.org/Organization", "ID");
@@ -85,7 +103,7 @@ trait CoreTrait
             //====================================================================//
             // Direct Readings
             case 'reference':
-                if ($this instanceof Invoice) {
+                if (!$this->isOrderObject()) {
                     $this->getSimple($fieldName, "Order");
                 } else {
                     $this->getSimple($fieldName);
@@ -95,7 +113,7 @@ trait CoreTrait
             //====================================================================//
             // Customer Object Id Readings
             case 'id_customer':
-                if ($this instanceof Invoice) {
+                if (!$this->isOrderObject()) {
                     $this->out[$fieldName] = self::objects()->encode("ThirdParty", $this->Order->{$fieldName});
                 } else {
                     $this->out[$fieldName] = self::objects()->encode("ThirdParty", $this->object->{$fieldName});
@@ -105,7 +123,7 @@ trait CoreTrait
             //====================================================================//
             // Customer Email
             case 'email':
-                if ($this instanceof Invoice) {
+                if (!$this->isOrderObject()) {
                     $customerId = $this->Order->id_customer;
                 } else {
                     $customerId = $this->object->id_customer;
@@ -148,7 +166,7 @@ trait CoreTrait
             //====================================================================//
             // Direct Writing
             case 'reference':
-                if ($this instanceof Invoice) {
+                if (!$this->isOrderObject()) {
                     $this->setSimple($fieldName, $fieldData, "Order");
                 } else {
                     $this->setSimple($fieldName, $fieldData);
@@ -158,7 +176,7 @@ trait CoreTrait
             //====================================================================//
             // Customer Object Id
             case 'id_customer':
-                if ($this instanceof Invoice) {
+                if (!$this->isOrderObject()) {
                     $this->setSimple($fieldName, self::objects()->Id($fieldData), "Order");
                 } else {
                     $this->setSimple($fieldName, self::objects()->Id($fieldData));
