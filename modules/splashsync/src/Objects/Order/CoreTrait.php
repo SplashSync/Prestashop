@@ -118,10 +118,10 @@ trait CoreTrait
             //====================================================================//
             // Customer Email
             case 'email':
-                if (!$this->isOrderObject()) {
-                    $customerId = $this->Order->id_customer;
-                } else {
+                if ("Splash\\Local\\Objects\\Order" === get_class($this)) {
                     $customerId = $this->object->id_customer;
+                } else {
+                    $customerId = $this->Order->id_customer;
                 }
                 //====================================================================//
                 // Load Customer
