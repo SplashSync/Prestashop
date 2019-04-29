@@ -39,6 +39,7 @@ class SplashSync extends Module
     use \Splash\Local\Objects\Product\HooksTrait;
 //    use \Splash\Local\Objects\Category\HooksTrait;
     use \Splash\Local\Objects\Order\HooksTrait;
+    use \Splash\Local\Objects\CreditNote\HooksTrait;
     use \Splash\Local\Traits\SplashIdTrait;
 
     /** @var bool */
@@ -209,6 +210,13 @@ class SplashSync extends Module
         if (!$this->registerHook('actionObjectOrderInvoiceAddAfter') ||
                 !$this->registerHook('actionObjectOrderInvoiceUpdateAfter') ||
                 !$this->registerHook('actionObjectOrderInvoiceDeleteAfter')) {
+            return false;
+        }
+        //====================================================================//
+        // Register Module Order Slip Hooks
+        if (!$this->registerHook('actionObjectOrderSlipAddAfter') ||
+                !$this->registerHook('actionObjectOrderSlipUpdateAfter') ||
+                !$this->registerHook('actionObjectOrderSlipDeleteAfter')) {
             return false;
         }
 
