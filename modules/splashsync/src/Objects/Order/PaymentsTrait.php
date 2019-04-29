@@ -190,7 +190,9 @@ trait PaymentsTrait
             if (is_array($this->Payments)) {
                 $this->updatePayment(array_shift($this->Payments), $paymentItem);
             } else {
-                $this->updatePayment($this->Payments->current(), $paymentItem);
+                /** @var null|OrderPayment $orderPayment */
+                $orderPayment = $this->Payments->current();
+                $this->updatePayment($orderPayment, $paymentItem);
                 $this->Payments->next();
             }
         }
