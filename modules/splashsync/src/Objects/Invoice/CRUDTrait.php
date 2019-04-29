@@ -15,6 +15,8 @@
 
 namespace Splash\Local\Objects\Invoice;
 
+use Address;
+use Carrier;
 use Order;
 use OrderInvoice;
 use Splash\Core\SplashCore      as Splash;
@@ -34,6 +36,11 @@ trait CRUDTrait
      * @var TaxCalculator
      */
     protected $ShippingTaxCalculator;
+
+    /**
+     * @var Carrier
+     */
+    protected $carrier;
 
     /**
      * Load Request Object
@@ -66,9 +73,12 @@ trait CRUDTrait
         $this->PaymentMethod = $this->Order->module;
 
         //====================================================================//
+        // Load Order Carrier
+        $this->carrier = new Carrier($this->Order->id_carrier);
+
+        //====================================================================//
         // Load Shipping Tax Calculator
-        $this->ShippingTaxCalculator = (new \Carrier($this->Order->id_carrier))
-            ->getTaxCalculator(new \Address($this->Order->id_address_delivery));
+        $this->ShippingTaxCalculator = $this->carrier->getTaxCalculator(new Address($this->Order->id_address_delivery));
 
         return $object;
     }

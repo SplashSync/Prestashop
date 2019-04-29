@@ -18,6 +18,7 @@ namespace   Splash\Local\Objects;
 use Configuration;
 use Currency;
 use OrderSlip;
+use PrestaShopCollection;
 use Shop;
 use Splash\Core\SplashCore      as Splash;
 use Splash\Local\Local;
@@ -49,6 +50,7 @@ class CreditNote extends AbstractObject
     // Prestashop Order Traits
     use \Splash\Local\Objects\Order\CoreTrait;
     use \Splash\Local\Objects\Order\AddressTrait;
+    use \Splash\Local\Objects\Order\PaymentsTrait;
 
     // Prestashop Invoice Traits
     use \Splash\Local\Objects\CreditNote\ObjectsListTrait;
@@ -56,6 +58,7 @@ class CreditNote extends AbstractObject
     use \Splash\Local\Objects\CreditNote\CoreTrait;
     use \Splash\Local\Objects\CreditNote\MainTrait;
     use \Splash\Local\Objects\CreditNote\ItemsTrait;
+    use \Splash\Local\Objects\CreditNote\StatusTrait;
 
     //====================================================================//
     // Object Definition Parameters
@@ -104,7 +107,26 @@ class CreditNote extends AbstractObject
     // General Class Variables
     //====================================================================//
 
+    /**
+     * List of Products Attached to Credit Note
+     *
+     * @var array
+     */
     protected $Products;
+
+    /**
+     * List of Payments Attached to Parent Order
+     *
+     * @var PrestaShopCollection
+     */
+    protected $Payments;
+
+    /**
+     * Name String of Order Payment Method
+     *
+     * @var string
+     */
+    protected $PaymentMethod;
 
     /**
      * @var OrderSlip
@@ -139,7 +161,10 @@ class CreditNote extends AbstractObject
         // Load Splash Module
         $this->spl = Local::getLocalModule();
         //====================================================================//
-        // Load OsWs Currency
+        // Load Default Currency
         $this->currency = new Currency(Configuration::get('PS_CURRENCY_DEFAULT'));
+        //====================================================================//
+        // Credit Note Mode for Payments
+        $this->setCreditNoteMode(true);
     }
 }

@@ -15,6 +15,8 @@
 
 namespace Splash\Local\Objects\Order;
 
+use Address;
+use Carrier;
 use Cart;
 use Configuration;
 use Order;
@@ -35,6 +37,12 @@ trait CRUDTrait
      * @var TaxCalculator
      */
     protected $ShippingTaxCalculator;
+
+    /**
+     * @var Carrier
+     */
+    protected $carrier;
+
     /**
      * @var Cart
      */
@@ -66,9 +74,12 @@ trait CRUDTrait
         $this->PaymentMethod = $object->module;
 
         //====================================================================//
+        // Load Order Carrier
+        $this->carrier = new Carrier($object->id_carrier);
+
+        //====================================================================//
         // Load Shipping Tax Calculator
-        $this->ShippingTaxCalculator = (new \Carrier($object->id_carrier))
-            ->getTaxCalculator(new \Address($object->id_address_delivery));
+        $this->ShippingTaxCalculator = $this->carrier->getTaxCalculator(new Address($object->id_address_delivery));
 
         return $object;
     }

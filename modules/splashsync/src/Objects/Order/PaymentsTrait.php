@@ -26,6 +26,13 @@ use Translate;
 trait PaymentsTrait
 {
     /**
+     * Credit Note Mode: Filter Nagative payment isntead of Positive Payments
+     *
+     * @var bool
+     */
+    private $isCreditNoteMode = false;
+
+    /**
      * Known Payment Method Codes Names
      *
      * @var array
@@ -100,7 +107,7 @@ trait PaymentsTrait
      * @param string $key       Input List Key
      * @param string $fieldName Field Identifier / Name
      */
-    private function getPaymentsFields($key, $fieldName)
+    protected function getPaymentsFields($key, $fieldName)
     {
         //====================================================================//
         // Check if List field & Init List Array
@@ -119,6 +126,11 @@ trait PaymentsTrait
         // Fill List with Data
         /** @var OrderPayment $orderPayment */
         foreach ($this->Payments as $index => $orderPayment) {
+            //====================================================================//
+            // Check if Payment is Allowed
+            if (!$this->isAllowed($orderPayment)) {
+                continue;
+            }
             //====================================================================//
             // READ Fields
             switch ($fieldName) {
@@ -157,40 +169,12 @@ trait PaymentsTrait
     }
 
     /**
-     * Try To Detect Payment method Standardized Name
-     *
-     * @param OrderPayment $orderPayment
-     *
-     * @return string
-     */
-    private function getPaymentMethod($orderPayment)
-    {
-        //====================================================================//
-        // If PhpUnit Mode => Read Order Payment Object
-        if (true == SPLASH_DEBUG) {
-            return $orderPayment->payment_method;
-        }
-        //====================================================================//
-        // Detect Payment Method Type from Default Payment "known" methods
-        if (array_key_exists($orderPayment->payment_method, $this->knownPaymentMethods)) {
-            return $this->knownPaymentMethods[$orderPayment->payment_method];
-        }
-        //====================================================================//
-        // Detect Payment Method is Credit Card Like Method
-        if (!empty($orderPayment->card_brand)) {
-            return "DirectDebit";
-        }
-
-        return "Unknown";
-    }
-
-    /**
      * Write Given Fields
      *
      * @param string $fieldName Field Identifier / Name
      * @param mixed  $fieldData Field Data
      */
-    private function setPaymentsFields($fieldName, $fieldData)
+    protected function setPaymentsFields($fieldName, $fieldData)
     {
         //====================================================================//
         // Safety Check
@@ -218,6 +202,79 @@ trait PaymentsTrait
         }
 
         unset($this->in[$fieldName]);
+    }
+
+    /**
+     * Enable/Disable Credit Notes Mode
+     *
+     * @param bool $enable Enable / Disbale Flag
+     */
+    protected function setCreditNoteMode($enable)
+    {
+        $this->isCreditNoteMode = $enable;
+    }
+
+    /**
+     * Read Total of Payments for This Order
+     *
+     * @return float
+     */
+    protected function getPaymentsTotal()
+    {
+        $totalPaid = 0;
+        //====================================================================//
+        // Verify List is Not Empty
+        if (!is_a($this->Payments, "PrestaShopCollection")) {
+            return $totalPaid;
+        }
+        //====================================================================//
+        // Walk on Order Payments
+        /** @var OrderPayment $orderPayment */
+        foreach ($this->Payments as $orderPayment) {
+            //====================================================================//
+            // Check if Payment is Allowed
+            if (!$this->isAllowed($orderPayment)) {
+                continue;
+            }
+            //====================================================================//
+            // READ Payment Amount;
+            $totalPaid += $orderPayment->amount;
+        }
+
+        return $this->isCreditNoteMode ? (-1 * $totalPaid) : $totalPaid;
+    }
+
+    /**
+     * Try To Detect Payment method Standardized Name
+     *
+     * @param OrderPayment $orderPayment
+     *
+     * @return string
+     */
+    private function getPaymentMethod($orderPayment)
+    {
+        //====================================================================//
+        // If PhpUnit Mode => Read Order Payment Object
+        if (true == SPLASH_DEBUG) {
+            return $orderPayment->payment_method;
+        }
+        //====================================================================//
+        // Payment Item Detect Payment Method Type from Default Payment "known" methods
+        if (array_key_exists($orderPayment->payment_method, $this->knownPaymentMethods)) {
+            return $this->knownPaymentMethods[$orderPayment->payment_method];
+        }
+        //====================================================================//
+        // Order Item Detect Payment Method Type from Default Payment "known" methods
+        if (array_key_exists($this->PaymentMethod, $this->knownPaymentMethods)) {
+            return $this->knownPaymentMethods[$this->PaymentMethod];
+        }
+        //====================================================================//
+        // Detect Payment Method is Credit Card Like Method
+        if (!empty($orderPayment->card_brand)) {
+            return "DirectDebit";
+        }
+
+        return "Unknown";
     }
 
     /**
@@ -299,5 +356,17 @@ trait PaymentsTrait
         }
 
         return $update;
+    }
+
+    /**
+     * Check if Payment Item Should be Listed or Not
+     *
+     * @param OrderPayment $orderPayment Current Item Data
+     *
+     * @return bool
+     */
+    private function isAllowed($orderPayment)
+    {
+        return $this->isCreditNoteMode ? ($orderPayment->amount < 0) : ($orderPayment->amount >= 0);
     }
 }

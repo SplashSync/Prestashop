@@ -207,7 +207,9 @@ trait MainTrait
 
                 break;
             case 'company':
-                if ($this->object->{$fieldName} === "Prestashop(".$this->object->id.")") {
+                if ($this->object->{$fieldName} == "Prestashop(".$this->object->id.")") {
+                    $this->setSimple($fieldName, "");
+
                     break;
                 }
                 $this->setSimple($fieldName, $fieldData);

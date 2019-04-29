@@ -15,6 +15,8 @@
 
 namespace Splash\Local\Objects\CreditNote;
 
+use Address;
+use Carrier;
 use Order;
 use OrderSlip;
 use Splash\Core\SplashCore      as Splash;
@@ -62,15 +64,19 @@ trait CRUDTrait
         //====================================================================//
         // Load Credit Note Products
         $this->Products = $this->object->getOrdersSlipProducts($objectId, $this->Order);
-
+        $this->Payments = $this->Order->getOrderPaymentCollection();
+        $this->PaymentMethod = $this->Order->module;
         //====================================================================//
         // Identify if a Customer Cart Rule Exists for this Credit Note
         $this->checkCustomerCartRule();
 
         //====================================================================//
+        // Load Order Carrier
+        $this->carrier = new Carrier($this->Order->id_carrier);
+
+        //====================================================================//
         // Load Shipping Tax Calculator
-        $this->shippingTaxCalculator = (new \Carrier($this->Order->id_carrier))
-            ->getTaxCalculator(new \Address($this->Order->id_address_delivery));
+        $this->shippingTaxCalculator = $this->carrier->getTaxCalculator(new Address($this->Order->id_address_delivery));
 
         return $this->object;
     }

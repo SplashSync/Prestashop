@@ -18,6 +18,7 @@ namespace   Splash\Local\Objects;
 use Configuration;
 use Currency;
 use OrderInvoice;
+use PrestaShopCollection;
 use Shop;
 use Splash\Core\SplashCore      as Splash;
 use Splash\Local\Local;
@@ -28,7 +29,8 @@ use Splash\Models\Objects\SimpleFieldsTrait;
 use SplashSync;
 
 /**
- * @abstract    Splash Local Object Class - Customer Invoices Local Integration
+ * Splash Local Object Class - Customer Invoices Local Integration
+ *
  * @SuppressWarnings(PHPMD.CamelCasePropertyName)
  * @SuppressWarnings(PHPMD.TooManyFields)
  */
@@ -105,8 +107,25 @@ class Invoice extends AbstractObject
     // General Class Variables
     //====================================================================//
 
+    /**
+     * List of Products Attached to Credit Note
+     *
+     * @var array
+     */
     protected $Products;
+
+    /**
+     * List of Payments Attached to Parent Order
+     *
+     * @var PrestaShopCollection
+     */
     protected $Payments;
+
+    /**
+     * Name String of Order Payment Method
+     *
+     * @var string
+     */
     protected $PaymentMethod;
 
     /**

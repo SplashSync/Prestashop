@@ -15,6 +15,7 @@
 
 namespace Splash\Local\Objects\CreditNote;
 
+use Carrier;
 use Db;
 use OrderDetail;
 use Splash\Core\SplashCore      as Splash;
@@ -32,6 +33,11 @@ trait ItemsTrait
     use ListsTrait;
     use PricesTrait;
 
+    /**
+     * @var Carrier
+     */
+    protected $carrier;
+    
     /**
      * @var bool
      */
@@ -254,7 +260,7 @@ trait ItemsTrait
             //====================================================================//
             // Order Line Direct Reading Data
             case 'product_name':
-                $value = $this->spl->l("Delivery");
+                $value = $this->getCarrierName();
 
                 break;
             case 'product_quantity':
@@ -316,6 +322,23 @@ trait ItemsTrait
             $this->currency->sign,
             $this->currency->name
         );
+    }
+
+    /**
+     * Get Order Shipping Carrier Name
+     *
+     * @return string
+     */
+    private function getCarrierName()
+    {
+        //====================================================================//
+        // Get Carrier by Id
+        if (empty($this->carrier) || empty($this->carrier->name)) {
+            return $this->spl->l("Delivery");
+        }
+        //====================================================================//
+        // Return Carrier Name
+        return $this->carrier->name;
     }
 
     /**
