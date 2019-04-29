@@ -301,10 +301,10 @@ trait PaymentsTrait
             //====================================================================//
             // Create New OrderDetail Item
             $orderPayment = new OrderPayment();
-            $orderPayment->order_reference = ($this->Order instanceof Order)
+            $orderPayment->order_reference = is_a($this->Order, Order::class)
                     ? $this->Order->reference
                     : $this->object->reference;
-            $orderPayment->id_currency = ($this->Order instanceof Order)
+            $orderPayment->id_currency = is_a($this->Order, Order::class)
                     ? $this->Order->id_currency
                     : $this->object->id_currency;
             $orderPayment->conversion_rate = 1;
