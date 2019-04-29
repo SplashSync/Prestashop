@@ -15,6 +15,7 @@
 
 namespace Splash\Local\Objects\Order;
 
+use Order;
 use OrderPayment;
 use Splash\Core\SplashCore      as Splash;
 use Splash\Local\Objects\Invoice;
@@ -300,10 +301,10 @@ trait PaymentsTrait
             //====================================================================//
             // Create New OrderDetail Item
             $orderPayment = new OrderPayment();
-            $orderPayment->order_reference = isset($this->Order)
+            $orderPayment->order_reference = ($this->Order instanceof Order)
                     ? $this->Order->reference
                     : $this->object->reference;
-            $orderPayment->id_currency = isset($this->Order)
+            $orderPayment->id_currency = ($this->Order instanceof Order)
                     ? $this->Order->id_currency
                     : $this->object->id_currency;
             $orderPayment->conversion_rate = 1;
