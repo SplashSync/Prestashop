@@ -37,7 +37,7 @@ trait ItemsTrait
      * @var Carrier
      */
     protected $carrier;
-    
+
     /**
      * @var bool
      */
