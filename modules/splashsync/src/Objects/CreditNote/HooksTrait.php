@@ -36,7 +36,11 @@ trait HooksTrait
      */
     public function hookactionObjectOrderSlipAddAfter($params)
     {
-        return $this->hookactionCreditNote($params["object"], SPL_A_CREATE, $this->l('Credit Note Created on Prestashop'));
+        return $this->hookactionCreditNote(
+            $params["object"],
+            SPL_A_CREATE,
+            $this->l('Credit Note Created on Prestashop')
+        );
     }
 
     /**
@@ -46,7 +50,11 @@ trait HooksTrait
      */
     public function hookactionObjectOrderSlipUpdateAfter($params)
     {
-        return $this->hookactionCreditNote($params["object"], SPL_A_UPDATE, $this->l('Credit Note Updated on Prestashop'));
+        return $this->hookactionCreditNote(
+            $params["object"],
+            SPL_A_UPDATE,
+            $this->l('Credit Note Updated on Prestashop')
+        );
     }
 
     /**
@@ -56,7 +64,11 @@ trait HooksTrait
      */
     public function hookactionObjectOrderSlipDeleteAfter($params)
     {
-        return $this->hookactionCreditNote($params["object"], SPL_A_DELETE, $this->l('Credit Note Deleted on Prestashop'));
+        return $this->hookactionCreditNote(
+            $params["object"],
+            SPL_A_DELETE,
+            $this->l('Credit Note Deleted on Prestashop')
+        );
     }
 
     /**

@@ -300,11 +300,11 @@ trait PaymentsTrait
             //====================================================================//
             // Create New OrderDetail Item
             $orderPayment = new OrderPayment();
-            $orderPayment->order_reference = isset($this->Order) 
-                    ? $this->Order->reference 
+            $orderPayment->order_reference = isset($this->Order)
+                    ? $this->Order->reference
                     : $this->object->reference;
-            $orderPayment->id_currency = isset($this->Order) 
-                    ? $this->Order->id_currency 
+            $orderPayment->id_currency = isset($this->Order)
+                    ? $this->Order->id_currency
                     : $this->object->id_currency;
             $orderPayment->conversion_rate = 1;
         }
