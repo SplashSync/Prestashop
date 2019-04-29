@@ -117,7 +117,7 @@ class Invoice extends AbstractObject
     /**
      * List of Payments Attached to Parent Order
      *
-     * @var PrestaShopCollection
+     * @var array|PrestaShopCollection
      */
     protected $Payments;
 
