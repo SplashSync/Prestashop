@@ -301,12 +301,12 @@ trait PaymentsTrait
             //====================================================================//
             // Create New OrderDetail Item
             $orderPayment = new OrderPayment();
-            $orderPayment->order_reference = is_a($this->Order, Order::class)
-                    ? $this->Order->reference
-                    : $this->object->reference;
-            $orderPayment->id_currency = is_a($this->Order, Order::class)
-                    ? $this->Order->id_currency
-                    : $this->object->id_currency;
+            $orderPayment->order_reference = is_a($this, "Splash\Local\Objects\Order")
+                    ? $this->object->reference
+                    : $this->Order->reference;
+            $orderPayment->id_currency = is_a($this, "Splash\Local\Objects\Order")
+                    ? $this->object->id_currency
+                    : $this->Order->id_currency;
             $orderPayment->conversion_rate = 1;
         }
 
