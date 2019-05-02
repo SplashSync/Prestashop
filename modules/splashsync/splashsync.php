@@ -24,7 +24,7 @@ require_once "src/Objects/ThirdParty/HooksTrait.php";
 require_once "src/Objects/Address/HooksTrait.php";
 require_once "src/Objects/Product/HooksTrait.php";
 require_once "src/Objects/Order/HooksTrait.php";
-require_once "src/Objects/CreditNotes/HooksTrait.php";
+require_once "src/Objects/CreditNote/HooksTrait.php";
 require_once "src/Traits/SplashIdTrait.php";
 
 /**
