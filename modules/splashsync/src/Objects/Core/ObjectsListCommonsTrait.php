@@ -68,7 +68,9 @@ trait ObjectsListCommonsTrait
         $sql->orderBy('`'.pSQL($sqlSortField).'` '.pSQL($sqlSortOrder));
         //====================================================================//
         // Build LIMIT
-        $sql->limit(pSQL($params["max"]), pSQL($params["offset"]));
+        $sqlLimitMax = empty($params["max"])        ?   50  :   pSQL($params["max"]);
+        $sqlLimitOff = empty($params["offset"])     ?   0   :   pSQL($params["offset"]);
+        $sql->limit($sqlLimitMax, $sqlLimitOff);
         //====================================================================//
         // Execute final request
         $result = Db::getInstance()->executeS($sql);

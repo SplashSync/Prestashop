@@ -15,10 +15,9 @@
 
 namespace Splash\Local\Objects\Order;
 
-//use Splash\Core\SplashCore      as Splash;
-
-//====================================================================//
-// Prestashop Static Classes
+use Context;
+use OrderState;
+use Splash\Local\Services\LanguagesManager as SLM;
 use Translate;
 
 /**
@@ -27,9 +26,29 @@ use Translate;
 trait StatusTrait
 {
     /**
+     * List of Know Static Prestashop Order Status Ids
+     *
+     * @var array
+     */
+    private static $psOrderStatus = array(
+        1 => "OrderPaymentDue",
+        2 => "OrderProcessing",
+        3 => "OrderProcessing",
+        4 => "OrderInTransit",
+        5 => "OrderDelivered",
+        6 => "OrderCanceled",
+        7 => "OrderCanceled",
+        8 => "OrderProblem",
+        9 => "OrderProcessing",
+        10 => "OrderPaymentDue",
+        11 => "OrderPaymentDue",
+        12 => "OrderProcessing",
+    );
+
+    /**
      * Build Fields using FieldFactory
      */
-    private function buildStatusFields()
+    protected function buildStatusFields()
     {
         //====================================================================//
         // ORDER STATUS
@@ -42,6 +61,7 @@ trait StatusTrait
             ->Name(Translate::getAdminTranslation("Order status", "AdminStatuses"))
             ->Description(Translate::getAdminTranslation("Status of the order", "AdminSupplyOrdersChangeState"))
             ->MicroData("http://schema.org/Order", "orderStatus")
+            ->addChoices($this->getOrderStatusChoices())
             ->isReadOnly();
 
         //====================================================================//
@@ -98,7 +118,7 @@ trait StatusTrait
      * @param string $key       Input List Key
      * @param string $fieldName Field Identifier / Name
      */
-    private function getStatusFields($key, $fieldName)
+    protected function getStatusFields($key, $fieldName)
     {
         //====================================================================//
         // READ Fields
@@ -134,6 +154,43 @@ trait StatusTrait
     }
 
     /**
+     * Write Given Fields
+     *
+     * @param string $fieldName Field Identifier / Name
+     * @param mixed  $fieldData Field Data
+     */
+    protected function setStatusFields($fieldName, $fieldData)
+    {
+        //====================================================================//
+        // WRITE Field
+        switch ($fieldName) {
+            //====================================================================//
+            // Order Status Updates
+            //====================================================================//
+            case 'status':
+                //====================================================================//
+                // Compare Order Status
+                $currentSplashStatus = $this->getSplashStatus();
+                if ($currentSplashStatus == $fieldData) {
+                    $this->newOrderState = null;
+
+                    continue;
+                }
+                //====================================================================//
+                // Update Order Status
+                $this->object->setCurrentState(
+                    $this->getPrestashopStatus($fieldData),
+                    Context::getContext()->employee->id
+                );
+
+                break;
+            default:
+                return;
+        }
+        unset($this->in[$fieldName]);
+    }
+
+    /**
      * Read Order Status
      *
      * @return string
@@ -143,20 +200,8 @@ trait StatusTrait
     {
         //====================================================================//
         // If order is in  Static Status => Use Static Status
-        if (1 == $this->object->current_state) {
-            return "OrderPaymentDue";
-        }
-        if (2 == $this->object->current_state) {
-            return "OrderProcessing";
-        }
-        if (3 == $this->object->current_state) {
-            return "OrderProcessing";
-        }
-        if (4 == $this->object->current_state) {
-            return "OrderInTransit";
-        }
-        if (5 == $this->object->current_state) {
-            return "OrderDelivered";
+        if (isset(static::$psOrderStatus[$this->object->current_state])) {
+            return static::$psOrderStatus[$this->object->current_state];
         }
         //====================================================================//
         // If order is invalid => Canceled
@@ -176,5 +221,56 @@ trait StatusTrait
         // Default Status => Order is Closed & Delivered
         // Used for Orders imported to Prestashop that do not have Prestatsop Status
         return "OrderDelivered";
+    }
+
+    /**
+     * Get Order Status Id for Prestashop
+     *
+     * @param string $splashStatus Splash generic Status Name
+     *
+     * @return null|int
+     */
+    private function getPrestashopStatus($splashStatus)
+    {
+        //====================================================================//
+        // Walk on Splash Possible Status List
+        foreach (static::$psOrderStatus as $id => $value) {
+            //====================================================================//
+            // Is FIRST Expected Splash Status
+            if ($splashStatus == $value) {
+                return $id;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Get Order Status Choices
+     *
+     * @return array
+     */
+    private function getOrderStatusChoices()
+    {
+        //====================================================================//
+        // Load Presatshop Status List
+        $psStates = OrderState::getOrderStates(SLM::getDefaultLangId());
+        //====================================================================//
+        // Walk on Splash Possible Status List
+        $choices = array();
+        foreach (static::$psOrderStatus as $id => $value) {
+            //====================================================================//
+            // Walk on Prestatshop States List
+            foreach ($psStates as $psState) {
+                if (isset($choices[$value])) {
+                    continue;
+                }
+                if ($id == $psState["id_order_state"]) {
+                    $choices[$value] = $psState["name"];
+                }
+            }
+        }
+
+        return $choices;
     }
 }

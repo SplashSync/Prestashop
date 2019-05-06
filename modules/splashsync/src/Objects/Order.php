@@ -52,8 +52,10 @@ class Order extends AbstractObject
     use \Splash\Local\Objects\Order\CoreTrait;
     use \Splash\Local\Objects\Order\MainTrait;
     use \Splash\Local\Objects\Order\AddressTrait;
+    use \Splash\Local\Objects\Order\DeliveryTrait;
     use \Splash\Local\Objects\Order\ItemsTrait;
     use \Splash\Local\Objects\Order\PaymentsTrait;
+    use \Splash\Local\Objects\Order\TrackingTrait;
     use \Splash\Local\Objects\Order\StatusTrait;
 
     //====================================================================//

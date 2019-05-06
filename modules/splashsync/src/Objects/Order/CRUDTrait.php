@@ -21,6 +21,7 @@ use Cart;
 use Configuration;
 use Order;
 use Splash\Core\SplashCore      as Splash;
+use Splash\Local\Services\LanguagesManager as SLM;
 use TaxCalculator;
 
 /**
@@ -75,7 +76,7 @@ trait CRUDTrait
 
         //====================================================================//
         // Load Order Carrier
-        $this->carrier = new Carrier($object->id_carrier);
+        $this->carrier = new Carrier($object->id_carrier, SLM::getDefaultLangId());
 
         //====================================================================//
         // Load Shipping Tax Calculator
