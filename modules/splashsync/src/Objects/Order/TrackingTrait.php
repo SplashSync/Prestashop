@@ -121,7 +121,7 @@ trait TrackingTrait
                 // Compare Tracking Numbers
                 $currentTrackingNumber = $this->object->getWsShippingNumber();
                 if ($currentTrackingNumber == $fieldData) {
-                    continue;
+                    break;
                 }
                 //====================================================================//
                 // Update Order Tracking Number
