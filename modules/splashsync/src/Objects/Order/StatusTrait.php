@@ -172,14 +172,12 @@ trait StatusTrait
                 // Compare Order Status
                 $currentSplashStatus = $this->getSplashStatus();
                 if ($currentSplashStatus == $fieldData) {
-                    $this->newOrderState = null;
-
                     continue;
                 }
                 //====================================================================//
                 // Update Order Status
                 $this->object->setCurrentState(
-                    $this->getPrestashopStatus($fieldData),
+                    (int) $this->getPrestashopStatus($fieldData),
                     Context::getContext()->employee->id
                 );
 
