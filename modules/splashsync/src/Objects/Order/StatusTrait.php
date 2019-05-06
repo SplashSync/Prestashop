@@ -172,7 +172,7 @@ trait StatusTrait
                 // Compare Order Status
                 $currentSplashStatus = $this->getSplashStatus();
                 if ($currentSplashStatus == $fieldData) {
-                    continue;
+                    break;
                 }
                 //====================================================================//
                 // Update Order Status
