@@ -26,7 +26,7 @@ use Translate;
 trait DeliveryTrait
 {
     /**
-     * @var null|Address
+     * @var Address
      */
     protected $delivery;
 
