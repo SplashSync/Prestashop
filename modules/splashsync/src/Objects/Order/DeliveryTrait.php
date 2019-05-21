@@ -38,6 +38,15 @@ trait DeliveryTrait
         $groupName = Translate::getAdminTranslation("Address", "AdminCustomers");
 
         //====================================================================//
+        // Contact Full Name
+        $this->fieldsFactory()->create(SPL_T_VARCHAR)
+            ->Identifier("fullname")
+            ->Name("Contact Name")
+            ->MicroData("http://schema.org/PostalAddress", "alternateName")
+            ->Group($groupName)
+            ->isReadOnly();
+
+        //====================================================================//
         // Addess
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
             ->Identifier("address1")
@@ -106,6 +115,24 @@ trait DeliveryTrait
             ->MicroData("http://schema.org/PostalAddress", "addressCountry")
             ->Group($groupName)
             ->isReadOnly();
+        
+        //====================================================================//
+        // Phone
+        $this->fieldsFactory()->create(SPL_T_PHONE)
+            ->Identifier("phone")
+            ->Group($groupName)
+            ->Name(Translate::getAdminTranslation("Home phone", "AdminAddresses"))
+            ->MicroData("http://schema.org/PostalAddress", "telephone")
+            ->isReadOnly();
+
+        //====================================================================//
+        // Mobile Phone
+        $this->fieldsFactory()->create(SPL_T_PHONE)
+            ->Identifier("phone_mobile")
+            ->Group($groupName)
+            ->Name(Translate::getAdminTranslation("Mobile phone", "AdminAddresses"))
+            ->MicroData("http://schema.org/Person", "telephone")
+            ->isReadOnly();
     }
 
     /**
@@ -123,12 +150,23 @@ trait DeliveryTrait
         // READ Fields
         switch ($fieldName) {
             //====================================================================//
+            // Delivery Contact Full Name
+            case 'fullname':
+                if (!empty($this->delivery->company)) {
+                    $this->out[$fieldName] = $this->delivery->company." ";
+                }
+                $this->out[$fieldName] .= $this->delivery->firstname." ".$this->delivery->lastname;
+
+                break;
+            //====================================================================//
             // Direct Readings
             case 'address1':
             case 'address2':
             case 'postcode':
             case 'city':
             case 'country':
+            case 'phone':
+            case 'phone_mobile':
                 $this->getSimple($fieldName, "delivery");
 
                 break;
