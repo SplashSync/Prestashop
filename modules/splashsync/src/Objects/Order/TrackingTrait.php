@@ -55,7 +55,7 @@ trait TrackingTrait
         // Order Tracking Url
         $this->fieldsFactory()->Create(SPL_T_URL)
             ->Identifier("track_url")
-            ->Name("Tracking Number")
+            ->Name("Tracking Url")
             ->MicroData("http://schema.org/ParcelDelivery", "trackingUrl")
             ->group("Tracking")
             ->isReadOnly();

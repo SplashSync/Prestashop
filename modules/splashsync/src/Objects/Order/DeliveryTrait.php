@@ -98,6 +98,14 @@ trait DeliveryTrait
             ->Group($groupName)
             ->MicroData("http://schema.org/PostalAddress", "addressRegion")
             ->isReadOnly();
+    }
+
+    /**
+     * Build Fields using FieldFactory
+     */
+    protected function buildDeliveryPart2Fields()
+    {
+        $groupName = Translate::getAdminTranslation("Address", "AdminCustomers");
 
         //====================================================================//
         // Country Name
@@ -115,7 +123,7 @@ trait DeliveryTrait
             ->MicroData("http://schema.org/PostalAddress", "addressCountry")
             ->Group($groupName)
             ->isReadOnly();
-        
+
         //====================================================================//
         // Phone
         $this->fieldsFactory()->create(SPL_T_PHONE)
@@ -159,18 +167,6 @@ trait DeliveryTrait
 
                 break;
             //====================================================================//
-            // Direct Readings
-            case 'address1':
-            case 'address2':
-            case 'postcode':
-            case 'city':
-            case 'country':
-            case 'phone':
-            case 'phone_mobile':
-                $this->getSimple($fieldName, "delivery");
-
-                break;
-            //====================================================================//
             // Country ISO Id - READ With Convertion
             case 'id_country':
                 $this->out[$fieldName] = Country::getIsoById($this->delivery->id_country);
@@ -190,6 +186,38 @@ trait DeliveryTrait
                 // READ With Convertion
                 $state = new State($this->delivery->id_state);
                 $this->out[$fieldName] = $state->iso_code;
+
+                break;
+            default:
+                return;
+        }
+        unset($this->in[$key]);
+    }
+
+    /**
+     * Read requested Field
+     *
+     * @param string $key       Input List Key
+     * @param string $fieldName Field Identifier / Name
+     */
+    protected function getDeliverySimpleFields($key, $fieldName)
+    {
+        //====================================================================//
+        // Load Delivery Address
+        $this->loadDeliveryAddress();
+        //====================================================================//
+        // READ Fields
+        switch ($fieldName) {
+            //====================================================================//
+            // Direct Readings
+            case 'address1':
+            case 'address2':
+            case 'postcode':
+            case 'city':
+            case 'country':
+            case 'phone':
+            case 'phone_mobile':
+                $this->getSimple($fieldName, "delivery");
 
                 break;
             default:
