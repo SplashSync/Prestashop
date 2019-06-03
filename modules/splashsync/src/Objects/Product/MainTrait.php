@@ -15,6 +15,8 @@
 
 namespace Splash\Local\Objects\Product;
 
+use Configuration;
+use Splash\Components\UnitConverter as Units;
 use Splash\Core\SplashCore      as Splash;
 use Translate;
 
@@ -23,6 +25,16 @@ use Translate;
  */
 trait MainTrait
 {
+    use \Splash\Models\Objects\UnitsHelperTrait;
+
+    private static $psDims = array(
+        "m" => Units::LENGTH_M,
+        "cm" => Units::LENGTH_CM,
+        "mm" => Units::LENGTH_MM,
+        "in" => Units::LENGTH_INCH,
+        "yd" => Units::LENGTH_YARD,
+    );
+
     /**
      * Build Address Fields using FieldFactory
      */
@@ -150,7 +162,7 @@ trait MainTrait
             case 'height':
             case 'depth':
             case 'width':
-                $this->getSimple($fieldName);
+                $this->getDimField($fieldName);
 
                 break;
             case 'surface':
@@ -205,6 +217,29 @@ trait MainTrait
     }
 
     /**
+     * Read Dimenssion Field with Unit Convertion
+     *
+     * @param string $fieldName Field Identifier / Name
+     */
+    private function getDimField($fieldName)
+    {
+        //====================================================================//
+        //  Load System Dimenssion Unit
+        $dimUnit = Configuration::get('PS_DIMENSION_UNIT');
+        //====================================================================//
+        //  Read Field Data
+        $realData = $this->object->{ $fieldName };
+        //====================================================================//
+        //  Convert Current Value
+        if (isset(static::$psDims[$dimUnit])) {
+            $realData = self::units()->normalizeLength((float) $realData, static::$psDims[$dimUnit]);
+        }
+        //====================================================================//
+        //  return Normalized Value
+        $this->out[$fieldName] = $realData;
+    }
+
+    /**
      * Write Given Fields
      *
      * @param string $fieldName Field Identifier / Name
@@ -237,7 +272,7 @@ trait MainTrait
             case 'height':
             case 'depth':
             case 'width':
-                $this->setSimpleFloat($fieldName, $fieldData);
+                $this->setDimField($fieldName, $fieldData);
 
                 break;
             default:
@@ -275,5 +310,26 @@ trait MainTrait
                 return;
         }
         unset($this->in[$fieldName]);
+    }
+
+    /**
+     * Write Dimension Field with Unit Convertion
+     *
+     * @param string $fieldName Field Identifier / Name
+     * @param mixed  $fieldData Field Data
+     */
+    private function setDimField($fieldName, $fieldData)
+    {
+        //====================================================================//
+        //  Load System Dimenssion Unit
+        $dimUnit = Configuration::get('PS_DIMENSION_UNIT');
+        //====================================================================//
+        //  Convert Current Value
+        if (isset(static::$psDims[$dimUnit])) {
+            $fieldData = self::units()->convertLength((float) $fieldData, static::$psDims[$dimUnit]);
+        }
+        //====================================================================//
+        //  Write Converted Value
+        $this->setSimpleFloat($fieldName, $fieldData);
     }
 }
