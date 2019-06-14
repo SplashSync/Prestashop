@@ -44,7 +44,7 @@ trait DatesTrait
             ->Identifier("date_upd")
             ->Name(Translate::getAdminTranslation("Last modification", "AdminSupplyOrders"))
             ->Group(Translate::getAdminTranslation("Meta", "AdminThemes"))
-            ->MicroData("http://schema.org/DataFeedItem", "dateCreated")
+            ->MicroData("http://schema.org/DataFeedItem", "dateModified")
             ->isReadOnly();
     }
 
