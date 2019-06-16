@@ -77,6 +77,15 @@ parameters:
             level:          "%level%"
             configuration:  "travis/phpstan.neon"           
 
+        build: 
+            source_folder:  "/modules/splashsync"
+            target_folder:  "/ps_module"
+            build_folder:   "splashsync/"
+            build_file:     "splashsync.1.3.0"
+        
+    extensions:
+        - Splash\Console\Extension\Loader
+
     testsuites:
         travis:
             tasks:
@@ -97,3 +106,7 @@ parameters:
         phpstan:
             tasks: 
                 - phpstan 
+                
+        module:
+            tasks:
+                - build
