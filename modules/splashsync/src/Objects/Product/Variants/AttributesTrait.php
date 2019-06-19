@@ -239,14 +239,14 @@ trait AttributesTrait
 
         return true;
     }
-    
+
     /**
      * Clear Product Attributes Definition Array
      *
      * @return bool
      */
     protected function flushAttributesResumeCache()
-    {    
+    {
         $this->variants = null;
     }
 
