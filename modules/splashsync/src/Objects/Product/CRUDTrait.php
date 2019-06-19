@@ -67,6 +67,9 @@ trait CRUDTrait
         //====================================================================//
         // Flush Images Infos Cache
         $this->flushImageCache();
+        //====================================================================//
+        // Flush Product Varaiants Cache
+        $this->flushAttributesResumeCache();
 
         return $this->object;
     }
