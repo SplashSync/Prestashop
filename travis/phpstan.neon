@@ -28,3 +28,5 @@ parameters:
 #            - "#Property AttributeGroupCore::\\$name \\(string\\) does not accept array#"
             - "#Property ModuleCore::\\$version \\(float\\) does not accept string.#"
 
+            # PN Advanced Packs
+            - '#Call to static method getIdsPacks\(\) on an unknown class AdvancedPack.#'

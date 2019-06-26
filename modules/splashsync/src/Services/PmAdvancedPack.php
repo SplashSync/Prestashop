@@ -56,13 +56,6 @@ class PmAdvancedPack
             return array();
         }
 
-        //====================================================================//
-        // Class Function is Available (For PhpStan)
-        if (!class_exists("AdvancedPack")) {
-//        if (!class_exists("AdvancedPack") || !method_exists("AdvancedPack", "getIdsPacks")) {
-            return array();
-        }
-
         return \AdvancedPack::getIdsPacks(true);
     }
 
