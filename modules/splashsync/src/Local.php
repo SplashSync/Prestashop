@@ -70,6 +70,9 @@ class Local implements LocalClassInterface
         if ((Configuration::get('SPLASH_WS_EXPERT')) && !empty(Configuration::get('SPLASH_WS_HOST'))) {
             $parameters["WsHost"] = Configuration::get('SPLASH_WS_HOST');
         }
+        //====================================================================//
+        // Smart Notifications
+        $parameters["SmartNotify"] = (bool) Configuration::get("SPLASH_SMART_NOTIFY");
 
         //====================================================================//
         // Setup Custom Json Configuration Path to (../config/splash.json)

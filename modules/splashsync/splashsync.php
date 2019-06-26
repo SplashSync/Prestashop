@@ -307,6 +307,9 @@ class SplashSync extends Module
         $helper->fields_value['SPLASH_WS_EXPERT'] = Configuration::get('SPLASH_WS_EXPERT');
         $helper->fields_value['SPLASH_WS_HOST'] = Configuration::get('SPLASH_WS_HOST');
         $helper->fields_value['SPLASH_USER_ID'] = Configuration::get('SPLASH_USER_ID');
+        $helper->fields_value['SPLASH_SMART_NOTIFY'] = Configuration::get('SPLASH_SMART_NOTIFY');
+        $helper->fields_value['SPLASH_SYNC_VIRTUAL'] = Configuration::get('SPLASH_SYNC_VIRTUAL');
+        $helper->fields_value['SPLASH_SYNC_PACKS'] = Configuration::get('SPLASH_SYNC_PACKS');
 
         return $helper->generateForm($fieldsForm);
     }
@@ -477,7 +480,6 @@ class SplashSync extends Module
         //====================================================================//
         // Init Fields List
         $fields = array();
-
         //====================================================================//
         // User Id
         $fields[] = array(
@@ -496,7 +498,6 @@ class SplashSync extends Module
             'size' => 60,
             'required' => true
         );
-
         //====================================================================//
         // Webservice SOAP Protocol
         $fields[] = array(
@@ -506,20 +507,13 @@ class SplashSync extends Module
             'name' => 'SPLASH_WS_METHOD',
             'options' => array(
                 'query' => array(
-                    array(
-                        'id' => 'SOAP',
-                        'name' => "Generic PHP SOAP",
-                    ),
-                    array(
-                        'id' => 'NuSOAP',
-                        'name' => "NuSOAP Library",
-                    ),
+                    array('id' => 'SOAP', 'name' => "Generic PHP SOAP"),
+                    array('id' => 'NuSOAP', 'name' => "NuSOAP Library"),
                 ),
                 'id' => 'id',
                 'name' => 'name'
             )
         );
-
         //====================================================================//
         // Expert Mode
         $fields[] = array(
@@ -539,10 +533,9 @@ class SplashSync extends Module
                 'name' => 'name'
             )
         );
-
+        //====================================================================//
+        // Server Host Url
         if (Configuration::get('SPLASH_WS_EXPERT')) {
-            //====================================================================//
-            // Server Host Url
             $fields[] = array(
                 'type' => 'text',
                 'label' => $this->l('Server Host Url'),
@@ -551,20 +544,32 @@ class SplashSync extends Module
                 'required' => false
             );
         }
-
+        //====================================================================//
+        // Smart Notifications
+        $fields[] = array(
+            'type' => 'checkbox',
+            'name' => 'SPLASH',
+            'label' => $this->l('Smart Notifications'),
+            'hint' => $this->l('On changes, display only warning & errors notifcations.'),
+            'values' => array(
+                'query' => array(
+                    array(
+                        'id' => 'SMART_NOTIFY',
+                        'name' => $this->l('On changes, display only warning & errors notifcations.'),
+                        'val' => '1'
+                    ),
+                ),
+                'id' => 'id',
+                'name' => 'name'
+            )
+        );
         //====================================================================//
         // Init Form array
         $output = array();
         $output['form'] = array(
-            'legend' => array(
-                'icon' => 'icon-key',
-                'title' => $this->l('Authentification Settings')
-            ),
+            'legend' => array('icon' => 'icon-key', 'title' => $this->l('Authentification Settings')),
             'input' => $fields,
-            'submit' => array(
-                'title' => $this->l('Save'),
-                'class' => 'btn btn-default pull-right'
-            )
+            'submit' => array('title' => $this->l('Save'), 'class' => 'btn btn-default pull-right')
         );
 
         return $output;
@@ -594,6 +599,44 @@ class SplashSync extends Module
                 'query' => Employee::getEmployees(),
                 'id' => 'id_employee',
                 'name' => 'firstname'
+            )
+        );
+
+        //====================================================================//
+        // Sync of Virtual Products
+        $fields[] = array(
+            'type' => 'checkbox',
+            'name' => 'SPLASH_SYNC',
+            'label' => $this->l('Virtual Products'),
+            'values' => array(
+                'query' => array(
+                    array(
+                        'id' => 'VIRTUAL',
+                        'name' => $this->l('Allow Synchronization of Virtual Products.'),
+                        'val' => '1'
+                    ),
+                ),
+                'id' => 'id',
+                'name' => 'name'
+            )
+        );
+
+        //====================================================================//
+        // Sync of Products Packs
+        $fields[] = array(
+            'type' => 'checkbox',
+            'name' => 'SPLASH_SYNC',
+            'label' => $this->l('Products Packs'),
+            'values' => array(
+                'query' => array(
+                    array(
+                        'id' => 'PACKS',
+                        'name' => $this->l('Allow Synchronization of Products Packs.'),
+                        'val' => '1'
+                    ),
+                ),
+                'id' => 'id',
+                'name' => 'name'
             )
         );
 
@@ -677,6 +720,9 @@ class SplashSync extends Module
                 Configuration::updateValue('SPLASH_WS_METHOD', trim($wsMethod));
                 Configuration::updateValue('SPLASH_WS_KEY', trim($userKey));
                 Configuration::updateValue('SPLASH_USER_ID', trim($userId));
+                Configuration::updateValue('SPLASH_SMART_NOTIFY', trim(Tools::getValue('SPLASH_SMART_NOTIFY')));
+                Configuration::updateValue('SPLASH_SYNC_VIRTUAL', trim(Tools::getValue('SPLASH_SYNC_VIRTUAL')));
+                Configuration::updateValue('SPLASH_SYNC_PACKS', trim(Tools::getValue('SPLASH_SYNC_PACKS')));
                 $output .= $this->displayConfirmation($this->l('Settings updated'));
             }
         }

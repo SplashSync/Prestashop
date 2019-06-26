@@ -16,7 +16,9 @@
 namespace Splash\Local\Objects\Product;
 
 use Combination;
+use Configuration;
 use Context;
+use Pack;
 use Product as PsProduct;
 use Splash\Client\Splash;
 use Splash\Local\Objects\Product;
@@ -171,6 +173,11 @@ trait HooksTrait
             $product = new PsProduct($product["id_product"]);
         }
         //====================================================================//
+        // Ensure Commit is Allowed for this Product
+        if (!$this->isAllowedProductCommit($product)) {
+            return array();
+        }
+        //====================================================================//
         // Read Product Combinations
         $attrList = $product->getAttributesResume(Context::getContext()->language->id);
         //====================================================================//
@@ -260,12 +267,16 @@ trait HooksTrait
         //====================================================================//
         // Safety Check
         if (empty($combinationId)) {
-            return Splash::log()
-                ->err("ErrLocalTpl", "Combination", __FUNCTION__, "Unable to Read Product Attribute Id.");
+            return Splash::log()->errTrace("Unable to Read Product Attribute Id.");
         }
         if (empty($combination->id_product)) {
-            return Splash::log()
-                ->err("ErrLocalTpl", "Combination", __FUNCTION__, "Unable to Read Product Id.");
+            return Splash::log()->errTrace("Unable to Read Product Id.");
+        }
+        //====================================================================//
+        // Ensure Commit is Allowed for this Product
+        $product = new PsProduct($combination->id_product);
+        if (!$this->isAllowedProductCommit($product)) {
+            return true;
         }
         //====================================================================//
         // Generate Unik Product Id
@@ -277,6 +288,53 @@ trait HooksTrait
             //====================================================================//
             // Commit Update For Product Attribute
             $this->doCommit("Product", $combination->id_product, SPL_A_DELETE, $comment);
+        }
+
+        return true;
+    }
+
+    /**
+     * Get Product Impacted Ids to Commit
+     *
+     * @param PsProduct $product Prestashop Product Object
+     *
+     * @return bool
+     */
+    private function isAllowedProductCommit($product)
+    {
+        //====================================================================//
+        // Ensure Input is Product Class
+        if (!($product instanceof PsProduct)) {
+            Splash::log()->errTrace("Input is not a Product.");
+
+            return false;
+        }
+        //====================================================================//
+        // Filter Virtual Products
+        if (empty(Configuration::get("SPLASH_SYNC_VIRTUAL"))) {
+            if (!empty($product->is_virtual)) {
+                Splash::log()->war("Virtual Product: Commit Skipped.");
+
+                return false;
+            }
+        }
+        //====================================================================//
+        // Setup Pack Products Filters
+        if (empty(Configuration::get("SPLASH_SYNC_PACKS"))) {
+            //====================================================================//
+            // Check if Product is a Pack
+            if (Pack::isPack($product->id)) {
+                Splash::log()->war("Products Pack: Commit Skipped.");
+
+                return false;
+            }
+            //====================================================================//
+            // Compatibility with Pm Advanced Packs Module
+            if (PmAdvancedPack::isAdvancedPack($product->id)) {
+                Splash::log()->war("Advanced Products Pack: Commit Skipped.");
+
+                return false;
+            }
         }
 
         return true;

@@ -46,16 +46,6 @@ trait CoreTrait
         }
 
         //====================================================================//
-        // Product Type Name
-        $this->fieldsFactory()->create(SPL_T_VARCHAR)
-            ->Identifier("type")
-            ->Name('Product Type')
-            ->Group(Translate::getAdminTranslation("Meta", "AdminThemes"))
-            ->addChoices(array("simple" => "Simple", "variant" => "Variant"))
-            ->MicroData("http://schema.org/Product", "type")
-            ->isReadOnly();
-
-        //====================================================================//
         // Is Default Product Variant
         $this->fieldsFactory()->create(SPL_T_BOOL)
             ->Identifier("default_on")
@@ -122,14 +112,6 @@ trait CoreTrait
         switch ($fieldName) {
             case 'parent_id':
                 $this->out[$fieldName] = $this->AttributeId ? (string) $this->ProductId : "";
-
-                break;
-            case 'type':
-                if ($this->AttributeId) {
-                    $this->out[$fieldName] = "variant";
-                } else {
-                    $this->out[$fieldName] = "simple";
-                }
 
                 break;
             case 'default_on':

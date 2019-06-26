@@ -15,7 +15,9 @@
 
 namespace Splash\Local\Objects\Product;
 
+use Product;
 use Splash\Core\SplashCore      as Splash;
+use Splash\Local\Services\PmAdvancedPack;
 use Translate;
 
 /**
@@ -25,6 +27,11 @@ use Translate;
  */
 trait CoreTrait
 {
+    /**
+     * Ready of Product Reference
+     *
+     * @return string
+     */
     protected function getProductReference()
     {
         //====================================================================//
@@ -37,8 +44,39 @@ trait CoreTrait
         if (!empty($this->Attribute->reference)) {
             return  $this->Attribute->reference;
         }
+        //====================================================================//
+        // Product has Attribute but Ref is Defined at Parent level
+        if (!empty($this->object->reference)) {
+            return  $this->object->reference."-".$this->AttributeId;
+        }
 
-        return  $this->object->reference."-".$this->AttributeId;
+        return "";
+    }
+
+    /**
+     * Ready of Product Type Name
+     *
+     * @return string
+     */
+    protected function getProductType()
+    {
+        //====================================================================//
+        // Compatibility with PM Advanced Pack Module
+        if (PmAdvancedPack::isAdvancedPack($this->object->id)) {
+            return "pack";
+        }
+        //====================================================================//
+        // Read Product Type
+        switch ($this->object->getType()) {
+            case Product::PTYPE_SIMPLE:
+                return $this->AttributeId ? "variant" : "simple";
+            case Product::PTYPE_PACK:
+                return "pack";
+            case Product::PTYPE_VIRTUAL:
+                return "virtual";
+        }
+
+        return "simple";
     }
 
     /**
@@ -58,6 +96,17 @@ trait CoreTrait
             ->isListed()
             ->MicroData("http://schema.org/Product", "model")
             ->isRequired();
+
+        //====================================================================//
+        // Type
+        $this->fieldsFactory()->create(SPL_T_VARCHAR)
+            ->identifier("type")
+            ->name("Type")
+            ->description('Internal product Type')
+            ->group(Translate::getAdminTranslation("Meta", "AdminThemes"))
+            ->microData("http://schema.org/Product", "type")
+            ->isListed()
+            ->isReadOnly();
     }
 
     /**
@@ -76,6 +125,10 @@ trait CoreTrait
             //====================================================================//
             case 'ref':
                 $this->out[$fieldName] = $this->getProductReference();
+
+                break;
+            case 'type':
+                $this->out[$fieldName] = $this->getProductType();
 
                 break;
             default:

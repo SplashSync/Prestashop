@@ -22,8 +22,6 @@ use Shop;
 use Splash\Core\SplashCore      as Splash;
 use Splash\Local\Local;
 use Splash\Models\AbstractObject;
-//====================================================================//
-// Prestashop Static Classes
 use Splash\Models\Objects\IntelParserTrait;
 use Splash\Models\Objects\ListsTrait;
 use Splash\Models\Objects\ObjectsTrait;
@@ -31,7 +29,8 @@ use Splash\Models\Objects\SimpleFieldsTrait;
 use SplashSync;
 
 /**
- * @abstract    Splash Local Object Class - Products Local Integration
+ * Splash Local Object Class - Products Local Integration
+ *
  * @SuppressWarnings(PHPMD.CamelCasePropertyName)
  */
 class Product extends AbstractObject
