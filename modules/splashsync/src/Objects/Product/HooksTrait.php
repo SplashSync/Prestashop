@@ -22,6 +22,7 @@ use Pack;
 use Product as PsProduct;
 use Splash\Client\Splash;
 use Splash\Local\Objects\Product;
+use Splash\Local\Services\PmAdvancedPack;
 
 /**
  * Prestashop Hooks for Products
