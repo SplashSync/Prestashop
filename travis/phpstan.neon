@@ -5,7 +5,6 @@ parameters:
     bootstrap: "./travis/phpstan.php"
     universalObjectCratesClasses:
             - ArrayObject
-            - AdvancedPack
     ignoreErrors:
             # Know Prestashop Issues
             - '#Parameter \#1 \$id of class [a-zA-Z0-9]+ constructor expects null\, string given.#'
