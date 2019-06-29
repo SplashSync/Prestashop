@@ -38,6 +38,7 @@ trait MainTrait
             ->Name(Translate::getAdminTranslation("First name", "AdminCustomers"))
             ->MicroData("http://schema.org/Person", "familyName")
             ->Association("firstname", "lastname")
+            ->isReadOnly(isset(Splash::configuration()->PsUseFullCompanyNames))
             ->isRequired()
             ->isListed();
 
@@ -48,6 +49,7 @@ trait MainTrait
             ->Name(Translate::getAdminTranslation("Last name", "AdminCustomers"))
             ->MicroData("http://schema.org/Person", "givenName")
             ->Association("firstname", "lastname")
+            ->isReadOnly(isset(Splash::configuration()->PsUseFullCompanyNames))
             ->isRequired()
             ->isListed();
 
@@ -78,16 +80,8 @@ trait MainTrait
             ->Identifier("company")
             ->Name(Translate::getAdminTranslation("Company", "AdminCustomers"))
             ->MicroData("http://schema.org/Organization", "legalName")
+            ->isReadOnly(isset(Splash::configuration()->PsUseFullCompanyNames))
             ->isListed();
-
-        //====================================================================//
-        // Full Name
-        $this->fieldsFactory()->create(SPL_T_VARCHAR)
-            ->identifier("full_name")
-            ->name("Full Name")
-            ->description("Customer Aggregated Full Name")
-            ->microData("http://schema.org/Organization", "alternateName")
-            ->isReadOnly();
 
         //====================================================================//
         // SIRET
@@ -126,8 +120,6 @@ trait MainTrait
         //====================================================================//
         // READ Fields
         switch ($fieldName) {
-            case 'lastname':
-            case 'firstname':
             case 'passwd':
             case 'siret':
             case 'ape':
@@ -135,17 +127,38 @@ trait MainTrait
                 $this->getSimple($fieldName);
 
                 break;
+            case 'lastname':
+            case 'firstname':
+                //====================================================================//
+                // Read Only AllInOne Customer Name Mode
+                if (isset(Splash::configuration()->PsUseFullCompanyNames)) {
+                    $this->out[$fieldName] = " ";
+
+                    break;
+                }
+                //====================================================================//
+                // Generic Mode
+                $this->getSimple($fieldName);
+
+                break;
             case 'company':
+                //====================================================================//
+                // Read Only AllInOne Customer Name Mode
+                if (isset(Splash::configuration()->PsUseFullCompanyNames)) {
+                    $this->out[$fieldName] = $this->getCustomerFullName();
+
+                    break;
+                }
+                //====================================================================//
+                // Generic Mode
                 if (!empty($this->object->{$fieldName})) {
                     $this->getSimple($fieldName);
 
                     break;
                 }
+                //====================================================================//
+                // Generic FallBack Mode
                 $this->out[$fieldName] = "Prestashop(".$this->object->id.")";
-
-                break;
-            case 'full_name':
-                $this->out[$fieldName] = $this->getCustomerFullName();
 
                 break;
             default:
@@ -214,7 +227,7 @@ trait MainTrait
         //====================================================================//
         // Customer Company Name
         if (!empty($this->object->company)) {
-            $fullName .= " - ".$this->object->company;
+            $fullName .= " | ".$this->object->company;
         }
 
         return $fullName;
