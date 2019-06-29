@@ -81,6 +81,15 @@ trait MainTrait
             ->isListed();
 
         //====================================================================//
+        // Full Name
+        $this->fieldsFactory()->create(SPL_T_VARCHAR)
+            ->identifier("full_name")
+            ->name("Full Name")
+            ->description("Customer Aggregated Full Name")
+            ->microData("http://schema.org/Organization", "alternateName")
+            ->isReadOnly();
+
+        //====================================================================//
         // SIRET
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
             ->Identifier("siret")
@@ -135,6 +144,10 @@ trait MainTrait
                 $this->out[$fieldName] = "Prestashop(".$this->object->id.")";
 
                 break;
+            case 'full_name':
+                $this->out[$fieldName] = $this->getCustomerFullName();
+
+                break;
             default:
                 return;
         }
@@ -186,6 +199,25 @@ trait MainTrait
                 return;
         }
         unset($this->in[$key]);
+    }
+
+    /**
+     * Read Customer Full Name
+     *
+     * @return string Customer Full Name
+     */
+    private function getCustomerFullName()
+    {
+        //====================================================================//
+        // Customer Core Name
+        $fullName = sprintf("%s %s", $this->object->firstname, $this->object->lastname);
+        //====================================================================//
+        // Customer Company Name
+        if (!empty($this->object->company)) {
+            $fullName .= " - ".$this->object->company;
+        }
+
+        return $fullName;
     }
 
     /**
