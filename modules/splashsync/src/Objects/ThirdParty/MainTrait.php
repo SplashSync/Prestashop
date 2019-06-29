@@ -142,23 +142,7 @@ trait MainTrait
 
                 break;
             case 'company':
-                //====================================================================//
-                // Read Only AllInOne Customer Name Mode
-                if (isset(Splash::configuration()->PsUseFullCompanyNames)) {
-                    $this->out[$fieldName] = $this->getCustomerFullName();
-
-                    break;
-                }
-                //====================================================================//
-                // Generic Mode
-                if (!empty($this->object->{$fieldName})) {
-                    $this->getSimple($fieldName);
-
-                    break;
-                }
-                //====================================================================//
-                // Generic FallBack Mode
-                $this->out[$fieldName] = "Prestashop(".$this->object->id.")";
+                $this->out[$fieldName] = $this->getCompanyName();
 
                 break;
             default:
@@ -215,22 +199,34 @@ trait MainTrait
     }
 
     /**
-     * Read Customer Full Name
+     * Read Customer Company Name
      *
-     * @return string Customer Full Name
+     * @return string Customer Company Name
      */
-    private function getCustomerFullName()
+    private function getCompanyName()
     {
         //====================================================================//
-        // Customer Core Name
-        $fullName = sprintf("%s %s", $this->object->firstname, $this->object->lastname);
-        //====================================================================//
-        // Customer Company Name
-        if (!empty($this->object->company)) {
-            $fullName .= " | ".$this->object->company;
-        }
+        // Read Only AllInOne Customer Name Mode
+        if (isset(Splash::configuration()->PsUseFullCompanyNames)) {
+            //====================================================================//
+            // Customer Core Name
+            $fullName = sprintf("%s %s", $this->object->firstname, $this->object->lastname);
+            //====================================================================//
+            // Customer Company Name
+            if (!empty($this->object->company)) {
+                $fullName .= " | ".$this->object->company;
+            }
 
-        return $fullName;
+            return $fullName;
+        }
+        //====================================================================//
+        // Generic Mode
+        if (!empty($this->object->company)) {
+            return $this->object->company;
+        }
+        //====================================================================//
+        // Generic FallBack Mode
+        return "Prestashop(".$this->object->id.")";
     }
 
     /**
