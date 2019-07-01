@@ -98,6 +98,16 @@ trait DeliveryTrait
             ->Group($groupName)
             ->MicroData("http://schema.org/PostalAddress", "addressRegion")
             ->isReadOnly();
+
+        //====================================================================//
+        // Other
+        $this->fieldsFactory()->create(SPL_T_VARCHAR)
+            ->identifier("other")
+            ->name("Other")
+            ->description("Other: Remarks, Relay Point Code, more...")
+            ->MicroData("http://schema.org/PostalAddress", "description")
+            ->Group($groupName)
+            ->isReadOnly();
     }
 
     /**
@@ -215,6 +225,7 @@ trait DeliveryTrait
             case 'postcode':
             case 'city':
             case 'country':
+            case 'other':
             case 'phone':
             case 'phone_mobile':
                 $this->getSimple($fieldName, "delivery");
