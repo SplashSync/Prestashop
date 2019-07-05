@@ -185,7 +185,7 @@ trait DeliveryTrait
             //====================================================================//
             // Delivery Contact Full Name
             case 'fullname':
-                $this->out[$fieldName] .= $this->delivery->firstname." ".$this->delivery->lastname;
+                $this->out[$fieldName] = $this->delivery->firstname." ".$this->delivery->lastname;
 
                 break;
             //====================================================================//
