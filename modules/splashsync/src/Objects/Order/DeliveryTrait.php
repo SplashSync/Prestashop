@@ -38,6 +38,15 @@ trait DeliveryTrait
         $groupName = Translate::getAdminTranslation("Address", "AdminCustomers");
 
         //====================================================================//
+        // Company
+        $this->fieldsFactory()->create(SPL_T_VARCHAR)
+            ->Identifier("company")
+            ->Name(Translate::getAdminTranslation("Company", "AdminCustomers"))
+            ->MicroData("http://schema.org/Organization", "legalName")
+            ->Group($groupName)
+            ->isReadOnly();
+
+        //====================================================================//
         // Contact Full Name
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
             ->Identifier("fullname")
@@ -168,11 +177,14 @@ trait DeliveryTrait
         // READ Fields
         switch ($fieldName) {
             //====================================================================//
+            // Delivery Company
+            case 'company':
+                $this->getSimple($fieldName, "delivery");
+
+                break;
+            //====================================================================//
             // Delivery Contact Full Name
             case 'fullname':
-                if (!empty($this->delivery->company)) {
-                    $this->out[$fieldName] = $this->delivery->company." ";
-                }
                 $this->out[$fieldName] .= $this->delivery->firstname." ".$this->delivery->lastname;
 
                 break;
