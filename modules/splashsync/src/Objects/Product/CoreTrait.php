@@ -123,17 +123,17 @@ trait CoreTrait
         //====================================================================//
         // Product has No Attribute
         if (!$this->AttributeId) {
-            return  $this->object->reference;
+            return  trim($this->object->reference);
         }
         //====================================================================//
         // Product has Attribute but Ref is Defined
         if (!empty($this->Attribute->reference)) {
-            return  $this->Attribute->reference;
+            return  trim($this->Attribute->reference);
         }
         //====================================================================//
         // Product has Attribute but Ref is Defined at Parent level
         if (!empty($this->object->reference)) {
-            return  $this->object->reference."-".$this->AttributeId;
+            return  trim($this->object->reference."-".$this->AttributeId);
         }
 
         return "";
