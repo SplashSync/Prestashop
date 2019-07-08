@@ -78,7 +78,6 @@ trait CoreTrait
             ->Identifier("parent_ref")
             ->Name("Parent SKU")
             ->Group(Translate::getAdminTranslation("Meta", "AdminThemes"))
-            ->MicroData("http://schema.org/Product", "isVariationOf")
             ->isReadOnly();
 
         //====================================================================//
