@@ -87,9 +87,18 @@ trait StatusTrait
         $this->fieldsFactory()->create(SPL_T_BOOL)
             ->Identifier("isValidated")
             ->Name($prefix.Translate::getAdminTranslation("Valid", "AdminCartRules"))
-            ->MicroData("http://schema.org/OrderStatus", "OrderProcessing")
+            ->MicroData("http://schema.org/OrderStatus", "OrderPaymentDone")
             ->Group(Translate::getAdminTranslation("Meta", "AdminThemes"))
             ->Association("isCanceled", "isValidated", "isClosed")
+            ->isReadOnly();
+
+        //====================================================================//
+        // Is Processing
+        $this->fieldsFactory()->create(SPL_T_BOOL)
+            ->Identifier("isProcessing")
+            ->Name($prefix."Processing")
+            ->MicroData("http://schema.org/OrderStatus", "OrderProcessing")
+            ->Group(Translate::getAdminTranslation("Meta", "AdminThemes"))
             ->isReadOnly();
 
         //====================================================================//
@@ -136,6 +145,10 @@ trait StatusTrait
                 break;
             case 'isValidated':
                 $this->out[$fieldName] = $this->object->valid;
+
+                break;
+            case 'isProcessing':
+                $this->out[$fieldName] = (bool) (3 == $this->object->current_state);
 
                 break;
             case 'isClosed':

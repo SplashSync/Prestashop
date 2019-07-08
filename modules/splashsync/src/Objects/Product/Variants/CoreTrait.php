@@ -73,6 +73,15 @@ trait CoreTrait
             ->isReadOnly();
 
         //====================================================================//
+        // Product Variation Parent Link
+        $this->fieldsFactory()->create(SPL_T_VARCHAR)
+            ->Identifier("parent_ref")
+            ->Name("Parent SKU")
+            ->Group(Translate::getAdminTranslation("Meta", "AdminThemes"))
+            ->MicroData("http://schema.org/Product", "isVariationOf")
+            ->isReadOnly();
+
+        //====================================================================//
         // CHILD PRODUCTS INFORMATIONS
         //====================================================================//
 
@@ -89,7 +98,7 @@ trait CoreTrait
         // Product Variation List - Product SKU
         $this->fieldsFactory()->Create(SPL_T_VARCHAR)
             ->Identifier("sku")
-            ->Name("SKU")
+            ->Name("Variant SKU")
             ->InList("variants")
             ->MicroData("http://schema.org/Product", "VariationName")
             ->isReadOnly();
@@ -112,6 +121,15 @@ trait CoreTrait
         switch ($fieldName) {
             case 'parent_id':
                 $this->out[$fieldName] = $this->AttributeId ? (string) $this->ProductId : "";
+
+                break;
+            case 'parent_ref':
+                if (empty($this->AttributeId) || empty($this->object->reference)) {
+                    $this->out[$fieldName] = "";
+
+                    break;
+                }
+                $this->out[$fieldName] = $this->object->reference;
 
                 break;
             case 'default_on':
