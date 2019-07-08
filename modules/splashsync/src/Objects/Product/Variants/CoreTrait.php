@@ -114,7 +114,7 @@ trait CoreTrait
      * @param string $key       Input List Key
      * @param string $fieldName Field Identifier / Name
      */
-    protected function getVariantsCoreFields($key, $fieldName)
+    protected function getVariantsParentFields($key, $fieldName)
     {
         //====================================================================//
         // READ Fields
@@ -132,6 +132,24 @@ trait CoreTrait
                 $this->out[$fieldName] = $this->object->reference;
 
                 break;
+            default:
+                return;
+        }
+
+        unset($this->in[$key]);
+    }
+
+    /**
+     * Read requested Field
+     *
+     * @param string $key       Input List Key
+     * @param string $fieldName Field Identifier / Name
+     */
+    protected function getVariantsDefaultsFields($key, $fieldName)
+    {
+        //====================================================================//
+        // READ Fields
+        switch ($fieldName) {
             case 'default_on':
                 if ($this->AttributeId) {
                     $this->getSimple($fieldName, "Attribute");
