@@ -182,6 +182,11 @@ trait StatusTrait
             //====================================================================//
             case 'status':
                 //====================================================================//
+                // Empty Status => Skipp Update
+                if (empty($fieldData)) {
+                    break;
+                }
+                //====================================================================//
                 // Compare Order Status
                 $currentSplashStatus = $this->getSplashStatus();
                 if ($currentSplashStatus == $fieldData) {
