@@ -39,10 +39,11 @@ trait StatusTrait
         6 => "OrderCanceled",
         7 => "OrderCanceled",
         8 => "OrderProblem",
-        9 => "OrderProcessing",
+        9 => "OrderOutOfStock",
         10 => "OrderPaymentDue",
         11 => "OrderPaymentDue",
-        12 => "OrderProcessing",
+        12 => "OrderOutOfStock",
+        13 => "OrderProcessing",
     );
 
     /**
