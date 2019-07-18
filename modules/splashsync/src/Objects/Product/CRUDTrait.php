@@ -70,6 +70,7 @@ trait CRUDTrait
         //====================================================================//
         // Flush Product Varaiants Cache
         $this->flushAttributesResumeCache();
+        $this->deleteCombinationResume();
 
         return $this->object;
     }
