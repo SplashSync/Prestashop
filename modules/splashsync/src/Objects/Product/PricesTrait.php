@@ -15,6 +15,7 @@
 
 namespace Splash\Local\Objects\Product;
 
+use Combination;
 use Splash\Core\SplashCore      as Splash;
 use Splash\Local\Services\TaxManager;
 use Splash\Models\Objects\PricesTrait as SplashPricesTrait;
@@ -105,7 +106,7 @@ trait PricesTrait
                 //====================================================================//
                 // Read Price
                 $priceHT = (double) Tools::convertPrice(
-                    $this->object->getPrice(false, $this->AttributeId, 6, null, false, false, 1),
+                    $this->getProductPrice(),
                     $this->Currency
                 );
                 $taxPercent = (double) $this->object->getTaxesRate();
@@ -314,5 +315,24 @@ trait PricesTrait
             $this->Attribute->price = round($priceHT, 9);
             $this->needUpdate("Attribute");
         }
+    }
+
+    /**
+     * Read Raw Product Price
+     *
+     * @return float
+     */
+    private function getProductPrice()
+    {
+        //====================================================================//
+        // Read Product Base Price
+        $basePrice = $this->object->base_price;
+        //====================================================================//
+        // On Attribute Context => Sum Attribute price Impact
+        if (($this->AttributeId > 0) && ($this->Attribute instanceof Combination)) {
+            $basePrice += $this->Attribute->price;
+        }
+
+        return round($basePrice, 6);
     }
 }
