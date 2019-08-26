@@ -107,6 +107,8 @@ class TotSwitchAttributes
      *
      * @param string $idProductAttribute
      * @param bool   $value
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private static function updateProductAttribute($idProductAttribute, $value)
     {
