@@ -97,7 +97,7 @@ class TotSwitchAttributes
         }
         //====================================================================//
         // Update Product Attribute Status
-        self::updateProductAttribute($attributeId, ($value ? 1 : 0));
+        self::updateProductAttribute($attributeId, $value);
 
         return true;
     }
