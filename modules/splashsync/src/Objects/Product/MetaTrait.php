@@ -15,9 +15,7 @@
 
 namespace Splash\Local\Objects\Product;
 
-use Splash\Core\SplashCore      as Splash;
-//====================================================================//
-// Prestashop Static Classes
+use Splash\Local\Services\TotSwitchAttributes;
 use Translate;
 
 /**
@@ -72,8 +70,19 @@ trait MetaTrait
             // OTHERS INFORMATIONS
             //====================================================================//
             case 'active':
-            case 'available_for_order':
             case 'on_sale':
+                $this->getSimpleBool($fieldName);
+
+                break;
+            case 'available_for_order':
+                //====================================================================//
+                // For Compatibility with Tot Switch Attribute  Module
+                if (TotSwitchAttributes::isDisabled($this->AttributeId, $this->Attribute)) {
+                    $this->out[$fieldName] = false;
+
+                    break;
+                }
+
                 $this->getSimpleBool($fieldName);
 
                 break;
@@ -98,8 +107,17 @@ trait MetaTrait
             //====================================================================//
             // Direct Writtings
             case 'active':
-            case 'available_for_order':
             case 'on_sale':
+                $this->setSimple($fieldName, $fieldData);
+
+                break;
+            case 'available_for_order':
+                //====================================================================//
+                // For Compatibility with Tot Switch Attribute  Module
+                if (TotSwitchAttributes::setAvailableForOrder($this->AttributeId, $this->Attribute, (bool) $fieldData)) {
+                    break;
+                }
+
                 $this->setSimple($fieldName, $fieldData);
 
                 break;
