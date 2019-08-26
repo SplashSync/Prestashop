@@ -114,7 +114,7 @@ trait MetaTrait
             case 'available_for_order':
                 //====================================================================//
                 // For Compatibility with Tot Switch Attribute  Module
-                if (TotSwitchAttributes::setAvailableForOrder($this->AttributeId, $this->Attribute, (bool) $fieldData)) {
+                if (TotSwitchAttributes::setAvailablility($this->AttributeId, $this->Attribute, (bool) $fieldData)) {
                     break;
                 }
 

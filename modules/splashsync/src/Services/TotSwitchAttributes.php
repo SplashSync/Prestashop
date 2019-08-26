@@ -83,7 +83,7 @@ class TotSwitchAttributes
      *
      * @return bool return TRUE if Product Attribute Status Updated
      */
-    public static function setAvailableForOrder($attributeId, $attribute, $value)
+    public static function setAvailablility($attributeId, $attribute, $value)
     {
         //====================================================================//
         // Check if Module is Active
@@ -105,48 +105,49 @@ class TotSwitchAttributes
     /**
      * Update product attribute
      *
-     * @param string $id_product_attribute
+     * @param string $idProductAttribute
      * @param bool   $value
      */
-    private function updateProductAttribute($id_product_attribute, $value)
+    private static function updateProductAttribute($idProductAttribute, $value)
     {
-        $id_shops = null;
+        $idShops = null;
         $sql = array();
 
         //====================================================================//
         // Detect Shop Id
-        $id_shop = Shop::getContextShopID(false);
-        if (null == $id_shop) {
-            $id_shops = Shop::getContextListShopID();
+        $idShop = Shop::getContextShopID(false);
+        if (null == $idShop) {
+            $idShops = Shop::getContextListShopID();
         }
 
         //====================================================================//
         // Prepare Sql For Updates
         if (!$value) {
-            if (is_array($id_shops)) {
-                foreach ($id_shops as $id_shop) {
+            if (is_array($idShops)) {
+                foreach ($idShops as $idShop) {
                     // add row in table for each shop
-                    $sql[] = 'REPLACE INTO `'._DB_PREFIX_.'tot_switch_attribute_disabled`(`id_product_attribute`, `id_shop`)
-                    VALUES ('.(int)$id_product_attribute.', '.(int)$id_shop.');';
+                    $sql[] = 'REPLACE INTO `'
+                            ._DB_PREFIX_.'tot_switch_attribute_disabled`(`id_product_attribute`, `id_shop`)
+                    VALUES ('.(int)$idProductAttribute.', '.(int)$idShop.');';
                 }
             } else {
                 // add row in table
                 $sql[] = 'REPLACE INTO `'._DB_PREFIX_.'tot_switch_attribute_disabled`(`id_product_attribute`, `id_shop`)
-                VALUES ('.(int)$id_product_attribute.', '.(int)$id_shop.');';
+                VALUES ('.(int)$idProductAttribute.', '.(int)$idShop.');';
             }
         } else {
-            if (is_array($id_shops)) {
-                foreach ($id_shops as $id_shop) {
+            if (is_array($idShops)) {
+                foreach ($idShops as $idShop) {
                     // delete row from table for each shop
                     $sql[] = 'DELETE FROM `'._DB_PREFIX_.'tot_switch_attribute_disabled`
-                    WHERE `id_product_attribute` = '.(int)$id_product_attribute.'
-                    AND `id_shop` = '.(int)$id_shop.';';
+                    WHERE `id_product_attribute` = '.(int)$idProductAttribute.'
+                    AND `id_shop` = '.(int)$idShop.';';
                 }
             } else {
                 // delete row from table
                 $sql[] = 'DELETE FROM `'._DB_PREFIX_.'tot_switch_attribute_disabled`
-                WHERE `id_product_attribute` = '.(int)$id_product_attribute.'
-                AND `id_shop` = '.(int)$id_shop.';';
+                WHERE `id_product_attribute` = '.(int)$idProductAttribute.'
+                AND `id_shop` = '.(int)$idShop.';';
             }
         }
 
