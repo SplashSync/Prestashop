@@ -79,7 +79,7 @@ trait CoreTrait
             ->Name("Parent SKU")
             ->Group(Translate::getAdminTranslation("Meta", "AdminThemes"))
             ->MicroData("http://schema.org/Product", "isVariationOfName")
-            ->isReadOnly();
+            ->isNotTested();
 
         //====================================================================//
         // CHILD PRODUCTS INFORMATIONS
@@ -230,7 +230,7 @@ trait CoreTrait
      * @param string $fieldName Field Identifier / Name
      * @param mixed  $fieldData Field Data
      */
-    private function setVariantsCoreFields($fieldName, $fieldData)
+    protected function setVariantsCoreFields($fieldName, $fieldData)
     {
         //====================================================================//
         // WRITE Field
@@ -250,6 +250,30 @@ trait CoreTrait
                 }
                 $this->object->deleteDefaultAttributes();
                 $this->object->setDefaultAttribute($attributeId);
+
+                break;
+            default:
+                return;
+        }
+        unset($this->in[$fieldName]);
+    }
+
+    /**
+     * Write Given Fields
+     *
+     * @param string $fieldName Field Identifier / Name
+     * @param mixed  $fieldData Field Data
+     */
+    protected function setVariantsParentFields($fieldName, $fieldData)
+    {
+        //====================================================================//
+        // WRITE Field
+        switch ($fieldName) {
+            case 'parent_ref':
+                if (empty($this->AttributeId) || empty($fieldData)) {
+                    break;
+                }
+                $this->setSimple("reference", $fieldData);
 
                 break;
             default:
