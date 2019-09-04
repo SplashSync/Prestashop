@@ -258,15 +258,19 @@ trait MainTrait
                 // If product as attributes
                 $currentWeight = $this->object->{$fieldName};
                 $currentWeight += isset($this->Attribute->{$fieldName}) ? $this->Attribute->{$fieldName} : 0;
-                if ($this->AttributeId && (abs($currentWeight - $fieldData) > 1E-6)) {
-                    $this->Attribute->{$fieldName} = $fieldData - $this->object->{$fieldName};
-                    $this->needUpdate("Attribute");
+                //====================================================================//
+                // If Simple Product
+                if (!$this->AttributeId) {
+                    $this->setSimpleFloat($fieldName, $fieldData);
 
                     break;
                 }
                 //====================================================================//
-                // If product as NO attributes
-                $this->setSimpleFloat($fieldName, $fieldData);
+                // If Variable Product
+                if (abs($currentWeight - $fieldData) > 1E-6) {
+                    $this->Attribute->{$fieldName} = $fieldData - $this->object->{$fieldName};
+                    $this->needUpdate("Attribute");
+                }
 
                 break;
             case 'height':
