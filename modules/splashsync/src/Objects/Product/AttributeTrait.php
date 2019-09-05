@@ -172,6 +172,12 @@ trait AttributeTrait
         // Stack Trace
         Splash::log()->trace();
         //====================================================================//
+        // Try Loading Product Attribute Combinaisons From DataBase
+        $attribute = new Combination($this->AttributeId);
+        if ($attribute->id != $this->AttributeId) {
+            return Splash::log()->warTrace("Unable to fetch Product Attribute (".$this->AttributeId.")");
+        }        
+        //====================================================================//
         // Delete Attribute
         $this->object->deleteAttributeCombination($this->AttributeId);
         //====================================================================//
