@@ -176,7 +176,7 @@ trait AttributeTrait
         $attribute = new Combination($this->AttributeId);
         if ($attribute->id != $this->AttributeId) {
             return Splash::log()->warTrace("Unable to fetch Product Attribute (".$this->AttributeId.")");
-        }        
+        }
         //====================================================================//
         // Delete Attribute
         $this->object->deleteAttributeCombination($this->AttributeId);
