@@ -23,9 +23,9 @@
 #
 # To us different PS Version coinfigured, you need to add hosts to /etc/hosts
 # 
-# 172.100.0.10        latest.prestashop.local
-# 172.100.0.16        ps1-6.prestashop.local
-# 172.100.0.17        ps1-7.prestashop.local
+# 172.102.0.10        latest.prestashop.local
+# 172.102.0.16        ps1-6.prestashop.local
+# 172.102.0.17        ps1-7.prestashop.local
 #
 ################################################################################
 
@@ -34,6 +34,8 @@ version: '2'
 
 services:
     
+    ################################################################################
+    # MySQL Container      
     mysql:
         image: mysql:5.7
         container_name: prestashop_mysql
@@ -43,6 +45,8 @@ services:
         networks:
             - prestashop
       
+    ################################################################################
+    # Prestashop Latest       
     prestashop:
         image: prestashop/prestashop
         container_name: prestashop_latest
@@ -50,7 +54,7 @@ services:
             - mysql
         volumes:
          - "./modules/splashsync:/var/www/html/modules/splashsync:ro"
-         - "./docker/setup.sh:/var/www/html/modules/setup.sh:ro"
+         - "./docker/docker-entrypoint.sh:/var/www/html/modules/docker-entrypoint.sh:ro"
         environment:
             - DB_SERVER=mysql
             - DB_PREFIX=ps_latest_
@@ -62,12 +66,15 @@ services:
             - ADMIN_PASSWD=splashsync
             - SPLASH_WS_ID=69696969696
             - SPLASH_WS_KEY=ThisTokenIsNotSoSecretChangeIt
-            - SPLASH_WS_HOST=dev.splashsync.local
-        command: sh /var/www/html/modules/setup.sh
+            - SPLASH_WS_HOST=http://docker.splashsync.local/ws/soap
+        command: sh /var/www/html/modules/docker-entrypoint.sh
+        hostname: latest.prestashop.local
         networks:
-            prestashop:
-                ipv4_address: 172.100.0.10
+            prestashop:     { ipv4_address: 172.102.0.10 }
+            splashsync:     { aliases: [ latest.prestashop.local ] }                
                 
+    ################################################################################
+    # Prestashop 1.7       
     prestashop_1_7:
         image: prestashop/prestashop:1.7
         container_name: prestashop_1_7
@@ -75,7 +82,7 @@ services:
             - mysql
         volumes:
          - "./modules/splashsync:/var/www/html/modules/splashsync:ro"
-         - "./docker/setup.sh:/var/www/html/modules/setup.sh:ro"
+         - "./docker/docker-entrypoint.sh:/var/www/html/modules/docker-entrypoint.sh:ro"
         environment:
             - DB_SERVER=mysql
             - DB_PREFIX=ps_1_7_
@@ -87,12 +94,15 @@ services:
             - ADMIN_PASSWD=splashsync
             - SPLASH_WS_ID=69696969696
             - SPLASH_WS_KEY=ThisTokenIsNotSoSecretChangeIt
-            - SPLASH_WS_HOST=dev.splashsync.local
-        command: sh /var/www/html/modules/setup.sh
+            - SPLASH_WS_HOST=http://docker.splashsync.local/ws/soap
+        command: sh /var/www/html/modules/docker-entrypoint.sh
+        hostname: ps1-7.prestashop.local
         networks:
-            prestashop:
-                ipv4_address: 172.100.0.17
+            prestashop:     { ipv4_address: 172.102.0.17 }
+            splashsync:     { aliases: [ ps1-7.prestashop.local ] }                
         
+    ################################################################################
+    # Prestashop 1.6       
     prestashop_1_6:
         image: prestashop/prestashop:1.6
         container_name: prestashop_1_6
@@ -100,7 +110,7 @@ services:
             - mysql
         volumes:
          - "./modules/splashsync:/var/www/html/modules/splashsync:ro"
-         - "./docker/setup.sh:/var/www/html/modules/setup.sh:ro"
+         - "./docker/docker-entrypoint.sh:/var/www/html/modules/docker-entrypoint.sh:ro"
         environment:
             - DB_SERVER=mysql
             - DB_PREFIX=ps_1_6_
@@ -112,17 +122,22 @@ services:
             - ADMIN_PASSWD=splashsync
             - SPLASH_WS_ID=69696969696
             - SPLASH_WS_KEY=ThisTokenIsNotSoSecretChangeIt
-            - SPLASH_WS_HOST=dev.splashsync.local
-        command: sh /var/www/html/modules/setup.sh
+            - SPLASH_WS_HOST=http://docker.splashsync.local/ws/soap
+        command: sh /var/www/html/modules/docker-entrypoint.sh
+        hostname: ps1-6.prestashop.local
         networks:
-            prestashop:
-                ipv4_address: 172.100.0.16
+            prestashop:     { ipv4_address: 172.102.0.16 }
+            splashsync:     { aliases: [ ps1-6.prestashop.local ] }                
                 
 networks:
+    ################################################################################
+    # Default Private Network    
     prestashop:
         driver: bridge
         ipam:
             config:
-                - subnet: 172.100.0.0/24
-                  gateway: 172.100.0.1
- 
+                - subnet: 172.102.0.0/24
+    ################################################################################
+    # External Splash Network
+    splashsync:
+        external: true
