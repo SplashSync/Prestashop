@@ -1,4 +1,8 @@
-## Key features & benefits
+---
+lang: en
+permalink: docs/features
+title: Key features & benefits
+---
 
 With more than one million users, PrestaShop is now one of the most widely used E-Commerce platforms in the world.
 

@@ -1,7 +1,11 @@
-
-## Installation
+---
+lang: en
+permalink: start/install
+title: Installation
+---
 
 ### Easy Installation
+
 Prestashop offer possibility to install modules directly from PrestaShop Addons or Administration Interface. 
 
 For sure, you can use it to install our module. If it didn't work, please use the manual installation.
@@ -14,16 +18,7 @@ For sure, you can use it to install our module. If it didn't work, please use th
 
 ## Requirements
 
-* PHP 5.6+ | PHP 7.0+
+* PHP 7.1+
 * PrestaShop 1.6+
 * An active Splash Sync User Account
 
-## Documentation
-
-For the configuration guide and reference, see: [Prestashop Module Documentation](https://splashsync.github.io/Prestashop)
-
-## Contributing
-
-Any Pull requests are welcome! 
-
-This module is part of [SplashSync](http://www.splashsync.com) project.
