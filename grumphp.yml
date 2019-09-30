@@ -106,9 +106,9 @@ parameters:
             build_file:     "splashsync.1.3.1"
         
         build-docs: 
-            enabled:            false
-            local_folder:       '/src/Resources/docs'
-            generic_contents:   ["module", "splash"]
+            enabled:            true
+            local_folder:       '/modules/splashsync/docs'
+            generic_contents:   ["splash"]
             
     extensions:
         - Splash\Console\Extension\Loader
@@ -137,3 +137,4 @@ parameters:
         splash:
             tasks:
                 - build-module
+                - build-docs

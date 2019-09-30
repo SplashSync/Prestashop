@@ -48,7 +48,7 @@ services:
     ################################################################################
     # Prestashop Latest       
     prestashop:
-        image: prestashop/prestashop
+        image: prestashop/prestashop:nightly-7.2-apache
         container_name: prestashop_latest
         depends_on:
             - mysql
@@ -76,7 +76,7 @@ services:
     ################################################################################
     # Prestashop 1.7       
     prestashop_1_7:
-        image: prestashop/prestashop:1.7
+        image: prestashop/prestashop:1.7-7.2-apache
         container_name: prestashop_1_7
         depends_on:
             - mysql
@@ -104,7 +104,7 @@ services:
     ################################################################################
     # Prestashop 1.6       
     prestashop_1_6:
-        image: prestashop/prestashop:1.6
+        image: prestashop/prestashop:1.6-7.1-apache
         container_name: prestashop_1_6
         depends_on:
             - mysql

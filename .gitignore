@@ -42,3 +42,4 @@ upload/
 .directory
 save-commands.json
 /.php_cs.cache
+/reboot.sh
