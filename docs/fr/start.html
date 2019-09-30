@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+    <!-- Meta -->
+  	<meta charset="utf-8">
+  	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+  	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="shortcut icon" href="/Prestashop/fr/assets/img/favicon.ico"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Quick Start | Prestashop Module</title>
+<meta name="generator" content="Jekyll v3.8.6" />
+<meta property="og:title" content="Quick Start" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Prestashop Module for Splash Sync." />
+<meta property="og:description" content="Prestashop Module for Splash Sync." />
+<link rel="canonical" href="splashsync.github.io/Prestashop/fr/start" />
+<meta property="og:url" content="splashsync.github.io/Prestashop/start" />
+<meta property="og:site_name" content="Prestashop Module" />
+<script type="application/ld+json">
+{"@type":"WebPage","headline":"Quick Start","url":"splashsync.github.io/Prestashop/start","description":"Prestashop Module for Splash Sync.","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<!-- MAIN STYLESHEETS -->
+
+<!-- Google Fonts -->
+<link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css' />
+<!-- Bootstrap 5 CSS -->
+<link rel="stylesheet" href="/Prestashop/fr/assets/vendor/bootstrap/dist/css/bootstrap.min.css" />   
+<!-- PrismJs CSS (Syntax Highlighter) -->    
+<link rel="stylesheet" href="/Prestashop/fr/assets/vendor/prismjs/themes/prism-okaidia.css" />
+<!-- Plugins CSS -->    
+<link rel="stylesheet" href="/Prestashop/fr/assets/plugins/elegant_font/css/style.css" />  
+<!-- FontAwesome 5 Free -->
+<link rel="stylesheet" href="/Prestashop/fr/assets/vendor/@fortawesome/fontawesome-free/css/all.css" /> 
+<!-- Ekko LightBox -->    
+<link rel="stylesheet" href="/Prestashop/fr/assets/vendor/ekko-lightbox/dist/ekko-lightbox.css" />  
+<!-- Datatables -->    
+<link rel="stylesheet" href="/Prestashop/fr/assets/vendor/datatables.net-bs4/css/dataTables.bootstrap4.min.css" />  
+<!-- Theme CSS -->
+<link id="theme-style" rel="stylesheet" href="/Prestashop/fr/assets/css/main.css" />
+
+<!-- END MAIN STYLESHEETS -->
+<link type="application/atom+xml" rel="alternate" href="splashsync.github.io/Prestashop/fr/feed.xml" title="Prestashop Module" /><!-- Google Analytics --></head>
+
+
+
+<body class="body-green">
+    <div class="page-wrapper"><!-- Page Header -->
+<header id="header" class="header">
+	<div class="container">
+		<div class="branding">
+	  		<h1 class="logo">
+			    <a href="index.html">
+			    	<img src="/Prestashop/assets/img/apple-touch-icon.png" height="30px" class="d-none d-md-inline-block">
+					<span class="text-highlight">Prestashop Module</span>
+					<span class="text-bold">DOC</span>
+			    </a>
+			</h1>
+    	</div>
+
+
+<ol class="breadcrumb">
+	<li class="breadcrumb-item">
+		<a href="index.html">Accueil</a>
+	</li>
+
+	
+		&nbsp;/&nbsp;
+		
+			Start
+		
+	
+
+</ol>
+
+<div class="top-search-box">
+
+			<a class="btn btn-md btn-link text-white github-button" href="https://github.com/SplashSync/Prestashop" 
+				data-size="large" aria-label="Voir sur Github"
+                                target="_blank"
+				title="Voir sur Github"
+				>
+		        <i class="fab fa-github"></i>
+		        
+			</a>
+<!-- Languages Selector -->
+
+<div class="dropdown d-inline-block">
+	<button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownLangSelect" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+		
+			<span class="flag-icon flag-icon-fr"></span>
+		
+
+		Français
+	</button>
+
+	<div class="dropdown-menu " aria-labelledby="dropdownLangSelect">
+		
+			<a 
+				 class="dropdown-item text-primary"
+				 
+				href=" /Prestashop/start "
+				>
+				
+					<span class="flag-icon flag-icon-us flag-icon-squared"></span>
+				
+
+				English
+
+			</a>
+		
+			<a 
+				 class="dropdown-item text-primary"
+				style="font-weight: bold;" 
+				href=" /Prestashop/fr/start "
+				>
+				
+					<span class="flag-icon flag-icon-fr"></span>
+				
+
+				Français
+
+			</a>
+		
+	</div>
+</div>
+
+
+
+<!-- End Languages Selector -->
+</div>
+        
+	</div>
+</header>
+<!-- End Page Header -->
+        
+
+
+<!-- 
+        <header class="site-header">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/Prestashop/fr/">Prestashop Module</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/Prestashop/fr/start/install">Installation</a><a class="page-link" href="/Prestashop/fr/docs/intro">Module Splash Sync pour Prestashop</a><a class="page-link" href="/Prestashop/fr/start/configure">Configuration</a><a class="page-link" href="/Prestashop/fr/docs/features">Principales caractéristiques et avantages</a><a class="page-link" href="/Prestashop/fr/start/tricks">Astuces et FAQ</a><a class="page-link" href="/Prestashop/fr/faq/splash">Questions à propos de Splash Sync</a><a class="page-link" href="/Prestashop/fr/about.html">About</a><a class="page-link" href="/Prestashop/fr/documentation">Documentation</a><a class="page-link" href="/Prestashop/fr/faq">Faq</a><a class="page-link" href="/Prestashop/fr/manifest">Manifest</a><a class="page-link" href="/Prestashop/fr/objects">Objects</a><a class="page-link" href="/Prestashop/fr/start">Quick Start</a></div>
+      </nav></div>
+</header>
+ --><div class="doc-wrapper">
+        <div class="container">
+          <div id="doc-header" class="doc-header text-center">
+    <h1 class="doc-title"><i class="icon fa fa-paper-plane"></i>&nbsp;Quick Start</h1>
+    <div class="meta">Installation du module</div>
+</div>
+
+
+<div class="doc-body row">
+
+	<!-- Doc Content -->    
+    <div class="doc-content col-md-9 col-12 order-1">
+        <div class="content-inner">
+
+
+
+
+
+	
+
+    
+
+      	
+
+
+			<!--Doc Section-->
+			<section id="installation" class="doc-section">
+
+			    <h2 class="section-title">Installation</h2>
+			    
+			    <div class="section-block lightbox-content">
+			    	<h3 id="installation-facile">Installation facile</h3>
+
+<p>Prestashop offre la possibilité d’installer des modules directement depuis PrestaShop Addons ou Interface d’administration.</p>
+
+<p>Bien sûr, vous pouvez l’utiliser pour installer notre module. Si cela ne fonctionne pas, veuillez utiliser l’installation manuelle.</p>
+
+<h3 id="manual-installation">Manual Installation</h3>
+
+<ul>
+  <li>Téléchargez la dernière version stable ici: [Splash Modules] (http://www.splashsync.com/en/modules/)</li>
+  <li>Copier le contenu du module dans le dossier du module PrestaShop (modules / splashsync)</li>
+  <li>Activer et configurer le module</li>
+</ul>
+
+<h2 id="pré-requis">Pré-requis</h2>
+
+<ul>
+  <li>PHP 7.1+</li>
+  <li>PrestaShop 1.6+</li>
+  <li>Un compte utilisateur Splash Sync actif</li>
+</ul>
+
+
+			    </div>
+
+			</section>
+			<!--End Doc Section-->
+
+		
+
+		
+
+	
+
+	
+
+    
+
+      	
+
+		
+
+	
+
+	
+
+    
+
+      	
+
+
+			<!--Doc Section-->
+			<section id="configuration" class="doc-section">
+
+			    <h2 class="section-title">Configuration</h2>
+			    
+			    <div class="section-block lightbox-content">
+			    	<h3 id="activer-le-module">Activer le module</h3>
+
+<p>La configuration de votre module est disponible dans l’interface d’administration Modules et services » Splash</p>
+
+<p><img src="/Prestashop/assets/img/screenshot_1.png" alt="" /></p>
+
+<h3 id="connectez-vous-à-votre-compte-splash">Connectez-vous à votre compte Splash</h3>
+
+<p>Tout d’abord, vous devez créer des clés d’accès pour votre module sur notre site Web. 
+Pour ce faire, dans l’espace de travail Splash, accédez à <strong>Serveurs</strong> » <strong>Ajouter un serveur</strong> et notez vos clés d’identification et de chiffrement.</p>
+
+<p><img src="/Prestashop/assets/img/screenshot_2.png" alt="" /></p>
+
+<p>Ensuite, entrez les clés dans la configuration du module (veillez à ne rien oublier).</p>
+
+<p><img src="/Prestashop/assets/img/screenshot_3.png" alt="" /></p>
+
+<h3 id="configuration-par-défaut">Configuration par défaut</h3>
+
+<p>Pour fonctionner correctement, ce module nécessite la sélection de peu de paramètres. Ces valeurs par défaut seront utilisées lors de la création / modification d’objets.</p>
+
+<p><img src="/Prestashop/assets/img/screenshot_4.png" alt="" /></p>
+
+<h5 id="langage-par-défaut">Langage par défaut</h5>
+
+<p>Sélectionnez la langue à utiliser pour la communication avec Splash Server.</p>
+
+<h5 id="utilisateur-par-defaut">Utilisateur par defaut</h5>
+
+<p>Sélectionnez quel utilisateur sera utilisé pour toutes les actions exécutées par le module Splash.
+Nous recommandons fortement la création d’un utilisateur dédié pour Splash.
+Attention, le module Splash se chargera de la politique des droits des utilisateurs, cet utilisateur doit avoir un droit approprié sur Prestashop.</p>
+
+<h3 id="vérifier-les-résultats-des-autotests">Vérifier les résultats des autotests</h3>
+
+<p>Chaque fois que vous mettez à jour votre configuration, le module vérifiera vos paramètres et s’assurera que la communication avec Splash fonctionne correctement.
+Assurez-vous que tous les tests sont réussis… c’est essentiel!</p>
+
+<p><img src="/Prestashop/assets/img/screenshot_5.png" alt="" /></p>
+
+			    </div>
+
+			</section>
+			<!--End Doc Section-->
+
+		
+
+		
+
+	
+
+	
+
+    
+
+      	
+
+		
+
+	
+
+	
+
+    
+
+      	
+
+
+			<!--Doc Section-->
+			<section id="astuces-et-faq" class="doc-section">
+
+			    <h2 class="section-title">Astuces et FAQ</h2>
+			    
+			    <div class="section-block lightbox-content">
+			    	<h3 id="code-de-langue-dans-un-format-incorrect">Code de langue dans un format incorrect</h3>
+
+<p>Si vous avez installé un package préconfiguré de Prestashop, le code de langue peut être incomplet.
+Mais Splash a besoin de codes de langues ISO complets pour identifier les langues utilisées dans les descriptions de vos produits.</p>
+
+<p>Vous verrez cette erreur sur la page de configuration du module.</p>
+
+<p><img src="/Prestashop/assets/img/screenshot_6.png" alt="" /></p>
+
+<p>Pour résoudre ce problème, sélectionnez Configuration des langues et remplacez <strong>Code de langue</strong> par un format standard.</p>
+
+<p><img src="/Prestashop/assets/img/screenshot_9.png" alt="" /></p>
+
+<p>Par exemple, si votre code de langue est:</p>
+
+<ul>
+  <li><strong>en</strong>, changez pour <strong>en-us</strong>.</li>
+  <li><strong>es</strong>, changez pour <strong>es-es</strong>.</li>
+  <li><strong>fr</strong>, changez pour <strong>fr-fr</strong>.</li>
+  <li><strong>it</strong>, changez pour <strong>it-it</strong>.</li>
+</ul>
+
+<h3 id="configuration-requise-pour-le-mode-multilingue">Configuration requise pour le mode multilingue</h3>
+
+<p>Pour utiliser et synchroniser le catalogue de produits Prestashop avec d’autres applications, assurez-vous qu’elles sont compatibles avec les champs multilingues.</p>
+
+<p>Demandez à notre support si vous avez des problèmes pour configurer votre synchronisation.</p>
+
+<h3 id="import-de-produits-depuis-splash-push-create">Import de Produits depuis Splash (Push Create)</h3>
+
+<p>Par défaut, notre module Prestashop n’est utilisé que pour exporter de nouveaux produits de Prestashop vers votre Splash Eco-System.
+Pour améliorer les choses, nous utilisons des noms de produits avec des options comme nom de produit, ce qui nous permet d’obtenir des noms différents pour chaque variante de produit.</p>
+
+<p>Pour autoriser l’importation de nouveaux produits de Splash vers Prestashop, vous devrez mettre à jour vos schémas de synchronisation afin d’ajouter un schéma d’exportation dans le champ “Nom du produit sans options”.
+Cela expliquera Splash que le nom du produit doit être écrit ici.</p>
+
+			    </div>
+
+			</section>
+			<!--End Doc Section-->
+
+		
+
+		
+
+	
+
+	
+
+    
+
+	
+
+    
+
+      	
+
+		
+
+	
+
+	
+
+    
+
+      	
+
+		
+
+	
+
+	
+
+    
+
+	
+
+    
+
+      	
+
+		
+
+	
+
+	
+
+    
+
+      	
+
+		
+
+	
+
+	
+
+    
+
+	
+
+    
+
+	
+
+    
+
+      	
+
+		
+
+	
+
+	
+
+    
+
+      	
+
+		
+
+	
+
+	
+
+    
+
+      	
+
+		
+
+	
+
+	
+
+    
+
+	
+
+    
+
+</div>
+    </div>
+	<!-- End Doc Content -->    
+
+	<!-- Doc Sidebar -->    
+    <div class="doc-sidebar col-md-3 col-12 order-0 d-none d-md-flex">
+        <div id="doc-nav" class="doc-nav">
+
+<!-- Documentations Menu -->
+<nav id="doc-menu" class="nav doc-menu flex-column sticky">
+
+<div class="h5 block-title mt-5 text-green">Quick Start</div>
+
+      
+      
+      
+        
+        
+
+          
+            <a class="nav-link scrollto" 
+              href="#installation">
+              Installation
+            </a>
+          
+
+          
+        
+      
+        
+        
+
+          
+
+          
+        
+      
+        
+        
+
+          
+            <a class="nav-link scrollto" 
+              href="#configuration">
+              Configuration
+            </a>
+          
+
+          
+        
+      
+        
+        
+
+          
+
+          
+        
+      
+        
+        
+
+          
+            <a class="nav-link scrollto" 
+              href="#astuces-et-faq">
+              Astuces et FAQ
+            </a>
+          
+
+          
+        
+      
+        
+        
+      
+        
+        
+
+          
+
+          
+        
+      
+        
+        
+
+          
+
+          
+        
+      
+        
+        
+      
+        
+        
+
+          
+
+          
+        
+      
+        
+        
+
+          
+
+          
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+
+          
+
+          
+        
+      
+        
+        
+
+          
+
+          
+        
+      
+        
+        
+
+          
+
+          
+        
+      
+        
+        
+      
+        
+        
+      
+      
+
+</nav>
+<!--End Documentations Menu -->
+
+</div>
+    </div>
+    <!-- End Doc Sidebar -->    
+
+</div>
+        </div>
+      </div>
+
+    </div>
+<!--Main Footer-->
+<footer id="footer" class="footer text-center">
+    <div class="container">
+
+        <!--/* 
+          This template is released under the Creative Commons Attribution 3.0 License. Please keep the attribution link below when using for your own project. 
+          Thank you for your support. :) 
+          If you'd like to use the template without the attribution, you can buy the commercial license via our website: themes.3rdwavemedia.com 
+          */-->
+          
+        <small class="copyright">
+          © Splash Sync 2017-2019
+          |
+          Designed with <i class="fas fa-heart"></i> by <a href="https://themes.3rdwavemedia.com/" target="_blank">Xiaoying Riley</a>
+        </small>
+        
+    </div>
+</footer>
+<!--End Main Footer-->
+<!-- MAIN JAVASCRIPTS -->  
+
+<!-- jQuery -->
+<script type="text/javascript" src="/Prestashop/assets/vendor/jquery/dist/jquery.min.js"></script>
+
+<!-- Bootstrap 5 JS -->
+<script type="text/javascript" src="/Prestashop/assets/vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- jQuery ScrollTo Plugin-->
+<script type="text/javascript" src="/Prestashop/assets/vendor/jquery-scrollTo/dist/jquery-scrollTo.min.js"></script>      
+
+<!-- Ekko LightBox -->    
+<script type="text/javascript" src="/Prestashop/assets/vendor/ekko-lightbox/dist/ekko-lightbox.min.js"></script>      
+
+<!-- Datatables -->    
+<script type="text/javascript" src="/Prestashop/assets/vendor/datatables.net/js/jquery.dataTables.min.js"></script>      
+<script type="text/javascript" src="/Prestashop/assets/vendor/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>      
+
+<!-- Theme JS -->
+<script type="text/javascript" src="/Prestashop/assets/js/main.js"></script>
+
+<!-- PrismJs JS (Syntax Highlighter) -->    
+<script type="text/javascript" src="/Prestashop/assets/vendor/prismjs/components/prism-core.min.js"></script>    
+<script type="text/javascript" src="/Prestashop/assets/vendor/prismjs/plugins/autoloader/prism-autoloader.min.js"></script>    
+
+<!-- End MAIN JAVASCRIPTS --> 
+</body>
+  
+</html>

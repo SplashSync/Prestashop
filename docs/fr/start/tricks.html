@@ -1,0 +1,35 @@
+<h3 id="code-de-langue-dans-un-format-incorrect">Code de langue dans un format incorrect</h3>
+
+<p>Si vous avez installé un package préconfiguré de Prestashop, le code de langue peut être incomplet.
+Mais Splash a besoin de codes de langues ISO complets pour identifier les langues utilisées dans les descriptions de vos produits.</p>
+
+<p>Vous verrez cette erreur sur la page de configuration du module.</p>
+
+<p><img src="/Prestashop/assets/img/screenshot_6.png" alt="" /></p>
+
+<p>Pour résoudre ce problème, sélectionnez Configuration des langues et remplacez <strong>Code de langue</strong> par un format standard.</p>
+
+<p><img src="/Prestashop/assets/img/screenshot_9.png" alt="" /></p>
+
+<p>Par exemple, si votre code de langue est:</p>
+
+<ul>
+  <li><strong>en</strong>, changez pour <strong>en-us</strong>.</li>
+  <li><strong>es</strong>, changez pour <strong>es-es</strong>.</li>
+  <li><strong>fr</strong>, changez pour <strong>fr-fr</strong>.</li>
+  <li><strong>it</strong>, changez pour <strong>it-it</strong>.</li>
+</ul>
+
+<h3 id="configuration-requise-pour-le-mode-multilingue">Configuration requise pour le mode multilingue</h3>
+
+<p>Pour utiliser et synchroniser le catalogue de produits Prestashop avec d’autres applications, assurez-vous qu’elles sont compatibles avec les champs multilingues.</p>
+
+<p>Demandez à notre support si vous avez des problèmes pour configurer votre synchronisation.</p>
+
+<h3 id="import-de-produits-depuis-splash-push-create">Import de Produits depuis Splash (Push Create)</h3>
+
+<p>Par défaut, notre module Prestashop n’est utilisé que pour exporter de nouveaux produits de Prestashop vers votre Splash Eco-System.
+Pour améliorer les choses, nous utilisons des noms de produits avec des options comme nom de produit, ce qui nous permet d’obtenir des noms différents pour chaque variante de produit.</p>
+
+<p>Pour autoriser l’importation de nouveaux produits de Splash vers Prestashop, vous devrez mettre à jour vos schémas de synchronisation afin d’ajouter un schéma d’exportation dans le champ “Nom du produit sans options”.
+Cela expliquera Splash que le nom du produit doit être écrit ici.</p>
