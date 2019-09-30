@@ -43,3 +43,4 @@ upload/
 save-commands.json
 /.php_cs.cache
 /reboot.sh
+/.gh-pages/
