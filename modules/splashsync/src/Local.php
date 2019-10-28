@@ -23,8 +23,10 @@ use Splash\Core\SplashCore      as Splash;
 use Splash\Local\Services\LanguagesManager as SLM;
 use Splash\Local\Traits\SplashIdTrait;
 use Splash\Models\LocalClassInterface;
+use Splash\Models\FileProviderInterface;
 use SplashSync;
 use Validate;
+use Splash\Local\Objects\Core\FileProviderTrait;
 
 /**
  * Splash Local Core Class - Head of Module's Local Integration
@@ -32,9 +34,10 @@ use Validate;
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Local implements LocalClassInterface
+class Local implements LocalClassInterface, FileProviderInterface
 {
     use SplashIdTrait;
+    use FileProviderTrait;
 
     /**
      * @var SplashSync
