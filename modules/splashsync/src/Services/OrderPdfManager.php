@@ -47,7 +47,9 @@ class OrderPdfManager
         // Load Invoice Object
         $invoice = new OrderInvoice($order->invoice_number);
         if ($invoice->id != $order->invoice_number) {
-            return Splash::log()->errTrace("Unable to load Invoice (".$order->invoice_number.").");
+            Splash::log()->errTrace("Unable to load Invoice (".$order->invoice_number.").");
+
+            return null;
         }
         //====================================================================//
         // GET COMPUTED INFOS
@@ -93,7 +95,9 @@ class OrderPdfManager
         // Load Invoice Object
         $invoice = new OrderInvoice($order->invoice_number);
         if ($invoice->id != $order->invoice_number) {
-            return Splash::log()->errTrace("Unable to load Invoice (".$order->invoice_number.").");
+            Splash::log()->errTrace("Unable to load Invoice (".$order->invoice_number.").");
+
+            return null;
         }
         //====================================================================//
         // GET COMPUTED INFOS
