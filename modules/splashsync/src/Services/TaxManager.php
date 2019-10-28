@@ -52,7 +52,7 @@ class TaxManager
         $sql->select("g.`id_tax_rule`");
         $sql->select("g.`id_country`");
         $sql->select("cl.`name` as country_name");
-        $sql->select("g.`id_tax_rules_group` as id_group");
+        $sql->select("g.`id_tax_rules_group`");
         //====================================================================//
         // Build FROM
         $sql->from("tax_rule", "g");
@@ -60,9 +60,11 @@ class TaxManager
         // Build JOIN
         $sql->leftJoin("country_lang", 'cl', '(g.`id_country` = cl.`id_country` AND `id_lang` = '.(int) $langId.')');
         $sql->leftJoin("tax", 't', '(g.`id_tax` = t.`id_tax`)');
+        $sql->leftJoin("tax_rules_group", 'tg', '(g.`id_tax_rules_group` = tg.`id_tax_rules_group`)');
         //====================================================================//
         // Build WHERE
         $sql->where('t.`rate` = '.$taxRate);
+        $sql->where('tg.`deleted` = 0');
         $sql->where('g.`id_country` = '.(int) $countryId);
         //====================================================================//
         // Build ORDER BY
@@ -73,11 +75,12 @@ class TaxManager
         if (Db::getInstance()->getNumberError()) {
             return false;
         }
-
+        //====================================================================//
+        // Extract First Result
         if (is_array($result) && (Db::getInstance()->numRows() > 0)) {
             $newTaxRate = array_shift($result);
 
-            return $newTaxRate["id_group"];
+            return $newTaxRate["id_tax_rules_group"];
         }
 
         return false;

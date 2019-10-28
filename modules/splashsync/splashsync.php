@@ -70,7 +70,7 @@ class SplashSync extends Module
         // Init Module Main Information Fields
         $this->name = 'splashsync';
         $this->tab = 'administration';
-        $this->version = '1.3.1';
+        $this->version = '1.4.0';
         $this->author = 'SplashSync';
         $this->need_instance = 0;
         $this->ps_versions_compliancy = array('min' => '1.6', 'max' => '1.7');
@@ -277,6 +277,11 @@ class SplashSync extends Module
         //====================================================================//
         // Build Display Option Form Array
         $fieldsForm[] = $this->getOptionFormArray();
+        //====================================================================//
+        // Build Display Oders Form Array
+        if (\Splash\Local\Services\OrderStatusManager::isAllowedWrite()) {
+            $fieldsForm[] = $this->getOrderFormArray();
+        }
 
         $helper = new HelperForm();
 
@@ -310,6 +315,15 @@ class SplashSync extends Module
         $helper->fields_value['SPLASH_SMART_NOTIFY'] = Configuration::get('SPLASH_SMART_NOTIFY');
         $helper->fields_value['SPLASH_SYNC_VIRTUAL'] = Configuration::get('SPLASH_SYNC_VIRTUAL');
         $helper->fields_value['SPLASH_SYNC_PACKS'] = Configuration::get('SPLASH_SYNC_PACKS');
+
+        //====================================================================//
+        // Load Oders Status Values
+        if (\Splash\Local\Services\OrderStatusManager::isAllowedWrite()) {
+            foreach (\Splash\Local\Services\OrderStatusManager::getAllStatus() as $status) {
+                $fieldName = $status['field'];
+                $helper->fields_value[$fieldName] = Configuration::get($fieldName);
+            }
+        }
 
         return $helper->generateForm($fieldsForm);
     }
@@ -659,6 +673,55 @@ class SplashSync extends Module
     }
 
     /**
+     * Get Local Order Form Fields Array
+     *
+     * @return array
+     */
+    private function getOrderFormArray()
+    {
+        //====================================================================//
+        // Init Fields List
+        $fields = array();
+        //====================================================================//
+        // Load Prestashop Status List
+        $psStates = \Splash\Local\Services\OrderStatusManager::getOrderFormStatusChoices();
+        //====================================================================//
+        // Populate Form
+        foreach (\Splash\Local\Services\OrderStatusManager::getAllStatus() as $status) {
+            //====================================================================//
+            // Default User Id
+            $fields[] = array(
+                'label' => $status['name'],
+                'hint' => $status["desc"],
+                'cast' => 'intval',
+                'type' => 'select',
+                'name' => $status['field'],
+                'options' => array(
+                    'query' => $psStates,
+                    'id' => 'id_order_state',
+                    'name' => 'name'
+                )
+            );
+        }
+        //====================================================================//
+        // Init Form array
+        $output = array();
+        $output['form'] = array(
+            'legend' => array(
+                'icon' => 'icon-cogs',
+                'title' => $this->l('Orders Writing Settings')
+            ),
+            'input' => $fields,
+            'submit' => array(
+                'title' => $this->l('Save'),
+                'class' => 'btn btn-default pull-right'
+            )
+        );
+
+        return $output;
+    }
+
+    /**
      * Update Configuration when Form is Submited
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
@@ -667,63 +730,72 @@ class SplashSync extends Module
     private function setMainFormValues()
     {
         $output = null;
+        //====================================================================//
+        // Verify Form was Submited
+        if (!Tools::isSubmit('submit'.$this->name)) {
+            return $output;
+        }
+        //====================================================================//
+        // Verify USER ID
+        $serverId = Tools::getValue('SPLASH_WS_ID');
+        if (empty($serverId) || !Validate::isString($serverId)) {
+            $output .= $this->displayError($this->l('Invalid User Identifier'));
+        }
+        //====================================================================//
+        // Verify USER KEY
+        $userKey = Tools::getValue('SPLASH_WS_KEY');
+        if (empty($userKey) || !Validate::isString($userKey)) {
+            $output .= $this->displayError($this->l('Invalid User Encryption Key'));
+        }
+        //====================================================================//
+        // Verify User Id
+        $userId = Tools::getValue('SPLASH_USER_ID');
+        if (empty($userId) || !Validate::isInt($userId)) {
+            $output .= $this->displayError($this->l('Invalid User'));
+        }
+        //====================================================================//
+        // Verify Expert Mode
+        $expert = Tools::getValue('SPLASH_WS_EXPERT');
+        if (!$expert || !Configuration::get('SPLASH_WS_EXPERT')) {
+            $wsHost = "https://www.splashsync.com/ws/soap";
+            $wsMethod = "SOAP";
+        } else {
+            $wsHost = Tools::getValue('SPLASH_WS_HOST');
+            $wsMethod = Tools::getValue('SPLASH_WS_METHOD');
+        }
+        //====================================================================//
+        // Verify Server Host Url
+        if (empty($wsHost) || !Validate::isUrlOrEmpty($wsHost)) {
+            $output .= $this->displayError($this->l('Invalid Server Url!'));
+        }
+        //====================================================================//
+        // Verify WS Method
+        if (empty($wsMethod) || !Validate::isString($wsMethod) || !in_array($wsMethod, array("NuSOAP", "SOAP"), true)) {
+            $output .= $this->displayError($this->l('Invalid WebService Protocol'));
+        }
+        //====================================================================//
+        // Verify Ther is No Error on Core Configuration
+        if (null != $output) {
+            return $output;
+        }
+        //====================================================================//
+        // Update Configuration
+        Configuration::updateValue('SPLASH_WS_EXPERT', trim($expert));
+        Configuration::updateValue('SPLASH_WS_HOST', trim($wsHost));
+        Configuration::updateValue('SPLASH_WS_ID', trim($serverId));
+        Configuration::updateValue('SPLASH_WS_METHOD', trim($wsMethod));
+        Configuration::updateValue('SPLASH_WS_KEY', trim($userKey));
+        Configuration::updateValue('SPLASH_USER_ID', trim($userId));
+        Configuration::updateValue('SPLASH_SMART_NOTIFY', trim(Tools::getValue('SPLASH_SMART_NOTIFY')));
+        Configuration::updateValue('SPLASH_SYNC_VIRTUAL', trim(Tools::getValue('SPLASH_SYNC_VIRTUAL')));
+        Configuration::updateValue('SPLASH_SYNC_PACKS', trim(Tools::getValue('SPLASH_SYNC_PACKS')));
 
-        if (Tools::isSubmit('submit'.$this->name)) {
-            //====================================================================//
-            // Verify USER ID
-            $serverId = Tools::getValue('SPLASH_WS_ID');
-            if (empty($serverId) || !Validate::isString($serverId)) {
-                $output .= $this->displayError($this->l('Invalid User Identifier'));
-            }
-
-            //====================================================================//
-            // Verify USER KEY
-            $userKey = Tools::getValue('SPLASH_WS_KEY');
-            if (empty($userKey) || !Validate::isString($userKey)) {
-                $output .= $this->displayError($this->l('Invalid User Encryption Key'));
-            }
-
-            //====================================================================//
-            // Verify User Id
-            $userId = Tools::getValue('SPLASH_USER_ID');
-            if (empty($userId) || !Validate::isInt($userId)) {
-                $output .= $this->displayError($this->l('Invalid User'));
-            }
-
-            //====================================================================//
-            // Verify Expert Mode
-            $expert = Tools::getValue('SPLASH_WS_EXPERT');
-            if (!$expert || !Configuration::get('SPLASH_WS_EXPERT')) {
-                $wsHost = "https://www.splashsync.com/ws/soap";
-                $wsMethod = "SOAP";
-            } else {
-                $wsHost = Tools::getValue('SPLASH_WS_HOST');
-                $wsMethod = Tools::getValue('SPLASH_WS_METHOD');
-            }
-
-            //====================================================================//
-            // Verify Server Host Url
-            if (empty($wsHost) || !Validate::isUrlOrEmpty($wsHost)) {
-                $output .= $this->displayError($this->l('Invalid Server Url!'));
-            }
-
-            //====================================================================//
-            // Verify WS Method
-            if (empty($wsMethod) || !Validate::isString($wsMethod) || !in_array($wsMethod, array("NuSOAP", "SOAP"), true)) {
-                $output .= $this->displayError($this->l('Invalid WebService Protocol'));
-            }
-
-            if (null == $output) {
-                Configuration::updateValue('SPLASH_WS_EXPERT', trim($expert));
-                Configuration::updateValue('SPLASH_WS_HOST', trim($wsHost));
-                Configuration::updateValue('SPLASH_WS_ID', trim($serverId));
-                Configuration::updateValue('SPLASH_WS_METHOD', trim($wsMethod));
-                Configuration::updateValue('SPLASH_WS_KEY', trim($userKey));
-                Configuration::updateValue('SPLASH_USER_ID', trim($userId));
-                Configuration::updateValue('SPLASH_SMART_NOTIFY', trim(Tools::getValue('SPLASH_SMART_NOTIFY')));
-                Configuration::updateValue('SPLASH_SYNC_VIRTUAL', trim(Tools::getValue('SPLASH_SYNC_VIRTUAL')));
-                Configuration::updateValue('SPLASH_SYNC_PACKS', trim(Tools::getValue('SPLASH_SYNC_PACKS')));
-                $output .= $this->displayConfirmation($this->l('Settings updated'));
+        //====================================================================//
+        // Update Oders Status Values
+        if (\Splash\Local\Services\OrderStatusManager::isAllowedWrite()) {
+            foreach (\Splash\Local\Services\OrderStatusManager::getAllStatus() as $status) {
+                $fieldName = $status["field"];
+                Configuration::updateValue($fieldName, trim(Tools::getValue($fieldName)));
             }
         }
 

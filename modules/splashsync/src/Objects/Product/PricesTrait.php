@@ -267,7 +267,9 @@ trait PricesTrait
 
         //====================================================================//
         // Update Price VAT Rate
-        if (abs($newPrice["vat"] - $this->object->tax_rate) > 1E-6) {
+        $vatRateDelta = abs($newPrice["vat"] - $this->object->tax_rate);
+        $needVatRate = ($newPrice["vat"] > 0) && empty($this->object->id_tax_rules_group);
+        if (($vatRateDelta > 1E-6) || $needVatRate) {
             //====================================================================//
             // Search For Tax Id Group with Given Tax Rate and Country
             $newTaxRateGroupId = TaxManager::getTaxRateGroupId($newPrice["vat"]);
