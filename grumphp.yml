@@ -108,7 +108,7 @@ parameters:
         build-docs: 
             enabled:            true
             local_folder:       '/modules/splashsync/docs'
-            generic_contents:   ["splash"]
+            generic_contents:   ["splash", "php-docker"]
             
     extensions:
         - Splash\Console\Extension\Loader
