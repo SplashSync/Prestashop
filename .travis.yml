@@ -77,7 +77,8 @@ matrix:
 env:
     global:
         - SYMFONY_DEPRECATIONS_HELPER=disabled
-    
+        - GRUMPHP_BIN_DIR="modules/splashsync/vendor/bin"
+        
 before_script:
 
     - export MODULE_DIR=/tmp/SplashSync
