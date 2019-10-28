@@ -326,13 +326,17 @@ trait MainTrait
                 $genders->where("type", "=", $fieldData);
                 /** @var false|Gender */
                 $gendertype = $genders->getFirst();
-
                 //====================================================================//
                 // Unknown Gender Type => Take First Available Gender
                 if ((false == $gendertype)) {
                     $genders = Gender::getGenders(Context::getContext()->language->id);
                     $gendertype = $genders->getFirst();
-                    Splash::log()->war("MsgLocalTpl", __CLASS__, __FUNCTION__, "This Gender Type doesn't exist.");
+                    Splash::log()->warTrace("This Gender Type doesn't exist.");
+                }
+                //====================================================================//
+                // NO Gender Type => Exit
+                if ((false == $gendertype)) {
+                    Splash::log()->errTrace("This Gender Type doesn't exist.");
                 }
 
                 //====================================================================//
