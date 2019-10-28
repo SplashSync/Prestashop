@@ -76,7 +76,7 @@ trait FileProviderTrait
             default:
                 $file = false;
 
-                break;            
+                break;
         }
         //====================================================================//
         // Check Pdf Contents Md5

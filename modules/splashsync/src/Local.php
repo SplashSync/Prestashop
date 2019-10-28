@@ -20,13 +20,13 @@ use Context;
 use Employee;
 use Language;
 use Splash\Core\SplashCore      as Splash;
+use Splash\Local\Objects\Core\FileProviderTrait;
 use Splash\Local\Services\LanguagesManager as SLM;
 use Splash\Local\Traits\SplashIdTrait;
-use Splash\Models\LocalClassInterface;
 use Splash\Models\FileProviderInterface;
+use Splash\Models\LocalClassInterface;
 use SplashSync;
 use Validate;
-use Splash\Local\Objects\Core\FileProviderTrait;
 
 /**
  * Splash Local Core Class - Head of Module's Local Integration
