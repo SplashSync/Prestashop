@@ -1,0 +1,62 @@
+
+splash:
+
+################################################################################    
+# Configure Splash Bundle Parameters Cache    
+# Cache is Enabled by Default to Store Custom Connectors Configuration
+# If disabled, configuration must be store in Static, on connections section
+################################################################################    
+#    cache: 
+#        enabled: false    
+#        lifetime: 10
+
+    # Allow Notifications for Generic Users   
+    notify: ["ROLE_USER"]
+    
+################################################################################    
+# List of Availables Connector Connections
+################################################################################    
+
+    connections:
+        
+        ########################################################################
+        # Prestashop Latest 
+        latest:
+            id:                 ThisIsPsLastKey
+            key:                ThisTokenIsNotSoSecretChangeIt
+            name:               Prestashop Latest
+            host:               false
+            connector:          soap
+            config:  
+                WsIdentifier:       ThisIsPsLastKey
+                WsEncryptionKey:    ThisTokenIsNotSoSecretChangeIt                
+                WsHost:             http://latest.prestashop.local
+                WsPath:             /modules/splashsync/vendor/splash/phpcore/soap.php
+        
+        ########################################################################
+        # Prestashop 1.7
+        ps-1-7:
+            id:                 ThisIsPs17Key
+            key:                ThisTokenIsNotSoSecretChangeIt
+            name:               Prestashop 1.7
+            host:               false
+            connector:          soap
+            config:  
+                WsIdentifier:       ThisIsPs17Key
+                WsEncryptionKey:    ThisTokenIsNotSoSecretChangeIt                
+                WsHost:             http://ps1-7.prestashop.local
+                WsPath:             /modules/splashsync/vendor/splash/phpcore/soap.php
+        
+        ########################################################################
+        # Prestashop 1.6
+        ps-1-6:
+            id:                 ThisIsPs16Key
+            key:                ThisTokenIsNotSoSecretChangeIt
+            name:               Prestashop 1.6
+            host:               false
+            connector:          soap
+            config:  
+                WsIdentifier:       ThisIsPs16Key
+                WsEncryptionKey:    ThisTokenIsNotSoSecretChangeIt                
+                WsHost:             http://ps1-6.prestashop.local
+                WsPath:             /modules/splashsync/vendor/splash/phpcore/soap.php

@@ -1,0 +1,26 @@
+{
+    "parameters": {
+        "WsMethod":"SOAP"
+    },
+    "Address": { 
+        "enable_push_deleted": false
+    },
+    "ThirdParty": { 
+        "enable_push_deleted": false
+    },
+    "Order": { 
+        "allow_push_updated": true,
+        "fields": {
+            "status": { "write": 1 }
+        }		
+    },
+    "Invoice": { 
+        "enable_push_deleted": false
+    },
+    "CreditNote": { 
+        "disabled": false
+    },
+    "Product": {
+        "enable_push_deleted": false
+    }
+}
