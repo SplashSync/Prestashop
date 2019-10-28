@@ -26,6 +26,7 @@
 # 172.102.0.10        latest.prestashop.local
 # 172.102.0.16        ps1-6.prestashop.local
 # 172.102.0.17        ps1-7.prestashop.local
+# 172.102.0.100       toolkit.prestashop.local
 #
 ################################################################################
 
@@ -53,7 +54,11 @@ services:
         depends_on:
             - mysql
         volumes:
+        # Push Configuration Overides             
+#         - "./docker/config/splash.json:/var/www/html/config/splash.json:ro"
+        # Module Sources 
          - "./modules/splashsync:/var/www/html/modules/splashsync:ro"
+        # Docker EntryPoint 
          - "./docker/docker-entrypoint.sh:/var/www/html/modules/docker-entrypoint.sh:ro"
         environment:
             - DB_SERVER=mysql
@@ -64,7 +69,7 @@ services:
             - PS_FOLDER_INSTALL=installed
             - ADMIN_MAIL=contact@splashsync.com
             - ADMIN_PASSWD=splashsync
-            - SPLASH_WS_ID=69696969696
+            - SPLASH_WS_ID=ThisIsPsLastKey
             - SPLASH_WS_KEY=ThisTokenIsNotSoSecretChangeIt
             - SPLASH_WS_HOST=http://docker.splashsync.local/ws/soap
         command: sh /var/www/html/modules/docker-entrypoint.sh
@@ -92,7 +97,7 @@ services:
             - PS_FOLDER_INSTALL=installed
             - ADMIN_MAIL=contact@splashsync.com
             - ADMIN_PASSWD=splashsync
-            - SPLASH_WS_ID=69696969696
+            - SPLASH_WS_ID=ThisIsPs17Key
             - SPLASH_WS_KEY=ThisTokenIsNotSoSecretChangeIt
             - SPLASH_WS_HOST=http://docker.splashsync.local/ws/soap
         command: sh /var/www/html/modules/docker-entrypoint.sh
@@ -120,7 +125,7 @@ services:
             - PS_FOLDER_INSTALL=installed
             - ADMIN_MAIL=contact@splashsync.com
             - ADMIN_PASSWD=splashsync
-            - SPLASH_WS_ID=69696969696
+            - SPLASH_WS_ID=ThisIsPs16Key
             - SPLASH_WS_KEY=ThisTokenIsNotSoSecretChangeIt
             - SPLASH_WS_HOST=http://docker.splashsync.local/ws/soap
         command: sh /var/www/html/modules/docker-entrypoint.sh
@@ -128,7 +133,20 @@ services:
         networks:
             prestashop:     { ipv4_address: 172.102.0.16 }
             splashsync:     { aliases: [ ps1-6.prestashop.local ] }                
-                
+               
+    ################################################################################
+    # Splash Toolkit Container   
+    toolkit:
+        image: 'splashsync/toolkit'
+        container_name: prestashop-toolkit
+        volumes:
+            # Specify Local Configuration File
+            - './docker/toolkit/splash.yml:/app/config/packages/splash.yml:ro'
+        hostname:           toolkit.wordpress.local
+        networks:
+            prestashop:      { ipv4_address: 172.102.0.100, aliases: [ toolkit.prestashop.local ] }
+            splashsync:     { aliases: [ toolkit.prestashop.local ] }
+            
 networks:
     ################################################################################
     # Default Private Network    
