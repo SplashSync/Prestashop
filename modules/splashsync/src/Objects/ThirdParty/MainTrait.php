@@ -335,18 +335,10 @@ trait MainTrait
                     Splash::log()->warTrace("This Gender Type doesn't exist.");
                 }
                 //====================================================================//
-                // NO Gender Type => Exit
-                if ((false == $gendertype)) {
-                    Splash::log()->errTrace("This Gender Type doesn't exist.");
-                }
-
-                //====================================================================//
                 // Update Gender Type
-                $this->setSimple("id_gender", $gendertype->id_gender);
-//                if ($this->object->id_gender != $gendertype->id_gender) {
-//                    $this->object->id_gender = $gendertype->id_gender;
-//                    $this->needUpdate();
-//                }
+                if ($gendertype) {
+                    $this->setSimple("id_gender", $gendertype->id_gender);
+                }
 
                 break;
             default:
