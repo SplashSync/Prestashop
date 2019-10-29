@@ -330,6 +330,7 @@ trait MainTrait
                 // Unknown Gender Type => Take First Available Gender
                 if ((false == $gendertype)) {
                     $genders = Gender::getGenders(Context::getContext()->language->id);
+                    /** @var false|Gender */
                     $gendertype = $genders->getFirst();
                     Splash::log()->warTrace("This Gender Type doesn't exist.");
                 }
@@ -341,10 +342,11 @@ trait MainTrait
 
                 //====================================================================//
                 // Update Gender Type
-                if ($this->object->id_gender != $gendertype->id_gender) {
-                    $this->object->id_gender = $gendertype->id_gender;
-                    $this->needUpdate();
-                }
+                $this->setSimple("id_gender", $gendertype->id_gender);
+//                if ($this->object->id_gender != $gendertype->id_gender) {
+//                    $this->object->id_gender = $gendertype->id_gender;
+//                    $this->needUpdate();
+//                }
 
                 break;
             default:
