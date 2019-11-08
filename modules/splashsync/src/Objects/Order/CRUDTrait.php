@@ -115,6 +115,7 @@ trait CRUDTrait
 
         //====================================================================//
         // Setup Minimal Data
+        $this->object->current_state = 0;
         $this->object->id_cart = $this->Cart->id;
         $this->object->id_currency = Configuration::get('PS_CURRENCY_DEFAULT');
         $this->object->conversion_rate = 1;
