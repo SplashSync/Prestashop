@@ -575,6 +575,11 @@ trait ImagesTrait
                 );
             }
             //====================================================================//
+            // Safety Check
+            if (!($psImage instanceof Image)) {
+                continue;
+            }
+            //====================================================================//
             // Update Image Position in List
             $this->updateImagePosition($psImage, $inValue);
             $this->updateImageCoverFlag($psImage, $inValue);
@@ -624,7 +629,7 @@ trait ImagesTrait
         //====================================================================//
         // File Imported => Write it Here
         if (false == $newImageFile) {
-            return false;
+            return Splash::log()->err("Reading Raw Image from Server failled...");
         }
         $this->needUpdate();
         //====================================================================//

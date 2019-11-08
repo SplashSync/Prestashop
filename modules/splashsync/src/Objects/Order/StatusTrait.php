@@ -16,7 +16,6 @@
 namespace Splash\Local\Objects\Order;
 
 use Context;
-use Splash\Client\Splash      as Splash;
 use Splash\Local\Services\OrderStatusManager as StatusManager;
 use Translate;
 

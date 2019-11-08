@@ -17,7 +17,6 @@ namespace Splash\Local\Objects\Product;
 
 use Configuration;
 use Splash\Components\UnitConverter as Units;
-use Splash\Core\SplashCore      as Splash;
 use Translate;
 
 /**

@@ -16,7 +16,6 @@
 namespace Splash\Local\Services;
 
 use AppKernel;
-use Splash\Client\Splash      as Splash;
 
 /**
  * Symfony Container Manager

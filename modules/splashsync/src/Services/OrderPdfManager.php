@@ -63,11 +63,13 @@ class OrderPdfManager
             return null;
         }
 
-        return FilesHelper::encode(
+        $infos = FilesHelper::encode(
             self::getInvoiceNumber($invoice),
             pathinfo($fullPath, PATHINFO_BASENAME),
             pathinfo($fullPath, PATHINFO_DIRNAME)."/"
         );
+
+        return $infos ? $infos : null;
     }
 
     /**
@@ -101,11 +103,13 @@ class OrderPdfManager
             return null;
         }
 
-        return FilesHelper::encode(
+        $infos = FilesHelper::encode(
             self::getDeliveryNumber($order),
             pathinfo($fullPath, PATHINFO_BASENAME),
             pathinfo($fullPath, PATHINFO_DIRNAME)."/"
         );
+
+        return $infos ? $infos : null;
     }
 
     /**
