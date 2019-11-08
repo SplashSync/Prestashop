@@ -18,12 +18,12 @@ namespace Splash\Local\Objects\CreditNote;
 use Carrier;
 use Db;
 use OrderDetail;
+use Splash\Core\SplashCore as Splash;
 use Splash\Local\Objects\Product;
 use Splash\Models\Objects\ListsTrait;
 use Splash\Models\Objects\PricesTrait;
 use Tools;
 use Translate;
-use Splash\Core\SplashCore as Splash;
 
 /**
  * Access to Orders Items Fields
