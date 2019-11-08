@@ -29,10 +29,9 @@ use Splash\Models\Helpers\FilesHelper;
  */
 class OrderPdfManager
 {
-    
     /** @var string */
     const PDF_PATH = "/var/splash/";
-    
+
     /**
      * Get Order Invoice Pdf Informations
      *
@@ -54,13 +53,13 @@ class OrderPdfManager
             return null;
         }
         //====================================================================//
-        // Generate Pdf Target Path 
+        // Generate Pdf Target Path
         $fullPath = self::getPdfPath($order, PDF::TEMPLATE_INVOICE);
         //====================================================================//
         // Ensure Pdf Exist or Create it
-        if(!self::createPdf($invoice, PDF::TEMPLATE_INVOICE, $fullPath)) {
+        if (!self::createPdf($invoice, PDF::TEMPLATE_INVOICE, $fullPath)) {
             Splash::log()->errTrace("Unable to Create Pdf (".$fullPath.").");
-            
+
             return null;
         }
 
@@ -92,13 +91,13 @@ class OrderPdfManager
             return null;
         }
         //====================================================================//
-        // Generate Pdf Target Path 
+        // Generate Pdf Target Path
         $fullPath = self::getPdfPath($order, PDF::TEMPLATE_DELIVERY_SLIP);
         //====================================================================//
         // Ensure Pdf Exist or Create it
-        if(!self::createPdf($invoice, PDF::TEMPLATE_DELIVERY_SLIP, $fullPath)) {
+        if (!self::createPdf($invoice, PDF::TEMPLATE_DELIVERY_SLIP, $fullPath)) {
             Splash::log()->errTrace("Unable to Create Pdf (".$fullPath.").");
-            
+
             return null;
         }
 
@@ -111,9 +110,10 @@ class OrderPdfManager
 
     /**
      * Create & Store Pdf from Prestashop Templates
-     * 
+     *
      * @param OrderInvoice $object
      * @param string       $template
+     * @param mixed        $fullPath
      *
      * @return string
      */
@@ -121,13 +121,13 @@ class OrderPdfManager
     {
         //====================================================================//
         // A File Already Exists => Exit
-        if(is_file($fullPath)) {
+        if (is_file($fullPath)) {
             return true;
         }
         //====================================================================//
-        // Generate Raw Pdf 
+        // Generate Raw Pdf
         $rawPdf = self::getPdfContents($object, $template);
-              
+
         //====================================================================//
         // Store to Disk using File Manager
         return Splash::file()->writeFile(
@@ -137,10 +137,10 @@ class OrderPdfManager
             base64_encode($rawPdf)
         );
     }
-    
+
     /**
      * Load Raw Pdf Contents from Prestashop
-     * 
+     *
      * @param OrderInvoice $object
      * @param string       $template
      *
@@ -158,13 +158,13 @@ class OrderPdfManager
         // Return Raw Pdf Contents
         return (string) $pdf->render(false);
     }
-    
+
     /**
      * Get Pdf Cache Storage Path for this File
      * Encode for safety but... Unique for a each Order
-     * 
-     * @param Order         $order
-     * @param string        $template
+     *
+     * @param Order  $order
+     * @param string $template
      *
      * @return string
      */
@@ -174,7 +174,7 @@ class OrderPdfManager
         // Generate Unique File Name
         $checkSum = array($order->date_add, $order->id, $order->reference, $template);
         $encoded = md5(implode('::', $checkSum));
-        
+
         //==============================================================================
         // Encode Multilevel File Path
         $basePath = _PS_ROOT_DIR_.self::PDF_PATH.strtolower($template)."/";
@@ -186,9 +186,9 @@ class OrderPdfManager
 
         //==============================================================================
         // Concat File Path
-        return $basePath.$path.$encoded.'.pdf';        
+        return $basePath.$path.$encoded.'.pdf';
     }
-    
+
     /**
      * Get Order Invoice
      *
@@ -206,10 +206,10 @@ class OrderPdfManager
 
             return null;
         }
-        
+
         return $invoice;
-    } 
-    
+    }
+
     /**
      * Get Order Invoice Number
      *
@@ -220,8 +220,8 @@ class OrderPdfManager
     private static function getInvoiceNumber(OrderInvoice $orderInvoice)
     {
         return $orderInvoice->getInvoiceNumberFormatted(SLM::getDefaultLangId());
-    }    
-    
+    }
+
     /**
      * Get Order Delivery Number
      *
@@ -235,7 +235,7 @@ class OrderPdfManager
         // GET COMPUTED INFOS
         $slipNumber = Configuration::get('PS_DELIVERY_PREFIX', SLM::getDefaultLangId(), null, $order->id_shop);
         $slipNumber .= sprintf("%06d", $order->delivery_number);
-        
+
         return $slipNumber;
-    }    
+    }
 }
