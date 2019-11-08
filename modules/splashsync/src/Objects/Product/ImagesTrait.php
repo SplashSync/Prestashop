@@ -329,7 +329,7 @@ trait ImagesTrait
             $position = $imgArray["position"];
         //====================================================================//
         // Generic Mode Only => Use List Index
-        } elseif (!$this->AttributeId || (true == SPLASH_DEBUG)) {
+        } elseif (!$this->AttributeId || (Splash::isDebugMode())) {
             $position = $this->imgPosition;
         }
 

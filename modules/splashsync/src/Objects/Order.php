@@ -84,15 +84,6 @@ class Order extends AbstractObject
     protected static $ICO = "fa fa-shopping-cart ";
 
     /**
-     *  Object Synchronistion Limitations
-     *
-     *  This Flags are Used by Splash Server to Prevent Unexpected Operations on Remote Server
-     */
-    protected static $ALLOW_PUSH_CREATED = SPLASH_DEBUG;        // Allow Creation Of New Local Objects
-    protected static $ALLOW_PUSH_UPDATED = SPLASH_DEBUG;        // Allow Update Of Existing Local Objects
-    protected static $ALLOW_PUSH_DELETED = SPLASH_DEBUG;       // Allow Delete Of Existing Local Objects
-
-    /**
      *  Object Synchronistion Recommended Configuration
      */
     // Enable Creation Of New Local Objects when Not Existing
@@ -125,10 +116,9 @@ class Order extends AbstractObject
      */
     private $spl;
 
-    //====================================================================//
-    // Class Constructor
-    //====================================================================//
-
+    /**
+     * Class Constructor
+     */
     public function __construct()
     {
         //====================================================================//
@@ -145,5 +135,50 @@ class Order extends AbstractObject
         //====================================================================//
         // Load Default Currency
         $this->Currency = new Currency(Configuration::get('PS_CURRENCY_DEFAULT'));
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function description()
+    {
+        //====================================================================//
+        // Stack Trace
+        Splash::log()->trace();
+
+        //====================================================================//
+        // Build & Return Object Description Array
+        $description = array(
+            //====================================================================//
+            // General Object definition
+            //====================================================================//
+            // Object Type Name
+            "type" => $this->getType(),
+            // Object Display Name
+            "name" => $this->getName(),
+            // Object Descrition
+            "description" => $this->getDesc(),
+            // Object Icon Class (Font Awesome or Glyph. ie "fa fa-user")
+            "icon" => $this->getIcon(),
+            // Is This Object Enabled or Not?
+            "disabled" => $this->getIsDisabled(),
+            //====================================================================//
+            // Object Limitations
+            "allow_push_created" => Splash::isDebugMode(),
+            "allow_push_updated" => Splash::isDebugMode(),
+            "allow_push_deleted" => Splash::isDebugMode(),
+            //====================================================================//
+            // Object Default Configuration
+            "enable_push_created" => (bool) static::$ENABLE_PUSH_CREATED,
+            "enable_push_updated" => (bool) static::$ENABLE_PUSH_UPDATED,
+            "enable_push_deleted" => (bool) static::$ENABLE_PUSH_DELETED,
+            "enable_pull_created" => (bool) static::$ENABLE_PULL_CREATED,
+            "enable_pull_updated" => (bool) static::$ENABLE_PULL_UPDATED,
+            "enable_pull_deleted" => (bool) static::$ENABLE_PULL_DELETED
+        );
+
+        //====================================================================//
+        // Apply Overrides & Return Object Description Array
+        return Splash::configurator()->overrideDescription(static::getType(), $description);
     }
 }

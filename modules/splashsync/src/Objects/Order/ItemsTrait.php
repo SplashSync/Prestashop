@@ -443,7 +443,7 @@ trait ItemsTrait
         //====================================================================//
         // Check if List field
         // Check If Order has Discounts
-        if ((!$fieldId) || ((true == SPLASH_DEBUG) && (0 == $this->object->total_shipping_tax_incl))) {
+        if ((!$fieldId) || (Splash::isDebugMode() && (0 == $this->object->total_shipping_tax_incl))) {
             return;
         }
         //====================================================================//

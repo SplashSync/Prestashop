@@ -258,7 +258,7 @@ trait PaymentsTrait
     {
         //====================================================================//
         // If PhpUnit Mode => Read Order Payment Object
-        if (true == SPLASH_DEBUG) {
+        if (Splash::isDebugMode()) {
             return $orderPayment->payment_method;
         }
         //====================================================================//
