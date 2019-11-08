@@ -15,6 +15,7 @@
 
 namespace Splash\Local\Objects\Order;
 
+use Splash\Core\SplashCore      as Splash;
 use Splash\Local\Services\OrderPdfManager;
 use Translate;
 
@@ -28,6 +29,12 @@ trait PdfTrait
      */
     private function buildPdfFields()
     {
+        //====================================================================//
+        // BETA FEATURE - Only if manually enabled
+        if (!isset(Splash::configuration()->PsUseOrderPdf)) {
+            return;
+        }
+
         //====================================================================//
         // Invoice PDF
         $this->fieldsFactory()->create(SPL_T_FILE)

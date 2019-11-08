@@ -1,6 +1,7 @@
 {
     "parameters": {
-        "WsMethod":"SOAP"
+        "WsMethod":         "SOAP",
+        "PsUseOrderPdf":    true        
     },
     "Address": { 
         "enable_push_deleted": false

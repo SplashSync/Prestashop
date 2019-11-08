@@ -20,10 +20,8 @@ use Context;
 use Employee;
 use Language;
 use Splash\Core\SplashCore      as Splash;
-use Splash\Local\Objects\Core\FileProviderTrait;
 use Splash\Local\Services\LanguagesManager as SLM;
 use Splash\Local\Traits\SplashIdTrait;
-use Splash\Models\FileProviderInterface;
 use Splash\Models\LocalClassInterface;
 use SplashSync;
 use Validate;
@@ -34,10 +32,9 @@ use Validate;
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Local implements LocalClassInterface, FileProviderInterface
+class Local implements LocalClassInterface
 {
     use SplashIdTrait;
-    use FileProviderTrait;
 
     /**
      * @var SplashSync
