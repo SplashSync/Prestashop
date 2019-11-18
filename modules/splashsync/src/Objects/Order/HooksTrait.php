@@ -17,6 +17,7 @@ namespace Splash\Local\Objects\Order;
 
 use PrestaShopCollection;
 use Splash\Core\SplashCore      as Splash;
+use Order;
 
 /**
  * Prestashop Hooks for Order & Invoices
@@ -117,10 +118,15 @@ trait HooksTrait
         // Log
         $this->debugHook(__FUNCTION__, $orderId." >> ".$comment);
         //====================================================================//
-        // Safety Check
+        // Safety Check - ID is Valid
         if (empty($orderId)) {
-            Splash::log()->err("ErrLocalTpl", "Order", __FUNCTION__, "Unable to Read Order Id.");
+            Splash::log()->errTrace("Unable to Read Order Id.");
         }
+        //====================================================================//
+        // Safety Check - Cart is Not Empty
+        if (($order instanceof Order) && empty($order->getProductsDetail())) {
+            Splash::log()->warTrace("Order has no Products.");
+        }        
         //====================================================================//
         // Commit Update For Order
         $errors += !$this->doCommit("Order", $orderId, $action, $comment);
