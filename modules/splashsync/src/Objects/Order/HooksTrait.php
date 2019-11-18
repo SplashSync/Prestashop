@@ -125,8 +125,6 @@ trait HooksTrait
         //====================================================================//
         // Safety Check - Cart is Not Empty
         if ($this->isEmptyOrder($order)) {
-            Splash::log()->warTrace("Order has no Products.");
-
             return false;
         }
         //====================================================================//
