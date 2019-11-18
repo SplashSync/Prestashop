@@ -15,9 +15,9 @@
 
 namespace Splash\Local\Objects\Order;
 
+use Order;
 use PrestaShopCollection;
 use Splash\Core\SplashCore      as Splash;
-use Order;
 
 /**
  * Prestashop Hooks for Order & Invoices
@@ -126,7 +126,7 @@ trait HooksTrait
         // Safety Check - Cart is Not Empty
         if (($order instanceof Order) && empty($order->getProductsDetail())) {
             Splash::log()->warTrace("Order has no Products.");
-        }        
+        }
         //====================================================================//
         // Commit Update For Order
         $errors += !$this->doCommit("Order", $orderId, $action, $comment);
