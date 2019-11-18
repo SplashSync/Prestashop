@@ -120,12 +120,14 @@ trait HooksTrait
         //====================================================================//
         // Safety Check - ID is Valid
         if (empty($orderId)) {
-            Splash::log()->errTrace("Unable to Read Order Id.");
+            return Splash::log()->errTrace("Unable to Read Order Id.");
         }
         //====================================================================//
         // Safety Check - Cart is Not Empty
-        if (($order instanceof Order) && !Splash::isDebugMode() && empty($order->getProductsDetail())) {
+        if ($this->isEmptyOrder($order)) {
             Splash::log()->warTrace("Order has no Products.");
+
+            return false;
         }
         //====================================================================//
         // Commit Update For Order
@@ -171,5 +173,26 @@ trait HooksTrait
         //====================================================================//
         // Commit Update For Invoice
         return $this->doCommit("Invoice", $objectId, $action, $comment);
+    }
+
+    /**
+     * Verify if Order Products List Is Empty
+     *
+     * @param object $order Prestashop Order Object
+     *
+     * @return bool
+     */
+    private function isEmptyOrder($order)
+    {
+        if (!($order instanceof Order) || Splash::isDebugMode()) {
+            return false;
+        }
+        if (empty($order->getProductsDetail())) {
+            Splash::log()->warTrace("Order has no Products.");
+
+            return true;
+        }
+
+        return false;
     }
 }
