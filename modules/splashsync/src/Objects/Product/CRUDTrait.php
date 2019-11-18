@@ -49,7 +49,7 @@ trait CRUDTrait
             return Splash::log()->errTrace("Product Unik Id is Missing.");
         }
         //====================================================================//
-        // Clear Cache
+        // Clear Price Cache
         \Product::flushPriceCache();
         //====================================================================//
         // If $id Given => Load Product Object From DataBase
@@ -58,6 +58,9 @@ trait CRUDTrait
         if ($this->object->id != $this->ProductId) {
             return Splash::log()->errTrace("Unable to fetch Product (".$this->ProductId.")");
         }
+        //====================================================================//
+        // FIX: Revert Reduction Price (PS Force Reading of Reduced Prices)
+        $this->object->price = $this->object->base_price;
         //====================================================================//
         // If $id_attribute Given => Load Product Attribute Combinaisons From DataBase
         //====================================================================//
