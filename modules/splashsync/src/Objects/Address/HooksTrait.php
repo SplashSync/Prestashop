@@ -15,6 +15,7 @@
 
 namespace Splash\Local\Objects\Address;
 
+use Address;
 use Splash\Client\Splash;
 
 /**
@@ -72,9 +73,9 @@ trait HooksTrait
     /**
      * This function is called after each action on a address object
      *
-     * @param object $address Prestashop Address Object
-     * @param string $action  Performed Action
-     * @param string $comment Action Comment
+     * @param Address $address Prestashop Address Object
+     * @param string  $action  Performed Action
+     * @param string  $comment Action Comment
      */
     private function hookactionAddress($address, $action, $comment)
     {
