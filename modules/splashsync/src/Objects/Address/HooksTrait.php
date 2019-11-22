@@ -15,6 +15,8 @@
 
 namespace Splash\Local\Objects\Address;
 
+use Splash\Client\Splash;
+
 /**
  * @abstract Prestashop Hooks for Address
  */
@@ -33,9 +35,8 @@ trait HooksTrait
      */
     public function hookactionObjectAddressAddAfter($params)
     {
-        return $this->doCommit(
-            "Address",
-            $params["object"]->id,
+        return $this->hookactionAddress(
+            $params["object"],
             SPL_A_CREATE,
             $this->l('Customer Address Created on Prestashop')
         );
@@ -48,9 +49,8 @@ trait HooksTrait
      */
     public function hookactionObjectAddressUpdateAfter($params)
     {
-        return $this->doCommit(
-            "Address",
-            $params["object"]->id,
+        return $this->hookactionAddress(
+            $params["object"],
             SPL_A_UPDATE,
             $this->l('Customer Address Updated on Prestashop')
         );
@@ -62,11 +62,39 @@ trait HooksTrait
      */
     public function hookactionObjectAddressDeleteAfter($params)
     {
-        return $this->doCommit(
-            "Address",
-            $params["object"]->id,
+        return $this->hookactionAddress(
+            $params["object"],
             SPL_A_DELETE,
             $this->l('Customer Address Deleted on Prestashop')
         );
+    }
+
+    /**
+     * This function is called after each action on a address object
+     *
+     * @param object $address Prestashop Address Object
+     * @param string $action  Performed Action
+     * @param string $comment Action Comment
+     */
+    private function hookactionAddress($address, $action, $comment)
+    {
+        //====================================================================//
+        // Safety Check
+        $addressId = $address->id;
+        if (empty($addressId)) {
+            Splash::log()->err("ErrLocalTpl", __CLASS__, __FUNCTION__, "Unable to Read Address Id.");
+        }
+        //====================================================================//
+        // Commit Update For Product
+        $result = $this->doCommit("Address", $addressId, $action, $comment);
+        //====================================================================//
+        // Also Commit Update For Customer
+        if (isset($address->id_customer) && !empty($address->id_customer) && !Splash::isDebugMode()) {
+            //====================================================================//
+            // Commit Update For Customer
+            $this->doCommit("ThirdParty", $address->id_customer, $action, $comment);
+        }
+
+        return $result;
     }
 }
