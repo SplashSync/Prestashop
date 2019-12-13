@@ -2,7 +2,10 @@ includes:
     - '../modules/splashsync/vendor/phpstan/phpstan-phpunit/extension.neon'
 
 parameters:
-    bootstrap: "./travis/phpstan.php"
+    bootstrap: "./phpstan.php"
+    checkMissingIterableValueType: false
+    checkGenericClassInNonGenericObjectType: false
+    inferPrivatePropertyTypeFromConstructor: true 
     universalObjectCratesClasses:
             - ArrayObject
     ignoreErrors:
