@@ -105,9 +105,6 @@ class SplashSync extends Module
             // Init Splash Module
             Splash\Client\Splash::core();
         }
-        //====================================================================//
-        // INIT Context VAriables
-        self::initContext();
     }
 
     //====================================================================//
@@ -136,11 +133,9 @@ class SplashSync extends Module
         if (!parent::install()) {
             return false;
         }
-
         //====================================================================//
         // Create Splash Linking Table
         self::createSplashIdTable();
-
         //====================================================================//
         // Register Module Customers Hooks
         if (!$this->registerHook('actionObjectCustomerAddAfter') ||
@@ -148,7 +143,6 @@ class SplashSync extends Module
                 !$this->registerHook('actionObjectCustomerDeleteAfter')) {
             return false;
         }
-
         //====================================================================//
         // Register Module Customers Address Hooks
         if (!$this->registerHook('actionObjectAddressAddAfter') ||
@@ -156,16 +150,19 @@ class SplashSync extends Module
                 !$this->registerHook('actionObjectAddressDeleteAfter')) {
             return false;
         }
-
         //====================================================================//
         // Register Module Admin Panel Hooks
-        if (!$this->registerHook('displayHome') ||
-                !$this->registerHook('displayHeader') ||
-                !$this->registerHook('displayBackOfficeTop') ||
-                !$this->registerHook('displayBackOfficeFooter') ||
-                !$this->registerHook('displayBackOfficeHeader') ||
-                !$this->registerHook('footer') ||
-                !$this->registerHook('displayAdminHomeQuickLinks')) {
+        if (!$this->registerHook('displayBackOfficeHeader')) {
+            return false;
+        }
+        // Ps 1.6 => Notify on Footer
+        if (\Tools::version_compare(_PS_VERSION_, "1.7", '<')
+                && !$this->registerHook('displayBackOfficeFooter')) {
+            return false;
+        }
+        // Ps 1.7 => Notify on Admin End Contents
+        if (!\Tools::version_compare(_PS_VERSION_, "1.7", '<')
+                && !$this->registerHook('displayAdminEndContent')) {
             return false;
         }
         //====================================================================//
@@ -335,46 +332,60 @@ class SplashSync extends Module
     //====================================================================//
 
     /**
-     * admin <Header> Hook
+     * Back Office Header Hook
+     *
+     * Add Needed CSS & JS Code for Notifications
      */
     public function hookDisplayBackOfficeHeader()
     {
         //====================================================================//
-        // Register Module JS
-        $this->context->controller->addJS($this->_path.'views/js/splash.js');
+        // Ensure Jquery is Loaded
         if (\Tools::version_compare(_PS_VERSION_, "1.7", '<')) {
             $this->context->controller->addJquery();
         }
-        $this->context->controller->addJS($this->_path.'views/js/jquery.noty.packaged.min.js');
+        //====================================================================//
+        // Register Not Js & Css
+        $this->context->controller->addCss($this->_path.'views/css/noty.css');
+        $this->context->controller->addCss($this->_path.'views/css/themes/mint.css');
+        $this->context->controller->addCss($this->_path.'views/css/themes/semanticui.css');
+        $this->context->controller->addJS($this->_path.'views/js/noty.min.js');
+        //====================================================================//
+        // Register Splash Js
+        $this->context->controller->addJS($this->_path.'views/js/splash.js');
     }
 
     /**
-     * admin <Footer> Hook
+     * Back Office End Contents Hook
+     *
+     * Notifications contents moved here due to repeated
+     * rendering of footer on PS subrequests.
+     *
+     * @since 1.7.0
+     */
+    public function hookDisplayAdminEndContent()
+    {
+        return $this->hookDisplayBackOfficeFooter();
+    }
+
+    /**
+     * Back Office End Contents Hook
+     *
+     * Render contents to show user notifications
      */
     public function hookDisplayBackOfficeFooter()
     {
         //====================================================================//
         // Read Cookie String
-        $cookie = Context::getContext()->cookie;
-        $notifications = $cookie->__get("spl_notify");
-
+        $notifications = Context::getContext()->cookie->__get("spl_notify");
+        if (false == $notifications) {
+            return;
+        }
         //====================================================================//
         // Assign Smarty Variables
         $this->context->smarty->assign('notifications', json_decode($notifications, true));
-        $this->context->smarty->assign(
-            'url',
-            \Splash\Client\Splash::ws()->getServerScheme()
-                ."://".Configuration::get('PS_SHOP_DOMAIN')
-                .__PS_BASE_URI__
-        );
-
         //====================================================================//
-        //  Generate Ajax Token
-        $token = Tools::getAdminToken(
-            'AdminModules'.Tab::getIdFromClassName('AdminModules').(int)$cookie->__get("id_employee")
-        );
-        $this->context->smarty->assign('token', $token);
-
+        // Clear Logs in Cookie
+        Context::getContext()->cookie->__set("spl_notify", "");
         //====================================================================//
         // Render Footer
         return $this->display(__FILE__, 'footer.tpl');
@@ -461,25 +472,6 @@ class SplashSync extends Module
 
             return true;
         }
-
-        return true;
-    }
-
-    /**
-     * Init Splash Parameters in structure in Global Context
-     *
-     * @return bool True if OK, False if Errors
-     */
-    private function initContext()
-    {
-        //====================================================================//
-        //  Init Splash Parameters in structure if empty
-        if (!isset(Context::getContext()->splash)) {
-            Context::getContext()->splash = new ArrayObject(array(), ArrayObject::ARRAY_AS_PROPS);
-        }
-        //====================================================================//
-        //  Init Cookie structure if empty
-        Context::getContext()->cookie->update();
 
         return true;
     }
@@ -970,11 +962,9 @@ class SplashSync extends Module
         //====================================================================//
         // Read Current Cookie String
         $rawNotifications = Context::getContext()->cookie->__get("spl_notify");
-
         //====================================================================//
         // Merge Cookie With Log
         Splash\Client\Splash::log()->merge(json_decode($rawNotifications, true));
-
         //====================================================================//
         // Encode & Compare
         $newRaw = json_encode(Splash\Client\Splash::log());

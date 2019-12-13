@@ -13,39 +13,19 @@
 
 <script type="text/javascript">
 
-    var $Notified = false;
-    
+    $(document).ready(function () {
     {foreach $notifications.err as $err}
-        showError(  "{$err|escape:'htmlall':'UTF-8'}");
-        $Notified = true;
+        showError(  "{$err|escape:'javascript':'UTF-8'}");
     {/foreach}
-
     {foreach $notifications.war as $war}
-        showWarning("{$war|escape:'htmlall':'UTF-8'}");
-        $Notified = true;
+        showWarning("{$war|escape:'javascript':'UTF-8'}");
     {/foreach}
-
-
     {foreach $notifications.msg as $msg}
-        showSuccess("{$msg|escape:'htmlall':'UTF-8'}");
-        $Notified = true;
+        showSuccess("{$msg|escape:'javascript':'UTF-8'}");
     {/foreach}
-
     {foreach $notifications.deb as $deb}
-        showInfo(   "{$deb|escape:'htmlall':'UTF-8'}");
-        $Notified = true;
+        showInfo(   "{$deb|escape:'javascript':'UTF-8'}");
     {/foreach}
+    });    
 
-    if ( $Notified ) {
-        $.ajax({
-            url: '{$url|escape:'htmlall':'UTF-8'}modules/splashsync/ajax.php',
-            type: 'get',
-            data: 'ClearNotifications=true&token={$token|escape:'htmlall':'UTF-8'}',
-            success: function(data) {
-                console.log('[Splash] Notifications Cleared');
-            }
-        }); 
-    }
-
-    
 </script>
