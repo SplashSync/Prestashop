@@ -29,6 +29,9 @@ use Splash\Models\Helpers\FilesHelper;
  */
 class OrderPdfManager
 {
+    /** @var int */
+    const PDF_TTL = 10;
+
     /** @var string */
     const PDF_PATH = "/var/splash/";
 
@@ -63,10 +66,11 @@ class OrderPdfManager
             return null;
         }
 
-        $infos = FilesHelper::encode(
+        $infos = FilesHelper::stream(
             self::getInvoiceNumber($invoice),
             pathinfo($fullPath, PATHINFO_BASENAME),
-            pathinfo($fullPath, PATHINFO_DIRNAME)."/"
+            pathinfo($fullPath, PATHINFO_DIRNAME)."/",
+            self::PDF_TTL
         );
 
         return $infos ? $infos : null;
@@ -103,10 +107,11 @@ class OrderPdfManager
             return null;
         }
 
-        $infos = FilesHelper::encode(
+        $infos = FilesHelper::stream(
             self::getDeliveryNumber($order),
             pathinfo($fullPath, PATHINFO_BASENAME),
-            pathinfo($fullPath, PATHINFO_DIRNAME)."/"
+            pathinfo($fullPath, PATHINFO_DIRNAME)."/",
+            self::PDF_TTL
         );
 
         return $infos ? $infos : null;
