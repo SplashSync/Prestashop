@@ -15,6 +15,8 @@
 
 namespace Splash\Tests;
 
+use Context;
+use Currency;
 use Splash\Client\Splash;
 use Splash\Local\Objects\Order;
 use Splash\Tests\Tools\ObjectsCase;
@@ -30,6 +32,12 @@ class L01InvoicesTest extends ObjectsCase
     public function testCreateAnInvoice()
     {
         $this->assertTrue(true);
+
+        //====================================================================//
+        //   Ensure Currency is Loaded
+        if (empty(Context::getContext()->currency)) {
+            Context::getContext()->currency = new Currency(1);
+        }
 
         //====================================================================//
         //   Create Fake Order Data
