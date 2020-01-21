@@ -39,7 +39,7 @@ class OrderStatusManager
         5 => "OrderDelivered",
         6 => "OrderCanceled",
         7 => "OrderCanceled",
-        8 => "OrderProblem",
+        8 => "OrderPaymentDue",
         9 => "OrderProcessing",
         10 => "OrderPaymentDue",
         11 => "OrderPaymentDue",
