@@ -15,7 +15,7 @@ parameters:
             - '#Parameter \#2 \$idLang of class Image constructor expects null\, int given.#'
 #            - '#[a-zA-Z0-9\\_\#]+ class Currency constructor expects null, string given#'
 #            - '#[a-zA-Z0-9\\_\#]+ class Address constructor expects int|null, bool|int|null given#'
-            - "#Property CustomerCore::\\$passwd \\(int\\) does not accept bool|string.#"
+            - "#Property CustomerCore::\\$passwd \\(int\\) does not accept bool\\|string.#"
             - '#Parameter \#2 \$idAttributeGroup of static method AttributeGroupCore::getAttributes\(\) expects bool\, int given.#'
 
             # Splash Fixes
@@ -28,7 +28,9 @@ parameters:
             - '#Access to an undefined property ObjectModel::[a-zA-Z0-9$\\_]#'
             - '#Access to an undefined property Context::[a-zA-Z0-9$\\_]#'
             - "#Casting to float something that's already float#"
-#            - "#Property AttributeGroupCore::\\$name \\(string\\) does not accept array#"
+            - "#Property AttributeGroupCore::\\$name \\(string\\) does not accept array#"
+            - "#Property AttributeGroupCore::\\$public_name \\(string\\) does not accept array#"
+            - "#Property AttributeCore::\\$name \\(string\\) does not accept array#"
             - "#Property ModuleCore::\\$version \\(float\\) does not accept string.#"
 
             # PN Advanced Packs
