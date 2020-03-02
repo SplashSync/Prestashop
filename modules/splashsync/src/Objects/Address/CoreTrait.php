@@ -168,7 +168,7 @@ trait CoreTrait
         }
         //====================================================================//
         // Verify Object Exists
-        $customer = new Customer($custoId);
+        $customer = new Customer((int) $custoId);
         if ($customer->id != $custoId) {
             return Splash::log()->errTrace("Unable to load Address Customer(".$custoId.").");
         }

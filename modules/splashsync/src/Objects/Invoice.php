@@ -197,6 +197,6 @@ class Invoice extends AbstractObject
         $this->spl = Local::getLocalModule();
         //====================================================================//
         // Load OsWs Currency
-        $this->Currency = new Currency(Configuration::get('PS_CURRENCY_DEFAULT'));
+        $this->Currency = new Currency((int) Configuration::get('PS_CURRENCY_DEFAULT'));
     }
 }

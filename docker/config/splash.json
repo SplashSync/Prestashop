@@ -1,6 +1,6 @@
 {
     "parameters": {
-        "WsMethod":         "SOAP",
+        "WsMethod":         "NuSOAP",
         "PsUseOrderPdf":    true        
     },
     "Address": { 
@@ -13,13 +13,13 @@
         "allow_push_updated": true,
         "fields": {
             "status": { "write": 1 }
-        }		
+        }
     },
     "Invoice": { 
         "enable_push_deleted": false
     },
     "CreditNote": { 
-        "disabled": false
+        "disabled": true
     },
     "Product": {
         "enable_push_deleted": false

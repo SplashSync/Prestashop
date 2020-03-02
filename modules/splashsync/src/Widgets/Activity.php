@@ -158,7 +158,7 @@ class Activity extends AbstractWidget
 
         //====================================================================//
         // Load Default Currency
-        $this->currency = new Currency(Configuration::get('PS_CURRENCY_DEFAULT'));
+        $this->currency = new Currency((int) Configuration::get('PS_CURRENCY_DEFAULT'));
 
         //====================================================================//
         // Load Splash Module

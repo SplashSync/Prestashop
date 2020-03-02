@@ -38,7 +38,7 @@ trait CRUDTrait
         Splash::log()->trace();
         //====================================================================//
         // Load Object
-        $object = new Customer($objectId);
+        $object = new Customer((int) $objectId);
         if ($object->id != $objectId) {
             return Splash::log()->err(
                 "ErrLocalTpl",
@@ -166,7 +166,7 @@ trait CRUDTrait
         //====================================================================//
         // Load Object From DataBase
         //====================================================================//
-        $object = new Customer($objectId);
+        $object = new Customer((int) $objectId);
         if ($object->id != $objectId) {
             return Splash::log()->war("ErrLocalTpl", __CLASS__, __FUNCTION__, "Unable to load (".$objectId.").");
         }
