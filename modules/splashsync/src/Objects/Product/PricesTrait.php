@@ -39,8 +39,6 @@ trait PricesTrait
      */
     private function buildPricesFields()
     {
-        $groupName = Translate::getAdminTranslation("Prices", "AdminProducts");
-
         //====================================================================//
         // PRICES INFORMATIONS
         //====================================================================//
@@ -56,7 +54,6 @@ trait PricesTrait
                 )." (".$this->Currency->sign.")"
             )
             ->MicroData("http://schema.org/Product", "price")
-            ->Group($groupName)
             ->isListed();
 
         //====================================================================//
@@ -70,7 +67,6 @@ trait PricesTrait
                 )." Base (".$this->Currency->sign.")"
             )
             ->MicroData("http://schema.org/Product", "basePrice")
-            ->Group($groupName)
             ->isListed();
 
         //====================================================================//

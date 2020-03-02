@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2019 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) 2015-2020 Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -15,6 +15,7 @@
 
 namespace Splash\Local\Objects\Product;
 
+use Splash\Local\Services\LanguagesManager as SLM;
 use Splash\Local\Services\TotSwitchAttributes;
 use Translate;
 
@@ -53,6 +54,29 @@ trait MetaTrait
             ->Identifier("on_sale")
             ->Name($this->spl->l("On Sale"))
             ->MicroData("http://schema.org/Product", "onsale");
+
+        //====================================================================//
+        // Online Only
+        $this->fieldsFactory()->create(SPL_T_BOOL)
+            ->Identifier("online_only")
+            ->Name($this->spl->l("Online Only"))
+            ->MicroData("http://schema.org/Product", "onlineOnly");
+
+        //====================================================================//
+        // Online Only Ref.
+        $this->fieldsFactory()->create(SPL_T_VARCHAR)
+            ->Identifier("online_ref")
+            ->Name($this->spl->l("Online Only Ref."))
+            ->MicroData("http://schema.org/Product", "onlineOnlyRef")
+            ->isReadOnly();
+
+        //====================================================================//
+        // Online Only Title
+        $this->fieldsFactory()->create(SPL_T_VARCHAR)
+            ->Identifier("online_name")
+            ->Name($this->spl->l("Online Only Title."))
+            ->MicroData("http://schema.org/Product", "onlineOnlyTitle")
+            ->isReadOnly();
     }
 
     /**
@@ -71,6 +95,7 @@ trait MetaTrait
             //====================================================================//
             case 'active':
             case 'on_sale':
+            case 'online_only':
                 $this->getSimpleBool($fieldName);
 
                 break;
@@ -84,6 +109,42 @@ trait MetaTrait
                 }
 
                 $this->getSimpleBool($fieldName);
+
+                break;
+            default:
+                return;
+        }
+
+        unset($this->in[$key]);
+    }
+
+    /**
+     * Read requested Field
+     *
+     * @param string $key       Input List Key
+     * @param string $fieldName Field Identifier / Name
+     */
+    private function getMetaOnlineFields($key, $fieldName)
+    {
+        //====================================================================//
+        // READ Fields
+        switch ($fieldName) {
+            case 'online_ref':
+                if (empty($this->object->online_only)) {
+                    $this->out[$fieldName] = $this->getProductReference();
+
+                    break;
+                }
+                $this->out[$fieldName] = null;
+
+                break;
+            case 'online_name':
+                if (empty($this->object->online_only)) {
+                    $this->out[$fieldName] = $this->getMultilang("name", SLM::getDefaultLangId());
+
+                    break;
+                }
+                $this->out[$fieldName] = null;
 
                 break;
             default:
@@ -108,6 +169,7 @@ trait MetaTrait
             // Direct Writtings
             case 'active':
             case 'on_sale':
+            case 'online_only':
                 $this->setSimple($fieldName, $fieldData);
 
                 break;

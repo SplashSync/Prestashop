@@ -108,7 +108,6 @@ trait MainTrait
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
             ->Identifier("supplier_reference")
             ->Name(Translate::getAdminTranslation("Supplier reference", "AdminProducts"))
-            ->Group($groupName)
             ->MicroData("http://schema.org/Product", "mpn");
 
         //====================================================================//

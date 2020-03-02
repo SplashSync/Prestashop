@@ -34,8 +34,6 @@ trait StockTrait
      */
     protected function buildStockFields()
     {
-        $groupName = Translate::getAdminTranslation("Quantities", "AdminProducts");
-
         //====================================================================//
         // PRODUCT STOCKS
         //====================================================================//
@@ -46,7 +44,6 @@ trait StockTrait
             ->Identifier("stock")
             ->Name(Translate::getAdminTranslation("Stock", "AdminProducts"))
             ->MicroData("http://schema.org/Offer", "inventoryLevel")
-            ->Group($groupName)
             ->isListed();
 
         //====================================================================//
@@ -55,7 +52,6 @@ trait StockTrait
             ->Identifier("outofstock")
             ->Name(Translate::getAdminTranslation("This product is out of stock", "AdminOrders"))
             ->MicroData("http://schema.org/ItemAvailability", "OutOfStock")
-            ->Group($groupName)
             ->isReadOnly();
 
         //====================================================================//
@@ -69,7 +65,6 @@ trait StockTrait
                     "AdminProducts"
                 )
             )
-            ->Group($groupName)
             ->MicroData("http://schema.org/Offer", "eligibleTransactionVolume");
     }
 

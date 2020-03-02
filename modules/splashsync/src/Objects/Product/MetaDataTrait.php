@@ -32,7 +32,7 @@ trait MetaDataTrait
      */
     protected function buildMetaDataFields()
     {
-        $groupName = Translate::getAdminTranslation("SEO", "AdminProducts");
+        $groupName = Translate::getAdminTranslation("Information", "AdminProducts");
         $this->fieldsFactory()->setDefaultLanguage(LanguagesManager::getDefaultLanguage());
 
         //====================================================================//

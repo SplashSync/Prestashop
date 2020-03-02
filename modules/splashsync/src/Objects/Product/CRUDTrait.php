@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2019 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) 2015-2020 Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -16,7 +16,9 @@
 namespace Splash\Local\Objects\Product;
 
 use Combination;
+use Configuration;
 use Product;
+use Splash\Client\Splash        as SplashClient;
 use Splash\Core\SplashCore      as Splash;
 use Splash\Local\Services\LanguagesManager as SLM;
 use Tools;
@@ -57,6 +59,11 @@ trait CRUDTrait
         $this->object = new Product($this->ProductId, true);
         if ($this->object->id != $this->ProductId) {
             return Splash::log()->errTrace("Unable to fetch Product (".$this->ProductId.")");
+        }
+        //====================================================================//
+        // Verify if Product is Allowed Sync
+        if (!$this->isAllowedLoading()) {
+            return $this->onNotAllowedLoading($unikId);
         }
         //====================================================================//
         // FIX: Revert Reduction Price (PS Force Reading of Reduced Prices)
@@ -284,5 +291,49 @@ trait CRUDTrait
         //====================================================================//
         // Create Empty Product
         return $this->object;
+    }
+
+    /**
+     * Check if Product Loading is Allowed
+     *
+     * @return bool
+     */
+    private function isAllowedLoading()
+    {
+        $productType = $this->getProductType();
+        //====================================================================//
+        // Filter Virtual Products
+        if (empty(Configuration::get("SPLASH_SYNC_VIRTUAL")) && ("virtual" == $productType)) {
+            return false;
+        }
+        //====================================================================//
+        // Setup Pack Products Filters
+        if (empty(Configuration::get("SPLASH_SYNC_PACKS")) && ("pack" == $productType)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Action to Perfom on Rejected Loading
+     *
+     * @param string $unikId
+     *
+     * @return false
+     */
+    private function onNotAllowedLoading(string $unikId)
+    {
+        //====================================================================//
+        // If Self Delete Unsynk Products is Disabled
+        if (!isset(Splash::configuration()->PsDeleteUnlinkedProducts)) {
+            return Splash::log()->err("Unsynk Product: Loading not allowed.");
+        }
+
+        //====================================================================//
+        // Send Delete Commit
+        SplashClient::commit("Product", $unikId, SPL_A_DELETE, "Delete of an Unsynk Product");
+
+        return Splash::log()->err("Unsynk Product: Will be deleted.");
     }
 }
