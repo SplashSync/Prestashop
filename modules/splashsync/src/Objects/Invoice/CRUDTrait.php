@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2019 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) 2015-2020 Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -57,7 +57,7 @@ trait CRUDTrait
 
         //====================================================================//
         // Load Object
-        $object = new OrderInvoice($objectId);
+        $object = new OrderInvoice((int) $objectId);
         if ($object->id != $objectId) {
             return Splash::log()->errTrace("Unable to load Invoice (".$objectId.").");
         }
@@ -85,13 +85,14 @@ trait CRUDTrait
 
     /**
      * Create Request Object
+     *
+     * @return null
      */
     public function create()
     {
         //====================================================================//
         // Stack Trace
         Splash::log()->trace();
-
         //====================================================================//
         // An Invoice Cannot Get deleted
         Splash::log()->errTrace("You Cannot Create Prestashop Invoices");

@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2019 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) 2015-2020 Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -135,12 +135,14 @@ class Activity extends AbstractWidget
      * Block Building - Inputs Parameters
      *
      * @param null|array|ArrayObject $inputs
+     *
+     * @return void
      */
     private function buildActivityBlock($inputs = array())
     {
         //====================================================================//
         // Verify Inputs
-        if (!is_array($inputs) && !is_a($inputs, "ArrayObject")) {
+        if (!is_array($inputs) && !($inputs instanceof ArrayObject)) {
             $this->blocksFactory()
                 ->addNotificationsBlock(array("warning" => "Inputs is not an Array!"));
         }
@@ -162,7 +164,7 @@ class Activity extends AbstractWidget
         // Load Splash Module
         $this->spl = Local::getLocalModule();
         if (false == $this->spl) {
-            return false;
+            return;
         }
 
         //====================================================================//
@@ -202,13 +204,21 @@ class Activity extends AbstractWidget
                 "fa_icon" => "money",
                 "value" => \Tools::displayPrice($activityData["net_profits"], $this->currency),
             ), $this->sparkOptions)
-                ;
+        ;
     }
 
     //====================================================================//
     // Class Tooling Functions
     //====================================================================//
 
+    /**
+     * Get Activity Data
+     *
+     * @param string $dateFrom
+     * @param string $dateTo
+     *
+     * @return array
+     */
     private function getData($dateFrom, $dateTo)
     {
         // We need the following figures to calculate our stats
@@ -229,6 +239,13 @@ class Activity extends AbstractWidget
         return $tmpData;
     }
 
+    /**
+     * @param string $dateFrom
+     * @param string $dateTo
+     * @param array  $grossData
+     *
+     * @return array
+     */
     private function refineData($dateFrom, $dateTo, $grossData)
     {
         $refinedData = array(
@@ -250,6 +267,11 @@ class Activity extends AbstractWidget
         return $refinedData;
     }
 
+    /**
+     * @param array $data
+     *
+     * @return array
+     */
     private function addupData($data)
     {
         $summing = array(
@@ -271,6 +293,13 @@ class Activity extends AbstractWidget
         return $summing;
     }
 
+    /**
+     * @param array     $refinedData
+     * @param false|int $date
+     * @param array     $grossData
+     *
+     * @return void
+     */
     private function getRefinedSales(&$refinedData, $date, $grossData)
     {
         $refinedData['sales'][$date] = 0;
@@ -289,6 +318,13 @@ class Activity extends AbstractWidget
                 ? $refinedData['orders'][$date] / $refinedData['visits'][$date] : 0;
     }
 
+    /**
+     * @param array     $refinedData
+     * @param false|int $date
+     * @param array     $grossData
+     *
+     * @return void
+     */
     private function getRefinedProfits(&$refinedData, $date, $grossData)
     {
         $refinedData['net_profits'][$date] = 0;

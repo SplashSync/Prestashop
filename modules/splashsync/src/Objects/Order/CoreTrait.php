@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2019 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) 2015-2020 Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -33,21 +33,19 @@ trait CoreTrait
      */
     protected function isOrderObject()
     {
-        if ("Splash\\Local\\Objects\\Order" !== get_class($this)) {
-            return false;
-        }
-
-        return true;
+        return ($this instanceof Order);
     }
 
     /**
      * Build Core Fields using FieldFactory
+     *
+     * @return void
      */
     private function buildCoreFields()
     {
         //====================================================================//
         // Customer Object
-        $this->fieldsFactory()->create(self::objects()->encode("ThirdParty", SPL_T_ID))
+        $this->fieldsFactory()->create((string) self::objects()->encode("ThirdParty", SPL_T_ID))
             ->Identifier("id_customer")
             ->Name(Translate::getAdminTranslation("Customer ID", "AdminCustomerThreads"))
             ->isRequired();
@@ -68,10 +66,10 @@ trait CoreTrait
         //====================================================================//
         // Reference
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
-            ->Identifier("reference")
-            ->Name(Translate::getAdminTranslation("Reference", "AdminOrders"))
+            ->identifier("reference")
+            ->name(Translate::getAdminTranslation("Reference", "AdminOrders"))
             ->MicroData("http://schema.org/Order", "orderNumber")
-            ->AddOption("maxLength", 8)
+            ->addOption("maxLength", "8")
             ->isRequired()
             ->isListed();
 
@@ -90,6 +88,8 @@ trait CoreTrait
      *
      * @param string $key       Input List Key
      * @param string $fieldName Field Identifier / Name
+     *
+     * @return void
      */
     private function getCoreFields($key, $fieldName)
     {
@@ -138,7 +138,7 @@ trait CoreTrait
             //====================================================================//
             // Order Official Date
             case 'order_date':
-                $this->out[$fieldName] = date(SPL_T_DATECAST, (int) strtotime($this->object->date_add));
+                $this->out[$fieldName] = date(SPL_T_DATECAST, (int) strtotime((string) $this->object->date_add));
 
                 break;
             default:
@@ -153,6 +153,8 @@ trait CoreTrait
      *
      * @param string $fieldName Field Identifier / Name
      * @param mixed  $fieldData Field Data
+     *
+     * @return void
      */
     private function setCoreFields($fieldName, $fieldData)
     {

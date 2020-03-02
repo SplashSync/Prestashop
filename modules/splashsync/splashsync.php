@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2019 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) 2015-2020 Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -241,6 +241,9 @@ class SplashSync extends Module
     // *******************************************************************//
     //====================================================================//
 
+    /**
+     * @return string
+     */
     public function getContent()
     {
         $output = null;
@@ -260,6 +263,9 @@ class SplashSync extends Module
         return $output;
     }
 
+    /**
+     * @return string
+     */
     public function displayForm()
     {
         $fieldsForm = array();
@@ -335,6 +341,8 @@ class SplashSync extends Module
      * Back Office Header Hook
      *
      * Add Needed CSS & JS Code for Notifications
+     *
+     * @return void
      */
     public function hookDisplayBackOfficeHeader()
     {
@@ -360,6 +368,8 @@ class SplashSync extends Module
      * Notifications contents moved here due to repeated
      * rendering of footer on PS subrequests.
      *
+     * @return null|string
+     *
      * @since 1.7.0
      */
     public function hookDisplayAdminEndContent()
@@ -371,6 +381,8 @@ class SplashSync extends Module
      * Back Office End Contents Hook
      *
      * Render contents to show user notifications
+     *
+     * @return null|string
      */
     public function hookDisplayBackOfficeFooter()
     {
@@ -378,7 +390,7 @@ class SplashSync extends Module
         // Read Cookie String
         $notifications = Context::getContext()->cookie->__get("spl_notify");
         if (false == $notifications) {
-            return;
+            return null;
         }
         //====================================================================//
         // Assign Smarty Variables
@@ -461,6 +473,8 @@ class SplashSync extends Module
      * @param string     $name
      * @param string     $objectId
      * @param null|mixed $other
+     *
+     * @return bool
      */
     protected function debugHook($name, $objectId, $other = null)
     {
@@ -716,6 +730,8 @@ class SplashSync extends Module
     /**
      * Update Configuration when Form is Submited
      *
+     * @return null|string
+     *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
@@ -796,6 +812,8 @@ class SplashSync extends Module
 
     /**
      * Execute Server SelfTests
+     *
+     * @return string
      */
     private function displayTest()
     {
@@ -824,6 +842,8 @@ class SplashSync extends Module
 
     /**
      * Display Tests Results Table Header
+     *
+     * @return void
      */
     private function displayTestHead()
     {
@@ -857,6 +877,8 @@ class SplashSync extends Module
 
     /**
      * Execute Server SelfTests
+     *
+     * @return void
      */
     private function displayTestSelfTests()
     {
@@ -871,6 +893,8 @@ class SplashSync extends Module
 
     /**
      * Execute Server Objects List
+     *
+     * @return void
      */
     private function displayTestObjectList()
     {
@@ -896,6 +920,8 @@ class SplashSync extends Module
 
     /**
      * Execute Server Ping & Connect
+     *
+     * @return void
      */
     private function displayTestPingAndConnect()
     {
@@ -942,20 +968,14 @@ class SplashSync extends Module
 
     //====================================================================//
     // *******************************************************************//
-    //  MODULE FRONT OFFICE (SHOP) HOOKS
-    // *******************************************************************//
-    //====================================================================//
-
-    //  NO FRONT OFFICE HOOKS FOR THIS MODULE
-
-    //====================================================================//
-    // *******************************************************************//
     //  MODULE VARIOUS DISPLAYS
     // *******************************************************************//
     //====================================================================//
 
     /**
      * Read all log messages posted by OsWs and post it
+     *
+     * @return void
      */
     private function importMessages()
     {

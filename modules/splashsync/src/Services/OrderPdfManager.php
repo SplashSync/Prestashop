@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2019 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) 2015-2020 Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -124,7 +124,7 @@ class OrderPdfManager
      * @param string       $template
      * @param mixed        $fullPath
      *
-     * @return string
+     * @return bool
      */
     private static function createPdf(OrderInvoice $object, $template, $fullPath)
     {
@@ -236,7 +236,7 @@ class OrderPdfManager
      *
      * @param Order $order
      *
-     * @return null|string
+     * @return string
      */
     private static function getDeliveryNumber(Order $order)
     {

@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2019 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) 2015-2020 Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -15,19 +15,17 @@
 
 namespace Splash\Local\Objects\Address;
 
-//====================================================================//
-// Prestashop Static Classes
 use Translate;
 
 /**
  * Access to Address Optional Fields
- *
- * @author      B. Paquier <contact@splashsync.com>
  */
 trait OptionalTrait
 {
     /**
-     *   @abstract     Build Address Optional Fields using FieldFactory
+     * Build Address Optional Fields using FieldFactory
+     *
+     * @return void
      */
     private function buildOptionalFields()
     {
@@ -77,6 +75,8 @@ trait OptionalTrait
      *
      * @param string $key       Input List Key
      * @param string $fieldName Field Identifier / Name
+     *
+     * @return void
      */
     private function getOptionalFields($key, $fieldName)
     {
@@ -105,6 +105,8 @@ trait OptionalTrait
      *
      * @param string $fieldName Field Identifier / Name
      * @param mixed  $fieldData Field Data
+     *
+     * @return void
      */
     private function setOptionalFields($fieldName, $fieldData)
     {

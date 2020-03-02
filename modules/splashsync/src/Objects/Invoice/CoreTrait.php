@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2019 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) 2015-2020 Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -25,17 +25,19 @@ trait CoreTrait
 {
     /**
      * Build Core Fields using FieldFactory
+     *
+     * @return void
      */
     private function buildInvoiceCoreFields()
     {
         //====================================================================//
         // Order Object
-        $this->fieldsFactory()->create(self::objects()->encode("Order", SPL_T_ID))
+        $this->fieldsFactory()->create((string) self::objects()->encode("Order", SPL_T_ID))
             ->Identifier("id_order")
             ->Name($this->spl->l('Order'))
             ->MicroData("http://schema.org/Invoice", "referencesOrder")
             ->isReadOnly()
-                ;
+        ;
 
         //====================================================================//
         // Invoice Reference
@@ -45,7 +47,7 @@ trait CoreTrait
             ->MicroData("http://schema.org/Invoice", "confirmationNumber")
             ->isReadOnly()
             ->isListed()
-                ;
+        ;
     }
 
     /**
@@ -53,6 +55,8 @@ trait CoreTrait
      *
      * @param string $key       Input List Key
      * @param string $fieldName Field Identifier / Name
+     *
+     * @return void
      */
     private function getInvoiceCoreFields($key, $fieldName)
     {

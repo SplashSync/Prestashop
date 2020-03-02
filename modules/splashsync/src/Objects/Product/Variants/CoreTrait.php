@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2019 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) 2015-2020 Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -38,6 +38,8 @@ trait CoreTrait
 
     /**
      * Build Fields using FieldFactory
+     *
+     * @return void
      */
     protected function buildVariantsCoreFields()
     {
@@ -56,7 +58,7 @@ trait CoreTrait
 
         //====================================================================//
         // Default Product Variant
-        $this->fieldsFactory()->create(self::objects()->encode("Product", SPL_T_ID))
+        $this->fieldsFactory()->create((string) self::objects()->encode("Product", SPL_T_ID))
             ->Identifier("default_id")
             ->Name('Default Variant')
             ->Group(Translate::getAdminTranslation("Meta", "AdminThemes"))
@@ -113,6 +115,8 @@ trait CoreTrait
      *
      * @param string $key       Input List Key
      * @param string $fieldName Field Identifier / Name
+     *
+     * @return void
      */
     protected function getVariantsParentFields($key, $fieldName)
     {
@@ -144,6 +148,8 @@ trait CoreTrait
      *
      * @param string $key       Input List Key
      * @param string $fieldName Field Identifier / Name
+     *
+     * @return void
      */
     protected function getVariantsDefaultsFields($key, $fieldName)
     {
@@ -160,7 +166,7 @@ trait CoreTrait
                 break;
             case 'default_id':
                 if ($this->AttributeId) {
-                    $unikId = (int) $this->getUnikId(
+                    $unikId = (string) $this->getUnikId(
                         $this->ProductId,
                         $this->object->getDefaultIdProductAttribute()
                     );
@@ -182,6 +188,8 @@ trait CoreTrait
      *
      * @param string $key       Input List Key
      * @param string $fieldName Field Identifier / Name
+     *
+     * @return void
      */
     protected function getVariantChildsFields($key, $fieldName)
     {
@@ -214,6 +222,8 @@ trait CoreTrait
 
     /**
      * Delete Product Combination Resume Array
+     *
+     * @return void
      */
     protected function deleteCombinationResume()
     {
@@ -229,6 +239,8 @@ trait CoreTrait
      *
      * @param string $fieldName Field Identifier / Name
      * @param mixed  $fieldData Field Data
+     *
+     * @return void
      */
     protected function setVariantsCoreFields($fieldName, $fieldData)
     {
@@ -263,6 +275,8 @@ trait CoreTrait
      *
      * @param string $fieldName Field Identifier / Name
      * @param mixed  $fieldData Field Data
+     *
+     * @return void
      */
     protected function setVariantsParentFields($fieldName, $fieldData)
     {

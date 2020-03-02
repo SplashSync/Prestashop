@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2019 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) 2015-2020 Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -20,8 +20,6 @@ use Translate;
 
 /**
  * Access to Product Identification CheckSum
- *
- * @author      B. Paquier <contact@splashsync.com>
  */
 trait ChecksumTrait
 {
@@ -57,6 +55,8 @@ trait ChecksumTrait
 
     /**
      * Build Fields using FieldFactory
+     *
+     * @return void
      */
     private function buildChecksumFields()
     {
@@ -86,6 +86,8 @@ trait ChecksumTrait
      *
      * @param string $key       Input List Key
      * @param string $fieldName Field Identifier / Name
+     *
+     * @return void
      */
     private function getChecksumFields($key, $fieldName)
     {
@@ -123,7 +125,7 @@ trait ChecksumTrait
             $attributes
         );
 
-        return self::md5()->fromArray($md5Array);
+        return (string) self::md5()->fromArray($md5Array);
     }
 
     /**
@@ -142,6 +144,6 @@ trait ChecksumTrait
             $attributes
         );
 
-        return self::md5()->debugFromArray($md5Array);
+        return (string) self::md5()->debugFromArray($md5Array);
     }
 }

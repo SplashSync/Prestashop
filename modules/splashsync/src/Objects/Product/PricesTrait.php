@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2019 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) 2015-2020 Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -36,6 +36,8 @@ trait PricesTrait
 
     /**
      * Build Fields using FieldFactory
+     *
+     * @return void
      */
     private function buildPricesFields()
     {
@@ -79,7 +81,6 @@ trait PricesTrait
                     "AdminProducts"
                 )." Base (".$this->Currency->sign.")"
             )
-            ->Group($groupName)
             ->MicroData("http://schema.org/Product", "wholesalePrice");
     }
 
@@ -88,6 +89,8 @@ trait PricesTrait
      *
      * @param null|string $key       Input List Key
      * @param string      $fieldName Field Identifier / Name
+     *
+     * @return void
      */
     private function getPricesFields($key, $fieldName)
     {
@@ -170,6 +173,8 @@ trait PricesTrait
      *
      * @param string $fieldName Field Identifier / Name
      * @param mixed  $fieldData Field Data
+     *
+     * @return void
      */
     private function setPricesFields($fieldName, $fieldData)
     {
@@ -237,6 +242,8 @@ trait PricesTrait
      * Write New Price
      *
      * @param array $newPrice New Product Price Array
+     *
+     * @return void
      */
     private function updateProductPrice($newPrice)
     {
@@ -256,7 +263,7 @@ trait PricesTrait
         // Update product Price without Attribute
         } else {
             if (abs($newPrice["ht"] - $this->object->price) > 1E-6) {
-                $this->object->price = number_format(round($newPrice["ht"], 9), 9);
+                $this->object->price = (float) number_format(round($newPrice["ht"], 9), 9);
                 $this->needUpdate();
             }
         }
@@ -292,7 +299,7 @@ trait PricesTrait
      *
      * @param array $newPrice New Product Price Array
      *
-     * @return bool
+     * @return void
      */
     private function updateAttributePrice($newPrice)
     {

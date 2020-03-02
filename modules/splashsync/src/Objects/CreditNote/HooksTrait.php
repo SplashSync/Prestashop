@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2019 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) 2015-2020 Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -33,6 +33,8 @@ trait HooksTrait
      * This hook is called after a Credit Note is created
      *
      * @param array $params
+     *
+     * @return bool
      */
     public function hookactionObjectOrderSlipAddAfter($params)
     {
@@ -47,6 +49,8 @@ trait HooksTrait
      * This hook is called after a Credit Note is updated
      *
      * @param array $params
+     *
+     * @return bool
      */
     public function hookactionObjectOrderSlipUpdateAfter($params)
     {
@@ -61,6 +65,8 @@ trait HooksTrait
      * This hook is called after a Credit Note is deleted
      *
      * @param array $params
+     *
+     * @return bool
      */
     public function hookactionObjectOrderSlipDeleteAfter($params)
     {
@@ -77,6 +83,8 @@ trait HooksTrait
      * @param OrderSlip $order   Prestashop OrderSlip Object
      * @param string    $action  Performed Action
      * @param string    $comment Action Comment
+     *
+     * @return bool
      */
     private function hookactionCreditNote($order, $action, $comment)
     {
@@ -96,6 +104,6 @@ trait HooksTrait
         }
         //====================================================================//
         // Commit Update For Invoice
-        return $this->doCommit("CreditNote", $objectId, $action, $comment);
+        return $this->doCommit("CreditNote", (string) $objectId, $action, $comment);
     }
 }

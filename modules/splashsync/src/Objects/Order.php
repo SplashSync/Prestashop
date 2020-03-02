@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2019 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) 2015-2020 Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -18,6 +18,7 @@ namespace   Splash\Local\Objects;
 use Configuration;
 use Currency;
 use Order as psOrder;
+use PrestaShopCollection;
 use Shop;
 use Splash\Core\SplashCore      as Splash;
 use Splash\Local\Local;
@@ -64,41 +65,68 @@ class Order extends AbstractObject
     //====================================================================//
 
     /**
-     *  Object Disable Flag. Uncomment this line to Override this flag and disable Object.
-     */
-//    protected static    $DISABLED        =  True;
-
-    /**
-     *  Object Name (Translated by Module)
+     * Object Name (Translated by Module)
+     *
+     * @var string
      */
     protected static $NAME = "Customer Order";
 
     /**
-     *  Object Description (Translated by Module)
+     * Object Description (Translated by Module)
+     *
+     * @var string
      */
     protected static $DESCRIPTION = "Prestashop Customers Order Object";
 
     /**
-     *  Object Icon (FontAwesome or Glyph ico tag)
+     * Object Icon (FontAwesome or Glyph ico tag)
+     *
+     * @var string
      */
     protected static $ICO = "fa fa-shopping-cart ";
 
+    //====================================================================//
+    // Object Synchronistion Recommended Configuration
+    //====================================================================//
+
     /**
-     *  Object Synchronistion Recommended Configuration
+     * Enable Creation Of New Local Objects when Not Existing
+     *
+     * @var bool
      */
-    // Enable Creation Of New Local Objects when Not Existing
     protected static $ENABLE_PUSH_CREATED = false;
-    // Enable Update Of Existing Local Objects when Modified Remotly
+
+    /**
+     * Enable Update Of Existing Local Objects when Modified Remotly
+     *
+     * @var bool
+     */
     protected static $ENABLE_PUSH_UPDATED = false;
-    // Enable Delete Of Existing Local Objects when Deleted Remotly
+
+    /**
+     * Enable Delete Of Existing Local Objects when Deleted Remotly
+     *
+     * @var bool
+     */
     protected static $ENABLE_PUSH_DELETED = false;
 
     //====================================================================//
     // General Class Variables
     //====================================================================//
 
+    /**
+     * @var array
+     */
     protected $Products = array();
+
+    /**
+     * @var array|PrestaShopCollection
+     */
     protected $Payments = array();
+
+    /**
+     * @var string
+     */
     protected $PaymentMethod;
 
     /**

@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2019 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) 2015-2020 Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -45,19 +45,21 @@ trait ItemsTrait
 
     /**
      * Build Fields using FieldFactory
+     *
+     * @return void
      */
     protected function buildItemsFields()
     {
         //====================================================================//
         // Order Line Product Identifier
-        $this->fieldsFactory()->create(self::objects()->Encode("Product", SPL_T_ID))
+        $this->fieldsFactory()->create((string) self::objects()->Encode("Product", SPL_T_ID))
             ->Identifier("product_id")
             ->InList("lines")
             ->Name(Translate::getAdminTranslation("Product ID", "AdminImport"))
             ->MicroData("http://schema.org/Product", "productID")
             ->Group(Translate::getAdminTranslation("Products", "AdminOrders"))
             ->Association("product_name@lines", "product_quantity@lines", "product_id@lines", "unit_price@lines")
-                ;
+        ;
 
         //====================================================================//
         // Order Line Description
@@ -68,7 +70,7 @@ trait ItemsTrait
             ->MicroData("http://schema.org/partOfInvoice", "description")
             ->Group(Translate::getAdminTranslation("Products", "AdminOrders"))
             ->Association("product_name@lines", "product_quantity@lines", "product_id@lines", "unit_price@lines")
-                ;
+        ;
 
         //====================================================================//
         // Order Line Quantity
@@ -79,7 +81,7 @@ trait ItemsTrait
             ->MicroData("http://schema.org/QuantitativeValue", "value")
             ->Group(Translate::getAdminTranslation("Products", "AdminOrders"))
             ->Association("product_name@lines", "product_quantity@lines", "product_id@lines", "unit_price@lines")
-                ;
+        ;
 
         //====================================================================//
         // Order Line Unit Price
@@ -90,7 +92,7 @@ trait ItemsTrait
             ->MicroData("http://schema.org/PriceSpecification", "price")
             ->Group(Translate::getAdminTranslation("Products", "AdminOrders"))
             ->Association("product_name@lines", "product_quantity@lines", "product_id@lines", "unit_price@lines")
-                ;
+        ;
 
         //====================================================================//
         // Order Line Tax Name
@@ -102,7 +104,7 @@ trait ItemsTrait
             ->Association("product_name@lines", "product_quantity@lines", "unit_price@lines")
             ->Group(Translate::getAdminTranslation("Products", "AdminOrders"))
             ->isReadOnly()
-                ;
+        ;
 
         //====================================================================//
         // Order Line Discount
@@ -114,7 +116,7 @@ trait ItemsTrait
             ->Group(Translate::getAdminTranslation("Products", "AdminOrders"))
             ->Association("product_name@lines", "product_quantity@lines", "unit_price@lines")
             ->isReadOnly()
-                ;
+        ;
     }
 
     /**
@@ -122,6 +124,8 @@ trait ItemsTrait
      *
      * @param string $key       Input List Key
      * @param string $fieldName Field Identifier / Name
+     *
+     * @return void
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
@@ -206,6 +210,8 @@ trait ItemsTrait
 
     /**
      * Identify if a Customer Cart Rule Exists for this Credit Note
+     *
+     * @return bool
      */
     protected function checkCustomerCartRule()
     {
@@ -233,6 +239,8 @@ trait ItemsTrait
      *
      * @param string $key       Input List Key
      * @param string $fieldName Field Identifier / Name
+     *
+     * @return void
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
@@ -293,7 +301,7 @@ trait ItemsTrait
     /**
      * Get Order Shipping Price
      *
-     * @return array
+     * @return array|string
      */
     private function getShippingPrice()
     {

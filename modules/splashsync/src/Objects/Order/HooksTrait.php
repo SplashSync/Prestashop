@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2019 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) 2015-2020 Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -34,6 +34,8 @@ trait HooksTrait
      * This hook is called after a order is created
      *
      * @param array $params
+     *
+     * @return bool
      */
     public function hookactionObjectOrderAddAfter($params)
     {
@@ -44,6 +46,8 @@ trait HooksTrait
      * This hook is called after a order is updated
      *
      * @param array $params
+     *
+     * @return bool
      */
     public function hookactionObjectOrderUpdateAfter($params)
     {
@@ -54,6 +58,8 @@ trait HooksTrait
      * This hook is called after a order is deleted
      *
      * @param array $params
+     *
+     * @return bool
      */
     public function hookactionObjectOrderDeleteAfter($params)
     {
@@ -70,6 +76,8 @@ trait HooksTrait
      * This hook is called after a Invoice is created
      *
      * @param array $params
+     *
+     * @return bool
      */
     public function hookactionObjectOrderInvoiceAddAfter($params)
     {
@@ -80,6 +88,8 @@ trait HooksTrait
      * This hook is called after a Invoice is updated
      *
      * @param array $params
+     *
+     * @return bool
      */
     public function hookactionObjectOrderInvoiceUpdateAfter($params)
     {
@@ -90,6 +100,8 @@ trait HooksTrait
      * This hook is called after a Invoice is deleted
      *
      * @param array $params
+     *
+     * @return bool
      */
     public function hookactionObjectOrderInvoiceDeleteAfter($params)
     {
@@ -102,6 +114,8 @@ trait HooksTrait
      * @param object $order   Prestashop Order Object
      * @param string $action  Performed Action
      * @param string $comment Action Comment
+     *
+     * @return bool
      */
     private function hookactionOrder($order, $action, $comment)
     {
@@ -136,7 +150,7 @@ trait HooksTrait
             $invoices = new PrestaShopCollection('OrderInvoice');
             $invoices->where('id_order', '=', $orderId);
             foreach ($invoices as $invoice) {
-                $errors += !$this->doCommit("Invoice", $invoice->id, $action, $comment);
+                $errors += !$this->doCommit("Invoice", (string) $invoice->id, $action, $comment);
             }
         }
 
@@ -149,6 +163,8 @@ trait HooksTrait
      * @param object $order   Prestashop Order Object
      * @param string $action  Performed Action
      * @param string $comment Action Comment
+     *
+     * @return bool
      */
     private function hookactionInvoice($order, $action, $comment)
     {
@@ -170,7 +186,7 @@ trait HooksTrait
         }
         //====================================================================//
         // Commit Update For Invoice
-        return $this->doCommit("Invoice", $objectId, $action, $comment);
+        return $this->doCommit("Invoice", (string) $objectId, $action, $comment);
     }
 
     /**

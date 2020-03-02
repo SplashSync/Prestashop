@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2019 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) 2015-2020 Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -17,6 +17,7 @@ namespace Splash\Local\Objects\Order;
 
 use Order;
 use OrderPayment;
+use PrestaShopCollection;
 use Splash\Core\SplashCore      as Splash;
 use Splash\Local\Objects\Invoice;
 use Translate;
@@ -53,6 +54,8 @@ trait PaymentsTrait
 
     /**
      * Build Fields using FieldFactory
+     *
+     * @return void
      */
     protected function buildPaymentsFields()
     {
@@ -66,7 +69,7 @@ trait PaymentsTrait
             ->Group(Translate::getAdminTranslation("Payment", "AdminPayment"))
             ->Association("mode@payments", "amount@payments")
             ->AddChoices(array_flip($this->knownPaymentMethods))
-                ;
+        ;
 
         //====================================================================//
         // Payment Line Date
@@ -77,7 +80,7 @@ trait PaymentsTrait
             ->MicroData("http://schema.org/PaymentChargeSpecification", "validFrom")
             ->Group(Translate::getAdminTranslation("Payment", "AdminPayment"))
             ->isReadOnly()
-                ;
+        ;
 
         //====================================================================//
         // Payment Line Payment Identifier
@@ -88,7 +91,7 @@ trait PaymentsTrait
             ->MicroData("http://schema.org/Invoice", "paymentMethodId")
             ->Association("mode@payments", "amount@payments")
             ->Group(Translate::getAdminTranslation("Payment", "AdminPayment"))
-                ;
+        ;
 
         //====================================================================//
         // Payment Line Amount
@@ -99,7 +102,7 @@ trait PaymentsTrait
             ->MicroData("http://schema.org/PaymentChargeSpecification", "price")
             ->Group(Translate::getAdminTranslation("Payment", "AdminPayment"))
             ->Association("mode@payments", "amount@payments")
-                ;
+        ;
     }
 
     /**
@@ -107,6 +110,8 @@ trait PaymentsTrait
      *
      * @param string $key       Input List Key
      * @param string $fieldName Field Identifier / Name
+     *
+     * @return void
      */
     protected function getPaymentsFields($key, $fieldName)
     {
@@ -118,7 +123,7 @@ trait PaymentsTrait
         }
         //====================================================================//
         // Verify List is Not Empty
-        if (!is_a($this->Payments, "PrestaShopCollection")) {
+        if (!($this->Payments instanceof PrestaShopCollection)) {
             unset($this->in[$key]);
 
             return;
@@ -174,6 +179,8 @@ trait PaymentsTrait
      *
      * @param string $fieldName Field Identifier / Name
      * @param mixed  $fieldData Field Data
+     *
+     * @return void
      */
     protected function setPaymentsFields($fieldName, $fieldData)
     {
@@ -211,6 +218,8 @@ trait PaymentsTrait
      * Enable/Disable Credit Notes Mode
      *
      * @param bool $enable Enable / Disbale Flag
+     *
+     * @return void
      */
     protected function setCreditNoteMode($enable)
     {
@@ -227,7 +236,7 @@ trait PaymentsTrait
         $totalPaid = 0;
         //====================================================================//
         // Verify List is Not Empty
-        if (!is_a($this->Payments, "PrestaShopCollection")) {
+        if (!($this->Payments instanceof PrestaShopCollection)) {
             return $totalPaid;
         }
         //====================================================================//

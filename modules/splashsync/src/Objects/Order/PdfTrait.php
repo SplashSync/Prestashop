@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2019 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) 2015-2020 Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -26,6 +26,8 @@ trait PdfTrait
 {
     /**
      * Build Fields using FieldFactory
+     *
+     * @return void
      */
     private function buildPdfFields()
     {
@@ -57,6 +59,8 @@ trait PdfTrait
      *
      * @param string $key       Input List Key
      * @param string $fieldName Field Identifier / Name
+     *
+     * @return void
      */
     private function getPdfFields($key, $fieldName)
     {

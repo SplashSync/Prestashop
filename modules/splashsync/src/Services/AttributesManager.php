@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2019 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) 2015-2020 Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -24,8 +24,6 @@ use Tools;
 
 /**
  * Prestahop Products Variants Attributes Manager
- *
- * @author      B. Paquier <contact@splashsync.com>
  */
 class AttributesManager
 {
@@ -197,7 +195,7 @@ class AttributesManager
                 }
                 //====================================================================//
                 // Add Attribute to Group Values
-                static::$attributes[$group->id][$attrId] = new Attribute($attrId);
+                static::$attributes[$group->id][$attrId] = new Attribute((int) $attrId);
             }
         }
 

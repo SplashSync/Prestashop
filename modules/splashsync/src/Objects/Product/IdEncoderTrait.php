@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2019 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) 2015-2020 Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -102,7 +102,7 @@ trait IdEncoderTrait
         //====================================================================//
         // Id Splash Id String Given
         if (false !== strpos((string) $unikId, '@@')) {
-            $decoded = explode('@@', $unikId);
+            $decoded = explode('@@', (string) $unikId);
 
             return array(
                 'pId' => (int) $decoded[0],
@@ -112,8 +112,8 @@ trait IdEncoderTrait
         //====================================================================//
         // Standard Id Decoder
         return array(
-            'pId' => $unikId & 0xFFFFF,
-            'aId' => $unikId >> 20,
+            'pId' => (int) $unikId & 0xFFFFF,
+            'aId' => (int) $unikId >> 20,
         );
     }
 }

@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2019 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) 2015-2020 Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -31,6 +31,8 @@ class L02AttributesManagerTest extends ObjectsCase
 {
     /**
      * Ensure Products Combinations Feature is Active on Prestashop Install
+     *
+     * @return void
      */
     public function testFeatureIsActive()
     {
@@ -44,6 +46,8 @@ class L02AttributesManagerTest extends ObjectsCase
 
     /**
      * Test Identification of Attributes Groups
+     *
+     * @return void
      */
     public function testIdentifyAttributeGroup()
     {
@@ -66,6 +70,8 @@ class L02AttributesManagerTest extends ObjectsCase
 
     /**
      * Test Creation of Attributes Groups & Values
+     *
+     * @return void
      */
     public function testCreateAttributeGroup()
     {
@@ -136,6 +142,8 @@ class L02AttributesManagerTest extends ObjectsCase
      *
      * @param AttributeGroup $group Attribute Group Object
      * @param string         $code  Attribute Group Name in Default Language
+     *
+     * @return void
      */
     private function coreTestCreateAttribute($group, $code)
     {
@@ -192,6 +200,8 @@ class L02AttributesManagerTest extends ObjectsCase
      * Ensure Attributes Group is Deleted
      *
      * @param string $code
+     *
+     * @return void
      */
     private function ensureAttributeGroupIsDeleted($code)
     {

@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2019 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) 2015-2020 Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -64,6 +64,8 @@ trait ImagesTrait
 
     /**
      * Build Fields using FieldFactory
+     *
+     * @return void
      */
     private function buildImagesFields()
     {
@@ -118,6 +120,8 @@ trait ImagesTrait
      *
      * @param string $key       Input List Key
      * @param string $fieldName Field Identifier / Name
+     *
+     * @return void
      */
     private function getImagesFields($key, $fieldName)
     {
@@ -155,6 +159,8 @@ trait ImagesTrait
      *
      * @param string $fieldName Field Identifier / Name
      * @param mixed  $fieldData Field Data
+     *
+     * @return void
      */
     private function setImagesFields($fieldName, $fieldData)
     {
@@ -188,7 +194,7 @@ trait ImagesTrait
         $publicUrl = Context::getContext()->link;
         //====================================================================//
         // Fetch Images Object
-        $objectImage = new Image($imageId, SLM::getDefaultLangId());
+        $objectImage = new Image((int) $imageId, SLM::getDefaultLangId());
         //====================================================================//
         // Detect Image Name
         /** @var array $linkRewrite */
@@ -202,7 +208,7 @@ trait ImagesTrait
             ($objectImage->legend?$objectImage->legend:$objectImage->id.".".$objectImage->image_format),
             $objectImage->id.".".$objectImage->image_format,
             _PS_PROD_IMG_DIR_.$objectImage->getImgFolder(),
-            $publicUrl->getImageLink($imageName, $imageId)
+            $publicUrl->getImageLink($imageName, (string) $imageId)
         );
         //====================================================================//
         // Encode Image Information Array
@@ -260,7 +266,7 @@ trait ImagesTrait
      *
      * @param string $md5 Expected Image Md5
      *
-     * @retrurn     Image|false
+     * @return false|Image
      */
     private function searchImage($md5)
     {
@@ -290,7 +296,7 @@ trait ImagesTrait
      * @param int    $psImageId Prestashop Image Id
      * @param string $md5       Expected Image Md5
      *
-     * @retrurn     Image|false
+     * @return false|Image
      */
     private function isSearchedImage($psImageId, $md5)
     {
@@ -318,7 +324,8 @@ trait ImagesTrait
      * Detect Image Position (Using AttributeId, Given Position or List Index)
      *
      * @param array $imgArray Splash Image Value Definition Array
-     * @retrurn     int|null
+     *
+     * @return null|int
      */
     private function getImagePosition($imgArray)
     {
@@ -326,7 +333,7 @@ trait ImagesTrait
         //====================================================================//
         // Generic & Combination Mode => Update Only if Position Given
         if (isset($imgArray["position"]) && is_numeric($imgArray["position"])) {
-            $position = $imgArray["position"];
+            $position = (int) $imgArray["position"];
         //====================================================================//
         // Generic Mode Only => Use List Index
         } elseif (!$this->AttributeId || (Splash::isDebugMode())) {
@@ -341,7 +348,8 @@ trait ImagesTrait
      *
      * @param Image $psImage  Prestashop Image Object
      * @param array $imgArray Splash Image Value Definition Array
-     * @retrurn     void
+     *
+     * @return void
      */
     private function updateImagePosition(&$psImage, $imgArray)
     {
@@ -358,7 +366,8 @@ trait ImagesTrait
      * Detect Image Cover Flag (Using AttributeId, Given Position or List Index)
      *
      * @param array $imgArray Splash Image Value Definition Array
-     * @retrurn     bool|null
+     *
+     * @return null|bool
      */
     private function getImageCoverFlag($imgArray)
     {
@@ -372,11 +381,12 @@ trait ImagesTrait
     }
 
     /**
-     * @abstract    Update Image Cover Flag (Using AttributeId, Given Position or List Index)
+     * Update Image Cover Flag (Using AttributeId, Given Position or List Index)
      *
      * @param Image $psImage  Prestashop Image Object
      * @param array $imgArray Splash Image Value Definition Array
-     * @retrurn     void
+     *
+     * @return void
      */
     private function updateImageCoverFlag(&$psImage, $imgArray)
     {
@@ -398,7 +408,8 @@ trait ImagesTrait
      * Update Image in Database
      *
      * @param Image $psImage Prestashop Image Object
-     * @retrurn     void
+     *
+     * @return void
      */
     private function updateImage(&$psImage)
     {
@@ -412,9 +423,10 @@ trait ImagesTrait
      * Detect Image Visible Flag
      *
      * @param array $imgArray Splash Image Value Definition Array
-     * @retrurn     bool
+     *
+     * @return bool
      */
-    private function getImageVisibleFlag($imgArray)
+    private function isImageVisible($imgArray)
     {
         //====================================================================//
         // Visible Flag is Available
@@ -429,7 +441,8 @@ trait ImagesTrait
      * Update Combination Images List
      *
      * @param array $psImageIds Prestashop Image Ids
-     * @retrurn     void
+     *
+     * @return void
      */
     private function updateAttributeImages($psImageIds)
     {
@@ -458,6 +471,8 @@ trait ImagesTrait
 
     /**
      * Update Product Image Thumbnail
+     *
+     * @return void
      */
     private function updateImgThumbnail()
     {
@@ -487,7 +502,7 @@ trait ImagesTrait
     /**
      * Flush Product Images Reading Cache
      *
-     * @retrurn     void
+     * @return void
      */
     private function flushImageCache()
     {
@@ -497,6 +512,8 @@ trait ImagesTrait
 
     /**
      * Return Product Images Informations Array from Prestashop Object Class
+     *
+     * @return array
      */
     private function getImagesInfoArray()
     {
@@ -514,6 +531,7 @@ trait ImagesTrait
         );
         //====================================================================//
         // Images List is Empty
+        $this->imagesCache = array();
         if (!count($productImages)) {
             return $this->imagesCache;
         }
@@ -532,6 +550,8 @@ trait ImagesTrait
      * Update Product Image Array from Server Data
      *
      * @param mixed $data Input Image List for Update
+     *
+     * @return bool
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
@@ -570,8 +590,8 @@ trait ImagesTrait
                 // If Not found, Add this object to list
                 $psImage = $this->addImageToProduct(
                     $inValue["image"],
-                    $this->getImagePosition($inValue),
-                    $this->getImageCoverFlag($inValue)
+                    (int) $this->getImagePosition($inValue),
+                    (bool) $this->getImageCoverFlag($inValue)
                 );
             }
             //====================================================================//
@@ -588,7 +608,7 @@ trait ImagesTrait
             $this->updateImage($psImage);
             //====================================================================//
             // Add Ps Image Id to Visible
-            if ($this->getImageVisibleFlag($inValue)) {
+            if ($this->isImageVisible($inValue)) {
                 $visibleImageIds[] = $psImage->id;
             }
         }
@@ -656,7 +676,9 @@ trait ImagesTrait
     /**
      * CleanUp Product Images List
      *
-     * @param array $objectImagesList Array Of Remaining Product Images
+     * @param null|array $objectImagesList Array Of Remaining Product Images
+     *
+     * @return void
      */
     private function cleanImages($objectImagesList)
     {

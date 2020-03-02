@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2019 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) 2015-2020 Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -281,14 +281,14 @@ trait HooksTrait
         }
         //====================================================================//
         // Generate Unik Product Id
-        $unikId = (int) Product::getUnikIdStatic($combination->id_product, $combinationId);
+        $unikId = Product::getUnikIdStatic($combination->id_product, $combinationId);
         //====================================================================//
         // Commit Update For Product Attribute
         $this->doCommit("Product", $unikId, $action, $comment);
         if (SPL_A_CREATE == $action) {
             //====================================================================//
             // Commit Update For Product Attribute
-            $this->doCommit("Product", $combination->id_product, SPL_A_DELETE, $comment);
+            $this->doCommit("Product", (string) $combination->id_product, SPL_A_DELETE, $comment);
         }
 
         return true;

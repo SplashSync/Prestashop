@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2019 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) 2015-2020 Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -28,7 +28,7 @@ use Splash\Core\SplashCore      as Splash;
 use Splash\Models\AbstractWidget;
 
 /**
- *  Demo Widget for Prestashop
+ * Demo Widget for Prestashop
  */
 class Demo extends AbstractWidget
 {
@@ -44,22 +44,30 @@ class Demo extends AbstractWidget
     //====================================================================//
 
     /**
-     *  Widget Disable Flag. Uncomment thius line to Override this flag and disable Object.
+     * Widget Disable Flag. Uncomment thius line to Override this flag and disable Object.
+     *
+     * @var bool
      */
     protected static $DISABLED = true;
 
     /**
-     *  Widget Name (Translated by Module)
+     * Widget Name (Translated by Module)
+     *
+     * @var string
      */
     protected static $NAME = "Demo Widget";
 
     /**
-     *  Widget Description (Translated by Module)
+     * Widget Description (Translated by Module)
+     *
+     * @var string
      */
     protected static $DESCRIPTION = "TEST & DEMONSTRATION WIDGET";
 
     /**
-     *  Widget Icon (FontAwesome or Glyph ico tag)
+     * Widget Icon (FontAwesome or Glyph ico tag)
+     *
+     * @var string
      */
     protected static $ICO = "fa fa-magic";
 
@@ -69,6 +77,8 @@ class Demo extends AbstractWidget
 
     /**
      * Return Widget Customs Parameters
+     *
+     * @return array|false
      */
     public function getParameters()
     {
@@ -140,6 +150,8 @@ class Demo extends AbstractWidget
 
     /**
      * Block Building - Text Intro
+     *
+     * @return void
      */
     private function buildIntroBlock()
     {
@@ -152,12 +164,14 @@ class Demo extends AbstractWidget
      * Block Building - Inputs Parameters
      *
      * @param null|array|ArrayObject $inputs
+     *
+     * @return void
      */
     private function buildParametersBlock($inputs = array())
     {
         //====================================================================//
         // verify Inputs
-        if (!is_array($inputs) && !is_a($inputs, "ArrayObject")) {
+        if (!is_array($inputs) && !($inputs instanceof ArrayObject)) {
             $this->blocksFactory()
                 ->addNotificationsBlock(array("warning" => "Inputs is not an Array!"));
 
@@ -175,6 +189,8 @@ class Demo extends AbstractWidget
 
     /**
      * Block Building - Notifications Parameters
+     *
+     * @return void
      */
     private function buildNotificationsBlock()
     {

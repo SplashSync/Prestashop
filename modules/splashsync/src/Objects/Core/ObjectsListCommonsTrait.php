@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2019 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) 2015-2020 Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -16,6 +16,7 @@
 namespace   Splash\Local\Objects\Core;
 
 use Db;
+use DbQuery;
 use Splash\Core\SplashCore      as Splash;
 
 /**
@@ -49,7 +50,7 @@ trait ObjectsListCommonsTrait
     /**
      * Get Raw Data Array for an Sql Request
      *
-     * @param string     $sql
+     * @param DbQuery    $sql
      * @param string     $sortField
      * @param null|array $params
      *
@@ -70,7 +71,7 @@ trait ObjectsListCommonsTrait
         // Build LIMIT
         $sqlLimitMax = empty($params["max"])        ?   50  :   pSQL($params["max"]);
         $sqlLimitOff = empty($params["offset"])     ?   0   :   pSQL($params["offset"]);
-        $sql->limit($sqlLimitMax, $sqlLimitOff);
+        $sql->limit((int) $sqlLimitMax, (int)  $sqlLimitOff);
         //====================================================================//
         // Execute final request
         $result = Db::getInstance()->executeS($sql);
@@ -84,7 +85,7 @@ trait ObjectsListCommonsTrait
     /**
      * Get Splash generic Data Array from a Raw Sql Request
      *
-     * @param string     $sql
+     * @param DbQuery    $sql
      * @param string     $sortField
      * @param null|array $params
      *

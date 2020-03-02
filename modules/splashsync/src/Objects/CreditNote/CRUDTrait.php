@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2019 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) 2015-2020 Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -52,7 +52,7 @@ trait CRUDTrait
 
         //====================================================================//
         // Load Object
-        $this->object = new OrderSlip($objectId);
+        $this->object = new OrderSlip((int) $objectId);
         if ($this->object->id != $objectId) {
             return Splash::log()->errTrace("Unable to load Credit Note (".$objectId.").");
         }
@@ -63,7 +63,7 @@ trait CRUDTrait
 
         //====================================================================//
         // Load Credit Note Products
-        $this->Products = $this->object->getOrdersSlipProducts($objectId, $this->Order);
+        $this->Products = $this->object->getOrdersSlipProducts((int) $objectId, $this->Order);
         $this->Payments = $this->Order->getOrderPaymentCollection();
         $this->PaymentMethod = $this->Order->module;
         //====================================================================//
@@ -83,13 +83,14 @@ trait CRUDTrait
 
     /**
      * Create Request Object
+     *
+     * @return null
      */
     public function create()
     {
         //====================================================================//
         // Stack Trace
         Splash::log()->trace();
-
         //====================================================================//
         // An Invoice Cannot Get deleted
         Splash::log()->errTrace("You Cannot Create Prestashop Credit Notes");

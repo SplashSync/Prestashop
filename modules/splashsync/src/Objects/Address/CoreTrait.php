@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2019 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) 2015-2020 Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -16,8 +16,6 @@
 namespace Splash\Local\Objects\Address;
 
 use Customer;
-//====================================================================//
-// Prestashop Static Classes
 use Splash\Core\SplashCore      as Splash;
 use Translate;
 
@@ -28,6 +26,8 @@ trait CoreTrait
 {
     /**
      * Build Address Core Fields using FieldFactory
+     *
+     * @return void
      */
     private function buildCoreFields()
     {
@@ -41,7 +41,7 @@ trait CoreTrait
 
         //====================================================================//
         // Customer
-        $this->fieldsFactory()->create(self::objects()->encode("ThirdParty", SPL_T_ID))
+        $this->fieldsFactory()->create((string) self::objects()->encode("ThirdParty", SPL_T_ID))
             ->Identifier("id_customer")
             ->Name(Translate::getAdminTranslation("Customer ID", "AdminCustomerThreads"))
             ->MicroData("http://schema.org/Organization", "ID")
@@ -81,6 +81,8 @@ trait CoreTrait
      *
      * @param string $key       Input List Key
      * @param string $fieldName Field Identifier / Name
+     *
+     * @return void
      */
     private function getCoreFields($key, $fieldName)
     {
@@ -113,6 +115,8 @@ trait CoreTrait
      *
      * @param string $fieldName Field Identifier / Name
      * @param mixed  $fieldData Field Data
+     *
+     * @return void
      */
     private function setCoreFields($fieldName, $fieldData)
     {
@@ -144,6 +148,8 @@ trait CoreTrait
      * Write Given Fields
      *
      * @param string $customerIdString
+     *
+     * @return bool
      */
     private function setIdCustomer($customerIdString)
     {

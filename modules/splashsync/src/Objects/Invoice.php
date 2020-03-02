@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2019 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) 2015-2020 Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -65,42 +65,74 @@ class Invoice extends AbstractObject
     //====================================================================//
 
     /**
-     *  Object Disable Flag. Uncomment this line to Override this flag and disable Object.
-     */
-//    protected static    $DISABLED        =  True;
-
-    /**
-     *  Object Name (Translated by Module)
+     * Object Name (Translated by Module)
+     *
+     * @var string
      */
     protected static $NAME = "Customer Invoice";
 
     /**
-     *  Object Description (Translated by Module)
+     * Object Description (Translated by Module)
+     *
+     * @var string
      */
     protected static $DESCRIPTION = "Prestashop Customers Invoice Object";
 
     /**
-     *  Object Icon (FontAwesome or Glyph ico tag)
+     * Object Icon (FontAwesome or Glyph ico tag)
+     *
+     * @var string
      */
     protected static $ICO = "fa fa-money";
 
-    /**
-     *  Object Synchronistion Limitations
-     *
-     *  This Flags are Used by Splash Server to Prevent Unexpected Operations on Remote Server
-     */
-    protected static $ALLOW_PUSH_CREATED = false;       // Allow Creation Of New Local Objects
-    protected static $ALLOW_PUSH_UPDATED = false;       // Allow Update Of Existing Local Objects
-    protected static $ALLOW_PUSH_DELETED = false;       // Allow Delete Of Existing Local Objects
+    //====================================================================//
+    // Object Synchronistion Limitations
+    //====================================================================//
 
     /**
-     *  Object Synchronistion Recommended Configuration
+     * Allow Creation Of New Local Objects
+     *
+     * @var bool
      */
-    // Enable Creation Of New Local Objects when Not Existing
+    protected static $ALLOW_PUSH_CREATED = false;
+
+    /**
+     * Allow Update Of Existing Local Objects
+     *
+     * @var bool
+     */
+    protected static $ALLOW_PUSH_UPDATED = false;
+
+    /**
+     * Allow Delete Of Existing Local Objects
+     *
+     * @var bool
+     */
+    protected static $ALLOW_PUSH_DELETED = false;
+
+    //====================================================================//
+    // Object Synchronistion Recommended Configuration
+    //====================================================================//
+
+    /**
+     * Enable Creation Of New Local Objects when Not Existing
+     *
+     * @var bool
+     */
     protected static $ENABLE_PUSH_CREATED = false;
-    // Enable Update Of Existing Local Objects when Modified Remotly
+
+    /**
+     * Enable Update Of Existing Local Objects when Modified Remotly
+     *
+     * @var bool
+     */
     protected static $ENABLE_PUSH_UPDATED = false;
-    // Enable Delete Of Existing Local Objects when Deleted Remotly
+
+    /**
+     * Enable Delete Of Existing Local Objects when Deleted Remotly
+     *
+     * @var bool
+     */
     protected static $ENABLE_PUSH_DELETED = false;
 
     //====================================================================//
@@ -147,6 +179,9 @@ class Invoice extends AbstractObject
     // Class Constructor
     //====================================================================//
 
+    /**
+     * Class Constructor
+     */
     public function __construct()
     {
         //====================================================================//

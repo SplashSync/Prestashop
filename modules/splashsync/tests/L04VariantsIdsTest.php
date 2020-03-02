@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2019 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) 2015-2020 Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -30,6 +30,8 @@ class L04VariantsIdsTest extends TestCase
      * @param null|int|string $aId    Product Id
      * @param int|string      $result Expected Id for Splash
      *
+     * @return void
+     *
      * @dataProvider productIdsProvider
      */
     public function testEncodeDecode($pId, $aId, $result)
@@ -49,7 +51,9 @@ class L04VariantsIdsTest extends TestCase
     }
 
     /**
-     * @abstract    Override Parent Function to Filter on Products Fields
+     * Override Parent Function to Filter on Products Fields
+     *
+     * @return array
      */
     public function productIdsProvider()
     {

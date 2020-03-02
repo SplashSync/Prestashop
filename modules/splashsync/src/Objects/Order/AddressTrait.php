@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2019 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) 2015-2020 Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -22,12 +22,14 @@ trait AddressTrait
 {
     /**
      * Build Fields using FieldFactory
+     *
+     * @return void
      */
     private function buildAddressFields()
     {
         //====================================================================//
         // Billing Address
-        $this->fieldsFactory()->create(self::objects()->encode("Address", SPL_T_ID))
+        $this->fieldsFactory()->create((string) self::objects()->encode("Address", SPL_T_ID))
             ->Identifier("id_address_invoice")
             ->Name('Billing Address ID')
             ->MicroData("http://schema.org/Order", "billingAddress")
@@ -35,7 +37,7 @@ trait AddressTrait
 
         //====================================================================//
         // Shipping Address
-        $this->fieldsFactory()->create(self::objects()->encode("Address", SPL_T_ID))
+        $this->fieldsFactory()->create((string) self::objects()->encode("Address", SPL_T_ID))
             ->Identifier("id_address_delivery")
             ->Name('Shipping Address ID')
             ->MicroData("http://schema.org/Order", "orderDelivery")
@@ -47,6 +49,8 @@ trait AddressTrait
      *
      * @param string $key       Input List Key
      * @param string $fieldName Field Identifier / Name
+     *
+     * @return void
      */
     private function getAddressFields($key, $fieldName)
     {
@@ -57,7 +61,7 @@ trait AddressTrait
             // Customer Address Ids
             case 'id_address_invoice':
             case 'id_address_delivery':
-                if ("Splash\\Local\\Objects\\Order" !== get_class($this)) {
+                if (!$this->isOrderObject()) {
                     $this->out[$fieldName] = self::objects()->encode("Address", $this->Order->{$fieldName});
                 } else {
                     $this->out[$fieldName] = self::objects()->encode("Address", $this->object->{$fieldName});
@@ -75,6 +79,8 @@ trait AddressTrait
      *
      * @param string $fieldName Field Identifier / Name
      * @param mixed  $fieldData Field Data
+     *
+     * @return void
      */
     private function setAddressFields($fieldName, $fieldData)
     {

@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2019 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) 2015-2020 Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -63,7 +63,7 @@ trait CRUDTrait
         Splash::log()->trace();
         //====================================================================//
         // Load Object
-        $object = new Order($objectId);
+        $object = new Order((int) $objectId);
         if ($object->id != $objectId) {
             return Splash::log()->errTrace("Unable to load Order (".$objectId.").");
         }
@@ -104,7 +104,7 @@ trait CRUDTrait
         //====================================================================//
         // Create a New Cart
         $this->Cart = new Cart();
-        $this->Cart->id_currency = Configuration::get('PS_CURRENCY_DEFAULT');
+        $this->Cart->id_currency = (int) Configuration::get('PS_CURRENCY_DEFAULT');
         if (true != $this->Cart->add()) {
             return Splash::log()->errTrace("Unable to Create new Order Cart.");
         }
@@ -117,13 +117,13 @@ trait CRUDTrait
         // Setup Minimal Data
         $this->object->current_state = 0;
         $this->object->id_cart = $this->Cart->id;
-        $this->object->id_currency = Configuration::get('PS_CURRENCY_DEFAULT');
+        $this->object->id_currency = (int) Configuration::get('PS_CURRENCY_DEFAULT');
         $this->object->conversion_rate = 1;
         $this->object->id_carrier = 1;
         $this->object->id_shop = 1;
         $this->object->payment = "Payment by check";
         $this->object->module = "ps_checkpayment";
-        $this->object->secure_key = md5(uniqid(rand(), true));
+        $this->object->secure_key = md5(uniqid((string) rand(), true));
 
         $this->object->total_products = (float) 0;
         $this->object->total_products_wt = (float) 0;
@@ -131,8 +131,8 @@ trait CRUDTrait
         $this->object->total_paid_tax_incl = (float) 0;
         $this->object->total_paid = 0;
         $this->object->total_paid_real = 0;
-        $this->object->round_mode = Configuration::get('PS_PRICE_ROUND_MODE');
-        $this->object->round_type = Configuration::get('PS_ROUND_TYPE');
+        $this->object->round_mode = (int) Configuration::get('PS_PRICE_ROUND_MODE');
+        $this->object->round_type = (int) Configuration::get('PS_ROUND_TYPE');
 
         $this->setCoreFields("id_customer", $this->in["id_customer"]);
 
@@ -211,7 +211,7 @@ trait CRUDTrait
         //====================================================================//
         // Load Object From DataBase
         //====================================================================//
-        $this->object = new Order($objectId);
+        $this->object = new Order((int) $objectId);
         if ($this->object->id != $objectId) {
             return Splash::log()->warTrace("Unable to load Order (".$objectId.").");
         }

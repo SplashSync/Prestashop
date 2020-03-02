@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2019 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) 2015-2020 Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -260,6 +260,7 @@ class Local implements LocalClassInterface
     public function testSequences($name = null)
     {
         switch ($name) {
+            default:
             case "None":
                 // NOITHING TO DO FOR SEQUENCE SETUP
                 return array();
@@ -316,7 +317,7 @@ class Local implements LocalClassInterface
 
         //====================================================================//
         // Load Remote User Parameters
-        $userId = Configuration::get('SPLASH_USER_ID');
+        $userId = (int) Configuration::get('SPLASH_USER_ID');
         if (empty($userId) || !Validate::isInt($userId)) {
             return false;
         }
@@ -381,7 +382,11 @@ class Local implements LocalClassInterface
         $homedir = $this->getHomeFolder();
         //====================================================================//
         // Scan All Folders from Root Directory
-        $scan = array_diff(scandir($homedir, 1), array('..', '.'));
+        $scanRaw = scandir($homedir, 1);
+        if (false == $scanRaw) {
+            return false;
+        }
+        $scan = array_diff($scanRaw, array('..', '.'));
         if (false == $scan) {
             return false;
         }
@@ -432,6 +437,8 @@ class Local implements LocalClassInterface
 
     /**
      * When Module is Loaded by Travis Ci, Check Module is Installed
+     *
+     * @return bool
      */
     private function onTravisIncludes()
     {

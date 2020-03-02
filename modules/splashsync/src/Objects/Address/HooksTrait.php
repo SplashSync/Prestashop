@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2019 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) 2015-2020 Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -19,7 +19,7 @@ use Address;
 use Splash\Client\Splash;
 
 /**
- * @abstract Prestashop Hooks for Address
+ * Prestashop Hooks for Address
  */
 trait HooksTrait
 {
@@ -33,6 +33,8 @@ trait HooksTrait
      * This hook is displayed after an Address is created
      *
      * @param array $params
+     *
+     * @return bool
      */
     public function hookactionObjectAddressAddAfter($params)
     {
@@ -47,6 +49,8 @@ trait HooksTrait
      * This hook is displayed after an Address is updated
      *
      * @param array $params
+     *
+     * @return bool
      */
     public function hookactionObjectAddressUpdateAfter($params)
     {
@@ -60,6 +64,8 @@ trait HooksTrait
      * This hook is displayed after an Address is deleted
      *
      * @param array $params
+     *
+     * @return bool
      */
     public function hookactionObjectAddressDeleteAfter($params)
     {
@@ -76,6 +82,8 @@ trait HooksTrait
      * @param Address $address Prestashop Address Object
      * @param string  $action  Performed Action
      * @param string  $comment Action Comment
+     *
+     * @return bool
      */
     private function hookactionAddress($address, $action, $comment)
     {
@@ -87,13 +95,13 @@ trait HooksTrait
         }
         //====================================================================//
         // Commit Update For Product
-        $result = $this->doCommit("Address", $addressId, $action, $comment);
+        $result = $this->doCommit("Address", (string) $addressId, $action, $comment);
         //====================================================================//
         // Also Commit Update For Customer
         if (isset($address->id_customer) && !empty($address->id_customer) && !Splash::isDebugMode()) {
             //====================================================================//
             // Commit Update For Customer
-            $this->doCommit("ThirdParty", $address->id_customer, $action, $comment);
+            $this->doCommit("ThirdParty", (string) $address->id_customer, $action, $comment);
         }
 
         return $result;

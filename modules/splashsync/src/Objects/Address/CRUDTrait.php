@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2019 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) 2015-2020 Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -37,7 +37,7 @@ trait CRUDTrait
         Splash::log()->trace();
         //====================================================================//
         // Load Object
-        $object = new Address($objectId);
+        $object = new Address((int) $objectId);
         if ($object->id != $objectId) {
             return Splash::log()->errTrace("Unable to load Customer Address (".$objectId.").");
         }
@@ -169,7 +169,7 @@ trait CRUDTrait
         //====================================================================//
         // Load Object From DataBase
         //====================================================================//
-        $address = new Address($objectId);
+        $address = new Address((int) $objectId);
         if ($address->id != $objectId) {
             return Splash::log()->warTrace("Unable to load (".$objectId.").");
         }

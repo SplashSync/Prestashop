@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2019 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) 2015-2020 Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -33,6 +33,8 @@ trait DescTrait
 
     /**
      * Build Description Fields using FieldFactory
+     *
+     * @return void
      */
     protected function buildDescFields()
     {
@@ -90,6 +92,8 @@ trait DescTrait
      *
      * @param string $key       Input List Key
      * @param string $fieldName Field Identifier / Name
+     *
+     * @return void
      */
     protected function getDescFields($key, $fieldName)
     {
@@ -125,6 +129,8 @@ trait DescTrait
      *
      * @param string $fieldName Field Identifier / Name
      * @param mixed  $fieldData Field Data
+     *
+     * @return void
      */
     protected function setDescFields($fieldName, $fieldData)
     {
@@ -144,7 +150,7 @@ trait DescTrait
 
                     break;
                 case 'description_short':
-                    $maxLength = Configuration::get('PS_PRODUCT_SHORT_DESC_LIMIT');
+                    $maxLength = (int)Configuration::get('PS_PRODUCT_SHORT_DESC_LIMIT');
                     $this->setMultilang($baseFieldName, $idLang, $fieldData, $maxLength);
                     unset($this->in[$fieldName]);
 
