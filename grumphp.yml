@@ -103,7 +103,7 @@ parameters:
             source_folder:  "/modules/splashsync"
             target_folder:  "/ps_module"
             build_folder:   "splashsync/"
-            build_file:     "splashsync.1.4.2"
+            build_file:     "splashsync.1.4.3"
         
         build-docs: 
             enabled:            true
@@ -128,7 +128,6 @@ parameters:
                 
         csfixer:
             tasks: 
-#                - phpcsfixer
                 - phpcsfixer2                
         phpstan:
             tasks: 

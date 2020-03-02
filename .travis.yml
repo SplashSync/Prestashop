@@ -36,10 +36,10 @@ cache:
   directories:
     - $HOME/.composer/cache
 
-sudo: required
+os: linux
 dist: trusty
 
-matrix:
+jobs:
     include:
         
         # Prestashop develop Branch       
