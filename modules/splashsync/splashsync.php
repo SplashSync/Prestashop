@@ -425,7 +425,7 @@ class SplashSync extends Module
     {
         //====================================================================//
         // Safety Checks
-        if (is_numeric($objectId)) {
+        if (is_scalar($objectId)) {
             Splash\Client\Splash::log()
                 ->deb("Splash Commit => ".$objectType." Action = ".$action." Id = ".$objectId, " : ".$comment);
         } elseif (is_array($objectId) && empty($objectId)) {
