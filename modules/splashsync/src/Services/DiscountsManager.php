@@ -154,7 +154,7 @@ class DiscountsManager
         $orderId = ($object instanceof OrderInvoice) ? $object->id_order : $object->id;
         //====================================================================//
         // Check if Discounts Details Available
-        if (self::hasOrderDiscountsDetails($orderId, $currency)) {
+        if (self::hasOrderDiscountsDetails($orderId, $currency) && is_array(static::$cache)) {
             return static::$cache;
         }
         //====================================================================//
