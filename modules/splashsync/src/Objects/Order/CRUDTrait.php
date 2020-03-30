@@ -21,6 +21,7 @@ use Cart;
 use Configuration;
 use Order;
 use Splash\Core\SplashCore      as Splash;
+use Splash\Local\Services\DiscountsManager;
 use Splash\Local\Services\LanguagesManager as SLM;
 use TaxCalculator;
 
@@ -81,6 +82,10 @@ trait CRUDTrait
         //====================================================================//
         // Load Shipping Tax Calculator
         $this->ShippingTaxCalculator = $this->carrier->getTaxCalculator(new Address($object->id_address_delivery));
+
+        //====================================================================//
+        // Flush Order Discount Cache
+        DiscountsManager::flushOrderDiscountsDetails();
 
         return $object;
     }

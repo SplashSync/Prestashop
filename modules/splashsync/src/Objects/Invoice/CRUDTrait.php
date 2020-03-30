@@ -20,6 +20,7 @@ use Carrier;
 use Order;
 use OrderInvoice;
 use Splash\Core\SplashCore      as Splash;
+use Splash\Local\Services\DiscountsManager;
 use TaxCalculator;
 
 /**
@@ -79,6 +80,10 @@ trait CRUDTrait
         //====================================================================//
         // Load Shipping Tax Calculator
         $this->ShippingTaxCalculator = $this->carrier->getTaxCalculator(new Address($this->Order->id_address_delivery));
+
+        //====================================================================//
+        // Flush Order Discount Cache
+        DiscountsManager::flushOrderDiscountsDetails();
 
         return $object;
     }

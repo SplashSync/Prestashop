@@ -19,6 +19,7 @@ use OrderDetail;
 use Splash\Core\SplashCore      as Splash;
 use Splash\Local\Objects\Invoice;
 use Splash\Local\Objects\Product;
+use Splash\Local\Services\DiscountsManager;
 use Splash\Models\Objects\ListsTrait;
 use Splash\Models\Objects\PricesTrait;
 use Tools;
@@ -195,7 +196,7 @@ trait ItemsTrait
      *
      * @return void
      */
-    private function setProductsFields($fieldName, $fieldData)
+    protected function setProductsFields($fieldName, $fieldData)
     {
         //====================================================================//
         // Safety Check
@@ -218,6 +219,105 @@ trait ItemsTrait
         }
 
         unset($this->in[$fieldName]);
+    }
+
+    /**
+     * Read requested Field
+     *
+     * @param string $key       Input List Key
+     * @param string $fieldName Field Identifier / Name
+     *
+     * @return void
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     */
+    protected function getShippingFields($key, $fieldName)
+    {
+        //====================================================================//
+        // Check if List field & Init List Array
+        $fieldId = self::lists()->InitOutput($this->out, "lines", $fieldName);
+        //====================================================================//
+        // Check if List field
+        // Check If Order has Discounts
+        if ((!$fieldId) || (Splash::isDebugMode() && (0 == $this->object->total_shipping_tax_incl))) {
+            return;
+        }
+        //====================================================================//
+        // READ Fields
+        switch ($fieldId) {
+            //====================================================================//
+            // Order Line Direct Reading Data
+            case 'product_name':
+                $value = $this->getCarrierName();
+
+                break;
+            case 'product_quantity':
+                $value = 1;
+
+                break;
+            case 'reduction_percent':
+                $value = 0;
+
+                break;
+            //====================================================================//
+            // Order Line Product Id
+            case 'product_id':
+                $value = null;
+
+                break;
+            //====================================================================//
+            // Order Line Unit Price
+            case 'unit_price':
+                $value = $this->getShippingPrice();
+
+                break;
+            case 'tax_name':
+                $value = $this->ShippingTaxCalculator->getTaxesName();
+
+                break;
+            default:
+                return;
+        }
+
+        //====================================================================//
+        // Insert Data in List
+        self::lists()->Insert($this->out, "lines", $fieldName, count($this->Products), $value);
+    }
+
+    /**
+     * Read requested Field
+     *
+     * @param string $key       Input List Key
+     * @param string $fieldName Field Identifier / Name
+     *
+     * @return void
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    protected function getDiscountFields($key, $fieldName)
+    {
+        //====================================================================//
+        // Check if List field & Init List Array
+        $fieldId = self::lists()->InitOutput($this->out, "lines", $fieldName);
+        if (!$fieldId) {
+            return;
+        }
+        //====================================================================//
+        // Check If Order has Discounts
+        if (0 == $this->getDiscountTaxIncl()) {
+            return;
+        }
+        //====================================================================//
+        // Get First Discount Index
+        $index = count($this->Products) + 1;
+        //====================================================================//
+        // Insert Data in List
+        $dicsountItems = DiscountsManager::getDiscountItems($this->object, $this->Currency);
+        foreach ($dicsountItems as $dicsountItem) {
+            self::lists()->Insert($this->out, "lines", $fieldName, $index, $dicsountItem[$fieldId]);
+            $index++;
+        }
     }
 
     /**
@@ -312,117 +412,6 @@ trait ItemsTrait
     }
 
     /**
-     * Read requested Field
-     *
-     * @param string $key       Input List Key
-     * @param string $fieldName Field Identifier / Name
-     *
-     * @return void
-     *
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     */
-    private function getDiscountFields($key, $fieldName)
-    {
-        //====================================================================//
-        // Check if List field & Init List Array
-        $fieldId = self::lists()->InitOutput($this->out, "lines", $fieldName);
-        if (!$fieldId) {
-            return;
-        }
-        //====================================================================//
-        // Check If Order has Discounts
-        if (0 == $this->getDiscountTaxIncl()) {
-            return;
-        }
-        //====================================================================//
-        // READ Fields
-        switch ($fieldId) {
-            //====================================================================//
-            // Order Line Direct Reading Datainvoice
-            case 'product_name':
-                $value = $this->spl->l("Discount");
-
-                break;
-            case 'product_quantity':
-                $value = 1;
-
-                break;
-            case 'reduction_percent':
-                $value = 0;
-
-                break;
-            //====================================================================//
-            // Order Line Product Id
-            case 'product_id':
-                $value = null;
-
-                break;
-            //====================================================================//
-            // Order Line Unit Price
-            case 'unit_price':
-                $value = $this->getDiscountPrice($this->getDiscountTaxIncl(), $this->getDiscountTaxExcl());
-
-                break;
-            case 'tax_name':
-                $value = null;
-
-                break;
-            default:
-                return;
-        }
-
-        //====================================================================//
-        // Create Line Array If Needed
-        $index = count($this->Products) + 1;
-        //====================================================================//
-        // Insert Data in List
-        self::lists()->Insert($this->out, "lines", $fieldName, $index, $value);
-    }
-
-    /**
-     * Get product Discount Price
-     *
-     * @param float $priceTaxIncl
-     * @param float $priceTaxExcl
-     *
-     * @return array|string
-     */
-    private function getDiscountPrice($priceTaxIncl, $priceTaxExcl)
-    {
-        //====================================================================//
-        // Manually Compute Tax Rate
-        if ($priceTaxIncl != $priceTaxExcl) {
-            $taxPercent = round(100 * (($priceTaxIncl - $priceTaxExcl) / $priceTaxExcl), 3);
-        } else {
-            $taxPercent = 0;
-        }
-        //====================================================================//
-        // Build Price Array
-        return self::prices()->Encode(
-            (double)    (-1) * Tools::convertPrice($priceTaxExcl, $this->Currency),
-            (double)    $taxPercent,
-            null,
-            $this->Currency->iso_code,
-            $this->Currency->sign,
-            $this->Currency->name
-        );
-    }
-
-    /**
-     * Get Total Discount Tax Excluded
-     *
-     * @return double
-     */
-    private function getDiscountTaxExcl()
-    {
-        if ($this instanceof Invoice) {
-            return  $this->object->total_discount_tax_excl;
-        }
-
-        return  $this->object->total_discounts_tax_excl;
-    }
-
-    /**
      * Get Total Discount Tax Included
      *
      * @return double
@@ -434,70 +423,6 @@ trait ItemsTrait
         }
 
         return  $this->object->total_discounts_tax_incl;
-    }
-
-    /**
-     * Read requested Field
-     *
-     * @param string $key       Input List Key
-     * @param string $fieldName Field Identifier / Name
-     *
-     * @return void
-     *
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     */
-    private function getShippingFields($key, $fieldName)
-    {
-        //====================================================================//
-        // Check if List field & Init List Array
-        $fieldId = self::lists()->InitOutput($this->out, "lines", $fieldName);
-        //====================================================================//
-        // Check if List field
-        // Check If Order has Discounts
-        if ((!$fieldId) || (Splash::isDebugMode() && (0 == $this->object->total_shipping_tax_incl))) {
-            return;
-        }
-        //====================================================================//
-        // READ Fields
-        switch ($fieldId) {
-            //====================================================================//
-            // Order Line Direct Reading Data
-            case 'product_name':
-                $value = $this->getCarrierName();
-
-                break;
-            case 'product_quantity':
-                $value = 1;
-
-                break;
-            case 'reduction_percent':
-                $value = 0;
-
-                break;
-            //====================================================================//
-            // Order Line Product Id
-            case 'product_id':
-                $value = null;
-
-                break;
-            //====================================================================//
-            // Order Line Unit Price
-            case 'unit_price':
-                $value = $this->getShippingPrice();
-
-                break;
-            case 'tax_name':
-                $value = $this->ShippingTaxCalculator->getTaxesName();
-
-                break;
-            default:
-                return;
-        }
-
-        //====================================================================//
-        // Insert Data in List
-        self::lists()->Insert($this->out, "lines", $fieldName, count($this->Products), $value);
     }
 
     /**
