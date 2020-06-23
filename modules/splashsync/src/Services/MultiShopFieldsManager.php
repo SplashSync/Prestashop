@@ -104,7 +104,7 @@ class MultiShopFieldsManager
                 // Clone Field for Shop
                 $shopField = clone $coreField;
                 $shopField->id = self::MSF_PREFIX.$shop["id_shop"]."_".$coreField->id;
-                if(!empty($coreField->itemtype)) {
+                if (!empty($coreField->itemtype)) {
                     $shopField->itemtype = $coreField->itemtype."/Shop".$shop["id_shop"];
                     $shopField->tag = md5($shopField->itemprop."::".$shopField->itemtype);
                 }

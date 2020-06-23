@@ -15,11 +15,11 @@
 
 namespace Splash\Local\Services;
 
-use Shop;
-use Splash\Core\SplashCore as Splash;
+use Configuration;
 use Context;
 use Country;
-use Configuration;
+use Shop;
+use Splash\Core\SplashCore as Splash;
 
 class MultiShopManager
 {
@@ -116,7 +116,6 @@ class MultiShopManager
 
             return true;
         }
-
 
         return false;
     }
