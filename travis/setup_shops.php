@@ -25,9 +25,9 @@ Splash\Client\Splash::local();
 
 //====================================================================//
 // Ensure Number of Active Shops
-if(count(MSM::getShopIds()) < 2) {
+if (count(MSM::getShopIds()) < 2) {
     var_dump(MSM::addPhpUnitShop("Phpunit1"));
 }
-if(count(MSM::getShopIds()) < 3) {
+if (count(MSM::getShopIds()) < 3) {
     var_dump(MSM::addPhpUnitShop("Phpunit2"));
 }
