@@ -147,33 +147,28 @@ class Local implements LocalClassInterface
     public function selfTest()
     {
         //====================================================================//
+        // Safety Check => PHP Min Version
+        if (PHP_VERSION < 7.1) {
+            return Splash::log()->err("Splash Module for Prestashop require at least PHP 7.1");
+        }
+        //====================================================================//
         //  Load Local Translation File
         Splash::translator()->load("main@local");
-
         //====================================================================//
         //  Verify - Server Identifier Given
         if (empty(Configuration::get('SPLASH_WS_ID'))) {
             return Splash::log()->err("ErrSelfTestNoWsId");
         }
-
         //====================================================================//
         //  Verify - Server Encrypt Key Given
         if (empty(Configuration::get('SPLASH_WS_KEY'))) {
             return Splash::log()->err("ErrSelfTestNoWsKey");
         }
-
-//        //====================================================================//
-//        //  Verify - Default Language is Given
-//        if (empty(Configuration::get('SPLASH_LANG_ID'))) {
-//            return Splash::log()->err("ErrSelfTestDfLang");
-//        }
-
         //====================================================================//
         //  Verify - User Selected
         if (empty(Configuration::get('SPLASH_USER_ID'))) {
             return Splash::log()->err("ErrSelfTestNoUser");
         }
-
         //====================================================================//
         //  Verify - Languages Codes Are in Valid Format
         foreach (Language::getLanguages() as $language) {
@@ -182,7 +177,6 @@ class Local implements LocalClassInterface
                 return Splash::log()->err("ErrSelfTestLangCode", $language["language_code"]);
             }
         }
-
         //====================================================================//
         //  Verify - Splash Link Table is Valid
         if (!self::checkSplashIdTable()) {
