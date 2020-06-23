@@ -101,16 +101,8 @@ class MultiShopFieldsManager
             // Walk on Shops to Add Shops Fields
             foreach (Shop::getShops(false) as $shop) {
                 //====================================================================//
-                // Clone Field for Shop
-                $shopField = clone $coreField;
-                $shopField->id = self::MSF_PREFIX.$shop["id_shop"]."_".$coreField->id;
-                if (!empty($coreField->itemtype)) {
-                    $shopField->itemtype = $coreField->itemtype."/Shop".$shop["id_shop"];
-                    $shopField->tag = md5($shopField->itemprop."::".$shopField->itemtype);
-                }
-                $shopField->name = "[".$shop["name"]."] ".$coreField->name;
-                $shopField->desc = "[".$shop["name"]."] ".$coreField->desc;
-                $shopField->inlist = false;
+                // Build Multi-Shop Field
+                $shopField = self::toMsfField($coreField, (int) $shop["id_shop"], (string) $shop["name"]);
                 self::$expandedFields[] = $shopField;
                 self::$singleShopsFields[$shop["id_shop"]][] = $shopField->id;
             }
@@ -272,5 +264,42 @@ class MultiShopFieldsManager
         }
 
         return $result;
+    }
+
+    /**
+     * Clone Field to MultiShop Field
+     *
+     * @param ArrayObject $coreField
+     * @param int         $shopId
+     * @param string      $shopName
+     *
+     * @return ArrayObject
+     */
+    private static function toMsfField(ArrayObject $coreField, int $shopId, string $shopName): ArrayObject
+    {
+        //====================================================================//
+        // Clone Field for Shop
+        $shopField = clone $coreField;
+        //====================================================================//
+        // Encode Id
+        $shopField->id = self::MSF_PREFIX.$shopId."_".$coreField->id;
+        //====================================================================//
+        // Encode Metadata
+        $shopField->inlist = false;
+        if (!empty($coreField->itemtype)) {
+            $shopField->itemtype = $coreField->itemtype."/Shop".$shopId;
+            $shopField->tag = md5($shopField->itemprop."::".$shopField->itemtype);
+        }
+        //====================================================================//
+        // Encode Description
+        $shopField->name = "[".$shopName."] ".$coreField->name;
+        $shopField->desc = "[".$shopName."] ".$coreField->desc;
+        //====================================================================//
+        // Add Test Associations
+        foreach (Shop::getShops(false) as $shop) {
+            $shopField->asso[] = self::MSF_PREFIX.$shop["id_shop"]."_".$coreField->id;
+        }
+
+        return $shopField;
     }
 }
