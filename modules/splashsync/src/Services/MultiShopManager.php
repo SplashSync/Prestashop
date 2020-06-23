@@ -19,6 +19,7 @@ use Configuration;
 use Context;
 use Country;
 use Shop;
+use ShopUrl;
 use Splash\Core\SplashCore as Splash;
 
 class MultiShopManager
@@ -118,5 +119,42 @@ class MultiShopManager
         }
 
         return false;
+    }
+
+    /**
+     * Add A Shop to Prestashop for Testing
+     *
+     * @param null|int $shopId
+     *
+     * @return bool
+     */
+    public static function addPhpUnitShop(string $name): bool
+    {
+        //====================================================================//
+        // Ensure Feature is Active
+        if (!Shop::isFeatureActive()) {
+            self::setContext();
+            Configuration::updateValue("PS_MULTISHOP_FEATURE_ACTIVE", '1');
+        }
+        //====================================================================//
+        // Add a New Shop
+        $shop = new Shop();
+        $shop->name = $name;
+        $shop->theme_name = "classic";
+        $shop->id_shop_group = 1;
+        $shop->id_category = 2;
+        $shop->add();
+        //====================================================================//
+        // Add a New Shop Url
+        $shopUrl = new ShopUrl();
+        $shopUrl->id_shop = $shop->id;
+        $shopUrl->domain = 'localhost';
+        $shopUrl->domain_ssl = 'localhost';
+        $shopUrl->virtual_uri = strtolower($name);
+        $shopUrl->main = true;
+        $shopUrl->active = true;
+        $shopUrl->add();
+
+        return Shop::isFeatureActive();
     }
 }
