@@ -56,7 +56,8 @@ trait CRUDTrait
         //====================================================================//
         // If $id Given => Load Product Object From DataBase
         //====================================================================//
-        $this->object = new Product($this->ProductId, true);
+
+        $this->object = new Product($this->ProductId, true, null, \Shop::getContextShopID(true));
         if ($this->object->id != $this->ProductId) {
             return Splash::log()->errTrace("Unable to fetch Product (".$this->ProductId.")");
         }

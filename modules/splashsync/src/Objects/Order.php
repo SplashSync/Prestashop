@@ -45,6 +45,7 @@ class Order extends AbstractObject
     use \Splash\Local\Objects\Core\DatesTrait;
     use \Splash\Local\Objects\Core\SplashMetaTrait;
     use \Splash\Local\Objects\Core\ObjectsListCommonsTrait;
+    use \Splash\Local\Objects\Core\MultishopTrait;
     use \Splash\Local\Traits\SplashIdTrait;
 
     // Prestashop Order Traits

@@ -39,8 +39,10 @@ upload/
 
 /nbproject/private/
 /nbproject/
+.idea
 .directory
 save-commands.json
 /.php_cs.cache
 /reboot.sh
 /.gh-pages/
+/modules/splashsync/.php_cs.cache

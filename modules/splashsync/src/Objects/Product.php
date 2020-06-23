@@ -36,7 +36,6 @@ use SplashSync;
 class Product extends AbstractObject
 {
     // Splash Php Core Traits
-    use IntelParserTrait;
     use SimpleFieldsTrait;
     use ObjectsTrait;
     use ListsTrait;
@@ -46,10 +45,11 @@ class Product extends AbstractObject
     use Core\SplashMetaTrait;
     use Core\ObjectsListCommonsTrait;
     use Core\MultilangTrait;
+    use Core\MultishopObjectTrait;
     use \Splash\Local\Traits\SplashIdTrait;
 
     // Prestashop Products Traits
-    use \Splash\Local\Objects\Product\ObjectsListTrait;
+    use Product\ObjectsListTrait;
     use \Splash\Local\Objects\Product\CRUDTrait;
     use \Splash\Local\Objects\Product\CoreTrait;
     use \Splash\Local\Objects\Product\MainTrait;

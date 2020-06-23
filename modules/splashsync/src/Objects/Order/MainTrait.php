@@ -15,8 +15,6 @@
 
 namespace Splash\Local\Objects\Order;
 
-//use Splash\Core\SplashCore      as Splash;
-
 //====================================================================//
 // Prestashop Static Classes
 use Translate;

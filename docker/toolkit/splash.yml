@@ -41,12 +41,12 @@ splash:
 #            name:               Prestashop 1.7
 #            host:               false
 #            connector:          soap
-#            config:  
+#            config:
 #                WsIdentifier:       ThisIsPs17Key
-#                WsEncryptionKey:    ThisTokenIsNotSoSecretChangeIt                
+#                WsEncryptionKey:    ThisTokenIsNotSoSecretChangeIt
 #                WsHost:             http://ps1-7.prestashop.local
 #                WsPath:             /modules/splashsync/vendor/splash/phpcore/soap.php
-#        
+#
 #        ########################################################################
 #        # Prestashop 1.6
 #        ps-1-6:
@@ -55,8 +55,8 @@ splash:
 #            name:               Prestashop 1.6
 #            host:               false
 #            connector:          soap
-#            config:  
+#            config:
 #                WsIdentifier:       ThisIsPs16Key
-#                WsEncryptionKey:    ThisTokenIsNotSoSecretChangeIt                
+#                WsEncryptionKey:    ThisTokenIsNotSoSecretChangeIt
 #                WsHost:             http://ps1-6.prestashop.local
 #                WsPath:             /modules/splashsync/vendor/splash/phpcore/soap.php

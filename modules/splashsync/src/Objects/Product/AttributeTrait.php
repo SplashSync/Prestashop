@@ -70,7 +70,7 @@ trait AttributeTrait
             if (is_array($attrList) && !empty($attrList)) {
                 Splash::commit("Product", $this->ProductId, SPL_A_DELETE);
 
-                return Splash::log()->err("Trying to fetch a Base Product, this is now forbideen.");
+                return Splash::log()->err("Trying to fetch a Base Product, this is now forbidden.");
             }
 
             return true;
@@ -78,7 +78,7 @@ trait AttributeTrait
         //====================================================================//
         // If $id_attribute Given => Load Product Attribute Combinaisons From DataBase
         //====================================================================//
-        $this->Attribute = new Combination($this->AttributeId);
+        $this->Attribute = new Combination($this->AttributeId, null, \Shop::getContextShopID(true));
         if ($this->Attribute->id != $this->AttributeId) {
             return Splash::log()->errTrace("Unable to fetch Product Attribute (".$this->AttributeId.")");
         }

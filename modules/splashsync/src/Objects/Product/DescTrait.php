@@ -20,6 +20,7 @@ use Language;
 use Product;
 use Splash\Core\SplashCore      as Splash;
 use Splash\Local\Services\LanguagesManager;
+use Splash\Local\Services\MultiShopManager as MSM;
 use Translate;
 
 /**
@@ -54,6 +55,7 @@ trait DescTrait
                 ->Group($groupName)
                 ->MicroData("http://schema.org/Product", "alternateName")
                 ->setMultilang($isoLang)
+                ->addOption("shop", MSM::MODE_ALL)
                 ->isRequired(LanguagesManager::isDefaultLanguage($isoLang));
 
             //====================================================================//

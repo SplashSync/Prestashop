@@ -17,6 +17,7 @@ namespace Splash\Local\Objects\Product;
 
 use Configuration;
 use Splash\Components\UnitConverter as Units;
+use Splash\Local\Services\MultiShopManager as MSM;
 use Translate;
 
 /**
@@ -42,13 +43,9 @@ trait MainTrait
      *
      * @return void
      */
-    private function buildMainFields()
+    protected function buildMainFields()
     {
         $groupName = Translate::getAdminTranslation("Shipping", "AdminProducts");
-
-        //====================================================================//
-        // PRODUCT SPECIFICATIONS
-        //====================================================================//
 
         //====================================================================//
         // Weight
@@ -113,6 +110,7 @@ trait MainTrait
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
             ->Identifier("supplier_reference")
             ->Name(Translate::getAdminTranslation("Supplier reference", "AdminProducts"))
+            ->addOption("shop", MSM::MODE_ALL)
             ->MicroData("http://schema.org/Product", "mpn");
 
         //====================================================================//
@@ -121,6 +119,7 @@ trait MainTrait
             ->Identifier("upc")
             ->Name(Translate::getAdminTranslation("UPC Code", "AdminProducts"))
             ->Group($groupName)
+            ->addOption("shop", MSM::MODE_ALL)
             ->MicroData("http://schema.org/Product", "gtin12");
 
         //====================================================================//
@@ -129,6 +128,7 @@ trait MainTrait
             ->Identifier("ean13")
             ->Name(Translate::getAdminTranslation("EAN Code", "AdminProducts"))
             ->Group($groupName)
+            ->addOption("shop", MSM::MODE_ALL)
             ->MicroData("http://schema.org/Product", "gtin13");
 
         //====================================================================//
@@ -137,6 +137,7 @@ trait MainTrait
             ->Identifier("isbn")
             ->Name(Translate::getAdminTranslation("ISBN Code", "AdminProducts"))
             ->Group($groupName)
+            ->addOption("shop", MSM::MODE_ALL)
             ->MicroData("http://schema.org/Product", "gtin14");
     }
 
@@ -148,7 +149,7 @@ trait MainTrait
      *
      * @return void
      */
-    private function getMainFields($key, $fieldName)
+    protected function getMainFields($key, $fieldName)
     {
         //====================================================================//
         // READ Fields
@@ -195,7 +196,7 @@ trait MainTrait
      *
      * @return void
      */
-    private function getBarCodeFields($key, $fieldName)
+    protected function getBarCodeFields($key, $fieldName)
     {
         //====================================================================//
         // READ Fields

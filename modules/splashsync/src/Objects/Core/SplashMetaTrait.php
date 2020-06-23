@@ -15,6 +15,7 @@
 
 namespace Splash\Local\Objects\Core;
 
+use Splash\Local\Services\MultiShopManager as MSM;
 use Translate;
 
 /**
@@ -40,6 +41,7 @@ trait SplashMetaTrait
             ->Identifier("splash_id")
             ->Name("Splash Id")
             ->Group(Translate::getAdminTranslation("Meta", "AdminThemes"))
+            ->addOption("shop", MSM::MODE_ALL)
             ->MicroData("http://splashync.com/schemas", "ObjectId");
     }
 

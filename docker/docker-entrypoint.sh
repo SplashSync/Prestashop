@@ -43,6 +43,9 @@ if [ ! -f ./config/settings.inc.php  ]; then
 		    fi
 		done
 
+		echo "\n* Ensure Database Exists...";
+		mysqladmin -h $DB_SERVER -P $DB_PORT -u $DB_USER -p$DB_PASSWD create $DB_NAME 2> /dev/null;
+
 		echo "\n* Installing PrestaShop, this may take a while ...";
 		if [ $PS_ERASE_DB = 1 ]; then
 			echo "\n* Drop & recreate mysql database...";
@@ -55,10 +58,12 @@ if [ ! -f ./config/settings.inc.php  ]; then
 			fi
 		fi
 
+
 		if [ "$PS_DOMAIN" = "<to be defined>" ]; then
 			export PS_DOMAIN=$(hostname -i)
 		fi
 
+    echo "\n* Launching the installer script...";
 		runuser -g www-data -u www-data -- php /var/www/html/$PS_FOLDER_INSTALL/index_cli.php \
 		  --domain="$PS_DOMAIN" --db_server=$DB_SERVER:$DB_PORT --db_name="$DB_NAME" --db_user=$DB_USER \
 			--db_password=$DB_PASSWD --prefix="$DB_PREFIX" --firstname="John" --lastname="Doe" \
@@ -72,15 +77,15 @@ if [ ! -f ./config/settings.inc.php  ]; then
 		echo "\n* Install SplashSync Module";
 
 		# Setup Module's Default Parameters
-		mysql -u root -padmin -h mysql -D prestashop -e "INSERT INTO ${DB_PREFIX}configuration ( name ,  value ,  date_add ,  date_upd ) VALUES ('SPLASH_WS_ID','$SPLASH_WS_ID',NOW(), NOW());"
-		mysql -u root -padmin -h mysql -D prestashop -e "INSERT INTO ${DB_PREFIX}configuration ( name ,  value ,  date_add ,  date_upd ) VALUES ('SPLASH_WS_KEY','$SPLASH_WS_KEY',NOW(), NOW());"
-		mysql -u root -padmin -h mysql -D prestashop -e "INSERT INTO ${DB_PREFIX}configuration ( name ,  value ,  date_add ,  date_upd ) VALUES ('SPLASH_LANG_ID','en-US',NOW(), NOW());"
-		mysql -u root -padmin -h mysql -D prestashop -e "INSERT INTO ${DB_PREFIX}configuration ( name ,  value ,  date_add ,  date_upd ) VALUES ('SPLASH_USER_ID','1',NOW(), NOW());"
-		mysql -u root -padmin -h mysql -D prestashop -e "INSERT INTO ${DB_PREFIX}configuration ( name ,  value ,  date_add ,  date_upd ) VALUES ('SPLASH_WS_EXPERT','1',NOW(), NOW());"
-		mysql -u root -padmin -h mysql -D prestashop -e "INSERT INTO ${DB_PREFIX}configuration ( name ,  value ,  date_add ,  date_upd ) VALUES ('SPLASH_WS_HOST', '$SPLASH_WS_HOST' ,NOW(), NOW());"
+		mysql -u $DB_USER -p$DB_PASSWD -h $DB_SERVER -D $DB_NAME -e "INSERT INTO ${DB_PREFIX}configuration ( name ,  value ,  date_add ,  date_upd ) VALUES ('SPLASH_WS_ID','$SPLASH_WS_ID',NOW(), NOW());"
+		mysql -u $DB_USER -p$DB_PASSWD -h $DB_SERVER -D $DB_NAME -e "INSERT INTO ${DB_PREFIX}configuration ( name ,  value ,  date_add ,  date_upd ) VALUES ('SPLASH_WS_KEY','$SPLASH_WS_KEY',NOW(), NOW());"
+		mysql -u $DB_USER -p$DB_PASSWD -h $DB_SERVER -D $DB_NAME -e "INSERT INTO ${DB_PREFIX}configuration ( name ,  value ,  date_add ,  date_upd ) VALUES ('SPLASH_LANG_ID','en-US',NOW(), NOW());"
+		mysql -u $DB_USER -p$DB_PASSWD -h $DB_SERVER -D $DB_NAME -e "INSERT INTO ${DB_PREFIX}configuration ( name ,  value ,  date_add ,  date_upd ) VALUES ('SPLASH_USER_ID','1',NOW(), NOW());"
+		mysql -u $DB_USER -p$DB_PASSWD -h $DB_SERVER -D $DB_NAME -e "INSERT INTO ${DB_PREFIX}configuration ( name ,  value ,  date_add ,  date_upd ) VALUES ('SPLASH_WS_EXPERT','1',NOW(), NOW());"
+		mysql -u $DB_USER -p$DB_PASSWD -h $DB_SERVER -D $DB_NAME -e "INSERT INTO ${DB_PREFIX}configuration ( name ,  value ,  date_add ,  date_upd ) VALUES ('SPLASH_WS_HOST', '$SPLASH_WS_HOST' ,NOW(), NOW());"
 
 		# Enable the Module
-		mysql -u root -padmin -h mysql -D prestashop -e "INSERT INTO ${DB_PREFIX}module ( name ,  active ,  version ) VALUES ( 'splashsync', 1 , 'test');"
+		mysql -u root -padmin -h mysql -D $DB_NAME -e "INSERT INTO ${DB_PREFIX}module ( name ,  active ,  version ) VALUES ( 'splashsync', 1 , 'test');"
 
 	fi
 

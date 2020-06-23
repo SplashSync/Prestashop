@@ -19,6 +19,7 @@ use Configuration;
 use Context;
 use Db;
 use DbQuery;
+use Splash\Core\SplashCore as Splash;
 use TaxRule;
 
 /**
@@ -40,7 +41,6 @@ class TaxManager
         if (is_null($countryId)) {
             $countryId = Configuration::get('PS_COUNTRY_DEFAULT');
         }
-
         //====================================================================//
         // Prepare SQL request for reading in Database
         //====================================================================//

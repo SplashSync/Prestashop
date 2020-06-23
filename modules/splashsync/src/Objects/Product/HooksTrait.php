@@ -42,6 +42,36 @@ trait HooksTrait
     }
 
     /**
+     * This hook is called when a Product is Updated
+     *
+     * Changes are Generaly Detected on 'actionObjectProductUpdateAfter' hook
+     * but some modules only Uses this Hook after Direct Database writtings.
+     *
+     * @param array $params
+     *
+     * @return bool
+     */
+    public function hookactionProductUpdate($params)
+    {
+        //====================================================================//
+        // Check We Are on Database Module request
+        if (!self::isOnDatabaseModuleUpdate()) {
+            return false;
+        }
+        //====================================================================//
+        // Safety Check
+        if (!isset($params["product"]) || !($params["product"] instanceof PsProduct)) {
+            return false;
+        }
+
+        return $this->hookactionProduct(
+            $params["product"],
+            SPL_A_UPDATE,
+            $this->l('Product Updated on PS Database Module')
+        );
+    }
+
+    /**
      * This hook is called after a Product is Updated
      *
      * @param array $params
@@ -339,5 +369,29 @@ trait HooksTrait
         }
 
         return true;
+    }
+
+    /**
+     * Check if this hook is called by a Direct Database writtings module
+     *
+     * @see https://www.storecommander.com
+     *
+     * @return bool
+     */
+    private static function isOnDatabaseModuleUpdate()
+    {
+        //====================================================================//
+        // IS FEATURE ALLOWED
+        if (isset(Splash::configuration()->PsNoDatabaseModuleHooks)) {
+            return false;
+        }
+        //====================================================================//
+        // IS STORE COMMANDER
+        $requestUri = filter_input(INPUT_SERVER, 'REQUEST_URI');
+        if (false !== strpos($requestUri, "/modules/storecommander/")) {
+            return true;
+        }
+
+        return false;
     }
 }

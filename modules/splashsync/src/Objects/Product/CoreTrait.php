@@ -16,6 +16,7 @@
 namespace Splash\Local\Objects\Product;
 
 use Product;
+use Splash\Local\Services\MultiShopManager as MSM;
 use Splash\Local\Services\PmAdvancedPack;
 use Translate;
 
@@ -42,6 +43,7 @@ trait CoreTrait
             ))
             ->isListed()
             ->MicroData("http://schema.org/Product", "model")
+            ->addOption("shop", MSM::MODE_ALL)
             ->isRequired();
 
         //====================================================================//
@@ -52,6 +54,7 @@ trait CoreTrait
             ->description('Internal product Type')
             ->group(Translate::getAdminTranslation("Meta", "AdminThemes"))
             ->microData("http://schema.org/Product", "type")
+            ->addOption("shop", MSM::MODE_ALL)
             ->isReadOnly();
     }
 
