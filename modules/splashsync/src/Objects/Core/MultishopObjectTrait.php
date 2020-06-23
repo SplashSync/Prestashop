@@ -16,6 +16,7 @@
 namespace Splash\Local\Objects\Core;
 
 use ArrayObject;
+use Exception;
 use Shop;
 use Splash\Core\SplashCore as Splash;
 use Splash\Local\Services\MultiShopFieldsManager as MSF;
@@ -46,7 +47,14 @@ trait MultishopObjectTrait
     }
 
     /**
-     * {@inheritdoc}
+     * Override Get Function to Map MultiStore Fields
+     *
+     * @param null|string            $objectId
+     * @param null|array|ArrayObject $fieldsList
+     *
+     * @throws Exception
+     *
+     * @return array|ArrayObject|false
      */
     public function get($objectId = null, $fieldsList = null)
     {
@@ -63,7 +71,7 @@ trait MultishopObjectTrait
         MSF::loadFields($this->coreFields());
         //====================================================================//
         // Load Fields for All Shop Context
-        $allShopFields = array_intersect($fieldsList, array_merge(
+        $allShopFields = array_intersect((array) $fieldsList, array_merge(
             MSF::getAllShopFields(),
             MSF::getMultiShopFields()
         ));
@@ -85,7 +93,7 @@ trait MultishopObjectTrait
         foreach (MSM::getShopIds() as $shopId) {
             //====================================================================//
             // Load Fields for Single Shop Context
-            $singleShopFields = array_intersect($fieldsList, MSF::getSingleShopFields($shopId));
+            $singleShopFields = array_intersect((array) $fieldsList, MSF::getSingleShopFields($shopId));
             //====================================================================//
             // Ensure We have Fields to Read
             if (empty($singleShopFields)) {
@@ -107,7 +115,10 @@ trait MultishopObjectTrait
     }
 
     /**
-     * {@inheritdoc}
+     * @param null|string            $objectId
+     * @param null|array|ArrayObject $list
+     *
+     * @return false|string
      */
     public function set($objectId = null, $list = null)
     {
@@ -121,7 +132,7 @@ trait MultishopObjectTrait
         $list = ($list instanceof ArrayObject) ? $list->getArrayCopy() : $list;
         //====================================================================//
         // Write Data for All Shop Context
-        $allShopData = MSF::extractData($list, null);
+        $allShopData = MSF::extractData((array) $list, null);
         if (!empty($allShopData)) {
             MSM::setContext();
             $objectId = $this->coreSet($objectId, $allShopData);
@@ -136,7 +147,7 @@ trait MultishopObjectTrait
         foreach (MSM::getShopIds() as $shopId) {
             //====================================================================//
             // Extract Data for Single Shop Context
-            $multiShopData = MSF::extractData($list, $shopId);
+            $multiShopData = MSF::extractData((array) $list, $shopId);
             if (empty($multiShopData)) {
                 continue;
             }
@@ -144,7 +155,7 @@ trait MultishopObjectTrait
             // Write Data for Single Shop Context
             MSM::setContext($shopId);
             if (empty($this->coreSet($objectId, $multiShopData))) {
-                Splash::log()->errTrace(sprintf("Writing to Shop %i errored.", $shopId));
+                Splash::log()->errTrace(sprintf("Writing to Shop %d errored.", $shopId));
             };
         }
 
