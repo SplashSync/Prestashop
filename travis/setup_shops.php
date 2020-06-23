@@ -13,8 +13,8 @@
  *  file that was distributed with this source code.
  */
 
-require_once dirname(__DIR__) . "/splashsync/vendor/autoload.php";
-require_once dirname(__DIR__) . "/../vendor/autoload.php";
+require_once dirname(__DIR__) . "/modules/splashsync/vendor/autoload.php";
+require_once dirname(__DIR__) . "/vendor/autoload.php";
 
 use Splash\Local\Services\MultiShopManager as MSM;
 
