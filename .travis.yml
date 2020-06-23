@@ -117,8 +117,12 @@ script:
     - if [[ ${TRAVIS_PHP_VERSION:0:1} > "5" ]]; then phpdbg -qrr -d memory_limit=-1 modules/splashsync/vendor/bin/phpunit -c travis/phpunit.xml.dist; fi  
     # PHP5.6    =>  Without Php Debugger (Coverage x2 Faster)
     - if [[ ${TRAVIS_PHP_VERSION:0:1} < "7" ]]; then modules/splashsync/vendor/bin/phpunit -c travis/phpunit.xml.dist; fi  
-       
-    # Show Outdated Packages  
+
+    # PHP7+     =>  Run PhpUnit MSF Sequence
+    - php travis/setup_shops.php
+    - phpdbg -qrr -d memory_limit=-1 modules/splashsync/vendor/bin/phpunit -c travis/phpunit.xml.dist
+
+    # Show Outdated Packages
     - cd $MODULE_DIR    
     - composer outdated
     
