@@ -38,7 +38,6 @@ class SplashSync extends Module
     use \Splash\Local\Objects\ThirdParty\HooksTrait;
     use \Splash\Local\Objects\Address\HooksTrait;
     use \Splash\Local\Objects\Product\HooksTrait;
-//    use \Splash\Local\Objects\Category\HooksTrait;
     use \Splash\Local\Objects\Order\HooksTrait;
     use \Splash\Local\Objects\CreditNote\HooksTrait;
     use \Splash\Local\Traits\SplashIdTrait;
@@ -70,7 +69,7 @@ class SplashSync extends Module
         // Init Module Main Information Fields
         $this->name = 'splashsync';
         $this->tab = 'administration';
-        $this->version = '1.4.5';
+        $this->version = '1.5.0';
         $this->author = 'SplashSync';
         $this->need_instance = 0;
         $this->ps_versions_compliancy = array('min' => '1.6', 'max' => '1.7');

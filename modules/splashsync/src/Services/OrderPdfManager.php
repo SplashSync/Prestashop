@@ -165,7 +165,10 @@ class OrderPdfManager
         $pdf = new PDF($object, $template, Context::getContext()->smarty);
         //====================================================================//
         // Return Raw Pdf Contents
-        return (string) $pdf->render(false);
+        /** @var null|string $contents */
+        $contents = $pdf->render(false);
+
+        return (string) $contents;
     }
 
     /**
