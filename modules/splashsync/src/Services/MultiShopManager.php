@@ -104,7 +104,7 @@ class MultiShopManager
         if (is_null($shopId)) {
             Shop::resetContext();
             Shop::setContext(Shop::CONTEXT_ALL);
-            Context::getContext()->country = new Country(Configuration::get('PS_COUNTRY_DEFAULT'));
+            Context::getContext()->country = new Country((int) Configuration::get('PS_COUNTRY_DEFAULT'));
 
             return true;
         }
@@ -113,7 +113,7 @@ class MultiShopManager
         if (in_array($shopId, self::getShopIds(), false)) {
             Shop::resetContext();
             Shop::setContext(Shop::CONTEXT_SHOP, $shopId);
-            Context::getContext()->country = new Country(Configuration::get('PS_COUNTRY_DEFAULT'));
+            Context::getContext()->country = new Country((int) Configuration::get('PS_COUNTRY_DEFAULT'));
 
             return true;
         }
@@ -123,8 +123,6 @@ class MultiShopManager
 
     /**
      * Add A Shop to Prestashop for Testing
-     *
-     * @param null|int $shopId
      *
      * @return bool
      */

@@ -16,6 +16,7 @@
 namespace Splash\Local\Objects\Core;
 
 use Shop;
+use Splash\Local\Objects\Invoice;
 use Translate;
 
 /**
@@ -96,16 +97,18 @@ trait MultishopTrait
 
                 break;
             case 'shop_code':
-                $this->out[$fieldName] = "PS_SHOP_".((string) $this->object->id_shop);
+                $this->out[$fieldName] = "PS_SHOP_".((string) $this->getObjectShopId());
 
                 break;
             case 'shop_name':
-                $shop = Shop::getShop($this->object->id_shop);
+                /** @var null|array $shop */
+                $shop = Shop::getShop($this->getObjectShopId());
                 $this->out[$fieldName] = is_array($shop) ? $shop["name"] : null;
 
                 break;
             case 'shop_url':
-                $shop = Shop::getShop($this->object->id_shop);
+                /** @var null|array $shop */
+                $shop = Shop::getShop($this->getObjectShopId());
                 $this->out[$fieldName] = is_array($shop) ? $shop["domain"] : null;
 
                 break;
@@ -114,5 +117,15 @@ trait MultishopTrait
         }
 
         unset($this->in[$key]);
+    }
+
+    /**
+     * Get Current Object Shop Id
+     *
+     * @return int
+     */
+    protected function getObjectShopId(): int
+    {
+        return ($this instanceof Invoice) ? $this->Order->id_shop : $this->object->id_shop;
     }
 }
