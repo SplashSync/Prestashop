@@ -124,7 +124,7 @@ script:
 
     # Show Outdated Packages
     - cd $MODULE_DIR    
-    - composer outdated
+    - composer outdated -D
     
 notifications:
   email:         
