@@ -33,7 +33,7 @@
         "php-parallel-lint/php-parallel-lint":  "^1.0",
         "phpmd/phpmd":                      "^2.6",
         "phpro/grumphp":                    "^0.17",
-        "sclable/xml-lint":                 "^0.3",
+        "sclable/xml-lint":                 "^0.2.4",
         "sebastian/phpcpd":                 ">5.0",
         "seld/jsonlint":                    "^1.7",
         "sensiolabs/security-checker":      "*",
@@ -52,7 +52,7 @@
             "php modules/splashsync/vendor/bin/grumphp git:deinit"            
         ],
         "post-update-cmd": [
-            "php modules/splashsync/vendor/bin/grumphp git:deinit"            
+            "php modules/splashsync/vendor/bin/grumphp git:deinit"
         ]
     }    
 }
