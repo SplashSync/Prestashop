@@ -102,7 +102,9 @@ class MultiShopManager
         //====================================================================//
         // Check if All Shop Context
         if (is_null($shopId)) {
-            Shop::resetContext();
+            if (method_exists(Shop::class, "resetContext")) {
+                Shop::resetContext();
+            }
             Shop::setContext(Shop::CONTEXT_ALL);
             Context::getContext()->country = new Country((int) Configuration::get('PS_COUNTRY_DEFAULT'));
 
@@ -111,7 +113,9 @@ class MultiShopManager
         //====================================================================//
         // Check if Shop is Active
         if (in_array($shopId, self::getShopIds(), false)) {
-            Shop::resetContext();
+            if (method_exists(Shop::class, "resetContext")) {
+                Shop::resetContext();
+            }
             Shop::setContext(Shop::CONTEXT_SHOP, $shopId);
             Context::getContext()->country = new Country((int) Configuration::get('PS_COUNTRY_DEFAULT'));
 

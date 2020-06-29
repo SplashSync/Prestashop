@@ -82,6 +82,20 @@ trait PricesTrait
                 )." Base (".$this->Currency->sign.")"
             )
             ->MicroData("http://schema.org/Product", "wholesalePrice");
+
+        //====================================================================//
+        // Reduced Price
+        $this->fieldsFactory()->create(SPL_T_PRICE)
+            ->Identifier("price-reduced")
+            ->Name(
+                Translate::getAdminTranslation(
+                    "Sale price",
+                    "AdminProducts"
+                )." (".$this->Currency->sign.")"
+            )
+            ->MicroData("http://schema.org/Product", "reducedPrice")
+            ->isReadOnly()
+        ;
     }
 
     /**
@@ -147,6 +161,48 @@ trait PricesTrait
                     $priceHT = (double) Tools::convertPrice($this->object->wholesale_price, $this->Currency);
                 }
                 $taxPercent = (double)  $this->object->getTaxesRate();
+                //====================================================================//
+                // Build Price Array
+                $this->out[$fieldName] = self::prices()->Encode(
+                    $priceHT,
+                    $taxPercent,
+                    null,
+                    $this->Currency->iso_code,
+                    $this->Currency->sign,
+                    $this->Currency->name
+                );
+
+                break;
+            default:
+                return;
+        }
+
+        if (!is_null($key)) {
+            unset($this->in[$key]);
+        }
+    }
+
+    /**
+     * Read requested Field
+     *
+     * @param null|string $key       Input List Key
+     * @param string      $fieldName Field Identifier / Name
+     *
+     * @return void
+     */
+    private function getReducedPricesFields($key, $fieldName)
+    {
+        //====================================================================//
+        // READ Fields
+        switch ($fieldName) {
+            //====================================================================//
+            // REDUCED PRICE INFORMATIONS
+            //====================================================================//
+            case 'price-reduced':
+                //====================================================================//
+                // Read Price
+                $priceHT = (double) $this->object->getPrice(false);
+                $taxPercent = (double) $this->object->getTaxesRate();
                 //====================================================================//
                 // Build Price Array
                 $this->out[$fieldName] = self::prices()->Encode(
