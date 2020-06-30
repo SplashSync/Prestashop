@@ -12,8 +12,7 @@ ls -al  $TRAVIS_BUILD_DIR
 cp app/config/parameters.yml.dist app/config/parameters.yml
 
 # Add PHP Extensions
-echo Add PHP Extensions
+#echo Add PHP Extensions
 
-echo "extension = zip.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
-echo "extension = gd.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+echo Show PHP Extensions
 php -m
