@@ -48,13 +48,17 @@ jobs:
         - php: 7.1
           env: PS_VERSION=develop        
 
-        # Prestashop 1.7.6.x Branch       
-        - php: 7.3
-          env: PS_VERSION=1.7.6.x        
+        # Prestashop 1.7.7.x Branch
+        - php: 7.4
+          env: PS_VERSION=1.7.7.x
         - php: 7.1
-          env: PS_VERSION=1.7.6.x        
+          env: PS_VERSION=1.7.7.x
 
-        # Prestashop 1.7.5.x Branch       
+        # Prestashop 1.7.6.x Branch
+        - php: 7.3
+          env: PS_VERSION=1.7.6.x
+
+        # Prestashop 1.7.5.x Branch
         - php: 7.2
           env: PS_VERSION=1.7.5.x        
         
