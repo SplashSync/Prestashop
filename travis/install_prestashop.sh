@@ -14,6 +14,6 @@ cp app/config/parameters.yml.dist app/config/parameters.yml
 # Add PHP Extensions
 echo Add PHP Extensions
 
-if [[ "$(php -v | grep 'PHP 7')" ]]; then echo yes | pecl install -f zip; fi
-if [[ "$(php -v | grep 'PHP 7')" ]]; then echo yes | pecl install -f gd; fi
+echo "extension = zip.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+echo "extension = gd.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
 php -m
