@@ -31,3 +31,5 @@ if (count(MSM::getShopIds()) < 2) {
 if (count(MSM::getShopIds()) < 3) {
     var_dump(MSM::addPhpUnitShop("Phpunit2"));
 }
+
+var_dump(MSM::isFeatureActive());

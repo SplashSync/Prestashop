@@ -59,6 +59,11 @@ class MultiShopManager
             return false;
         }
         //====================================================================//
+        // When Library is called in TRAVIS CI mode ONLY
+        if (!empty(Splash::input("SPLASH_TRAVIS"))) {
+            return true;
+        }
+        //====================================================================//
         // Check if Splash Multi-Shop Feature is Active
         return !empty(Splash::configuration()->PsUseMultiShopParser);
     }
