@@ -188,6 +188,6 @@ class MultiShopManager
         Configuration::loadConfiguration();
         Shop::cacheShops(true);
 
-        return \Db::getInstance()->getValue('SELECT COUNT(*) FROM ' . _DB_PREFIX_ . 'shop');
+        return \Db::getInstance()->getValue('SELECT COUNT(*) FROM '._DB_PREFIX_.'shop');
     }
 }

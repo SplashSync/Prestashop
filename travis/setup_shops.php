@@ -28,8 +28,5 @@ Splash\Client\Splash::local();
 if (count(MSM::getShopIds()) < 2) {
     var_dump(MSM::addPhpUnitShop("Phpunit1"));
 }
-if (count(MSM::getShopIds()) < 3) {
-    var_dump(MSM::addPhpUnitShop("Phpunit2"));
-}
 
 var_dump(MSM::isFeatureActive());
