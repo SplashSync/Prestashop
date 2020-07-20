@@ -180,6 +180,8 @@ class MultiShopManager
         $shopUrl->active = true;
         $shopUrl->add();
 
+        Shop::cacheShops(true);
+
         return Shop::isFeatureActive();
     }
 }
