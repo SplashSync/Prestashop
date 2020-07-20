@@ -21,6 +21,7 @@ use Product;
 use Splash\Client\Splash        as SplashClient;
 use Splash\Core\SplashCore      as Splash;
 use Splash\Local\Services\LanguagesManager as SLM;
+use Splash\Local\Services\MultiShopManager as MSM;
 use Tools;
 
 /**
@@ -172,6 +173,12 @@ trait CRUDTrait
         // Safety Checks
         if (empty($unikId)) {
             return Splash::log()->err("ErrSchNoObjectId", __CLASS__."::".__FUNCTION__);
+        }
+
+        //====================================================================//
+        // Check if Multi-shop Mode is Active
+        if (MSM::isFeatureActive()) {
+            MSM::setContext();
         }
 
         //====================================================================//

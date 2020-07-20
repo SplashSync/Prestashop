@@ -55,6 +55,9 @@ trait MultishopObjectTrait
      * @throws Exception
      *
      * @return array|ArrayObject|false
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function get($objectId = null, $fieldsList = null)
     {
@@ -70,18 +73,8 @@ trait MultishopObjectTrait
         // Load Core Fields from All Shop Context
         MSF::loadFields($this->coreFields());
         //====================================================================//
-        // Load Fields for All Shop Context
-        $allShopFields = array_intersect((array) $fieldsList, array_merge(
-            MSF::getAllShopFields(),
-            MSF::getMultiShopFields()
-        ));
-        //====================================================================//
         // Read Data for All Shop Context
-        $allShopData = array();
-        if (!empty($allShopFields)) {
-            MSM::setContext();
-            $allShopData = $this->coreGet($objectId, $allShopFields);
-        }
+        $allShopData = $this->getAllShopsData($objectId, $fieldsList);
         //====================================================================//
         // Object Not Found => Exit
         if (!is_array($allShopData)) {
@@ -111,7 +104,15 @@ trait MultishopObjectTrait
         }
         //====================================================================//
         // Merge All & Multi Shop Data & Return
-        return array_merge($allShopData, $multiShopData);
+        $objectData = array_merge($allShopData, $multiShopData);
+        //====================================================================//
+        // Ensure Object Id is Here
+        if (!empty($objectData) && !isset($objectData["id"])) {
+            $objectData["id"] = $objectId;
+        }
+        //====================================================================//
+        // Return Object Data of False
+        return empty($objectData) ? false : $objectData;
     }
 
     /**
@@ -136,11 +137,11 @@ trait MultishopObjectTrait
         if (!empty($allShopData)) {
             MSM::setContext();
             $objectId = $this->coreSet($objectId, $allShopData);
-        }
-        //====================================================================//
-        // Catch Write Errors
-        if (empty($objectId)) {
-            return $objectId;
+            //====================================================================//
+            // Catch Write Errors
+            if (empty($objectId)) {
+                return $objectId;
+            }
         }
         //====================================================================//
         // Walk on Shops to Read Shops Fields
@@ -154,11 +155,45 @@ trait MultishopObjectTrait
             //====================================================================//
             // Write Data for Single Shop Context
             MSM::setContext($shopId);
-            if (empty($this->coreSet($objectId, $multiShopData))) {
+            $multiShopObjectId = $this->coreSet($objectId, $multiShopData);
+            if (empty($multiShopObjectId)) {
                 Splash::log()->errTrace(sprintf("Writing to Shop %d errored.", $shopId));
+            };
+            if (empty($objectId)) {
+                $objectId = $multiShopObjectId;
             };
         }
 
         return $objectId;
+    }
+
+    /**
+     * Get All MultiStore Shared Fields
+     *
+     * @param null|string            $objectId
+     * @param null|array|ArrayObject $fieldsList
+     *
+     * @throws Exception
+     *
+     * @return array|ArrayObject|false
+     */
+    public function getAllShopsData($objectId = null, $fieldsList = null)
+    {
+        //====================================================================//
+        // Load Fields for All Shop Context
+        $allShopFields = array_intersect((array) $fieldsList, array_merge(
+            MSF::getAllShopFields(),
+            MSF::getMultiShopFields()
+        ));
+        //====================================================================//
+        // Read Data for All Shop Context
+        $allShopData = array();
+        if (!empty($allShopFields)) {
+            MSM::setContext();
+            $allShopData = $this->coreGet($objectId, $allShopFields);
+        }
+        //====================================================================//
+        // Object Not Found => Exit
+        return is_array($allShopData) ? $allShopData : false;
     }
 }

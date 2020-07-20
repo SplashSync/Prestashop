@@ -224,7 +224,7 @@ trait HooksTrait
                 //====================================================================//
                 // Add Current Product Combinations to Commit Update List
                 return array(
-                    (int) Product::getUnikIdStatic($product->id, Splash::object("Product")->AttributeId)
+                    Product::getUnikIdStatic($product->id, Splash::object("Product")->AttributeId)
                 );
             }
         }

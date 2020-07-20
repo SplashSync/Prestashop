@@ -46,37 +46,37 @@ trait MainTrait
     protected function buildMainFields()
     {
         $groupName = Translate::getAdminTranslation("Shipping", "AdminProducts");
-
         //====================================================================//
         // Weight
         $this->fieldsFactory()->create(SPL_T_DOUBLE)
             ->Identifier("weight")
             ->Name(Translate::getAdminTranslation("Package weight", "AdminProducts"))
             ->Group($groupName)
+            ->addOption("shop", MSM::MODE_ALL)
             ->MicroData("http://schema.org/Product", "weight");
-
         //====================================================================//
         // Height
         $this->fieldsFactory()->create(SPL_T_DOUBLE)
             ->Identifier("height")
             ->Name(Translate::getAdminTranslation("Package height", "AdminProducts"))
             ->Group($groupName)
+            ->addOption("shop", MSM::MODE_ALL)
             ->MicroData("http://schema.org/Product", "height");
-
         //====================================================================//
         // Depth
         $this->fieldsFactory()->create(SPL_T_DOUBLE)
             ->Identifier("depth")
             ->Name(Translate::getAdminTranslation("Package depth", "AdminProducts"))
             ->Group($groupName)
+            ->addOption("shop", MSM::MODE_ALL)
             ->MicroData("http://schema.org/Product", "depth");
-
         //====================================================================//
         // Width
         $this->fieldsFactory()->create(SPL_T_DOUBLE)
             ->Identifier("width")
             ->Name(Translate::getAdminTranslation("Package width", "AdminProducts"))
             ->Group($groupName)
+            ->addOption("shop", MSM::MODE_ALL)
             ->MicroData("http://schema.org/Product", "width");
 
         //====================================================================//
@@ -98,6 +98,7 @@ trait MainTrait
             ->Identifier("volume")
             ->Name($this->spl->l("Volume"))
             ->Group($groupName)
+            ->addOption("shop", MSM::MODE_ALL)
             ->MicroData("http://schema.org/Product", "volume")
             ->isReadOnly();
 

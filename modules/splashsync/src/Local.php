@@ -21,6 +21,8 @@ use Employee;
 use Language;
 use Splash\Core\SplashCore      as Splash;
 use Splash\Local\Services\LanguagesManager as SLM;
+use Splash\Local\Services\MultiShopFieldsManager as MSF;
+use Splash\Local\Services\MultiShopManager as MSM;
 use Splash\Local\Traits\SplashIdTrait;
 use Splash\Models\LocalClassInterface;
 use SplashSync;
@@ -253,14 +255,35 @@ class Local implements LocalClassInterface
      */
     public function testSequences($name = null)
     {
-        switch ($name) {
-            default:
-            case "None":
-                // NOITHING TO DO FOR SEQUENCE SETUP
-                return array();
-            case "List":
+        //====================================================================//
+        // List Tests Sequences
+        if ("List" == $name) {
+            if (!MSM::isFeatureActive()) {
                 return array("None");
+            }
+            $sequences = array("None");
+            foreach (MSM::getShopIds() as $shopId) {
+                $sequences[] = "Msf_".$shopId;
+            }
+
+            return $sequences;
         }
+        //====================================================================//
+        // Init Msf Test Sequence
+        if (0 === strpos($name, "Msf")) {
+            $shopId = 0;
+            sscanf($name, "Msf_%d", $shopId);
+            MSM::setContext();
+            Configuration::updateValue('SPLASH_MSF_FOCUSED', (int) $shopId);
+
+            return array();
+        }
+        //====================================================================//
+        // Init Default Test Sequence
+        MSM::setContext();
+        Configuration::updateValue('SPLASH_MSF_FOCUSED', false);
+
+        return array();
     }
 
     /**

@@ -64,6 +64,29 @@ class MultiShopManager
     }
 
     /**
+     * Check if Splash MultiShop Feature is Focused on a Specific Shop
+     * ONLY USED FOR PHPUNIT TESTS
+     *
+     * @return null|int
+     */
+    public static function isFocused(): ?int
+    {
+        //====================================================================//
+        // Check if Multi-Shop Feature is Active
+        if (!self::isFeatureActive()) {
+            return null;
+        }
+        //====================================================================//
+        // Check if Splash Multi-Shop Focus is Active
+        $focusedShopId = Configuration::get('SPLASH_MSF_FOCUSED');
+        if (empty($focusedShopId) || !is_numeric($focusedShopId)) {
+            return null;
+        }
+
+        return (int) $focusedShopId;
+    }
+
+    /**
      * Get List of Active Prestashop MultiShops Context
      *
      * @return array

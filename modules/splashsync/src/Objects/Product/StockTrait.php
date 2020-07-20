@@ -15,6 +15,8 @@
 
 namespace Splash\Local\Objects\Product;
 
+use Pack;
+use Shop;
 use Splash\Core\SplashCore      as Splash;
 use StockAvailable;
 use Translate;
@@ -88,13 +90,13 @@ trait StockTrait
             //====================================================================//
             // Stock Reel
             case 'stock':
-                $this->out[$fieldName] = $this->object->getQuantity($this->ProductId, $this->AttributeId);
+                $this->out[$fieldName] = $this->getStockQuantity();
 
                 break;
             //====================================================================//
             // Out Of Stock
             case 'outofstock':
-                $quantity = $this->object->getQuantity($this->ProductId, $this->AttributeId);
+                $quantity = $this->getStockQuantity();
                 $this->out[$fieldName] = ($quantity > 0) ? false : true;
 
                 break;
@@ -146,10 +148,15 @@ trait StockTrait
                 }
                 //====================================================================//
                 // Product Already Exists => Update Product Stock
-                if ($this->object->getQuantity($this->ProductId, $this->AttributeId) != $fieldData) {
+                if ($this->getStockQuantity() != $fieldData) {
                     //====================================================================//
                     // Update Stock in DataBase
-                    StockAvailable::setQuantity($this->ProductId, $this->AttributeId, $fieldData);
+                    StockAvailable::setQuantity(
+                        $this->ProductId,
+                        $this->AttributeId,
+                        $fieldData,
+                        Shop::getContextShopID(true)
+                    );
                     $this->needUpdate($this->AttributeId ? "Attribute" : "object");
                 }
 
@@ -168,5 +175,23 @@ trait StockTrait
                 return;
         }
         unset($this->in[$fieldName]);
+    }
+
+    /**
+     * Override of Generic Stocks reading to manage MSf Mode
+     *
+     * @return int
+     */
+    protected function getStockQuantity()
+    {
+        if (Pack::isPack((int) $this->ProductId)) {
+            return Pack::getQuantity($this->ProductId, $this->AttributeId);
+        }
+
+        return StockAvailable::getQuantityAvailableByProduct(
+            $this->ProductId,
+            $this->AttributeId,
+            Shop::getContextShopID(true)
+        );
     }
 }

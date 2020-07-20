@@ -20,6 +20,7 @@ use Context;
 use Image;
 use ImageManager;
 use ImageType;
+use Shop;
 use Splash\Core\SplashCore      as Splash;
 use Splash\Local\Services\LanguagesManager as SLM;
 use Splash\Models\Objects\ImagesTrait as SplashImagesTrait;
@@ -242,7 +243,8 @@ trait ImagesTrait
             $this->variantImages = Image::getImages(
                 SLM::getDefaultLangId(),
                 $this->object->id,
-                $this->AttributeId ? $this->AttributeId : null
+                $this->AttributeId ? $this->AttributeId : null,
+                Shop::getContextShopID(true)
             );
         }
         //====================================================================//
@@ -315,6 +317,14 @@ trait ImagesTrait
         // If CheckSum are Different => Continue
         if ($md5 !== $checkSum) {
             return false;
+        }
+        //====================================================================//
+        // Safety Checks
+        if (empty($psImage->id_image)) {
+            $psImage->id_image = $psImage->id;
+        }
+        if (empty($psImage->id_product)) {
+            $psImage->id_product = $this->ProductId;
         }
 
         return $psImage;
@@ -478,7 +488,15 @@ trait ImagesTrait
     {
         //====================================================================//
         // Load Object Images List
-        foreach (Image::getImages(SLM::getDefaultLangId(), $this->ProductId) as $image) {
+        $allImages = Image::getImages(
+            SLM::getDefaultLangId(),
+            $this->ProductId,
+            null,
+            Shop::getContextShopID(true)
+        );
+        //====================================================================//
+        // Walk on Object Images List
+        foreach ($allImages as $image) {
             $imageObj = new Image($image['id_image']);
             $imagePath = _PS_PROD_IMG_DIR_.$imageObj->getExistingImgPath();
             if (!file_exists($imagePath.'.jpg')) {
@@ -527,7 +545,8 @@ trait ImagesTrait
         $productImages = Image::getImages(
             SLM::getDefaultLangId(),
             $this->object->id,
-            null
+            null,
+            Shop::getContextShopID(true)
         );
         //====================================================================//
         // Images List is Empty
@@ -565,7 +584,12 @@ trait ImagesTrait
         }
         //====================================================================//
         // Load Object Images List for Whole Product
-        $this->imagesCache = Image::getImages(SLM::getDefaultLangId(), $this->object->id);
+        $this->imagesCache = Image::getImages(
+            SLM::getDefaultLangId(),
+            $this->object->id,
+            null,
+            Shop::getContextShopID(true)
+        );
 
         //====================================================================//
         // UPDATE IMAGES LIST
