@@ -18,8 +18,8 @@ namespace Splash\Local\Objects\Product;
 use Configuration;
 use Splash\Components\UnitConverter as Units;
 use Splash\Local\Services\MultiShopManager as MSM;
-use Translate;
 use Tools;
+use Translate;
 
 /**
  * Access to Product Main Fields

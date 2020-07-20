@@ -152,8 +152,8 @@ trait DescTrait
 
                     break;
                 case 'description_short':
-                    $maxLength = (int)Configuration::get('PS_PRODUCT_SHORT_DESC_LIMIT');
-                    $this->setMultilang($baseFieldName, $idLang, $fieldData, $maxLength);
+                    $maxLength = (int) Configuration::get('PS_PRODUCT_SHORT_DESC_LIMIT');
+                    $this->setMultilang($baseFieldName, $idLang, $fieldData, $maxLength ? $maxLength : null);
                     unset($this->in[$fieldName]);
 
                     break;
