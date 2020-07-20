@@ -92,7 +92,6 @@ trait MainTrait
             ->Group($groupName)
             ->MicroData("http://schema.org/Product", "surface")
             ->isReadOnly();
-
         //====================================================================//
         // Volume
         $this->fieldsFactory()->create(SPL_T_DOUBLE)
@@ -114,7 +113,6 @@ trait MainTrait
             ->Name(Translate::getAdminTranslation("Supplier reference", "AdminProducts"))
             ->addOption("shop", MSM::MODE_ALL)
             ->MicroData("http://schema.org/Product", "mpn");
-
         //====================================================================//
         // UPC
         $this->fieldsFactory()->create(SPL_T_INT)
@@ -123,7 +121,6 @@ trait MainTrait
             ->Group($groupName)
             ->addOption("shop", MSM::MODE_ALL)
             ->MicroData("http://schema.org/Product", "gtin12");
-
         //====================================================================//
         // EAN
         $this->fieldsFactory()->create(SPL_T_INT)
@@ -132,7 +129,6 @@ trait MainTrait
             ->Group($groupName)
             ->addOption("shop", MSM::MODE_ALL)
             ->MicroData("http://schema.org/Product", "gtin13");
-
         //====================================================================//
         // ISBN
         if (Tools::version_compare(_PS_VERSION_, "1.7", '>=')) {
