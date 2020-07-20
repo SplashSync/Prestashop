@@ -151,9 +151,9 @@ class MultiShopManager
     /**
      * Add A Shop to Prestashop for Testing
      *
-     * @return bool
+     * @return int
      */
-    public static function addPhpUnitShop(string $name): bool
+    public static function addPhpUnitShop(string $name): int
     {
         //====================================================================//
         // Ensure Feature is Active
@@ -180,8 +180,9 @@ class MultiShopManager
         $shopUrl->active = true;
         $shopUrl->add();
 
+        Configuration::loadConfiguration();
         Shop::cacheShops(true);
 
-        return Shop::isFeatureActive();
+        return \Db::getInstance()->getValue('SELECT COUNT(*) FROM ' . _DB_PREFIX_ . 'shop');
     }
 }
