@@ -128,6 +128,7 @@ services:
         - ./docker/config/splash.json:/var/www/html/config/splash.json:ro
         # Module Sources
         - ./modules/splashsync:/var/www/html/modules/splashsync:ro
+        - ./travis:/var/www/html/travis:ro
         # Docker EntryPoint
         - ./docker/docker-entrypoint.sh:/var/www/html/modules/docker-entrypoint.sh:ro
         environment:

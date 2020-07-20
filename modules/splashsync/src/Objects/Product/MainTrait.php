@@ -19,6 +19,7 @@ use Configuration;
 use Splash\Components\UnitConverter as Units;
 use Splash\Local\Services\MultiShopManager as MSM;
 use Translate;
+use Tools;
 
 /**
  * Access to Product Main Fields
@@ -134,12 +135,14 @@ trait MainTrait
 
         //====================================================================//
         // ISBN
-        $this->fieldsFactory()->create(SPL_T_INT)
-            ->Identifier("isbn")
-            ->Name(Translate::getAdminTranslation("ISBN Code", "AdminProducts"))
-            ->Group($groupName)
-            ->addOption("shop", MSM::MODE_ALL)
-            ->MicroData("http://schema.org/Product", "gtin14");
+        if (Tools::version_compare(_PS_VERSION_, "1.7", '>=')) {
+            $this->fieldsFactory()->create(SPL_T_INT)
+                ->Identifier("isbn")
+                ->Name(Translate::getAdminTranslation("ISBN Code", "AdminProducts"))
+                ->Group($groupName)
+                ->addOption("shop", MSM::MODE_ALL)
+                ->MicroData("http://schema.org/Product", "gtin14");
+        }
     }
 
     /**
