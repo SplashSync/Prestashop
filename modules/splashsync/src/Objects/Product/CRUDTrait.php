@@ -153,8 +153,6 @@ trait CRUDTrait
             return false;
         }
 
-        Splash::log()->www("Commits", SplashClient::$commited);
-
         return $this->getObjectIdentifier();
     }
 

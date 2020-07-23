@@ -428,7 +428,11 @@ class SplashSync extends Module
             Splash\Client\Splash::log()
                 ->deb("Splash Commit => ".$objectType." Action = ".$action." Id = ".$objectId, " : ".$comment);
         } elseif (is_array($objectId) && empty($objectId)) {
-            return true;
+
+            return Splash\Client\Splash::log()
+                ->err("Splash Hook Error : Empty Id List Given => ".print_r($objectId, true));
+//
+//            return true;
         } elseif (is_array($objectId)) {
             Splash\Client\Splash::log()
                 ->deb("Splash Commit => ".$objectType." Action = ".$action." Ids (x".implode(", ", $objectId).") ".$comment);

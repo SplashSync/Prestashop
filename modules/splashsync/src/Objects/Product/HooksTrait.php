@@ -232,7 +232,7 @@ trait HooksTrait
         // Add Product Combinations to Commit Update List
         $productIds = array();
         foreach ($attrList as $attr) {
-            $productIds[] = (int) Product::getUnikIdStatic($product->id, $attr["id_product_attribute"]);
+            $productIds[] = Product::getUnikIdStatic($product->id, $attr["id_product_attribute"]);
         }
 
         return  $productIds;
