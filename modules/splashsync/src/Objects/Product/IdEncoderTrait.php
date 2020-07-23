@@ -66,6 +66,8 @@ trait IdEncoderTrait
         }
         //====================================================================//
         // Generate Standard Id
+        Splash::log()->warTrace("Standard Encoding : ". (string) ($productId + ($attributeId << 20)));
+
         return (string) ($productId + ($attributeId << 20));
     }
 
