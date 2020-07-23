@@ -108,9 +108,7 @@ else
     echo "\n* Pretashop Core already installed...";
 fi
 
-/var/www/html/modules/splashsync/vendor/bin/phpunit -c /var/www/html/travis/phpunit.xml.dist /var/www/html/modules/splashsync/vendor/splash/phpcore/Tests/Core/
-php /var/www/html/travis/setup_shops.php && php /var/www/html/travis/setup_shops.php
-/var/www/html/modules/splashsync/vendor/bin/phpunit -c /var/www/html/travis/phpunit.products.xml
+
 
 echo "\n* Almost ! Starting web server now\n";
 exec apache2-foreground

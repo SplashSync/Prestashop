@@ -118,37 +118,37 @@ services:
         
     ################################################################################
     # Prestashop 1.6       
-#    prestashop_1_6:
-#        image: prestashop/prestashop:1.6-7.1-apache
-#        container_name: prestashop_1_6
-#        depends_on:
-#           - mysql
-#        volumes:
-#        # Push Configuration Overides
-#        - ./docker/config/splash.json:/var/www/html/config/splash.json:ro
-#        # Module Sources
-#        - ./modules/splashsync:/var/www/html/modules/splashsync:ro
-#        - ./travis:/var/www/html/travis:ro
-#        # Docker EntryPoint
-#        - ./docker/docker-entrypoint.sh:/var/www/html/modules/docker-entrypoint.sh:ro
-#        environment:
-#           - DB_SERVER=mysql
-#           - DB_NAME=Prestashop__1p6
-#           - DB_PREFIX=ps_1_6_
-#           - PS_INSTALL_AUTO=1
-#           - PS_DOMAIN=ps1-6.prestashop.local
-#           - PS_FOLDER_ADMIN=_ad
-#           - PS_FOLDER_INSTALL=installed
-#           - ADMIN_MAIL=contact@splashsync.com
-#           - ADMIN_PASSWD=splashsync
-#           - SPLASH_WS_ID=ThisIsPs16Key
-#           - SPLASH_WS_KEY=ThisTokenIsNotSoSecretChangeIt
-#           - SPLASH_WS_HOST=http://toolkit.prestashop.local/ws/soap
-#        command: sh /var/www/html/modules/docker-entrypoint.sh
-#        hostname: ps1-6.prestashop.local
-#        networks:
-#           prestashop:     { ipv4_address: 172.102.0.16 }
-#           splashsync:     { aliases: [ ps1-6.prestashop.local ] }
+    prestashop_1_6:
+        image: prestashop/prestashop:1.6-7.1-apache
+        container_name: prestashop_1_6
+        depends_on:
+           - mysql
+        volumes:
+        # Push Configuration Overides
+        - ./docker/config/splash.json:/var/www/html/config/splash.json:ro
+        # Module Sources
+        - ./modules/splashsync:/var/www/html/modules/splashsync:ro
+        - ./travis:/var/www/html/travis:ro
+        # Docker EntryPoint
+        - ./docker/docker-entrypoint.sh:/var/www/html/modules/docker-entrypoint.sh:ro
+        environment:
+           - DB_SERVER=mysql
+           - DB_NAME=Prestashop__1p6
+           - DB_PREFIX=ps_1_6_
+           - PS_INSTALL_AUTO=1
+           - PS_DOMAIN=ps1-6.prestashop.local
+           - PS_FOLDER_ADMIN=_ad
+           - PS_FOLDER_INSTALL=installed
+           - ADMIN_MAIL=contact@splashsync.com
+           - ADMIN_PASSWD=splashsync
+           - SPLASH_WS_ID=ThisIsPs16Key
+           - SPLASH_WS_KEY=ThisTokenIsNotSoSecretChangeIt
+           - SPLASH_WS_HOST=http://toolkit.prestashop.local/ws/soap
+        command: sh /var/www/html/modules/docker-entrypoint.sh
+        hostname: ps1-6.prestashop.local
+        networks:
+           prestashop:     { ipv4_address: 172.102.0.16 }
+           splashsync:     { aliases: [ ps1-6.prestashop.local ] }
                
     ################################################################################
     # Splash Toolkit Container   
