@@ -58,18 +58,20 @@ class TotSwitchAttributes
         if (!self::isFeatureActive()) {
             return false;
         }
-
         //====================================================================//
         // Not on Attribute Context => Skip
         if (($attributeId <= 0) || !($attribute instanceof Combination)) {
             return false;
         }
-
+        //====================================================================//
+        // Check Shop Context
+        $shopId = Shop::getContextShopID(true);
+        $shopSql = $shopId ? ' AND id_shop = '.$shopId : "";
         //====================================================================//
         // Check if Product Attribute Id is Disabled
         $sql = 'SELECT id_product_attribute, id_shop';
         $sql .= ' FROM `'._DB_PREFIX_.'tot_switch_attribute_disabled`';
-        $sql .= ' WHERE id_shop = '.Shop::getContextShopID(false).' AND id_product_attribute = '.$attributeId;
+        $sql .= ' WHERE id_product_attribute = '.$attributeId.' '.$shopSql;
 
         return !empty(Db::getInstance()->executeS($sql));
     }
@@ -119,7 +121,7 @@ class TotSwitchAttributes
 
         //====================================================================//
         // Detect Shop Id
-        $idShop = Shop::getContextShopID(false);
+        $idShop = Shop::getContextShopID(true);
         if (null == $idShop) {
             $idShops = Shop::getContextListShopID();
         }
