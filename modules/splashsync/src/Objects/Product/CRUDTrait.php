@@ -133,7 +133,7 @@ trait CRUDTrait
         //====================================================================//
         // Verify Update Is requiered
         if (!$needed && !$this->isToUpdate("Attribute")) {
-            Splash::log()->deb("MsgLocalNoUpdateReq", __CLASS__, __FUNCTION__);
+            Splash::log()->war("MsgLocalNoUpdateReq", __CLASS__, __FUNCTION__);
 
             return $this->getObjectIdentifier();
         }
