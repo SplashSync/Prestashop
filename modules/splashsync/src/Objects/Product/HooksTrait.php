@@ -249,6 +249,7 @@ trait HooksTrait
      */
     private function hookactionProduct($product, $action, $comment)
     {
+        \Splash\Core\SplashCore::log()->warTrace("Begin Product Commit for action ".$action);
         //====================================================================//
         // Safety Check
         if (!isset($product->id) || empty($product->id)) {
