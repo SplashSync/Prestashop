@@ -117,7 +117,7 @@ script:
     - modules/splashsync/vendor/bin/phpunit -c travis/phpunit.xml.dist modules/splashsync/vendor/splash/phpcore/Tests/Core/
     
     # ALL PHP   =>  Run PhpUnit Local Sequence with No Data Inside
-#    - modules/splashsync/vendor/bin/phpunit -c travis/phpunit.xml.dist --testsuite=Local
+    - modules/splashsync/vendor/bin/phpunit -c travis/phpunit.xml.dist --testsuite=Local
     
     # PHP7+     =>  Run PhpUnit Main Sequence
 #    - if [[ ${TRAVIS_PHP_VERSION:0:1} > "5" ]]; then phpdbg -qrr -d memory_limit=-1 modules/splashsync/vendor/bin/phpunit -c travis/phpunit.xml.dist; fi
@@ -126,7 +126,7 @@ script:
 
     # PHP7+     =>  Run PhpUnit MSF Sequence
     - php travis/setup_shops.php && php travis/setup_shops.php
-    - modules/splashsync/vendor/bin/phpunit -c travis/phpunit.products.xml modules/splashsync/vendor/splash/phpcore/Tests/WsSpecials/S00ProductTest
+#    - modules/splashsync/vendor/bin/phpunit -c travis/phpunit.products.xml modules/splashsync/vendor/splash/phpcore/Tests/WsSpecials/S00ProductTest
     - modules/splashsync/vendor/bin/phpunit -c travis/phpunit.products.xml
 
     # Show Outdated Packages
