@@ -33,19 +33,19 @@ splash:
                 WsHost:             http://latest.prestashop.local
                 WsPath:             /modules/splashsync/vendor/splash/phpcore/soap.php
         
-#        ########################################################################
-#        # Prestashop 1.7
-#        ps-1-7:
-#            id:                 ThisIsPs17Key
-#            key:                ThisTokenIsNotSoSecretChangeIt
-#            name:               Prestashop 1.7
-#            host:               false
-#            connector:          soap
-#            config:
-#                WsIdentifier:       ThisIsPs17Key
-#                WsEncryptionKey:    ThisTokenIsNotSoSecretChangeIt
-#                WsHost:             http://ps1-7.prestashop.local
-#                WsPath:             /modules/splashsync/vendor/splash/phpcore/soap.php
+        ########################################################################
+        # Prestashop 1.7
+        ps-1-7:
+            id:                 ThisIsPs17Key
+            key:                ThisTokenIsNotSoSecretChangeIt
+            name:               Prestashop 1.7
+            host:               false
+            connector:          soap
+            config:
+                WsIdentifier:       ThisIsPs17Key
+                WsEncryptionKey:    ThisTokenIsNotSoSecretChangeIt
+                WsHost:             http://ps1-7.prestashop.local
+                WsPath:             /modules/splashsync/vendor/splash/phpcore/soap.php
 
         ########################################################################
         # Prestashop 1.6

@@ -23,6 +23,7 @@ use ImageType;
 use Shop;
 use Splash\Core\SplashCore      as Splash;
 use Splash\Local\Services\LanguagesManager as SLM;
+use Splash\Local\Services\MultiShopManager as MSM;
 use Splash\Models\Objects\ImagesTrait as SplashImagesTrait;
 use Tools;
 use Translate;
@@ -84,6 +85,9 @@ trait ImagesTrait
             ->Name(Translate::getAdminTranslation("Images", "AdminProducts"))
             ->Group($groupName)
             ->MicroData("http://schema.org/Product", "image");
+        if (Tools::version_compare(_PS_VERSION_, "1.7.7", '<=')) {
+            $this->fieldsFactory()->addOption("shop", MSM::MODE_ALL);
+        }
 
         //====================================================================//
         // Product Images => Position
@@ -94,6 +98,9 @@ trait ImagesTrait
             ->MicroData("http://schema.org/Product", "positionImage")
             ->Group($groupName)
             ->isNotTested();
+        if (Tools::version_compare(_PS_VERSION_, "1.7.7", '<=')) {
+            $this->fieldsFactory()->addOption("shop", MSM::MODE_ALL);
+        }
 
         //====================================================================//
         // Product Images => Is Cover
@@ -104,6 +111,9 @@ trait ImagesTrait
             ->MicroData("http://schema.org/Product", "isCover")
             ->Group($groupName)
             ->isNotTested();
+        if (Tools::version_compare(_PS_VERSION_, "1.7.7", '<=')) {
+            $this->fieldsFactory()->addOption("shop", MSM::MODE_ALL);
+        }
 
         //====================================================================//
         // Product Images => Is Visible Image
@@ -114,6 +124,9 @@ trait ImagesTrait
             ->MicroData("http://schema.org/Product", "isVisibleImage")
             ->Group($groupName)
             ->isNotTested();
+        if (Tools::version_compare(_PS_VERSION_, "1.7.7", '<=')) {
+            $this->fieldsFactory()->addOption("shop", MSM::MODE_ALL);
+        }
     }
 
     /**
@@ -673,7 +686,7 @@ trait ImagesTrait
         //====================================================================//
         // File Imported => Write it Here
         if (false == $newImageFile) {
-            return Splash::log()->err("Reading Raw Image from Server failled...");
+            return Splash::log()->err("Reading Raw Image from Server failed...");
         }
         $this->needUpdate();
         //====================================================================//
@@ -686,7 +699,7 @@ trait ImagesTrait
         //====================================================================//
         // Write Image To Database
         if (!$objectImage->add()) {
-            return false;
+            return Splash::log()->err("Create PS Image failed...");
         }
         //====================================================================//
         // Write Image On Folder
