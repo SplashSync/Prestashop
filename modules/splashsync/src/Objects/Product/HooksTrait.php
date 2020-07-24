@@ -260,12 +260,14 @@ trait HooksTrait
         //====================================================================//
         // Combination Lock Mode => Splash is Creating a Variant Product
         if (Splash::object("Product")->isLocked("onCombinationLock")) {
+            \Splash\Core\SplashCore::log()->warTrace("Commit Locked for action ".$action);
             return true;
         }
         //====================================================================//
         // Get Product Impacted Ids to Commit
         $idList = $this->getActionProductIds($product);
         if (empty($idList)) {
+            \Splash\Core\SplashCore::log()->warTrace("Commit Empty for action ".$action);
             return true;
         }
         //====================================================================//
