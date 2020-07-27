@@ -283,6 +283,8 @@ class Local implements LocalClassInterface
         MSM::setContext();
         Configuration::updateValue('SPLASH_MSF_FOCUSED', false);
 
+        $this->getLocalModule()->registerHook('actionObjectProductUpdateAfter');
+
         return array();
     }
 
