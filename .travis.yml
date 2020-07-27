@@ -37,20 +37,20 @@ jobs:
           env: PS_VERSION=1.7.7.x
 
         # Prestashop 1.7.6.x Branch
-        - php: 7.3
-          env: PS_VERSION=1.7.6.x
+#        - php: 7.3
+#          env: PS_VERSION=1.7.6.x
 
         # Prestashop 1.7.5.x Branch
-        - php: 7.2
-          env: PS_VERSION=1.7.5.x
+#        - php: 7.2
+#          env: PS_VERSION=1.7.5.x
 
         # Prestashop 1.7.4.x Branch
-        - php: 7.1
-          env: PS_VERSION=1.7.4.x
+#        - php: 7.1
+#          env: PS_VERSION=1.7.4.x
 
         # Prestashop 1.7.1.x Branch
-        - php: 7.1
-          env: PS_VERSION=1.7.1.x
+#        - php: 7.1
+#          env: PS_VERSION=1.7.1.x
         
     allow_failures:
 #        - env: PS_VERSION=1.7.5.x
@@ -90,9 +90,10 @@ script:
 
     # With PHP 7.2 => Execute CsFixer
     - if [[ ${TRAVIS_PHP_VERSION:0:3} > "7.1" ]]; then php modules/splashsync/vendor/bin/grumphp run --testsuite=csfixer; fi
-    # With PHP 7.2 => Execute Phpstan 
+    # With PHP 7.2 => Execute Phpstan
+    - if [[ ${TRAVIS_PHP_VERSION:0:3} > "7.1" ]]; then modules/splashsync/vendor/bin/phpstan analyze -c travis/phpstan.neon ./modules/splashsync/src/ --level 8; fi
     - if [[ ${TRAVIS_PHP_VERSION:0:3} > "7.1" ]]; then php modules/splashsync/vendor/bin/grumphp run --testsuite=phpstan; fi
-    
+
     # Run PhpUnit Core Test Sequence (Will Enable the Module)
     - modules/splashsync/vendor/bin/phpunit -c travis/phpunit.xml.dist modules/splashsync/vendor/splash/phpcore/Tests/Core/
     
