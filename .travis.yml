@@ -126,8 +126,9 @@ script:
 
     # PHP7+     =>  Run PhpUnit MSF Sequence
     - php travis/setup_shops.php && php travis/setup_shops.php
-#    - modules/splashsync/vendor/bin/phpunit -c travis/phpunit.products.xml modules/splashsync/vendor/splash/phpcore/Tests/WsSpecials/S00ProductTest
-    - modules/splashsync/vendor/bin/phpunit -c travis/phpunit.products.xml
+    - modules/splashsync/vendor/bin/phpunit -c travis/phpunit.products.xml modules/splashsync/vendor/splash/phpcore/Tests/WsObjects
+#    - modules/splashsync/vendor/bin/phpunit -c travis/phpunit.products.xml modules/splashsync/vendor/splash/phpcore/Tests/WsSpecials
+#    - modules/splashsync/vendor/bin/phpunit -c travis/phpunit.products.xml
 
     # Show Outdated Packages
     - cd $MODULE_DIR    
