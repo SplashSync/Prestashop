@@ -58,16 +58,11 @@ trait IdEncoderTrait
         // 32 bits Platforms Compatibility
         if ((PHP_INT_SIZE == 4) || !empty(Splash::input('SPLASH_TRAVIS'))) {
             if (($productId > 0xFFFFF) || ($attributeId > 0x7FF)) {
-
-                Splash::log()->warTrace("String Encoding : ". (string) $productId.'@@'.(string) $attributeId);
-
                 return (string) $productId.'@@'.(string) $attributeId;
             }
         }
         //====================================================================//
         // Generate Standard Id
-        Splash::log()->warTrace("Standard Encoding : ". (string) ($productId + ($attributeId << 20)));
-
         return (string) ($productId + ($attributeId << 20));
     }
 
