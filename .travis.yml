@@ -105,13 +105,13 @@ script:
     - cd $MODULE_DIR
     
     # Run Grump Main Test Sequence
-#    - php modules/splashsync/vendor/bin/grumphp run --testsuite=travis
+    - php modules/splashsync/vendor/bin/grumphp run --testsuite=travis
     - cd $TRAVIS_BUILD_DIR
 
     # With PHP 7.2 => Execute CsFixer
-#    - if [[ ${TRAVIS_PHP_VERSION:0:3} > "7.1" ]]; then php modules/splashsync/vendor/bin/grumphp run --testsuite=csfixer; fi
+    - if [[ ${TRAVIS_PHP_VERSION:0:3} > "7.1" ]]; then php modules/splashsync/vendor/bin/grumphp run --testsuite=csfixer; fi
     # With PHP 7.2 => Execute Phpstan 
-#    - if [[ ${TRAVIS_PHP_VERSION:0:3} > "7.1" ]]; then php modules/splashsync/vendor/bin/grumphp run --testsuite=phpstan; fi
+    - if [[ ${TRAVIS_PHP_VERSION:0:3} > "7.1" ]]; then php modules/splashsync/vendor/bin/grumphp run --testsuite=phpstan; fi
     
     # Run PhpUnit Core Test Sequence (Will Enable the Module)
     - modules/splashsync/vendor/bin/phpunit -c travis/phpunit.xml.dist modules/splashsync/vendor/splash/phpcore/Tests/Core/
@@ -120,16 +120,15 @@ script:
     - modules/splashsync/vendor/bin/phpunit -c travis/phpunit.xml.dist --testsuite=Local
     
     # PHP7+     =>  Run PhpUnit Main Sequence
-#    - if [[ ${TRAVIS_PHP_VERSION:0:1} > "5" ]]; then phpdbg -qrr -d memory_limit=-1 modules/splashsync/vendor/bin/phpunit -c travis/phpunit.xml.dist; fi
+    - if [[ ${TRAVIS_PHP_VERSION:0:1} > "5" ]]; then phpdbg -qrr -d memory_limit=-1 modules/splashsync/vendor/bin/phpunit -c travis/phpunit.xml.dist; fi
     # PHP5.6    =>  Without Php Debugger (Coverage x2 Faster)
-#    - if [[ ${TRAVIS_PHP_VERSION:0:1} < "7" ]]; then modules/splashsync/vendor/bin/phpunit -c travis/phpunit.xml.dist; fi
+    - if [[ ${TRAVIS_PHP_VERSION:0:1} < "7" ]]; then modules/splashsync/vendor/bin/phpunit -c travis/phpunit.xml.dist; fi
 
-    # PHP7+     =>  Run PhpUnit MSF Sequence
+    # PHP7+     =>  Run PhpUnit Product with MSF Sequence
     - php travis/setup_shops.php && php travis/setup_shops.php
     - modules/splashsync/vendor/bin/phpunit -c travis/phpunit.products.xml modules/splashsync/vendor/splash/phpcore/Tests/WsAdmin
     - modules/splashsync/vendor/bin/phpunit -c travis/phpunit.products.xml modules/splashsync/vendor/splash/phpcore/Tests/WsObjects
     - modules/splashsync/vendor/bin/phpunit -c travis/phpunit.products.xml modules/splashsync/vendor/splash/phpcore/Tests/WsSpecials
-#    - modules/splashsync/vendor/bin/phpunit -c travis/phpunit.products.xml
 
     # Show Outdated Packages
     - cd $MODULE_DIR    

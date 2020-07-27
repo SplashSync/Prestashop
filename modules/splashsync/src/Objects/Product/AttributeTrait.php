@@ -148,7 +148,6 @@ trait AttributeTrait
         }
         //====================================================================//
         // UPDATE ATTRIBUTE INFORMATIONS
-        Splash::log()->warTrace("Attribute Update Requested");
         if (true != $this->Attribute->update()) {
             return Splash::log()->errTrace("Unable to update Product Attribute.");
         }

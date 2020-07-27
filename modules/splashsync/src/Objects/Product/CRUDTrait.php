@@ -41,8 +41,7 @@ trait CRUDTrait
         //====================================================================//
         // Stack Trace
         Splash::log()->trace();
-        Splash::log()->www("Shop", \Shop::getContextShopID(true));
-        Splash::log()->www("Inputs", $this->in);
+
         //====================================================================//
         // Decode Product Id
         $this->ProductId = self::getId($unikId);
@@ -134,7 +133,7 @@ trait CRUDTrait
         //====================================================================//
         // Verify Update Is requiered
         if (!$needed && !$this->isToUpdate("Attribute")) {
-            Splash::log()->war("MsgLocalNoUpdateReq", __CLASS__, __FUNCTION__);
+            Splash::log()->deb("MsgLocalNoUpdateReq", __CLASS__, __FUNCTION__);
 
             return $this->getObjectIdentifier();
         }
@@ -143,7 +142,6 @@ trait CRUDTrait
         // UPDATE MAIN INFORMATIONS
         //====================================================================//
         if ($this->ProductId && $needed) {
-            Splash::log()->warTrace("Product Update Requested");
             if (true != $this->object->update()) {
                 return Splash::log()->errTrace("Unable to update Product.");
             }
