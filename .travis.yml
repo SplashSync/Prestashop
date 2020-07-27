@@ -124,8 +124,17 @@ script:
     # PHP5.6    =>  Without Php Debugger (Coverage x2 Faster)
     - if [[ ${TRAVIS_PHP_VERSION:0:1} < "7" ]]; then modules/splashsync/vendor/bin/phpunit -c travis/phpunit.xml.dist; fi
 
-    # PHP7+     =>  Run PhpUnit Product with MSF Sequence
+    ################################################################################
+    # Run PhpUnit Product with MSF Sequence
+    ################################################################################
+    # Start Prestashop (Composer & More)
+    - bash $MODULE_SCRIPTS_DIR/start_prestashop.sh
+    # Install Module
+    - bash $MODULE_SCRIPTS_DIR/install_module.sh
+    # Enable MSF Mode
+    - cd $TRAVIS_BUILD_DIR
     - php travis/setup_shops.php && php travis/setup_shops.php
+    - modules/splashsync/vendor/bin/phpunit -c travis/phpunit.xml.dist --testsuite=Local
     - modules/splashsync/vendor/bin/phpunit -c travis/phpunit.products.xml modules/splashsync/vendor/splash/phpcore/Tests/WsAdmin
     - modules/splashsync/vendor/bin/phpunit -c travis/phpunit.products.xml modules/splashsync/vendor/splash/phpcore/Tests/WsObjects
     - modules/splashsync/vendor/bin/phpunit -c travis/phpunit.products.xml modules/splashsync/vendor/splash/phpcore/Tests/WsSpecials
