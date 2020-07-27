@@ -19,26 +19,6 @@
 # Travis CI Configuration File
 ################################################################################
 
-# Tell Travis CI we're using PHP
-language: php
-
-addons:
-    #chrome: stable
-    apt:
-        packages:
-        - apache2
-        - postfix
-        - libapache2-mod-fastcgi
-        - libappindicator1
-        - fonts-liberation
-
-cache:
-  directories:
-    - $HOME/.composer/cache
-
-os: linux
-dist: trusty
-
 jobs:
     include:
         
@@ -128,13 +108,13 @@ script:
     # Run PhpUnit Product with MSF Sequence
     ################################################################################
     # Start Prestashop (Composer & More)
-    - bash $MODULE_SCRIPTS_DIR/start_prestashop.sh
+#    - bash $MODULE_SCRIPTS_DIR/start_prestashop.sh
     # Install Module
-    - bash $MODULE_SCRIPTS_DIR/install_module.sh
+#    - bash $MODULE_SCRIPTS_DIR/install_module.sh
     # Enable MSF Mode
-    - cd $TRAVIS_BUILD_DIR
+#    - cd $TRAVIS_BUILD_DIR
     - php travis/setup_shops.php && php travis/setup_shops.php
-    - modules/splashsync/vendor/bin/phpunit -c travis/phpunit.xml.dist --testsuite=Local
+#    - modules/splashsync/vendor/bin/phpunit -c travis/phpunit.xml.dist --testsuite=Local
     - modules/splashsync/vendor/bin/phpunit -c travis/phpunit.products.xml modules/splashsync/vendor/splash/phpcore/Tests/WsAdmin
     - modules/splashsync/vendor/bin/phpunit -c travis/phpunit.products.xml modules/splashsync/vendor/splash/phpcore/Tests/WsObjects
     - modules/splashsync/vendor/bin/phpunit -c travis/phpunit.products.xml modules/splashsync/vendor/splash/phpcore/Tests/WsSpecials
@@ -142,7 +122,30 @@ script:
     # Show Outdated Packages
     - cd $MODULE_DIR    
     - composer outdated -D
-    
+
+# Tell Travis CI we're using PHP
+language: php
+os: linux
+
+# Tell Travis CI we're using MySQL
+services:
+  - mysql
+
+# Tell Travis CI we're using Cache
+cache:
+  directories:
+    - $HOME/.composer/cache
+
+# Tell Travis CI we're using Addons
+addons:
+  apt:
+    packages:
+      - apache2
+      - postfix
+      - libapache2-mod-fastcgi
+      - libappindicator1
+      - fonts-liberation
+
 notifications:
   email:         
     on_success: never # default: change
