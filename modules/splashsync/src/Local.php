@@ -258,30 +258,30 @@ class Local implements LocalClassInterface
         //====================================================================//
         // List Tests Sequences
         if ("List" == $name) {
-            if (!MSM::isFeatureActive()) {
+//            if (!MSM::isFeatureActive()) {
                 return array("None");
-            }
-            $sequences = array("None");
-            foreach (MSM::getShopIds() as $shopId) {
-                $sequences[] = "Msf_".$shopId;
-            }
+//            }
+//            $sequences = array("None");
+//            foreach (MSM::getShopIds() as $shopId) {
+//                $sequences[] = "Msf_".$shopId;
+//            }
 
-            return $sequences;
+//            return $sequences;
         }
         //====================================================================//
         // Init Msf Test Sequence
-        if (0 === strpos($name, "Msf")) {
-            $shopId = 0;
-            sscanf($name, "Msf_%d", $shopId);
-            MSM::setContext();
-            Configuration::updateValue('SPLASH_MSF_FOCUSED', (int) $shopId);
-
-            return array();
-        }
+//        if (0 === strpos($name, "Msf")) {
+//            $shopId = 0;
+//            sscanf($name, "Msf_%d", $shopId);
+//            MSM::setContext();
+//            Configuration::updateValue('SPLASH_MSF_FOCUSED', (int) $shopId);
+//
+//            return array();
+//        }
         //====================================================================//
         // Init Default Test Sequence
-        MSM::setContext();
-        Configuration::updateValue('SPLASH_MSF_FOCUSED', false);
+//        MSM::setContext();
+//        Configuration::updateValue('SPLASH_MSF_FOCUSED', false);
 
         return array();
     }
