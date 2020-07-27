@@ -41,8 +41,8 @@ trait CRUDTrait
         //====================================================================//
         // Stack Trace
         Splash::log()->trace();
-//        Splash::log()->www("Shop", \Shop::getContextShopID(true));
-//        Splash::log()->www("Inputs", $this->in);
+        Splash::log()->www("Shop", \Shop::getContextShopID(true));
+        Splash::log()->www("Inputs", $this->in);
         //====================================================================//
         // Decode Product Id
         $this->ProductId = self::getId($unikId);
