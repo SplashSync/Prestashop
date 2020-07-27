@@ -17,7 +17,7 @@
 //echo "TEST";
 ini_set('memory_limit','-1');
 ini_set('display_errors', "1");
-error_reporting(E_ERROR);
+error_reporting(E_ALL);
 //exit;
 
 require_once dirname(__DIR__) . "/modules/splashsync/vendor/autoload.php";

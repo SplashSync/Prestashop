@@ -60,8 +60,11 @@ services:
          - ./docker/config/splash.json:/var/www/html/config/splash.json:ro
         # Module Sources
          - ./modules/splashsync:/var/www/html/modules/splashsync:ro
+         - ./.git:/var/www/html/.git:ro,rslave
          - ./travis:/var/www/html/travis:ro
          - ./phpunit.xml.dist:/var/www/html/phpunit.xml.dist:ro
+         - ./composer.json:/var/www/html/composer.json:ro
+         - ./grumphp.yml:/var/www/html/grumphp.yml:ro
         # Docker EntryPoint
          - ./docker/docker-entrypoint.sh:/var/www/html/modules/docker-entrypoint.sh:ro
         environment:

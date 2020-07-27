@@ -30,3 +30,21 @@ if (count(MSM::getShopIds()) < 2) {
 }
 
 var_dump(MSM::isFeatureActive());
+
+//====================================================================//
+// Setup Shops Context for Testing
+$options = getopt("s:");
+if(!MSM::isFeatureActive() || !isset($options["s"])) {
+    exit;
+}
+if ($options["s"] > 0) {
+    Configuration::updateValue('SPLASH_MSF_FOCUSED', (int) $options["s"]);
+    print_r("Setuped for Shop ".$options["s"].PHP_EOL);
+}
+if (empty($options["s"])) {
+    Configuration::updateValue('SPLASH_MSF_FOCUSED', false);
+    print_r("Setuped for All Shops".PHP_EOL);
+}
+
+
+
