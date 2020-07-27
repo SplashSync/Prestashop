@@ -151,7 +151,6 @@ trait CRUDTrait
 
         //====================================================================//
         // UPDATE ATTRIBUTE INFORMATIONS
-        Splash::log()->warTrace("Attribute Update Requested");
         if (!$this->updateAttribute()) {
             return Splash::log()->errTrace("Unable to update Product Attribute.");
         }
