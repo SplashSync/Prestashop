@@ -13,12 +13,9 @@
  *  file that was distributed with this source code.
  */
 
-
-//echo "TEST";
+//====================================================================//
+// Fix For PHP Memeory Limit
 ini_set('memory_limit','-1');
-ini_set('display_errors', "1");
-error_reporting(E_ALL);
-//exit;
 
 require_once dirname(__DIR__) . "/modules/splashsync/vendor/autoload.php";
 require_once dirname(__DIR__) . "/vendor/autoload.php";
@@ -26,4 +23,9 @@ require_once dirname(__DIR__) . "/vendor/autoload.php";
 //====================================================================//
 // Init Splash for Local Includes
 Splash\Client\Splash::core();
-Splash\Client\Splash::local();
+Splash\Client\Splash::local()->includes();
+
+//====================================================================//
+// Fix For PS Autoloader
+PrestaShopAutoload::getInstance()->load("Attribute");
+
