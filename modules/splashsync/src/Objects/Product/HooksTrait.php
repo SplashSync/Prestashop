@@ -53,6 +53,7 @@ trait HooksTrait
      */
     public function hookactionProductUpdate($params)
     {
+        Splash::log()->warTrace("Product Update Hook Started");
         //====================================================================//
         // Check We Are on Database Module request
         if (!self::isOnDatabaseModuleUpdate()) {
