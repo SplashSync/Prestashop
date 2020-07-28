@@ -338,7 +338,7 @@ class MultiShopFieldsManager
      * @param ArrayObject $coreField
      * @param int         $shopId
      *
-     * @return void
+     * @return string
      */
     private static function getMsfFieldId(ArrayObject $coreField, int $shopId)
     {
@@ -346,7 +346,6 @@ class MultiShopFieldsManager
         // This is a Simple Field
         if (!self::isListField($coreField->type)) {
             return self::MSF_PREFIX.$shopId."_".$coreField->id;
-            ;
         }
         //====================================================================//
         // This is a List Field
