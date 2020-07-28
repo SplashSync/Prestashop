@@ -86,9 +86,7 @@ services:
     ################################################################################
     # Prestashop 1.7       
     prestashop_1_7:
-#        image: prestashop/prestashop:1.7-7.2-apache
-        build:
-            context: ./docker
+        image: prestashop/prestashop:1.7-7.2-apache
         container_name: prestashop_1_7
         depends_on:
             - mysql
