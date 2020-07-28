@@ -494,7 +494,7 @@ class Local implements LocalClassInterface
         }
         //====================================================================//
         // Import & Display Errors
-        Splash::log()->err('[SPLASH] Splash Module Intall Failled');
+        Splash::log()->err('[SPLASH] Splash Module Install Failed');
         foreach (static::$SplashSyncModule->getErrors() as $error) {
             Splash::log()->err('[SPLASH] Mod. Install : '.$error);
         }

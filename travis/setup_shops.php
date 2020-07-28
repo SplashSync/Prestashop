@@ -29,7 +29,12 @@ if (count(MSM::getShopIds()) < 2) {
     var_dump(MSM::addPhpUnitShop("Phpunit1"));
 }
 
-var_dump(MSM::isFeatureActive());
+//====================================================================//
+// Redo Module Install
+$localModule = Splash\Client\Splash::local()->getLocalModule();
+$localModule->uninstall();
+$localModule->updateTranslationsAfterInstall(false);
+$localModule->install();
 
 //====================================================================//
 // Setup Shops Context for Testing
