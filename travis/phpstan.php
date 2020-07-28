@@ -15,7 +15,7 @@
 
 //====================================================================//
 // Fix For PHP Memeory Limit
-ini_set('memory_limit','-1');
+ini_set('memory_limit', '-1');
 
 require_once dirname(__DIR__) . "/modules/splashsync/vendor/autoload.php";
 require_once dirname(__DIR__) . "/vendor/autoload.php";
@@ -28,4 +28,3 @@ Splash\Client\Splash::local()->includes();
 //====================================================================//
 // Fix For PS Autoloader
 PrestaShopAutoload::getInstance()->load("Attribute");
-

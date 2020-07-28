@@ -33,8 +33,8 @@ jobs:
           env: PS_VERSION=1.7.7.x
 #        - php: 7.2
 #          env: PS_VERSION=1.7.7.x
-        - php: 7.1
-          env: PS_VERSION=1.7.7.x
+#        - php: 7.1
+#          env: PS_VERSION=1.7.7.x
 
         # Prestashop 1.7.6.x Branch
 #        - php: 7.3
@@ -91,7 +91,6 @@ script:
     # With PHP 7.2 => Execute CsFixer
     - if [[ ${TRAVIS_PHP_VERSION:0:3} > "7.1" ]]; then php modules/splashsync/vendor/bin/grumphp run --testsuite=csfixer; fi
     # With PHP 7.2 => Execute Phpstan
-    - if [[ ${TRAVIS_PHP_VERSION:0:3} > "7.1" ]]; then modules/splashsync/vendor/bin/phpstan analyze -c travis/phpstan.neon ./modules/splashsync/src/ --level 8; fi
     - if [[ ${TRAVIS_PHP_VERSION:0:3} > "7.1" ]]; then php modules/splashsync/vendor/bin/grumphp run --testsuite=phpstan; fi
 
     # Run PhpUnit Core Test Sequence (Will Enable the Module)
@@ -114,7 +113,7 @@ script:
 #    - bash $MODULE_SCRIPTS_DIR/install_module.sh
     # Enable MSF Mode
 #    - cd $TRAVIS_BUILD_DIR
-    - php travis/setup_shops.php && php travis/setup_shops.php
+    - php travis/setup_shops.php && php travis/setup_shops.php -s=0
 #    - modules/splashsync/vendor/bin/phpunit -c travis/phpunit.xml.dist --testsuite=Local
     - modules/splashsync/vendor/bin/phpunit -c travis/phpunit.products.xml modules/splashsync/vendor/splash/phpcore/Tests/WsAdmin
     - modules/splashsync/vendor/bin/phpunit -c travis/phpunit.products.xml modules/splashsync/vendor/splash/phpcore/Tests/WsObjects

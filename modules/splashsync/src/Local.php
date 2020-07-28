@@ -258,9 +258,14 @@ class Local implements LocalClassInterface
         //====================================================================//
         // List Tests Sequences
         if ("List" == $name) {
-//            if (!MSM::isFeatureActive()) {
+            if (!MSM::isFeatureActive()) {
                 return array("None");
-//            }
+            }
+            $shopId = (int) Configuration::get('SPLASH_MSF_FOCUSED');
+
+            return array(
+                $shopId ? "Shop ".$shopId : "All Shops"
+            );
 //            $sequences = array("None");
 //            foreach (MSM::getShopIds() as $shopId) {
 //                $sequences[] = "Msf_".$shopId;
