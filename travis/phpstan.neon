@@ -19,6 +19,9 @@ parameters:
             - '#Parameter \#2 \$idAttributeGroup of static method AttributeGroupCore::getAttributes\(\) expects bool\, int given.#'
             - '#Parameter \#4 \$id_shop of static method StockAvailableCore::setQuantity\(\) expects null\, int given.#'
 
+            # Know Prestashop Backward
+            - '#Static method ImageCore::getImages\(\) invoked with 4 parameters, 2-3 required.#'
+
             # Splash Fixes
 #            - '#Call to an undefined method [a-zA-Z0-9\\_]+ObjectInterface::load()#'
 #            - '#Call to an undefined method [a-zA-Z0-9\\_]+ObjectInterface::getAttributeGroupByCode()#'
