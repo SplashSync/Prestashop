@@ -18,6 +18,7 @@ require_once dirname(__DIR__) . "/vendor/autoload.php";
 
 use Splash\Local\Services\MultiShopManager as MSM;
 use Splash\Client\Splash as Splash;
+use Splash\Local\Local;
 
 //====================================================================//
 // Init Splash for Local Includes
@@ -33,7 +34,7 @@ Splash::log()->msg('[SPLASH] Shops Setup Done');
 
 //====================================================================//
 // Redo Module Install
-/** @var Splash\Local\Local $localModule */
+/** @var \Splash\Local\Local $localModule */
 $localModule = Splash::local()->getLocalModule();
 $localModule->uninstall();
 $localModule->updateTranslationsAfterInstall(false);
