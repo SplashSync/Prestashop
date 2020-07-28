@@ -35,7 +35,7 @@ var_dump(MSM::isFeatureActive());
 // Setup Shops Context for Testing
 $options = getopt("s:");
 if (MSM::isFeatureActive() && isset($options["s"]) && is_numeric($options["s"])) {
-    $shopId = (int) $options["s"];
+    $shopId = intval($options["s"]);
     MSM::setContext();
     Configuration::updateValue('SPLASH_MSF_FOCUSED', $shopId ? $shopId : false);
     print_r("Setuped for ".($shopId ? "Shop ".$shopId : "All Shops").PHP_EOL);
