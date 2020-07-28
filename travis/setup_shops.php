@@ -17,24 +17,27 @@ require_once dirname(__DIR__) . "/modules/splashsync/vendor/autoload.php";
 require_once dirname(__DIR__) . "/vendor/autoload.php";
 
 use Splash\Local\Services\MultiShopManager as MSM;
+use Splash\Client\Splash as Splash;
 
 //====================================================================//
 // Init Splash for Local Includes
-Splash\Client\Splash::core();
-Splash\Client\Splash::local();
+Splash::core();
+Splash::local();
 
 //====================================================================//
 // Ensure Number of Active Shops
 if (count(MSM::getShopIds()) < 2) {
     var_dump(MSM::addPhpUnitShop("Phpunit1"));
 }
+Splash::log()->msg('[SPLASH] Shops Setup Done');
 
 //====================================================================//
 // Redo Module Install
-$localModule = Splash\Client\Splash::local()->getLocalModule();
+$localModule = Splash::local()->getLocalModule();
 $localModule->uninstall();
 $localModule->updateTranslationsAfterInstall(false);
 $localModule->install();
+Splash::log()->msg('[SPLASH] Splash Module Re-Installed');
 
 //====================================================================//
 // Setup Shops Context for Testing
@@ -45,5 +48,7 @@ if (MSM::isFeatureActive() && isset($options["s"]) && is_numeric($options["s"]))
     Configuration::updateValue('SPLASH_MSF_FOCUSED', $shopId ? $shopId : false);
     MSM::setContext();
     Configuration::updateValue('SPLASH_MSF_FOCUSED', $shopId ? $shopId : false);
-    print_r("Setuped for ".($shopId ? "Shop ".$shopId : "All Shops").PHP_EOL);
+    Splash::log()->msg("Setuped for ".($shopId ? "Shop ".$shopId : "All Shops").PHP_EOL);
 }
+
+echo Splash::log()->getConsoleLog(true).PHP_EOL;
