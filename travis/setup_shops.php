@@ -34,7 +34,7 @@ var_dump(MSM::isFeatureActive());
 //====================================================================//
 // Setup Shops Context for Testing
 $options = getopt("s:");
-if(!MSM::isFeatureActive() || !isset($options["s"])) {
+if(!MSM::isFeatureActive() || !isset($options["s"]) || !is_numeric($options["s"])) {
     exit;
 }
 if ($options["s"] > 0) {
