@@ -261,6 +261,7 @@ class Local implements LocalClassInterface
             if (!MSM::isFeatureActive()) {
                 return array("None");
             }
+            MSM::setContext();
             $shopId = (int) Configuration::get('SPLASH_MSF_FOCUSED');
 
             return array(
