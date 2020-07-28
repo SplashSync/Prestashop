@@ -34,9 +34,9 @@ Splash::log()->msg('[SPLASH] Shops Setup Done');
 
 //====================================================================//
 // Redo Module Install
-/** @var \Local $localModule */
+/** @var Local $localModule */
 $local = Splash::local();
-/** @var \SplashSync $localModule */
+/** @var SplashSync $localModule */
 $localModule = $local->getLocalModule();
 $localModule->uninstall();
 $localModule->updateTranslationsAfterInstall(false);
