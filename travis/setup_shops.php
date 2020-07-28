@@ -38,5 +38,7 @@ if (MSM::isFeatureActive() && isset($options["s"]) && is_numeric($options["s"]))
     $shopId = intval($options["s"]);
     MSM::setContext();
     Configuration::updateValue('SPLASH_MSF_FOCUSED', $shopId ? $shopId : false);
+    MSM::setContext();
+    Configuration::updateValue('SPLASH_MSF_FOCUSED', $shopId ? $shopId : false);
     print_r("Setuped for ".($shopId ? "Shop ".$shopId : "All Shops").PHP_EOL);
 }
