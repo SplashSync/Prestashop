@@ -34,7 +34,7 @@ Splash::log()->msg('[SPLASH] Shops Setup Done');
 
 //====================================================================//
 // Redo Module Install
-/** @var Local $localModule */
+/** @var Local $local */
 $local = Splash::local();
 /** @var SplashSync $localModule */
 $localModule = $local->getLocalModule();
