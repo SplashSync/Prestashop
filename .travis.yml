@@ -37,16 +37,16 @@ jobs:
           env: PS_VERSION=1.7.7.x
 
         # Prestashop 1.7.6.x Branch
-#        - php: 7.3
-#          env: PS_VERSION=1.7.6.x
+        - php: 7.3
+          env: PS_VERSION=1.7.6.x
 
         # Prestashop 1.7.5.x Branch
-#        - php: 7.2
-#          env: PS_VERSION=1.7.5.x
+        - php: 7.2
+          env: PS_VERSION=1.7.5.x
 
         # Prestashop 1.7.4.x Branch
-#        - php: 7.1
-#          env: PS_VERSION=1.7.4.x
+        - php: 7.1
+          env: PS_VERSION=1.7.4.x
 
         # Prestashop 1.7.1.x Branch
         - php: 7.1
@@ -104,26 +104,9 @@ script:
     # PHP5.6    =>  Without Php Debugger (Coverage x2 Faster)
     - if [[ ${TRAVIS_PHP_VERSION:0:1} < "7" ]]; then modules/splashsync/vendor/bin/phpunit -c travis/phpunit.xml.dist; fi
 
-    ################################################################################
     # Run PhpUnit Product with MSF Sequence
-    ################################################################################
-    # Start Prestashop (Composer & More)
-#    - bash $MODULE_SCRIPTS_DIR/start_prestashop.sh
-    # Install Module
-#    - bash $MODULE_SCRIPTS_DIR/install_module.sh
-    # Enable MSF Mode
-#    - cd $TRAVIS_BUILD_DIR
     - php travis/setup_shops.php && php travis/setup_shops.php
     - modules/splashsync/vendor/bin/phpunit -c travis/phpunit.products.xml
-#    - php travis/setup_shops.php -s=1 && php travis/setup_shops.php -s=1
-#    - modules/splashsync/vendor/bin/phpunit -c travis/phpunit.products.xml
-#    - php travis/setup_shops.php -s=2 && php travis/setup_shops.php -s=2
-#    - modules/splashsync/vendor/bin/phpunit -c travis/phpunit.products.xml
-#    -
-  #    - modules/splashsync/vendor/bin/phpunit -c travis/phpunit.xml.dist --testsuite=Local
-#    - modules/splashsync/vendor/bin/phpunit -c travis/phpunit.products.xml modules/splashsync/vendor/splash/phpcore/Tests/WsAdmin
-#    - modules/splashsync/vendor/bin/phpunit -c travis/phpunit.products.xml modules/splashsync/vendor/splash/phpcore/Tests/WsObjects
-#    - modules/splashsync/vendor/bin/phpunit -c travis/phpunit.products.xml modules/splashsync/vendor/splash/phpcore/Tests/WsSpecials
 
     # Show Outdated Packages
     - cd $MODULE_DIR    
