@@ -113,12 +113,12 @@ script:
 #    - bash $MODULE_SCRIPTS_DIR/install_module.sh
     # Enable MSF Mode
 #    - cd $TRAVIS_BUILD_DIR
-    - php travis/setup_shops.php -s=0 && php travis/setup_shops.php -s=0
+    - php travis/setup_shops.php && php travis/setup_shops.php
     - modules/splashsync/vendor/bin/phpunit -c travis/phpunit.products.xml
-    - php travis/setup_shops.php -s=1 && php travis/setup_shops.php -s=1
-    - modules/splashsync/vendor/bin/phpunit -c travis/phpunit.products.xml
-    - php travis/setup_shops.php -s=2 && php travis/setup_shops.php -s=2
-    - modules/splashsync/vendor/bin/phpunit -c travis/phpunit.products.xml
+#    - php travis/setup_shops.php -s=1 && php travis/setup_shops.php -s=1
+#    - modules/splashsync/vendor/bin/phpunit -c travis/phpunit.products.xml
+#    - php travis/setup_shops.php -s=2 && php travis/setup_shops.php -s=2
+#    - modules/splashsync/vendor/bin/phpunit -c travis/phpunit.products.xml
 #    -
   #    - modules/splashsync/vendor/bin/phpunit -c travis/phpunit.xml.dist --testsuite=Local
 #    - modules/splashsync/vendor/bin/phpunit -c travis/phpunit.products.xml modules/splashsync/vendor/splash/phpcore/Tests/WsAdmin
