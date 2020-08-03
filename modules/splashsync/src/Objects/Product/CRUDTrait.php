@@ -381,7 +381,6 @@ trait CRUDTrait
             "active" => true,
             "available_for_order" => true,
             "show_price" => true,
-            "show_price" => true,
             "name" => $langIds,
             "description" => $langIds,
             "description_short" => $langIds,
