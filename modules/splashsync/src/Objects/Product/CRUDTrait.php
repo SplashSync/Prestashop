@@ -17,7 +17,9 @@ namespace Splash\Local\Objects\Product;
 
 use Combination;
 use Configuration;
+use Language;
 use Product;
+use Shop;
 use Splash\Client\Splash        as SplashClient;
 use Splash\Core\SplashCore      as Splash;
 use Splash\Local\Services\LanguagesManager as SLM;
@@ -142,6 +144,9 @@ trait CRUDTrait
         // UPDATE MAIN INFORMATIONS
         //====================================================================//
         if ($this->ProductId && $needed) {
+            //====================================================================//
+            // FORCE MSF FIELDS WRITING (FOR PS 1.6.x)
+            $this->forceProductUpdateFields();
             if (true != $this->object->update()) {
                 return Splash::log()->errTrace("Unable to update Product.");
             }
@@ -343,5 +348,46 @@ trait CRUDTrait
         SplashClient::commit("Product", $unikId, SPL_A_DELETE, "Delete of an Unsynk Product");
 
         return Splash::log()->err("Unsynk Product: Will be deleted.");
+    }
+
+    /**
+     * Force Update of MSF Fields on PS 1.6.x
+     *
+     * @return void
+     */
+    private function forceProductUpdateFields()
+    {
+        //====================================================================//
+        // Only On MultiShop Mode on PS 1.6.X
+        if (!Shop::isFeatureActive() || Tools::version_compare(_PS_VERSION_, "1.7", '>=')) {
+            return;
+        }
+        //====================================================================//
+        // Build Multilang Array
+        $langIds = array();
+        foreach (Language::getIDs(false) as $langId) {
+            $langIds[$langId] = $langId;
+        }
+        //====================================================================//
+        // Force MultiShop Fields Update
+        $this->object->setFieldsToUpdate(array(
+            "id_category_default" => true,
+            "id_tax_rules_group" => true,
+            "on_sale" => true,
+            "online_only" => true,
+            "minimal_quantity" => true,
+            "price" => true,
+            "wholesale_price" => true,
+            "active" => true,
+            "available_for_order" => true,
+            "show_price" => true,
+            "show_price" => true,
+            "name" => $langIds,
+            "description" => $langIds,
+            "description_short" => $langIds,
+            "meta_title" => $langIds,
+            "meta_description" => $langIds,
+            "link_rewrite" => $langIds,
+        ));
     }
 }
