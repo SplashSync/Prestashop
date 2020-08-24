@@ -15,16 +15,9 @@
 
 namespace Splash\Local\Services;
 
-use Currency;
-use Db;
-use DbQuery;
-use Order;
-use OrderInvoice;
-use Splash\Core\SplashCore as Splash;
-use Splash\Local\Local;
-use Tools;
-use Product;
 use Category;
+use Db;
+use Product;
 
 /**
  * Product Categories Manager
@@ -41,9 +34,9 @@ class CategoryManager
     /**
      * Get Product Categories List
      *
-     * @param int $productId
-     * @param int|null $langId
-     * @param string $field
+     * @param int      $productId
+     * @param null|int $langId
+     * @param string   $field
      *
      * @return array
      */
@@ -55,8 +48,8 @@ class CategoryManager
         //====================================================================//
         // Map List to Requested Field
         $result = array();
-        foreach($fullList as $id => $item) {
-            if(isset($item[$field])) {
+        foreach ($fullList as $id => $item) {
+            if (isset($item[$field])) {
                 $result[$id] = (string) $item[$field];
             }
         }
@@ -67,18 +60,18 @@ class CategoryManager
     /**
      * Get Product Categories List
      *
-     * @param int $productId
+     * @param int               $productId
      * @param array|ArrayObject $data
-     * @param int|null $langId
-     * @param string $field
+     * @param null|int          $lang
+     * @param string            $field
      *
      * @return void
      */
-    public static function setProductCategories(Product $product, $data, int $langId = null, string $field = "link_rewrite")
+    public static function setProductCategories(Product $prd, $data, int $lang = null, string $field = "link_rewrite")
     {
         //====================================================================//
         // Load Product Current Categories List
-        $current = self::getProductCategories($product->id, $langId, $field);
+        $current = self::getProductCategories($prd->id, $lang, $field);
         //====================================================================//
         // Walk on Slugs List for ADD
         foreach ($data as $dataField) {
@@ -89,9 +82,9 @@ class CategoryManager
             }
             //====================================================================//
             // Search for Category Id
-            $categoryId = self::getCategoryId($dataField, $langId, $field);
-            if($categoryId) {
-                $product->addToCategories($categoryId);
+            $categoryId = self::getCategoryId($dataField, $lang, $field);
+            if ($categoryId) {
+                $prd->addToCategories($categoryId);
             }
         }
         //====================================================================//
@@ -100,7 +93,7 @@ class CategoryManager
             //====================================================================//
             // NOT Already Associated
             if (!in_array($dataField, $data, true)) {
-                $product->deleteCategory($categoryId);
+                $prd->deleteCategory($categoryId);
             }
         }
     }
@@ -108,9 +101,9 @@ class CategoryManager
     /**
      * Get List of All Products Categories
      *
-     * @param int $productId
-     * @param int|null $langId
-     * @param string $field
+     * @param int      $productId
+     * @param null|int $langId
+     * @param string   $field
      *
      * @return array
      */
@@ -122,8 +115,8 @@ class CategoryManager
         //====================================================================//
         // Map List to Requested Field
         $result = array();
-        foreach($fullList as $id => $item) {
-            if(isset($item[$field])) {
+        foreach ($fullList as $id => $item) {
+            if (isset($item[$field])) {
                 $result[$id] = (string) $item[$field];
             }
         }
@@ -134,9 +127,9 @@ class CategoryManager
     /**
      * Serach in All Products Categories for a Given Name/Code
      *
-     * @param string $value
-     * @param int|null $langId
-     * @param string $field
+     * @param string   $value
+     * @param null|int $langId
+     * @param string   $field
      *
      * @return null|int
      */
@@ -147,8 +140,8 @@ class CategoryManager
         $fullList = self::getAllCategoriesList($langId);
         //====================================================================//
         // Map List to Requested Field
-        foreach($fullList as $item) {
-            if(isset($item[$field]) && ($item[$field] == $value)) {
+        foreach ($fullList as $item) {
+            if (isset($item[$field]) && ($item[$field] == $value)) {
                 return $item["id_category"];
             }
         }
@@ -159,9 +152,9 @@ class CategoryManager
     /**
      * Get List of All Products Categories
      *
-     * @param int $productId
-     * @param int|null $langId
-     * @param string $field
+     * @param int      $productId
+     * @param null|int $langId
+     * @param string   $field
      *
      * @return array
      */
@@ -173,8 +166,8 @@ class CategoryManager
         //====================================================================//
         // Map List to Requested Field
         $result = array();
-        foreach($fullList as $id => $item) {
-            if(isset($item[$field])) {
+        foreach ($fullList as $item) {
+            if (isset($item[$field])) {
                 $result[(string) $item[$field]] = (string) $item["name"];
             }
         }
@@ -190,10 +183,10 @@ class CategoryManager
     public static function getAllCategoriesList(int $langId = null)
     {
         $index = (int) $langId;
-        if(!isset(static::$cache[$index])) {
+        if (!isset(static::$cache[$index])) {
             static::$cache[$index] = Category::getCategories($langId, false, false);
         }
 
         return static::$cache[$index];
-   }
+    }
 }

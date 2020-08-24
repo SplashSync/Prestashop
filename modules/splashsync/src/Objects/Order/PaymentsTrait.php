@@ -75,7 +75,7 @@ trait PaymentsTrait
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
             ->Identifier("rawMode")
             ->InList("payments")
-            ->Name(Translate::getAdminTranslation("Payment method", "AdminOrders"). " Raw")
+            ->Name(Translate::getAdminTranslation("Payment method", "AdminOrders")." Raw")
             ->Group(Translate::getAdminTranslation("Payment", "AdminPayment"))
             ->isReadOnly()
         ;
@@ -145,45 +145,53 @@ trait PaymentsTrait
             }
             //====================================================================//
             // READ Fields
-            switch ($fieldName) {
-                //====================================================================//
-                // Payment Line - Payment Mode
-                case 'mode@payments':
-                    $value = $this->getPaymentMethod($orderPayment);
-
-                    break;
-                //====================================================================//
-                // Payment Line - Raw Payment Mode
-                case 'rawMode@payments':
-                    $value = $orderPayment->payment_method;
-
-                    break;
-                //====================================================================//
-                // Payment Line - Payment Date
-                case 'date@payments':
-                    $value = date(SPL_T_DATECAST, strtotime($orderPayment->date_add));
-
-                    break;
-                //====================================================================//
-                // Payment Line - Payment Identification Number
-                case 'number@payments':
-                    $value = $orderPayment->transaction_id;
-
-                    break;
-                //====================================================================//
-                // Payment Line - Payment Amount
-                case 'amount@payments':
-                    $value = $orderPayment->amount;
-
-                    break;
-                default:
-                    return;
+            $value = $this->getOrderPaymentValue($orderPayment, $fieldName);
+            if (is_null($value)) {
+                return;
             }
             //====================================================================//
             // Insert Data in List
             self::lists()->Insert($this->out, "payments", $fieldName, $index, $value);
         }
         unset($this->in[$key]);
+    }
+
+    /**
+     * Read requested Field
+     *
+     * @param OrderPayment $orderPayment
+     * @param string       $fieldName    Field Identifier / Name
+     *
+     * @return null|mixed
+     */
+    protected function getOrderPaymentValue($orderPayment, $fieldName)
+    {
+        //====================================================================//
+        // READ Fields
+        switch ($fieldName) {
+            //====================================================================//
+            // Payment Line - Payment Mode
+            case 'mode@payments':
+                return $this->getPaymentMethod($orderPayment);
+            //====================================================================//
+            // Payment Line - Raw Payment Mode
+            case 'rawMode@payments':
+                return $orderPayment->payment_method;
+            //====================================================================//
+            // Payment Line - Payment Date
+            case 'date@payments':
+                return date(SPL_T_DATECAST, strtotime($orderPayment->date_add));
+            //====================================================================//
+            // Payment Line - Payment Identification Number
+            case 'number@payments':
+                return $orderPayment->transaction_id;
+            //====================================================================//
+            // Payment Line - Payment Amount
+            case 'amount@payments':
+                return $orderPayment->amount;
+            default:
+                return null;
+        }
     }
 
     /**
