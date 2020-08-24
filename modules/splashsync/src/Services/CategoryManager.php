@@ -73,6 +73,9 @@ class CategoryManager
         // Load Product Current Categories List
         $current = self::getProductCategories($prd->id, $lang, $field);
         //====================================================================//
+        // Detect ArrayObjects
+        $data = ($data instanceof ArrayObject) ? $data->getArrayCopy() : $data;
+        //====================================================================//
         // Walk on Slugs List for ADD
         foreach ($data as $dataField) {
             //====================================================================//
