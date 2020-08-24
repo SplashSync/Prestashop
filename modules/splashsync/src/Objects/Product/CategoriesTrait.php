@@ -18,6 +18,7 @@ namespace Splash\Local\Objects\Product;
 use Category;
 use Splash\Local\Services\CategoryManager;
 use Splash\Local\Services\LanguagesManager;
+use Splash\Local\Services\MultiShopManager as MSM;
 use Splash\Models\Helpers\InlineHelper;
 use Translate;
 
@@ -53,6 +54,11 @@ trait CategoriesTrait
             ->addChoices(CategoryManager::getAllCategoriesChoices())
             ->setPreferNone()
         ;
+        //====================================================================//
+        // NO TEST in MSF Mode as Categories are Not Copied
+        if (MSM::isFeatureActive()) {
+            $this->fieldsFactory()->isNotTested();
+        }
 
         $this->fieldsFactory()->setDefaultLanguage(LanguagesManager::getDefaultLanguage());
         foreach (LanguagesManager::getAvailableLanguages() as $langId => $isoLang) {
