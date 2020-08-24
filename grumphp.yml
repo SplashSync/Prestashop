@@ -103,7 +103,7 @@ parameters:
             source_folder:  "/modules/splashsync"
             target_folder:  "/ps_module"
             build_folder:   "splashsync/"
-            build_file:     "splashsync.1.5.0"
+            build_file:     "splashsync.1.5.1"
         
         build-docs: 
             enabled:            true
