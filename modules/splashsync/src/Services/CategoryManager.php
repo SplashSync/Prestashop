@@ -15,8 +15,8 @@
 
 namespace Splash\Local\Services;
 
+use ArrayObject;
 use Category;
-use Db;
 use Product;
 
 /**
@@ -60,7 +60,7 @@ class CategoryManager
     /**
      * Get Product Categories List
      *
-     * @param int               $productId
+     * @param Product           $prd
      * @param array|ArrayObject $data
      * @param null|int          $lang
      * @param string            $field
@@ -184,7 +184,7 @@ class CategoryManager
     {
         $index = (int) $langId;
         if (!isset(static::$cache[$index])) {
-            static::$cache[$index] = Category::getCategories($langId, false, false);
+            static::$cache[$index] = Category::getCategories(is_null($langId) ? false : $langId, false, false);
         }
 
         return static::$cache[$index];
