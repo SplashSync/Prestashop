@@ -70,7 +70,15 @@ trait PaymentsTrait
             ->Association("mode@payments", "amount@payments")
             ->AddChoices(array_flip($this->knownPaymentMethods))
         ;
-
+        //====================================================================//
+        // Raw Payment Line Payment Method
+        $this->fieldsFactory()->create(SPL_T_VARCHAR)
+            ->Identifier("rawMode")
+            ->InList("payments")
+            ->Name(Translate::getAdminTranslation("Payment method", "AdminOrders"). " Raw")
+            ->Group(Translate::getAdminTranslation("Payment", "AdminPayment"))
+            ->isReadOnly()
+        ;
         //====================================================================//
         // Payment Line Date
         $this->fieldsFactory()->create(SPL_T_DATE)
@@ -81,7 +89,6 @@ trait PaymentsTrait
             ->Group(Translate::getAdminTranslation("Payment", "AdminPayment"))
             ->isReadOnly()
         ;
-
         //====================================================================//
         // Payment Line Payment Identifier
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
@@ -92,7 +99,6 @@ trait PaymentsTrait
             ->Association("mode@payments", "amount@payments")
             ->Group(Translate::getAdminTranslation("Payment", "AdminPayment"))
         ;
-
         //====================================================================//
         // Payment Line Amount
         $this->fieldsFactory()->create(SPL_T_DOUBLE)
@@ -144,6 +150,12 @@ trait PaymentsTrait
                 // Payment Line - Payment Mode
                 case 'mode@payments':
                     $value = $this->getPaymentMethod($orderPayment);
+
+                    break;
+                //====================================================================//
+                // Payment Line - Raw Payment Mode
+                case 'rawMode@payments':
+                    $value = $orderPayment->payment_method;
 
                     break;
                 //====================================================================//

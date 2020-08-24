@@ -62,6 +62,7 @@ class Product extends AbstractObject
     use \Splash\Local\Objects\Product\ChecksumTrait;
     use Product\MetaDataTrait;
     use Product\IdEncoderTrait;
+    use Product\CategoriesTrait;
 
     /**
      * @var psProduct
