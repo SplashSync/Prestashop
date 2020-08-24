@@ -104,7 +104,6 @@ class CategoryManager
     /**
      * Get List of All Products Categories
      *
-     * @param int      $productId
      * @param null|int $langId
      * @param string   $field
      *
@@ -155,7 +154,6 @@ class CategoryManager
     /**
      * Get List of All Products Categories
      *
-     * @param int      $productId
      * @param null|int $langId
      * @param string   $field
      *
