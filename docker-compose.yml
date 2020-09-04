@@ -121,7 +121,7 @@ services:
     ################################################################################
     # Prestashop 1.6       
     prestashop_1_6:
-        image: prestashop/pestashop:1.6-7.1-apache
+        image: prestashop/prestashop:1.6-7.1-apache
         container_name: prestashop_1_6
         depends_on:
            - mysql

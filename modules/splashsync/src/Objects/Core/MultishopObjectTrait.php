@@ -43,7 +43,10 @@ trait MultishopObjectTrait
         }
         //====================================================================//
         // Load Core Fields from All Shop Context
-        return MSF::loadFields($this->coreFields());
+        $fields = MSF::loadFields($this->coreFields());
+        //====================================================================//
+        // Redo Override Fields from Local Configurator
+        return Splash::configurator()->overrideFields(self::getType(), $fields);
     }
 
     /**
