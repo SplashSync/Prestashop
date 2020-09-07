@@ -93,7 +93,7 @@ trait MultishopTrait
         // READ Fields
         switch ($fieldName) {
             case 'id_shop':
-                $this->getSimple($fieldName);
+                $this->out[$fieldName] = $this->getObjectShopId();
 
                 break;
             case 'shop_code':
