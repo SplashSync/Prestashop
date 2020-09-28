@@ -373,7 +373,7 @@ trait PricesTrait
         //====================================================================//
         // Update Attribute Price if Required
         if (abs($priceHT - $this->Attribute->price) > 1E-6) {
-            $this->Attribute->price = number_format(round($priceHT, 9), 9,".", "");
+            $this->Attribute->price = number_format(round($priceHT, 9), 9, ".", "");
             $this->needUpdate("Attribute");
         }
     }
