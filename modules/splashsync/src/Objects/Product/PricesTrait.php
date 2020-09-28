@@ -319,7 +319,7 @@ trait PricesTrait
         // Update product Price without Attribute
         } else {
             if (abs($newPrice["ht"] - $this->object->price) > 1E-6) {
-                $this->object->price = (float) number_format(round($newPrice["ht"], 9), 9);
+                $this->object->price = (float) number_format(round($newPrice["ht"], 9), 9, ".", "");
                 $this->needUpdate();
             }
         }
@@ -373,7 +373,7 @@ trait PricesTrait
         //====================================================================//
         // Update Attribute Price if Required
         if (abs($priceHT - $this->Attribute->price) > 1E-6) {
-            $this->Attribute->price = number_format(round($priceHT, 9), 9);
+            $this->Attribute->price = number_format(round($priceHT, 9), 9,".", "");
             $this->needUpdate("Attribute");
         }
     }
