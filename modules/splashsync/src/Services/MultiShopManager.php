@@ -57,7 +57,7 @@ class MultiShopManager
     /**
      * List of Country Objects Cache
      *
-     * @var Counrty[]
+     * @var Country[]
      */
     private static $countriesCache;
 
