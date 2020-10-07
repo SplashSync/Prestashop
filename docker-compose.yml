@@ -56,7 +56,7 @@ services:
         depends_on:
             - mysql
         volumes:
-        # Push Configuration Overrides
+        # Push Configuration Override
          - ./docker/config/splash.json:/var/www/html/config/splash.json:ro
         # Module Sources
          - ./modules/splashsync:/var/www/html/modules/splashsync:ro
@@ -91,7 +91,7 @@ services:
         depends_on:
             - mysql
         volumes:
-        # Push Configuration Overides
+        # Push Configuration Override
          - "./docker/config/splash.json:/var/www/html/config/splash.json:ro"
         # Module Sources
          - ./modules/splashsync:/var/www/html/modules/splashsync:ro
@@ -126,10 +126,11 @@ services:
         depends_on:
            - mysql
         volumes:
-        # Push Configuration Overides
+        # Push Configuration Override
         - ./docker/config/splash.json:/var/www/html/config/splash.json:ro
         # Module Sources
         - ./modules/splashsync:/var/www/html/modules/splashsync:ro
+        - ./modules/nostotagging:/var/www/html/modules/nostotagging:ro
         - ./travis:/var/www/html/travis:ro
         # Docker EntryPoint
         - ./docker/docker-entrypoint.sh:/var/www/html/modules/docker-entrypoint.sh:ro

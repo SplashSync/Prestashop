@@ -18,6 +18,7 @@ namespace Splash\Local\Services;
 use Configuration;
 use Context;
 use Country;
+use Exception;
 use Shop;
 use ShopUrl;
 use Splash\Core\SplashCore as Splash;
@@ -40,11 +41,25 @@ class MultiShopManager
     const MODE_NONE = "none";
 
     /**
-     * List of Active Shops Ids
+     * List of Shops Ids
      *
      * @var array
      */
     private static $shopIds;
+
+    /**
+     * List of Shops Objects Cache
+     *
+     * @var Shop[]
+     */
+    private static $shopsCache;
+
+    /**
+     * List of Country Objects Cache
+     *
+     * @var Counrty[]
+     */
+    private static $countriesCache;
 
     /**
      * Check if Splash MultiShop Feature is Active
@@ -133,8 +148,11 @@ class MultiShopManager
             if (method_exists(Shop::class, "resetContext")) {
                 Shop::resetContext();
             }
+            // Setup Shop Context
             Shop::setContext(Shop::CONTEXT_ALL);
-            Context::getContext()->country = new Country((int) Configuration::get('PS_COUNTRY_DEFAULT'));
+            // Setup Global Context
+            Context::getContext()->shop = self::getCachedShop();
+            Context::getContext()->country = self::getCachedCountry();
 
             return true;
         }
@@ -144,13 +162,58 @@ class MultiShopManager
             if (method_exists(Shop::class, "resetContext")) {
                 Shop::resetContext();
             }
+            // Setup Shop Context
             Shop::setContext(Shop::CONTEXT_SHOP, $shopId);
-            Context::getContext()->country = new Country((int) Configuration::get('PS_COUNTRY_DEFAULT'));
+            // Setup Global Context
+            Context::getContext()->shop = self::getCachedShop($shopId);
+            Context::getContext()->country = self::getCachedCountry();
 
             return true;
         }
 
         return false;
+    }
+
+    /**
+     * Get Shop Object with caching
+     *
+     * @param null|int $shopId
+     *
+     * @throws Exception
+     *
+     * @return Shop
+     */
+    public static function getCachedShop(int $shopId = null): Shop
+    {
+        $shopId = $shopId ?? (int) Configuration::get('PS_SHOP_DEFAULT');
+        if (!isset(self::$shopsCache[$shopId])) {
+            self::$shopsCache[$shopId] = new Shop($shopId);
+        }
+        if (!(self::$shopsCache[$shopId] instanceof Shop)) {
+            throw new Exception("Unable to load Requested Shop");
+        }
+
+        return self::$shopsCache[$shopId];
+    }
+
+    /**
+     * Get Country Object with caching
+     *
+     * @throws Exception
+     *
+     * @return Country
+     */
+    public static function getCachedCountry(): Country
+    {
+        $countryId = (int) Configuration::get('PS_COUNTRY_DEFAULT');
+        if (!isset(self::$countriesCache[$countryId])) {
+            self::$countriesCache[$countryId] = new Country($countryId);
+        }
+        if (!(self::$countriesCache[$countryId] instanceof Country)) {
+            throw new Exception("Unable to load Requested Country");
+        }
+
+        return self::$countriesCache[$countryId];
     }
 
     /**

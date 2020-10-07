@@ -82,7 +82,7 @@ trait CRUDTrait
         // Flush Images Infos Cache
         $this->flushImageCache();
         //====================================================================//
-        // Flush Product Varaiants Cache
+        // Flush Product Variants Cache
         $this->flushAttributesResumeCache();
         $this->deleteCombinationResume();
 
@@ -133,7 +133,7 @@ trait CRUDTrait
         Splash::log()->trace();
 
         //====================================================================//
-        // Verify Update Is requiered
+        // Verify Update Is required
         if (!$needed && !$this->isToUpdate("Attribute")) {
             Splash::log()->deb("MsgLocalNoUpdateReq", __CLASS__, __FUNCTION__);
 
@@ -291,6 +291,11 @@ trait CRUDTrait
         $this->setSimple("reference", $this->in["ref"]);
         $this->setMultilang("name", SLM::getDefaultLangId(), $this->in["name"]);
         $this->setMultilang("link_rewrite", SLM::getDefaultLangId(), $this->in["link_rewrite"]);
+        //====================================================================//
+        // Pre-Setup Product Status
+        if (isset(Splash::configuration()->PsNewProductStatus)) {
+            $this->setSimple("active", (bool) Splash::configuration()->PsNewProductIsActive);
+        }
         //====================================================================//
         // CREATE PRODUCT
         if (true != $this->object->add()) {

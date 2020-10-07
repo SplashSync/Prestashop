@@ -137,7 +137,7 @@ trait AttributeTrait
         // Stack Trace
         Splash::log()->trace();
         //====================================================================//
-        // Verify Update Is requiered
+        // Verify Update Is required
         if (!$this->isToUpdate("Attribute")) {
             Splash::log()->deb("MsgLocalNoUpdateReq", __CLASS__, __FUNCTION__);
 
