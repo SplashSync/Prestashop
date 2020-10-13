@@ -142,7 +142,7 @@ class L10MsfProductsTest extends ObjectsCase
             $sequences["[V]".$index]["3"] = true;
         }
 
-        return empty($sequences)
+        return !empty($sequences)
             ? $sequences
             : array("Skip" => array("None", "Product", null));
     }
@@ -209,7 +209,7 @@ class L10MsfProductsTest extends ObjectsCase
         }
         //====================================================================//
         //   Ensure Field is Msf Field
-        if (is_array($field->options) && isset($field->options["shop"])) {
+        if (is_array($field->options) && array_key_exists("shop", $field->options)) {
             if (MSM::MODE_ALL == $field->options["shop"]) {
                 return false;
             }
