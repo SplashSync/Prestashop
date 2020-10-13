@@ -148,7 +148,10 @@ trait AttributeTrait
         }
         //====================================================================//
         // FORCE MSF FIELDS WRITING
-        $this->Attribute->setFieldsToUpdate($this->getMsfUpdateFields("Attribute"));
+        $updateFields = $this->getMsfUpdateFields("Attribute");
+        if ($updateFields) {
+            $this->Attribute->setFieldsToUpdate($updateFields);
+        }
         //====================================================================//
         // UPDATE ATTRIBUTE INFORMATIONS
         if (true != $this->Attribute->update()) {

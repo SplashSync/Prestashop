@@ -149,7 +149,10 @@ trait CRUDTrait
         if ($this->ProductId && $needed) {
             //====================================================================//
             // FORCE MSF FIELDS WRITING
-            $this->object->setFieldsToUpdate($this->getMsfUpdateFields("Product"));
+            $updateFields = $this->getMsfUpdateFields("Product");
+            if ($updateFields) {
+                $this->object->setFieldsToUpdate($updateFields);
+            }
             if (true != $this->object->update()) {
                 return Splash::log()->errTrace("Unable to update Product.");
             }
