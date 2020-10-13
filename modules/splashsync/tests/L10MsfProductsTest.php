@@ -53,6 +53,9 @@ class L10MsfProductsTest extends ObjectsCase
         // Create a New Product with All Shops Data
         $allShopsOriginData = $this->prepareForTesting($objectType, $field);
         $this->assertNotEmpty($allShopsOriginData);
+        if (!is_array($allShopsOriginData)) {
+            return;
+        }
         if ($variant) {
             $allShopsOriginData['attributes'] = array(array(
                 "code" => "SIZE",
@@ -79,6 +82,10 @@ class L10MsfProductsTest extends ObjectsCase
         //====================================================================//
         // Redo Set for Product with All Shops Data
         $allShopsRedoData = $this->prepareForTesting($objectType, $field);
+        $this->assertNotEmpty($allShopsRedoData);
+        if (!is_array($allShopsRedoData)) {
+            return;
+        }
         unset($allShopsRedoData[$field->id]);
         $redoObjectId = Splash::object($objectType)->set($objectId, $allShopsRedoData);
         $allShopsRedoData[$field->id] = $allShopsOriginData[$field->id];
@@ -173,16 +180,29 @@ class L10MsfProductsTest extends ObjectsCase
         }
         //====================================================================//
         //   Ensure Field is R/W Field
-        $field = $sequence["2"];
+        return $this->isAllowedFieldForTesting($sequence["2"]);
+    }
+
+    /**
+     * Check if Field is Allowed for Testing
+     *
+     * @param mixed $field
+     *
+     * @return bool
+     */
+    private function isAllowedFieldForTesting($field): bool
+    {
+        //====================================================================//
+        //   Ensure Field is R/W Field
         if (empty($field->read) || empty($field->write) || !empty($field->notest)) {
             return false;
         }
         //====================================================================//
         //   Ensure Field is Msf Field
-        if (isset($field->options["shop"]) && (MSM::MODE_ALL == $field->options["shop"])) {
+        if (isset($field->options, $field->options["shop"]) && (MSM::MODE_ALL == $field->options["shop"])) {
             return false;
         }
-        if (false !== strpos($field->id, "_shop_")) {
+        if (!isset($field->id) || (false !== strpos($field->id, "_shop_"))) {
             return false;
         }
 
