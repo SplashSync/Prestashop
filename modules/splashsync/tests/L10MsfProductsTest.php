@@ -46,6 +46,14 @@ class L10MsfProductsTest extends ObjectsCase
     public function testSetSingleFieldFromModule(string $testSequence, string $objectType, $field, $variant = false)
     {
         //====================================================================//
+        //   NOT in Msf Mode
+        if (is_null($field)) {
+            $this->assertTrue(true);
+
+            return;
+        }
+
+        //====================================================================//
         //   Load Test Sequence
         $this->loadLocalTestSequence($testSequence);
 
@@ -134,7 +142,9 @@ class L10MsfProductsTest extends ObjectsCase
             $sequences["[V]".$index]["3"] = true;
         }
 
-        return $sequences;
+        return empty($sequences)
+            ? $sequences
+            : array("Skip" => array("None", "Product", null));
     }
 
     /**
