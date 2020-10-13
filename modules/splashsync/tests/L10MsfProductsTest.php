@@ -52,6 +52,7 @@ class L10MsfProductsTest extends ObjectsCase
         //====================================================================//
         // Create a New Product with All Shops Data
         $allShopsOriginData = $this->prepareForTesting($objectType, $field);
+        $this->assertNotEmpty($allShopsOriginData);
         if ($variant) {
             $allShopsOriginData['attributes'] = array(array(
                 "code" => "SIZE",
@@ -132,8 +133,8 @@ class L10MsfProductsTest extends ObjectsCase
     /**
      * Build Object Data for One Shop Only
      *
-     * @param $field
-     * @param int $shopId
+     * @param mixed $field
+     * @param int   $shopId
      *
      * @throws \Exception
      *
