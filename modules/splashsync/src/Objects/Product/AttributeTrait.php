@@ -149,7 +149,7 @@ trait AttributeTrait
         //====================================================================//
         // FORCE MSF FIELDS WRITING
         $updateFields = $this->getMsfUpdateFields("Attribute");
-        if ($updateFields) {
+        if (is_array($updateFields)) {
             $this->Attribute->setFieldsToUpdate($updateFields);
         }
         //====================================================================//

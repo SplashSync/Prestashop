@@ -150,7 +150,7 @@ trait CRUDTrait
             //====================================================================//
             // FORCE MSF FIELDS WRITING
             $updateFields = $this->getMsfUpdateFields("Product");
-            if ($updateFields) {
+            if (is_array($updateFields)) {
                 $this->object->setFieldsToUpdate($updateFields);
             }
             if (true != $this->object->update()) {
