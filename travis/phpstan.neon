@@ -29,6 +29,7 @@ parameters:
 #            - '#Call to an undefined method [a-zA-Z0-9\\_]+ObjectInterface::getAttributeByCode()#'
 #            - '#Call to an undefined method [a-zA-Z0-9\\_]+ObjectInterface::addAttributeValue()#'
 #            - '#Call to an undefined method [a-zA-Z0-9\\_]+ObjectInterface::getMultilang()#'
+            - '#Access to an undefined property object::$options#'
             - '#Access to an undefined property ObjectModel::[a-zA-Z0-9$\\_]#'
             - '#Access to an undefined property Context::[a-zA-Z0-9$\\_]#'
             - "#Casting to float something that's already float#"
