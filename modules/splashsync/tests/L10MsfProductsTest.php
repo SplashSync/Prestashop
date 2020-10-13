@@ -116,7 +116,7 @@ class L10MsfProductsTest extends ObjectsCase
         foreach ($coreSequences as $index => $sequence) {
             //====================================================================//
             // Ensure Test Sequence is Allowed
-            if (!$this->isAllowedForTesting($sequences)) {
+            if (!$this->isAllowedForTesting($sequence)) {
                 continue;
             }
             //====================================================================//
@@ -130,13 +130,35 @@ class L10MsfProductsTest extends ObjectsCase
     }
 
     /**
+     * Build Object Data for One Shop Only
+     *
+     * @param $field
+     * @param int $shopId
+     *
+     * @throws \Exception
+     *
+     * @return array
+     */
+    private function getShopDataSet($field, int $shopId): array
+    {
+        return MSF::encodeData(
+            array($field->id => self::fakeFieldData(
+                $field->type,
+                self::toArray($field->choices),
+                self::toArray($field->options)
+            )),
+            $shopId
+        );
+    }
+
+    /**
      * Check if Sequence is Allowed for Testing
      *
      * @param array $sequence
      *
      * @return bool
      */
-    public function isAllowedForTesting(array $sequence): bool
+    private function isAllowedForTesting(array $sequence): bool
     {
         //====================================================================//
         // Ensure We Are in All Shops Test Sequence
@@ -164,27 +186,5 @@ class L10MsfProductsTest extends ObjectsCase
         }
 
         return true;
-    }
-
-    /**
-     * Build Object Data for One Shop Only
-     *
-     * @param $field
-     * @param int $shopId
-     *
-     * @throws \Exception
-     *
-     * @return array
-     */
-    private function getShopDataSet($field, int $shopId): array
-    {
-        return MSF::encodeData(
-            array($field->id => self::fakeFieldData(
-                $field->type,
-                self::toArray($field->choices),
-                self::toArray($field->options)
-            )),
-            $shopId
-        );
     }
 }
