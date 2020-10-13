@@ -199,7 +199,7 @@ class L10MsfProductsTest extends ObjectsCase
         }
         //====================================================================//
         //   Ensure Field is Msf Field
-        if (isset($field->options, $field->options["shop"])) {
+        if (is_array($field->options) && isset($field->options["shop"])) {
             if (MSM::MODE_ALL == $field->options["shop"]) {
                 return false;
             }
