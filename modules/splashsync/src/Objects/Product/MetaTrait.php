@@ -179,6 +179,7 @@ trait MetaTrait
             case 'on_sale':
             case 'online_only':
                 $this->setSimple($fieldName, $fieldData);
+                $this->addMsfUpdateFields("Product", $fieldName);
 
                 break;
             case 'available_for_order':
@@ -189,6 +190,7 @@ trait MetaTrait
                 }
 
                 $this->setSimple($fieldName, $fieldData);
+                $this->addMsfUpdateFields("Product", $fieldName);
 
                 break;
             default:

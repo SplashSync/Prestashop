@@ -15,6 +15,7 @@
 
 namespace   Splash\Local\Objects;
 
+use Combination;
 use Configuration;
 use Currency;
 use Product as psProduct;
@@ -26,6 +27,7 @@ use Splash\Models\Objects\ListsTrait;
 use Splash\Models\Objects\ObjectsTrait;
 use Splash\Models\Objects\SimpleFieldsTrait;
 use SplashSync;
+use Tools;
 
 /**
  * Splash Local Object Class - Products Local Integration
@@ -130,6 +132,9 @@ class Product extends AbstractObject
     // Class Constructor
     //====================================================================//
 
+    /**
+     * Product constructor.
+     */
     public function __construct()
     {
         //====================================================================//
@@ -146,5 +151,37 @@ class Product extends AbstractObject
         //====================================================================//
         // Load Default Currency
         $this->Currency = new Currency((int) Configuration::get('PS_CURRENCY_DEFAULT'));
+    }
+
+    /**
+     * Override Product Definition for Msf Mode
+     *
+     * @return void
+     */
+    public static function overrideDefinition()
+    {
+        //====================================================================//
+        // Only On MultiShop Mode on PS 1.7.X
+        if (!Shop::isFeatureActive() || Tools::version_compare(_PS_VERSION_, "1.7", '<')) {
+            return;
+        }
+
+        //====================================================================//
+        // Fix Product Definition
+        psProduct::$definition['fields']["id_category_default"]['shop'] = '1';
+        psProduct::$definition['fields']["minimal_quantity"]['shop'] = '1';
+        psProduct::$definition['fields']["price"]['shop'] = '1';
+        psProduct::$definition['fields']["wholesale_price"]['shop'] = '1';
+        psProduct::$definition['fields']["active"]['shop'] = '1';
+        psProduct::$definition['fields']["available_for_order"]['shop'] = '1';
+        psProduct::$definition['fields']["on_sale"]['shop'] = '1';
+        psProduct::$definition['fields']["online_only"]['shop'] = '1';
+
+        //====================================================================//
+        // Fix Product Attributes Definition
+        Combination::$definition['fields']["price"]['shop'] = '1';
+        Combination::$definition['fields']["wholesale_price"]['shop'] = '1';
+        Combination::$definition['fields']["minimal_quantity"]['shop'] = '1';
+        Combination::$definition['fields']["default_on"]['shop'] = '1';
     }
 }

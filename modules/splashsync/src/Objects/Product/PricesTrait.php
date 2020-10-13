@@ -254,6 +254,7 @@ trait PricesTrait
                 if (!self::prices()->Compare($this->out["price-base"], $fieldData)) {
                     $this->object->price = $fieldData["ht"];
                     $this->object->base_price = $fieldData["ht"];
+                    $this->addMsfUpdateFields("Product", "price");
                     $this->needUpdate();
                     //====================================================================//
                     // Clear Cache
@@ -276,11 +277,13 @@ trait PricesTrait
                 // Update product Wholesale Price with Attribute
                 if ($this->AttributeId) {
                     $this->Attribute->wholesale_price = $fieldData["ht"];
+                    $this->addMsfUpdateFields("Attribute", "wholesale_price");
                     $this->needUpdate("Attribute");
                 //====================================================================//
                 // Update product Price without Attribute
                 } else {
                     $this->object->wholesale_price = $fieldData["ht"];
+                    $this->addMsfUpdateFields("Product", "wholesale_price");
                     $this->needUpdate();
                 }
 
@@ -320,6 +323,7 @@ trait PricesTrait
         } else {
             if (abs($newPrice["ht"] - $this->object->price) > 1E-6) {
                 $this->object->price = (float) number_format(round($newPrice["ht"], 9), 9, ".", "");
+                $this->addMsfUpdateFields("Product", "price");
                 $this->needUpdate();
             }
         }
@@ -337,6 +341,7 @@ trait PricesTrait
             if (($newTaxRateGroupId >= 0) && ($newTaxRateGroupId != $this->object->id_tax_rules_group)) {
                 $this->object->id_tax_rules_group = (int) $newTaxRateGroupId;
                 $this->object->tax_rate = $newPrice["vat"];
+                $this->addMsfUpdateFields("Product", "id_tax_rules_group");
                 $this->needUpdate();
             } else {
                 Splash::log()->war(
@@ -375,6 +380,7 @@ trait PricesTrait
         if (abs($priceHT - $this->Attribute->price) > 1E-6) {
             $this->Attribute->price = number_format(round($priceHT, 9), 9, ".", "");
             $this->needUpdate("Attribute");
+            $this->addMsfUpdateFields("Attribute", "price");
         }
     }
 

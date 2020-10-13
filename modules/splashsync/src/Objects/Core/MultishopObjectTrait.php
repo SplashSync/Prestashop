@@ -32,6 +32,11 @@ trait MultishopObjectTrait
     }
 
     /**
+     * @var array[]
+     */
+    private $updateFields = array();
+
+    /**
      * {@inheritdoc}
      */
     public function fields()
@@ -198,5 +203,68 @@ trait MultishopObjectTrait
         //====================================================================//
         // Object Not Found => Exit
         return is_array($allShopData) ? $allShopData : false;
+    }
+
+    /**
+     * Reset List of Msf Updated Fields
+     *
+     * @return void
+     */
+    public function resetMsfUpdateFields(): void
+    {
+        $this->updateFields = array();
+    }
+
+    /**
+     * Add Field to List of Msf Updated Fields
+     *
+     * @param string      $type
+     * @param string      $name
+     * @param null|string $langId
+     *
+     * @return void
+     */
+    public function addMsfUpdateFields(string $type, string $name, string $langId = null): void
+    {
+        //====================================================================//
+        // Ensure List Exits
+        if (!isset($this->updateFields[$type])) {
+            $this->updateFields[$type] = array();
+        }
+        //====================================================================//
+        // Add Simple Field to Update List
+        if (is_null($langId)) {
+            $this->updateFields[$type][$name] = true;
+
+            return;
+        }
+        //====================================================================//
+        // Add Multilang Field to Update List
+        if (!isset($this->updateFields[$type][$name])) {
+            $this->updateFields[$type][$name] = array();
+        }
+        $this->updateFields[$type][$name][$langId] = $langId;
+    }
+
+    /**
+     * Get List of Msf Updated Fields
+     *
+     * @param string $type
+     *
+     * @return null|array
+     */
+    public function getMsfUpdateFields(string $type)
+    {
+        //====================================================================//
+        // Only On MultiShop Mode
+        if (!Shop::isFeatureActive()) {
+            return null;
+        }
+        //====================================================================//
+        // Return Updated Fields
+        return isset($this->updateFields[$type])
+            ? $this->updateFields[$type]
+            : array()
+        ;
     }
 }

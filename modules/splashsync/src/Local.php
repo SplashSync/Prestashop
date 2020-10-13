@@ -20,6 +20,7 @@ use Context;
 use Employee;
 use Language;
 use Splash\Core\SplashCore      as Splash;
+use Splash\Local\Objects\Product;
 use Splash\Local\Services\LanguagesManager as SLM;
 use Splash\Local\Services\MultiShopFieldsManager as MSF;
 use Splash\Local\Services\MultiShopManager as MSM;
@@ -122,6 +123,9 @@ class Local implements LocalClassInterface
                 // Splash Module Class Includes
                 require_once($home.'/modules/splashsync/splashsync.php');
             }
+            //====================================================================//
+            // Override Product Definition for Compatibility with PS 1.7
+            Product::overrideDefinition();
         }
 
         //====================================================================//

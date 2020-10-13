@@ -32,7 +32,7 @@
 ################################################################################
 
 
-version: '2'
+version: "3.5"
 
 services:
     
@@ -52,7 +52,7 @@ services:
     # Prestashop Latest       
     prestashop:
         image: prestashop/prestashop:nightly-7.2-apache
-        container_name: prestashop_latest
+        container_name: latest.prestashop.local
         depends_on:
             - mysql
         volumes:
@@ -87,7 +87,7 @@ services:
     # Prestashop 1.7       
     prestashop_1_7:
         image: prestashop/prestashop:1.7-7.2-apache
-        container_name: prestashop_1_7
+        container_name: ps1-7.prestashop.local
         depends_on:
             - mysql
         volumes:
@@ -122,7 +122,7 @@ services:
     # Prestashop 1.6       
     prestashop_1_6:
         image: prestashop/prestashop:1.6-7.1-apache
-        container_name: prestashop_1_6
+        container_name: ps1-6.prestashop.local
         depends_on:
            - mysql
         volumes:
@@ -157,7 +157,7 @@ services:
     # Splash Toolkit Container   
     toolkit:
         image: 'splashsync/toolkit'
-        container_name: prestashop_toolkit
+        container_name: toolkit.prestashop.local
         volumes:
             # Specify Local Configuration File
             - './docker/toolkit/splash.yml:/app/config/packages/splash.yml:ro'
@@ -170,7 +170,7 @@ services:
     # PhpMyAdmin Container
     phpmyadmin:
         image: phpmyadmin/phpmyadmin:5
-        container_name: prestashop_phpmyadmin
+        container_name: phpmyadmin.prestashop.local
         logging: { driver: "none" }
         depends_on:
             - mysql

@@ -18,10 +18,8 @@ namespace Splash\Local\Objects\Product;
 use Attribute;
 use Combination;
 use Product;
-use Shop;
 use Splash\Client\Splash      as Splash;
 use Splash\Local\Services\LanguagesManager as SLM;
-use Tools;
 
 /**
  * Prestashop Product Attribute Data Access
@@ -149,8 +147,8 @@ trait AttributeTrait
             return Splash::log()->errTrace("Unable to update Product Attribute that doesn't Exists.");
         }
         //====================================================================//
-        // FORCE MSF FIELDS WRITING (FOR PS 1.6.x)
-        $this->forceCombinationUpdateFields();
+        // FORCE MSF FIELDS WRITING
+        $this->Attribute->setFieldsToUpdate($this->getMsfUpdateFields("Attribute"));
         //====================================================================//
         // UPDATE ATTRIBUTE INFORMATIONS
         if (true != $this->Attribute->update()) {
@@ -189,7 +187,7 @@ trait AttributeTrait
         // Invalidate Combinations Cache
         $this->deleteCombinationResume();
         //====================================================================//
-        // Read Product Attributes Conbination
+        // Read Product Attributes Combination
         $attrList = $this->object->getAttributesResume(SLM::getDefaultLangId());
         //====================================================================//
         // Verify if Was Last Combination
@@ -199,28 +197,5 @@ trait AttributeTrait
         //====================================================================//
         // Also Delete Product From DataBase
         return $this->object->delete();
-    }
-
-    /**
-     * Force Update of MSF Fields on PS 1.6.x
-     *
-     * @return void
-     */
-    private function forceCombinationUpdateFields()
-    {
-        //====================================================================//
-        // Only On MultiShop Mode on PS 1.6.X
-        if (!Shop::isFeatureActive() || Tools::version_compare(_PS_VERSION_, "1.7", '>=')) {
-            return;
-        }
-        //====================================================================//
-        // Force MultiShop Fields Update
-        $this->Attribute->setFieldsToUpdate(array(
-            "price" => true,
-            "wholesale_price" => true,
-            "weight" => true,
-            "default_on" => true,
-            "minimal_quantity" => true,
-        ));
     }
 }

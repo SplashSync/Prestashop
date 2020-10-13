@@ -166,8 +166,10 @@ trait StockTrait
             case 'minimal_quantity':
                 if ($this->AttributeId) {
                     $this->setSimple($fieldName, $fieldData, "Attribute");
+                    $this->addMsfUpdateFields("Attribute", "minimal_quantity");
                 } else {
                     $this->setSimple($fieldName, $fieldData);
+                    $this->addMsfUpdateFields("Product", "minimal_quantity");
                 }
 
                 break;

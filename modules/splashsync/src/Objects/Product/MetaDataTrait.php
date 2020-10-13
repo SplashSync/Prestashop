@@ -145,6 +145,7 @@ trait MetaDataTrait
                 case 'meta_description':
                 case 'meta_title':
                     $this->setMultilang($baseFieldName, $idLang, $fieldData);
+                    $this->addMsfUpdateFields("Product", $baseFieldName, $idLang);
                     unset($this->in[$fieldName]);
 
                     break;
