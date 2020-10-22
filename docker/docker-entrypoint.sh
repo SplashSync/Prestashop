@@ -108,12 +108,15 @@ else
     echo "\n* Pretashop Core already installed...";
 fi
 
-if [ $PS_RUN_TESTS = 1 ]; then
+if [ "$PS_RUN_TESTS" = 1 ]; then
     echo "\n* Execute Module Tests...";
     /var/www/html/modules/splashsync/vendor/bin/phpunit -c /var/www/html/travis/phpunit.xml.dist
     php /var/www/html/travis/setup_shops.php && php /var/www/html/travis/setup_shops.php
     /var/www/html/modules/splashsync/vendor/bin/phpunit -c /var/www/html/travis/phpunit.xml.dist
 fi
+
+echo "\n* Redo Splash Module Install\n";
+php travis/setup_module.php
 
 echo "\n* Almost ! Starting web server now\n";
 exec apache2-foreground
