@@ -116,7 +116,7 @@ if [ "$PS_RUN_TESTS" = 1 ]; then
 fi
 
 echo "\n* Redo Splash Module Install\n";
-php travis/setup_module.php
+php ./travis/setup_module.php
 
 echo "\n* Almost ! Starting web server now\n";
 exec apache2-foreground
