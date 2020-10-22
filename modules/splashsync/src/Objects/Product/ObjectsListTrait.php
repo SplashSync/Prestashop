@@ -46,6 +46,8 @@ trait ObjectsListTrait
         $sql->select("pa.`id_product_attribute`  as id_attribute");
         $sql->select("p.`reference` as ref");
         $sql->select("pa.`reference` as ref_attribute");
+        $sql->select("p.`supplier_reference` as supplier_reference");
+        $sql->select("pa.`supplier_reference` as supplier_reference_attribute");
         $sql->select("pl.`name` as name");
         $sql->select("p.`quantity` as stock");
         $sql->select("p.`weight` as weight");
@@ -111,7 +113,7 @@ trait ObjectsListTrait
 
         //====================================================================//
         // Setup String Filters
-        // Add filters with names convertions. Added LOWER function to be NON case sensitive
+        // Add filters with names conversions. Added LOWER function to be NON case sensitive
         if (!empty($filter)) {
             //====================================================================//
             // Search by Product Name
@@ -122,6 +124,9 @@ trait ObjectsListTrait
             //====================================================================//
             // Search by Product Ref
             $stringFilters .= " OR LOWER( p.reference ) LIKE LOWER( '%".pSQL($filter)."%') ";
+            //====================================================================//
+            // Search by Product Supplier Ref
+            $stringFilters .= " OR LOWER( p.supplier_reference ) LIKE LOWER( '%".pSQL($filter)."%') ";
             //====================================================================//
             // Search by Product Variant Ref
             $stringFilters .= " OR LOWER( pa.reference ) LIKE LOWER( '%".pSQL($filter)."%') ";
@@ -186,6 +191,7 @@ trait ObjectsListTrait
         if (!$product["id_attribute"]) {
             $dataBuffer["id"] = $product["id"];
             $dataBuffer["ref"] = $product["ref"];
+            $dataBuffer["supplier_reference"] = $product["supplier_reference"];
             $dataBuffer["weight"] = $product["weight"].Configuration::get('PS_WEIGHT_UNIT');
             $dataBuffer["stock"] = $productClass->getQuantity($product["id"]);
             $dataBuffer["price"] = $productClass->getPrice(false, null, 3);
@@ -197,6 +203,7 @@ trait ObjectsListTrait
             $dataBuffer["ref"] = (empty($product["ref_attribute"]) && !empty($product["ref"]))
                     ?$product["ref"]."-".$product["id_attribute"]
                     :$product["ref_attribute"];
+            $dataBuffer["supplier_reference"] = $product["supplier_reference_attribute"];
             $dataBuffer["weight"] = ($product["weight"] + $product["weight_attribute"]);
             $dataBuffer["weight"] .= Configuration::get('PS_WEIGHT_UNIT');
             $dataBuffer["price"] = $productClass->getPrice(false, $product["id_attribute"], 3);

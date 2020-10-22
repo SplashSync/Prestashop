@@ -112,7 +112,9 @@ trait MainTrait
             ->Identifier("supplier_reference")
             ->Name(Translate::getAdminTranslation("Supplier reference", "AdminProducts"))
             ->addOption("shop", MSM::MODE_ALL)
-            ->MicroData("http://schema.org/Product", "mpn");
+            ->MicroData("http://schema.org/Product", "mpn")
+            ->isListed()
+        ;
         //====================================================================//
         // UPC
         $this->fieldsFactory()->create(SPL_T_INT)

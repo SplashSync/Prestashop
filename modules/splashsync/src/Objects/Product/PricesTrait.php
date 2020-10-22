@@ -39,7 +39,7 @@ trait PricesTrait
      *
      * @return void
      */
-    private function buildPricesFields()
+    protected function buildPricesFields()
     {
         //====================================================================//
         // PRICES INFORMATIONS
@@ -56,7 +56,8 @@ trait PricesTrait
                 )." (".$this->Currency->sign.")"
             )
             ->MicroData("http://schema.org/Product", "price")
-            ->isListed();
+            ->isListed()
+        ;
 
         //====================================================================//
         // Product Selling Base Price
@@ -69,7 +70,7 @@ trait PricesTrait
                 )." Base (".$this->Currency->sign.")"
             )
             ->MicroData("http://schema.org/Product", "basePrice")
-            ->isListed();
+        ;
 
         //====================================================================//
         // WholeSale Price
@@ -106,7 +107,7 @@ trait PricesTrait
      *
      * @return void
      */
-    private function getPricesFields($key, $fieldName)
+    protected function getPricesFields($key, $fieldName)
     {
         //====================================================================//
         // READ Fields
@@ -190,7 +191,7 @@ trait PricesTrait
      *
      * @return void
      */
-    private function getReducedPricesFields($key, $fieldName)
+    protected function getReducedPricesFields($key, $fieldName)
     {
         //====================================================================//
         // READ Fields
@@ -232,7 +233,7 @@ trait PricesTrait
      *
      * @return void
      */
-    private function setPricesFields($fieldName, $fieldData)
+    protected function setPricesFields($fieldName, $fieldData)
     {
         //====================================================================//
         // WRITE Field
