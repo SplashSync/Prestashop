@@ -17,13 +17,16 @@ require_once dirname(__DIR__) . "/modules/splashsync/vendor/autoload.php";
 require_once dirname(__DIR__) . "/vendor/autoload.php";
 
 use Splash\Client\Splash as Splash;
+use Splash\Local\Local;
 
 //====================================================================//
 // Init Splash for Local Includes
 Splash::core();
+/** @var Local $local */
+$local = Splash::local();
 //====================================================================//
 // Load Splash Prestashop Module
-if (Splash::local()->getLocalModule()->install()) {
+if ($local->getLocalModule()->install()) {
     Splash::log()->msg("Module Install Done");
 }
 echo Splash::log()->getConsoleLog(true).PHP_EOL;
