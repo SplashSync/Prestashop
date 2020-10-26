@@ -3,12 +3,21 @@ echo Install SplashSync Module
 
 # Build Module Dependencies
 cd $MODULE_DIR
-# With PHP 7.2 => Load Phpstan   
-if [[ ${TRAVIS_PHP_VERSION:0:3} < "7.1" ]]; then composer remove splash/console --no-update --dev; fi
-if [[ ${TRAVIS_PHP_VERSION:0:3} < "7.2" ]]; then composer remove friendsofphp/php-cs-fixer --no-update --dev; fi
-if [[ ${TRAVIS_PHP_VERSION:0:3} < "7.2" ]]; then composer remove phpstan/phpstan --no-update --dev; fi
-if [[ ${TRAVIS_PHP_VERSION:0:3} < "7.2" ]]; then composer remove phpstan/phpstan-phpunit --no-update --dev; fi
+
+####################################################################
+# Composer Update
+####################################################################
+# With PHP <7.2 => Remove Phpstan & CsFixer
+if [[ ${TRAVIS_PHP_VERSION:0:3} < "7.2" ]]; then
+  composer remove friendsofphp/php-cs-fixer --no-update --dev;
+  composer remove phpstan/phpstan --no-update --dev;
+  composer remove phpstan/phpstan-phpunit --no-update --dev;
+fi
+# With PHP < 7.3 => Rollback to Composer 1
+if [[ ${TRAVIS_PHP_VERSION:0:3} < "7.3" ]]; then composer self-update --rollback; fi
+# Run Composer Update
 composer update --prefer-dist --no-interaction --no-progress
+
 cd $TRAVIS_BUILD_DIR
 
 # Move Module Contents to Install Folder
