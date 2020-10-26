@@ -53,7 +53,7 @@ trait MultishopTrait
 
         //====================================================================//
         // Prestashop Shop Code
-        $this->fieldsFactory()->create(SPL_T_INT)
+        $this->fieldsFactory()->create(SPL_T_VARCHAR)
             ->Identifier("shop_code")
             ->Name("Shop Code")
             ->Group(Translate::getAdminTranslation("Meta", "AdminThemes"))
@@ -62,7 +62,7 @@ trait MultishopTrait
 
         //====================================================================//
         // Prestashop Shop Name
-        $this->fieldsFactory()->create(SPL_T_INT)
+        $this->fieldsFactory()->create(SPL_T_VARCHAR)
             ->Identifier("shop_name")
             ->Name("Shop Name")
             ->Group(Translate::getAdminTranslation("Meta", "AdminThemes"))
