@@ -27,6 +27,7 @@ use Splash\Local\Services\MultiShopManager as MSM;
 use Splash\Local\Traits\SplashIdTrait;
 use Splash\Models\LocalClassInterface;
 use SplashSync;
+use Tools;
 use Validate;
 
 /**
@@ -135,6 +136,9 @@ class Local implements LocalClassInterface
             //====================================================================//
             // Load Default User
             $this->loadLocalUser();
+            //====================================================================//
+            // PS 1.7: Boot Symfony Kernel
+            $this->loadSymfonyKernel();
         }
 
         //====================================================================//
@@ -308,7 +312,7 @@ class Local implements LocalClassInterface
 
     //====================================================================//
     // *******************************************************************//
-    // Place Here Any SPECIFIC ro COMMON Local Functions
+    // Place Here Any SPECIFIC or COMMON Local Functions
     // *******************************************************************//
     //====================================================================//
 
@@ -355,6 +359,33 @@ class Local implements LocalClassInterface
         Context::getContext()->employee = $user;
 
         return Splash::log()->deb('Commons  - Employee Loaded from Splash Parameters => '.$user->email);
+    }
+
+    /**
+     * PS 1.7: Boot Symfony Kernel
+     *
+     * @return void
+     */
+    public function loadSymfonyKernel()
+    {
+        //====================================================================//
+        // Only On MultiShop Mode on PS 1.7.X
+        if (Tools::version_compare(_PS_VERSION_, "1.7", '<')) {
+            return;
+        }
+        global $kernel;
+        //====================================================================//
+        // Try to load it globally (for backoffice pages)
+        if($kernel){
+            return;
+        }
+        //====================================================================//
+        // Create it manually
+        require_once _PS_ROOT_DIR_.'/app/AppKernel.php';
+        $env = _PS_MODE_DEV_ ? 'dev' : 'prod';
+        $debug = _PS_MODE_DEV_ ? true : false;
+        $kernel = new \AppKernel($env, $debug);
+        $kernel->boot();
     }
 
     /**
