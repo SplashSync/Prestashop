@@ -51,7 +51,7 @@ services:
     ################################################################################
     # Prestashop Latest       
     prestashop:
-        image: prestashop/prestashop:nightly-7.2-apache
+        image: prestashop/prestashop:nightly-7.3-apache
         container_name: latest.prestashop.local
         depends_on:
             - mysql

@@ -62,6 +62,15 @@ class MultiShopManager
     private static $countriesCache;
 
     /**
+     * Name of Ps Symfony Legacy Context Class
+     *
+     * @since PS 1.7
+     *
+     * @var string
+     */
+    private static $legacyContextClass = "\\PrestaShop\\PrestaShop\\Adapter\\LegacyContext";
+
+    /**
      * Check if Splash MultiShop Feature is Active
      *
      * @return bool
@@ -132,14 +141,15 @@ class MultiShopManager
      * Setup Prestashop MultiShops Context
      *
      * @param null|int $shopId
+     * @param mixed    $force
      *
      * @return bool
      */
-    public static function setContext(int $shopId = null): bool
+    public static function setContext(int $shopId = null, $force = false): bool
     {
         //====================================================================//
         // Check if Multi-Shop Feature is Active
-        if (!self::isFeatureActive()) {
+        if (!self::isFeatureActive() && empty($force)) {
             return true;
         }
         //====================================================================//
@@ -150,6 +160,9 @@ class MultiShopManager
             }
             // Setup Shop Context
             Shop::setContext(Shop::CONTEXT_ALL);
+            if (class_exists(static::$legacyContextClass)) {
+                static::$legacyContextClass::getContext()->shop->setContext(Shop::CONTEXT_ALL);
+            }
             // Setup Global Context
             Context::getContext()->shop = self::getCachedShop();
             Context::getContext()->country = self::getCachedCountry();
@@ -164,6 +177,9 @@ class MultiShopManager
             }
             // Setup Shop Context
             Shop::setContext(Shop::CONTEXT_SHOP, $shopId);
+            if (class_exists(static::$legacyContextClass)) {
+                static::$legacyContextClass::getContext()->shop->setContext(Shop::CONTEXT_SHOP, $shopId);
+            }
             // Setup Global Context
             Context::getContext()->shop = self::getCachedShop($shopId);
             Context::getContext()->country = self::getCachedCountry();

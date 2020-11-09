@@ -19,7 +19,6 @@ use Configuration;
 use Currency;
 use Order as psOrder;
 use PrestaShopCollection;
-use Shop;
 use Splash\Core\SplashCore      as Splash;
 use Splash\Local\Local;
 use Splash\Models\AbstractObject;
@@ -150,11 +149,6 @@ class Order extends AbstractObject
      */
     public function __construct()
     {
-        //====================================================================//
-        // Set Module Context To All Shops
-        if (Shop::isFeatureActive()) {
-            Shop::setContext(Shop::CONTEXT_ALL);
-        }
         //====================================================================//
         //  Load Local Translation File
         Splash::translator()->load("objects@local");

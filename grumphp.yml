@@ -15,125 +15,30 @@
 #
 ################################################################################
 
-################################################################################
-# GrumPhp Configuration File
-################################################################################
-
+#############################################
+# Override Config. for Prestashop Module
 parameters:
-    
-    #############################################        
-    #   Local Config 
-    #############################################        
-    #   Path to Php Core Module
-    core_dir:       "./modules/splashsync/vendor/splash/phpcore/Resources/grumphp"     
-    #   Testing Mode (core|module)
-    mode:           "module"
-    level:          8
-    
-    #############################################        
-    #   Base Configs 
-    git_dir: .
-    bin_dir:        "modules/splashsync/vendor/bin"
-    ascii:
-        failed:     "%core_dir%/grumphp-grumpy.txt"
-        succeeded:  "%core_dir%/grumphp-happy.txt"
-    process_timeout: 180    
-    
-    tasks:
-        
-        #############################################        
-        #   Composer Verifs           
-        composer:
-            file:           "./composer.json"
-            
-        #############################################        
-        #   Syntax Errors Detection                 
-        xmllint: ~
-        yamllint: ~
-        jsonlint:
-            ignore_patterns:        [ "docs" ]
-            detect_key_conflicts:   true
-            
-        phplint:
-            exclude:        ['modules/splashsync/vendor']
-            triggered_by:   ['php']
-                
-        #############################################        
-        #   Blacklist Codes Detection                
-        git_blacklist:
-            keywords:
-                - "var_dump"
-                - "dump("
-                - "console.log"
-                - "print_r"
-                - "die("
-            triggered_by: [php, js, twig]
-            
-        #############################################        
-        #   Security Checks             
-        securitychecker: ~
-                
-        #############################################        
-        #   Code Quality   
-        phpcsfixer:     ~ 
-        phpcsfixer2:    
-            allow_risky:    true
-            config:         "travis/php_cs.dist"                
-            
-        phpcs:
-            standard:       "PSR2"
-            triggered_by:   [php]
-            ignore_patterns:
-                - modules/splashsync/splashsync.php
-                
-        phpmd:
-            ruleset:        ["%core_dir%/phpmd.xml"]  
-                
-        phpcpd:
-            exclude:        
-                - "docs"
-                - "modules/splashsync/vendor"    
-                
-        phpstan:
-            level:          "%level%"
-            configuration:  "travis/phpstan.neon"           
 
-        build-module: 
-            enabled:        true
-            source_folder:  "/modules/splashsync"
-            target_folder:  "/ps_module"
-            build_folder:   "splashsync/"
-            build_file:     "splashsync.1.5.5"
-        
-        build-docs: 
-            enabled:            true
-            local_folder:       '/modules/splashsync/docs'
-            generic_contents:   ["splash", "php-docker"]
-            
-    extensions:
-        - Splash\Console\Extension\Loader
+    core_dir:           "./modules/splashsync/vendor/badpixxel/php-sdk"
+    mode:               "splashsync"
+    exclude:            ['modules/splashsync/vendor', 'docs', 'docker']
 
-    testsuites:
-        travis:
-            tasks:
-                - composer
-                - phplint
-                - phpcs 
-                - git_blacklist
-                - jsonlint
-                - phpmd
-                - phpcpd
-                - xmllint
-                - yamllint
-                
-        csfixer:
-            tasks: 
-                - phpcsfixer2                
-        phpstan:
-            tasks: 
-                - phpstan 
-                
-        splash:
-            tasks:
-                - build-module
-                - build-docs
+    # Php Stan
+    stan-config:        "./travis/phpstan.neon"
+
+    # For Building Splash Documentation
+    doc-src:            '/modules/splashsync/docs'
+    doc-contents:       ["splash", "php-docker"]
+
+    # For Building Splash Module
+    mod-src:            '/modules/splashsync'
+    mod-file:           "splashsync.1.5.655"
+
+    # For Building Splash Manifest
+    yml-enable:     false
+
+#############################################
+# Import Generic + Splash Console Configs
+imports:
+    - { resource: "./modules/splashsync/vendor/badpixxel/php-sdk/grumphp/generic.yml" }
+    - { resource: "./modules/splashsync/vendor/splash/console/src/Resources/grumphp/*.yml" }

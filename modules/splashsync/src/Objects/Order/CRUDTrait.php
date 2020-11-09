@@ -20,9 +20,11 @@ use Carrier;
 use Cart;
 use Configuration;
 use Order;
+use Shop;
 use Splash\Core\SplashCore      as Splash;
 use Splash\Local\Services\DiscountsManager;
 use Splash\Local\Services\LanguagesManager as SLM;
+use Splash\Local\Services\MultiShopManager as MSM;
 use TaxCalculator;
 
 /**
@@ -86,6 +88,10 @@ trait CRUDTrait
         //====================================================================//
         // Flush Order Discount Cache
         DiscountsManager::flushOrderDiscountsDetails();
+
+        //====================================================================//
+        // Set Module Context To Order Shop
+        MSM::setContext($object->id_shop, true);
 
         return $object;
     }

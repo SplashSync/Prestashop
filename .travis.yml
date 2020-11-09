@@ -29,11 +29,9 @@ jobs:
 #          env: PS_VERSION=develop
 
         # Prestashop 1.7.7.x Branch
-        - php: 7.3
+        - php: 7.4
           env: PS_VERSION=1.7.7.x
-#        - php: 7.2
-#          env: PS_VERSION=1.7.7.x
-        - php: 7.1
+        - php: 7.2
           env: PS_VERSION=1.7.7.x
 
         # Prestashop 1.7.6.x Branch
@@ -45,27 +43,28 @@ jobs:
           env: PS_VERSION=1.7.5.x
 
         # Prestashop 1.7.4.x Branch
-        - php: 7.1
+        - php: 7.3
           env: PS_VERSION=1.7.4.x
 
         # Prestashop 1.7.1.x Branch
-        - php: 7.1
+        - php: 7.2
           env: PS_VERSION=1.7.1.x
         
     allow_failures:
-#        - env: PS_VERSION=1.7.5.x
         - env: PS_VERSION=develop
         
     # Fast finish allows to set the build as "finished" even if the "allow_failures" matrix elements are not finished yet.
     fast_finish: true
 
-# Global Env Configuration
-env:
-    global:
-        - SYMFONY_DEPRECATIONS_HELPER=disabled
-        - GRUMPHP_BIN_DIR="modules/splashsync/vendor/bin"
-        
-before_script:
+
+
+################################################################################
+# TEST SCRIPTS
+################################################################################
+
+################################################################################
+# Install & Configure Environnement
+install:
 
     - export MODULE_DIR=/tmp/SplashSync
     - export MODULE_SCRIPTS_DIR=/tmp/SplashSync/travis
@@ -80,18 +79,20 @@ before_script:
     - bash $MODULE_SCRIPTS_DIR/start_prestashop.sh
     #   Install Module
     - bash $MODULE_SCRIPTS_DIR/install_module.sh
-    
+
+################################################################################
+# Run Test Script
 script: 
     - cd $MODULE_DIR
     
     # Run Grump Main Test Sequence
-    - php modules/splashsync/vendor/bin/grumphp run --testsuite=travis
+    - php modules/splashsync/vendor/bin/grumphp run -r --testsuite=travis
     - cd $TRAVIS_BUILD_DIR
 
     # With PHP 7.2 => Execute CsFixer
-    - if [[ ${TRAVIS_PHP_VERSION:0:3} > "7.1" ]]; then php modules/splashsync/vendor/bin/grumphp run --testsuite=csfixer; fi
+    - if [[ ${TRAVIS_PHP_VERSION:0:3} > "7.1" ]]; then php modules/splashsync/vendor/bin/grumphp run -r --testsuite=csfixer; fi
     # With PHP 7.2 => Execute Phpstan
-    - if [[ ${TRAVIS_PHP_VERSION:0:3} > "7.1" ]]; then php modules/splashsync/vendor/bin/grumphp run --testsuite=phpstan; fi
+    - if [[ ${TRAVIS_PHP_VERSION:0:3} > "7.1" ]]; then php modules/splashsync/vendor/bin/grumphp run -r --testsuite=phpstan; fi
 
     # Run PhpUnit Core Test Sequence (Will Enable the Module)
     - modules/splashsync/vendor/bin/phpunit -c travis/phpunit.xml.dist modules/splashsync/vendor/splash/phpcore/Tests/Core/
@@ -112,19 +113,41 @@ script:
     - cd $MODULE_DIR    
     - composer outdated -D
 
-# Tell Travis CI we're using PHP
-language: php
-os: linux
+################################################################################
+# Run After Script
+after_script:
+  - composer outdated -D
 
+################################################################################
+# GENERIC CONFIGURATION
+################################################################################
+
+
+################################################################################
+# Project language
+language:   php
+os:         linux
+dist:       trusty
+
+################################################################################
 # Tell Travis CI we're using MySQL
 services:
   - mysql
 
+################################################################################
 # Tell Travis CI we're using Cache
 cache:
   directories:
     - $HOME/.composer/cache
 
+################################################################################
+# Global Env Configuration
+env:
+  global:
+    - SYMFONY_DEPRECATIONS_HELPER=disabled
+    - GRUMPHP_BIN_DIR="modules/splashsync/vendor/bin"
+
+################################################################################
 # Tell Travis CI we're using Addons
 addons:
   apt:
@@ -135,13 +158,9 @@ addons:
       - libappindicator1
       - fonts-liberation
 
+################################################################################
+# After a build, send email notification with the build results
 notifications:
-  email:         
+  email:
     on_success: never # default: change
     on_failure: never # default: always
-
-after_success:
-    # Display Full List of Executed Tests    
-    - cat coverage/executed.txt
-    
-after_failure:

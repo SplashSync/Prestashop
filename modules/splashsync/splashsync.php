@@ -13,6 +13,9 @@
  *  file that was distributed with this source code.
  */
 
+// phpcs:disable PSR1.Classes.ClassDeclaration.MissingNamespace
+// phpcs:disable PSR1.Files.SideEffects
+
 /**
  * Splash Sync Prestahop Module - Noty Notifications
  */
@@ -69,7 +72,7 @@ class SplashSync extends Module
         // Init Module Main Information Fields
         $this->name = 'splashsync';
         $this->tab = 'administration';
-        $this->version = '1.5.5';
+        $this->version = '1.5.6';
         $this->author = 'SplashSync';
         $this->need_instance = 0;
         $this->ps_versions_compliancy = array('min' => '1.6', 'max' => '1.7');
@@ -430,8 +433,9 @@ class SplashSync extends Module
         } elseif (is_array($objectId) && empty($objectId)) {
             return true;
         } elseif (is_array($objectId)) {
-            Splash\Client\Splash::log()
-                ->deb("Splash Commit => ".$objectType." Action = ".$action." Ids (x".implode(", ", $objectId).") ".$comment);
+            Splash\Client\Splash::log()->deb(
+                "Splash Commit => ".$objectType." Action = ".$action." Ids (x".implode(", ", $objectId).") ".$comment
+            );
         } else {
             return Splash\Client\Splash::log()
                 ->err("Splash Hook Error : Wrong Id List Given => ".print_r($objectId, true));

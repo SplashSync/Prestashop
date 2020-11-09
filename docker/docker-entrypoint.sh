@@ -118,5 +118,8 @@ fi
 echo "\n* Redo Splash Module Install\n";
 php ./travis/setup_module.php
 
+echo "\n* Clear Cache...";
+rm -Rf /var/www/html/var
+
 echo "\n* Almost ! Starting web server now\n";
 exec apache2-foreground

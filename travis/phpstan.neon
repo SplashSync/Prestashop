@@ -2,7 +2,8 @@ includes:
     - '../modules/splashsync/vendor/phpstan/phpstan-phpunit/extension.neon'
 
 parameters:
-    bootstrap: "%currentWorkingDirectory%/travis/phpstan.php"
+    bootstrapFiles:
+        - "%currentWorkingDirectory%/travis/phpstan.php"
     checkMissingIterableValueType: false
     checkGenericClassInNonGenericObjectType: false
     inferPrivatePropertyTypeFromConstructor: true 

@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2019 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) 2015-2020 Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -13,8 +13,8 @@
  *  file that was distributed with this source code.
  */
 
-require_once dirname(__DIR__) . "/modules/splashsync/vendor/autoload.php";
-require_once dirname(__DIR__) . "/vendor/autoload.php";
+require_once dirname(__DIR__)."/modules/splashsync/vendor/autoload.php";
+require_once dirname(__DIR__)."/vendor/autoload.php";
 
 use Splash\Client\Splash as Splash;
 use Splash\Local\Local;

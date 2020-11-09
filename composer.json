@@ -19,40 +19,18 @@
             "/Tests/"
         ]
     },
-    
+
+    "autoload-dev": {
+        "psr-4": { "Splash\\Tests\\": "modules/splashsync/tests" }
+    },
+
     "require": {
         "php":                              "^7.1",
         "splash/phpcore":                   "dev-master"
     },
-    
+
     "require-dev": {
         "splash/console":                   "dev-master",
-        "phpunit/phpunit":                  "^7.0",
-        "composer/composer":                "^1.5",
-        "j13k/yaml-lint":                   "^1.1",
-        "php-parallel-lint/php-parallel-lint":  "^1.0",
-        "phpmd/phpmd":                      "^2.6",
-        "phpro/grumphp":                    "^0.16",
-        "sclable/xml-lint":                 "^0.2.4",
-        "sebastian/phpcpd":                 ">3.0",
-        "seld/jsonlint":                    "^1.7",
-        "sensiolabs/security-checker":      "*",
-        "squizlabs/php_codesniffer":        "^3.2",
-        "friendsofphp/php-cs-fixer":        "^2.10",
-        "phpstan/phpstan":                  "^0.12",
-        "phpstan/phpstan-phpunit":          "^0.12"        
-    },
-    
-    "autoload-dev": {
-        "psr-4": { "Splash\\Tests\\": "modules/splashsync/tests" }
-    },
-    
-    "scripts": {
-        "post-install-cmd": [
-            "php modules/splashsync/vendor/bin/grumphp git:deinit"            
-        ],
-        "post-update-cmd": [
-            "php modules/splashsync/vendor/bin/grumphp git:deinit"
-        ]
-    }    
+        "badpixxel/php-sdk":                "dev-main"
+    }
 }

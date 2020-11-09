@@ -376,7 +376,7 @@ class Local implements LocalClassInterface
         global $kernel;
         //====================================================================//
         // Try to load it globally (for backoffice pages)
-        if($kernel){
+        if ($kernel) {
             return;
         }
         //====================================================================//
