@@ -86,13 +86,13 @@ script:
     - cd $MODULE_DIR
     
     # Run Grump Main Test Sequence
-    - php modules/splashsync/vendor/bin/grumphp run -r --testsuite=travis
+    - php modules/splashsync/vendor/bin/grumphp run -n --testsuite=travis
     - cd $TRAVIS_BUILD_DIR
 
     # With PHP 7.2 => Execute CsFixer
-    - if [[ ${TRAVIS_PHP_VERSION:0:3} > "7.1" ]]; then php modules/splashsync/vendor/bin/grumphp run -r --testsuite=csfixer; fi
+    - if [[ ${TRAVIS_PHP_VERSION:0:3} > "7.1" ]]; then php modules/splashsync/vendor/bin/grumphp run -n --testsuite=csfixer; fi
     # With PHP 7.2 => Execute Phpstan
-    - if [[ ${TRAVIS_PHP_VERSION:0:3} > "7.1" ]]; then php modules/splashsync/vendor/bin/grumphp run -r --testsuite=phpstan; fi
+    - if [[ ${TRAVIS_PHP_VERSION:0:3} > "7.1" ]]; then php modules/splashsync/vendor/bin/grumphp run -n --testsuite=phpstan; fi
 
     # Run PhpUnit Core Test Sequence (Will Enable the Module)
     - modules/splashsync/vendor/bin/phpunit -c travis/phpunit.xml.dist modules/splashsync/vendor/splash/phpcore/Tests/Core/

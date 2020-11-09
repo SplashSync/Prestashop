@@ -12,7 +12,9 @@ ls -al  $TRAVIS_BUILD_DIR
 cp app/config/parameters.yml.dist app/config/parameters.yml
 
 # Add PHP Extensions
-#echo Add PHP Extensions
+echo Add PHP Extensions
+phpenv config-add zip.ini
+phpenv config-add gd.ini
 
 echo Show PHP Extensions
 php -m
