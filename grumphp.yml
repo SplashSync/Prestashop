@@ -23,8 +23,11 @@ parameters:
     mode:               "splashsync"
     exclude:            ['modules/splashsync/vendor', 'docs', 'docker']
 
+    # Php Cs Fixer
+    csfixer-config:     "./grumphp/cs.%mode%.php"
+
     # Php Stan
-    stan-config:        "./travis/phpstan.neon"
+    stan-config:        "./grumphp/phpstan.neon"
 
     # For Building Splash Documentation
     doc-src:            '/modules/splashsync/docs'

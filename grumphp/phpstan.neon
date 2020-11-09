@@ -3,7 +3,7 @@ includes:
 
 parameters:
     bootstrapFiles:
-        - "%currentWorkingDirectory%/travis/phpstan.php"
+        - "%currentWorkingDirectory%/grumphp/phpstan.php"
     checkMissingIterableValueType: false
     checkGenericClassInNonGenericObjectType: false
     inferPrivatePropertyTypeFromConstructor: true 
