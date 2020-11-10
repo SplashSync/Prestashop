@@ -26,6 +26,7 @@ mkdir     $TMP_DIR/.git
 mv -f     $TRAVIS_BUILD_DIR/*               $TMP_DIR
 mv -f     $TRAVIS_BUILD_DIR/.git/*          $TMP_DIR/.git
 mv -f     $TRAVIS_BUILD_DIR/.travis.yml     $TMP_DIR/.travis.yml
+mv -f     $TRAVIS_BUILD_DIR/.gitlab-ci.yml  $TMP_DIR/.gitlab-ci.yml
 
 echo "--> Delete Remaining Contents from Build Folder"
 rm -Rf    $TRAVIS_BUILD_DIR/.git
