@@ -38,4 +38,5 @@ cp -Rf    $TMP_DIR/travis/*                          $TRAVIS_BUILD_DIR/travis/
 ################################################################################
 # Move Git Files to Prestashop Root Directory
 echo "Move Git Files to Prestashop Root Directory"
+mkdir     $TRAVIS_BUILD_DIR/.git
 cp -Rf    $TMP_DIR/.git/*                            $TRAVIS_BUILD_DIR/.git/
