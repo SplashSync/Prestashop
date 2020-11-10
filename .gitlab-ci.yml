@@ -38,69 +38,47 @@ variables:
 stages:
   - tests
 
-before_script:
-  - apt-get update
-  - apt-get install -y zip unzip git
-  - php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
-  - php composer-setup.php --install-dir=/usr/local/bin --filename=composer
-  - php -r "unlink('composer-setup.php');"
-  - echo "memory_limit=-1" >> /usr/local/etc/php/conf.d/memeory.ini
 
 ################################################################
 # Functional Tests
 ################################################################
 
-tests:
-    image:      prestashop/prestashop:1.7-7.2-apache
+.functionnal:   &functionnal
     stage:      tests
     tags:       ['Dedicated']
     script:
 
       - cd $TMP_DIR
-
       ################################################################################
       # Build Module (Composer)
       - curl -s https://raw.githubusercontent.com/BadPixxel/Php-Sdk/main/travis/composer.sh | sh
-#      - ls -l $CI_PROJECT_DIR
-#      - ls -la $TMP_DIR
-#      - php modules/splashsync/vendor/bin/grumphp run -n --testsuite=travis
-#      - ls -l $TRAVIS_BUILD_DIR
-
       ################################################################################
       # Install Prestashop + WebServer (Apache & PHP-Fpm)
       - cat $CI_PROJECT_DIR/docker/docker-entrypoint.sh | bash
-
       ################################################################################
       # Install Module
       - bash $SCRIPTS_DIR/module/install.sh
-
       ################################################################################
       # Run Grumphp Main Test Sequence
       - cd $TMP_DIR
       - php modules/splashsync/vendor/bin/grumphp run -n --testsuite=travis
-
       ################################################################################
       # Run Grumphp CsFixer Test Sequence
       - cd $TRAVIS_BUILD_DIR
       - composer install
       - php modules/splashsync/vendor/bin/grumphp run -n --testsuite=csfixer
-
       ################################################################################
-      # Run Grumphp Phpstan Test Sequence
-#      - php modules/splashsync/vendor/bin/grumphp run -n --testsuite=phpstan
-
+      # Run Grumphp Php Stan Test Sequence
+      - php modules/splashsync/vendor/bin/grumphp run -n --testsuite=phpstan
       ################################################################################
       # Run PhpUnit Core Test Sequence (Will Enable the Module)
       - modules/splashsync/vendor/bin/phpunit -c travis/phpunit.xml.dist modules/splashsync/vendor/splash/phpcore/Tests/Core/
-
       ################################################################################
       # ALL PHP   =>  Run PhpUnit Local Sequence with No Data Inside
       - modules/splashsync/vendor/bin/phpunit -c travis/phpunit.xml.dist --testsuite=Local
-
       ################################################################################
       # Run PhpUnit Test Sequence (With Coverage)
       - php modules/splashsync/vendor/bin/phpunit -c travis/phpunit.xml.dist
-
       ################################################################################
       # Run PhpUnit Product with MSF Sequence
       - php travis/setup_shops.php && php travis/setup_shops.php
@@ -108,3 +86,26 @@ tests:
 
     services:
       - name: mysql:5.7
+
+Prestashop-1.7-Php-7.3:
+  image:      prestashop/prestashop:1.7-7.3-apache
+  <<: *functionnal
+
+Prestashop-1.7-Php-7.2:
+  image:      prestashop/prestashop:1.7-7.2-apache
+  <<: *functionnal
+
+Prestashop-1.6-Php-7.2:
+  image:      prestashop/prestashop:1.6-7.2-apache
+  <<: *functionnal
+
+################################################################
+# Before Script
+################################################################
+before_script:
+  - apt-get update
+  - apt-get install -y zip unzip git
+  - php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+  - php composer-setup.php --install-dir=/usr/local/bin --filename=composer
+  - php -r "unlink('composer-setup.php');"
+  - echo "memory_limit=-1" >> /usr/local/etc/php/conf.d/memeory.ini
