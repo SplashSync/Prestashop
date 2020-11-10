@@ -83,6 +83,8 @@ tests:
       ################################################################################
       # Run Grumphp CsFixer Test Sequence
       - cd $TRAVIS_BUILD_DIR
+      - ls -l modules/splashsync/vendor/bin
+      - php modules/splashsync/vendor/bin/grumphp run -n --testsuite=travis
       - php modules/splashsync/vendor/bin/grumphp run -n --testsuite=csfixer
       ################################################################################
       # Run Grumphp Phpstan Test Sequence
