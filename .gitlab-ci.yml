@@ -115,4 +115,5 @@ before_script:
   - php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
   - php composer-setup.php --install-dir=/usr/local/bin --filename=composer
   - php -r "unlink('composer-setup.php');"
-  - echo "memory_limit=-1" >> /usr/local/etc/php/conf.d/memeory.ini
+  - echo "memory_limit=-1" >> /usr/local/etc/php/conf.d/memory.ini
+  - echo "error_reporting = E_COMPILE_ERROR|E_RECOVERABLE_ERROR|E_ERROR|E_CORE_ERROR" >> /usr/local/etc/php/conf.d/errors.ini
