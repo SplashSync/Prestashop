@@ -34,12 +34,6 @@ cp app/config/parameters.yml.dist app/config/parameters.yml
 
 ################################################################################
 # Add PHP Extensions
-echo "Install Required PHP Extensions"
-phpenv config-add zip.ini
-phpenv config-add gd.ini
-
-################################################################################
-# Add PHP Extensions
 echo "Setup Apache & Php-Fpm"
 bash travis-scripts/setup-php-fpm.sh
 bash travis-scripts/setup-apache.sh
