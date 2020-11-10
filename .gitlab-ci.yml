@@ -53,6 +53,9 @@ tests:
 #    after_script:
 #        # Run After Script
 #        - cat  travis/after.sh | sh
+
+    services:
+      - name: mysql:5.7
     variables:
         DB_SERVER:                mysql
         PS_INSTALL_AUTO:          1
