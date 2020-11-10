@@ -29,6 +29,8 @@ cp -Rf    $TMP_DIR/modules/splashsync/*              $TRAVIS_BUILD_DIR/modules/s
 ################################################################################
 # Move Configuration Files to Prestashop Root Directory
 echo Move Configuration Files to Prestashop Root Directory
+mkdir     $TRAVIS_BUILD_DIR/grumphp
+mkdir     $TRAVIS_BUILD_DIR/travis
 cp -f     $TMP_DIR/grumphp.yml                       $TRAVIS_BUILD_DIR/grumphp.yml
 cp -f     $TMP_DIR/grumphp/*                         $TRAVIS_BUILD_DIR/grumphp/
 cp -f     $TMP_DIR/travis/*                          $TRAVIS_BUILD_DIR/travis/
