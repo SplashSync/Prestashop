@@ -23,7 +23,10 @@ variables:
   MYSQL_ROOT_PASSWORD:    admin
   DOCKER_DRIVER:          overlay2
   COMPOSER_MEMORY_LIMIT:  -1
-  CI_PROJECT_DIR:         /var/www/html
+  CI_PROJECT_DIR:         /tmp/SplashSync
+  TMP_DIR:                /tmp/SplashSync
+  SCRIPTS_DIR:            /tmp/SplashSync/travis
+  TRAVIS_BUILD_DIR:       /var/www/html
 
 ################################################################
 # Defined Pipeline Stages
@@ -35,9 +38,9 @@ stages:
 ################################################################
 
 tests:
+    image:      prestashop/prestashop:1.7-7.2-apache
     stage:      tests
-    tags:
-        - Dedicated
+    tags:       ['Dedicated']
     script:
       - echo $CI_PROJECT_DIR
       - ls -l /var/www/html
