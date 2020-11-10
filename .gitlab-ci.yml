@@ -68,8 +68,7 @@ tests:
 
       ################################################################################
       # Install Prestashop + WebServer (Apache & PHP-Fpm)
-#      - cat $CI_PROJECT_DIR/docker/docker-entrypoint.sh | bash
-#      - bash $SCRIPTS_DIR/prestashop/install.sh
+      - cat $CI_PROJECT_DIR/docker/docker-entrypoint.sh | bash
 
       ################################################################################
       # Install Module
@@ -84,13 +83,28 @@ tests:
       # Run Grumphp CsFixer Test Sequence
       - cd $TRAVIS_BUILD_DIR
       - composer install
-      - ls -l modules/splashsync/vendor/bin
-#      - php modules/splashsync/vendor/bin/grumphp run -n --testsuite=travis
       - php modules/splashsync/vendor/bin/grumphp run -n --testsuite=csfixer
+
       ################################################################################
       # Run Grumphp Phpstan Test Sequence
       - php modules/splashsync/vendor/bin/grumphp run -n --testsuite=phpstan
 
+      ################################################################################
+      # Run PhpUnit Core Test Sequence (Will Enable the Module)
+      - modules/splashsync/vendor/bin/phpunit -c travis/phpunit.xml.dist modules/splashsync/vendor/splash/phpcore/Tests/Core/
+
+      ################################################################################
+      # ALL PHP   =>  Run PhpUnit Local Sequence with No Data Inside
+      - modules/splashsync/vendor/bin/phpunit -c travis/phpunit.xml.dist --testsuite=Local
+
+      ################################################################################
+      # Run PhpUnit Test Sequence (With Coverage)
+      - php modules/splashsync/vendor/bin/phpunit -c travis/phpunit.xml.dist
+
+      ################################################################################
+      # Run PhpUnit Product with MSF Sequence
+      - php travis/setup_shops.php && php travis/setup_shops.php
+      - modules/splashsync/vendor/bin/phpunit -c travis/phpunit.products.xml
 #      - bash $SCRIPTS_DIR/module/setup.sh
 
 #        # Composer Build
