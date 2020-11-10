@@ -85,11 +85,11 @@ tests:
       - cd $TRAVIS_BUILD_DIR
       - composer install
       - ls -l modules/splashsync/vendor/bin
-      - php modules/splashsync/vendor/bin/grumphp run -n --testsuite=travis
+#      - php modules/splashsync/vendor/bin/grumphp run -n --testsuite=travis
       - php modules/splashsync/vendor/bin/grumphp run -n --testsuite=csfixer
       ################################################################################
       # Run Grumphp Phpstan Test Sequence
-      - then php modules/splashsync/vendor/bin/grumphp run -n --testsuite=phpstan
+      - php modules/splashsync/vendor/bin/grumphp run -n --testsuite=phpstan
 
 #      - bash $SCRIPTS_DIR/module/setup.sh
 
