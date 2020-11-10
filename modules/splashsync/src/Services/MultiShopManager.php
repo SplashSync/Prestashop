@@ -73,7 +73,7 @@ class MultiShopManager
     /**
      * Check if Splash MultiShop Feature is Active
      *
-     * @param bool    $force
+     * @param bool $force
      *
      * @return bool
      */
