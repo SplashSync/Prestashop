@@ -69,7 +69,7 @@ stages:
       - php modules/splashsync/vendor/bin/grumphp run -n --testsuite=csfixer
       ################################################################################
       # Run Grumphp Php Stan Test Sequence
-      - php modules/splashsync/vendor/bin/grumphp run -n --testsuite=phpstan
+      - if [ -f "/var/www/html/vendor/autoload.php" ]]; then php modules/splashsync/vendor/bin/grumphp run -n --testsuite=phpstan; fi
       ################################################################################
       # Run PhpUnit Core Test Sequence (Will Enable the Module)
       - modules/splashsync/vendor/bin/phpunit -c travis/phpunit.xml.dist modules/splashsync/vendor/splash/phpcore/Tests/Core/
