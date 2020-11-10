@@ -42,8 +42,9 @@ tests:
     stage:      tests
     tags:       ['Dedicated']
     script:
-      - echo $CI_PROJECT_DIR
-      - ls -l /var/www/html
+      - ls -l $CI_PROJECT_DIR
+      - ls -l $TMP_DIR
+      - ls -l $TRAVIS_BUILD_DIR
       - cat $CI_PROJECT_DIR/docker/docker-entrypoint.sh | bash
 #        # Composer Build
 #        - cat  travis/composer.sh | sh
