@@ -379,15 +379,10 @@ class Local implements LocalClassInterface
         if ($kernel) {
             return;
         }
-        if (!defined('_PS_MODE_DEV_')) {
-            define('_PS_MODE_DEV_', false);
-        }
         //====================================================================//
         // Create it manually
         require_once _PS_ROOT_DIR_.'/app/AppKernel.php';
-        $env = _PS_MODE_DEV_ ? 'dev' : 'prod';
-        $debug = _PS_MODE_DEV_ ? true : false;
-        $kernel = new \AppKernel($env, $debug);
+        $kernel = new \AppKernel('prod', false);
         $kernel->boot();
     }
 
