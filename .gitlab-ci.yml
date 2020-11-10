@@ -61,6 +61,7 @@ tests:
       - curl -s https://raw.githubusercontent.com/BadPixxel/Php-Sdk/main/travis/composer.sh | sh
 #      - ls -l $CI_PROJECT_DIR
       - ls -la $TMP_DIR
+      - php modules/splashsync/vendor/bin/grumphp run -n --testsuite=travis
 #      - ls -l $TRAVIS_BUILD_DIR
 #      - cat $CI_PROJECT_DIR/docker/docker-entrypoint.sh | bash
 #        # Composer Build
