@@ -68,7 +68,7 @@ tests:
 
       ################################################################################
       # Install Prestashop + WebServer (Apache & PHP-Fpm)
-      - cat $CI_PROJECT_DIR/docker/docker-entrypoint.sh | bash
+#      - cat $CI_PROJECT_DIR/docker/docker-entrypoint.sh | bash
 #      - bash $SCRIPTS_DIR/prestashop/install.sh
 
       ################################################################################
@@ -83,6 +83,7 @@ tests:
       ################################################################################
       # Run Grumphp CsFixer Test Sequence
       - cd $TRAVIS_BUILD_DIR
+      - composer install
       - ls -l modules/splashsync/vendor/bin
       - php modules/splashsync/vendor/bin/grumphp run -n --testsuite=travis
       - php modules/splashsync/vendor/bin/grumphp run -n --testsuite=csfixer
