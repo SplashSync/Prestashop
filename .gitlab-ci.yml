@@ -27,6 +27,12 @@ variables:
   TMP_DIR:                /builds/splashsync-modules/Prestashop
   SCRIPTS_DIR:            /builds/splashsync-modules/Prestashop/travis
   TRAVIS_BUILD_DIR:       /var/www/html
+  DB_SERVER:                mysql
+  PS_INSTALL_AUTO:          1
+  SPLASH_NO_APACHE:         1
+  SPLASH_WS_ID:             ThisIsPsLastKey
+  SPLASH_WS_KEY:            ThisTokenIsNotSoSecretChangeIt
+  SPLASH_WS_HOST:           http://test.splashsync.local/ws/soap
 
 ################################################################
 # Defined Pipeline Stages
@@ -56,9 +62,3 @@ tests:
 
     services:
       - name: mysql:5.7
-    variables:
-        DB_SERVER:                mysql
-        PS_INSTALL_AUTO:          1
-        SPLASH_WS_ID:             ThisIsPsLastKey
-        SPLASH_WS_KEY:            ThisTokenIsNotSoSecretChangeIt
-        SPLASH_WS_HOST:           http://test.splashsync.local/ws/soap

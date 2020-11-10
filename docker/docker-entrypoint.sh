@@ -121,5 +121,7 @@ php ./travis/setup_module.php
 echo "\n* Clear Cache...";
 rm -Rf /var/www/html/var
 
-echo "\n* Almost ! Starting web server now\n";
-exec apache2-foreground
+if [ -z "$SPLASH_NO_APACHE" ]; then
+  echo "\n* Almost ! Starting web server now\n";
+  exec apache2-foreground
+fi
