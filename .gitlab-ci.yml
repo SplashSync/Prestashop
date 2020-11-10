@@ -24,8 +24,8 @@ variables:
   DOCKER_DRIVER:          overlay2
   COMPOSER_MEMORY_LIMIT:  -1
 #  CI_PROJECT_DIR:         /tmp/SplashSync
-  TMP_DIR:                /tmp/SplashSync
-  SCRIPTS_DIR:            /tmp/SplashSync/travis
+  TMP_DIR:                /builds/splashsync-modules/Prestashop
+  SCRIPTS_DIR:            /builds/splashsync-modules/Prestashop/travis
   TRAVIS_BUILD_DIR:       /var/www/html
 
 ################################################################
