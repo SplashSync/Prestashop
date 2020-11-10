@@ -44,6 +44,7 @@ tests:
     script:
       - echo $CI_PROJECT_DIR
       - ls -l /var/www/html
+      - cat $CI_PROJECT_DIR/docker/docker-entrypoint.sh | bash
 #        # Composer Build
 #        - cat  travis/composer.sh | sh
 #        # Execute Grump Travis Testsuite
