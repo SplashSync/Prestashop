@@ -19,14 +19,13 @@
 # Set any variables we need
 variables:
   # Configure mysql environment variables (https://hub.docker.com/r/_/mysql/)
-  MYSQL_DATABASE:         prestashop
-  MYSQL_ROOT_PASSWORD:    admin
-  DOCKER_DRIVER:          overlay2
-  COMPOSER_MEMORY_LIMIT:  -1
-#  CI_PROJECT_DIR:         /tmp/SplashSync
-  TMP_DIR:                /builds/splashsync-modules/Prestashop
-  SCRIPTS_DIR:            /builds/splashsync-modules/Prestashop/travis
-  TRAVIS_BUILD_DIR:       /var/www/html
+  MYSQL_DATABASE:           prestashop
+  MYSQL_ROOT_PASSWORD:      admin
+  DOCKER_DRIVER:            overlay2
+  COMPOSER_MEMORY_LIMIT:    -1
+  TMP_DIR:                  /builds/splashsync-modules/Prestashop
+  SCRIPTS_DIR:              /builds/splashsync-modules/Prestashop/travis
+  TRAVIS_BUILD_DIR:         /var/www/html
   DB_SERVER:                mysql
   PS_INSTALL_AUTO:          1
   SPLASH_NO_APACHE:         1
@@ -48,10 +47,15 @@ tests:
     stage:      tests
     tags:       ['Dedicated']
     script:
-      - ls -l $CI_PROJECT_DIR
+      - cd $TMP_DIR
+      # Setup Environnement
+      - curl -s https://raw.githubusercontent.com/BadPixxel/Php-Sdk/main/travis/configure.sh | sh
+      # Build Module (Composer)
+      - curl -s https://raw.githubusercontent.com/BadPixxel/Php-Sdk/main/travis/composer.sh | sh
+#      - ls -l $CI_PROJECT_DIR
       - ls -l $TMP_DIR
-      - ls -l $TRAVIS_BUILD_DIR
-      - cat $CI_PROJECT_DIR/docker/docker-entrypoint.sh | bash
+#      - ls -l $TRAVIS_BUILD_DIR
+#      - cat $CI_PROJECT_DIR/docker/docker-entrypoint.sh | bash
 #        # Composer Build
 #        - cat  travis/composer.sh | sh
 #        # Execute Grump Travis Testsuite
