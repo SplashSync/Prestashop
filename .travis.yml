@@ -90,30 +90,37 @@ install:
 
 ################################################################################
 # Run Test Script
-script: 
+script:
 
+    ################################################################################
     # Run Grumphp Main Test Sequence
     - cd $TMP_DIR
     - php modules/splashsync/vendor/bin/grumphp run -n --testsuite=travis
 
     - cd $TRAVIS_BUILD_DIR
 
+    ################################################################################
     # Run Grumphp CsFixer Test Sequence
     - if [[ ${TRAVIS_PHP_VERSION:0:3} > "7.1" ]]; then php modules/splashsync/vendor/bin/grumphp run -n --testsuite=csfixer; fi
+    ################################################################################
     # Run Grumphp Phpstan Test Sequence
     - if [[ ${TRAVIS_PHP_VERSION:0:3} > "7.1" ]]; then php modules/splashsync/vendor/bin/grumphp run -n --testsuite=phpstan; fi
 
+    ################################################################################
     # Run PhpUnit Core Test Sequence (Will Enable the Module)
     - modules/splashsync/vendor/bin/phpunit -c travis/phpunit.xml.dist modules/splashsync/vendor/splash/phpcore/Tests/Core/
-    
+
+    ################################################################################
     # ALL PHP   =>  Run PhpUnit Local Sequence with No Data Inside
     - modules/splashsync/vendor/bin/phpunit -c travis/phpunit.xml.dist --testsuite=Local
-    
+
+    ################################################################################
     # Run PhpUnit Test Sequence (With Coverage)
     # - if [[ ${TRAVIS_PHP_VERSION:0:1} > "5" ]]; then phpdbg -qrr -d memory_limit=-1 modules/splashsync/vendor/bin/phpunit -c travis/phpunit.xml.dist; fi
     # Run PhpUnit Test Sequence (NO Coverage)
     - php modules/splashsync/vendor/bin/phpunit -c travis/phpunit.xml.dist
 
+    ################################################################################
     # Run PhpUnit Product with MSF Sequence
     - php travis/setup_shops.php && php travis/setup_shops.php
     - modules/splashsync/vendor/bin/phpunit -c travis/phpunit.products.xml

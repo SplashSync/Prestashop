@@ -55,16 +55,41 @@ tests:
     stage:      tests
     tags:       ['Dedicated']
     script:
+
       - cd $TMP_DIR
-      # Setup Environnement
-#      - curl -s https://raw.githubusercontent.com/BadPixxel/Php-Sdk/main/travis/configure.sh | sh
+
+      ################################################################################
       # Build Module (Composer)
       - curl -s https://raw.githubusercontent.com/BadPixxel/Php-Sdk/main/travis/composer.sh | sh
 #      - ls -l $CI_PROJECT_DIR
-      - ls -la $TMP_DIR
-      - php modules/splashsync/vendor/bin/grumphp run -n --testsuite=travis
+#      - ls -la $TMP_DIR
+#      - php modules/splashsync/vendor/bin/grumphp run -n --testsuite=travis
 #      - ls -l $TRAVIS_BUILD_DIR
-#      - cat $CI_PROJECT_DIR/docker/docker-entrypoint.sh | bash
+
+      ################################################################################
+      # Install Prestashop + WebServer (Apache & PHP-Fpm)
+      - cat $CI_PROJECT_DIR/docker/docker-entrypoint.sh | bash
+#      - bash $SCRIPTS_DIR/prestashop/install.sh
+
+      ################################################################################
+      # Install Module
+      - bash $SCRIPTS_DIR/module/install.sh
+
+      ################################################################################
+      # Run Grumphp Main Test Sequence
+      - cd $TMP_DIR
+      - php modules/splashsync/vendor/bin/grumphp run -n --testsuite=travis
+
+      ################################################################################
+      # Run Grumphp CsFixer Test Sequence
+      - cd $TRAVIS_BUILD_DIR
+      - php modules/splashsync/vendor/bin/grumphp run -n --testsuite=csfixer
+      ################################################################################
+      # Run Grumphp Phpstan Test Sequence
+      - then php modules/splashsync/vendor/bin/grumphp run -n --testsuite=phpstan
+
+#      - bash $SCRIPTS_DIR/module/setup.sh
+
 #        # Composer Build
 #        - cat  travis/composer.sh | sh
 #        # Execute Grump Travis Testsuite
