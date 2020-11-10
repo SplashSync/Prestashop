@@ -44,6 +44,7 @@ before_script:
   - php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
   - php composer-setup.php --install-dir=/usr/local/bin --filename=composer
   - php -r "unlink('composer-setup.php');"
+  - echp "memory_limit=-1" >> /usr/local/etc/php/conf.d/memeory.ini
 
 ################################################################
 # Functional Tests
