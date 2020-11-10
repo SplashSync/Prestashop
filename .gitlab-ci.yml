@@ -46,6 +46,12 @@ stages:
 .functionnal:   &functionnal
     stage:      tests
     tags:       ['Dedicated']
+    artifacts:
+      paths:
+        - $CI_PROJECT_DIR/splash.json
+        - $CI_PROJECT_DIR/splash.yml
+    services:
+      - name: mysql:5.7
     script:
 
       - cd $TMP_DIR
@@ -83,19 +89,20 @@ stages:
       # Run PhpUnit Product with MSF Sequence
       - php travis/setup_shops.php && php travis/setup_shops.php
       - modules/splashsync/vendor/bin/phpunit -c travis/phpunit.products.xml
+      ################################################################################
+      # Run Grumphp Splash Manifest Sequence
+      - php modules/splashsync/vendor/bin/grumphp run -n --tasks=build-manifest
 
-    services:
-      - name: mysql:5.7
 
-Presta-1.7-Php-7.3:
+Ps-1.7-Php-7.3:
   image:      prestashop/prestashop:1.7-7.3-apache
   <<: *functionnal
 
-Presta-1.7-Php-7.2:
+Ps-1.7-Php-7.2:
   image:      prestashop/prestashop:1.7-7.2-apache
   <<: *functionnal
 
-Presta-1.6-Php-7.2:
+Ps-1.6-Php-7.2:
   image:      prestashop/prestashop:1.6-7.2-apache
   <<: *functionnal
 
