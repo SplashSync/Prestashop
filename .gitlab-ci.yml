@@ -42,7 +42,7 @@ before_script:
   - apt-get update
   - apt-get install -y zip unzip
   - php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
-  - php composer-setup.php
+  - php composer-setup.php --install-dir=/usr/local/bin --filename=composer
   - php -r "unlink('composer-setup.php');"
 
 ################################################################
