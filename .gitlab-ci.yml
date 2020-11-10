@@ -40,7 +40,7 @@ tests:
         - Dedicated
     script:
       - echo $CI_PROJECT_DIR
-      - ls l- /var/www/html
+      - ls -l /var/www/html
 #        # Composer Build
 #        - cat  travis/composer.sh | sh
 #        # Execute Grump Travis Testsuite
