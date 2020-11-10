@@ -87,7 +87,7 @@ tests:
 
       ################################################################################
       # Run Grumphp Phpstan Test Sequence
-      - php modules/splashsync/vendor/bin/grumphp run -n --testsuite=phpstan
+#      - php modules/splashsync/vendor/bin/grumphp run -n --testsuite=phpstan
 
       ################################################################################
       # Run PhpUnit Core Test Sequence (Will Enable the Module)
@@ -105,15 +105,6 @@ tests:
       # Run PhpUnit Product with MSF Sequence
       - php travis/setup_shops.php && php travis/setup_shops.php
       - modules/splashsync/vendor/bin/phpunit -c travis/phpunit.products.xml
-#      - bash $SCRIPTS_DIR/module/setup.sh
-
-#        # Composer Build
-#        - cat  travis/composer.sh | sh
-#        # Execute Grump Travis Testsuite
-#        - cat travis/grumphp.sh | sh
-#    after_script:
-#        # Run After Script
-#        - cat  travis/after.sh | sh
 
     services:
       - name: mysql:5.7
