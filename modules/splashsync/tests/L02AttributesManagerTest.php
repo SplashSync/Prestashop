@@ -56,6 +56,7 @@ class L02AttributesManagerTest extends ObjectsCase
         $attributeGroup = Manager::touchGroup("Size", null);
         $this->assertNotEmpty($attributeGroup);
         $this->assertInstanceOf(AttributeGroup::class, $attributeGroup);
+        $this->assertIsIterable($attributeGroup->name);
         $this->assertContains("Size", $attributeGroup->name);
 
         //====================================================================//
