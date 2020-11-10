@@ -40,7 +40,7 @@ stages:
 
 before_script:
   - apt-get update
-  - apt-get install -y zip unzip
+  - apt-get install -y zip unzip git
   - php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
   - php composer-setup.php --install-dir=/usr/local/bin --filename=composer
   - php -r "unlink('composer-setup.php');"
@@ -60,7 +60,7 @@ tests:
       # Build Module (Composer)
       - curl -s https://raw.githubusercontent.com/BadPixxel/Php-Sdk/main/travis/composer.sh | sh
 #      - ls -l $CI_PROJECT_DIR
-      - ls -l $TMP_DIR
+      - ls -la $TMP_DIR
 #      - ls -l $TRAVIS_BUILD_DIR
 #      - cat $CI_PROJECT_DIR/docker/docker-entrypoint.sh | bash
 #        # Composer Build
