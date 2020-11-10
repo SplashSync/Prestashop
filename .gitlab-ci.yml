@@ -1,0 +1,56 @@
+################################################################################
+#
+#  This file is part of SplashSync Project.
+#
+#  Copyright (C) Splash Sync <www.splashsync.com>
+#
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+#
+#  For the full copyright and license information, please view the LICENSE
+#  file that was distributed with this source code.
+#
+#  @author Bernard Paquier <contact@splashsync.com>
+#
+################################################################################
+
+################################################################
+# Set any variables we need
+variables:
+  # Configure mysql environment variables (https://hub.docker.com/r/_/mysql/)
+  MYSQL_DATABASE:         prestashop
+  MYSQL_ROOT_PASSWORD:    admin
+  DOCKER_DRIVER:          overlay2
+  COMPOSER_MEMORY_LIMIT:  -1
+  CI_PROJECT_DIR:         /var/www/html
+
+################################################################
+# Defined Pipeline Stages
+stages:
+  - tests
+
+################################################################
+# Functional Tests
+################################################################
+
+tests:
+    stage:      tests
+    tags:
+        - Dedicated
+    script:
+      - echo $CI_PROJECT_DIR
+      - ls l- /var/www/html
+#        # Composer Build
+#        - cat  travis/composer.sh | sh
+#        # Execute Grump Travis Testsuite
+#        - cat travis/grumphp.sh | sh
+#    after_script:
+#        # Run After Script
+#        - cat  travis/after.sh | sh
+    variables:
+        DB_SERVER:                mysql
+        PS_INSTALL_AUTO:          1
+        SPLASH_WS_ID:             ThisIsPsLastKey
+        SPLASH_WS_KEY:            ThisTokenIsNotSoSecretChangeIt
+        SPLASH_WS_HOST:           http://test.splashsync.local/ws/soap

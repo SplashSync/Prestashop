@@ -118,10 +118,6 @@ script:
     - php travis/setup_shops.php && php travis/setup_shops.php
     - modules/splashsync/vendor/bin/phpunit -c travis/phpunit.products.xml
 
-    # Show Outdated Packages
-    - cd $MODULE_DIR    
-    - composer outdated -D
-
 ################################################################################
 # Run After Script
 after_script:
