@@ -38,6 +38,13 @@ variables:
 stages:
   - tests
 
+before_script:
+  - apt-get update
+  - apt-get install zip unzip
+  - php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+  - php composer-setup.php
+  - php -r "unlink('composer-setup.php');"
+
 ################################################################
 # Functional Tests
 ################################################################
@@ -49,7 +56,7 @@ tests:
     script:
       - cd $TMP_DIR
       # Setup Environnement
-      - curl -s https://raw.githubusercontent.com/BadPixxel/Php-Sdk/main/travis/configure.sh | sh
+#      - curl -s https://raw.githubusercontent.com/BadPixxel/Php-Sdk/main/travis/configure.sh | sh
       # Build Module (Composer)
       - curl -s https://raw.githubusercontent.com/BadPixxel/Php-Sdk/main/travis/composer.sh | sh
 #      - ls -l $CI_PROJECT_DIR
