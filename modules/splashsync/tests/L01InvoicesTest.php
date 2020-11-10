@@ -56,7 +56,7 @@ class L01InvoicesTest extends ObjectsCase
         $splashOrder = Splash::object("Order");
         $this->assertInstanceOf(Order::class, $splashOrder);
         $order = $splashOrder->load($objectId);
-        $this->assertInternalType('object', $order);
+        $this->assertIsObject($order);
         $this->assertNotEmpty($order);
 
         //====================================================================//

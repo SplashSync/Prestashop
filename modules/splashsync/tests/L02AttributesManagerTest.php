@@ -123,7 +123,7 @@ class L02AttributesManagerTest extends ObjectsCase
         //====================================================================//
         //   Attribute Group Value should be Empty
         $attributes = Manager::getAllAttributes($attributeGroup);
-        $this->assertInternalType("array", $attributes);
+        $this->assertIsArray($attributes);
         $this->assertEmpty($attributes);
 
         //====================================================================//

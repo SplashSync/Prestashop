@@ -135,7 +135,7 @@ trait StockTrait
             //====================================================================//
 
             //====================================================================//
-            // Direct Writtings
+            // Direct Writings
             case 'stock':
                 //====================================================================//
                 // Product uses Advanced Stock Manager => Cancel Product Stock Update
@@ -155,7 +155,8 @@ trait StockTrait
                         $this->ProductId,
                         $this->AttributeId,
                         $fieldData,
-                        Shop::getContextShopID(true)
+                        Shop::getContextShopID(true),
+                        (bool) Shop::getContextShopID(true)
                     );
                     $this->needUpdate($this->AttributeId ? "Attribute" : "object");
                 }

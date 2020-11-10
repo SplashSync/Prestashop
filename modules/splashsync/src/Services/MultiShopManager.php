@@ -73,14 +73,21 @@ class MultiShopManager
     /**
      * Check if Splash MultiShop Feature is Active
      *
+     * @param bool    $force
+     *
      * @return bool
      */
-    public static function isFeatureActive(): bool
+    public static function isFeatureActive($force = false): bool
     {
         //====================================================================//
         // Check if Multi-Shop Feature is Active
         if (!Shop::isFeatureActive()) {
             return false;
+        }
+        //====================================================================//
+        // Check if Multi-Shop Feature is Forced
+        if ($force && Configuration::get('PS_MULTISHOP_FEATURE_ACTIVE')) {
+            return true;
         }
         //====================================================================//
         // When Library is called in TRAVIS CI mode ONLY
@@ -149,7 +156,7 @@ class MultiShopManager
     {
         //====================================================================//
         // Check if Multi-Shop Feature is Active
-        if (!self::isFeatureActive() && empty($force)) {
+        if (!self::isFeatureActive($force)) {
             return true;
         }
         //====================================================================//

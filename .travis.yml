@@ -151,6 +151,8 @@ env:
   global:
     - SYMFONY_DEPRECATIONS_HELPER=disabled
     - GRUMPHP_BIN_DIR="modules/splashsync/vendor/bin"
+    - TMP_DIR=/tmp/SplashSync
+    - SCRIPTS_DIR=/tmp/SplashSync/travis
 
 ################################################################################
 # Tell Travis CI we're using Addons

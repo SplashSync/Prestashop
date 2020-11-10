@@ -20,11 +20,6 @@ echo "----------------------------------------------------"
 echo "--> Move Module to Temporary Folder"
 echo "----------------------------------------------------"
 
-################################################################################
-# Create Env. Variables
-export TMP_DIR=/tmp/SplashSync
-export SCRIPTS_DIR=/tmp/SplashSync/travis
-
 echo "--> Move Module Contents to Tmp Folder"
 mkdir     $TMP_DIR
 mkdir     $TMP_DIR/.git

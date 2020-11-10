@@ -339,7 +339,7 @@ trait AttributesTrait
     }
 
     //====================================================================//
-    // PRIVATE - Fields Writting Functions
+    // PRIVATE - Fields Writing Functions
     //====================================================================//
 
     /**
