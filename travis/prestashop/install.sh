@@ -41,7 +41,8 @@ bash travis-scripts/setup-apache.sh
 ################################################################################
 # Force Composer 1
 echo "Composer => Force Composer 1";
-composer self-update --1;
+composer self-update 1.10.17;
+composer --version
 
 ################################################################################
 # Composer Update

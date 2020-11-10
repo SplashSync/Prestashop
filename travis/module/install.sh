@@ -32,8 +32,8 @@ echo Move Configuration Files to Prestashop Root Directory
 mkdir     $TRAVIS_BUILD_DIR/grumphp
 mkdir     $TRAVIS_BUILD_DIR/travis
 cp -f     $TMP_DIR/grumphp.yml                       $TRAVIS_BUILD_DIR/grumphp.yml
-cp -f     $TMP_DIR/grumphp/*                         $TRAVIS_BUILD_DIR/grumphp/
-cp -f     $TMP_DIR/travis/*                          $TRAVIS_BUILD_DIR/travis/
+cp -Rf    $TMP_DIR/grumphp/*                         $TRAVIS_BUILD_DIR/grumphp/
+cp -Rf    $TMP_DIR/travis/*                          $TRAVIS_BUILD_DIR/travis/
 
 ################################################################################
 # Move Git Files to Prestashop Root Directory
