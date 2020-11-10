@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 ################################################################################
 #
 #  This file is part of SplashSync Project.
@@ -17,16 +17,24 @@
 ################################################################################
 
 echo "----------------------------------------------------"
-echo "--> After Script"
+echo "--> Move Module to Temporary Folder"
 echo "----------------------------------------------------"
 
-echo "Composer ==> Outdated Packages"
-composer outdated -D
+################################################################################
+# Create Env. Variables
+export TMP_DIR=/tmp/SplashSync
+export SCRIPTS_DIR=/tmp/SplashSync/travis
 
-echo "PhpLoc ==> Packages Statistics"
-wget https://phar.phpunit.de/phploc.phar -q
-php phploc.phar modules/splashsync --exclude=modules/splashsync/vendor
-rm phploc.phar
+echo "--> Move Module Contents to Tmp Folder"
+mkdir     $TMP_DIR
+mkdir     $TMP_DIR/.git
+mv -f     $TRAVIS_BUILD_DIR/*               $TMP_DIR
+mv -f     $TRAVIS_BUILD_DIR/.git/*          $TMP_DIR/.git
+mv -f     $TRAVIS_BUILD_DIR/.travis.yml     $TMP_DIR/.travis.yml
 
-echo "Installed PHP Extensions"
-php -m
+echo "--> Delete Remaining Contents from Build Folder"
+rm -Rf    $TRAVIS_BUILD_DIR/.git
+rm -Rf    $TRAVIS_BUILD_DIR/.gitignore
+rm -Rf    $TRAVIS_BUILD_DIR/.travis.yml
+rm -Rf    $TRAVIS_BUILD_DIR/*
+

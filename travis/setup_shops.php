@@ -52,7 +52,7 @@ if (MSM::isFeatureActive() && isset($options["s"]) && is_numeric($options["s"]))
     Configuration::updateValue('SPLASH_MSF_FOCUSED', $shopId ? $shopId : false);
     MSM::setContext();
     Configuration::updateValue('SPLASH_MSF_FOCUSED', $shopId ? $shopId : false);
-    Splash::log()->msg("Setuped for ".($shopId ? "Shop ".$shopId : "All Shops").PHP_EOL);
+    Splash::log()->msg("Setup for ".($shopId ? "Shop ".$shopId : "All Shops").PHP_EOL);
 }
 
 echo Splash::log()->getConsoleLog(true).PHP_EOL;

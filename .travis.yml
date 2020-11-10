@@ -66,32 +66,36 @@ jobs:
 # Install & Configure Environnement
 install:
 
-    - export MODULE_DIR=/tmp/SplashSync
-    - export MODULE_SCRIPTS_DIR=/tmp/SplashSync/travis
+    ################################################################################
+    # Setup Travis
+    - curl -s https://raw.githubusercontent.com/BadPixxel/Php-Sdk/main/travis/configure.sh | sh
+    # Build Module (Composer)
+    - curl -s https://raw.githubusercontent.com/BadPixxel/Php-Sdk/main/travis/composer.sh | sh
+    # Move Module to Tmp Folder
+    - bash travis/module/move.sh
 
-    #   Move Module to Tmp Folder
-    - bash travis/move_module.sh
-    #   Install Prestashop
-    - bash $MODULE_SCRIPTS_DIR/install_prestashop.sh
-    #    Setup WebServer (Apache & PHP-Fpm)
-    - bash $MODULE_SCRIPTS_DIR/install_webserver.sh
-    #   Start Prestashop (Composer & More)
-    - bash $MODULE_SCRIPTS_DIR/start_prestashop.sh
-    #   Install Module
-    - bash $MODULE_SCRIPTS_DIR/install_module.sh
+    ################################################################################
+    # Install Prestashop + WebServer (Apache & PHP-Fpm)
+    - bash $SCRIPTS_DIR/prestashop/install.sh
+
+    ################################################################################
+    # Install Module
+    - bash $SCRIPTS_DIR/module/install.sh
+    - bash $SCRIPTS_DIR/module/setup.sh
 
 ################################################################################
 # Run Test Script
 script: 
-    - cd $MODULE_DIR
-    
-    # Run Grump Main Test Sequence
+
+    # Run Grumphp Main Test Sequence
+    - cd $TMP_DIR
     - php modules/splashsync/vendor/bin/grumphp run -n --testsuite=travis
+
     - cd $TRAVIS_BUILD_DIR
 
-    # With PHP 7.2 => Execute CsFixer
+    # Run Grumphp CsFixer Test Sequence
     - if [[ ${TRAVIS_PHP_VERSION:0:3} > "7.1" ]]; then php modules/splashsync/vendor/bin/grumphp run -n --testsuite=csfixer; fi
-    # With PHP 7.2 => Execute Phpstan
+    # Run Grumphp Phpstan Test Sequence
     - if [[ ${TRAVIS_PHP_VERSION:0:3} > "7.1" ]]; then php modules/splashsync/vendor/bin/grumphp run -n --testsuite=phpstan; fi
 
     # Run PhpUnit Core Test Sequence (Will Enable the Module)
@@ -100,10 +104,10 @@ script:
     # ALL PHP   =>  Run PhpUnit Local Sequence with No Data Inside
     - modules/splashsync/vendor/bin/phpunit -c travis/phpunit.xml.dist --testsuite=Local
     
-    # PHP7+     =>  Run PhpUnit Main Sequence
-    - if [[ ${TRAVIS_PHP_VERSION:0:1} > "5" ]]; then phpdbg -qrr -d memory_limit=-1 modules/splashsync/vendor/bin/phpunit -c travis/phpunit.xml.dist; fi
-    # PHP5.6    =>  Without Php Debugger (Coverage x2 Faster)
-    - if [[ ${TRAVIS_PHP_VERSION:0:1} < "7" ]]; then modules/splashsync/vendor/bin/phpunit -c travis/phpunit.xml.dist; fi
+    # Run PhpUnit Test Sequence (With Coverage)
+    # - if [[ ${TRAVIS_PHP_VERSION:0:1} > "5" ]]; then phpdbg -qrr -d memory_limit=-1 modules/splashsync/vendor/bin/phpunit -c travis/phpunit.xml.dist; fi
+    # Run PhpUnit Test Sequence (NO Coverage)
+    - php modules/splashsync/vendor/bin/phpunit -c travis/phpunit.xml.dist
 
     # Run PhpUnit Product with MSF Sequence
     - php travis/setup_shops.php && php travis/setup_shops.php
@@ -116,7 +120,8 @@ script:
 ################################################################################
 # Run After Script
 after_script:
-  - composer outdated -D
+  - cd $TMP_DIR
+  - bash $SCRIPTS_DIR/after.sh
 
 ################################################################################
 # GENERIC CONFIGURATION
