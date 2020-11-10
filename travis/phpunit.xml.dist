@@ -7,7 +7,7 @@
     colors                      = "true"
     convertErrorsToExceptions   = "true"
     convertNoticesToExceptions  = "false"
-    convertWarningsToExceptions = "true"
+    convertWarningsToExceptions = "false"
     processIsolation            = "false"
     stopOnFailure               = "true"
     bootstrap                   = "../modules/splashsync/vendor/autoload.php" 
