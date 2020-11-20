@@ -23,8 +23,8 @@ variables:
   MYSQL_ROOT_PASSWORD:      admin
   DOCKER_DRIVER:            overlay2
   COMPOSER_MEMORY_LIMIT:    -1
-  TMP_DIR:                  /builds/splashsync/Prestashop
-  SCRIPTS_DIR:              /builds/splashsync/Prestashop/travis
+  TMP_DIR:                  /builds/SplashSync/Prestashop
+  SCRIPTS_DIR:              /builds/SplashSync/Prestashop/travis
   TRAVIS_BUILD_DIR:         /var/www/html
   DB_SERVER:                mysql
   PS_INSTALL_AUTO:          1
