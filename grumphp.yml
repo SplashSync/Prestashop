@@ -31,11 +31,12 @@ parameters:
 
     # For Building Splash Documentation
     doc-src:            '/modules/splashsync/docs'
+    doc-target:         '/public'
     doc-contents:       ["splash", "php-docker"]
 
     # For Building Splash Module
     mod-src:            '/modules/splashsync'
-    mod-file:           "splashsync.1.5.655"
+    mod-file:           "splashsync.1.5.6"
 
     # For Building Splash Manifest
     yml-enable:     false

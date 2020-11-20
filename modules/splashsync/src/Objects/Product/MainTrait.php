@@ -227,31 +227,6 @@ trait MainTrait
     }
 
     /**
-     * Read Dimenssion Field with Unit Convertion
-     *
-     * @param string $fieldName Field Identifier / Name
-     *
-     * @return void
-     */
-    private function getDimField($fieldName)
-    {
-        //====================================================================//
-        //  Load System Dimenssion Unit
-        $dimUnit = Configuration::get('PS_DIMENSION_UNIT');
-        //====================================================================//
-        //  Read Field Data
-        $realData = $this->object->{ $fieldName };
-        //====================================================================//
-        //  Convert Current Value
-        if (isset(static::$psDims[$dimUnit])) {
-            $realData = self::units()->normalizeLength((float) $realData, static::$psDims[$dimUnit]);
-        }
-        //====================================================================//
-        //  return Normalized Value
-        $this->out[$fieldName] = $realData;
-    }
-
-    /**
      * Write Given Fields
      *
      * @param string $fieldName Field Identifier / Name
@@ -259,7 +234,7 @@ trait MainTrait
      *
      * @return void
      */
-    private function setMainFields($fieldName, $fieldData)
+    protected function setMainFields($fieldName, $fieldData)
     {
         //====================================================================//
         // WRITE Field
@@ -283,6 +258,7 @@ trait MainTrait
                 // If Variable Product
                 if (abs($currentWeight - $fieldData) > 1E-6) {
                     $this->Attribute->{$fieldName} = $fieldData - $this->object->{$fieldName};
+                    $this->addMsfUpdateFields("Attribute", $fieldName);
                     $this->needUpdate("Attribute");
                 }
 
@@ -307,7 +283,7 @@ trait MainTrait
      *
      * @return void
      */
-    private function setBarCodeFields($fieldName, $fieldData)
+    protected function setBarCodeFields($fieldName, $fieldData)
     {
         //====================================================================//
         // WRITE Field
@@ -333,7 +309,32 @@ trait MainTrait
     }
 
     /**
-     * Write Dimension Field with Unit Convertion
+     * Read Dimenssion Field with Unit Convertion
+     *
+     * @param string $fieldName Field Identifier / Name
+     *
+     * @return void
+     */
+    private function getDimField($fieldName)
+    {
+        //====================================================================//
+        //  Load System Dimension Unit
+        $dimUnit = Configuration::get('PS_DIMENSION_UNIT');
+        //====================================================================//
+        //  Read Field Data
+        $realData = $this->object->{ $fieldName };
+        //====================================================================//
+        //  Convert Current Value
+        if (isset(static::$psDims[$dimUnit])) {
+            $realData = self::units()->normalizeLength((float) $realData, static::$psDims[$dimUnit]);
+        }
+        //====================================================================//
+        //  return Normalized Value
+        $this->out[$fieldName] = $realData;
+    }
+
+    /**
+     * Write Dimension Field with Unit Conversion
      *
      * @param string $fieldName Field Identifier / Name
      * @param mixed  $fieldData Field Data

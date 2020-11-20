@@ -46,3 +46,4 @@ save-commands.json
 /reboot.sh
 /.gh-pages/
 /modules/splashsync/.php_cs.cache
+/public/
