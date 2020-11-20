@@ -69,7 +69,7 @@ stages:
       - cd $TMP_DIR
       ################################################################################
       # Build Module (Composer)
-      - curl -s https://raw.githubusercontent.com/BadPixxel/Php-Sdk/main/travis/composer.sh | sh
+      - curl -s https://raw.githubusercontent.com/BadPixxel/Php-Sdk/main/ci/composer.sh | sh
       ################################################################################
       # Install Prestashop + WebServer (Apache & PHP-Fpm)
       - cat $CI_PROJECT_DIR/docker/docker-entrypoint.sh | bash
