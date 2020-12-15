@@ -24,7 +24,7 @@ title: Prestashop Module
 # Subtitle of the Site (Generaly DOC)
 subtitle: DOC
 # the subpath of your site, e.g. /blog
-baseurl: "/Prestashop" 
+baseurl: "/Prestashop"
 # Description of the Bundle/Module
 description:    "Prestashop Module for Splash Sync."
 # Package Code on Packagist
