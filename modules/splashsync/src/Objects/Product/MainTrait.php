@@ -20,6 +20,7 @@ use Splash\Components\UnitConverter as Units;
 use Splash\Local\Services\MultiShopManager as MSM;
 use Tools;
 use Translate;
+use Validate;
 
 /**
  * Access to Product Main Fields
@@ -289,16 +290,25 @@ trait MainTrait
         // WRITE Field
         switch ($fieldName) {
             //====================================================================//
-            // PRODUCT BARCODES
+            // SUPPLIER REF
             //====================================================================//
             case 'supplier_reference':
+                $this->AttributeId
+                    ? $this->setSimple($fieldName, $fieldData, "Attribute")
+                    : $this->setSimple($fieldName, $fieldData);
+
+                break;
+            //====================================================================//
+            // PRODUCT BARCODES
+            //====================================================================//
             case 'upc':
             case 'ean13':
             case 'isbn':
-                if ($this->AttributeId) {
-                    $this->setSimple($fieldName, $fieldData, "Attribute");
-                } else {
-                    $this->setSimple($fieldName, $fieldData);
+                $validateMethod = "is".ucwords($fieldName);
+                if (method_exists(Validate::class, $validateMethod) && Validate::$validateMethod($fieldData)) {
+                    $this->AttributeId
+                        ? $this->setSimple($fieldName, $fieldData, "Attribute")
+                        : $this->setSimple($fieldName, $fieldData);
                 }
 
                 break;
@@ -309,7 +319,7 @@ trait MainTrait
     }
 
     /**
-     * Read Dimenssion Field with Unit Convertion
+     * Read Dimension Field with Unit Conversion
      *
      * @param string $fieldName Field Identifier / Name
      *

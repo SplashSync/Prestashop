@@ -20,6 +20,7 @@ use Shop;
 use Splash\Core\SplashCore      as Splash;
 use StockAvailable;
 use Translate;
+use Validate;
 
 /**
  * Access to Product Stock Fields
@@ -165,12 +166,14 @@ trait StockTrait
             //====================================================================//
             // Minimum Order Quantity
             case 'minimal_quantity':
-                if ($this->AttributeId) {
-                    $this->setSimple($fieldName, $fieldData, "Attribute");
-                    $this->addMsfUpdateFields("Attribute", "minimal_quantity");
-                } else {
-                    $this->setSimple($fieldName, $fieldData);
-                    $this->addMsfUpdateFields("Product", "minimal_quantity");
+                if (Validate::isUnsignedInt($fieldData)) {
+                    if ($this->AttributeId) {
+                        $this->setSimple($fieldName, $fieldData, "Attribute");
+                        $this->addMsfUpdateFields("Attribute", "minimal_quantity");
+                    } else {
+                        $this->setSimple($fieldName, $fieldData);
+                        $this->addMsfUpdateFields("Product", "minimal_quantity");
+                    }
                 }
 
                 break;
