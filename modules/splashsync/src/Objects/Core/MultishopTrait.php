@@ -16,6 +16,7 @@
 namespace Splash\Local\Objects\Core;
 
 use Shop;
+use Splash\Local\Objects\CreditNote;
 use Splash\Local\Objects\Invoice;
 use Translate;
 
@@ -126,6 +127,10 @@ trait MultishopTrait
      */
     protected function getObjectShopId(): int
     {
-        return ($this instanceof Invoice) ? $this->Order->id_shop : $this->object->id_shop;
+        if (($this instanceof Invoice) || ($this instanceof CreditNote)) {
+            return $this->Order->id_shop;
+        }
+
+        return $this->object->id_shop;
     }
 }
