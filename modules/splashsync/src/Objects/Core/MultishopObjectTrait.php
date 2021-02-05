@@ -166,6 +166,7 @@ trait MultishopObjectTrait
             //====================================================================//
             // Write Data for Single Shop Context
             MSM::setContext($shopId);
+            /** @var string|null $objectId */
             $multiShopObjectId = $this->coreSet($objectId, $multiShopData);
             if (empty($multiShopObjectId)) {
                 Splash::log()->errTrace(sprintf("Writing to Shop %d errored.", $shopId));

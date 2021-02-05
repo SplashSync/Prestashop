@@ -128,7 +128,7 @@ trait MultishopTrait
      */
     protected function getObjectShopId(): int
     {
-        /** @var CreditNote|Invoice|Order $this */
+        // @phpstan-ignore-next-line
         if (($this instanceof Invoice) || ($this instanceof CreditNote)) {
             return $this->Order->id_shop;
         }
