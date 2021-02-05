@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2020 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) 2015-2021 Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -151,11 +151,12 @@ trait DescTrait
                 case 'name':
                     //====================================================================//
                     // Source Catalog Mode => Name isn't ReadOnly but Write is Forbidden
-                    if(self::isSourceCatalogMode()) {
+                    if (self::isSourceCatalogMode()) {
                         unset($this->in[$fieldName]);
 
                         break;
                     }
+                    // no break
                 case 'description':
                     $this->setMultilang($baseFieldName, $idLang, $fieldData);
                     $this->addMsfUpdateFields("Product", $baseFieldName, $idLang);

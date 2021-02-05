@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2020 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) 2015-2021 Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -491,13 +491,13 @@ class Local implements LocalClassInterface
      */
     private function selfTestInfos()
     {
-        if (!empty(Splash::configuration()->PsUseMultiShopParser))  {
+        if (!empty(Splash::configuration()->PsUseMultiShopParser)) {
             Splash::log()->war("FEATURE: Multi-shop mode is Active!");
-            if (!empty(Splash::configuration()->PsIsLightMultiShop))  {
+            if (!empty(Splash::configuration()->PsIsLightMultiShop)) {
                 Splash::log()->war("FEATURE: Multi-shop light mode is also Active...");
             }
         }
-        if (!empty(Splash::configuration()->PsIsSourceCatalog))  {
+        if (!empty(Splash::configuration()->PsIsSourceCatalog)) {
             Splash::log()->war("FEATURE: Source Catalog mode is Active! Your products informations are now readonly.");
         }
     }
