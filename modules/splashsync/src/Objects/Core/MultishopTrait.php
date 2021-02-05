@@ -16,8 +16,6 @@
 namespace Splash\Local\Objects\Core;
 
 use Shop;
-use Splash\Local\Objects\CreditNote;
-use Splash\Local\Objects\Invoice;
 use Translate;
 
 /**
@@ -127,10 +125,10 @@ trait MultishopTrait
      */
     protected function getObjectShopId(): int
     {
-        if (in_array(\Splash\Local\Objects\Invoice\CRUDTrait::class, class_uses($this))) {
+        if (in_array(\Splash\Local\Objects\Invoice\CRUDTrait::class, class_uses($this), true)) {
             return $this->Order->id_shop;
         }
-        if (in_array(\Splash\Local\Objects\CreditNote\CRUDTrait::class, class_uses($this))) {
+        if (in_array(\Splash\Local\Objects\CreditNote\CRUDTrait::class, class_uses($this), true)) {
             return $this->Order->id_shop;
         }
 
