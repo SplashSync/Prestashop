@@ -18,7 +18,6 @@ namespace Splash\Local\Objects\Core;
 use Shop;
 use Splash\Local\Objects\CreditNote;
 use Splash\Local\Objects\Invoice;
-use Splash\Local\Objects\Order;
 use Translate;
 
 /**
