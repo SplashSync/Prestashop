@@ -50,6 +50,7 @@ trait MetaDataTrait
                 ->Description($groupName." ".Translate::getAdminTranslation("Meta description", "AdminProducts"))
                 ->Group($groupName)
                 ->MicroData("http://schema.org/Article", "headline")
+                ->isReadOnly(self::isSourceCatalogMode())
                 ->setMultilang($isoLang);
 
             //====================================================================//
@@ -60,6 +61,7 @@ trait MetaDataTrait
                 ->Description($groupName." ".Translate::getAdminTranslation("Meta title", "AdminProducts"))
                 ->Group($groupName)
                 ->MicroData("http://schema.org/Article", "name")
+                ->isReadOnly(self::isSourceCatalogMode())
                 ->setMultilang($isoLang);
 
             //====================================================================//
@@ -81,6 +83,7 @@ trait MetaDataTrait
                 ->Description($groupName." ".Translate::getAdminTranslation("Friendly URL", "AdminProducts"))
                 ->Group($groupName)
                 ->MicroData("http://schema.org/Product", "urlRewrite")
+                ->isReadOnly(self::isSourceCatalogMode())
                 ->setMultilang($isoLang);
         }
     }
@@ -132,6 +135,11 @@ trait MetaDataTrait
      */
     protected function setMetaDataFields($fieldName, $fieldData)
     {
+        //====================================================================//
+        // Source Catalog Mode => Write is Forbidden
+        if(self::isSourceCatalogMode()) {
+            return;
+        }
         //====================================================================//
         // Walk on Available Languages
         foreach (LanguagesManager::getAvailableLanguages() as $idLang => $isoLang) {

@@ -18,6 +18,7 @@ namespace Splash\Local\Objects\Product\Variants;
 use Combination;
 use Splash\Core\SplashCore      as Splash;
 use Splash\Local\Services\LanguagesManager as SLM;
+use Splash\Local\Services\MultiShopManager as MSM;
 use Translate;
 
 /**
@@ -95,7 +96,11 @@ trait CoreTrait
             ->InList("variants")
             ->MicroData("http://schema.org/Product", "Variants")
             ->isNotTested();
-
+        //====================================================================//
+        // MSF Light Mode => Visible Only on ALL Sites
+        if (MSM::isLightMode()) {
+            $this->fieldsFactory()->addOption("shop", MSM::MODE_ALL);
+        }
         //====================================================================//
         // Product Variation List - Product SKU
         $this->fieldsFactory()->Create(SPL_T_VARCHAR)
@@ -104,6 +109,11 @@ trait CoreTrait
             ->InList("variants")
             ->MicroData("http://schema.org/Product", "VariationName")
             ->isReadOnly();
+        //====================================================================//
+        // MSF Light Mode => Visible Only on ALL Sites
+        if (MSM::isLightMode()) {
+            $this->fieldsFactory()->addOption("shop", MSM::MODE_ALL);
+        }
     }
 
     //====================================================================//

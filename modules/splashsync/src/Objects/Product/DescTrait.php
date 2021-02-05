@@ -29,7 +29,7 @@ use Translate;
 trait DescTrait
 {
     //====================================================================//
-    //  Multilanguage Fields
+    //  Multi-language Fields
     //====================================================================//
 
     /**
@@ -67,6 +67,7 @@ trait DescTrait
                 ->MicroData("http://schema.org/Product", "name")
                 ->setMultilang($isoLang)
                 ->isListed(LanguagesManager::isDefaultLanguage($isoLang))
+                ->isReadOnly(self::isSourceCatalogMode())
                 ->isReadOnly();
 
             //====================================================================//
@@ -76,6 +77,7 @@ trait DescTrait
                 ->Name(Translate::getAdminTranslation("description", "AdminProducts"))
                 ->Group($groupName)
                 ->MicroData("http://schema.org/Article", "articleBody")
+                ->isReadOnly(self::isSourceCatalogMode())
                 ->setMultilang($isoLang);
 
             //====================================================================//
@@ -85,6 +87,7 @@ trait DescTrait
                 ->Name(Translate::getAdminTranslation("Short Description", "AdminProducts"))
                 ->Group($groupName)
                 ->MicroData("http://schema.org/Product", "description")
+                ->isReadOnly(self::isSourceCatalogMode())
                 ->setMultilang($isoLang);
         }
     }
@@ -103,7 +106,7 @@ trait DescTrait
         // Walk on Available Languages
         foreach (LanguagesManager::getAvailableLanguages() as $idLang => $isoLang) {
             //====================================================================//
-            // Decode Multilang Field Name
+            // Decode Multi-lang Field Name
             $baseFieldName = LanguagesManager::fieldNameDecode($fieldName, $isoLang);
             //====================================================================//
             // READ Fields
@@ -136,16 +139,23 @@ trait DescTrait
      */
     protected function setDescFields($fieldName, $fieldData)
     {
-        //====================================================================//prod
+        //====================================================================//
         // Walk on Available Languages
         foreach (LanguagesManager::getAvailableLanguages() as $idLang => $isoLang) {
             //====================================================================//
-            // Decode Multilang Field Name
+            // Decode Multi-lang Field Name
             $baseFieldName = LanguagesManager::fieldNameDecode($fieldName, $isoLang);
             //====================================================================//
             // WRITE Field
             switch ($baseFieldName) {
                 case 'name':
+                    //====================================================================//
+                    // Source Catalog Mode => Name isn't ReadOnly but Write is Forbidden
+                    if(self::isSourceCatalogMode()) {
+                        unset($this->in[$fieldName]);
+
+                        break;
+                    }
                 case 'description':
                     $this->setMultilang($baseFieldName, $idLang, $fieldData);
                     $this->addMsfUpdateFields("Product", $baseFieldName, $idLang);

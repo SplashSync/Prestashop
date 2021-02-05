@@ -84,8 +84,10 @@ trait ImagesTrait
             ->InList("images")
             ->Name(Translate::getAdminTranslation("Images", "AdminProducts"))
             ->Group($groupName)
-            ->MicroData("http://schema.org/Product", "image");
-        if (Tools::version_compare(_PS_VERSION_, "1.7.7", '<=')) {
+            ->MicroData("http://schema.org/Product", "image")
+            ->isReadOnly(self::isSourceCatalogMode())
+        ;
+        if (Tools::version_compare(_PS_VERSION_, "1.7.7", '<=') || MSM::isLightMode()) {
             $this->fieldsFactory()->addOption("shop", MSM::MODE_ALL);
         }
 
@@ -97,8 +99,10 @@ trait ImagesTrait
             ->Name(Translate::getAdminTranslation("Position", "AdminProducts"))
             ->MicroData("http://schema.org/Product", "positionImage")
             ->Group($groupName)
-            ->isNotTested();
-        if (Tools::version_compare(_PS_VERSION_, "1.7.7", '<=')) {
+            ->isReadOnly(self::isSourceCatalogMode())
+            ->isNotTested()
+        ;
+        if (Tools::version_compare(_PS_VERSION_, "1.7.7", '<=') || MSM::isLightMode()) {
             $this->fieldsFactory()->addOption("shop", MSM::MODE_ALL);
         }
 
@@ -110,8 +114,10 @@ trait ImagesTrait
             ->Name(Translate::getAdminTranslation("Cover", "AdminProducts"))
             ->MicroData("http://schema.org/Product", "isCover")
             ->Group($groupName)
-            ->isNotTested();
-        if (Tools::version_compare(_PS_VERSION_, "1.7.7", '<=')) {
+            ->isReadOnly(self::isSourceCatalogMode())
+            ->isNotTested()
+        ;
+        if (Tools::version_compare(_PS_VERSION_, "1.7.7", '<=') || MSM::isLightMode()) {
             $this->fieldsFactory()->addOption("shop", MSM::MODE_ALL);
         }
 
@@ -123,8 +129,10 @@ trait ImagesTrait
             ->Name(Translate::getAdminTranslation("Visible", "AdminProducts"))
             ->MicroData("http://schema.org/Product", "isVisibleImage")
             ->Group($groupName)
-            ->isNotTested();
-        if (Tools::version_compare(_PS_VERSION_, "1.7.7", '<=')) {
+            ->isReadOnly(self::isSourceCatalogMode())
+            ->isNotTested()
+        ;
+        if (Tools::version_compare(_PS_VERSION_, "1.7.7", '<=') || MSM::isLightMode()) {
             $this->fieldsFactory()->addOption("shop", MSM::MODE_ALL);
         }
     }

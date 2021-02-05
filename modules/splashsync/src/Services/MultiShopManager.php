@@ -100,6 +100,25 @@ class MultiShopManager
     }
 
     /**
+     * Check if Msf Light Mode is Active
+     *
+     * In this mode:
+     * - [shop_X] Products Textual Informations are Read Only
+     *
+     * @return bool
+     */
+    public static function isLightMode(): bool
+    {
+        global $isLightMsfMode;
+
+        if(!isset($isLightMsfMode)) {
+            $isLightMsfMode = !empty(Splash::configuration()->PsIsLightMultiShop);
+        }
+
+        return $isLightMsfMode;
+    }
+
+    /**
      * Check if Splash MultiShop Feature is Focused on a Specific Shop
      * ONLY USED FOR PHPUNIT TESTS
      *

@@ -83,11 +83,11 @@ class Local implements LocalClassInterface
         $parameters["ConfiguratorPath"] = $this->getHomeFolder()."/config/splash.json";
 
         //====================================================================//
-        // Overide Module Parameters with Local User Selected Default Lang
+        // Override Module Parameters with Local User Selected Default Lang
         $parameters["DefaultLanguage"] = SLM::getDefaultLanguage();
 
         //====================================================================//
-        // Overide Module Local Name in Logs
+        // Override Module Local Name in Logs
         $parameters["localname"] = Configuration::get('PS_SHOP_NAME');
 
         return $parameters;
@@ -197,6 +197,9 @@ class Local implements LocalClassInterface
                 return Splash::log()->err("ErrSelfTestNoTable");
             }
         }
+        //====================================================================//
+        //  Info - Check Special Features
+        $this->selfTestInfos();
 
         return true;
     }
@@ -479,6 +482,24 @@ class Local implements LocalClassInterface
         //====================================================================//
         // Compute Prestashop Home Folder Address
         return dirname(dirname(dirname(__DIR__)));
+    }
+
+    /**
+     * Check Configuration & Inform User of Custom Parameters Activated
+     *
+     * @return void
+     */
+    private function selfTestInfos()
+    {
+        if (!empty(Splash::configuration()->PsUseMultiShopParser))  {
+            Splash::log()->war("FEATURE: Multi-shop mode is Active!");
+            if (!empty(Splash::configuration()->PsIsLightMultiShop))  {
+                Splash::log()->war("FEATURE: Multi-shop light mode is also Active...");
+            }
+        }
+        if (!empty(Splash::configuration()->PsIsSourceCatalog))  {
+            Splash::log()->war("FEATURE: Source Catalog mode is Active! Your products informations are now readonly.");
+        }
     }
 
     //====================================================================//

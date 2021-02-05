@@ -55,6 +55,11 @@ trait CategoriesTrait
             ->setPreferNone()
         ;
         //====================================================================//
+        // MSF Light Mode => Visible Only on ALL Sites
+        if (MSM::isLightMode()) {
+            $this->fieldsFactory()->addOption("shop", MSM::MODE_ALL);
+        }
+        //====================================================================//
         // NO TEST in MSF Mode as Categories are Not Copied
         if (MSM::isFeatureActive()) {
             $this->fieldsFactory()->isNotTested();
@@ -74,6 +79,11 @@ trait CategoriesTrait
                 ->setPreferNone()
                 ->isReadOnly()
             ;
+            //====================================================================//
+            // MSF Light Mode => Visible Only on ALL Sites
+            if (MSM::isLightMode()) {
+                $this->fieldsFactory()->addOption("shop", MSM::MODE_ALL);
+            }
         }
     }
 

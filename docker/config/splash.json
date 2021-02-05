@@ -1,8 +1,10 @@
 {
     "parameters": {
-        "WsMethod":         "NuSOAP",
-        "PsUseOrderPdf":    true,
-        "PsUseMultiShopParser":    true
+        "WsMethod":                 "SOAP",
+        "PsUseOrderPdf":            true,
+        "PsUseMultiShopParser":     true,
+        "PsIsLightMultiShop":       true,
+        "PsIsSourceCatalog":        false
     },
     "Address": { 
         "enable_push_deleted": false

@@ -18,7 +18,7 @@
 ################################################################################
 # Docker Compose File
 #
-# This Docker File intend to Create a Complete Dev Envirenement 
+# This Docker File intend to Create a Complete Dev Environment
 # for Splash Modules on Prestashop
 #
 # To us different PS Version configured, you need to add hosts to /etc/hosts

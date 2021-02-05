@@ -36,11 +36,12 @@ use Tools;
  */
 class Product extends AbstractObject
 {
+    //====================================================================//
     // Splash Php Core Traits
     use SimpleFieldsTrait;
     use ObjectsTrait;
     use ListsTrait;
-
+    //====================================================================//
     // Prestashop Common Traits
     use Core\DatesTrait;
     use Core\SplashMetaTrait;
@@ -48,20 +49,20 @@ class Product extends AbstractObject
     use Core\MultilangTrait;
     use Core\MultishopObjectTrait;
     use \Splash\Local\Traits\SplashIdTrait;
-
+    //====================================================================//
     // Prestashop Products Traits
     use Product\ObjectsListTrait;
-    use \Splash\Local\Objects\Product\CRUDTrait;
-    use \Splash\Local\Objects\Product\CoreTrait;
-    use \Splash\Local\Objects\Product\MainTrait;
-    use \Splash\Local\Objects\Product\DescTrait;
-    use \Splash\Local\Objects\Product\StockTrait;
-    use \Splash\Local\Objects\Product\PricesTrait;
-    use \Splash\Local\Objects\Product\ImagesTrait;
-    use \Splash\Local\Objects\Product\MetaTrait;
-    use \Splash\Local\Objects\Product\AttributeTrait;
-    use \Splash\Local\Objects\Product\VariantsTrait;
-    use \Splash\Local\Objects\Product\ChecksumTrait;
+    use Product\CRUDTrait;
+    use Product\CoreTrait;
+    use Product\MainTrait;
+    use Product\DescTrait;
+    use Product\StockTrait;
+    use Product\PricesTrait;
+    use Product\ImagesTrait;
+    use Product\MetaTrait;
+    use Product\AttributeTrait;
+    use Product\VariantsTrait;
+    use Product\ChecksumTrait;
     use Product\MetaDataTrait;
     use Product\IdEncoderTrait;
     use Product\CategoriesTrait;
@@ -151,6 +152,26 @@ class Product extends AbstractObject
         //====================================================================//
         // Load Default Currency
         $this->Currency = new Currency((int) Configuration::get('PS_CURRENCY_DEFAULT'));
+    }
+
+    /**
+     * Check if Source Product Catalog Mode is Active
+     *
+     * In this mode:
+     * - ALL Products Textual Informations are Read Only
+     * - BUT External can create Products with minimal Infos (SKU, Name)
+     *
+     * @return bool
+     */
+    public static function isSourceCatalogMode(): bool
+    {
+        static $isSourceCatalogMode;
+
+        if(!isset($isSourceCatalogMode)) {
+            $isSourceCatalogMode = !empty(Splash::configuration()->PsIsSourceCatalog);
+        }
+
+        return $isSourceCatalogMode;
     }
 
     /**

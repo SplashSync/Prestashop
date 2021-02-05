@@ -265,12 +265,12 @@ trait CRUDTrait
             // Extra Languages
             if (empty($this->in["link_rewrite_".$isoCode])) {
                 //====================================================================//
-                // Detect Multilang Name or Fallback to Default
+                // Detect Multi-lang Name or Fallback to Default
                 $value = isset($this->in["name_".$isoCode])
                         ? $this->in["name_".$isoCode]
                         : $this->in["name"];
                 //====================================================================//
-                // Setup Multilang Url Rewrite
+                // Setup Multi-lang Url Rewrite
                 $this->in["link_rewrite_".$isoCode] = Tools::link_rewrite($value);
             }
         }

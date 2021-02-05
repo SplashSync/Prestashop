@@ -139,17 +139,8 @@ trait StockTrait
             // Direct Writings
             case 'stock':
                 //====================================================================//
-                // Product uses Advanced Stock Manager => Cancel Product Stock Update
-                if ($this->object->useAdvancedStockManagement()) {
-                    Splash::log()->err(
-                        'Update Product Stock Using Advanced Stock Management : This Feature is not implemented Yet!!'
-                    );
-
-                    break;
-                }
-                //====================================================================//
                 // Product Already Exists => Update Product Stock
-                if ($this->getStockQuantity() != $fieldData) {
+                if (($this->getStockQuantity() != $fieldData) && $this->isAllowedStockUpdate()) {
                     //====================================================================//
                     // Update Stock in DataBase
                     StockAvailable::setQuantity(
@@ -199,5 +190,30 @@ trait StockTrait
             $this->AttributeId,
             Shop::getContextShopID(true)
         );
+    }
+
+    /**
+     * Check if Product Stocks may be safely updated
+     *
+     * @return bool
+     */
+    protected function isAllowedStockUpdate(): bool
+    {
+        //====================================================================//
+        // Product uses Advanced Stock Manager => NO Product Stock Update
+        if ($this->object->useAdvancedStockManagement()) {
+            return Splash::log()->err(
+                'Update Product Stock Using Advanced Stock Management : This Feature is not implemented Yet!!'
+            );
+        }
+        //====================================================================//
+        // Product Depends on Stock => NO Product Stock Update
+        if ($this->object->depends_on_stock) {
+            return Splash::log()->err(
+                'Product Stock Depends on Warehouse Stock : This Feature is not implemented Yet!!'
+            );
+        }
+
+        return true;
     }
 }

@@ -23,6 +23,7 @@ use Product;
 use Splash\Core\SplashCore      as Splash;
 use Splash\Local\Services\AttributesManager as Manager;
 use Splash\Local\Services\LanguagesManager as SLM;
+use Splash\Local\Services\MultiShopManager as MSM;
 use Translate;
 
 /**
@@ -80,6 +81,11 @@ trait AttributesTrait
             ->addOption("isLowerCase", true)
             ->MicroData("http://schema.org/Product", "VariantAttributeCode")
             ->isNotTested();
+        //====================================================================//
+        // MSF Light Mode => Visible Only on ALL Sites
+        if (MSM::isLightMode()) {
+            $this->fieldsFactory()->addOption("shop", MSM::MODE_ALL);
+        }
 
         foreach (SLM::getAvailableLanguages() as $isoLang) {
             //====================================================================//
@@ -92,6 +98,11 @@ trait AttributesTrait
                 ->setMultilang($isoLang)
                 ->InList("attributes")
                 ->isNotTested();
+            //====================================================================//
+            // MSF Light Mode => Visible Only on ALL Sites
+            if (MSM::isLightMode()) {
+                $this->fieldsFactory()->addOption("shop", MSM::MODE_ALL);
+            }
 
             //====================================================================//
             // Product Variation Attribute Value
@@ -103,6 +114,11 @@ trait AttributesTrait
                 ->setMultilang($isoLang)
                 ->InList("attributes")
                 ->isNotTested();
+            //====================================================================//
+            // MSF Light Mode => Visible Only on ALL Sites
+            if (MSM::isLightMode()) {
+                $this->fieldsFactory()->addOption("shop", MSM::MODE_ALL);
+            }
         }
     }
 
