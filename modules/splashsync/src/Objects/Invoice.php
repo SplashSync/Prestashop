@@ -112,7 +112,7 @@ class Invoice extends AbstractObject
     protected static $ALLOW_PUSH_DELETED = false;
 
     //====================================================================//
-    // Object Synchronistion Recommended Configuration
+    // Object Synchronization Recommended Configuration
     //====================================================================//
 
     /**
