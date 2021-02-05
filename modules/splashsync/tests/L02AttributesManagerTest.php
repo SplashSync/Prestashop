@@ -56,6 +56,7 @@ class L02AttributesManagerTest extends ObjectsCase
         $attributeGroup = Manager::touchGroup("Size", null);
         $this->assertNotEmpty($attributeGroup);
         $this->assertInstanceOf(AttributeGroup::class, $attributeGroup);
+        // @phpstan-ignore-next-line
         $this->assertIsIterable($attributeGroup->name);
         $this->assertContains("Size", $attributeGroup->name);
 
@@ -164,10 +165,13 @@ class L02AttributesManagerTest extends ObjectsCase
         //   Verify New Attribute
         $this->assertNotEmpty($attribute);
         $this->assertInstanceOf(Attribute::class, $attribute);
+        // @phpstan-ignore-next-line
         $this->assertNotEmpty($attribute->id);
+        // @phpstan-ignore-next-line
         $this->assertEquals($group->id, $attribute->id_attribute_group);
         foreach (SLM::getAvailableLanguages() as $langId => $isoCode) {
             // Values are All Same (Default Language)
+            // @phpstan-ignore-next-line
             $this->assertEquals($dfValue, $attribute->name[$langId]);
         }
 
@@ -193,6 +197,7 @@ class L02AttributesManagerTest extends ObjectsCase
             $this->assertInstanceOf(Attribute::class, $updatedAttribute);
             $this->assertSame($reloadAttr, $updatedAttribute);
             // Names Now Multilang
+            // @phpstan-ignore-next-line
             $this->assertEquals($values[$isoCode], $updatedAttribute->name[$langId]);
         }
     }

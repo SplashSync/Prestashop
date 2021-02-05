@@ -288,12 +288,15 @@ class AttributesManager
         }
         //====================================================================//
         // COMPARE Attribute Names
+        // @phpstan-ignore-next-line
         if ($attribute->name[$langId] == $name) {
             return $attribute;
         }
         //====================================================================//
         // UPDATE Attribute
+        // @phpstan-ignore-next-line
         $attribute->name[$langId] = $name;
+        // @phpstan-ignore-next-line
         if (true != $attribute->update()) {
             return Splash::log()->errTrace("Unable to update Variant Attribute Value.");
         }
@@ -403,6 +406,7 @@ class AttributesManager
         // Search for this Attribute Value
         /** @var Attribute $attribute */
         foreach (self::getAllAttributes($group) as $attribute) {
+            // @phpstan-ignore-next-line
             if ($loName == Tools::strtolower($attribute->name[$langId])) {
                 return $attribute;
             }
@@ -435,24 +439,29 @@ class AttributesManager
         //====================================================================//
         // Create New Attribute Value
         $attribute = new Attribute();
+        // @phpstan-ignore-next-line
         $attribute->id_attribute_group = $group->id;
         if ($group->is_color_group) {
+            // @phpstan-ignore-next-line
             $attribute->color = $color;
         }
         //====================================================================//
         // Setup Name => Same Name for Each Languages
+        // @phpstan-ignore-next-line
         $attribute->name = array();
         foreach (array_keys(SLM::getAvailableLanguages()) as $langId) {
             $attribute->name[$langId] = $name;
         }
         //====================================================================//
         // CREATE Attribute Value
+        // @phpstan-ignore-next-line
         if (true != $attribute->add()) {
             return Splash::log()->errTrace("Unable to create Attribute Value.");
         }
         //====================================================================//
         // ADD to Attribute Values Cache
         if (!is_null(static::$attributes)) {
+            /** @phpstan-ignore-next-line */
             static::$attributes[$group->id][$attribute->id] = $attribute;
         }
 

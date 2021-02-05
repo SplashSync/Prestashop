@@ -70,13 +70,13 @@ trait MultishopObjectTrait
     public function get($objectId = null, $fieldsList = null)
     {
         //====================================================================//
+        // Detect ArrayObjects
+        $fieldsList = ($fieldsList instanceof ArrayObject) ? $fieldsList->getArrayCopy() : $fieldsList;
+        //====================================================================//
         // Check if Multi-shop Mode is Active
         if (!MSM::isFeatureActive()) {
             return $this->coreGet($objectId, $fieldsList);
         }
-        //====================================================================//
-        // Detect ArrayObjects
-        $fieldsList = ($fieldsList instanceof ArrayObject) ? $fieldsList->getArrayCopy() : $fieldsList;
         //====================================================================//
         // Load Core Fields from All Shop Context
         MSF::loadFields($this->coreFields());
@@ -128,17 +128,20 @@ trait MultishopObjectTrait
      * @param null|array|ArrayObject $list
      *
      * @return false|string
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function set($objectId = null, $list = null)
     {
+        //====================================================================//
+        // Detect ArrayObjects
+        $list = ($list instanceof ArrayObject) ? $list->getArrayCopy() : $list;
         //====================================================================//
         // Check if Multi-shop Mode is Active
         if (!MSM::isFeatureActive()) {
             return $this->coreSet($objectId, $list);
         }
-        //====================================================================//
-        // Detect ArrayObjects
-        $list = ($list instanceof ArrayObject) ? $list->getArrayCopy() : $list;
         //====================================================================//
         // Write Data for All Shop Context
         $allShopData = MSF::extractData((array) $list, null);
@@ -172,14 +175,14 @@ trait MultishopObjectTrait
             };
         }
 
-        return $objectId;
+        return $objectId ?: false;
     }
 
     /**
      * Get All MultiStore Shared Fields
      *
-     * @param null|string            $objectId
-     * @param null|array|ArrayObject $fieldsList
+     * @param null|string $objectId
+     * @param null|array  $fieldsList
      *
      * @throws Exception
      *

@@ -194,6 +194,7 @@ trait AttributesTrait
             if (!$attribute) {
                 continue;
             }
+            // @phpstan-ignore-next-line
             $attributesIds[] = $attribute->id;
         }
 
