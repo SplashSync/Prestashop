@@ -128,7 +128,10 @@ trait MultishopTrait
         if (isset($this->Order->id_shop)) {
             return $this->Order->id_shop;
         }
-        // @phpstan-ignore-next-line
-        return $this->object->id_shop;
+        if (isset($this->object->id_shop)) {
+            return $this->object->id_shop;
+        }
+
+        return 0;
     }
 }
