@@ -125,10 +125,7 @@ trait MultishopTrait
      */
     protected function getObjectShopId(): int
     {
-        if (in_array(\Splash\Local\Objects\Invoice\CRUDTrait::class, class_uses($this), true)) {
-            return $this->Order->id_shop;
-        }
-        if (in_array(\Splash\Local\Objects\CreditNote\CRUDTrait::class, class_uses($this), true)) {
+        if (isset($this->Order->id_shop)) {
             return $this->Order->id_shop;
         }
 
