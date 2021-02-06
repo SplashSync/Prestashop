@@ -207,4 +207,14 @@ class CreditNote extends AbstractObject
         // Credit Note Mode for Payments
         $this->setCreditNoteMode(true);
     }
+
+    /**
+     * Get Current Object Shop Id
+     *
+     * @return int
+     */
+    protected function getObjectShopId(): int
+    {
+        return $this->Order->id_shop;
+    }
 }

@@ -200,4 +200,14 @@ class Invoice extends AbstractObject
         // Load OsWs Currency
         $this->Currency = new Currency((int) Configuration::get('PS_CURRENCY_DEFAULT'));
     }
+
+    /**
+     * Get Current Object Shop Id
+     *
+     * @return int
+     */
+    protected function getObjectShopId(): int
+    {
+        return $this->Order->id_shop;
+    }
 }
