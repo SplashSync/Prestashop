@@ -179,7 +179,7 @@ class Order extends AbstractObject
             "type" => $this->getType(),
             // Object Display Name
             "name" => $this->getName(),
-            // Object Descrition
+            // Object Description
             "description" => $this->getDesc(),
             // Object Icon Class (Font Awesome or Glyph. ie "fa fa-user")
             "icon" => $this->getIcon(),
