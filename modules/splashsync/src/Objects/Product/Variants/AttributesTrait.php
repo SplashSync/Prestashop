@@ -294,12 +294,16 @@ trait AttributesTrait
                 if ($attribute["id_product_attribute"] != $this->AttributeId) {
                     continue;
                 }
-                $this->variants[$index] = $attribute;
                 //====================================================================//
                 // Load Attribute Group
-                $this->variants[$index]["group"] = Manager::getGroupById($attribute["id_attribute_group"]);
+                $attributeGroup = Manager::getGroupById($attribute["id_attribute_group"]);
+                if (!$attributeGroup) {
+                    continue;
+                }
                 //====================================================================//
                 // Load Attribute Value
+                $this->variants[$index] = $attribute;
+                $this->variants[$index]["group"] = $attributeGroup;
                 $this->variants[$index]["value"] = Manager::getAttributeById(
                     $this->variants[$index]["group"],
                     $attribute["id_attribute"]
