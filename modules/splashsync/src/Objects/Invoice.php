@@ -87,7 +87,7 @@ class Invoice extends AbstractObject
     protected static $ICO = "fa fa-money";
 
     //====================================================================//
-    // Object Synchronistion Limitations
+    // Object Synchronization Limitations
     //====================================================================//
 
     /**

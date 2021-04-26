@@ -17,6 +17,7 @@ namespace Splash\Tests;
 
 use Configuration;
 use Splash\Client\Splash;
+use Splash\Components\CommitsManager;
 use Splash\Local\Services\MultiShopFieldsManager as MSF;
 use Splash\Local\Services\MultiShopManager as MSM;
 use Splash\Tests\Tools\ObjectsCase;
@@ -32,12 +33,12 @@ class L10MsfProductsTest extends ObjectsCase
     use ObjectsSetTestsTrait;
 
     /**
-     * @dataProvider objectMsfProductFieldsProvider
-     *
      * @param string $testSequence
      * @param string $objectType
      * @param mixed  $field
      * @param bool   $variant
+     *
+     * @dataProvider objectMsfProductFieldsProvider
      *
      * @throws \Exception
      *
@@ -72,7 +73,9 @@ class L10MsfProductsTest extends ObjectsCase
             ));
         }
         $objectId = $this->setObjectFromModule($objectType, $allShopsOriginData);
-        Splash::$commited = array();
+        //====================================================================//
+        // Clean Objects Committed Array
+        CommitsManager::resetSessionCommitted();
 
         //====================================================================//
         // Write Different Product Data for All Shops
