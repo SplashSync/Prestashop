@@ -21,6 +21,7 @@ use Employee;
 use Language;
 use Splash\Core\SplashCore      as Splash;
 use Splash\Local\Objects\Product;
+use Splash\Local\Services\KernelManager;
 use Splash\Local\Services\LanguagesManager as SLM;
 use Splash\Local\Services\MultiShopFieldsManager as MSF;
 use Splash\Local\Services\MultiShopManager as MSM;
@@ -376,17 +377,9 @@ class Local implements LocalClassInterface
         if (Tools::version_compare(_PS_VERSION_, "1.7", '<')) {
             return;
         }
-        global $kernel;
         //====================================================================//
-        // Try to load it globally (for backoffice pages)
-        if ($kernel) {
-            return;
-        }
-        //====================================================================//
-        // Create it manually
-        require_once _PS_ROOT_DIR_.'/app/AppKernel.php';
-        $kernel = new \AppKernel('prod', false);
-        $kernel->boot();
+        // Only for PrestaShop > 1.7 => Ensure Kernel is Loaded
+        KernelManager::ensureKernel();
     }
 
     /**

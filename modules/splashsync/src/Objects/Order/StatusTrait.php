@@ -16,6 +16,7 @@
 namespace Splash\Local\Objects\Order;
 
 use Context;
+use Splash\Local\Services\KernelManager;
 use Splash\Local\Services\OrderStatusManager as StatusManager;
 use Translate;
 
@@ -177,6 +178,9 @@ trait StatusTrait
                 if ($currentSplashStatus == $fieldData) {
                     break;
                 }
+                //====================================================================//
+                // Only for PrestaShop > 1.7 => Ensure Kernel is Loaded
+                KernelManager::ensureKernel();
                 //====================================================================//
                 // Update Order Status
                 $this->object->setCurrentState(
