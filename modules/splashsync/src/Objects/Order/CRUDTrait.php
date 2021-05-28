@@ -98,7 +98,7 @@ trait CRUDTrait
         //====================================================================//
         // Set Context Currency to Order Currency
         if ($object->id_currency) {
-            Context::getContext()->currency = new Currency($object->id_currency);
+            Context::getContext()->currency = Currency::getCurrencyInstance($object->id_currency);
         }
 
         return $object;
