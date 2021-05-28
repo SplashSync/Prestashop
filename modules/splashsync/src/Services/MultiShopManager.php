@@ -169,6 +169,8 @@ class MultiShopManager
      * @param null|int $shopId
      * @param mixed    $force
      *
+     * @throws Exception
+     *
      * @return bool
      */
     public static function setContext(int $shopId = null, $force = false): bool
@@ -209,6 +211,23 @@ class MultiShopManager
             // Setup Global Context
             Context::getContext()->shop = self::getCachedShop($shopId);
             Context::getContext()->country = self::getCachedCountry();
+
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Init Prestashop Legacy Context before User Login
+     *
+     * @return bool
+     */
+    public static function initLegacyContext(): bool
+    {
+        if (class_exists(static::$legacyContextClass) && !isset(Context::getContext()->employee->id)) {
+            Context::getContext()->employee = null;
+            static::$legacyContextClass::getContext();
 
             return true;
         }

@@ -359,6 +359,9 @@ class Local implements LocalClassInterface
         }
 
         //====================================================================//
+        // Ensure Init of Legacy Context Before User Login
+        MSM::initLegacyContext();
+        //====================================================================//
         // Setup Remote User
         Context::getContext()->employee = $user;
 

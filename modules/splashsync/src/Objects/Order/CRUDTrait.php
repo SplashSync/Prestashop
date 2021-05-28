@@ -19,6 +19,8 @@ use Address;
 use Carrier;
 use Cart;
 use Configuration;
+use Context;
+use Currency;
 use Order;
 use Shop;
 use Splash\Core\SplashCore      as Splash;
@@ -92,6 +94,12 @@ trait CRUDTrait
         //====================================================================//
         // Set Module Context To Order Shop
         MSM::setContext($object->id_shop, true);
+
+        //====================================================================//
+        // Set Context Currency to Order Currency
+        if ($object->id_currency) {
+            Context::getContext()->currency = new Currency($object->id_currency);
+        }
 
         return $object;
     }
