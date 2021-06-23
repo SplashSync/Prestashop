@@ -15,7 +15,6 @@
 
 namespace Splash\Local\Services;
 
-use ArrayObject;
 use Exception;
 use Shop;
 use Splash\Local\Services\MultiShopManager as MSM;
@@ -165,9 +164,9 @@ class MultiShopFieldsManager
      *
      * @param int $shopId
      *
-     * @return array
-     *
      * @throws Exception
+     *
+     * @return array
      */
     public static function getSingleShopFields(int $shopId): array
     {
@@ -298,9 +297,9 @@ class MultiShopFieldsManager
     /**
      * Clone Field to MultiShop Field
      *
-     * @param array $coreField
-     * @param int         $shopId
-     * @param string      $shopName
+     * @param array  $coreField
+     * @param int    $shopId
+     * @param string $shopName
      *
      * @return void
      */
@@ -345,7 +344,7 @@ class MultiShopFieldsManager
      * Build New Field Id for MultiShop Fields
      *
      * @param array $coreField
-     * @param int         $shopId
+     * @param int   $shopId
      *
      * @return string
      */
@@ -358,6 +357,8 @@ class MultiShopFieldsManager
         }
         //====================================================================//
         // This is a List Field
-        return self::fieldName($coreField['id']).LISTSPLIT.self::MSF_PREFIX.$shopId."_".self::listName($coreField['id']);
+        return self::fieldName($coreField['id'])
+            .LISTSPLIT.self::MSF_PREFIX.$shopId
+            ."_".self::listName($coreField['id']);
     }
 }
