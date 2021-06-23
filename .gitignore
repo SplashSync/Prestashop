@@ -47,3 +47,4 @@ save-commands.json
 /.gh-pages/
 /modules/splashsync/.php_cs.cache
 /public/
+/.php-cs-fixer.cache

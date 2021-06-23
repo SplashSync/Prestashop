@@ -61,10 +61,17 @@ class MultiShopFieldsManager
     /**
      * IDs of Single Shop Fields
      *
-     * @var array
+     * @var array[]
      */
     private static $singleShopsFields;
 
+    /**
+     * Load Multi-Shop Fields
+     *
+     * @param array $coreFields
+     *
+     * @return array
+     */
     public static function loadFields(array $coreFields): array
     {
         //====================================================================//
@@ -100,16 +107,16 @@ class MultiShopFieldsManager
     /**
      * Check if Field is in ALL Shops Mode
      *
-     * @param ArrayObject $coreField
+     * @param array $coreField
      *
      * @return bool
      */
-    public static function isAllShopsFields(ArrayObject $coreField): bool
+    public static function isAllShopsFields(array $coreField): bool
     {
         //====================================================================//
         // Field is Set for All Shops
-        if (isset($coreField->options["shop"])) {
-            if (MSM::MODE_ALL == $coreField->options["shop"]) {
+        if (isset($coreField["options"]["shop"])) {
+            if (MSM::MODE_ALL == $coreField["options"]["shop"]) {
                 return true;
             }
         }
@@ -156,9 +163,11 @@ class MultiShopFieldsManager
     /**
      * Get List of Multi Shops Fields
      *
-     * @throws Exception
+     * @param int $shopId
      *
      * @return array
+     *
+     * @throws Exception
      */
     public static function getSingleShopFields(int $shopId): array
     {
@@ -250,11 +259,11 @@ class MultiShopFieldsManager
     /**
      * Clone Field to All Shop Field
      *
-     * @param ArrayObject $coreField
+     * @param array $coreField
      *
      * @return bool Also Add MultiShop Fields?
      */
-    private static function addToAllFields(ArrayObject $coreField): bool
+    private static function addToAllFields(array $coreField): bool
     {
         //====================================================================//
         // PhpUnit Focused Mode => All Fields Only In One Shop
@@ -266,22 +275,22 @@ class MultiShopFieldsManager
         }
         //====================================================================//
         // Clone Field for Shop
-        $shopField = clone $coreField;
+        $shopField = array_merge($coreField);
         //====================================================================//
         // Setup as All-Shops Field
-        $shopField->name = "[ALL] ".$coreField->name;
-        $shopField->desc = "[ALL] ".$coreField->desc;
+        $shopField['name'] = "[ALL] ".$coreField['name'];
+        $shopField['desc'] = "[ALL] ".$coreField['desc'];
         //====================================================================//
         // Add to Fields Caches
         self::$expandedFields[] = $shopField;
         //====================================================================//
         // Field is ALL Shop Mode
         if (self::isAllShopsFields($coreField)) {
-            self::$allShopsFields[] = $shopField->id;
+            self::$allShopsFields[] = $shopField['id'];
 
             return false;
         }
-        self::$multiShopsFields[] = $shopField->id;
+        self::$multiShopsFields[] = $shopField['id'];
 
         return true;
     }
@@ -289,13 +298,13 @@ class MultiShopFieldsManager
     /**
      * Clone Field to MultiShop Field
      *
-     * @param ArrayObject $coreField
+     * @param array $coreField
      * @param int         $shopId
      * @param string      $shopName
      *
      * @return void
      */
-    private static function addToMsfFields(ArrayObject $coreField, int $shopId, string $shopName)
+    private static function addToMsfFields(array $coreField, int $shopId, string $shopName)
     {
         //====================================================================//
         // PhpUnit Focused Mode => All Fields Only In One Shop
@@ -304,51 +313,51 @@ class MultiShopFieldsManager
         }
         //====================================================================//
         // Clone Field for Shop
-        $shopField = clone $coreField;
+        $shopField = array_merge($coreField);
         //====================================================================//
         // Encode Field Id
-        $shopField->id = self::getMsfFieldId($coreField, $shopId);
+        $shopField['id'] = self::getMsfFieldId($coreField, $shopId);
         //====================================================================//
         // Encode Metadata
-        $shopField->inlist = false;
-        if (!empty($coreField->itemtype) && !MSM::isFocused()) {
-            $shopField->itemtype = $coreField->itemtype."/Shop".$shopId;
-            $shopField->tag = md5($shopField->itemprop."::".$shopField->itemtype);
+        $shopField['inlist'] = false;
+        if (!empty($coreField['itemtype']) && !MSM::isFocused()) {
+            $shopField['itemtype'] = $coreField['itemtype']."/Shop".$shopId;
+            $shopField['tag'] = md5($shopField['itemprop']."::".$shopField['itemtype']);
         }
         //====================================================================//
         // Encode Description
-        $shopField->name = "[".$shopName."] ".$coreField->name;
-        $shopField->desc = "[".$shopName."] ".$coreField->desc;
+        $shopField['name'] = "[".$shopName."] ".$coreField['name'];
+        $shopField['desc'] = "[".$shopName."] ".$coreField['desc'];
         //====================================================================//
         // Add Test Associations
         if (!MSM::isFocused() && !self::isAllShopsFields($coreField)) {
             foreach (Shop::getShops(false) as $shop) {
-                $shopField->asso[] = self::getMsfFieldId($coreField, $shop["id_shop"]);
+                $shopField['asso'][] = self::getMsfFieldId($coreField, $shop["id_shop"]);
             }
         }
         //====================================================================//
         // Add to Fields Caches
         self::$expandedFields[] = $shopField;
-        self::$singleShopsFields[$shopId][] = $shopField->id;
+        self::$singleShopsFields[$shopId][] = $shopField['id'];
     }
 
     /**
      * Build New Field Id for MultiShop Fields
      *
-     * @param ArrayObject $coreField
+     * @param array $coreField
      * @param int         $shopId
      *
      * @return string
      */
-    private static function getMsfFieldId(ArrayObject $coreField, int $shopId)
+    private static function getMsfFieldId(array $coreField, int $shopId): string
     {
         //====================================================================//
         // This is a Simple Field
-        if (!self::isListField($coreField->type)) {
-            return self::MSF_PREFIX.$shopId."_".$coreField->id;
+        if (!self::isListField($coreField['type'])) {
+            return self::MSF_PREFIX.$shopId."_".$coreField['id'];
         }
         //====================================================================//
         // This is a List Field
-        return self::fieldName($coreField->id).LISTSPLIT.self::MSF_PREFIX.$shopId."_".self::listName($coreField->id);
+        return self::fieldName($coreField['id']).LISTSPLIT.self::MSF_PREFIX.$shopId."_".self::listName($coreField['id']);
     }
 }
