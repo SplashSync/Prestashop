@@ -22,6 +22,7 @@ use Order;
 use OrderInvoice;
 use Splash\Core\SplashCore as Splash;
 use Splash\Local\Local;
+use Splash\Models\Objects\PricesTrait;
 use Tools;
 
 /**
@@ -30,7 +31,7 @@ use Tools;
  */
 class DiscountsManager
 {
-    use \Splash\Models\Objects\PricesTrait;
+    use PricesTrait;
 
     /**
      * @var string
@@ -47,7 +48,7 @@ class DiscountsManager
      *
      * @return bool
      */
-    public static function isFeatureActive()
+    public static function isFeatureActive(): bool
     {
         //====================================================================//
         // Check if Parameter is Enabled
@@ -67,7 +68,7 @@ class DiscountsManager
      *
      * @return bool
      */
-    public static function hasStorageTable()
+    public static function hasStorageTable(): bool
     {
         // List Tables
         Db::getInstance()->execute(
@@ -86,7 +87,7 @@ class DiscountsManager
      *
      * @return bool
      */
-    public static function createStorageTable()
+    public static function createStorageTable(): bool
     {
         $sql = "CREATE TABLE IF NOT EXISTS `"._DB_PREFIX_.self::TABLE."`(";
         $sql .= "`id_order_discount_tax`        INT(11)         NOT NULL AUTO_INCREMENT PRIMARY KEY ,";
@@ -105,12 +106,12 @@ class DiscountsManager
      * Check if Order has Discounts Details in Storage
      * If YES, Store Details in Cache
      *
-     * @param int   $orderId
-     * @param mixed $currency
+     * @param int      $orderId
+     * @param Currency $currency
      *
      * @return bool
      */
-    public static function hasOrderDiscountsDetails($orderId, $currency): bool
+    public static function hasOrderDiscountsDetails(int $orderId, Currency $currency): bool
     {
         //====================================================================//
         // Check if Feature is Enabled
@@ -120,6 +121,11 @@ class DiscountsManager
         //====================================================================//
         // Check if Discount Details Found
         static::$cache = self::getOrderDiscountsDetails($orderId, $currency);
+        //====================================================================//
+        // Empty => Check if Collector Feature is Enabled
+        if (empty(static::$cache) && DiscountCollector::isFeatureActive()) {
+            static::$cache = DiscountCollector::collectDiscountsItems(new Order($orderId), $currency);
+        }
 
         return !empty(static::$cache);
     }
@@ -142,7 +148,7 @@ class DiscountsManager
      *
      * @return array
      */
-    public static function getDiscountItems($object, $currency)
+    public static function getDiscountItems($object, Currency $currency): array
     {
         //====================================================================//
         // Check if Items Already in Cache
@@ -172,7 +178,7 @@ class DiscountsManager
      *
      * @return array
      */
-    private static function getCoreDiscounts($object, $currency)
+    private static function getCoreDiscounts($object, Currency $currency): array
     {
         $values = array(
             'product_name' => Local::getLocalModule()->l("Discount"),
@@ -194,7 +200,7 @@ class DiscountsManager
      *
      * @return array
      */
-    private static function getOrderDiscountsDetails(int $orderId, $currency): array
+    private static function getOrderDiscountsDetails(int $orderId, Currency $currency): array
     {
         //====================================================================//
         // Build query
@@ -233,7 +239,9 @@ class DiscountsManager
             //====================================================================//
             // Add Item to List
             $items[] = array(
-                'product_name' => Local::getLocalModule()->l("Discount"),
+                'product_name' => !empty(Splash::configuration()->PsUseDiscountsRulesNames)
+                    ? $result['cart_rule_name']
+                    : Local::getLocalModule()->l("Discount"),
                 'product_quantity' => 1,
                 'reduction_percent' => 0,
                 'product_id' => null,

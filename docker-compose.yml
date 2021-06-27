@@ -61,6 +61,7 @@ services:
         # Module Sources
          - ./.git:/var/www/html/.git:ro
          - ./modules/splashsync:/var/www/html/modules/splashsync:ro
+         - ./grumphp:/var/www/html/grumphp:ro
          - ./travis:/var/www/html/travis:ro
          - ./phpunit.xml.dist:/var/www/html/phpunit.xml.dist:ro
          - ./grumphp.yml:/var/www/html/grumphp.yml:ro

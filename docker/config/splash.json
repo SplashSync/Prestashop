@@ -4,7 +4,10 @@
         "PsUseOrderPdf":            true,
         "PsUseMultiShopParser":     true,
         "PsIsLightMultiShop":       true,
-        "PsIsSourceCatalog":        false
+        "PsIsSourceCatalog":        false,
+        "PsUseAdvancedDiscounts":   true,
+        "PsUseDiscountsCollector":  true,
+        "PsUseDiscountsRulesNames":  true
     },
     "Address": { 
         "enable_push_deleted": false
