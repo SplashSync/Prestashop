@@ -38,7 +38,14 @@ class MarketplaceVendorConfigurator extends StockOnlyConfigurator
         //====================================================================//
         // Products => Allow Sync
         if ("Product" == $objectType) {
-            return $description;
+            return array_replace_recursive($description, array(
+                "allow_push_created" => 0,
+                "allow_push_updated" => 1,
+                "allow_push_deleted" => 0,
+                "enable_push_created" => 0,
+                "enable_push_updated" => 1,
+                "enable_push_deleted" => 0,
+            ));
         }
         //====================================================================//
         // Other Types => NO Sync
