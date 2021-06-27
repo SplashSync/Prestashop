@@ -162,8 +162,11 @@ class DiscountCollector
      *
      * @return void
      */
-    private static function collectFreeShippingRawDiscounts(Order $order, array $orderRules, array $productsDetail): void
-    {
+    private static function collectFreeShippingRawDiscounts(
+        Order $order,
+        array $orderRules,
+        array $productsDetail
+    ): void {
         $freeShippingRules = array();
         //====================================================================//
         // Detect Free Shipping Rules
@@ -292,8 +295,13 @@ class DiscountCollector
      *
      * @return void
      */
-    private static function addRawDiscountValue(int $cartRuleId, float $taxRate, string $taxName, float $amontTaxExcl, float $amontTaxIncl): void
-    {
+    private static function addRawDiscountValue(
+        int $cartRuleId,
+        float $taxRate,
+        string $taxName,
+        float $amontTaxExcl,
+        float $amontTaxIncl
+    ): void {
         //====================================================================//
         // Detect Tax Name & Rate
         if (!isset(self::$rawDiscounts[$cartRuleId][$taxRate][$taxName])) {
@@ -318,8 +326,12 @@ class DiscountCollector
     {
         $data = array();
         foreach ($rawDiscounts as $cartRuleId => $discount) {
-            $cartRule = $cartRules[$cartRuleId] ?? new CartRule($cartRuleId);
-            $cartRuleName = $cartRule->name[Context::getContext()->language->id] ?? ($cartRule->name[array_keys($cartRule->name)[0] ?? 1] ?? '');
+            $cartRule = self::getCartRule($cartRuleId);
+            if (!$cartRule) {
+                continue;
+            }
+            $cartRuleName = $cartRule->name[Context::getContext()->language->id]
+                ?? ($cartRule->name[array_keys($cartRule->name)[0] ?? 1] ?? '');
 
             foreach ($discount as $taxRate => $tax) {
                 foreach ($tax as $taxName => $amounts) {
@@ -353,8 +365,12 @@ class DiscountCollector
         foreach ($rawDiscounts as $cartRuleId => $discount) {
             foreach ($discount as $taxRate => $tax) {
                 foreach ($tax as $taxName => $amounts) {
-                    $cartRule = $cartRules[$cartRuleId] ?? new CartRule($cartRuleId);
-                    $cartRuleName = $cartRule->name[Context::getContext()->language->id] ?? ($cartRule->name[array_keys($cartRule->name)[0] ?? 1] ?? '');
+                    $cartRule = self::getCartRule($cartRuleId);
+                    if (!$cartRule) {
+                        continue;
+                    }
+                    $cartRuleName = $cartRule->name[Context::getContext()->language->id]
+                        ?? ($cartRule->name[array_keys($cartRule->name)[0] ?? 1] ?? '');
                     //====================================================================//
                     // Compute Item Price
                     $itemPrice = self::prices()->encode(

@@ -23,9 +23,9 @@ use Splash\Core\SplashCore      as Splash;
 use Splash\Local\Objects\Product;
 use Splash\Local\Services\KernelManager;
 use Splash\Local\Services\LanguagesManager as SLM;
-use Splash\Local\Services\MultiShopFieldsManager as MSF;
 use Splash\Local\Services\MultiShopManager as MSM;
 use Splash\Local\Traits\SplashIdTrait;
+use Splash\Models\AbstractConfigurator;
 use Splash\Models\LocalClassInterface;
 use SplashSync;
 use Tools;
@@ -71,7 +71,7 @@ class Local implements LocalClassInterface
         }
 
         //====================================================================//
-        // If Expert Mode => Allow Overide of Server Host Address
+        // If Expert Mode => Allow Override of Server Host Address
         if ((Configuration::get('SPLASH_WS_EXPERT')) && !empty(Configuration::get('SPLASH_WS_HOST'))) {
             $parameters["WsHost"] = Configuration::get('SPLASH_WS_HOST');
         }
@@ -441,7 +441,7 @@ class Local implements LocalClassInterface
         }
 
         //====================================================================//
-        // Identify Admion Folder
+        // Identify Admin Folder
         foreach ($scan as $filename) {
             //====================================================================//
             // Filename Is Folder
@@ -495,6 +495,24 @@ class Local implements LocalClassInterface
         }
         if (!empty(Splash::configuration()->PsIsSourceCatalog)) {
             Splash::log()->war("FEATURE: Source Catalog mode is Active! Your products informations are now readonly.");
+        }
+        if (!empty(Splash::configuration()->PsUseAdvancedDiscounts)) {
+            Splash::log()->war(
+                "FEATURE: Advanced Discounts is Active! Read Discounts details from table \\'order_discount_tax\\'."
+            );
+        }
+        if (!empty(Splash::configuration()->PsUseDiscountsCollector)) {
+            Splash::log()->war(
+                "FEATURE: Discounts Collector is Active! Splash detect Discounts details from Order Carts."
+            );
+        }
+        //====================================================================//
+        // Custom Configurator is Active
+        if (!empty(Configuration::get('SPLASH_WS_EXPERT'))) {
+            $configurator = (string) Configuration::get('SPLASH_CONFIGURATOR');
+            if (class_exists($configurator) && is_subclass_of($configurator, AbstractConfigurator::class)) {
+                Splash::log()->war("FEATURE: Custom configurator is Active: ".$configurator::getName());
+            }
         }
     }
 

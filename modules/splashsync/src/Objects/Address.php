@@ -37,17 +37,18 @@ class Address extends AbstractObject
     use ObjectsTrait;
 
     // Prestashop Common Traits
-    use \Splash\Local\Objects\Core\DatesTrait;
-    use \Splash\Local\Objects\Core\SplashMetaTrait;
-    use \Splash\Local\Objects\Core\ObjectsListCommonsTrait;
+    use Core\DatesTrait;
+    use Core\SplashMetaTrait;
+    use Core\ObjectsListCommonsTrait;
+    use Core\ConfiguratorAwareTrait;
     use \Splash\Local\Traits\SplashIdTrait;
 
     // Prestashop Address Traits
-    use \Splash\Local\Objects\Address\ObjectsListTrait;
-    use \Splash\Local\Objects\Address\CRUDTrait;
-    use \Splash\Local\Objects\Address\CoreTrait;
-    use \Splash\Local\Objects\Address\MainTrait;
-    use \Splash\Local\Objects\Address\OptionalTrait;
+    use Address\ObjectsListTrait;
+    use Address\CRUDTrait;
+    use Address\CoreTrait;
+    use Address\MainTrait;
+    use Address\OptionalTrait;
 
     //====================================================================//
     // Object Definition Parameters

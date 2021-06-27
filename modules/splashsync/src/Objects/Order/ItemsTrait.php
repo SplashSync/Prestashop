@@ -318,8 +318,8 @@ trait ItemsTrait
     /**
      * Write Data to Current Item
      *
-     * @param array|null $currentProduct Current Item Data Array
-     * @param array $productItem    Input Item Data Array
+     * @param null|array $currentProduct Current Item Data Array
+     * @param array      $productItem    Input Item Data Array
      *
      * @return void
      *

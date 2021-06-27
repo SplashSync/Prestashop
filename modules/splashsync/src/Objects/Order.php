@@ -41,24 +41,25 @@ class Order extends AbstractObject
     use ObjectsTrait;
 
     // Prestashop Common Traits
-    use \Splash\Local\Objects\Core\DatesTrait;
-    use \Splash\Local\Objects\Core\SplashMetaTrait;
-    use \Splash\Local\Objects\Core\ObjectsListCommonsTrait;
-    use \Splash\Local\Objects\Core\MultishopTrait;
+    use Core\DatesTrait;
+    use Core\SplashMetaTrait;
+    use Core\ObjectsListCommonsTrait;
+    use Core\MultishopTrait;
+    use Core\ConfiguratorAwareTrait;
     use \Splash\Local\Traits\SplashIdTrait;
 
     // Prestashop Order Traits
-    use \Splash\Local\Objects\Order\ObjectsListTrait;
-    use \Splash\Local\Objects\Order\CRUDTrait;
-    use \Splash\Local\Objects\Order\CoreTrait;
-    use \Splash\Local\Objects\Order\MainTrait;
-    use \Splash\Local\Objects\Order\AddressTrait;
-    use \Splash\Local\Objects\Order\DeliveryTrait;
-    use \Splash\Local\Objects\Order\ItemsTrait;
-    use \Splash\Local\Objects\Order\PaymentsTrait;
-    use \Splash\Local\Objects\Order\TrackingTrait;
-    use \Splash\Local\Objects\Order\StatusTrait;
-    use \Splash\Local\Objects\Order\PdfTrait;
+    use Order\ObjectsListTrait;
+    use Order\CRUDTrait;
+    use Order\CoreTrait;
+    use Order\MainTrait;
+    use Order\AddressTrait;
+    use Order\DeliveryTrait;
+    use Order\ItemsTrait;
+    use Order\PaymentsTrait;
+    use Order\TrackingTrait;
+    use Order\StatusTrait;
+    use Order\PdfTrait;
 
     //====================================================================//
     // Object Definition Parameters

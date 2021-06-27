@@ -48,6 +48,7 @@ class Product extends AbstractObject
     use Core\ObjectsListCommonsTrait;
     use Core\MultilangTrait;
     use Core\MultishopObjectTrait;
+    use Core\ConfiguratorAwareTrait;
     use \Splash\Local\Traits\SplashIdTrait;
     //====================================================================//
     // Prestashop Products Traits

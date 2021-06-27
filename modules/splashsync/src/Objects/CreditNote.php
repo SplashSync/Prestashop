@@ -42,24 +42,25 @@ class CreditNote extends AbstractObject
     use ObjectsTrait;
 
     // Prestashop Common Traits
-    use \Splash\Local\Objects\Core\DatesTrait;
-    use \Splash\Local\Objects\Core\SplashMetaTrait;
-    use \Splash\Local\Objects\Core\ObjectsListCommonsTrait;
-    use \Splash\Local\Objects\Core\MultishopTrait;
+    use Core\DatesTrait;
+    use Core\SplashMetaTrait;
+    use Core\ObjectsListCommonsTrait;
+    use Core\MultishopTrait;
+    use Core\ConfiguratorAwareTrait;
     use \Splash\Local\Traits\SplashIdTrait;
 
     // Prestashop Order Traits
-    use \Splash\Local\Objects\Order\CoreTrait;
-    use \Splash\Local\Objects\Order\AddressTrait;
-    use \Splash\Local\Objects\Order\PaymentsTrait;
+    use Order\CoreTrait;
+    use Order\AddressTrait;
+    use Order\PaymentsTrait;
 
     // Prestashop Invoice Traits
-    use \Splash\Local\Objects\CreditNote\ObjectsListTrait;
-    use \Splash\Local\Objects\CreditNote\CRUDTrait;
-    use \Splash\Local\Objects\CreditNote\CoreTrait;
-    use \Splash\Local\Objects\CreditNote\MainTrait;
-    use \Splash\Local\Objects\CreditNote\ItemsTrait;
-    use \Splash\Local\Objects\CreditNote\StatusTrait;
+    use CreditNote\ObjectsListTrait;
+    use CreditNote\CRUDTrait;
+    use CreditNote\CoreTrait;
+    use CreditNote\MainTrait;
+    use CreditNote\ItemsTrait;
+    use CreditNote\StatusTrait;
 
     //====================================================================//
     // Object Definition Parameters

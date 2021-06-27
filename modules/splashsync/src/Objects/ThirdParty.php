@@ -18,6 +18,7 @@ namespace   Splash\Local\Objects;
 use Customer;
 use Splash\Core\SplashCore      as Splash;
 use Splash\Local\Local;
+use Splash\Local\Traits\SplashIdTrait;
 use Splash\Models\AbstractObject;
 use Splash\Models\Objects\IntelParserTrait;
 use Splash\Models\Objects\ObjectsTrait;
@@ -37,19 +38,20 @@ class ThirdParty extends AbstractObject
     use ObjectsTrait;
 
     // Prestashop Common Traits
-    use \Splash\Local\Objects\Core\DatesTrait;
-    use \Splash\Local\Objects\Core\SplashMetaTrait;
-    use \Splash\Local\Objects\Core\ObjectsListCommonsTrait;
-    use \Splash\Local\Traits\SplashIdTrait;
+    use Core\DatesTrait;
+    use Core\SplashMetaTrait;
+    use Core\ObjectsListCommonsTrait;
+    use Core\ConfiguratorAwareTrait;
+    use SplashIdTrait;
 
     // Prestashop ThirdParty Traits
-    use \Splash\Local\Objects\ThirdParty\ObjectsListTrait;
-    use \Splash\Local\Objects\ThirdParty\CRUDTrait;
-    use \Splash\Local\Objects\ThirdParty\CoreTrait;
-    use \Splash\Local\Objects\ThirdParty\MainTrait;
-    use \Splash\Local\Objects\ThirdParty\AddressTrait;
-    use \Splash\Local\Objects\ThirdParty\AddressesTrait;
-    use \Splash\Local\Objects\ThirdParty\MetaTrait;
+    use ThirdParty\ObjectsListTrait;
+    use ThirdParty\CRUDTrait;
+    use ThirdParty\CoreTrait;
+    use ThirdParty\MainTrait;
+    use ThirdParty\AddressTrait;
+    use ThirdParty\AddressesTrait;
+    use ThirdParty\MetaTrait;
 
     /**
      * @var Customer

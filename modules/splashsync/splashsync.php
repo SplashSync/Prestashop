@@ -17,8 +17,9 @@
 // phpcs:disable PSR1.Files.SideEffects
 
 /**
- * Splash Sync Prestahop Module - Noty Notifications
+ * Splash Sync PrestaShop Module - Noty Notifications
  */
+
 if (!defined('_PS_VERSION_')) {
     exit;
 }
@@ -35,6 +36,7 @@ require_once "src/Traits/SplashIdTrait.php";
  *
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.ExcessiveClassLength)
  */
 class SplashSync extends Module
 {
@@ -280,10 +282,15 @@ class SplashSync extends Module
         // Build Display Main Form Array
         $fieldsForm[] = $this->getMainFormArray();
         //====================================================================//
+        // Build Display Expert Form Array
+        if (Configuration::get('SPLASH_WS_EXPERT')) {
+            $fieldsForm[] = $this->getExpertFormArray();
+        }
+        //====================================================================//
         // Build Display Option Form Array
         $fieldsForm[] = $this->getOptionFormArray();
         //====================================================================//
-        // Build Display Oders Form Array
+        // Build Display Orders Form Array
         if (\Splash\Local\Services\OrderStatusManager::isAllowedWrite()) {
             $fieldsForm[] = $this->getOrderFormArray();
         }
@@ -320,6 +327,7 @@ class SplashSync extends Module
         $helper->fields_value['SPLASH_SMART_NOTIFY'] = Configuration::get('SPLASH_SMART_NOTIFY');
         $helper->fields_value['SPLASH_SYNC_VIRTUAL'] = Configuration::get('SPLASH_SYNC_VIRTUAL');
         $helper->fields_value['SPLASH_SYNC_PACKS'] = Configuration::get('SPLASH_SYNC_PACKS');
+        $helper->fields_value['SPLASH_CONFIGURATOR'] = Configuration::get('SPLASH_CONFIGURATOR');
 
         //====================================================================//
         // Load Oders Status Values
@@ -525,7 +533,7 @@ class SplashSync extends Module
         // Webservice SOAP Protocol
         $fields[] = array(
             'label' => $this->l('Webservice'),
-            'hint' => $this->l('Webservice libary used for communication.'),
+            'hint' => $this->l('Webservice library used for communication.'),
             'type' => 'select',
             'name' => 'SPLASH_WS_METHOD',
             'options' => array(
@@ -593,6 +601,57 @@ class SplashSync extends Module
             'legend' => array('icon' => 'icon-key', 'title' => $this->l('Authentification Settings')),
             'input' => $fields,
             'submit' => array('title' => $this->l('Save'), 'class' => 'btn btn-default pull-right')
+        );
+
+        return $output;
+    }
+
+    /**
+     * Get Local Options Form Fields Array
+     *
+     * @return array
+     */
+    private function getExpertFormArray()
+    {
+        //====================================================================//
+        // Init Fields List
+        $fields = array();
+        //====================================================================//
+        // Select Configurator
+        $fields[] = array(
+            'label' => $this->l('Custom Configuration'),
+            'hint' => $this->l('Select an advanced configuration mode.'),
+            'type' => 'select',
+            'name' => 'SPLASH_CONFIGURATOR',
+            'options' => array(
+                'query' => array(
+                    array('id' => null, 'name' => 'None, use generic configuration'),
+                    array(
+                        'id' => \Splash\Local\Configurators\StockOnlyConfigurator::class,
+                        'name' => \Splash\Local\Configurators\StockOnlyConfigurator::getName()
+                    ),
+                    array(
+                        'id' => \Splash\Local\Configurators\MarketplaceVendorConfigurator::class,
+                        'name' => \Splash\Local\Configurators\MarketplaceVendorConfigurator::getName()
+                    ),
+                ),
+                'id' => 'id',
+                'name' => 'name'
+            )
+        );
+        //====================================================================//
+        // Init Form array
+        $output = array();
+        $output['form'] = array(
+            'legend' => array(
+                'icon' => 'icon-cogs',
+                'title' => $this->l('Expert Settings')
+            ),
+            'input' => $fields,
+            'submit' => array(
+                'title' => $this->l('Save'),
+                'class' => 'btn btn-default pull-right'
+            )
         );
 
         return $output;
@@ -800,9 +859,10 @@ class SplashSync extends Module
         Configuration::updateValue('SPLASH_SMART_NOTIFY', trim(Tools::getValue('SPLASH_SMART_NOTIFY')));
         Configuration::updateValue('SPLASH_SYNC_VIRTUAL', trim(Tools::getValue('SPLASH_SYNC_VIRTUAL')));
         Configuration::updateValue('SPLASH_SYNC_PACKS', trim(Tools::getValue('SPLASH_SYNC_PACKS')));
+        Configuration::updateValue('SPLASH_CONFIGURATOR', trim(Tools::getValue('SPLASH_CONFIGURATOR')));
 
         //====================================================================//
-        // Update Oders Status Values
+        // Update Orders Status Values
         if (\Splash\Local\Services\OrderStatusManager::isAllowedWrite()) {
             foreach (\Splash\Local\Services\OrderStatusManager::getAllStatus() as $status) {
                 $fieldName = $status["field"];

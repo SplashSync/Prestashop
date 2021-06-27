@@ -42,24 +42,25 @@ class Invoice extends AbstractObject
     use ObjectsTrait;
 
     // Prestashop Common Traits
-    use \Splash\Local\Objects\Core\DatesTrait;
-    use \Splash\Local\Objects\Core\SplashMetaTrait;
-    use \Splash\Local\Objects\Core\ObjectsListCommonsTrait;
-    use \Splash\Local\Objects\Core\MultishopTrait;
+    use Core\DatesTrait;
+    use Core\SplashMetaTrait;
+    use Core\ObjectsListCommonsTrait;
+    use Core\MultishopTrait;
+    use Core\ConfiguratorAwareTrait;
     use \Splash\Local\Traits\SplashIdTrait;
 
     // Prestashop Order Traits
-    use \Splash\Local\Objects\Order\CoreTrait;
-    use \Splash\Local\Objects\Order\MainTrait;
-    use \Splash\Local\Objects\Order\AddressTrait;
-    use \Splash\Local\Objects\Order\ItemsTrait;
-    use \Splash\Local\Objects\Order\PaymentsTrait;
+    use Order\CoreTrait;
+    use Order\MainTrait;
+    use Order\AddressTrait;
+    use Order\ItemsTrait;
+    use Order\PaymentsTrait;
 
     // Prestashop Invoice Traits
-    use \Splash\Local\Objects\Invoice\ObjectsListTrait;
-    use \Splash\Local\Objects\Invoice\CRUDTrait;
-    use \Splash\Local\Objects\Invoice\CoreTrait;
-    use \Splash\Local\Objects\Invoice\StatusTrait;
+    use Invoice\ObjectsListTrait;
+    use Invoice\CRUDTrait;
+    use Invoice\CoreTrait;
+    use Invoice\StatusTrait;
 
     //====================================================================//
     // Object Definition Parameters
