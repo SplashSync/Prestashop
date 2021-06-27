@@ -16,7 +16,6 @@
 namespace Splash\Local\Objects\Core;
 
 use Configuration;
-use Splash\Client\Splash;
 use Splash\Models\AbstractConfigurator;
 
 trait ConfiguratorAwareTrait
