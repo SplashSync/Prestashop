@@ -318,15 +318,15 @@ trait ItemsTrait
     /**
      * Write Data to Current Item
      *
-     * @param null|array $currentProduct Current Item Data Array
-     * @param array      $productItem    Input Item Data Array
+     * @param null|array        $currentProduct Current Item Data Array
+     * @param array|ArrayObject $productItem    Input Item Data Array
      *
      * @return void
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    private function updateProduct(?array $currentProduct, array $productItem)
+    private function updateProduct(?array $currentProduct, $productItem)
     {
         //====================================================================//
         // Not A Product Line => Skipped
