@@ -15,6 +15,7 @@
 
 namespace Splash\Local\Objects\Order;
 
+use ArrayObject;
 use OrderDetail;
 use Splash\Core\SplashCore      as Splash;
 use Splash\Local\Objects\Invoice;
