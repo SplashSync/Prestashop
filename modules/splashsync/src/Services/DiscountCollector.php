@@ -69,7 +69,7 @@ class DiscountCollector
             : self::toDiscountDbValues($order, $cache);
 
         foreach ($discounts as $discount) {
-            $total += $discount['amount'];
+            $total += $discount['amount_wt'];
         }
 
         return (float) $total;
