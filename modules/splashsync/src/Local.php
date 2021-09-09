@@ -44,7 +44,7 @@ class Local implements LocalClassInterface
     /**
      * @var SplashSync
      */
-    private static $SplashSyncModule = null;
+    private static $SplashSyncModule;
 
     //====================================================================//
     // *******************************************************************//

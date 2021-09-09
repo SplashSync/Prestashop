@@ -41,7 +41,7 @@ class DiscountsManager
     /**
      * @var null|array
      */
-    private static $cache = null;
+    private static $cache;
 
     /**
      * Check if Advanced Discounts Feature is Active
