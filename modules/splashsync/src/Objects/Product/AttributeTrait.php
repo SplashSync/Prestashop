@@ -87,6 +87,12 @@ trait AttributeTrait
         // On Attribute Context Ensure Base Product Price Remain Like Base Product
         if ($this->AttributeId > 0) {
             $this->object->price = $this->object->base_price;
+            //====================================================================//
+            // FIX: In MSF Mode, if combination has no Shop Data, it's not created
+            // So id_product may be loaded as 0... and saved!!
+            if (empty($this->Attribute->id_product) && !empty($this->ProductId)) {
+                $this->Attribute->id_product = $this->ProductId;
+            }
         }
 
         return true;
