@@ -94,28 +94,31 @@ stages:
       ################################################################################
       # Run PhpUnit Core Test Sequence (Will Enable the Module)
       - modules/splashsync/vendor/bin/phpunit -c travis/phpunit.xml.dist modules/splashsync/vendor/splash/phpcore/Tests/Core/ --log-junit core-report.xml
-      ################################################################################
-      # ALL PHP   =>  Run PhpUnit Local Sequence with No Data Inside
-      - modules/splashsync/vendor/bin/phpunit -c travis/phpunit.xml.dist --testsuite=Local --log-junit local-report.xml
-      ################################################################################
-      # Run PhpUnit Test Sequence
-      - php modules/splashsync/vendor/bin/phpunit -c travis/phpunit.xml.dist --log-junit standard-report.xml
-      ################################################################################
-      # Run PhpUnit Product with MSF Sequence
-      - php travis/setup_shops.php && php travis/setup_shops.php
-      - modules/splashsync/vendor/bin/phpunit -c travis/phpunit.products.xml --log-junit msf-report.xml
-      ################################################################################
-      # Run Grumphp Splash Manifest Sequence
-      - php modules/splashsync/vendor/bin/grumphp run -n --tasks=build-manifest
+      - ls -l /builds/SplashSync/Prestashop/
+      - ls -l /builds/SplashSync/Prestashop/modules
+      - ls -l /builds/SplashSync/Prestashop/modules/splashsync
+#       ################################################################################
+#       # ALL PHP   =>  Run PhpUnit Local Sequence with No Data Inside
+#       - modules/splashsync/vendor/bin/phpunit -c travis/phpunit.xml.dist --testsuite=Local --log-junit local-report.xml
+#       ################################################################################
+#       # Run PhpUnit Test Sequence
+#       - php modules/splashsync/vendor/bin/phpunit -c travis/phpunit.xml.dist --log-junit standard-report.xml
+#       ################################################################################
+#       # Run PhpUnit Product with MSF Sequence
+#       - php travis/setup_shops.php && php travis/setup_shops.php
+#       - modules/splashsync/vendor/bin/phpunit -c travis/phpunit.products.xml --log-junit msf-report.xml
+#       ################################################################################
+#       # Run Grumphp Splash Manifest Sequence
+#       - php modules/splashsync/vendor/bin/grumphp run -n --tasks=build-manifest
 
 
-Ps-1.7-Php-7.3:
-  image:      prestashop/prestashop:1.7-7.3-apache
-  <<: *functionnal
-
-Ps-1.7-Php-7.2:
-  image:      prestashop/prestashop:1.7-7.2-apache
-  <<: *functionnal
+# Ps-1.7-Php-7.3:
+#   image:      prestashop/prestashop:1.7-7.3-apache
+#   <<: *functionnal
+#
+# Ps-1.7-Php-7.2:
+#   image:      prestashop/prestashop:1.7-7.2-apache
+#   <<: *functionnal
 
 Ps-1.6-Php-7.2:
   image:      prestashop/prestashop:1.6-7.2-apache
