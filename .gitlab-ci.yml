@@ -95,7 +95,7 @@ stages:
       # Run PhpUnit Core Test Sequence (Will Enable the Module)
       - modules/splashsync/vendor/bin/phpunit -c travis/phpunit.xml.dist modules/splashsync/vendor/splash/phpcore/Tests/Core/ --log-junit core-report.xml
       - ls -l /builds/SplashSync/Prestashop/
-      - ls -l /builds/SplashSync/Prestashop/modules
+      - ls -l /var/www/html/travis/
       - ls -l /builds/SplashSync/Prestashop/modules/splashsync
 #       ################################################################################
 #       # ALL PHP   =>  Run PhpUnit Local Sequence with No Data Inside
