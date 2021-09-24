@@ -48,9 +48,12 @@ stages:
     stage:      tests
     tags:       ['Dedicated']
     artifacts:
-      paths:
-        - $CI_PROJECT_DIR/splash.json
-        - $CI_PROJECT_DIR/splash.yml
+        when: always
+        paths:
+            - $CI_PROJECT_DIR/splash.json
+            - $CI_PROJECT_DIR/splash.yml
+        reports:
+            junit: "*-report.xml"
     services:
       - name: mysql:5.7
     ################################################################
@@ -90,17 +93,17 @@ stages:
       - if [ -f "/var/www/html/vendor/autoload.php" ]; then php modules/splashsync/vendor/bin/grumphp run -n --testsuite=phpstan; fi
       ################################################################################
       # Run PhpUnit Core Test Sequence (Will Enable the Module)
-      - modules/splashsync/vendor/bin/phpunit -c travis/phpunit.xml.dist modules/splashsync/vendor/splash/phpcore/Tests/Core/
+      - modules/splashsync/vendor/bin/phpunit -c travis/phpunit.xml.dist modules/splashsync/vendor/splash/phpcore/Tests/Core/ --log-junit core-report.xml
       ################################################################################
       # ALL PHP   =>  Run PhpUnit Local Sequence with No Data Inside
-      - modules/splashsync/vendor/bin/phpunit -c travis/phpunit.xml.dist --testsuite=Local
+      - modules/splashsync/vendor/bin/phpunit -c travis/phpunit.xml.dist --testsuite=Local --log-junit local-report.xml
       ################################################################################
-      # Run PhpUnit Test Sequence (With Coverage)
-      - php modules/splashsync/vendor/bin/phpunit -c travis/phpunit.xml.dist
+      # Run PhpUnit Test Sequence
+      - php modules/splashsync/vendor/bin/phpunit -c travis/phpunit.xml.dist --log-junit standard-report.xml
       ################################################################################
       # Run PhpUnit Product with MSF Sequence
       - php travis/setup_shops.php && php travis/setup_shops.php
-      - modules/splashsync/vendor/bin/phpunit -c travis/phpunit.products.xml
+      - modules/splashsync/vendor/bin/phpunit -c travis/phpunit.products.xml --log-junit msf-report.xml
       ################################################################################
       # Run Grumphp Splash Manifest Sequence
       - php modules/splashsync/vendor/bin/grumphp run -n --tasks=build-manifest
