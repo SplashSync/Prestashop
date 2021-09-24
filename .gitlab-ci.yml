@@ -53,7 +53,7 @@ stages:
             - $CI_PROJECT_DIR/splash.json
             - $CI_PROJECT_DIR/splash.yml
         reports:
-            junit: "*-report.xml"
+            junit: "/var/www/html/*-report.xml"
     services:
       - name: mysql:5.7
     ################################################################
