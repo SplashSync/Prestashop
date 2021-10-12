@@ -27,7 +27,7 @@ use Tools;
 
 /**
  * Advanced Discounts Manager
- * Manager reading of Discounts Details for Orders and Invoices
+ * Reading of Discounts Details for Orders and Invoices
  */
 class DiscountsManager
 {

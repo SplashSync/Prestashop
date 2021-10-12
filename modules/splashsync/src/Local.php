@@ -21,6 +21,7 @@ use Employee;
 use Language;
 use Splash\Core\SplashCore      as Splash;
 use Splash\Local\Objects\Product;
+use Splash\Local\Services\DiscountsManager;
 use Splash\Local\Services\KernelManager;
 use Splash\Local\Services\LanguagesManager as SLM;
 use Splash\Local\Services\MultiShopManager as MSM;
@@ -496,6 +497,8 @@ class Local implements LocalClassInterface
         if (!empty(Splash::configuration()->PsIsSourceCatalog)) {
             Splash::log()->war("FEATURE: Source Catalog mode is Active! Your products informations are now readonly.");
         }
+        //====================================================================//
+        // Discounts Tax Details Detection
         if (!empty(Splash::configuration()->PsUseAdvancedDiscounts)) {
             Splash::log()->war(
                 "FEATURE: Advanced Discounts is Active! Read Discounts details from table \\'order_discount_tax\\'."
@@ -505,6 +508,9 @@ class Local implements LocalClassInterface
             Splash::log()->war(
                 "FEATURE: Discounts Collector is Active! Splash detect Discounts details from Order Carts."
             );
+            if (!DiscountsManager::hasStorageTable()) {
+                Splash::log()->err("FEATURE: Discounts Collector table doesn't exists.");
+            }
         }
         //====================================================================//
         // Custom Configurator is Active
