@@ -485,6 +485,7 @@ class Local implements LocalClassInterface
      * Check Configuration & Inform User of Custom Parameters Activated
      *
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function selfTestInfos()
     {
