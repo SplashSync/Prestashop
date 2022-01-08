@@ -16,7 +16,7 @@
 #
 ################################################################################
 
-echo Install Pretashop
+echo Install Prestashop
 
 if [ "$DB_SERVER" = "<to be defined>" -a $PS_INSTALL_AUTO = 1 ]; then
 	echo >&2 'error: You requested automatic PrestaShop installation but MySQL server address is not provided '
@@ -105,7 +105,7 @@ if [ ! -f ./config/settings.inc.php  ]; then
 	fi
 
 else
-    echo "\n* Pretashop Core already installed...";
+    echo "\n* Prestashop Core already installed...";
 fi
 
 if [ "$PS_RUN_TESTS" = 1 ]; then
@@ -120,6 +120,16 @@ php ./travis/setup_module.php
 
 echo "\n* Clear Cache...";
 rm -Rf /var/www/html/var
+
+if [ ! -z "$SPLASH_NGINX" ]; then
+  echo Install Nginx for Prestashop
+  apt update
+  apt install nano nginx systemd -y
+  rm -f /etc/nginx/sites-enabled/default
+  ln -s /etc/nginx/sites-available/prestashop.conf /etc/nginx/sites-enabled/prestashop
+  php-fpm -D
+  nginx -g 'daemon off;'
+fi
 
 if [ -z "$SPLASH_NO_APACHE" ]; then
   echo "\n* Almost ! Starting web server now\n";

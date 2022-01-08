@@ -60,3 +60,17 @@ splash:
                 WsEncryptionKey:    ThisTokenIsNotSoSecretChangeIt
                 WsHost:             http://ps1-6.prestashop.local
                 WsPath:             /modules/splashsync/vendor/splash/phpcore/soap.php
+
+        ########################################################################
+        # Prestashop Nginx
+        ps-nginx:
+            id:                 ThisIsPsNginxKey
+            key:                ThisTokenIsNotSoSecretChangeIt
+            name:               Prestashop Nginx
+            host:               false
+            connector:          soap
+            config:
+                WsIdentifier:       ThisIsPsNginxKey
+                WsEncryptionKey:    ThisTokenIsNotSoSecretChangeIt
+                WsHost:             http://nginx.prestashop.local
+                WsPath:             /modules/splashsync/vendor/splash/phpcore/soap.php
