@@ -208,6 +208,7 @@ trait HooksTrait
         if (!$this->isAllowedProductCommit($product)) {
             return array();
         }
+        $this->ensureCurrencyIsLoaded();
         //====================================================================//
         // Read Product Combinations
         $attrList = $product->getAttributesResume(LanguagesManager::getDefaultLangId());

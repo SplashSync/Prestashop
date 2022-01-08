@@ -18,6 +18,7 @@ namespace Splash\Local\Services;
 use Configuration;
 use Context;
 use Country;
+use Currency;
 use Exception;
 use Shop;
 use ShopUrl;
@@ -196,6 +197,7 @@ class MultiShopManager
             $context = Context::getContext();
             $context->shop = self::getCachedShop();
             $context->country = self::getCachedCountry();
+            $context->currency = Currency::getCurrencyInstance((int) Configuration::get('PS_CURRENCY_DEFAULT'));
 
             return true;
         }
@@ -215,6 +217,7 @@ class MultiShopManager
             $context = Context::getContext();
             $context->shop = self::getCachedShop($shopId);
             $context->country = self::getCachedCountry();
+            $context->currency = Currency::getCurrencyInstance((int) Configuration::get('PS_CURRENCY_DEFAULT'));
 
             return true;
         }

@@ -17,6 +17,7 @@ namespace   Splash\Local\Objects;
 
 use Combination;
 use Configuration;
+use Context;
 use Currency;
 use Product as psProduct;
 use Shop;
@@ -112,7 +113,7 @@ class Product extends AbstractObject
     //====================================================================//
 
     /**
-     * Prestashop Product Id
+     * Prestashop Product ID
      *
      * @var int
      */
@@ -152,7 +153,10 @@ class Product extends AbstractObject
         $this->spl = Local::getLocalModule();
         //====================================================================//
         // Load Default Currency
-        $this->Currency = new Currency((int) Configuration::get('PS_CURRENCY_DEFAULT'));
+        /** @var Context $context */
+        $context = Context::getContext();
+        $this->Currency = Currency::getCurrencyInstance((int) Configuration::get('PS_CURRENCY_DEFAULT'));
+        $context->currency = $this->Currency;
     }
 
     /**

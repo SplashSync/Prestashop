@@ -103,7 +103,7 @@ class SplashSync extends Module
         //====================================================================//
         if (!class_exists("Splash")) {
             //====================================================================//
-            // Splash Module & Dependecies Autoloader
+            // Splash Module & Dependencies Autoloader
             require_once(dirname(__FILE__)."/vendor/autoload.php");
             //====================================================================//
             // Init Splash Module
@@ -502,6 +502,20 @@ class SplashSync extends Module
         }
 
         return true;
+    }
+
+    /**
+     * Ensure Context Currency is Defined
+     *
+     * @return void
+     */
+    protected function ensureCurrencyIsLoaded(): void
+    {
+        /** @var Context $context */
+        $context = Context::getContext();
+        if (!isset($context->currency)) {
+            $context->currency = Currency::getCurrencyInstance((int) Configuration::get('PS_CURRENCY_DEFAULT'));
+        }
     }
 
     /**
