@@ -623,25 +623,26 @@ trait ImagesTrait
         $visibleImageIds = array();
         //====================================================================//
         // Given List Is Not Empty
-        /** @var array|ArrayObject $inValue */
-        foreach ($data as $inValue) {
-            $inValue = ($inValue instanceof ArrayObject) ? $inValue->getArrayCopy() : $inValue;
+        /** @var array|ArrayObject $value */
+        foreach ($data as $value) {
+            $value = ($value instanceof ArrayObject) ? $value->getArrayCopy() : $value;
             //====================================================================//
             // Check Image Array is here
-            if (!isset($inValue["image"]) || empty($inValue["image"])) {
+            if (!isset($value["image"]) || empty($value["image"])) {
                 continue;
             }
+            $inImage = ($value["image"] instanceof ArrayObject) ? $value["image"]->getArrayCopy() : $value["image"];
             $this->imgPosition++;
             //====================================================================//
             // Search For Image In Current List
-            $psImage = $this->searchImage($inValue["image"]["md5"]);
+            $psImage = $this->searchImage($value["image"]["md5"]);
             if (false == $psImage) {
                 //====================================================================//
                 // If Not found, Add this object to list
                 $psImage = $this->addImageToProduct(
-                    $inValue["image"],
-                    (int) $this->getImagePosition($inValue),
-                    (bool) $this->getImageCoverFlag($inValue)
+                    $inImage,
+                    (int) $this->getImagePosition($value),
+                    (bool) $this->getImageCoverFlag($value)
                 );
             }
             //====================================================================//
@@ -651,14 +652,14 @@ trait ImagesTrait
             }
             //====================================================================//
             // Update Image Position in List
-            $this->updateImagePosition($psImage, $inValue);
-            $this->updateImageCoverFlag($psImage, $inValue);
+            $this->updateImagePosition($psImage, $value);
+            $this->updateImageCoverFlag($psImage, $value);
             //====================================================================//
             // Update Image Object in Database
             $this->updateImage($psImage);
             //====================================================================//
             // Add Ps Image Id to Visible
-            if ($this->isImageVisible($inValue)) {
+            if ($this->isImageVisible($value)) {
                 $visibleImageIds[] = $psImage->id;
             }
         }
