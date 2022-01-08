@@ -1069,9 +1069,12 @@ class SplashSync extends Module
      */
     private function getMessageBufferPath(): string
     {
+        /** @var Context $context */
+        $context = Context::getContext();
+
         return sys_get_temp_dir()
             ."/splashPsNotifications-"
-            .(Context::getContext()->cookie->__get("session_token") ?: "admin")
+            .($context->cookie->__get("session_token") ?: "admin")
             .".json";
     }
 }

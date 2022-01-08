@@ -22,6 +22,7 @@ use Pack;
 use Product as PsProduct;
 use Splash\Client\Splash;
 use Splash\Local\Objects\Product;
+use Splash\Local\Services\LanguagesManager;
 use Splash\Local\Services\PmAdvancedPack;
 
 /**
@@ -44,7 +45,7 @@ trait HooksTrait
     /**
      * This hook is called when a Product is Updated
      *
-     * Changes are Generaly Detected on 'actionObjectProductUpdateAfter' hook
+     * Changes are Generally Detected on 'actionObjectProductUpdateAfter' hook
      * but some modules only Uses this Hook after Direct Database writtings.
      *
      * @param array $params
@@ -210,7 +211,7 @@ trait HooksTrait
         }
         //====================================================================//
         // Read Product Combinations
-        $attrList = $product->getAttributesResume(Context::getContext()->language->id);
+        $attrList = $product->getAttributesResume(LanguagesManager::getDefaultLangId());
         //====================================================================//
         // If Product has No Combinations
         if (!is_array($attrList) || empty($attrList)) {
@@ -224,7 +225,7 @@ trait HooksTrait
                 //====================================================================//
                 // Add Current Product Combinations to Commit Update List
                 return array(
-                    Product::getUnikIdStatic($product->id, Splash::object("Product")->AttributeId)
+                    Product::getUnikIdStatic((int) $product->id, Splash::object("Product")->AttributeId)
                 );
             }
         }
@@ -232,7 +233,7 @@ trait HooksTrait
         // Add Product Combinations to Commit Update List
         $productIds = array();
         foreach ($attrList as $attr) {
-            $productIds[] = Product::getUnikIdStatic($product->id, $attr["id_product_attribute"]);
+            $productIds[] = Product::getUnikIdStatic((int) $product->id, $attr["id_product_attribute"]);
         }
 
         return  $productIds;
@@ -361,7 +362,7 @@ trait HooksTrait
             }
             //====================================================================//
             // Compatibility with Pm Advanced Packs Module
-            if (PmAdvancedPack::isAdvancedPack($product->id)) {
+            if (PmAdvancedPack::isAdvancedPack((int)  $product->id)) {
                 Splash::log()->war("Advanced Products Pack: Commit Skipped.");
 
                 return false;
