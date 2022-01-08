@@ -110,7 +110,7 @@ stages:
 
 
 Ps-1.7-Php-7.4:
-  image:      prestashop/prestashop:1.7-7.4-apache
+  image:      prestashop/prestashop:1.7-7.4
   <<: *functionnal
 
 Ps-1.7-Php-7.3:
