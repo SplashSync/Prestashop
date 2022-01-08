@@ -396,18 +396,21 @@ class SplashSync extends Module
      */
     public function hookDisplayBackOfficeFooter()
     {
+        $bufferFile = $this->getMessageBufferPath();
         //====================================================================//
-        // Read Cookie String
-        $notifications = Context::getContext()->cookie->__get("spl_notify");
-        if (false == $notifications) {
-            return null;
+        // Read Current Notifications
+        $notifications = array();
+        if (is_file($bufferFile) && function_exists("json_decode")) {
+            $notifications = json_decode(file_get_contents($bufferFile), true);
         }
         //====================================================================//
         // Assign Smarty Variables
-        $this->context->smarty->assign('notifications', json_decode($notifications, true));
+        $this->context->smarty->assign('notifications', $notifications);
         //====================================================================//
-        // Clear Logs in Cookie
-        Context::getContext()->cookie->__set("spl_notify", "");
+        // Clear Notifications Logs in Cookie
+        if (is_file($bufferFile) && function_exists("json_encode")) {
+            file_put_contents($bufferFile, json_encode(array()));
+        }
         //====================================================================//
         // Render Footer
         return $this->display(__FILE__, 'footer.tpl');
@@ -1042,20 +1045,33 @@ class SplashSync extends Module
      */
     private function importMessages()
     {
+        $bufferFile = $this->getMessageBufferPath();
         //====================================================================//
-        // Read Current Cookie String
-        $rawNotifications = Context::getContext()->cookie->__get("spl_notify");
+        // Read Current Notifications
+        $notifications = array();
+        if (is_file($bufferFile) && function_exists("json_decode")) {
+            $notifications = json_decode(file_get_contents($bufferFile), true);
+        }
         //====================================================================//
         // Merge Cookie With Log
-        Splash\Client\Splash::log()->merge(json_decode($rawNotifications, true));
+        Splash\Client\Splash::log()->merge($notifications);
         //====================================================================//
-        // Encode & Compare
-        $newRaw = json_encode(Splash\Client\Splash::log());
-        if (0 != strcmp($rawNotifications, (string) $newRaw)) {
-            //====================================================================//
-            // Save new Cookie String
-            Context::getContext()->cookie->__set("spl_notify", $newRaw);
-            Context::getContext()->cookie->write();
+        // Save Changes to File
+        if (is_file($bufferFile) && function_exists("json_encode")) {
+            file_put_contents($bufferFile, json_encode(Splash\Client\Splash::log()));
         }
+    }
+
+    /**
+     * Get Full Path of User Notifications buffer File
+     *
+     * @return string
+     */
+    private function getMessageBufferPath(): string
+    {
+        return sys_get_temp_dir()
+            ."/splashPsNotifications-"
+            .(Context::getContext()->cookie->__get("session_token") ?: "admin")
+            .".json";
     }
 }
