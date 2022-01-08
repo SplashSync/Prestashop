@@ -1057,7 +1057,7 @@ class SplashSync extends Module
         Splash\Client\Splash::log()->merge($notifications);
         //====================================================================//
         // Save Changes to File
-        if (is_file($bufferFile) && function_exists("json_encode")) {
+        if (function_exists("json_encode")) {
             file_put_contents($bufferFile, json_encode(Splash\Client\Splash::log()));
         }
     }
