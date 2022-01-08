@@ -37,7 +37,9 @@ class TaxManager
      */
     public static function getTaxRateGroupId($taxRate, $countryId = null)
     {
-        $langId = Context::getContext()->language->id;
+        /** @var Context $context */
+        $context = Context::getContext();
+        $langId = $context->language->id;
         if (is_null($countryId)) {
             $countryId = Configuration::get('PS_COUNTRY_DEFAULT');
         }
@@ -98,7 +100,9 @@ class TaxManager
     {
         //====================================================================//
         // Get default Language Id
-        $langId = Context::getContext()->language->id;
+        /** @var Context $context */
+        $context = Context::getContext();
+        $langId = $context->language->id;
         //====================================================================//
         // For All Tax Rules of This Group, Search for Closest Rate
         $bestRate = 0;

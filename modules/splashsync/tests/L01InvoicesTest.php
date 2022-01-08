@@ -37,8 +37,10 @@ class L01InvoicesTest extends ObjectsCase
 
         //====================================================================//
         //   Ensure Currency is Loaded
-        if (empty(Context::getContext()->currency)) {
-            Context::getContext()->currency = new Currency(1);
+        $context = Context::getContext();
+        $this->assertNotNull($context);
+        if (empty($context->currency)) {
+            $context->currency = new Currency(1);
         }
 
         //====================================================================//

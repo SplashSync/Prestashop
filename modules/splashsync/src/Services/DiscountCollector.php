@@ -324,13 +324,15 @@ class DiscountCollector
      */
     private static function toDiscountDbValues(Order $order, array $rawDiscounts): array
     {
+        /** @var Context $context */
+        $context = Context::getContext();
         $data = array();
         foreach ($rawDiscounts as $cartRuleId => $discount) {
             $cartRule = self::getCartRule($cartRuleId);
             if (!$cartRule) {
                 continue;
             }
-            $cartRuleName = $cartRule->name[Context::getContext()->language->id]
+            $cartRuleName = $cartRule->name[$context->language->id]
                 ?? ($cartRule->name[array_keys($cartRule->name)[0] ?? 1] ?? '');
 
             foreach ($discount as $taxRate => $tax) {
@@ -361,6 +363,8 @@ class DiscountCollector
      */
     private static function toDiscountItems(Currency $currency, array $rawDiscounts): array
     {
+        /** @var Context $context */
+        $context = Context::getContext();
         $data = array();
         foreach ($rawDiscounts as $cartRuleId => $discount) {
             foreach ($discount as $taxRate => $tax) {
@@ -369,7 +373,7 @@ class DiscountCollector
                     if (!$cartRule) {
                         continue;
                     }
-                    $cartRuleName = $cartRule->name[Context::getContext()->language->id]
+                    $cartRuleName = $cartRule->name[$context->language->id]
                         ?? ($cartRule->name[array_keys($cartRule->name)[0] ?? 1] ?? '');
                     //====================================================================//
                     // Compute Item Price

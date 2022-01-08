@@ -17,11 +17,11 @@ namespace Splash\Local\Objects\ThirdParty;
 
 //====================================================================//
 // Prestashop Static Classes
-use Context;
+use Splash\Local\Services\LanguagesManager;
 use Translate;
 
 /**
- * Access to thirdparty Primary Address Fields
+ * Access to ThirdParty Primary Address Fields
  */
 trait AddressesTrait
 {
@@ -51,7 +51,7 @@ trait AddressesTrait
      *
      * @return void
      */
-    private function getAddressesFields($key, $fieldName)
+    private function getAddressesFields(string $key, string $fieldName): void
     {
         //====================================================================//
         // READ Fields
@@ -82,15 +82,15 @@ trait AddressesTrait
         }
         //====================================================================//
         // Read Address List
-        $addresList = $this->object->getAddresses(Context::getContext()->language->id);
+        $addressList = $this->object->getAddresses(LanguagesManager::getDefaultLangId());
         //====================================================================//
         // If Address List Is Empty => Null
-        if (empty($addresList)) {
+        if (empty($addressList)) {
             return;
         }
         //====================================================================//
         // Run Through Address List
-        foreach ($addresList as $index => $address) {
+        foreach ($addressList as $index => $address) {
             $this->out["contacts"][$index] = array(
                 "address" => self::objects()->Encode("Address", $address["id_address"])
             );

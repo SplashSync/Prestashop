@@ -90,9 +90,9 @@ trait CRUDTrait
      *
      * @param bool $needed Is This Update Needed
      *
-     * @return false|string Object Id
+     * @return false|string Object ID
      */
-    public function update($needed)
+    public function update(bool $needed)
     {
         //====================================================================//
         // Stack Trace
@@ -140,7 +140,7 @@ trait CRUDTrait
         // UPDATE/CREATE SPLASH ID
         //====================================================================//
         if (!is_null($this->NewSplashId)) {
-            self::setSplashId("Address", $this->object->id, $this->NewSplashId);
+            self::setSplashId("Address", (int) $this->object->id, $this->NewSplashId);
             $this->NewSplashId = null;
         }
 
@@ -154,7 +154,7 @@ trait CRUDTrait
      *
      * @return bool
      */
-    public function delete($objectId = null)
+    public function delete($objectId = null): bool
     {
         //====================================================================//
         // Stack Trace

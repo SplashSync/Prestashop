@@ -81,7 +81,7 @@ trait StockTrait
      *
      * @return void
      */
-    protected function getStockFields($key, $fieldName)
+    protected function getStockFields(string $key, string $fieldName)
     {
         //====================================================================//
         // READ Fields
@@ -126,7 +126,7 @@ trait StockTrait
      *
      * @return void
      */
-    protected function setStockFields($fieldName, $fieldData)
+    protected function setStockFields(string $fieldName, $fieldData)
     {
         //====================================================================//
         // WRITE Field
@@ -147,6 +147,7 @@ trait StockTrait
                         $this->ProductId,
                         $this->AttributeId,
                         $fieldData,
+                        // @phpstan-ignore-next-line
                         Shop::getContextShopID(true),
                         (bool) Shop::getContextShopID(true)
                     );
@@ -179,7 +180,7 @@ trait StockTrait
      *
      * @return int
      */
-    protected function getStockQuantity()
+    protected function getStockQuantity(): int
     {
         if (Pack::isPack((int) $this->ProductId)) {
             return Pack::getQuantity($this->ProductId, $this->AttributeId);

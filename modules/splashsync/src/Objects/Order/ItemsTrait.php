@@ -340,7 +340,7 @@ trait ItemsTrait
             //====================================================================//
             // Create New OrderDetail Item
             $orderDetail = new OrderDetail();
-            $orderDetail->id_order = $this->object->id;
+            $orderDetail->id_order = (int) $this->object->id;
             $orderDetail->id_shop = $this->object->id_shop;
             $orderDetail->id_warehouse = 0;
         } else {

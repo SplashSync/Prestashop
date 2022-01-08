@@ -186,7 +186,7 @@ class AttributesManager
             static::$attributes[$group->id] = array();
             //====================================================================//
             // For Each Available Attribue
-            $list = AttributeGroup::getAttributes(SLM::getDefaultLangId(), $group->id);
+            $list = AttributeGroup::getAttributes(SLM::getDefaultLangId(), (int) $group->id);
 
             foreach ($list as $attribute) {
                 $attrId = $attribute["id_attribute"];
@@ -357,6 +357,7 @@ class AttributesManager
         // Setup Name => Same Name for Each Languages
         $attributeGroup->name = array();
         $attributeGroup->public_name = array();
+        /** @var array $lang */
         foreach (Language::getLanguages() as $lang) {
             $attributeGroup->name[$lang["id_lang"]] = $code;
             $attributeGroup->public_name[$lang["id_lang"]] = $name;

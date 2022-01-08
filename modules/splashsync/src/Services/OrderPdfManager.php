@@ -155,14 +155,16 @@ class OrderPdfManager
      *
      * @return string
      */
-    private static function getPdfContents(OrderInvoice $object, $template)
+    private static function getPdfContents(OrderInvoice $object, string $template): string
     {
         //====================================================================//
         // Only for PrestaShop > 1.7 => Ensure Kernel is Loaded
         KernelManager::ensureKernel();
+        /** @var Context $context */
+        $context = Context::getContext();
         //====================================================================//
         // Generate Pdf
-        $pdf = new PDF($object, $template, Context::getContext()->smarty);
+        $pdf = new PDF($object, $template, $context->smarty);
         //====================================================================//
         // Return Raw Pdf Contents
         /** @var null|string $contents */

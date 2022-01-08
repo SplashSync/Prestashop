@@ -192,8 +192,10 @@ class MultiShopManager
                 static::$legacyContextClass::getContext()->shop->setContext(Shop::CONTEXT_ALL);
             }
             // Setup Global Context
-            Context::getContext()->shop = self::getCachedShop();
-            Context::getContext()->country = self::getCachedCountry();
+            /** @var Context $context */
+            $context = Context::getContext();
+            $context->shop = self::getCachedShop();
+            $context->country = self::getCachedCountry();
 
             return true;
         }
@@ -209,8 +211,10 @@ class MultiShopManager
                 static::$legacyContextClass::getContext()->shop->setContext(Shop::CONTEXT_SHOP, $shopId);
             }
             // Setup Global Context
-            Context::getContext()->shop = self::getCachedShop($shopId);
-            Context::getContext()->country = self::getCachedCountry();
+            /** @var Context $context */
+            $context = Context::getContext();
+            $context->shop = self::getCachedShop($shopId);
+            $context->country = self::getCachedCountry();
 
             return true;
         }

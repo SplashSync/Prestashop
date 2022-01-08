@@ -183,6 +183,7 @@ class Local implements LocalClassInterface
         }
         //====================================================================//
         //  Verify - Languages Codes Are in Valid Format
+        /** @var array $language */
         foreach (Language::getLanguages() as $language) {
             $tmp = explode("-", $language["language_code"]);
             if (2 != count($tmp)) {
@@ -266,7 +267,7 @@ class Local implements LocalClassInterface
     /**
      * {@inheritdoc}
      */
-    public function testSequences($name = null)
+    public function testSequences($name = null): array
     {
         //====================================================================//
         // List Tests Sequences
@@ -302,7 +303,7 @@ class Local implements LocalClassInterface
     /**
      * {@inheritdoc}
      */
-    public function testParameters()
+    public function testParameters(): array
     {
         //====================================================================//
         // Init Parameters Array
@@ -326,12 +327,14 @@ class Local implements LocalClassInterface
      *
      * @return bool
      */
-    public function loadLocalUser()
+    public function loadLocalUser(): bool
     {
+        /** @var Context $context */
+        $context = Context::getContext();
         //====================================================================//
         // CHECK USER ALREADY LOADED
         //====================================================================//
-        if (isset(Context::getContext()->employee->id) && !empty(Context::getContext()->employee->id)) {
+        if (isset($context->employee->id) && !empty($context->employee->id)) {
             return true;
         }
 
@@ -364,7 +367,7 @@ class Local implements LocalClassInterface
         MSM::initLegacyContext();
         //====================================================================//
         // Setup Remote User
-        Context::getContext()->employee = $user;
+        $context->employee = $user;
 
         return Splash::log()->deb('Commons  - Employee Loaded from Splash Parameters => '.$user->email);
     }

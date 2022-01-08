@@ -15,9 +15,9 @@
 
 namespace Splash\Local\Objects\ThirdParty;
 
-use Context;
 use Gender;
 use Splash\Core\SplashCore      as Splash;
+use Splash\Local\Services\LanguagesManager;
 use Translate;
 use Validate;
 
@@ -119,7 +119,7 @@ trait MainTrait
      *
      * @return void
      */
-    private function getMainFields($key, $fieldName)
+    private function getMainFields(string $key, string $fieldName): void
     {
         //====================================================================//
         // READ Fields
@@ -163,7 +163,7 @@ trait MainTrait
      *
      * @return void
      */
-    private function getGenderFields($key, $fieldName)
+    private function getGenderFields(string $key, string $fieldName): void
     {
         //====================================================================//
         // READ Fields
@@ -176,7 +176,7 @@ trait MainTrait
 
                     break;
                 }
-                $gender = new Gender($this->object->id_gender, Context::getContext()->language->id);
+                $gender = new Gender($this->object->id_gender, LanguagesManager::getDefaultLangId());
                 if (0 == $gender->type) {
                     $this->out[$fieldName] = $this->spl->l('Male');
                 } elseif (1 == $gender->type) {
@@ -209,7 +209,7 @@ trait MainTrait
      *
      * @return string Customer Company Name
      */
-    private function getCompanyName()
+    private function getCompanyName(): string
     {
         //====================================================================//
         // Read Only AllInOne Customer Name Mode
@@ -243,7 +243,7 @@ trait MainTrait
      *
      * @return void
      */
-    private function setMainFields($fieldName, $fieldData)
+    private function setMainFields(string $fieldName, $fieldData): void
     {
         //====================================================================//
         // WRITE Fields
@@ -324,7 +324,7 @@ trait MainTrait
      *
      * @return void
      */
-    private function setGenderFields($fieldName, $fieldData)
+    private function setGenderFields(string $fieldName, $fieldData): void
     {
         //====================================================================//
         // WRITE Fields
@@ -334,14 +334,14 @@ trait MainTrait
             case 'gender_type':
                 //====================================================================//
                 // Identify Gender Type
-                $genders = Gender::getGenders(Context::getContext()->language->id);
+                $genders = Gender::getGenders(LanguagesManager::getDefaultLangId());
                 $genders->where("type", "=", $fieldData);
                 /** @var false|Gender */
                 $gendertype = $genders->getFirst();
                 //====================================================================//
                 // Unknown Gender Type => Take First Available Gender
                 if ((false == $gendertype)) {
-                    $genders = Gender::getGenders(Context::getContext()->language->id);
+                    $genders = Gender::getGenders(LanguagesManager::getDefaultLangId());
                     /** @var false|Gender */
                     $gendertype = $genders->getFirst();
                     Splash::log()->warTrace("This Gender Type doesn't exist.");

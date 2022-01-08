@@ -18,6 +18,7 @@ namespace Splash\Tests;
 use Context;
 use Currency;
 use Db;
+use Exception;
 use Order;
 use OrderInvoice;
 use Splash\Client\Splash;
@@ -88,6 +89,8 @@ class L05AdvancedDiscountsTest extends ObjectsCase
     /**
      * Test Reading of a Core Discount Only
      *
+     * @throws Exception
+     *
      * @return void
      */
     public function testOrderWithSimpleDiscount()
@@ -124,6 +127,8 @@ class L05AdvancedDiscountsTest extends ObjectsCase
 
     /**
      * Test Reading of Advanced Discounts
+     *
+     * @throws Exception
      *
      * @return void
      */
@@ -249,6 +254,8 @@ class L05AdvancedDiscountsTest extends ObjectsCase
     /**
      * Test Reading of Advanced Discounts
      *
+     * @throws Exception
+     *
      * @return void
      */
     public function testInvoiceWithAdvancedDiscount()
@@ -338,14 +345,18 @@ class L05AdvancedDiscountsTest extends ObjectsCase
     /**
      * Create a new Order
      *
+     * @throws Exception
+     *
      * @return Order
      */
     private function createAnOrder()
     {
         //====================================================================//
         //   Ensure Currency is Loaded
-        if (empty(Context::getContext()->currency)) {
-            Context::getContext()->currency = new Currency(1);
+        $context = Context::getContext();
+        $this->assertNotNull($context);
+        if (empty($context->currency)) {
+            $context->currency = new Currency(1);
         }
         //====================================================================//
         //   Create Fake Order Data

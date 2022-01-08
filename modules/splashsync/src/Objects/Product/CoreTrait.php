@@ -30,7 +30,7 @@ trait CoreTrait
      *
      * @return void
      */
-    protected function buildCoreFields()
+    protected function buildCoreFields(): void
     {
         //====================================================================//
         // Reference
@@ -66,7 +66,7 @@ trait CoreTrait
      *
      * @return void
      */
-    protected function getCoreFields($key, $fieldName)
+    protected function getCoreFields(string $key, string $fieldName): void
     {
         //====================================================================//
         // READ Fields
@@ -97,7 +97,7 @@ trait CoreTrait
      *
      * @return void
      */
-    protected function setCoreFields($fieldName, $fieldData)
+    protected function setCoreFields(string $fieldName, $fieldData): void
     {
         //====================================================================//
         // WRITE Field
@@ -124,7 +124,7 @@ trait CoreTrait
      *
      * @return string
      */
-    protected function getProductReference()
+    protected function getProductReference(): string
     {
         //====================================================================//
         // Product has No Attribute
@@ -150,11 +150,11 @@ trait CoreTrait
      *
      * @return string
      */
-    protected function getProductType()
+    protected function getProductType(): string
     {
         //====================================================================//
         // Compatibility with PM Advanced Pack Module
-        if (PmAdvancedPack::isAdvancedPack($this->object->id)) {
+        if (PmAdvancedPack::isAdvancedPack((int) $this->object->id)) {
             return "pack";
         }
         //====================================================================//

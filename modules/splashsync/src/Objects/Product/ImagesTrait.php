@@ -46,7 +46,7 @@ trait ImagesTrait
     private $imgPosition = 0;
 
     /**
-     * Images Informations Cache
+     * Images Information Cache
      *
      * @var null|array
      */
@@ -145,7 +145,7 @@ trait ImagesTrait
      *
      * @return void
      */
-    private function getImagesFields($key, $fieldName)
+    private function getImagesFields(string $key, string $fieldName): void
     {
         //====================================================================//
         // Check if List field & Init List Array
@@ -184,7 +184,7 @@ trait ImagesTrait
      *
      * @return void
      */
-    private function setImagesFields($fieldName, $fieldData)
+    private function setImagesFields(string $fieldName, $fieldData): void
     {
         //====================================================================//
         // WRITE Field
@@ -205,15 +205,17 @@ trait ImagesTrait
     /**
      * Prepare Information Array for An Image
      *
-     * @param int|string $imageId Image Object Id
+     * @param int|string $imageId Image Object ID
      *
      * @return ArrayObject
      */
-    private function buildInfo($imageId)
+    private function buildInfo($imageId): ArrayObject
     {
         //====================================================================//
         // Get Images Link from Context
-        $publicUrl = Context::getContext()->link;
+        /** @var Context $context */
+        $context = Context::getContext();
+        $publicUrl = $context->link;
         //====================================================================//
         // Fetch Images Object
         $objectImage = new Image((int) $imageId, SLM::getDefaultLangId());
@@ -227,6 +229,7 @@ trait ImagesTrait
         //====================================================================//
         // Encode Image in Splash Format
         $splashImage = self::images()->Encode(
+            // @phpstan-ignore-next-line
             ($objectImage->legend?$objectImage->legend:$objectImage->id.".".$objectImage->image_format),
             $objectImage->id.".".$objectImage->image_format,
             _PS_PROD_IMG_DIR_.$objectImage->getImgFolder(),
@@ -249,11 +252,11 @@ trait ImagesTrait
     /**
      * Check if An Image is Visible
      *
-     * @param int|string $imageId Image Object Id
+     * @param int|string $imageId Image Object ID
      *
      * @return bool
      */
-    private function isVisibleImage($imageId)
+    private function isVisibleImage($imageId): bool
     {
         //====================================================================//
         // Get Images Infos From Cache
@@ -263,7 +266,7 @@ trait ImagesTrait
             // If Not a Variant, Use Product Images so All Images will be Visibles
             $this->variantImages = Image::getImages(
                 SLM::getDefaultLangId(),
-                $this->object->id,
+                (int) $this->object->id,
                 $this->AttributeId ? $this->AttributeId : null,
                 Shop::getContextShopID(true)
             );
@@ -291,7 +294,7 @@ trait ImagesTrait
      *
      * @return false|Image
      */
-    private function searchImage($md5)
+    private function searchImage(string $md5)
     {
         if (!is_array($this->imagesCache)) {
             return false;
@@ -321,7 +324,7 @@ trait ImagesTrait
      *
      * @return false|Image
      */
-    private function isSearchedImage($psImageId, $md5)
+    private function isSearchedImage(int $psImageId, string $md5)
     {
         //====================================================================//
         // Fetch Images Object
@@ -358,7 +361,7 @@ trait ImagesTrait
      *
      * @return null|int
      */
-    private function getImagePosition($imgArray)
+    private function getImagePosition(array $imgArray): ?int
     {
         $position = null;
         //====================================================================//
@@ -382,7 +385,7 @@ trait ImagesTrait
      *
      * @return void
      */
-    private function updateImagePosition(&$psImage, $imgArray)
+    private function updateImagePosition(Image &$psImage, array $imgArray): void
     {
         $position = $this->getImagePosition($imgArray);
         //====================================================================//
@@ -400,7 +403,7 @@ trait ImagesTrait
      *
      * @return null|bool
      */
-    private function getImageCoverFlag($imgArray)
+    private function getImageCoverFlag($imgArray): ?bool
     {
         //====================================================================//
         // Cover Flag is Available
@@ -419,7 +422,7 @@ trait ImagesTrait
      *
      * @return void
      */
-    private function updateImageCoverFlag(&$psImage, $imgArray)
+    private function updateImageCoverFlag(Image &$psImage, array $imgArray): void
     {
         $isCover = $this->getImageCoverFlag($imgArray);
         //====================================================================//
@@ -442,7 +445,7 @@ trait ImagesTrait
      *
      * @return void
      */
-    private function updateImage(&$psImage)
+    private function updateImage(Image &$psImage)
     {
         if ($this->isToUpdate("Image")) {
             $psImage->update();
@@ -457,7 +460,7 @@ trait ImagesTrait
      *
      * @return bool
      */
-    private function isImageVisible($imgArray)
+    private function isImageVisible(array $imgArray)
     {
         //====================================================================//
         // Visible Flag is Available
@@ -475,7 +478,7 @@ trait ImagesTrait
      *
      * @return void
      */
-    private function updateAttributeImages($psImageIds)
+    private function updateAttributeImages(array $psImageIds)
     {
         //====================================================================//
         // Not in Combination Mode => Skip
@@ -505,7 +508,7 @@ trait ImagesTrait
      *
      * @return void
      */
-    private function updateImgThumbnail()
+    private function updateImgThumbnail(): void
     {
         //====================================================================//
         // Load Object Images List
@@ -543,18 +546,18 @@ trait ImagesTrait
      *
      * @return void
      */
-    private function flushImageCache()
+    private function flushImageCache(): void
     {
         $this->imagesCache = null;
         $this->variantImages = null;
     }
 
     /**
-     * Return Product Images Informations Array from Prestashop Object Class
+     * Return Product Images Information Array from Prestashop Object Class
      *
      * @return array
      */
-    private function getImagesInfoArray()
+    private function getImagesInfoArray(): array
     {
         //====================================================================//
         // Get Images Infos From Cache
@@ -565,7 +568,7 @@ trait ImagesTrait
         // Load Complete Product Images List
         $productImages = Image::getImages(
             SLM::getDefaultLangId(),
-            $this->object->id,
+            (int) $this->object->id,
             null,
             Shop::getContextShopID(true)
         );
@@ -596,7 +599,7 @@ trait ImagesTrait
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    private function setImgArray($data)
+    private function setImgArray($data): bool
     {
         //====================================================================//
         // Safety Check
@@ -607,7 +610,7 @@ trait ImagesTrait
         // Load Object Images List for Whole Product
         $this->imagesCache = Image::getImages(
             SLM::getDefaultLangId(),
-            $this->object->id,
+            (int) $this->object->id,
             null,
             Shop::getContextShopID(true)
         );
@@ -686,7 +689,7 @@ trait ImagesTrait
      *
      * @return false|Image
      */
-    private function addImageToProduct($imgArray, $position, $isCover)
+    private function addImageToProduct(array $imgArray, int $position, bool $isCover)
     {
         //====================================================================//
         // Read File from Splash Server

@@ -36,7 +36,8 @@ trait ObjectsListTrait
         //====================================================================//
         // Stack Trace
         Splash::log()->trace();
-
+        /** @var Context $context */
+        $context = Context::getContext();
         //====================================================================//
         // Build query
         $sql = new DbQuery();
@@ -55,7 +56,7 @@ trait ObjectsListTrait
         $sql->leftJoin(
             "country_lang",
             'c',
-            'c.id_country = a.id_country AND id_lang = '.Context::getContext()->language->id." "
+            'c.id_country = a.id_country AND id_lang = '.$context->language->id." "
         );
         //====================================================================//
         // Setup filters

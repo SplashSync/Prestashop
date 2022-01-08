@@ -32,14 +32,14 @@ trait PricesTrait
     /**
      * @var string
      */
-    private $NewPrice;
+    private $newPrice;
 
     /**
      * Build Fields using FieldFactory
      *
      * @return void
      */
-    protected function buildPricesFields()
+    protected function buildPricesFields(): void
     {
         //====================================================================//
         // PRICES INFORMATIONS
@@ -107,7 +107,7 @@ trait PricesTrait
      *
      * @return void
      */
-    protected function getPricesFields($key, $fieldName)
+    protected function getPricesFields(?string $key, string $fieldName): void
     {
         //====================================================================//
         // READ Fields
@@ -159,7 +159,7 @@ trait PricesTrait
                 if ($this->AttributeId && ($this->Attribute->wholesale_price > 0)) {
                     $priceHT = (double) Tools::convertPrice($this->Attribute->wholesale_price, $this->Currency);
                 } else {
-                    $priceHT = (double) Tools::convertPrice($this->object->wholesale_price, $this->Currency);
+                    $priceHT = (double) Tools::convertPrice((float) $this->object->wholesale_price, $this->Currency);
                 }
                 $taxPercent = (double)  $this->object->getTaxesRate();
                 //====================================================================//

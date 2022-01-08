@@ -122,7 +122,7 @@ trait AttributeTrait
         }
         //====================================================================//
         // Store New Id on SplashObject Class
-        $this->AttributeId = $this->Attribute->id;
+        $this->AttributeId = (int) $this->Attribute->id;
         //====================================================================//
         // LOCK PRODUCT to prevent triggered actions on Price or Stock Update
         $this->lock($this->getUnikId());

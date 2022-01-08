@@ -40,7 +40,7 @@ trait CRUDTrait
     protected $Order;
 
     /**
-     * @var TaxCalculator
+     * @var TaxCalculator.
      */
     protected $ShippingTaxCalculator;
 
@@ -85,6 +85,7 @@ trait CRUDTrait
 
         //====================================================================//
         // Load Shipping Tax Calculator
+        // @phpstan-ignore-next-line
         $this->ShippingTaxCalculator = $this->carrier->getTaxCalculator(new Address($object->id_address_delivery));
 
         //====================================================================//
@@ -98,7 +99,9 @@ trait CRUDTrait
         //====================================================================//
         // Set Context Currency to Order Currency
         if ($object->id_currency) {
-            Context::getContext()->currency = Currency::getCurrencyInstance($object->id_currency);
+            /** @var Context $context */
+            $context = Context::getContext();
+            $context->currency = Currency::getCurrencyInstance($object->id_currency);
         }
 
         return $object;
@@ -180,7 +183,7 @@ trait CRUDTrait
      *
      * @return false|string Object Id
      */
-    public function update($needed)
+    public function update(bool $needed)
     {
         //====================================================================//
         // Stack Trace
@@ -203,7 +206,7 @@ trait CRUDTrait
         // UPDATE/CREATE SPLASH ID
         //====================================================================//
         if (!is_null($this->NewSplashId)) {
-            self::setSplashId(self::$NAME, $this->object->id, $this->NewSplashId);
+            self::setSplashId(self::$NAME, (int) $this->object->id, $this->NewSplashId);
             $this->NewSplashId = null;
         }
 
@@ -217,7 +220,7 @@ trait CRUDTrait
      *
      * @return bool
      */
-    public function delete($objectId = null)
+    public function delete($objectId = null): bool
     {
         //====================================================================//
         // Stack Trace

@@ -71,7 +71,7 @@ class CategoryManager
     {
         //====================================================================//
         // Load Product Current Categories List
-        $current = self::getProductCategories($prd->id, $lang, $field);
+        $current = self::getProductCategories((int) $prd->id, $lang, $field);
         //====================================================================//
         // Detect ArrayObjects
         $data = ($data instanceof ArrayObject) ? $data->getArrayCopy() : $data;

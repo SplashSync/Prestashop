@@ -37,7 +37,7 @@ trait DescTrait
      *
      * @return void
      */
-    protected function buildDescFields()
+    protected function buildDescFields(): void
     {
         $groupName = Translate::getAdminTranslation("Information", "AdminProducts");
         $this->fieldsFactory()->setDefaultLanguage(LanguagesManager::getDefaultLanguage());
@@ -100,7 +100,7 @@ trait DescTrait
      *
      * @return void
      */
-    protected function getDescFields($key, $fieldName)
+    protected function getDescFields(string $key, string $fieldName): void
     {
         //====================================================================//
         // Walk on Available Languages
@@ -121,7 +121,11 @@ trait DescTrait
                 case 'fullname':
                     //====================================================================//
                     // Product Specific - Read Full Product Name with Attribute Description
-                    $this->out[$fieldName] = Product::getProductName($this->object->id, $this->AttributeId, $idLang);
+                    $this->out[$fieldName] = Product::getProductName(
+                        (int) $this->object->id,
+                        $this->AttributeId,
+                        $idLang
+                    );
                     unset($this->in[$key]);
 
                     break;
@@ -137,7 +141,7 @@ trait DescTrait
      *
      * @return void
      */
-    protected function setDescFields($fieldName, $fieldData)
+    protected function setDescFields(string $fieldName, $fieldData): void
     {
         //====================================================================//
         // Walk on Available Languages
@@ -177,16 +181,17 @@ trait DescTrait
     }
 
     /**
-     * Read Multilangual Fields of an Object
+     * Read Multi langual Fields of an Object
      *
      * @param Product $object Pointer to Prestashop Object
      *
      * @return array
      */
-    private function getMultilangTags(&$object)
+    private function getMultiLangTags(Product &$object): array
     {
         //====================================================================//
-        // Native Multilangs Descriptions
+        // Native Multi langs Descriptions
+        /** @var array $languages */
         $languages = Language::getLanguages();
         if (empty($languages)) {
             return array();

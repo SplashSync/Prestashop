@@ -82,9 +82,9 @@ trait CRUDTrait
      *
      * @param bool $needed Is This Update Needed
      *
-     * @return false|string Object Id
+     * @return false|string Object ID
      */
-    public function update($needed)
+    public function update(bool $needed)
     {
         //====================================================================//
         // Stack Trace

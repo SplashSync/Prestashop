@@ -127,9 +127,9 @@ trait CRUDTrait
      *
      * @param bool $needed Is This Update Needed
      *
-     * @return false|string Object Id
+     * @return false|string Object ID
      */
-    public function update($needed)
+    public function update(bool $needed)
     {
         //====================================================================//
         // Stack Trace
@@ -170,11 +170,11 @@ trait CRUDTrait
     /**
      * Delete requested Object
      *
-     * @param string $unikId Object Id.
+     * @param string $unikId Object ID.
      *
      * @return bool
      */
-    public function delete($unikId = null)
+    public function delete($unikId = null): bool
     {
         //====================================================================//
         // Stack Trace
@@ -237,7 +237,7 @@ trait CRUDTrait
      *
      * @return bool
      */
-    private function isValidForCreation()
+    private function isValidForCreation(): bool
     {
         //====================================================================//
         // Check Product Ref is given
@@ -309,7 +309,7 @@ trait CRUDTrait
         }
         //====================================================================//
         // Store New Id on SplashObject Class
-        $this->ProductId = $this->object->id;
+        $this->ProductId = (int) $this->object->id;
         $this->AttributeId = 0;
 
         //====================================================================//
@@ -322,7 +322,7 @@ trait CRUDTrait
      *
      * @return bool
      */
-    private function isAllowedLoading()
+    private function isAllowedLoading(): bool
     {
         $productType = $this->getProductType();
         //====================================================================//
@@ -340,13 +340,13 @@ trait CRUDTrait
     }
 
     /**
-     * Action to Perfom on Rejected Loading
+     * Action to Perform on Rejected Loading
      *
      * @param string $unikId
      *
      * @return false
      */
-    private function onNotAllowedLoading(string $unikId)
+    private function onNotAllowedLoading(string $unikId): bool
     {
         //====================================================================//
         // If Self Delete Unsynk Products is Disabled

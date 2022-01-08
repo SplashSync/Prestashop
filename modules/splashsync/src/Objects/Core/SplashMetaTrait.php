@@ -53,15 +53,13 @@ trait SplashMetaTrait
      *
      * @return void
      */
-    protected function getSplashMetaFields(
-        $key,
-        $fieldName
-    ) {
+    protected function getSplashMetaFields(string $key, string $fieldName): void
+    {
         //====================================================================//
         // READ Fields
         switch ($fieldName) {
             case 'splash_id':
-                $this->out[$fieldName] = self::getSplashId(self::$NAME, $this->object->id);
+                $this->out[$fieldName] = self::getSplashId(self::$NAME, (int) $this->object->id);
 
                 break;
             default:
@@ -79,7 +77,7 @@ trait SplashMetaTrait
      *
      * @return void
      */
-    protected function setSplashMetaFields($fieldName, $fieldData)
+    protected function setSplashMetaFields(string $fieldName, $fieldData): void
     {
         //====================================================================//
         // WRITE Fields

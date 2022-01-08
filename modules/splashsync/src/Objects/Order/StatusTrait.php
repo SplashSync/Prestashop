@@ -30,7 +30,7 @@ trait StatusTrait
      *
      * @return void
      */
-    protected function buildStatusFields()
+    protected function buildStatusFields(): void
     {
         //====================================================================//
         // ORDER STATUS
@@ -111,7 +111,7 @@ trait StatusTrait
      *
      * @return void
      */
-    protected function getStatusFields($key, $fieldName)
+    protected function getStatusFields(string $key, string $fieldName): void
     {
         //====================================================================//
         // READ Fields
@@ -158,7 +158,7 @@ trait StatusTrait
      *
      * @return void
      */
-    protected function setStatusFields($fieldName, $fieldData)
+    protected function setStatusFields(string $fieldName, $fieldData): void
     {
         //====================================================================//
         // WRITE Field
@@ -181,11 +181,13 @@ trait StatusTrait
                 //====================================================================//
                 // Only for PrestaShop > 1.7 => Ensure Kernel is Loaded
                 KernelManager::ensureKernel();
+                /** @var Context $context */
+                $context = Context::getContext();
                 //====================================================================//
                 // Update Order Status
                 $this->object->setCurrentState(
                     (int) StatusManager::getPrestashopState($fieldData),
-                    Context::getContext()->employee->id
+                    $context->employee->id ?? 0
                 );
 
                 break;
@@ -202,7 +204,7 @@ trait StatusTrait
      *
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    private function getSplashStatus()
+    private function getSplashStatus(): string
     {
         //====================================================================//
         // If order is in  Static Status => Use Static Status
@@ -226,7 +228,7 @@ trait StatusTrait
         }
         //====================================================================//
         // Default Status => Order is Closed & Delivered
-        // Used for Orders imported to Prestashop that do not have Prestatsop Status
+        // Used for Orders imported to Prestashop that do not have Prestashop Status
         return "OrderDelivered";
     }
 }

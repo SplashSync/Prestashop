@@ -79,6 +79,7 @@ trait CRUDTrait
 
         //====================================================================//
         // Load Shipping Tax Calculator
+        // @phpstan-ignore-next-line
         $this->ShippingTaxCalculator = $this->carrier->getTaxCalculator(new Address($this->Order->id_address_delivery));
 
         //====================================================================//
@@ -110,9 +111,9 @@ trait CRUDTrait
      *
      * @param bool $needed Is This Update Needed
      *
-     * @return string Object Id
+     * @return string Object ID
      */
-    public function update($needed)
+    public function update(bool $needed): string
     {
         //====================================================================//
         // Stack Trace

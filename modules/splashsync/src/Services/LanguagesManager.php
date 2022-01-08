@@ -58,7 +58,10 @@ class LanguagesManager
      */
     public static function getDefaultLanguage()
     {
-        return self::langEncode(Context::getContext()->language->language_code);
+        /** @var Context $context */
+        $context = Context::getContext();
+
+        return self::langEncode($context->language->language_code);
     }
 
     /**
@@ -68,7 +71,10 @@ class LanguagesManager
      */
     public static function getDefaultLangId()
     {
-        return Context::getContext()->language->id;
+        /** @var Context $context */
+        $context = Context::getContext();
+
+        return $context->language->id;
     }
 
     /**
@@ -121,6 +127,7 @@ class LanguagesManager
         static::$languages = array();
         //====================================================================//
         // For Each Available Language
+        /** @var array $psLanguage */
         foreach (Language::getLanguages() as $psLanguage) {
             static::$languages[$psLanguage["id_lang"]] = self::langEncode($psLanguage["language_code"]);
         }

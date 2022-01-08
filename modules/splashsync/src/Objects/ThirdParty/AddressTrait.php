@@ -30,7 +30,7 @@ trait AddressTrait
      *
      * @return void
      */
-    private function buildPrimaryAddressPart1Fields()
+    private function buildPrimaryAddressPart1Fields(): void
     {
         $groupName = Translate::getAdminTranslation("Address", "AdminCustomers");
 
@@ -112,7 +112,7 @@ trait AddressTrait
      *
      * @return void
      */
-    private function buildPrimaryAddressPart2Fields()
+    private function buildPrimaryAddressPart2Fields(): void
     {
         $groupName = Translate::getAdminTranslation("Address", "AdminCustomers");
 
@@ -153,7 +153,7 @@ trait AddressTrait
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    private function getPrimaryAddressFields($key, $fieldName)
+    private function getPrimaryAddressFields(string $key, string $fieldName): void
     {
         //====================================================================//
         // Identify Main Address Id
@@ -182,14 +182,14 @@ trait AddressTrait
                 break;
             case 'id_country':
                 //====================================================================//
-                // READ With Convertion
+                // READ With Conversion
                 $this->out[$fieldName] = Country::getIsoById($mainAddress->id_country);
                 unset($this->in[$key]);
 
                 break;
             case 'state':
                 //====================================================================//
-                // READ With Convertion
+                // READ With Conversion
                 $state = new State($mainAddress->id_state);
                 $this->out[$fieldName] = $state->name;
                 unset($this->in[$key]);
@@ -197,7 +197,7 @@ trait AddressTrait
                 break;
             case 'id_state':
                 //====================================================================//
-                // READ With Convertion
+                // READ With Conversion
                 $state = new State($mainAddress->id_state);
                 $this->out[$fieldName] = $state->iso_code;
                 unset($this->in[$key]);
