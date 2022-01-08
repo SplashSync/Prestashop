@@ -109,6 +109,10 @@ stages:
       - php modules/splashsync/vendor/bin/grumphp run -n --tasks=build-manifest
 
 
+Ps-1.7-Php-7.4:
+  image:      prestashop/prestashop:1.7-7.4-apache
+  <<: *functionnal
+
 Ps-1.7-Php-7.3:
   image:      prestashop/prestashop:1.7-7.3-apache
   <<: *functionnal
