@@ -623,7 +623,9 @@ trait ImagesTrait
         $visibleImageIds = array();
         //====================================================================//
         // Given List Is Not Empty
+        /** @var array|ArrayObject $inValue */
         foreach ($data as $inValue) {
+            $inValue = ($inValue instanceof ArrayObject) ? $inValue->getArrayCopy() : $inValue;
             //====================================================================//
             // Check Image Array is here
             if (!isset($inValue["image"]) || empty($inValue["image"])) {
