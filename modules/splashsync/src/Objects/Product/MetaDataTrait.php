@@ -136,11 +136,6 @@ trait MetaDataTrait
     protected function setMetaDataFields($fieldName, $fieldData)
     {
         //====================================================================//
-        // Source Catalog Mode => Write is Forbidden
-        if (self::isSourceCatalogMode()) {
-            return;
-        }
-        //====================================================================//
         // Walk on Available Languages
         foreach (LanguagesManager::getAvailableLanguages() as $idLang => $isoLang) {
             //====================================================================//
@@ -152,8 +147,12 @@ trait MetaDataTrait
                 case 'link_rewrite':
                 case 'meta_description':
                 case 'meta_title':
-                    $this->setMultilang($baseFieldName, $idLang, $fieldData);
-                    $this->addMsfUpdateFields("Product", $baseFieldName, $idLang);
+                    //====================================================================//
+                    // Source Catalog Mode => Write is Forbidden
+                    if (!self::isSourceCatalogMode()) {
+                        $this->setMultilang($baseFieldName, $idLang, $fieldData);
+                        $this->addMsfUpdateFields("Product", $baseFieldName, $idLang);
+                    }
                     unset($this->in[$fieldName]);
 
                     break;
