@@ -401,7 +401,7 @@ class SplashSync extends Module
         // Read Current Notifications
         $notifications = array();
         if (is_file($bufferFile) && function_exists("json_decode")) {
-            $notifications = json_decode(file_get_contents($bufferFile), true);
+            $notifications = json_decode((string) file_get_contents($bufferFile), true);
         }
         //====================================================================//
         // Assign Smarty Variables
@@ -1050,7 +1050,7 @@ class SplashSync extends Module
         // Read Current Notifications
         $notifications = array();
         if (is_file($bufferFile) && function_exists("json_decode")) {
-            $notifications = json_decode(file_get_contents($bufferFile), true);
+            $notifications = json_decode((string) file_get_contents($bufferFile), true);
         }
         //====================================================================//
         // Merge Cookie With Log
