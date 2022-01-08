@@ -17,7 +17,6 @@ namespace Splash\Local\Objects\Product;
 
 use Combination;
 use Configuration;
-use Context;
 use Pack;
 use Product as PsProduct;
 use Splash\Client\Splash;
