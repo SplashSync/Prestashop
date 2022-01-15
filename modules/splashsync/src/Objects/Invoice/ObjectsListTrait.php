@@ -82,7 +82,10 @@ trait ObjectsListTrait
         // For each result, read information and add to $Data
         foreach ($result as $key => $invoice) {
             $object = new OrderInvoice($invoice["id"]);
-            $invoice["number"] = $object->getInvoiceNumberFormatted(SLM::getDefaultLangId());
+            $invoice["number"] = ($object->number)
+                ? $object->getInvoiceNumberFormatted(SLM::getDefaultLangId())
+                : "DRAFT#".$invoice["id"]
+            ;
             $data[$key] = $invoice;
         }
         //====================================================================//

@@ -47,6 +47,7 @@ stages:
 #    when:       manual
     stage:      tests
     tags:       ['Dedicated']
+    retry:      2
     artifacts:
         when: always
         paths:

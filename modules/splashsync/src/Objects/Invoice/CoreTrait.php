@@ -64,7 +64,10 @@ trait CoreTrait
         // READ Fields
         switch ($fieldName) {
             case 'number':
-                $this->out[$fieldName] = $this->object->getInvoiceNumberFormatted(SLM::getDefaultLangId());
+                $this->out[$fieldName] = ($this->number)
+                    ? $this->object->getInvoiceNumberFormatted(SLM::getDefaultLangId())
+                    : "DRAFT#".$this->object->id
+                ;
 
                 break;
             case 'id_order':
