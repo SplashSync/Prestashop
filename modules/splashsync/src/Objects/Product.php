@@ -56,6 +56,7 @@ class Product extends AbstractObject
     use Product\ObjectsListTrait;
     use Product\CRUDTrait;
     use Product\CoreTrait;
+    use Product\CoverImageTrait;
     use Product\MainTrait;
     use Product\DescTrait;
     use Product\StockTrait;

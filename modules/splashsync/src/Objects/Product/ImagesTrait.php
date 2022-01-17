@@ -69,7 +69,7 @@ trait ImagesTrait
      *
      * @return void
      */
-    private function buildImagesFields()
+    protected function buildImagesFields()
     {
         $groupName = Translate::getAdminTranslation("Images", "AdminProducts");
 
@@ -145,7 +145,7 @@ trait ImagesTrait
      *
      * @return void
      */
-    private function getImagesFields(string $key, string $fieldName): void
+    protected function getImagesFields(string $key, string $fieldName): void
     {
         //====================================================================//
         // Check if List field & Init List Array
@@ -184,7 +184,7 @@ trait ImagesTrait
      *
      * @return void
      */
-    private function setImagesFields(string $fieldName, $fieldData): void
+    protected function setImagesFields(string $fieldName, $fieldData): void
     {
         //====================================================================//
         // WRITE Field
@@ -209,7 +209,7 @@ trait ImagesTrait
      *
      * @return ArrayObject
      */
-    private function buildInfo($imageId): ArrayObject
+    protected function buildInfo($imageId): ArrayObject
     {
         //====================================================================//
         // Get Images Link from Context
