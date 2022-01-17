@@ -86,7 +86,7 @@ trait CoverImageTrait
      */
     private function getCoverImageDetails(): ?array
     {
-        /** @var bool|array $imgResult */
+        /** @var array|bool $imgResult */
         $imgResult = Image::getGlobalCover($this->ProductId);
         if (!is_array($imgResult) || empty($imgResult["id_image"])) {
             return null;
