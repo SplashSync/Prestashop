@@ -75,7 +75,7 @@ class L10MsfProductsTest extends ObjectsCase
         $objectId = $this->setObjectFromModule($objectType, $allShopsOriginData);
         //====================================================================//
         // Clean Objects Committed Array
-        CommitsManager::resetSessionCommitted();
+        CommitsManager::reset();
 
         //====================================================================//
         // Write Different Product Data for All Shops
