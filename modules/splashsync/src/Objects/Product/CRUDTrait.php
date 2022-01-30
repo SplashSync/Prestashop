@@ -170,11 +170,11 @@ trait CRUDTrait
     /**
      * Delete requested Object
      *
-     * @param string $unikId Object ID.
+     * @param null|string $uniqueId Object ID.
      *
      * @return bool
      */
-    public function delete($unikId = null): bool
+    public function delete($uniqueId = null): bool
     {
         //====================================================================//
         // Stack Trace
@@ -182,7 +182,7 @@ trait CRUDTrait
 
         //====================================================================//
         // Safety Checks
-        if (empty($unikId)) {
+        if (empty($uniqueId)) {
             return Splash::log()->err("ErrSchNoObjectId", __CLASS__."::".__FUNCTION__);
         }
 
@@ -194,9 +194,9 @@ trait CRUDTrait
 
         //====================================================================//
         // Decode Product Id
-        if (!empty($unikId)) {
-            $this->ProductId = $this->getId($unikId);
-            $this->AttributeId = $this->getAttribute($unikId);
+        if (!empty($uniqueId)) {
+            $this->ProductId = $this->getId($uniqueId);
+            $this->AttributeId = $this->getAttribute($uniqueId);
         } else {
             return Splash::log()->err("ErrSchWrongObjectId", __FUNCTION__);
         }
@@ -281,9 +281,11 @@ trait CRUDTrait
     /**
      * Create a New Simple Product
      *
+     * @param null|string $reference
+     *
      * @return false|Product New Product
      */
-    private function createSimpleProduct()
+    private function createSimpleProduct(?string $reference = null)
     {
         //====================================================================//
         // Stack Trace
@@ -294,7 +296,7 @@ trait CRUDTrait
         $this->object = new Product();
         //====================================================================//
         // Setup Product Minimal Data
-        $this->setSimple("reference", $this->in["ref"]);
+        $this->setSimple("reference", $reference ?? $this->in["ref"]);
         $this->setMultilang("name", SLM::getDefaultLangId(), $this->in["name"]);
         $this->setMultilang("link_rewrite", SLM::getDefaultLangId(), $this->in["link_rewrite"]);
         //====================================================================//

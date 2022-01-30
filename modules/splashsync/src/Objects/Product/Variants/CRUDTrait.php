@@ -84,7 +84,7 @@ trait CRUDTrait
             $this->lock("onCombinationLock");
             //====================================================================//
             // Create New Simple Product
-            $product = $this->createSimpleProduct();
+            $product = $this->createSimpleProduct($this->in["parent_ref"] ?? null);
             //====================================================================//
             // UNLOCK PRODUCT HOOKS
             $this->unLock("onCombinationLock");
