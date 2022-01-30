@@ -62,8 +62,17 @@ trait StatusTrait
             ->MicroData("http://schema.org/OrderStatus", "OrderCancelled")
             ->Group(Translate::getAdminTranslation("Meta", "AdminThemes"))
             ->Association("isCanceled", "isValidated", "isClosed")
-            ->isReadOnly();
-
+            ->isReadOnly()
+        ;
+        //====================================================================//
+        // Is Cancel State
+        $this->fieldsFactory()->create(SPL_T_BOOL)
+            ->Identifier("isCancelState")
+            ->Name($prefix.$this->spl->l("Canceled")." State")
+            ->Group(Translate::getAdminTranslation("Meta", "AdminThemes"))
+            ->Association("isCanceled", "isValidated", "isClosed")
+            ->isReadOnly()
+        ;
         //====================================================================//
         // Is Validated
         $this->fieldsFactory()->create(SPL_T_BOOL)
@@ -72,8 +81,8 @@ trait StatusTrait
             ->MicroData("http://schema.org/OrderStatus", "OrderPaymentDone")
             ->Group(Translate::getAdminTranslation("Meta", "AdminThemes"))
             ->Association("isCanceled", "isValidated", "isClosed")
-            ->isReadOnly();
-
+            ->isReadOnly()
+        ;
         //====================================================================//
         // Is Processing
         $this->fieldsFactory()->create(SPL_T_BOOL)
@@ -81,8 +90,8 @@ trait StatusTrait
             ->Name($prefix."Processing")
             ->MicroData("http://schema.org/OrderStatus", "OrderProcessing")
             ->Group(Translate::getAdminTranslation("Meta", "AdminThemes"))
-            ->isReadOnly();
-
+            ->isReadOnly()
+        ;
         //====================================================================//
         // Is Closed
         $this->fieldsFactory()->create(SPL_T_BOOL)
@@ -91,8 +100,8 @@ trait StatusTrait
             ->MicroData("http://schema.org/OrderStatus", "OrderDelivered")
             ->Group(Translate::getAdminTranslation("Meta", "AdminThemes"))
             ->Association("isCanceled", "isValidated", "isClosed")
-            ->isReadOnly();
-
+            ->isReadOnly()
+        ;
         //====================================================================//
         // Is Paid
         $this->fieldsFactory()->create(SPL_T_BOOL)
@@ -100,7 +109,8 @@ trait StatusTrait
             ->Name($prefix.$this->spl->l("Paid"))
             ->Group(Translate::getAdminTranslation("Meta", "AdminThemes"))
             ->MicroData("http://schema.org/OrderStatus", "OrderPaid")
-            ->isReadOnly();
+            ->isReadOnly()
+        ;
     }
 
     /**
@@ -127,12 +137,16 @@ trait StatusTrait
                 $this->out[$fieldName] = !$this->object->valid;
 
                 break;
+            case 'isCancelState':
+                $this->out[$fieldName] = (6 == $this->object->current_state);
+
+                break;
             case 'isValidated':
                 $this->out[$fieldName] = $this->object->valid;
 
                 break;
             case 'isProcessing':
-                $this->out[$fieldName] = (bool) (3 == $this->object->current_state);
+                $this->out[$fieldName] = (3 == $this->object->current_state);
 
                 break;
             case 'isClosed':
