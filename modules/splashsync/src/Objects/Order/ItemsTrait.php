@@ -62,6 +62,16 @@ trait ItemsTrait
             ->association("product_name@lines", "product_quantity@lines", "product_id@lines", "unit_price@lines")
         ;
         //====================================================================//
+        // Order Line Product SKU
+        $this->fieldsFactory()->create(SPL_T_VARCHAR)
+            ->identifier("product_reference")
+            ->inList("lines")
+            ->name(Translate::getAdminTranslation("Reference", "AdminProducts"))
+            ->microData("http://schema.org/Product", "sku")
+            ->group(Translate::getAdminTranslation("Products", "AdminOrders"))
+            ->isReadOnly()
+        ;
+        //====================================================================//
         // Order Line Quantity
         $this->fieldsFactory()->create(SPL_T_INT)
             ->identifier("product_quantity")
@@ -138,6 +148,7 @@ trait ItemsTrait
                 // Order Line Direct Reading Data
                 case 'product_name':
                 case 'product_quantity':
+                case 'product_reference':
                     $value = $product[$fieldId];
 
                     break;
@@ -149,7 +160,7 @@ trait ItemsTrait
                 // Order Line Product Id
                 case 'product_id':
                     $unikId = Product::getUnikIdStatic($product["product_id"], $product["product_attribute_id"]);
-                    $value = self::objects()->Encode("Product", $unikId);
+                    $value = self::objects()->encode("Product", $unikId);
 
                     break;
                 //====================================================================//
@@ -258,6 +269,7 @@ trait ItemsTrait
                 break;
             //====================================================================//
             // Order Line Product Id
+            case 'product_reference':
             case 'product_id':
                 $value = null;
 
