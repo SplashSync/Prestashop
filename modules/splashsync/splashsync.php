@@ -1070,6 +1070,11 @@ class SplashSync extends Module
         // Merge Cookie With Log
         Splash\Client\Splash::log()->merge($notifications);
         //====================================================================//
+        //  Smart Notifications => Filter Messages, Only Warnings & Errors
+        if (Splash\Client\Splash::configuration()->SmartNotify) {
+            Splash\Client\Splash::log()->smartFilter();
+        }
+        //====================================================================//
         // Save Changes to File
         if (function_exists("json_encode")) {
             file_put_contents($bufferFile, json_encode(Splash\Client\Splash::log()));
