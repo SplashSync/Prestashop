@@ -37,7 +37,7 @@ parameters:
     # For Building Splash Module
     mod-src:            '/modules/splashsync'
     mod-target:         '/splashsync/'
-    mod-file:           "splashsync.1.6.6"
+    mod-file:           "splashsync.1.6.7"
 
     # For Building Splash Manifest
     yml-enable:     false

@@ -123,6 +123,26 @@ trait StockTrait
                 }
 
                 break;
+            default:
+                return;
+        }
+
+        unset($this->in[$key]);
+    }
+
+    /**
+     * Read requested Field
+     *
+     * @param string $key       Input List Key
+     * @param string $fieldName Field Identifier / Name
+     *
+     * @return void
+     */
+    protected function getStockLocationFields(string $key, string $fieldName)
+    {
+        //====================================================================//
+        // READ Fields
+        switch ($fieldName) {
             //====================================================================//
             // Stock Location
             case 'stock_location':
@@ -215,6 +235,45 @@ trait StockTrait
         }
         unset($this->in[$fieldName]);
     }
+
+    /**
+     * Write Given Fields
+     *
+     * @param string $fieldName Field Identifier / Name
+     * @param mixed  $fieldData Field Data
+     *
+     * @return void
+     */
+    protected function setStockLocationFields(string $fieldName, $fieldData)
+    {
+        //====================================================================//
+        // WRITE Field
+        switch ($fieldName) {
+            //====================================================================//
+            // Stock Location
+            case 'stock_location':
+                $current = StockAvailable::getLocation(
+                    $this->ProductId,
+                    $this->AttributeId,
+                    Shop::getContextShopID(true)
+                );
+                if ($current != $fieldData) {
+                    StockAvailable::setLocation(
+                        $this->ProductId,
+                        $fieldData,
+                        Shop::getContextShopID(true),
+                        $this->AttributeId
+                    );
+                    $this->needUpdate($this->AttributeId ? "Attribute" : "object");
+                }
+
+                break;
+            default:
+                return;
+        }
+        unset($this->in[$fieldName]);
+    }
+
 
     /**
      * Override of Generic Stocks reading to manage MSf Mode
