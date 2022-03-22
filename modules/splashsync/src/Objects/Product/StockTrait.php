@@ -211,25 +211,6 @@ trait StockTrait
                 }
 
                 break;
-            //====================================================================//
-            // Stock Location
-            case 'stock_location':
-                $current = StockAvailable::getLocation(
-                    $this->ProductId,
-                    $this->AttributeId,
-                    Shop::getContextShopID(true)
-                );
-                if ($current != $fieldData) {
-                    StockAvailable::setLocation(
-                        $this->ProductId,
-                        $fieldData,
-                        Shop::getContextShopID(true),
-                        $this->AttributeId
-                    );
-                    $this->needUpdate($this->AttributeId ? "Attribute" : "object");
-                }
-
-                break;
             default:
                 return;
         }
