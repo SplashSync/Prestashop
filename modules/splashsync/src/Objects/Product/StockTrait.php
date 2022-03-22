@@ -20,8 +20,8 @@ use Shop;
 use Splash\Core\SplashCore      as Splash;
 use Splash\Local\Services\MultiShopManager as MSM;
 use StockAvailable;
-use Translate;
 use Tools;
+use Translate;
 use Validate;
 
 /**
@@ -254,7 +254,6 @@ trait StockTrait
         }
         unset($this->in[$fieldName]);
     }
-
 
     /**
      * Override of Generic Stocks reading to manage MSf Mode
