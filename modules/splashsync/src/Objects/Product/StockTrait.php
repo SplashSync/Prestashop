@@ -18,8 +18,10 @@ namespace Splash\Local\Objects\Product;
 use Pack;
 use Shop;
 use Splash\Core\SplashCore      as Splash;
+use Splash\Local\Services\MultiShopManager as MSM;
 use StockAvailable;
 use Translate;
+use Tools;
 use Validate;
 
 /**
@@ -46,31 +48,41 @@ trait StockTrait
         //====================================================================//
         // Stock Reel
         $this->fieldsFactory()->create(SPL_T_INT)
-            ->Identifier("stock")
-            ->Name(Translate::getAdminTranslation("Stock", "AdminProducts"))
-            ->MicroData("http://schema.org/Offer", "inventoryLevel")
-            ->isListed();
-
+            ->identifier("stock")
+            ->name(Translate::getAdminTranslation("Stock", "AdminProducts"))
+            ->microData("http://schema.org/Offer", "inventoryLevel")
+            ->isListed()
+        ;
         //====================================================================//
         // Out of Stock Flag
         $this->fieldsFactory()->create(SPL_T_BOOL)
-            ->Identifier("outofstock")
-            ->Name(Translate::getAdminTranslation("This product is out of stock", "AdminOrders"))
-            ->MicroData("http://schema.org/ItemAvailability", "OutOfStock")
-            ->isReadOnly();
-
+            ->identifier("outofstock")
+            ->name(Translate::getAdminTranslation("This product is out of stock", "AdminOrders"))
+            ->microData("http://schema.org/ItemAvailability", "OutOfStock")
+            ->isReadOnly()
+        ;
         //====================================================================//
         // Minimum Order Quantity
         $this->fieldsFactory()->create(SPL_T_INT)
-            ->Identifier("minimal_quantity")
-            ->Name(Translate::getAdminTranslation("Minimum quantity", "AdminProducts"))
-            ->Description(
+            ->identifier("minimal_quantity")
+            ->name(Translate::getAdminTranslation("Minimum quantity", "AdminProducts"))
+            ->description(
                 Translate::getAdminTranslation(
                     "The minimum quantity to buy this product (set to 1 to disable this feature).",
                     "AdminProducts"
                 )
             )
-            ->MicroData("http://schema.org/Offer", "eligibleTransactionVolume");
+            ->microData("http://schema.org/Offer", "eligibleTransactionVolume")
+        ;
+        //====================================================================//
+        // Stock Location
+        if (Tools::version_compare(_PS_VERSION_, "1.7", '>=')) {
+            $this->fieldsFactory()->create(SPL_T_VARCHAR)
+                ->identifier("stock_location")
+                ->name(Translate::getAdminTranslation("Stock location", "AdminCatalogFeature"))
+                ->addOption("shop", MSM::MODE_ALL)
+                ->microData("http://schema.org/Offer", "inventoryLocation");
+        }
     }
 
     /**
@@ -109,6 +121,16 @@ trait StockTrait
                 } else {
                     $this->out[$fieldName] = (int) $this->object->{$fieldName};
                 }
+
+                break;
+            //====================================================================//
+            // Stock Location
+            case 'stock_location':
+                $this->out[$fieldName] = StockAvailable::getLocation(
+                    $this->ProductId,
+                    $this->AttributeId,
+                    Shop::getContextShopID(true)
+                );
 
                 break;
             default:
@@ -166,6 +188,25 @@ trait StockTrait
                         $this->setSimple($fieldName, $fieldData);
                         $this->addMsfUpdateFields("Product", "minimal_quantity");
                     }
+                }
+
+                break;
+            //====================================================================//
+            // Stock Location
+            case 'stock_location':
+                $current = StockAvailable::getLocation(
+                    $this->ProductId,
+                    $this->AttributeId,
+                    Shop::getContextShopID(true)
+                );
+                if ($current != $fieldData) {
+                    StockAvailable::setLocation(
+                        $this->ProductId,
+                        $fieldData,
+                        Shop::getContextShopID(true),
+                        $this->AttributeId
+                    );
+                    $this->needUpdate($this->AttributeId ? "Attribute" : "object");
                 }
 
                 break;
