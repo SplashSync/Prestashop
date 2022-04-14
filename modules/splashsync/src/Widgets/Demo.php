@@ -29,6 +29,8 @@ use Splash\Models\AbstractWidget;
 
 /**
  * Demo Widget for Prestashop
+ *
+ * @SuppressWarnings(PHPMD.CamelCasePropertyName)
  */
 class Demo extends AbstractWidget
 {

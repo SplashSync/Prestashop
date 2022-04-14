@@ -34,6 +34,8 @@ use SplashSync;
 
 /**
  * Splash Widget - Display of Main Shop Activity
+ *
+ * @SuppressWarnings(PHPMD.CamelCasePropertyName)
  */
 class Activity extends AbstractWidget
 {

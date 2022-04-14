@@ -45,7 +45,7 @@ class Local implements LocalClassInterface
     /**
      * @var SplashSync
      */
-    private static $SplashSyncModule;
+    private static $splashSyncModule;
 
     //====================================================================//
     // *******************************************************************//
@@ -64,13 +64,11 @@ class Local implements LocalClassInterface
         // Server Identification Parameters
         $parameters["WsIdentifier"] = Configuration::get('SPLASH_WS_ID');
         $parameters["WsEncryptionKey"] = Configuration::get('SPLASH_WS_KEY');
-
         //====================================================================//
         // If Expert Mode => Allow Overide of Communication Protocol
         if ((Configuration::get('SPLASH_WS_EXPERT')) && !empty(Configuration::get('SPLASH_WS_METHOD'))) {
             $parameters["WsMethod"] = Configuration::get('SPLASH_WS_METHOD');
         }
-
         //====================================================================//
         // If Expert Mode => Allow Override of Server Host Address
         if ((Configuration::get('SPLASH_WS_EXPERT')) && !empty(Configuration::get('SPLASH_WS_HOST'))) {
@@ -79,15 +77,15 @@ class Local implements LocalClassInterface
         //====================================================================//
         // Smart Notifications
         $parameters["SmartNotify"] = (bool) Configuration::get("SPLASH_SMART_NOTIFY");
-
         //====================================================================//
         // Setup Custom Json Configuration Path to (../config/splash.json)
         $parameters["ConfiguratorPath"] = $this->getHomeFolder()."/config/splash.json";
-
+        //====================================================================//
+        // Setup Extensions Path
+        $parameters["ExtensionsPath"] = $this->getHomeFolder()."/modules/splash-extensions";
         //====================================================================//
         // Override Module Parameters with Local User Selected Default Lang
         $parameters["DefaultLanguage"] = SLM::getDefaultLanguage();
-
         //====================================================================//
         // Override Module Local Name in Logs
         $parameters["localname"] = Configuration::get('PS_SHOP_NAME');
@@ -398,8 +396,8 @@ class Local implements LocalClassInterface
     {
         //====================================================================//
         // Load Local Splash Sync Module
-        if (isset(static::$SplashSyncModule)) {
-            return static::$SplashSyncModule;
+        if (isset(static::$splashSyncModule)) {
+            return static::$splashSyncModule;
         }
         //====================================================================//
         // Safety Check
@@ -408,9 +406,9 @@ class Local implements LocalClassInterface
         }
         //====================================================================//
         // Create New Splash Module Instance
-        static::$SplashSyncModule = new \SplashSync();
+        static::$splashSyncModule = new \SplashSync();
 
-        return static::$SplashSyncModule;
+        return static::$splashSyncModule;
     }
 
     //====================================================================//
@@ -477,11 +475,11 @@ class Local implements LocalClassInterface
      *
      * @return string
      */
-    private function getHomeFolder()
+    private function getHomeFolder(): string
     {
         //====================================================================//
         // Compute Prestashop Home Folder Address
-        return dirname(dirname(dirname(__DIR__)));
+        return dirname(__DIR__, 3);
     }
 
     /**
@@ -542,23 +540,23 @@ class Local implements LocalClassInterface
         Splash::log()->trace();
         //====================================================================//
         // Load Local Splash Sync Module
-        if (!isset(static::$SplashSyncModule)) {
-            static::$SplashSyncModule = $this->getLocalModule();
+        if (!isset(static::$splashSyncModule)) {
+            static::$splashSyncModule = $this->getLocalModule();
         }
         //====================================================================//
         // Check if Module is Installed & Enabled
-        if (static::$SplashSyncModule->isEnabled('splashsync')) {
+        if (static::$splashSyncModule->isEnabled('splashsync')) {
             return true;
         }
         //====================================================================//
         // Execute Module is Uninstall
-        if (static::$SplashSyncModule->uninstall()) {
+        if (static::$splashSyncModule->uninstall()) {
             Splash::log()->msg('[SPLASH] Splash Module Unintall Done');
         }
         //====================================================================//
         // Execute Module is Install
-        static::$SplashSyncModule->updateTranslationsAfterInstall(false);
-        if (static::$SplashSyncModule->install()) {
+        static::$splashSyncModule->updateTranslationsAfterInstall(false);
+        if (static::$splashSyncModule->install()) {
             Splash::log()->msg('[SPLASH] Splash Module Intall Done');
             echo Splash::log()->getConsoleLog(true);
 
@@ -567,7 +565,7 @@ class Local implements LocalClassInterface
         //====================================================================//
         // Import & Display Errors
         Splash::log()->err('[SPLASH] Splash Module Install Failed');
-        foreach (static::$SplashSyncModule->getErrors() as $error) {
+        foreach (static::$splashSyncModule->getErrors() as $error) {
             Splash::log()->err('[SPLASH] Mod. Install : '.$error);
         }
         echo Splash::log()->getConsoleLog(true);
