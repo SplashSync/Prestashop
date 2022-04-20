@@ -82,7 +82,10 @@ class Local implements LocalClassInterface
         $parameters["ConfiguratorPath"] = $this->getHomeFolder()."/config/splash.json";
         //====================================================================//
         // Setup Extensions Path
-        $parameters["ExtensionsPath"] = $this->getHomeFolder()."/modules/splash-extensions";
+        $parameters["ExtensionsPath"] = array(
+            $this->getHomeFolder()."/modules/splashsyncadvancepack",
+            $this->getHomeFolder()."/modules/splash-extensions",
+        );
         //====================================================================//
         // Override Module Parameters with Local User Selected Default Lang
         $parameters["DefaultLanguage"] = SLM::getDefaultLanguage();

@@ -341,6 +341,35 @@ class SplashSync extends Module
         return $helper->generateForm($fieldsForm);
     }
 
+    /**
+     * Read all log messages posted by OsWs and post it
+     *
+     * @return void
+     */
+    public function importMessages()
+    {
+        $bufferFile = $this->getMessageBufferPath();
+        //====================================================================//
+        // Read Current Notifications
+        $notifications = array();
+        if (is_file($bufferFile) && function_exists("json_decode")) {
+            $notifications = json_decode((string) file_get_contents($bufferFile), true);
+        }
+        //====================================================================//
+        // Merge Cookie With Log
+        Splash\Client\Splash::log()->merge($notifications);
+        //====================================================================//
+        //  Smart Notifications => Filter Messages, Only Warnings & Errors
+        if (Splash\Client\Splash::configuration()->SmartNotify) {
+            Splash\Client\Splash::log()->smartFilter();
+        }
+        //====================================================================//
+        // Save Changes to File
+        if (function_exists("json_encode")) {
+            file_put_contents($bufferFile, json_encode(Splash\Client\Splash::log()));
+        }
+    }
+
     //====================================================================//
     // *******************************************************************//
     //  MODULE BACK OFFICE (ADMIN) HOOKS
@@ -907,6 +936,7 @@ class SplashSync extends Module
         //====================================================================//
         $helper = new HelperList();
 
+        $helper->shopLinkType = '';
         $helper->simple_header = true;
 
         $helper->identifier = 'id';
@@ -1052,34 +1082,7 @@ class SplashSync extends Module
     // *******************************************************************//
     //====================================================================//
 
-    /**
-     * Read all log messages posted by OsWs and post it
-     *
-     * @return void
-     */
-    private function importMessages()
-    {
-        $bufferFile = $this->getMessageBufferPath();
-        //====================================================================//
-        // Read Current Notifications
-        $notifications = array();
-        if (is_file($bufferFile) && function_exists("json_decode")) {
-            $notifications = json_decode((string) file_get_contents($bufferFile), true);
-        }
-        //====================================================================//
-        // Merge Cookie With Log
-        Splash\Client\Splash::log()->merge($notifications);
-        //====================================================================//
-        //  Smart Notifications => Filter Messages, Only Warnings & Errors
-        if (Splash\Client\Splash::configuration()->SmartNotify) {
-            Splash\Client\Splash::log()->smartFilter();
-        }
-        //====================================================================//
-        // Save Changes to File
-        if (function_exists("json_encode")) {
-            file_put_contents($bufferFile, json_encode(Splash\Client\Splash::log()));
-        }
-    }
+
 
     /**
      * Get Full Path of User Notifications buffer File
