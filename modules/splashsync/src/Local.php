@@ -83,7 +83,7 @@ class Local implements LocalClassInterface
         //====================================================================//
         // Setup Extensions Path
         $parameters["ExtensionsPath"] = array(
-            $this->getHomeFolder()."/modules/splashsyncadvancepack",
+            $this->getHomeFolder()."/modules/splashsyncadvancepack/src",
             $this->getHomeFolder()."/modules/splash-extensions",
         );
         //====================================================================//
