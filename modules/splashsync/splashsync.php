@@ -936,6 +936,7 @@ class SplashSync extends Module
         //====================================================================//
         $helper = new HelperList();
 
+        // @phpstan-ignore-next-line
         $helper->shopLinkType = '';
         $helper->simple_header = true;
 
