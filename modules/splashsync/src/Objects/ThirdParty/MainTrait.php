@@ -22,7 +22,7 @@ use Translate;
 use Validate;
 
 /**
- * Access to thirdparty Main Fields
+ * Access to ThirdParty Main Fields
  */
 trait MainTrait
 {
@@ -36,79 +36,98 @@ trait MainTrait
         //====================================================================//
         // Firstname
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
-            ->Identifier("firstname")
-            ->Name(Translate::getAdminTranslation("First name", "AdminCustomers"))
-            ->MicroData("http://schema.org/Person", "familyName")
-            ->Association("firstname", "lastname")
+            ->identifier("firstname")
+            ->name(Translate::getAdminTranslation("First name", "AdminCustomers"))
+            ->microData("http://schema.org/Person", "familyName")
+            ->association("firstname", "lastname")
             ->isReadOnly(isset(Splash::configuration()->PsUseFullCompanyNames))
             ->isRequired()
-            ->isListed();
-
+            ->isListed()
+        ;
         //====================================================================//
         // Lastname
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
-            ->Identifier("lastname")
-            ->Name(Translate::getAdminTranslation("Last name", "AdminCustomers"))
-            ->MicroData("http://schema.org/Person", "givenName")
-            ->Association("firstname", "lastname")
+            ->identifier("lastname")
+            ->name(Translate::getAdminTranslation("Last name", "AdminCustomers"))
+            ->microData("http://schema.org/Person", "givenName")
+            ->association("firstname", "lastname")
             ->isReadOnly(isset(Splash::configuration()->PsUseFullCompanyNames))
             ->isRequired()
-            ->isListed();
+            ->isListed()
+        ;
+        //====================================================================//
+        // Company
+        $this->fieldsFactory()->create(SPL_T_VARCHAR)
+            ->identifier("company")
+            ->name(Translate::getAdminTranslation("Company", "AdminCustomers"))
+            ->microData("http://schema.org/Organization", "legalName")
+            ->isReadOnly(isset(Splash::configuration()->PsUseFullCompanyNames))
+            ->isListed()
+        ;
+        //====================================================================//
+        // Full Name
+        $this->fieldsFactory()->create(SPL_T_VARCHAR)
+            ->identifier("full_name")
+            ->name("[C] Full Name")
+            ->description("Company | Firstname + Lastname")
+            ->microData("http://schema.org/Organization", "legalName")
+            ->isReadOnly()
+        ;
+        //====================================================================//
+        // SIRET
+        $this->fieldsFactory()->create(SPL_T_VARCHAR)
+            ->identifier("siret")
+            ->name(Translate::getAdminTranslation("SIRET", "AdminCustomers"))
+            ->microData("http://schema.org/Organization", "taxID")
+            ->group("ID")
+            ->isNotTested()
+        ;
+        //====================================================================//
+        // APE
+        $this->fieldsFactory()->create(SPL_T_VARCHAR)
+            ->identifier("ape")
+            ->name(Translate::getAdminTranslation("APE", "AdminCustomers"))
+            ->microData("http://schema.org/Organization", "naics")
+            ->group("ID")
+            ->isNotTested()
+        ;
+        //====================================================================//
+        // WebSite
+        $this->fieldsFactory()->create(SPL_T_URL)
+            ->identifier("website")
+            ->name(Translate::getAdminTranslation("Website", "AdminCustomers"))
+            ->microData("http://schema.org/Organization", "url")
+        ;
+    }
 
+    /**
+     * Build Customers Main Fields using FieldFactory
+     *
+     * @return void
+     */
+    private function buildGenderFields()
+    {
         //====================================================================//
         // Gender Name
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
-            ->Identifier("gender_name")
-            ->Name(Translate::getAdminTranslation("Social title", "AdminCustomers"))
-            ->MicroData("http://schema.org/Person", "honorificPrefix")
-            ->isReadOnly();
-
+            ->identifier("gender_name")
+            ->name(Translate::getAdminTranslation("Social title", "AdminCustomers"))
+            ->microData("http://schema.org/Person", "honorificPrefix")
+            ->isReadOnly()
+        ;
         //====================================================================//
         // Gender Type
         $desc = Translate::getAdminTranslation("Social title", "AdminCustomers");
         $desc .= " ; 0 => Male // 1 => Female // 2 => Neutral";
         $this->fieldsFactory()->create(SPL_T_INT)
-            ->Identifier("gender_type")
-            ->Name(Translate::getAdminTranslation("Social title", "AdminCustomers")." (ID)")
-            ->MicroData("http://schema.org/Person", "gender")
-            ->Description($desc)
-            ->Group(Translate::getAdminTranslation("Meta", "AdminThemes"))
-            ->AddChoices(array("0" => "Male", "1" => "female"))
-            ->isNotTested();
-
-        //====================================================================//
-        // Company
-        $this->fieldsFactory()->create(SPL_T_VARCHAR)
-            ->Identifier("company")
-            ->Name(Translate::getAdminTranslation("Company", "AdminCustomers"))
-            ->MicroData("http://schema.org/Organization", "legalName")
-            ->isReadOnly(isset(Splash::configuration()->PsUseFullCompanyNames))
-            ->isListed();
-
-        //====================================================================//
-        // SIRET
-        $this->fieldsFactory()->create(SPL_T_VARCHAR)
-            ->Identifier("siret")
-            ->Name(Translate::getAdminTranslation("SIRET", "AdminCustomers"))
-            ->MicroData("http://schema.org/Organization", "taxID")
-            ->Group("ID")
-            ->isNotTested();
-
-        //====================================================================//
-        // APE
-        $this->fieldsFactory()->create(SPL_T_VARCHAR)
-            ->Identifier("ape")
-            ->Name(Translate::getAdminTranslation("APE", "AdminCustomers"))
-            ->MicroData("http://schema.org/Organization", "naics")
-            ->Group("ID")
-            ->isNotTested();
-
-        //====================================================================//
-        // WebSite
-        $this->fieldsFactory()->create(SPL_T_URL)
-            ->Identifier("website")
-            ->Name(Translate::getAdminTranslation("Website", "AdminCustomers"))
-            ->MicroData("http://schema.org/Organization", "url");
+            ->identifier("gender_type")
+            ->name(Translate::getAdminTranslation("Social title", "AdminCustomers")." (ID)")
+            ->microData("http://schema.org/Person", "gender")
+            ->description($desc)
+            ->group(Translate::getAdminTranslation("Meta", "AdminThemes"))
+            ->addChoices(array("0" => "Male", "1" => "female"))
+            ->isNotTested()
+        ;
     }
 
     /**
@@ -131,6 +150,25 @@ trait MainTrait
                 $this->getSimple($fieldName);
 
                 break;
+            default:
+                return;
+        }
+        unset($this->in[$key]);
+    }
+
+    /**
+     * Read requested Field
+     *
+     * @param string $key       Input List Key
+     * @param string $fieldName Field Identifier / Name
+     *
+     * @return void
+     */
+    private function getMainComputedFields(string $key, string $fieldName): void
+    {
+        //====================================================================//
+        // READ Fields
+        switch ($fieldName) {
             case 'lastname':
             case 'firstname':
                 //====================================================================//
@@ -147,6 +185,13 @@ trait MainTrait
                 break;
             case 'company':
                 $this->out[$fieldName] = $this->getCompanyName();
+
+                break;
+            case 'full_name':
+                $this->out[$fieldName] = !empty($this->object->company)
+                    ? $this->object->company
+                    : sprintf("%s %s", $this->object->firstname, $this->object->lastname)
+                ;
 
                 break;
             default:
