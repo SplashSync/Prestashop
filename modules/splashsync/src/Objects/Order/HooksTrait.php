@@ -112,13 +112,13 @@ trait HooksTrait
     /**
      * This function is called after each action on an order object
      *
-     * @param object $order Prestashop Order Object
-     * @param string $action Performed Action
+     * @param object $order   Prestashop Order Object
+     * @param string $action  Performed Action
      * @param string $comment Action Comment
      *
-     * @return bool
-     *
      * @throws PrestaShopException
+     *
+     * @return bool
      */
     private function hookactionOrder(object $order, string $action, string $comment): bool
     {
@@ -195,7 +195,7 @@ trait HooksTrait
     /**
      * This function is called after each action on an order object
      *
-     * @param object $order Prestashop Order Object
+     * @param object $order   Prestashop Order Object
      * @param string $comment Action Comment
      *
      * @return bool
