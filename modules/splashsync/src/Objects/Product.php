@@ -101,7 +101,7 @@ class Product extends AbstractObject
     protected static $ICO = "fa fa-product-hunt";
 
     //====================================================================//
-    // Object Synchronistion Recommended Configuration
+    // Object Synchronization Recommended Configuration
     //====================================================================//
 
     /**
