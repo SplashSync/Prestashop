@@ -203,7 +203,10 @@ class CreditNote extends AbstractObject
         $this->spl = Local::getLocalModule();
         //====================================================================//
         // Load Default Currency
+        /** @var \Context $context */
+        $context = \Context::getContext();
         $this->currency = new Currency((int) Configuration::get('PS_CURRENCY_DEFAULT'));
+        $context->currency = $this->currency;
         //====================================================================//
         // Credit Note Mode for Payments
         $this->setCreditNoteMode(true);
