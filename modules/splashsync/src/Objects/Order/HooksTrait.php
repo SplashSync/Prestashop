@@ -17,6 +17,7 @@ namespace Splash\Local\Objects\Order;
 
 use Order;
 use PrestaShopCollection;
+use PrestaShopException;
 use Splash\Core\SplashCore      as Splash;
 
 /**
@@ -31,37 +32,37 @@ trait HooksTrait
     //====================================================================//
 
     /**
-     * This hook is called after a order is created
+     * This hook is called after an order is created
      *
      * @param array $params
      *
      * @return bool
      */
-    public function hookactionObjectOrderAddAfter($params)
+    public function hookactionObjectOrderAddAfter(array $params): bool
     {
         return $this->hookactionOrder($params["object"], SPL_A_CREATE, $this->l('Order Created on Prestashop'));
     }
 
     /**
-     * This hook is called after a order is updated
+     * This hook is called after an order is updated
      *
      * @param array $params
      *
      * @return bool
      */
-    public function hookactionObjectOrderUpdateAfter($params)
+    public function hookactionObjectOrderUpdateAfter(array $params): bool
     {
         return $this->hookactionOrder($params["object"], SPL_A_UPDATE, $this->l('Order Updated on Prestashop'));
     }
 
     /**
-     * This hook is called after a order is deleted
+     * This hook is called after an order is deleted
      *
      * @param array $params
      *
      * @return bool
      */
-    public function hookactionObjectOrderDeleteAfter($params)
+    public function hookactionObjectOrderDeleteAfter(array $params): bool
     {
         return $this->hookactionOrder($params["object"], SPL_A_DELETE, $this->l('Order Deleted on Prestashop'));
     }
@@ -73,25 +74,25 @@ trait HooksTrait
     //====================================================================//
 
     /**
-     * This hook is called after a Invoice is created
+     * This hook is called after an Invoice is created
      *
      * @param array $params
      *
      * @return bool
      */
-    public function hookactionObjectOrderInvoiceAddAfter($params)
+    public function hookactionObjectOrderInvoiceAddAfter(array $params): bool
     {
         return $this->hookactionInvoice($params["object"], SPL_A_CREATE, $this->l('Invoice Created on Prestashop'));
     }
 
     /**
-     * This hook is called after a Invoice is updated
+     * This hook is called after an Invoice is updated
      *
      * @param array $params
      *
      * @return bool
      */
-    public function hookactionObjectOrderInvoiceUpdateAfter($params)
+    public function hookactionObjectOrderInvoiceUpdateAfter(array $params): bool
     {
         return $this->hookactionInvoice($params["object"], SPL_A_UPDATE, $this->l('Invoice Updated on Prestashop'));
     }
@@ -103,21 +104,23 @@ trait HooksTrait
      *
      * @return bool
      */
-    public function hookactionObjectOrderInvoiceDeleteAfter($params)
+    public function hookactionObjectOrderInvoiceDeleteAfter(array $params): bool
     {
         return $this->hookactionInvoice($params["object"], SPL_A_DELETE, $this->l('Invoice Deleted on Prestashop'));
     }
 
     /**
-     * This function is called after each action on a order object
+     * This function is called after each action on an order object
      *
-     * @param object $order   Prestashop Order Object
-     * @param string $action  Performed Action
+     * @param object $order Prestashop Order Object
+     * @param string $action Performed Action
      * @param string $comment Action Comment
      *
      * @return bool
+     *
+     * @throws PrestaShopException
      */
-    private function hookactionOrder($order, $action, $comment)
+    private function hookactionOrder(object $order, string $action, string $comment): bool
     {
         $errors = 0;
         //====================================================================//
@@ -154,7 +157,7 @@ trait HooksTrait
             }
         }
 
-        return $errors?false:true;
+        return !$errors && $this->hookOrderSecondaryCommits($order, $comment);
     }
 
     /**
@@ -166,7 +169,7 @@ trait HooksTrait
      *
      * @return bool
      */
-    private function hookactionInvoice($order, $action, $comment)
+    private function hookactionInvoice(object $order, string $action, string $comment): bool
     {
         //====================================================================//
         // Retrieve Customer Id
@@ -190,13 +193,38 @@ trait HooksTrait
     }
 
     /**
+     * This function is called after each action on an order object
+     *
+     * @param object $order Prestashop Order Object
+     * @param string $comment Action Comment
+     *
+     * @return bool
+     */
+    private function hookOrderSecondaryCommits(object $order, string $comment): bool
+    {
+        $errors = 0;
+        //====================================================================//
+        // Commit Update For Order Shipping Address
+        if (!empty(Splash::configuration()->PsCommitOrderToAddresses) && isset($order->id_address_delivery)) {
+            if (!empty($order->id_address_delivery)) {
+                $errors += !$this->doCommit("Address", (string)$order->id_address_delivery, SPL_A_UPDATE, $comment);
+            }
+            if (!empty($order->id_address_invoice)) {
+                $errors += !$this->doCommit("Address", (string)$order->id_address_invoice, SPL_A_UPDATE, $comment);
+            }
+        }
+
+        return !$errors;
+    }
+
+    /**
      * Verify if Order Products List Is Empty
      *
      * @param object $order Prestashop Order Object
      *
      * @return bool
      */
-    private function isEmptyOrder($order)
+    private function isEmptyOrder(object $order): bool
     {
         if (!($order instanceof Order) || Splash::isDebugMode()) {
             return false;

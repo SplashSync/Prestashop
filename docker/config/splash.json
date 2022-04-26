@@ -7,7 +7,8 @@
         "PsIsSourceCatalog":        false,
         "PsUseAdvancedDiscounts":   true,
         "PsUseDiscountsCollector":  true,
-        "PsUseDiscountsRulesNames":  true
+        "PsUseDiscountsRulesNames": true,
+        "PsCommitOrderToAddresses": false
     },
     "Address": { 
         "enable_push_deleted": false
