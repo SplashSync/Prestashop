@@ -202,16 +202,26 @@ trait HooksTrait
      */
     private function hookOrderSecondaryCommits(object $order, string $comment): bool
     {
+        //====================================================================//
+        // Check NOT Server Mode
+        if (defined('SPLASH_SERVER_MODE') && !empty(SPLASH_SERVER_MODE)) {
+            return true;
+        }
+        //====================================================================//
+        // Check if feature is Enabled & NOT Server Mode
+        if (empty(Splash::configuration()->PsCommitOrderToAddresses)) {
+            return true;
+        }
         $errors = 0;
         //====================================================================//
         // Commit Update For Order Shipping Address
-        if (!empty(Splash::configuration()->PsCommitOrderToAddresses) && isset($order->id_address_delivery)) {
-            if (!empty($order->id_address_delivery)) {
-                $errors += !$this->doCommit("Address", (string)$order->id_address_delivery, SPL_A_UPDATE, $comment);
-            }
-            if (!empty($order->id_address_invoice)) {
-                $errors += !$this->doCommit("Address", (string)$order->id_address_invoice, SPL_A_UPDATE, $comment);
-            }
+        if (!empty($order->id_address_delivery)) {
+            $errors += !$this->doCommit("Address", (string)$order->id_address_delivery, SPL_A_UPDATE, $comment);
+        }
+        //====================================================================//
+        // Commit Update For Order Billing Address
+        if (!empty($order->id_address_invoice)) {
+            $errors += !$this->doCommit("Address", (string)$order->id_address_invoice, SPL_A_UPDATE, $comment);
         }
 
         return !$errors;
