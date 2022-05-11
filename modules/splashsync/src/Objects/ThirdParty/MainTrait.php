@@ -70,7 +70,7 @@ trait MainTrait
             ->identifier("full_name")
             ->name("[C] Full Name")
             ->description("Company | Firstname + Lastname")
-            ->microData("http://schema.org/Organization", "legalName")
+            ->microData("http://schema.org/Organization", "alternateName")
             ->isReadOnly()
         ;
         //====================================================================//
