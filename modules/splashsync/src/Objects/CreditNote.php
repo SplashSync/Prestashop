@@ -95,7 +95,7 @@ class CreditNote extends AbstractObject
     protected static $ICO = "fa fa-eur";
 
     //====================================================================//
-    // Object Synchronistion Limitations
+    // Object Synchronization Limitations
     //====================================================================//
 
     /**

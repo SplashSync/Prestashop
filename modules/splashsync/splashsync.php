@@ -463,7 +463,7 @@ class SplashSync extends Module
      *
      * @SuppressWarnings(PHPMD.DevelopmentCodeFragment)
      */
-    protected function doCommit($objectType, $objectId, $action, $comment)
+    public function doCommit(string $objectType, $objectId, string $action, string $comment): bool
     {
         //====================================================================//
         // Safety Checks
@@ -485,7 +485,7 @@ class SplashSync extends Module
         // Check if Object is in Remote Create Mode
         if (Splash\Client\Splash::object($objectType)->isLocked() && (SPL_A_UPDATE == $action)) {
             //====================================================================//
-            // Overide Action For Create
+            // Override Action For Create
             $action = SPL_A_CREATE;
         }
 
