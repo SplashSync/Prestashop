@@ -108,7 +108,9 @@ trait CRUDTrait
         //====================================================================//
         // Check Deleted Flag
         if (self::isDeleted($this->object)) {
-            return Splash::log()->war("This Address is marked as Deleted. Update was Skipped");
+            Splash::log()->war("This Address is marked as Deleted. Update was Skipped");
+
+            return $this->getObjectIdentifier();
         }
         //====================================================================//
         // Create Address Alias if Not Given

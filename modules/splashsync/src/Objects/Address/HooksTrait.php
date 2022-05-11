@@ -101,7 +101,7 @@ trait HooksTrait
         if (isset($address->id_customer) && !empty($address->id_customer) && !Splash::isDebugMode()) {
             //====================================================================//
             // Commit Update For Customer
-            $this->doCommit("ThirdParty", (string) $address->id_customer, $action, $comment);
+            $this->doCommit("ThirdParty", (string) $address->id_customer, SPL_A_UPDATE, $comment);
         }
 
         return $result;
