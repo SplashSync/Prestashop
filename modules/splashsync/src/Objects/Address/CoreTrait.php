@@ -29,51 +29,62 @@ trait CoreTrait
      *
      * @return void
      */
-    private function buildCoreFields()
+    protected function buildCoreFields()
     {
         //====================================================================//
         // Alias
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
-            ->Identifier("alias")
-            ->Name($this->spl->l("Address alias"))
-            ->Name(Translate::getAdminTranslation("Address alias", "AdminAddresses"))
-            ->MicroData("http://schema.org/PostalAddress", "name");
+            ->identifier("alias")
+            ->name($this->spl->l("Address alias"))
+            ->description(Translate::getAdminTranslation("Address alias", "AdminAddresses"))
+            ->MicroData("http://schema.org/PostalAddress", "name")
+        ;
 
         //====================================================================//
         // Customer
         $this->fieldsFactory()->create((string) self::objects()->encode("ThirdParty", SPL_T_ID))
-            ->Identifier("id_customer")
-            ->Name(Translate::getAdminTranslation("Customer ID", "AdminCustomerThreads"))
-            ->MicroData("http://schema.org/Organization", "ID")
-            ->isRequired();
-
+            ->identifier("id_customer")
+            ->name(Translate::getAdminTranslation("Customer ID", "AdminCustomerThreads"))
+            ->microData("http://schema.org/Organization", "ID")
+            ->isRequired()
+        ;
         //====================================================================//
         // Company
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
-            ->Identifier("company")
-            ->Name(Translate::getAdminTranslation("Company", "AdminCustomers"))
-            ->MicroData("http://schema.org/Organization", "legalName")
-            ->isListed();
-
+            ->identifier("company")
+            ->name(Translate::getAdminTranslation("Company", "AdminCustomers"))
+            ->microData("http://schema.org/Organization", "legalName")
+            ->isListed()
+        ;
         //====================================================================//
         // Firstname
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
-            ->Identifier("firstname")
-            ->Name(Translate::getAdminTranslation("First name", "AdminCustomers"))
-            ->MicroData("http://schema.org/Person", "familyName")
-            ->Association("firstname", "lastname")
+            ->identifier("firstname")
+            ->name(Translate::getAdminTranslation("First name", "AdminCustomers"))
+            ->microData("http://schema.org/Person", "familyName")
+            ->association("firstname", "lastname")
             ->isRequired()
-            ->isListed();
-
+            ->isListed()
+        ;
         //====================================================================//
         // Lastname
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
-            ->Identifier("lastname")
-            ->Name(Translate::getAdminTranslation("Last name", "AdminCustomers"))
-            ->MicroData("http://schema.org/Person", "givenName")
-            ->Association("firstname", "lastname")
+            ->identifier("lastname")
+            ->name(Translate::getAdminTranslation("Last name", "AdminCustomers"))
+            ->microData("http://schema.org/Person", "givenName")
+            ->association("firstname", "lastname")
             ->isRequired()
-            ->isListed();
+            ->isListed()
+        ;
+        //====================================================================//
+        // Deleted Flag
+        $this->fieldsFactory()->create(SPL_T_BOOL)
+            ->identifier("deleted")
+            ->name("Is Deleted")
+            ->description("This Address is use and Deleted. Hidden to Customer")
+            ->group("Meta")
+            ->isReadOnly()
+        ;
     }
 
     /**
@@ -84,7 +95,7 @@ trait CoreTrait
      *
      * @return void
      */
-    private function getCoreFields($key, $fieldName)
+    protected function getCoreFields(string $key, string $fieldName): void
     {
         //====================================================================//
         // READ Fields
@@ -104,6 +115,12 @@ trait CoreTrait
                 $this->out[$fieldName] = self::objects()->encode("ThirdParty", $this->object->{$fieldName});
 
                 break;
+            //====================================================================//
+            // Deleted Flag
+            case 'deleted':
+                $this->out[$fieldName] = self::isDeleted($this->object);
+
+                break;
             default:
                 return;
         }
@@ -118,7 +135,7 @@ trait CoreTrait
      *
      * @return void
      */
-    private function setCoreFields($fieldName, $fieldData)
+    protected function setCoreFields(string $fieldName, $fieldData): void
     {
         //====================================================================//
         // WRITE Field
@@ -151,11 +168,11 @@ trait CoreTrait
      *
      * @return bool
      */
-    private function setIdCustomer($customerIdString)
+    private function setIdCustomer(string $customerIdString): bool
     {
         //====================================================================//
         // Decode Customer Id
-        $custoId = self::objects()->Id($customerIdString);
+        $custoId = self::objects()->id($customerIdString);
         //====================================================================//
         // Check For Change
         if ($custoId == $this->object->id_customer) {

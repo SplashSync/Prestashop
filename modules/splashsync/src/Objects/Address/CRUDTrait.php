@@ -41,6 +41,11 @@ trait CRUDTrait
         if ($object->id != $objectId) {
             return Splash::log()->errTrace("Unable to load Customer Address (".$objectId.").");
         }
+        //====================================================================//
+        // Check Deleted Flag
+        if (self::isDeleted($object)) {
+            Splash::log()->war("This Address is marked as Deleted.");
+        }
 
         return $object;
     }
@@ -100,7 +105,11 @@ trait CRUDTrait
         if (!$needed) {
             return $this->getObjectIdentifier();
         }
-
+        //====================================================================//
+        // Check Deleted Flag
+        if (self::isDeleted($this->object)) {
+            return Splash::log()->war("This Address is marked as Deleted. Update was Skipped");
+        }
         //====================================================================//
         // Create Address Alias if Not Given
         if (empty($this->object->alias)) {
@@ -150,7 +159,7 @@ trait CRUDTrait
     /**
      * Delete requested Object
      *
-     * @param string $objectId Object Id.  If NULL, Object needs to be created.
+     * @param string $objectId Object ID.  If NULL, Object needs to be created.
      *
      * @return bool
      */
@@ -159,13 +168,11 @@ trait CRUDTrait
         //====================================================================//
         // Stack Trace
         Splash::log()->trace();
-
         //====================================================================//
         // Safety Checks
         if (empty($objectId)) {
             return Splash::log()->err("ErrSchNoObjectId", __CLASS__."::".__FUNCTION__);
         }
-
         //====================================================================//
         // Load Object From DataBase
         //====================================================================//
@@ -193,5 +200,19 @@ trait CRUDTrait
         }
 
         return (string) $this->object->id;
+    }
+
+    /**
+     * Check if Address is Deleted on Prestashop
+     *
+     * @since PS 1.7.0
+     */
+    public static function isDeleted(Address $address): bool
+    {
+        if (!isset($address->deleted)) {
+            return false;
+        }
+
+        return $address->deleted;
     }
 }

@@ -34,75 +34,76 @@ trait MainTrait
         $groupName = Translate::getAdminTranslation("Address", "AdminCustomers");
 
         //====================================================================//
-        // Addess
+        // Address
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
-            ->Identifier("address1")
-            ->Name($groupName)
-            ->MicroData("http://schema.org/PostalAddress", "streetAddress")
-            ->Group($groupName)
-            ->isRequired();
-
+            ->identifier("address1")
+            ->name($groupName)
+            ->microData("http://schema.org/PostalAddress", "streetAddress")
+            ->group($groupName)
+            ->isRequired()
+        ;
         //====================================================================//
-        // Addess Complement
+        // Address Complement
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
-            ->Identifier("address2")
-            ->Name($groupName." (2)")
-            ->Group($groupName)
-            ->MicroData("http://schema.org/PostalAddress", "postOfficeBoxNumber");
-
+            ->identifier("address2")
+            ->name($groupName." (2)")
+            ->group($groupName)
+            ->microData("http://schema.org/PostalAddress", "postOfficeBoxNumber")
+        ;
         //====================================================================//
         // Zip Code
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
-            ->Identifier("postcode")
-            ->Name(Translate::getAdminTranslation("Zip/Postal Code", "AdminAddresses"))
-            ->MicroData("http://schema.org/PostalAddress", "postalCode")
-            ->Group($groupName)
-            ->AddOption("maxLength", "12")
-            ->isRequired();
-
+            ->identifier("postcode")
+            ->name(Translate::getAdminTranslation("Zip/Postal Code", "AdminAddresses"))
+            ->microData("http://schema.org/PostalAddress", "postalCode")
+            ->group($groupName)
+            ->addOption("maxLength", "12")
+            ->isRequired()
+        ;
         //====================================================================//
         // City Name
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
-            ->Identifier("city")
-            ->Name(Translate::getAdminTranslation("City", "AdminAddresses"))
-            ->MicroData("http://schema.org/PostalAddress", "addressLocality")
-            ->Group($groupName)
+            ->identifier("city")
+            ->name(Translate::getAdminTranslation("City", "AdminAddresses"))
+            ->microData("http://schema.org/PostalAddress", "addressLocality")
+            ->group($groupName)
             ->isRequired()
-            ->isListed();
-
+            ->isListed()
+        ;
         //====================================================================//
         // State Name
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
-            ->Identifier("state")
-            ->Name(Translate::getAdminTranslation("State", "AdminAddresses"))
-            ->Group($groupName)
-            ->isReadOnly();
-
+            ->identifier("state")
+            ->name(Translate::getAdminTranslation("State", "AdminAddresses"))
+            ->group($groupName)
+            ->isReadOnly()
+        ;
         //====================================================================//
         // State code
         $this->fieldsFactory()->create(SPL_T_STATE)
-            ->Identifier("id_state")
-            ->Name(Translate::getAdminTranslation("State", "AdminAddresses")." (Code)")
-            ->Group($groupName)
-            ->MicroData("http://schema.org/PostalAddress", "addressRegion");
-
+            ->identifier("id_state")
+            ->name(Translate::getAdminTranslation("State", "AdminAddresses")." (Code)")
+            ->group($groupName)
+            ->microData("http://schema.org/PostalAddress", "addressRegion")
+        ;
         //====================================================================//
         // Country Name
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
-            ->Identifier("country")
-            ->Name(Translate::getAdminTranslation("Country", "AdminAddresses"))
-            ->Group($groupName)
+            ->identifier("country")
+            ->name(Translate::getAdminTranslation("Country", "AdminAddresses"))
+            ->group($groupName)
             ->isReadOnly()
-            ->isListed();
-
+            ->isListed()
+        ;
         //====================================================================//
         // Country ISO Code
         $this->fieldsFactory()->create(SPL_T_COUNTRY)
-            ->Identifier("id_country")
-            ->Name(Translate::getAdminTranslation("Country", "AdminAddresses")." (Code)")
-            ->MicroData("http://schema.org/PostalAddress", "addressCountry")
-            ->Group($groupName)
-            ->isRequired();
+            ->identifier("id_country")
+            ->name(Translate::getAdminTranslation("Country", "AdminAddresses")." (Code)")
+            ->microData("http://schema.org/PostalAddress", "addressCountry")
+            ->group($groupName)
+            ->isRequired()
+        ;
     }
 
     /**
@@ -113,7 +114,7 @@ trait MainTrait
      *
      * @return void
      */
-    private function getMainFields($key, $fieldName)
+    private function getMainFields(string $key, string $fieldName): void
     {
         //====================================================================//
         // READ Fields
@@ -129,23 +130,23 @@ trait MainTrait
 
                 break;
             //====================================================================//
-            // Country ISO Id - READ With Convertion
+            // Country ISO Id - READ With Conversion
             case 'id_country':
                 $this->out[$fieldName] = Country::getIsoById($this->object->id_country);
 
                 break;
             //====================================================================//
-            // State Name - READ With Convertion
+            // State Name - READ With Conversion
             case 'state':
                 $state = new State($this->object->id_state);
                 $this->out[$fieldName] = $state->name;
 
                 break;
             //====================================================================//
-            // State ISO Id - READ With Convertion
+            // State ISO Id - READ With Conversion
             case 'id_state':
                 //====================================================================//
-                // READ With Convertion
+                // READ With Conversion
                 $state = new State($this->object->id_state);
                 $this->out[$fieldName] = $state->iso_code;
 
@@ -164,7 +165,7 @@ trait MainTrait
      *
      * @return void
      */
-    private function setMainFields($fieldName, $fieldData)
+    private function setMainFields(string $fieldName, $fieldData): void
     {
         //====================================================================//
         // WRITE Field
@@ -193,13 +194,13 @@ trait MainTrait
      *
      * @return void
      */
-    private function setCountryFields($fieldName, $fieldData)
+    private function setCountryFields(string $fieldName, $fieldData): void
     {
         //====================================================================//
         // WRITE Field
         switch ($fieldName) {
             //====================================================================//
-            // Country ISO Id - READ With Convertion
+            // Country ISO Id - READ With Conversion
             case 'id_country':
                 if ($this->object->{$fieldName} != Country::getByIso($fieldData)) {
                     $this->object->{$fieldName} = Country::getByIso($fieldData);
@@ -208,7 +209,7 @@ trait MainTrait
 
                 break;
             //====================================================================//
-            // State ISO Id - READ With Convertion
+            // State ISO Id - READ With Conversion
             case 'id_state':
                 if ($this->object->{$fieldName} != State::getIdByIso($fieldData)) {
                     $this->object->{$fieldName} = State::getIdByIso($fieldData);
