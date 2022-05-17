@@ -77,6 +77,16 @@ trait CoreTrait
             ->isListed()
         ;
         //====================================================================//
+        // Active Flag
+        $this->fieldsFactory()->create(SPL_T_BOOL)
+            ->identifier("active")
+            ->name("Is Active")
+            ->description("This Address is not hidden for Customer")
+            ->microData("http://schema.org/Person", "active")
+            ->group("Meta")
+            ->isReadOnly()
+        ;
+        //====================================================================//
         // Deleted Flag
         $this->fieldsFactory()->create(SPL_T_BOOL)
             ->identifier("deleted")
@@ -116,6 +126,12 @@ trait CoreTrait
 
                 break;
             //====================================================================//
+            // Active Flag
+            case 'active':
+                $this->out[$fieldName] = !self::isDeleted($this->object);
+
+                break;
+            //====================================================================//
             // Deleted Flag
             case 'deleted':
                 $this->out[$fieldName] = self::isDeleted($this->object);
@@ -141,7 +157,7 @@ trait CoreTrait
         // WRITE Field
         switch ($fieldName) {
             //====================================================================//
-            // Direct Writtings
+            // Direct Writings
             case 'alias':
             case 'company':
             case 'firstname':
@@ -150,7 +166,7 @@ trait CoreTrait
 
                 break;
             //====================================================================//
-            // Customer Object Id Writtings
+            // Customer Object Id Writings
             case 'id_customer':
                 $this->setIdCustomer($fieldData);
 

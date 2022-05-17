@@ -76,7 +76,7 @@ class Address extends AbstractObject
     protected static $ICO = "fa fa-envelope-o";
 
     //====================================================================//
-    // Object Synchronistion Recommended Configuration
+    // Object Synchronization Recommended Configuration
     //====================================================================//
 
     /**
