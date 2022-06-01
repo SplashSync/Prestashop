@@ -60,6 +60,7 @@ class Order extends AbstractObject
     use Order\TrackingTrait;
     use Order\StatusTrait;
     use Order\PdfTrait;
+    use Order\TotalsTrait;
 
     //====================================================================//
     // Object Definition Parameters
