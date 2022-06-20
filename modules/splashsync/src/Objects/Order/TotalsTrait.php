@@ -141,7 +141,7 @@ trait TotalsTrait
      */
     private static function toVatPercents(float $priceTaxExcl, float $priceTaxIncl): float
     {
-        return ($priceTaxExcl > 0)
+        return (($priceTaxExcl > 0) && ($priceTaxIncl > 0))
             ? 100 * ($priceTaxIncl - $priceTaxExcl) / $priceTaxExcl
             : 0.0
         ;
