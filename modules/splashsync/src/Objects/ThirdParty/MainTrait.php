@@ -190,7 +190,12 @@ trait MainTrait
             case 'full_name':
                 $this->out[$fieldName] = !empty($this->object->company)
                     ? sprintf("%s [%s]", ucfirst($this->object->company), $this->object->id)
-                    : sprintf("%s %s [%s]", ucfirst($this->object->firstname), $this->object->lastname, $this->object->id)
+                    : sprintf(
+                        "%s %s [%s]",
+                        ucfirst($this->object->firstname),
+                        $this->object->lastname,
+                        $this->object->id
+                    )
                 ;
 
                 break;
