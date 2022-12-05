@@ -114,17 +114,17 @@ Ps-1.7-Php-7.4:
   image:      prestashop/prestashop:1.7-7.4
   <<: *functionnal
 
-Ps-1.7-Php-7.3:
-  image:      prestashop/prestashop:1.7-7.3-apache
-  <<: *functionnal
-
-Ps-1.7-Php-7.2:
-  image:      prestashop/prestashop:1.7-7.2-apache
-  <<: *functionnal
-
-Ps-1.6-Php-7.2:
-  image:      prestashop/prestashop:1.6-7.2-apache
-  <<: *functionnal
+# Ps-1.7-Php-7.3:
+#   image:      prestashop/prestashop:1.7-7.3-apache
+#   <<: *functionnal
+#
+# Ps-1.7-Php-7.2:
+#   image:      prestashop/prestashop:1.7-7.2-apache
+#   <<: *functionnal
+#
+# Ps-1.6-Php-7.2:
+#   image:      prestashop/prestashop:1.6-7.2-apache
+#   <<: *functionnal
 
 
 #################################################################
