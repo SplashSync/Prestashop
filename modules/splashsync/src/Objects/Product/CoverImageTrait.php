@@ -93,6 +93,6 @@ trait CoverImageTrait
         }
         $imgInfos = $this->buildInfo((int) $imgResult["id_image"]);
 
-        return $imgInfos["image"] ?? null;
+        return is_array($imgInfos["image"] ?? null) ? $imgInfos["image"] : null;
     }
 }

@@ -30,12 +30,12 @@ trait ChecksumTrait
      *
      * @return string $Md5              Unik Checksum
      */
-    public function getMd5Checksum()
+    public function getMd5Checksum(): string
     {
         return self::getMd5ChecksumFromValues(
             $this->object->name[SLM::getDefaultLangId()],
             $this->object->reference,
-            $this->getProductAttributesArray($this->object, $this->AttributeId)
+            $this->getProductAttributesArray($this->object, (int) $this->AttributeId)
         );
     }
 
@@ -44,12 +44,12 @@ trait ChecksumTrait
      *
      * @return string $Md5              Unik Checksum
      */
-    public function getMd5String()
+    public function getMd5String(): string
     {
         return self::getMd5StringFromValues(
             $this->object->name[SLM::getDefaultLangId()],
             $this->object->reference,
-            $this->getProductAttributesArray($this->object, $this->AttributeId)
+            $this->getProductAttributesArray($this->object, (int) $this->AttributeId)
         );
     }
 
@@ -58,27 +58,28 @@ trait ChecksumTrait
      *
      * @return void
      */
-    private function buildChecksumFields()
+    protected function buildChecksumFields(): void
     {
         //====================================================================//
         // Product CheckSum
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
-            ->Identifier("md5")
-            ->Name("Md5")
-            ->Description("Unik Md5 Object Checksum")
-            ->Group(Translate::getAdminTranslation("Meta", "AdminThemes"))
+            ->identifier("md5")
+            ->name("Md5")
+            ->description("Unik Md5 Object Checksum")
+            ->group(Translate::getAdminTranslation("Meta", "AdminThemes"))
             ->isListed()
-            ->MicroData("http://schema.org/Thing", "identifier")
-            ->isReadOnly();
-
+            ->microData("http://schema.org/Thing", "identifier")
+            ->isReadOnly()
+        ;
         //====================================================================//
         // Product CheckSum Debug String
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
-            ->Identifier("md5-debug")
-            ->Name("Md5 Debug")
-            ->Description("Unik Checksum String fro Debug")
-            ->Group(Translate::getAdminTranslation("Meta", "AdminThemes"))
-            ->isReadOnly();
+            ->identifier("md5-debug")
+            ->name("Md5 Debug")
+            ->description("Unik Checksum String fro Debug")
+            ->group(Translate::getAdminTranslation("Meta", "AdminThemes"))
+            ->isReadOnly()
+        ;
     }
 
     /**
@@ -89,7 +90,7 @@ trait ChecksumTrait
      *
      * @return void
      */
-    private function getChecksumFields($key, $fieldName)
+    protected function getChecksumFields(string $key, string $fieldName): void
     {
         //====================================================================//
         // READ Fields
@@ -110,16 +111,19 @@ trait ChecksumTrait
     }
 
     /**
-     * Compute Md5 CheckSum from Product Informations
+     * Compute Md5 CheckSum from Product Information
      *
-     * @param string $title      Product Title without Options
-     * @param string $sku        Product Reference
-     * @param array  $attributes Array of Product Attributes ($Code => $Value)
+     * @param string      $title      Product Title without Options
+     * @param null|string $sku        Product Reference
+     * @param array       $attributes Array of Product Attributes ($Code => $Value)
      *
      * @return string $Md5              Unik Checksum
      */
-    private static function getMd5ChecksumFromValues($title, $sku = null, $attributes = array())
-    {
+    private static function getMd5ChecksumFromValues(
+        string $title,
+        string $sku = null,
+        array $attributes = array()
+    ): string {
         $md5Array = array_merge_recursive(
             array("title" => $title, "sku" => $sku),
             $attributes
@@ -129,16 +133,19 @@ trait ChecksumTrait
     }
 
     /**
-     * Compute Md5 String from Product Informations
+     * Compute Md5 String from Product Information
      *
-     * @param string $title      Product Title without Options
-     * @param string $sku        Product Reference
-     * @param array  $attributes Array of Product Attributes ($Code => $Value)
+     * @param string      $title      Product Title without Options
+     * @param null|string $sku        Product Reference
+     * @param array       $attributes Array of Product Attributes ($Code => $Value)
      *
      * @return string $Md5              Unik Checksum
      */
-    private static function getMd5StringFromValues($title, $sku = null, $attributes = array())
-    {
+    private static function getMd5StringFromValues(
+        string $title,
+        string $sku = null,
+        array $attributes = array()
+    ): string {
         $md5Array = array_merge_recursive(
             array("title" => $title, "sku" => $sku),
             $attributes

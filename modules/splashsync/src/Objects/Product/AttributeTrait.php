@@ -17,6 +17,7 @@ namespace Splash\Local\Objects\Product;
 
 use Attribute;
 use Combination;
+use PrestaShopException;
 use Product;
 use Splash\Client\Splash      as Splash;
 use Splash\Local\Services\LanguagesManager as SLM;
@@ -27,18 +28,22 @@ use Splash\Local\Services\LanguagesManager as SLM;
 trait AttributeTrait
 {
     /**
-     * @var int
+     * Prestashop Product Attribute Class ID
+     *
+     * @var null|int
      */
-    public $AttributeId;     // Prestashop Product Attribute Class Id
+    public ?int $AttributeId = null;
 
     //====================================================================//
     // General Class Variables
     //====================================================================//
 
     /**
-     * @var Combination
+     * Prestashop Product Attribute Class
+     *
+     * @var null|Combination
      */
-    protected $Attribute;     // Prestashop Product Attribute Class
+    protected ?Combination $Attribute = null;
 
     //====================================================================//
     //  Product Attribute CRUD
@@ -47,18 +52,18 @@ trait AttributeTrait
     /**
      * Load Request Product Attribute Object
      *
-     * @param string $unikId Object id
+     * @param string $uniqueId Object id
      *
      * @return bool
      */
-    public function loadAttribute($unikId)
+    public function loadAttribute(string $uniqueId): bool
     {
         //====================================================================//
         // Stack Trace
         Splash::log()->trace();
         //====================================================================//
         // Decode Product Id
-        $this->AttributeId = self::getAttribute($unikId);
+        $this->AttributeId = self::getAttribute($uniqueId);
         //====================================================================//
         // Safety Checks
         if (!$this->isLocked("onCombinationCreate") && empty($this->AttributeId)) {
@@ -103,7 +108,7 @@ trait AttributeTrait
      *
      * @return bool
      */
-    public function createAttribute()
+    public function createAttribute(): bool
     {
         //====================================================================//
         // Stack Trace
@@ -117,7 +122,7 @@ trait AttributeTrait
         $this->setSimple("reference", $this->in["ref"], "Attribute");
         //====================================================================//
         // CREATE PRODUCT ATTRIBUTE IF NEW
-        if (true != $this->Attribute->add()) {
+        if (!$this->Attribute->add()) {
             return Splash::log()->errTrace("Unable to create Product Combination.");
         }
         //====================================================================//
@@ -125,7 +130,7 @@ trait AttributeTrait
         $this->AttributeId = (int) $this->Attribute->id;
         //====================================================================//
         // LOCK PRODUCT to prevent triggered actions on Price or Stock Update
-        $this->lock($this->getUnikId());
+        $this->lock((string) $this->getUnikId());
 
         return true;
     }
@@ -135,7 +140,7 @@ trait AttributeTrait
      *
      * @return bool
      */
-    public function updateAttribute()
+    public function updateAttribute(): bool
     {
         //====================================================================//
         // Stack Trace
@@ -149,7 +154,7 @@ trait AttributeTrait
         }
         //====================================================================//
         // Verify Attribute Already Exists
-        if (!$this->AttributeId) {
+        if (!$this->Attribute) {
             return Splash::log()->errTrace("Unable to update Product Attribute that doesn't Exists.");
         }
         //====================================================================//
@@ -158,17 +163,22 @@ trait AttributeTrait
         if (is_array($updateFields)) {
             $this->Attribute->setFieldsToUpdate($updateFields);
         }
-        //====================================================================//
-        // UPDATE ATTRIBUTE INFORMATIONS
-        if (true != $this->Attribute->update()) {
-            return Splash::log()->errTrace("Unable to update Product Attribute.");
+
+        try {
+            //====================================================================//
+            // UPDATE ATTRIBUTE INFORMATIONS
+            if (!$this->Attribute->update()) {
+                return Splash::log()->errTrace("Unable to update Product Attribute.");
+            }
+            //====================================================================//
+            // UPDATE ATTRIBUTE IMAGES
+            if (isset($this->attrImageIds)) {
+                $this->Attribute->setImages($this->attrImageIds);
+            }
+            $this->isUpdated("Attribute");
+        } catch (PrestaShopException $e) {
+            Splash::log()->report($e);
         }
-        //====================================================================//
-        // UPDATE ATTRIBUTE IMAGES
-        if (isset($this->attrImageIds)) {
-            $this->Attribute->setImages($this->attrImageIds);
-        }
-        $this->isUpdated("Attribute");
 
         return true;
     }
@@ -178,7 +188,7 @@ trait AttributeTrait
      *
      * @return bool
      */
-    public function deleteAttribute()
+    public function deleteAttribute(): bool
     {
         //====================================================================//
         // Stack Trace
@@ -191,7 +201,7 @@ trait AttributeTrait
         }
         //====================================================================//
         // Delete Attribute
-        $this->object->deleteAttributeCombination($this->AttributeId);
+        $this->object->deleteAttributeCombination((int) $this->AttributeId);
         //====================================================================//
         // Invalidate Combinations Cache
         $this->deleteCombinationResume();

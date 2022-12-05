@@ -31,20 +31,20 @@ trait CRUDTrait
     /**
      * Check if New Product is a Variant Product
      *
-     * @param array|ArrayObject $variantData Input Field Data
+     * @param array $objectData Input Field Data
      *
      * @return bool
      */
-    protected function isNewVariant($variantData)
+    protected function isNewVariant(array $objectData): bool
     {
         //====================================================================//
         // Check Product Attributes are given
-        if (!isset($variantData["attributes"]) || empty($variantData["attributes"])) {
+        if (empty($objectData["attributes"])) {
             return false;
         }
         //====================================================================//
         // Check Product Attributes are Valid
-        foreach ($variantData["attributes"] as $attributeArray) {
+        foreach ($objectData["attributes"] as $attributeArray) {
             if (!$this->isValidAttributeDefinition($attributeArray)) {
                 return false;
             }
@@ -60,15 +60,15 @@ trait CRUDTrait
     /**
      * Create a New Variant Product
      *
-     * @param mixed $fieldData Input Field Data
+     * @param array $objectData Input Field Data
      *
-     * @return false|Product
+     * @return null|Product
      */
-    private function createVariantProduct($fieldData)
+    private function createVariantProduct(array $objectData): ?Product
     {
         //====================================================================//
         // Safe Load Product Variants List
-        $variants = isset($fieldData["variants"]) ? $fieldData["variants"] : array();
+        $variants = $objectData["variants"] ?? array();
         //====================================================================//
         // Create or Load Base Product
         $baseProductId = $this->getBaseProduct($variants);
@@ -84,7 +84,10 @@ trait CRUDTrait
             $this->lock("onCombinationLock");
             //====================================================================//
             // Create New Simple Product
-            $product = $this->createSimpleProduct($this->in["parent_ref"] ?? null);
+            $parentRef = $this->in["parent_ref"] ?? null;
+            $product = $this->createSimpleProduct(
+                (is_scalar($parentRef) && $parentRef) ? (string) $parentRef : null
+            );
             //====================================================================//
             // UNLOCK PRODUCT HOOKS
             $this->unLock("onCombinationLock");
@@ -92,7 +95,7 @@ trait CRUDTrait
         //====================================================================//
         // Add Product Combination
         if (!$product || !$this->createAttribute()) {
-            return false;
+            return null;
         }
         //====================================================================//
         // Return Product

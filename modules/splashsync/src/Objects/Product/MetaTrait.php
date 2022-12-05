@@ -15,6 +15,7 @@
 
 namespace Splash\Local\Objects\Product;
 
+use PrestaShopException;
 use Splash\Local\Services\LanguagesManager as SLM;
 use Splash\Local\Services\TotSwitchAttributes;
 use Translate;
@@ -29,7 +30,7 @@ trait MetaTrait
      *
      * @return void
      */
-    private function buildMetaFields()
+    protected function buildMetaFields(): void
     {
         //====================================================================//
         // STRUCTURAL INFORMATIONS
@@ -38,47 +39,48 @@ trait MetaTrait
         //====================================================================//
         // Active => Product Is Enables & Visible
         $this->fieldsFactory()->create(SPL_T_BOOL)
-            ->Identifier("active")
-            ->Name(Translate::getAdminTranslation("Enabled", "AdminProducts"))
-            ->MicroData("http://schema.org/Product", "active");
-
+            ->identifier("active")
+            ->name(Translate::getAdminTranslation("Enabled", "AdminProducts"))
+            ->microData("http://schema.org/Product", "active")
+        ;
         //====================================================================//
         // Active => Product Is available_for_order
         $this->fieldsFactory()->create(SPL_T_BOOL)
-            ->Identifier("available_for_order")
-            ->Name(Translate::getAdminTranslation("Available for order", "AdminProducts"))
-            ->MicroData("http://schema.org/Product", "offered")
-            ->isListed();
-
+            ->identifier("available_for_order")
+            ->name(Translate::getAdminTranslation("Available for order", "AdminProducts"))
+            ->microData("http://schema.org/Product", "offered")
+            ->isListed()
+        ;
         //====================================================================//
         // On Sale
         $this->fieldsFactory()->create(SPL_T_BOOL)
-            ->Identifier("on_sale")
-            ->Name($this->spl->l("On Sale"))
-            ->MicroData("http://schema.org/Product", "onsale");
-
+            ->identifier("on_sale")
+            ->name($this->spl->l("On Sale"))
+            ->microData("http://schema.org/Product", "onsale")
+        ;
         //====================================================================//
         // Online Only
         $this->fieldsFactory()->create(SPL_T_BOOL)
-            ->Identifier("online_only")
-            ->Name($this->spl->l("Online Only"))
-            ->MicroData("http://schema.org/Product", "onlineOnly");
-
+            ->identifier("online_only")
+            ->name($this->spl->l("Online Only"))
+            ->microData("http://schema.org/Product", "onlineOnly")
+        ;
         //====================================================================//
         // Online Only Ref.
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
-            ->Identifier("online_ref")
-            ->Name($this->spl->l("Online Only Ref."))
-            ->MicroData("http://schema.org/Product", "onlineOnlyRef")
-            ->isReadOnly();
-
+            ->identifier("online_ref")
+            ->name($this->spl->l("Online Only Ref."))
+            ->microData("http://schema.org/Product", "onlineOnlyRef")
+            ->isReadOnly()
+        ;
         //====================================================================//
         // Online Only Title
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
-            ->Identifier("online_name")
-            ->Name($this->spl->l("Online Only Title."))
-            ->MicroData("http://schema.org/Product", "onlineOnlyTitle")
-            ->isReadOnly();
+            ->identifier("online_name")
+            ->name($this->spl->l("Online Only Title."))
+            ->microData("http://schema.org/Product", "onlineOnlyTitle")
+            ->isReadOnly()
+        ;
     }
 
     /**
@@ -87,9 +89,11 @@ trait MetaTrait
      * @param string $key       Input List Key
      * @param string $fieldName Field Identifier / Name
      *
+     * @throws PrestaShopException
+     *
      * @return void
      */
-    private function getMetaFields($key, $fieldName)
+    protected function getMetaFields(string $key, string $fieldName): void
     {
         //====================================================================//
         // READ Fields
@@ -130,7 +134,7 @@ trait MetaTrait
      *
      * @return void
      */
-    private function getMetaOnlineFields($key, $fieldName)
+    protected function getMetaOnlineFields(string $key, string $fieldName): void
     {
         //====================================================================//
         // READ Fields
@@ -146,7 +150,7 @@ trait MetaTrait
                 break;
             case 'online_name':
                 if (empty($this->object->online_only)) {
-                    $this->out[$fieldName] = $this->getMultilang("name", SLM::getDefaultLangId());
+                    $this->out[$fieldName] = $this->getMultiLang("name", SLM::getDefaultLangId());
 
                     break;
                 }
@@ -163,18 +167,18 @@ trait MetaTrait
     /**
      * Write Given Fields
      *
-     * @param string $fieldName Field Identifier / Name
-     * @param mixed  $fieldData Field Data
+     * @param string      $fieldName Field Identifier / Name
+     * @param bool|string $fieldData Field Data
      *
      * @return void
      */
-    private function setMetaFields($fieldName, $fieldData)
+    protected function setMetaFields(string $fieldName, $fieldData): void
     {
         //====================================================================//
         // WRITE Field
         switch ($fieldName) {
             //====================================================================//
-            // Direct Writtings
+            // Direct Writings
             case 'active':
             case 'on_sale':
             case 'online_only':

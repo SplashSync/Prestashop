@@ -36,14 +36,14 @@ trait AttributesTrait
      *
      * @var null|array
      */
-    private $variants;
+    private ?array $variants;
 
     /**
      * List of Required Attributes Fields
      *
      * @var array
      */
-    private static $requiredFields = array(
+    private static array $requiredFields = array(
         "code" => "Attribute Code",
         "public_name" => "Attribute Group Public Name",
         "name" => "Attribute Value Name",
@@ -58,7 +58,7 @@ trait AttributesTrait
      *
      * @return void
      */
-    protected function buildVariantsAttributesFields()
+    protected function buildVariantsAttributesFields(): void
     {
         if (!Combination::isFeatureActive()) {
             return;
@@ -74,13 +74,14 @@ trait AttributesTrait
         //====================================================================//
         // Product Variation Attribute Code (Default Language Only)
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
-            ->Identifier("code")
-            ->Name(Translate::getAdminTranslation("Code", "AdminCatalogFeature"))
-            ->InList("attributes")
-            ->Group($groupName)
+            ->identifier("code")
+            ->name(Translate::getAdminTranslation("Code", "AdminCatalogFeature"))
+            ->inList("attributes")
+            ->group($groupName)
             ->addOption("isLowerCase", true)
-            ->MicroData("http://schema.org/Product", "VariantAttributeCode")
-            ->isNotTested();
+            ->microData("http://schema.org/Product", "VariantAttributeCode")
+            ->isNotTested()
+        ;
         //====================================================================//
         // MSF Light Mode => Visible Only on ALL Sites
         if (MSM::isLightMode()) {
@@ -91,13 +92,14 @@ trait AttributesTrait
             //====================================================================//
             // Product Variation Attribute Name
             $this->fieldsFactory()->create(SPL_T_VARCHAR)
-                ->Identifier("public_name")
-                ->Name(Translate::getAdminTranslation("Name", "AdminCatalogFeature"))
-                ->Group($groupName)
-                ->MicroData("http://schema.org/Product", "VariantAttributeName")
+                ->identifier("public_name")
+                ->name(Translate::getAdminTranslation("Name", "AdminCatalogFeature"))
+                ->group($groupName)
+                ->microData("http://schema.org/Product", "VariantAttributeName")
                 ->setMultilang($isoLang)
-                ->InList("attributes")
-                ->isNotTested();
+                ->inList("attributes")
+                ->isNotTested()
+            ;
             //====================================================================//
             // MSF Light Mode => Visible Only on ALL Sites
             if (MSM::isLightMode()) {
@@ -107,13 +109,14 @@ trait AttributesTrait
             //====================================================================//
             // Product Variation Attribute Value
             $this->fieldsFactory()->create(SPL_T_VARCHAR)
-                ->Identifier("name")
-                ->Name(Translate::getAdminTranslation("Value", "AdminCatalogFeature"))
-                ->Group($groupName)
-                ->MicroData("http://schema.org/Product", "VariantAttributeValue")
+                ->identifier("name")
+                ->name(Translate::getAdminTranslation("Value", "AdminCatalogFeature"))
+                ->group($groupName)
+                ->microData("http://schema.org/Product", "VariantAttributeValue")
                 ->setMultilang($isoLang)
-                ->InList("attributes")
-                ->isNotTested();
+                ->inList("attributes")
+                ->isNotTested()
+            ;
             //====================================================================//
             // MSF Light Mode => Visible Only on ALL Sites
             if (MSM::isLightMode()) {
@@ -134,7 +137,7 @@ trait AttributesTrait
      *
      * @return void
      */
-    protected function getVariantsAttributesFields($key, $fieldName)
+    protected function getVariantsAttributesFields(string $key, string $fieldName): void
     {
         //====================================================================//
         // Check if List field & Init List Array
@@ -156,25 +159,25 @@ trait AttributesTrait
     /**
      * Write Given Fields
      *
-     * @param string $fieldName Field Identifier / Name
-     * @param mixed  $fieldData Field Data
+     * @param string     $fieldName Field Identifier / Name
+     * @param null|array $fieldData Field Data
      *
      * @return void
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    protected function setVariantsAttributesFields($fieldName, $fieldData)
+    protected function setVariantsAttributesFields(string $fieldName, ?array $fieldData): void
     {
         //====================================================================//
         // Check is Attribute Field
-        if (false == $this->isVariantsAttributesField($fieldName)) {
+        if (!$this->isVariantsAttributesField($fieldName)) {
             return;
         }
 
         //====================================================================//
         // Identify Products Attributes Ids
         $attributesIds = array();
-        foreach ($fieldData as $attrItem) {
+        foreach ($fieldData ?? array() as $attrItem) {
             //====================================================================//
             // Check Product Attributes are Valid
             if (!$this->isValidAttributeDefinition($attrItem)) {
@@ -212,12 +215,12 @@ trait AttributesTrait
     /**
      * Build Product Attribute Definition Array
      *
-     * @param Product $product     Product Object
-     * @param int     $attributeId Product Combinaison Id
+     * @param Product  $product     Product Object
+     * @param null|int $attributeId Product Combinaison Id
      *
      * @return array
      */
-    protected function getProductAttributesArray($product, $attributeId)
+    protected function getProductAttributesArray(Product $product, ?int $attributeId): array
     {
         $result = array();
         foreach ($product->getAttributeCombinations(SLM::getDefaultLangId()) as $attribute) {
@@ -237,21 +240,21 @@ trait AttributesTrait
     /**
      * Check if Attribute Array is Valid for Writing
      *
-     * @param array|ArrayObject $fieldData Attribute Array
+     * @param array $fieldData Attribute Array
      *
      * @return bool
      */
-    protected function isValidAttributeDefinition($fieldData)
+    protected function isValidAttributeDefinition(array $fieldData): bool
     {
         //====================================================================//
         // Check Attribute is Array
-        if ((!is_array($fieldData) && !is_a($fieldData, "ArrayObject")) || empty($fieldData)) {
+        if (empty($fieldData)) {
             return false;
         }
 
         //====================================================================//
         // Check Required Attributes Data are Given
-        foreach (static::$requiredFields as $key => $name) {
+        foreach (self::$requiredFields as $key => $name) {
             if (!isset($fieldData[$key])) {
                 return Splash::log()->errTrace("Product ".$name." is Missing.");
             }
@@ -268,7 +271,7 @@ trait AttributesTrait
      *
      * @return void
      */
-    protected function flushAttributesResumeCache()
+    protected function flushAttributesResumeCache(): void
     {
         $this->variants = null;
     }
@@ -282,7 +285,7 @@ trait AttributesTrait
      *
      * @return array
      */
-    private function getAttributesResume()
+    private function getAttributesResume(): array
     {
         if (!isset($this->variants)) {
             //====================================================================//
@@ -356,7 +359,9 @@ trait AttributesTrait
         unset($this->in[$key]);
         //====================================================================//
         // Sort Attributes by Code
-        ksort($this->out["attributes"]);
+        if (is_array($this->out["attributes"])) {
+            ksort($this->out["attributes"]);
+        }
     }
 
     //====================================================================//
@@ -460,7 +465,7 @@ trait AttributesTrait
         //====================================================================//
         // Build Current Attributes Ids Table
         $oldAttributesIds = array();
-        $oldAttributes = $this->Attribute->getWsProductOptionValues();
+        $oldAttributes = $this->Attribute ? $this->Attribute->getWsProductOptionValues() : array();
         if (is_array($oldAttributes)) {
             foreach ($oldAttributes as $attribute) {
                 $oldAttributesIds[] = $attribute["id"];
@@ -468,7 +473,7 @@ trait AttributesTrait
         }
         //====================================================================//
         // Update Combination if Modified
-        if (!empty(array_diff($attributesIds, $oldAttributesIds))) {
+        if ($this->Attribute && !empty(array_diff($attributesIds, $oldAttributesIds))) {
             $this->Attribute->setAttributes($attributesIds);
             $this->variants = null;
         }

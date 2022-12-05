@@ -48,53 +48,51 @@ trait PricesTrait
         //====================================================================//
         // Product Selling Price
         $this->fieldsFactory()->create(SPL_T_PRICE)
-            ->Identifier("price")
-            ->Name(
+            ->identifier("price")
+            ->name(
                 Translate::getAdminTranslation(
                     "Price (tax excl.)",
                     "AdminProducts"
                 )." (".$this->Currency->sign.")"
             )
-            ->MicroData("http://schema.org/Product", "price")
+            ->microData("http://schema.org/Product", "price")
             ->isListed()
         ;
-
         //====================================================================//
         // Product Selling Base Price
         $this->fieldsFactory()->create(SPL_T_PRICE)
-            ->Identifier("price-base")
-            ->Name(
+            ->identifier("price-base")
+            ->name(
                 Translate::getAdminTranslation(
                     "Price (tax excl.)",
                     "AdminProducts"
                 )." Base (".$this->Currency->sign.")"
             )
-            ->MicroData("http://schema.org/Product", "basePrice")
+            ->microData("http://schema.org/Product", "basePrice")
         ;
-
         //====================================================================//
         // WholeSale Price
         $this->fieldsFactory()->create(SPL_T_PRICE)
-            ->Identifier("price-wholesale")
-            ->Name(
+            ->identifier("price-wholesale")
+            ->name(
                 Translate::getAdminTranslation(
                     "Wholesale price",
                     "AdminProducts"
                 )." Base (".$this->Currency->sign.")"
             )
-            ->MicroData("http://schema.org/Product", "wholesalePrice");
-
+            ->microData("http://schema.org/Product", "wholesalePrice")
+        ;
         //====================================================================//
         // Reduced Price
         $this->fieldsFactory()->create(SPL_T_PRICE)
-            ->Identifier("price-reduced")
-            ->Name(
+            ->identifier("price-reduced")
+            ->name(
                 Translate::getAdminTranslation(
                     "Sale price",
                     "AdminProducts"
                 )." (".$this->Currency->sign.")"
             )
-            ->MicroData("http://schema.org/Product", "reducedPrice")
+            ->microData("http://schema.org/Product", "reducedPrice")
             ->isReadOnly()
         ;
     }
@@ -156,7 +154,7 @@ trait PricesTrait
             case 'price-wholesale':
                 //====================================================================//
                 // Read Price
-                if ($this->AttributeId && ($this->Attribute->wholesale_price > 0)) {
+                if ($this->Attribute && ($this->Attribute->wholesale_price > 0)) {
                     $priceHT = (double) Tools::convertPrice($this->Attribute->wholesale_price, $this->Currency);
                 } else {
                     $priceHT = (double) Tools::convertPrice((float) $this->object->wholesale_price, $this->Currency);
@@ -191,7 +189,7 @@ trait PricesTrait
      *
      * @return void
      */
-    protected function getReducedPricesFields($key, $fieldName)
+    protected function getReducedPricesFields(?string $key, string $fieldName): void
     {
         //====================================================================//
         // READ Fields
@@ -229,11 +227,13 @@ trait PricesTrait
      * Write Given Fields
      *
      * @param string $fieldName Field Identifier / Name
-     * @param mixed  $fieldData Field Data
+     * @param array  $fieldData Field Data
      *
      * @return void
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    protected function setPricesFields($fieldName, $fieldData)
+    protected function setPricesFields(string $fieldName, array $fieldData): void
     {
         //====================================================================//
         // WRITE Field
@@ -252,7 +252,9 @@ trait PricesTrait
 
                 //====================================================================//
                 // Compare Prices
-                if (!self::prices()->Compare($this->out["price-base"], $fieldData)) {
+                if (!is_array($this->out["price-base"])
+                    || !self::prices()->compare($this->out["price-base"], $fieldData)
+                ) {
                     $this->object->price = $fieldData["ht"];
                     $this->object->base_price = $fieldData["ht"];
                     $this->addMsfUpdateFields("Product", "price");
@@ -270,13 +272,15 @@ trait PricesTrait
 
                 //====================================================================//
                 // Compare Prices
-                if (self::prices()->Compare($this->out["price-wholesale"], $fieldData)) {
+                if (is_array($this->out["price-wholesale"])
+                    && self::prices()->compare($this->out["price-wholesale"], $fieldData)
+                ) {
                     break;
                 }
 
                 //====================================================================//
                 // Update product Wholesale Price with Attribute
-                if ($this->AttributeId) {
+                if ($this->Attribute) {
                     $this->Attribute->wholesale_price = $fieldData["ht"];
                     $this->addMsfUpdateFields("Attribute", "wholesale_price");
                     $this->needUpdate("Attribute");
@@ -304,15 +308,19 @@ trait PricesTrait
      * @param array $newPrice New Product Price Array
      *
      * @return void
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    private function updateProductPrice($newPrice)
+    private function updateProductPrice(array $newPrice): void
     {
         //====================================================================//
         // Read Current Product Price (Via Out Buffer)
         $this->getPricesFields(null, "price");
         //====================================================================//
         // Verify Price Need to be Updated
-        if (self::prices()->Compare($this->out["price"], $newPrice)) {
+        if (is_array($this->out["price"])
+            && self::prices()->compare($this->out["price"], $newPrice)
+        ) {
             return;
         }
         //====================================================================//
@@ -363,7 +371,7 @@ trait PricesTrait
      *
      * @return void
      */
-    private function updateAttributePrice($newPrice)
+    private function updateAttributePrice(array $newPrice): void
     {
         //====================================================================//
         // Detect New Base Price
@@ -372,7 +380,11 @@ trait PricesTrait
         } else {
             $basePrice = $this->object->base_price;
         }
-
+        //====================================================================//
+        // Safety Check
+        if (!isset($this->Attribute)) {
+            return;
+        }
         //====================================================================//
         // Evaluate Attribute Price
         $priceHT = $newPrice["ht"] - $basePrice;
@@ -390,7 +402,7 @@ trait PricesTrait
      *
      * @return float
      */
-    private function getProductPrice()
+    private function getProductPrice(): float
     {
         //====================================================================//
         // Read Product Base Price

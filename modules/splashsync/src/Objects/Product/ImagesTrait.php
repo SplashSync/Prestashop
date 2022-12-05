@@ -38,31 +38,31 @@ trait ImagesTrait
     /**
      * @var array
      */
-    protected $attrImageIds;
+    protected array $attrImageIds;
 
     /**
      * @var int
      */
-    private $imgPosition = 0;
+    private int $imgPosition = 0;
 
     /**
      * Images Information Cache
      *
      * @var null|array
      */
-    private $imagesCache;
+    private ?array $imagesCache = null;
 
     /**
      * Prestashop Variant Images Cache
      *
      * @var null|array
      */
-    private $variantImages;
+    private ?array $variantImages = null;
 
     /**
      * @var array
      */
-    private $newImagesArray;
+    private array $newImagesArray;
 
     /**
      * Build Fields using FieldFactory
@@ -80,11 +80,11 @@ trait ImagesTrait
         //====================================================================//
         // Product Images List
         $this->fieldsFactory()->create(SPL_T_IMG)
-            ->Identifier("image")
-            ->InList("images")
-            ->Name(Translate::getAdminTranslation("Images", "AdminProducts"))
-            ->Group($groupName)
-            ->MicroData("http://schema.org/Product", "image")
+            ->identifier("image")
+            ->inList("images")
+            ->name(Translate::getAdminTranslation("Images", "AdminProducts"))
+            ->group($groupName)
+            ->microData("http://schema.org/Product", "image")
             ->isReadOnly(self::isSourceCatalogMode())
         ;
         if (Tools::version_compare(_PS_VERSION_, "1.7.7", '<=') || MSM::isLightMode()) {
@@ -94,11 +94,11 @@ trait ImagesTrait
         //====================================================================//
         // Product Images => Position
         $this->fieldsFactory()->create(SPL_T_INT)
-            ->Identifier("position")
-            ->InList("images")
-            ->Name(Translate::getAdminTranslation("Position", "AdminProducts"))
-            ->MicroData("http://schema.org/Product", "positionImage")
-            ->Group($groupName)
+            ->identifier("position")
+            ->inList("images")
+            ->name(Translate::getAdminTranslation("Position", "AdminProducts"))
+            ->microData("http://schema.org/Product", "positionImage")
+            ->group($groupName)
             ->isReadOnly(self::isSourceCatalogMode())
             ->isNotTested()
         ;
@@ -109,11 +109,11 @@ trait ImagesTrait
         //====================================================================//
         // Product Images => Is Cover
         $this->fieldsFactory()->create(SPL_T_BOOL)
-            ->Identifier("cover")
-            ->InList("images")
-            ->Name(Translate::getAdminTranslation("Cover", "AdminProducts"))
-            ->MicroData("http://schema.org/Product", "isCover")
-            ->Group($groupName)
+            ->identifier("cover")
+            ->inList("images")
+            ->name(Translate::getAdminTranslation("Cover", "AdminProducts"))
+            ->microData("http://schema.org/Product", "isCover")
+            ->group($groupName)
             ->isReadOnly(self::isSourceCatalogMode())
             ->isNotTested()
         ;
@@ -124,11 +124,11 @@ trait ImagesTrait
         //====================================================================//
         // Product Images => Is Visible Image
         $this->fieldsFactory()->create(SPL_T_BOOL)
-            ->Identifier("visible")
-            ->InList("images")
-            ->Name(Translate::getAdminTranslation("Visible", "AdminProducts"))
-            ->MicroData("http://schema.org/Product", "isVisibleImage")
-            ->Group($groupName)
+            ->identifier("visible")
+            ->inList("images")
+            ->name(Translate::getAdminTranslation("Visible", "AdminProducts"))
+            ->microData("http://schema.org/Product", "isVisibleImage")
+            ->group($groupName)
             ->isReadOnly(self::isSourceCatalogMode())
             ->isNotTested()
         ;
@@ -149,12 +149,12 @@ trait ImagesTrait
     {
         //====================================================================//
         // Check if List field & Init List Array
-        $fieldId = self::lists()->InitOutput($this->out, "images", $fieldName);
+        $fieldId = self::lists()->initOutput($this->out, "images", $fieldName);
         if (!$fieldId) {
             return;
         }
         //====================================================================//
-        // For All Availables Product Images
+        // For All Available Product Images
         foreach ($this->getImagesInfoArray() as $index => $image) {
             //====================================================================//
             // Prepare
@@ -179,12 +179,12 @@ trait ImagesTrait
     /**
      * Write Given Fields
      *
-     * @param string $fieldName Field Identifier / Name
-     * @param mixed  $fieldData Field Data
+     * @param string     $fieldName Field Identifier / Name
+     * @param null|array $fieldData Field Data
      *
      * @return void
      */
-    protected function setImagesFields(string $fieldName, $fieldData): void
+    protected function setImagesFields(string $fieldName, ?array $fieldData): void
     {
         //====================================================================//
         // WRITE Field
@@ -193,7 +193,7 @@ trait ImagesTrait
             // PRODUCT IMAGES
             //====================================================================//
             case 'images':
-                $this->setImgArray($fieldData);
+                $this->setImgArray($fieldData ?? array());
 
                 break;
             default:
@@ -228,9 +228,9 @@ trait ImagesTrait
                 : 'Image';
         //====================================================================//
         // Encode Image in Splash Format
-        $splashImage = self::images()->Encode(
+        $splashImage = self::images()->encode(
             // @phpstan-ignore-next-line
-            ($objectImage->legend?$objectImage->legend:$objectImage->id.".".$objectImage->image_format),
+            ($objectImage->legend?:$objectImage->id.".".$objectImage->image_format),
             $objectImage->id.".".$objectImage->image_format,
             _PS_PROD_IMG_DIR_.$objectImage->getImgFolder(),
             $publicUrl->getImageLink($imageName, (string) $imageId)
@@ -345,7 +345,7 @@ trait ImagesTrait
         //====================================================================//
         // Safety Checks
         if (empty($psImage->id_image)) {
-            $psImage->id_image = $psImage->id;
+            $psImage->id_image = (int) $psImage->id;
         }
         if (empty($psImage->id_product)) {
             $psImage->id_product = $this->ProductId;
@@ -448,7 +448,11 @@ trait ImagesTrait
     private function updateImage(Image &$psImage)
     {
         if ($this->isToUpdate("Image")) {
-            $psImage->update();
+            try {
+                $psImage->update();
+            } catch (\PrestaShopException $e) {
+                Splash::log()->report($e);
+            }
             $this->isUpdated("Image");
         }
     }
@@ -460,7 +464,7 @@ trait ImagesTrait
      *
      * @return bool
      */
-    private function isImageVisible(array $imgArray)
+    private function isImageVisible(array $imgArray): bool
     {
         //====================================================================//
         // Visible Flag is Available
@@ -482,7 +486,7 @@ trait ImagesTrait
     {
         //====================================================================//
         // Not in Combination Mode => Skip
-        if (!$this->AttributeId) {
+        if (!$this->Attribute) {
             return;
         }
         //====================================================================//
@@ -592,20 +596,15 @@ trait ImagesTrait
     /**
      * Update Product Image Array from Server Data
      *
-     * @param mixed $data Input Image List for Update
+     * @param array $data Input Image List for Update
      *
      * @return bool
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    private function setImgArray($data): bool
+    private function setImgArray(array $data): bool
     {
-        //====================================================================//
-        // Safety Check
-        if (!is_array($data) && !is_a($data, "ArrayObject")) {
-            return false;
-        }
         //====================================================================//
         // Load Object Images List for Whole Product
         $this->imagesCache = Image::getImages(
