@@ -37,7 +37,7 @@ class Demo extends AbstractWidget
     //====================================================================//
     // Define Standard Options for this Widget
     // Override this array to change default options for your widget
-    public static $OPTIONS = array(
+    public static array $options = array(
         "Width" => self::SIZE_XL
     );
 
@@ -46,7 +46,7 @@ class Demo extends AbstractWidget
     //====================================================================//
 
     /**
-     * Widget Disable Flag. Uncomment thius line to Override this flag and disable Object.
+     * Widget Disable Flag. Uncomment this line to Override this flag and disable Object.
      *
      * @var bool
      */

@@ -38,7 +38,7 @@ class AttributesManager
     /**
      * Static cache for Attributes Group Values
      *
-     * @var null|array
+     * @var null|array<int|string, array<int, Attribute>>
      */
     private static ?array $attributes;
 
@@ -179,7 +179,7 @@ class AttributesManager
      *
      * @return Attribute[]
      */
-    public static function getAllAttributes($group, $reload = null): array
+    public static function getAllAttributes(AttributeGroup $group, bool $reload = null): array
     {
         //====================================================================//
         // If Not Already in Cache
@@ -213,9 +213,9 @@ class AttributesManager
      * @param AttributeGroup $group       Attribute Group Object
      * @param int            $attributeId Attribute Value Id
      *
-     * @return null|AttributeGroup
+     * @return null|Attribute
      */
-    public static function getAttributeById(AttributeGroup $group, int $attributeId): ?AttributeGroup
+    public static function getAttributeById(AttributeGroup $group, int $attributeId): ?Attribute
     {
         //====================================================================//
         // Ensure Loading of Attribute Values List
@@ -234,26 +234,26 @@ class AttributesManager
      * @param null|AttributeGroup $group Attribute Group Object
      * @param null|string         $name  Attribute Name in Default Language
      *
-     * @return Attribute|false
+     * @return null|Attribute
      */
-    public static function touchAttribute($group, $name)
+    public static function touchAttribute(?AttributeGroup $group, ?string $name): ?Attribute
     {
         //====================================================================//
         // Ensure Group is Valid
         if (!($group instanceof AttributeGroup)) {
-            return Splash::log()->errTrace("Attribute Group is invalid.");
+            return Splash::log()->errNull("Attribute Group is invalid.");
         }
         //====================================================================//
         // Ensure Name is Valid
         if (!is_string($name) || empty($name)) {
-            return Splash::log()->errTrace("Attribute Name is not a String.");
+            return Splash::log()->errNull("Attribute Name is not a String.");
         }
         //====================================================================//
         // TRY LOADING Attribute by Names
         $attribute = self::getAttributeByName($group, $name);
         //====================================================================//
         // CREATE Attribute if NOT Found
-        if (false == $attribute) {
+        if (!$attribute) {
             $attribute = self::addAttribute($group, $name);
         }
 
@@ -383,22 +383,22 @@ class AttributesManager
      * Identify Attribute Value Using Multilang Codes
      *
      * @param null|AttributeGroup $group   Attribute Group Object
-     * @param string              $name    Attribute Value Names in Default Language
-     * @param string              $isoCode Language ISO Code
+     * @param null|string         $name    Attribute Value Names in Default Language
+     * @param null|string         $isoCode Language ISO Code
      *
-     * @return Attribute|false
+     * @return null|Attribute
      */
-    private static function getAttributeByName($group, $name, $isoCode = null)
+    private static function getAttributeByName(?AttributeGroup $group, ?string $name, string $isoCode = null): ?Attribute
     {
         //====================================================================//
         // Ensure Group Id is Valid
         if (!($group instanceof AttributeGroup)) {
-            return Splash::log()->errTrace("Attribute Group is invalid.");
+            return Splash::log()->errNull("Attribute Group is invalid.");
         }
         //====================================================================//
         // Ensure Name is Valid
         if (!is_string($name) || empty($name)) {
-            return Splash::log()->errTrace("Attribute Value Name is not a String.");
+            return Splash::log()->errNull("Attribute Value Name is not a String.");
         }
         $loName = Tools::strtolower($name);
         //====================================================================//
@@ -414,42 +414,42 @@ class AttributesManager
             }
         }
 
-        return false;
+        return null;
     }
 
     /**
      * Add Attribute Group Value
      *
      * @param null|AttributeGroup $group Attribute Group Object
-     * @param string              $name  Attribute Name in Default Language
+     * @param null|string         $name  Attribute Name in Default Language
      * @param string              $color Attribute Color Attribute
      *
-     * @return Attribute|false Attribute Group Id
+     * @return null|Attribute Attribute Group ID
      */
-    private static function addAttribute($group, $name, $color = "#FFFFFF")
+    private static function addAttribute(?AttributeGroup $group, ?string $name, string $color = "#FFFFFF"): ?Attribute
     {
         //====================================================================//
         // Ensure Group is Valid
         if (!($group instanceof AttributeGroup)) {
-            return Splash::log()->errTrace("Attribute Group is invalid.");
+            return Splash::log()->errNull("Attribute Group is invalid.");
         }
         //====================================================================//
         // Ensure Name is Valid
         if (!is_string($name) || empty($name)) {
-            return Splash::log()->errTrace("Attribute Value Name is not a String.");
+            return Splash::log()->errNull("Attribute Value Name is not a String.");
         }
         //====================================================================//
         // Create New Attribute Value
         $attribute = new Attribute();
-        // @phpstan-ignore-next-line
+        /** @phpstan-ignore-next-line */
         $attribute->id_attribute_group = $group->id;
         if ($group->is_color_group) {
-            // @phpstan-ignore-next-line
+            /** @phpstan-ignore-next-line */
             $attribute->color = $color;
         }
         //====================================================================//
         // Setup Name => Same Name for Each Languages
-        // @phpstan-ignore-next-line
+        /** @phpstan-ignore-next-line */
         $attribute->name = array();
         foreach (array_keys(SLM::getAvailableLanguages()) as $langId) {
             $attribute->name[$langId] = $name;
@@ -457,8 +457,8 @@ class AttributesManager
         //====================================================================//
         // CREATE Attribute Value
         // @phpstan-ignore-next-line
-        if (true != $attribute->add()) {
-            return Splash::log()->errTrace("Unable to create Attribute Value.");
+        if (!$attribute->add()) {
+            return Splash::log()->errNull("Unable to create Attribute Value.");
         }
         //====================================================================//
         // ADD to Attribute Values Cache

@@ -24,11 +24,11 @@ use PrestaShopDatabaseException;
 trait SplashIdTrait
 {
     /**
-     * Check Splash Id Storage Table Exists
+     * Check Splash ID Storage Table Exists
      *
      * @return bool global test result
      */
-    public static function checkSplashIdTable()
+    public static function checkSplashIdTable(): bool
     {
         // List Tables
         Db::getInstance()

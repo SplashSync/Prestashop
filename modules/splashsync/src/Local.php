@@ -136,6 +136,7 @@ class Local implements LocalClassInterface
         //====================================================================//
         // When Library is called in server mode ONLY
         //====================================================================//
+        /** @phpstan-ignore-next-line */
         if (!empty(SPLASH_SERVER_MODE)) {
             //====================================================================//
             // Load Default User
@@ -198,6 +199,7 @@ class Local implements LocalClassInterface
             // Create Table
             self::createSplashIdTable();
             // Check Again
+            /** @phpstan-ignore-next-line  */
             if (!self::checkSplashIdTable()) {
                 return Splash::log()->err("ErrSelfTestNoTable");
             }
@@ -286,9 +288,9 @@ class Local implements LocalClassInterface
         }
         //====================================================================//
         // Init Msf Test Sequence
-        if (0 === strpos($name, "Msf")) {
+        if (0 === strpos((string) $name, "Msf")) {
             $shopId = 0;
-            sscanf($name, "Msf_%d", $shopId);
+            sscanf((string) $name, "Msf_%d", $shopId);
             MSM::setContext();
             Configuration::updateValue('SPLASH_MSF_FOCUSED', (int) $shopId);
 
@@ -400,8 +402,8 @@ class Local implements LocalClassInterface
     {
         //====================================================================//
         // Load Local Splash Sync Module
-        if (isset(static::$splashSyncModule)) {
-            return static::$splashSyncModule;
+        if (isset(self::$splashSyncModule)) {
+            return self::$splashSyncModule;
         }
         //====================================================================//
         // Safety Check
@@ -410,9 +412,9 @@ class Local implements LocalClassInterface
         }
         //====================================================================//
         // Create New Splash Module Instance
-        static::$splashSyncModule = new \SplashSync();
+        self::$splashSyncModule = new \SplashSync();
 
-        return static::$splashSyncModule;
+        return self::$splashSyncModule;
     }
 
     //====================================================================//
@@ -545,23 +547,23 @@ class Local implements LocalClassInterface
         Splash::log()->trace();
         //====================================================================//
         // Load Local Splash Sync Module
-        if (!isset(static::$splashSyncModule)) {
-            static::$splashSyncModule = $this->getLocalModule();
+        if (!isset(self::$splashSyncModule)) {
+            self::$splashSyncModule = $this->getLocalModule();
         }
         //====================================================================//
         // Check if Module is Installed & Enabled
-        if (static::$splashSyncModule->isEnabled('splashsync')) {
+        if (self::$splashSyncModule->isEnabled('splashsync')) {
             return true;
         }
         //====================================================================//
         // Execute Module is Uninstall
-        if (static::$splashSyncModule->uninstall()) {
+        if (self::$splashSyncModule->uninstall()) {
             Splash::log()->msg('[SPLASH] Splash Module Unintall Done');
         }
         //====================================================================//
         // Execute Module is Install
-        static::$splashSyncModule->updateTranslationsAfterInstall(false);
-        if (static::$splashSyncModule->install()) {
+        self::$splashSyncModule->updateTranslationsAfterInstall(false);
+        if (self::$splashSyncModule->install()) {
             Splash::log()->msg('[SPLASH] Splash Module Intall Done');
             echo Splash::log()->getConsoleLog(true);
 
@@ -570,7 +572,7 @@ class Local implements LocalClassInterface
         //====================================================================//
         // Import & Display Errors
         Splash::log()->err('[SPLASH] Splash Module Install Failed');
-        foreach (static::$splashSyncModule->getErrors() as $error) {
+        foreach (self::$splashSyncModule->getErrors() as $error) {
             Splash::log()->err('[SPLASH] Mod. Install : '.$error);
         }
         echo Splash::log()->getConsoleLog(true);

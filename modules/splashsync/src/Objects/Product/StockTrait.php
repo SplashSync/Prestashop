@@ -89,12 +89,12 @@ trait StockTrait
     /**
      * Read requested Field
      *
-     * @param string $key Input List Key
+     * @param string $key       Input List Key
      * @param string $fieldName Field Identifier / Name
      *
-     * @return void
-     *
      * @throws PrestaShopException
+     *
+     * @return void
      */
     protected function getStockFields(string $key, string $fieldName)
     {
@@ -167,11 +167,11 @@ trait StockTrait
      * Write Given Fields
      *
      * @param string $fieldName Field Identifier / Name
-     * @param int $fieldData Field Data
-     *
-     * @return void
+     * @param int    $fieldData Field Data
      *
      * @throws PrestaShopException
+     *
+     * @return void
      */
     protected function setStockFields(string $fieldName, int $fieldData)
     {
@@ -225,7 +225,7 @@ trait StockTrait
     /**
      * Write Given Fields
      *
-     * @param string $fieldName Field Identifier / Name
+     * @param string      $fieldName Field Identifier / Name
      * @param null|string $fieldData Field Data
      *
      * @return void
@@ -263,9 +263,9 @@ trait StockTrait
     /**
      * Override of Generic Stocks reading to manage MSf Mode
      *
-     * @return int
-     *
      * @throws PrestaShopException
+     *
+     * @return int
      */
     protected function getStockQuantity(): int
     {
