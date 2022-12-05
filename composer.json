@@ -20,8 +20,7 @@
     "autoload": {
         "psr-4": { "Splash\\Local\\": "modules/splashsync/src" },
         "exclude-from-classmap": [
-            "/Tests/",
-            "/modules/splashsync/vendor/symfony/polyfill-php80/Resources/stubs/Attribute.php"
+            "/Tests/"
         ]
     },
 
