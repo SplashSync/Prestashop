@@ -16,6 +16,7 @@
 namespace Splash\Local\Traits;
 
 use Db;
+use PrestaShopDatabaseException;
 
 /**
  * Prestashop Splash Id Storage Trait
@@ -78,19 +79,21 @@ trait SplashIdTrait
     /**
      * Write Splash Id to Storage
      *
-     * @param string     $objectType Object Type
-     * @param int|string $objectId   Object Identifier
-     * @param string     $splashId   Splash Object Identifier
+     * @param string      $objectType Object Type
+     * @param int|string  $objectId   Object Identifier
+     * @param null|string $splashId   Splash Object Identifier
+     *
+     * @throws PrestaShopDatabaseException
      *
      * @return bool
      */
-    public static function setSplashId($objectType, $objectId, $splashId = null)
+    public static function setSplashId(string $objectType, $objectId, ?string $splashId = null): bool
     {
         if (empty($splashId)) {
             return false;
         }
 
-        // Read Splash Id
+        // Read Splash ID
         $current = self::getSplashId($objectType, $objectId);
         // Object is Unknown
         if (!$current) {
@@ -100,7 +103,7 @@ trait SplashIdTrait
                 "spl_id" => pSQL($splashId),
             ));
         }
-        // Splash Id Changed
+        // Splash ID Changed
         if ($current !== $splashId) {
             return Db::getInstance()->update(
                 "splash_links",
