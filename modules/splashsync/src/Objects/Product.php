@@ -47,7 +47,7 @@ class Product extends AbstractObject
     use Core\DatesTrait;
     use Core\SplashMetaTrait;
     use Core\ObjectsListCommonsTrait;
-    use Core\MultilangTrait;
+    use Core\MultiLangTrait;
     use Core\MultishopObjectTrait;
     use Core\ConfiguratorAwareTrait;
     use \Splash\Local\Traits\SplashIdTrait;

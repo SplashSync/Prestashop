@@ -27,31 +27,32 @@ trait MetaTrait
      *
      * @return void
      */
-    private function buildMetaFields()
+    private function buildMetaFields(): void
     {
         //====================================================================//
         // Active
         $this->fieldsFactory()->create(SPL_T_BOOL)
-            ->Identifier("active")
-            ->Name(Translate::getAdminTranslation("Enabled", "AdminCustomers"))
-            ->MicroData("http://schema.org/Organization", "active")
-            ->isListed();
-
+            ->identifier("active")
+            ->name(Translate::getAdminTranslation("Enabled", "AdminCustomers"))
+            ->microData("http://schema.org/Organization", "active")
+            ->isListed()
+        ;
         //====================================================================//
         // Newsletter
         $this->fieldsFactory()->create(SPL_T_BOOL)
-            ->Identifier("newsletter")
-            ->Name(Translate::getAdminTranslation("Newsletter", "AdminCustomers"))
-            ->Group(Translate::getAdminTranslation("Meta", "AdminThemes"))
-            ->MicroData("http://schema.org/Organization", "newsletter");
-
+            ->identifier("newsletter")
+            ->name(Translate::getAdminTranslation("Newsletter", "AdminCustomers"))
+            ->group(Translate::getAdminTranslation("Meta", "AdminThemes"))
+            ->microData("http://schema.org/Organization", "newsletter")
+        ;
         //====================================================================//
-        // Adverstising
+        // Advertising
         $this->fieldsFactory()->create(SPL_T_BOOL)
-            ->Identifier("optin")
-            ->Name(Translate::getAdminTranslation("Opt-in", "AdminCustomers"))
-            ->Group(Translate::getAdminTranslation("Meta", "AdminThemes"))
-            ->MicroData("http://schema.org/Organization", "advertising");
+            ->identifier("optin")
+            ->name(Translate::getAdminTranslation("Opt-in", "AdminCustomers"))
+            ->group(Translate::getAdminTranslation("Meta", "AdminThemes"))
+            ->microData("http://schema.org/Organization", "advertising")
+        ;
     }
 
     /**
@@ -62,7 +63,7 @@ trait MetaTrait
      *
      * @return void
      */
-    private function getMetaFields($key, $fieldName)
+    private function getMetaFields(string $key, string $fieldName): void
     {
         //====================================================================//
         // READ Fields
@@ -89,7 +90,7 @@ trait MetaTrait
      *
      * @return void
      */
-    private function setMetaFields($fieldName, $fieldData)
+    private function setMetaFields(string $fieldName, $fieldData): void
     {
         //====================================================================//
         // WRITE Fields
@@ -98,7 +99,7 @@ trait MetaTrait
             case 'newsletter':
             case 'optin':
                 if ($this->object->{$fieldName} != $fieldData) {
-                    $this->object->{$fieldName} = $fieldData;
+                    $this->object->{$fieldName} = (bool) $fieldData;
                     $this->needUpdate();
                 }
 

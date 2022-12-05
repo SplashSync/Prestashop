@@ -88,7 +88,7 @@ class Order extends AbstractObject
     protected static string $ico = "fa fa-shopping-cart ";
 
     //====================================================================//
-    // Object Synchronistion Recommended Configuration
+    // Object Synchronization Recommended Configuration
     //====================================================================//
 
     /**

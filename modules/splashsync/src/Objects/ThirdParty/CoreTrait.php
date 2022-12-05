@@ -20,7 +20,7 @@ namespace Splash\Local\Objects\ThirdParty;
 use Translate;
 
 /**
- * Access to thirdparty Core Fields
+ * Access to ThirdParty Core Fields
  */
 trait CoreTrait
 {
@@ -29,7 +29,7 @@ trait CoreTrait
      *
      * @return void
      */
-    private function buildCoreFields()
+    protected function buildCoreFields(): void
     {
         //====================================================================//
         // Email
@@ -51,7 +51,7 @@ trait CoreTrait
      *
      * @return void
      */
-    private function getCoreFields($key, $fieldName)
+    protected function getCoreFields(string $key, string $fieldName): void
     {
         //====================================================================//
         // READ Field
@@ -68,11 +68,11 @@ trait CoreTrait
      * Write Given Fields
      *
      * @param string $fieldName Field Identifier / Name
-     * @param mixed  $fieldData Field Data
+     * @param string $fieldData Field Data
      *
      * @return void
      */
-    private function setCoreFields($fieldName, $fieldData)
+    protected function setCoreFields(string $fieldName, string $fieldData): void
     {
         //====================================================================//
         // WRITE Fields

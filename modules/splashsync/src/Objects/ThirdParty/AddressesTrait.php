@@ -30,17 +30,18 @@ trait AddressesTrait
      *
      * @return void
      */
-    private function buildAddressesFields()
+    private function buildAddressesFields(): void
     {
         //====================================================================//
         // Address List
         $this->fieldsFactory()->create((string) self::objects()->Encode("Address", SPL_T_ID))
-            ->Identifier("address")
-            ->InList("contacts")
-            ->Name(Translate::getAdminTranslation("Address", "AdminCustomers"))
-            ->MicroData("http://schema.org/Organization", "address")
-            ->Group(Translate::getAdminTranslation("Addresses", "AdminCustomers"))
-            ->isReadOnly();
+            ->identifier("address")
+            ->inList("contacts")
+            ->name(Translate::getAdminTranslation("Address", "AdminCustomers"))
+            ->microData("http://schema.org/Organization", "address")
+            ->group(Translate::getAdminTranslation("Addresses", "AdminCustomers"))
+            ->isReadOnly()
+        ;
     }
 
     /**
@@ -73,11 +74,11 @@ trait AddressesTrait
      *
      * @return void
      */
-    private function getAddressesList()
+    private function getAddressesList(): void
     {
         //====================================================================//
         // Create List If Not Existing
-        if (!isset($this->out["contacts"])) {
+        if (!isset($this->out["contacts"]) || !is_array($this->out["contacts"])) {
             $this->out["contacts"] = array();
         }
         //====================================================================//
@@ -92,7 +93,7 @@ trait AddressesTrait
         // Run Through Address List
         foreach ($addressList as $index => $address) {
             $this->out["contacts"][$index] = array(
-                "address" => self::objects()->Encode("Address", $address["id_address"])
+                "address" => self::objects()->encode("Address", $address["id_address"])
             );
         }
     }

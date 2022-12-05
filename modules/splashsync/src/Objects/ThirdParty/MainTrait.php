@@ -16,6 +16,7 @@
 namespace Splash\Local\Objects\ThirdParty;
 
 use Gender;
+use PrestaShopException;
 use Splash\Core\SplashCore      as Splash;
 use Splash\Local\Services\LanguagesManager;
 use Translate;
@@ -31,7 +32,7 @@ trait MainTrait
      *
      * @return void
      */
-    private function buildMainFields()
+    protected function buildMainFields()
     {
         //====================================================================//
         // Firstname
@@ -105,7 +106,7 @@ trait MainTrait
      *
      * @return void
      */
-    private function buildGenderFields()
+    protected function buildGenderFields(): void
     {
         //====================================================================//
         // Gender Name
@@ -138,7 +139,7 @@ trait MainTrait
      *
      * @return void
      */
-    private function getMainFields(string $key, string $fieldName): void
+    protected function getMainFields(string $key, string $fieldName): void
     {
         //====================================================================//
         // READ Fields
@@ -164,7 +165,7 @@ trait MainTrait
      *
      * @return void
      */
-    private function getMainComputedFields(string $key, string $fieldName): void
+    protected function getMainComputedFields(string $key, string $fieldName): void
     {
         //====================================================================//
         // READ Fields
@@ -213,7 +214,7 @@ trait MainTrait
      *
      * @return void
      */
-    private function getGenderFields(string $key, string $fieldName): void
+    protected function getGenderFields(string $key, string $fieldName): void
     {
         //====================================================================//
         // READ Fields
@@ -255,37 +256,6 @@ trait MainTrait
     }
 
     /**
-     * Read Customer Company Name
-     *
-     * @return string Customer Company Name
-     */
-    private function getCompanyName(): string
-    {
-        //====================================================================//
-        // Read Only AllInOne Customer Name Mode
-        if (isset(Splash::configuration()->PsUseFullCompanyNames)) {
-            //====================================================================//
-            // Customer Core Name
-            $fullName = sprintf("%s %s", $this->object->firstname, $this->object->lastname);
-            //====================================================================//
-            // Customer Company Name
-            if (!empty($this->object->company)) {
-                $fullName .= " | ".$this->object->company;
-            }
-
-            return $fullName;
-        }
-        //====================================================================//
-        // Generic Mode
-        if (!empty($this->object->company)) {
-            return $this->object->company;
-        }
-        //====================================================================//
-        // Generic FallBack Mode
-        return "Prestashop(".$this->object->id.")";
-    }
-
-    /**
      * Write Given Fields
      *
      * @param string $fieldName Field Identifier / Name
@@ -293,7 +263,7 @@ trait MainTrait
      *
      * @return void
      */
-    private function setMainFields(string $fieldName, $fieldData): void
+    protected function setMainFields(string $fieldName, $fieldData): void
     {
         //====================================================================//
         // WRITE Fields
@@ -324,11 +294,11 @@ trait MainTrait
      * Write Given Fields
      *
      * @param string $fieldName Field Identifier / Name
-     * @param mixed  $fieldData Field Data
+     * @param string $fieldData Field Data
      *
      * @return void
      */
-    private function setIdentificationFields($fieldName, $fieldData)
+    protected function setIdentificationFields(string $fieldName, string $fieldData)
     {
         //====================================================================//
         // WRITE Fields
@@ -372,9 +342,11 @@ trait MainTrait
      * @param string $fieldName Field Identifier / Name
      * @param mixed  $fieldData Field Data
      *
+     * @throws PrestaShopException
+     *
      * @return void
      */
-    private function setGenderFields(string $fieldName, $fieldData): void
+    protected function setGenderFields(string $fieldName, $fieldData): void
     {
         //====================================================================//
         // WRITE Fields
@@ -407,5 +379,36 @@ trait MainTrait
                 return;
         }
         unset($this->in[$fieldName]);
+    }
+
+    /**
+     * Read Customer Company Name
+     *
+     * @return string Customer Company Name
+     */
+    private function getCompanyName(): string
+    {
+        //====================================================================//
+        // Read Only AllInOne Customer Name Mode
+        if (isset(Splash::configuration()->PsUseFullCompanyNames)) {
+            //====================================================================//
+            // Customer Core Name
+            $fullName = sprintf("%s %s", $this->object->firstname, $this->object->lastname);
+            //====================================================================//
+            // Customer Company Name
+            if (!empty($this->object->company)) {
+                $fullName .= " | ".$this->object->company;
+            }
+
+            return $fullName;
+        }
+        //====================================================================//
+        // Generic Mode
+        if (!empty($this->object->company)) {
+            return $this->object->company;
+        }
+        //====================================================================//
+        // Generic FallBack Mode
+        return "Prestashop(".$this->object->id.")";
     }
 }
