@@ -37,13 +37,13 @@ class L10MsfProductsTest extends ObjectsCase
      * @param string     $testSequence
      * @param string     $objectType
      * @param null|array $field
-     * @param bool $variant
+     * @param bool       $variant
      *
      * @dataProvider objectMsfProductFieldsProvider
      *
-     * @return void
-     *
      * @throws Exception
+     *
+     * @return void
      */
     public function testSetSingleFieldFromModule(
         string $testSequence,
@@ -130,8 +130,9 @@ class L10MsfProductsTest extends ObjectsCase
     /**
      * Build List of Msf Product Fields to Tests
      *
-     * @return array
      * @throws Exception
+     *
+     * @return array
      */
     public function objectMsfProductFieldsProvider(): array
     {
