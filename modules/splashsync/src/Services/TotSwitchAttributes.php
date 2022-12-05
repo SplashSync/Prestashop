@@ -18,6 +18,7 @@ namespace Splash\Local\Services;
 use Combination;
 use Db;
 use Module;
+use PrestaShopException;
 use Shop;
 
 /**
@@ -46,12 +47,14 @@ class TotSwitchAttributes
     /**
      * Check if Product Combination is Disabled
      *
-     * @param int   $attributeId Ps Product Attribute Id
-     * @param mixed $attribute   Ps Product Attribute Class
+     * @param null|int         $attributeId Ps Product Attribute ID
+     * @param null|Combination $attribute   Ps Product Attribute Class
+     *
+     * @throws PrestaShopException
      *
      * @return bool return TRUE if Product Attribute is Disabled
      */
-    public static function isDisabled($attributeId, $attribute)
+    public static function isDisabled(?int $attributeId, ?Combination $attribute): bool
     {
         //====================================================================//
         // Check if Module is Active
@@ -79,13 +82,13 @@ class TotSwitchAttributes
     /**
      * Update Product Combination Status if Possible
      *
-     * @param int   $attributeId Ps Product Attribute Id
-     * @param mixed $attribute   Ps Product Attribute Class
-     * @param bool  $value       New Product Attribute Status
+     * @param null|int         $attributeId Ps Product Attribute ID
+     * @param null|Combination $attribute   Ps Product Attribute Class
+     * @param bool             $value       New Product Attribute Status
      *
      * @return bool return TRUE if Product Attribute Status Updated
      */
-    public static function setAvailablility($attributeId, $attribute, $value)
+    public static function setAvailablility(?int $attributeId, ?Combination $attribute, bool $value): bool
     {
         //====================================================================//
         // Check if Module is Active

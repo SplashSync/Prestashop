@@ -122,11 +122,11 @@ class OrderPdfManager
      *
      * @param OrderInvoice $object
      * @param string       $template
-     * @param mixed        $fullPath
+     * @param string       $fullPath
      *
      * @return bool
      */
-    private static function createPdf(OrderInvoice $object, $template, $fullPath)
+    private static function createPdf(OrderInvoice $object, string $template, string $fullPath): bool
     {
         //====================================================================//
         // A File Already Exists => Exit

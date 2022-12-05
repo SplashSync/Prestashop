@@ -20,6 +20,7 @@ use Db;
 use DbQuery;
 use Order;
 use OrderInvoice;
+use PrestaShopDatabaseException;
 use Splash\Core\SplashCore as Splash;
 use Splash\Local\Local;
 use Splash\Models\Objects\PricesTrait;
@@ -41,7 +42,7 @@ class DiscountsManager
     /**
      * @var null|array
      */
-    private static $cache;
+    private static ?array $cache;
 
     /**
      * Check if Advanced Discounts Feature is Active
@@ -120,14 +121,14 @@ class DiscountsManager
         }
         //====================================================================//
         // Check if Discount Details Found
-        static::$cache = self::getOrderDiscountsDetails($orderId, $currency);
+        self::$cache = self::getOrderDiscountsDetails($orderId, $currency);
         //====================================================================//
         // Empty => Check if Collector Feature is Enabled
-        if (empty(static::$cache) && DiscountCollector::isFeatureActive()) {
-            static::$cache = DiscountCollector::collectDiscountsItems(new Order($orderId), $currency);
+        if (empty(self::$cache) && DiscountCollector::isFeatureActive()) {
+            self::$cache = DiscountCollector::collectDiscountsItems(new Order($orderId), $currency);
         }
 
-        return !empty(static::$cache);
+        return !empty(self::$cache);
     }
 
     /**
@@ -137,7 +138,7 @@ class DiscountsManager
      */
     public static function flushOrderDiscountsDetails(): void
     {
-        static::$cache = null;
+        self::$cache = null;
     }
 
     /**
@@ -152,22 +153,22 @@ class DiscountsManager
     {
         //====================================================================//
         // Check if Items Already in Cache
-        if (is_array(static::$cache)) {
-            return static::$cache;
+        if (is_array(self::$cache)) {
+            return self::$cache;
         }
         //====================================================================//
         // Get Order Id
         $orderId = ($object instanceof OrderInvoice) ? $object->id_order : $object->id;
         //====================================================================//
         // Check if Discounts Details Available
-        if (self::hasOrderDiscountsDetails((int) $orderId, $currency) && is_array(static::$cache)) {
-            return static::$cache;
+        if (self::hasOrderDiscountsDetails((int) $orderId, $currency) && is_array(self::$cache)) {
+            return self::$cache;
         }
         //====================================================================//
         // Build Discounts Item from Core Data
-        static::$cache = self::getCoreDiscounts($object, $currency);
+        self::$cache = self::getCoreDiscounts($object, $currency);
 
-        return static::$cache;
+        return self::$cache;
     }
 
     /**
@@ -198,6 +199,8 @@ class DiscountsManager
      *
      * @param int      $orderId
      * @param Currency $currency
+     *
+     * @throws PrestaShopDatabaseException
      *
      * @return array
      */

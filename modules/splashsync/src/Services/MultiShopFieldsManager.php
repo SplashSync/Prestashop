@@ -30,13 +30,6 @@ class MultiShopFieldsManager
     const MSF_PREFIX = "_shop_";
 
     /**
-     * Original Fields List
-     *
-     * @var array
-     */
-    private static $coreFields;
-
-    /**
      * Expanded Fields List
      *
      * @var array
@@ -46,23 +39,23 @@ class MultiShopFieldsManager
     /**
      * IDs of All Shop Fields
      *
-     * @var array
+     * @var null|array
      */
-    private static $allShopsFields;
+    private static ?array $allShopsFields;
 
     /**
      * IDs of Multi Shop Fields
      *
-     * @var array
+     * @var null|array
      */
-    private static $multiShopsFields;
+    private static ?array $multiShopsFields;
 
     /**
      * IDs of Single Shop Fields
      *
-     * @var array[]
+     * @var null|array[]
      */
-    private static $singleShopsFields;
+    private static ?array $singleShopsFields;
 
     /**
      * Load Multi-Shop Fields
@@ -75,7 +68,6 @@ class MultiShopFieldsManager
     {
         //====================================================================//
         // Init Data Storage
-        self::$coreFields = $coreFields;
         self::$expandedFields = array();
         self::$singleShopsFields = array();
         //====================================================================//
