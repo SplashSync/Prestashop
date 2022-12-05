@@ -29,7 +29,7 @@ trait TotalsTrait
      *
      * @return void
      */
-    private function buildTotalsFields()
+    private function buildTotalsFields(): void
     {
         //====================================================================//
         // PRICES INFORMATIONS

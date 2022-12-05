@@ -31,7 +31,7 @@ trait CoreTrait
      *
      * @return bool
      */
-    protected function isOrderObject()
+    protected function isOrderObject(): bool
     {
         return ($this instanceof Order);
     }
@@ -46,41 +46,41 @@ trait CoreTrait
         //====================================================================//
         // Customer Object
         $this->fieldsFactory()->create((string) self::objects()->encode("ThirdParty", SPL_T_ID))
-            ->Identifier("id_customer")
-            ->Name(Translate::getAdminTranslation("Customer ID", "AdminCustomerThreads"))
+            ->identifier("id_customer")
+            ->name(Translate::getAdminTranslation("Customer ID", "AdminCustomerThreads"))
             ->isRequired();
         if (!$this->isOrderObject()) {
-            $this->fieldsFactory()->MicroData("http://schema.org/Invoice", "customer");
+            $this->fieldsFactory()->microData("http://schema.org/Invoice", "customer");
         } else {
-            $this->fieldsFactory()->MicroData("http://schema.org/Organization", "ID");
+            $this->fieldsFactory()->microData("http://schema.org/Organization", "ID");
         }
-
         //====================================================================//
         // Customer Email
         $this->fieldsFactory()->create(SPL_T_EMAIL)
-            ->Identifier("email")
-            ->Name(Translate::getAdminTranslation("Email address", "AdminCustomers"))
-            ->MicroData("http://schema.org/ContactPoint", "email")
-            ->isReadOnly();
-
+            ->identifier("email")
+            ->name(Translate::getAdminTranslation("Email address", "AdminCustomers"))
+            ->microData("http://schema.org/ContactPoint", "email")
+            ->isReadOnly()
+        ;
         //====================================================================//
         // Reference
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
             ->identifier("reference")
             ->name(Translate::getAdminTranslation("Reference", "AdminOrders"))
-            ->MicroData("http://schema.org/Order", "orderNumber")
+            ->microData("http://schema.org/Order", "orderNumber")
             ->addOption("maxLength", "8")
             ->isRequired()
-            ->isListed();
-
+            ->isListed()
+        ;
         //====================================================================//
         // Order Date
         $this->fieldsFactory()->create(SPL_T_DATE)
-            ->Identifier("order_date")
-            ->Name(Translate::getAdminTranslation("Date", "AdminProducts"))
-            ->MicroData("http://schema.org/Order", "orderDate")
+            ->identifier("order_date")
+            ->name(Translate::getAdminTranslation("Date", "AdminProducts"))
+            ->microData("http://schema.org/Order", "orderDate")
             ->isReadOnly()
-            ->isListed();
+            ->isListed()
+        ;
     }
 
     /**
@@ -91,7 +91,7 @@ trait CoreTrait
      *
      * @return void
      */
-    private function getCoreFields($key, $fieldName)
+    private function getCoreFields(string $key, string $fieldName): void
     {
         //====================================================================//
         // READ Fields
@@ -109,10 +109,10 @@ trait CoreTrait
                 //====================================================================//
                 // Customer Object Id Readings
             case 'id_customer':
-                if (!$this->isOrderObject()) {
-                    $this->out[$fieldName] = self::objects()->encode("ThirdParty", $this->Order->{$fieldName});
-                } else {
+                if ($this instanceof Order) {
                     $this->out[$fieldName] = self::objects()->encode("ThirdParty", $this->object->{$fieldName});
+                } else {
+                    $this->out[$fieldName] = self::objects()->encode("ThirdParty", $this->Order->{$fieldName});
                 }
 
                 break;
@@ -151,12 +151,12 @@ trait CoreTrait
     /**
      * Write Given Fields
      *
-     * @param string $fieldName Field Identifier / Name
-     * @param mixed  $fieldData Field Data
+     * @param string      $fieldName Field Identifier / Name
+     * @param null|string $fieldData Field Data
      *
      * @return void
      */
-    private function setCoreFields($fieldName, $fieldData)
+    private function setCoreFields(string $fieldName, ?string $fieldData): void
     {
         //====================================================================//
         // WRITE Field
@@ -175,9 +175,16 @@ trait CoreTrait
                 // Customer Object Id
             case 'id_customer':
                 if (!$this->isOrderObject()) {
-                    $this->setSimple($fieldName, self::objects()->Id($fieldData), "Order");
+                    $this->setSimple(
+                        $fieldName,
+                        self::objects()->id((string) $fieldData),
+                        "Order"
+                    );
                 } else {
-                    $this->setSimple($fieldName, self::objects()->Id($fieldData));
+                    $this->setSimple(
+                        $fieldName,
+                        self::objects()->id((string) $fieldData)
+                    );
                 }
 
                 break;

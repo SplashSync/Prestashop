@@ -23,23 +23,23 @@ use Splash\Local\Objects\Invoice;
 use Translate;
 
 /**
- * Access to Orders Payments Fields
+ * Access to Order Payments Fields
  */
 trait PaymentsTrait
 {
     /**
-     * Credit Note Mode: Filter Nagative payment isntead of Positive Payments
+     * Credit Note Mode: Filter Negative payment instead of Positive Payments
      *
      * @var bool
      */
-    private $isCreditNoteMode = false;
+    private bool $isCreditNoteMode = false;
 
     /**
      * Known Payment Method Codes Names
      *
-     * @var array
+     * @var array<string, string>
      */
-    private $knownPaymentMethods = array(
+    private array $knownPaymentMethods = array(
         "bankwire" => "ByBankTransferInAdvance",
         "ps_wirepayment" => "ByBankTransferInAdvance",
 
@@ -62,52 +62,52 @@ trait PaymentsTrait
         //====================================================================//
         // Payment Line Payment Method
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
-            ->Identifier("mode")
-            ->InList("payments")
-            ->Name(Translate::getAdminTranslation("Payment method", "AdminOrders"))
-            ->MicroData("http://schema.org/Invoice", "PaymentMethod")
-            ->Group(Translate::getAdminTranslation("Payment", "AdminPayment"))
-            ->Association("mode@payments", "amount@payments")
-            ->AddChoices(array_flip($this->knownPaymentMethods))
+            ->identifier("mode")
+            ->inList("payments")
+            ->name(Translate::getAdminTranslation("Payment method", "AdminOrders"))
+            ->microData("http://schema.org/Invoice", "PaymentMethod")
+            ->group(Translate::getAdminTranslation("Payment", "AdminPayment"))
+            ->association("mode@payments", "amount@payments")
+            ->addChoices(array_flip($this->knownPaymentMethods))
         ;
         //====================================================================//
         // Raw Payment Line Payment Method
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
-            ->Identifier("rawMode")
-            ->InList("payments")
-            ->Name(Translate::getAdminTranslation("Payment method", "AdminOrders")." Raw")
-            ->Group(Translate::getAdminTranslation("Payment", "AdminPayment"))
+            ->identifier("rawMode")
+            ->inList("payments")
+            ->name(Translate::getAdminTranslation("Payment method", "AdminOrders")." Raw")
+            ->group(Translate::getAdminTranslation("Payment", "AdminPayment"))
             ->isReadOnly()
         ;
         //====================================================================//
         // Payment Line Date
         $this->fieldsFactory()->create(SPL_T_DATE)
-            ->Identifier("date")
-            ->InList("payments")
-            ->Name(Translate::getAdminTranslation("Date", "AdminProducts"))
-            ->MicroData("http://schema.org/PaymentChargeSpecification", "validFrom")
-            ->Group(Translate::getAdminTranslation("Payment", "AdminPayment"))
+            ->identifier("date")
+            ->inList("payments")
+            ->name(Translate::getAdminTranslation("Date", "AdminProducts"))
+            ->microData("http://schema.org/PaymentChargeSpecification", "validFrom")
+            ->group(Translate::getAdminTranslation("Payment", "AdminPayment"))
             ->isReadOnly()
         ;
         //====================================================================//
         // Payment Line Payment Identifier
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
-            ->Identifier("number")
-            ->InList("payments")
-            ->Name(Translate::getAdminTranslation("Transaction ID", "AdminOrders"))
-            ->MicroData("http://schema.org/Invoice", "paymentMethodId")
-            ->Association("mode@payments", "amount@payments")
-            ->Group(Translate::getAdminTranslation("Payment", "AdminPayment"))
+            ->identifier("number")
+            ->inList("payments")
+            ->name(Translate::getAdminTranslation("Transaction ID", "AdminOrders"))
+            ->microData("http://schema.org/Invoice", "paymentMethodId")
+            ->group(Translate::getAdminTranslation("Payment", "AdminPayment"))
+            ->association("mode@payments", "amount@payments")
         ;
         //====================================================================//
         // Payment Line Amount
         $this->fieldsFactory()->create(SPL_T_DOUBLE)
-            ->Identifier("amount")
-            ->InList("payments")
-            ->Name(Translate::getAdminTranslation("Amount", "AdminOrders"))
-            ->MicroData("http://schema.org/PaymentChargeSpecification", "price")
-            ->Group(Translate::getAdminTranslation("Payment", "AdminPayment"))
-            ->Association("mode@payments", "amount@payments")
+            ->identifier("amount")
+            ->inList("payments")
+            ->name(Translate::getAdminTranslation("Amount", "AdminOrders"))
+            ->microData("http://schema.org/PaymentChargeSpecification", "price")
+            ->group(Translate::getAdminTranslation("Payment", "AdminPayment"))
+            ->association("mode@payments", "amount@payments")
         ;
     }
 
@@ -119,7 +119,7 @@ trait PaymentsTrait
      *
      * @return void
      */
-    protected function getPaymentsFields($key, $fieldName)
+    protected function getPaymentsFields(string $key, string $fieldName): void
     {
         //====================================================================//
         // Check if List field & Init List Array
@@ -162,9 +162,9 @@ trait PaymentsTrait
      * @param OrderPayment $orderPayment
      * @param string       $fieldName    Field Identifier / Name
      *
-     * @return null|mixed
+     * @return null|bool|float|string
      */
-    protected function getOrderPaymentValue($orderPayment, $fieldName)
+    protected function getOrderPaymentValue(OrderPayment $orderPayment, string $fieldName)
     {
         //====================================================================//
         // READ Fields
@@ -197,12 +197,12 @@ trait PaymentsTrait
     /**
      * Write Given Fields
      *
-     * @param string $fieldName Field Identifier / Name
-     * @param mixed  $fieldData Field Data
+     * @param string       $fieldName Field Identifier / Name
+     * @param null|array[] $fieldData Field Data
      *
      * @return void
      */
-    protected function setPaymentsFields($fieldName, $fieldData)
+    protected function setPaymentsFields(string $fieldName, ?array $fieldData): void
     {
         //====================================================================//
         // Safety Check
@@ -212,7 +212,7 @@ trait PaymentsTrait
 
         //====================================================================//
         // Verify Lines List & Update if Needed
-        foreach ($fieldData as $paymentItem) {
+        foreach ($fieldData ?? array() as $paymentItem) {
             //====================================================================//
             // Update Product Line
             if (is_array($this->Payments)) {
@@ -241,7 +241,7 @@ trait PaymentsTrait
      *
      * @return void
      */
-    protected function setCreditNoteMode($enable)
+    protected function setCreditNoteMode(bool $enable): void
     {
         $this->isCreditNoteMode = $enable;
     }
@@ -251,7 +251,7 @@ trait PaymentsTrait
      *
      * @return float
      */
-    protected function getPaymentsTotal()
+    protected function getPaymentsTotal(): float
     {
         $totalPaid = 0;
         //====================================================================//
@@ -283,7 +283,7 @@ trait PaymentsTrait
      *
      * @return string
      */
-    private function getPaymentMethod($orderPayment)
+    private function getPaymentMethod(OrderPayment $orderPayment): string
     {
         //====================================================================//
         // If PhpUnit Mode => Read Order Payment Object
@@ -317,7 +317,7 @@ trait PaymentsTrait
      *
      * @return bool
      */
-    private function updatePayment($orderPayment, $paymentItem)
+    private function updatePayment(?OrderPayment $orderPayment, array $paymentItem): bool
     {
         //====================================================================//
         // Safety Check
@@ -401,7 +401,7 @@ trait PaymentsTrait
      *
      * @return bool
      */
-    private function isAllowed($orderPayment)
+    private function isAllowed(OrderPayment $orderPayment): bool
     {
         return $this->isCreditNoteMode ? ($orderPayment->amount < 0) : ($orderPayment->amount >= 0);
     }

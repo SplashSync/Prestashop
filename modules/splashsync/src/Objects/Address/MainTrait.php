@@ -205,6 +205,7 @@ trait MainTrait
             //====================================================================//
             // Country ISO Id - READ With Conversion
             case 'id_country':
+                $fieldData = (string) $fieldData;
                 if ($this->object->{$fieldName} != Country::getByIso($fieldData)) {
                     $this->object->{$fieldName} = Country::getByIso($fieldData);
                     $this->needUpdate();
@@ -214,6 +215,7 @@ trait MainTrait
                 //====================================================================//
                 // State ISO Id - READ With Conversion
             case 'id_state':
+                $fieldData = (string) $fieldData;
                 if ($this->object->{$fieldName} != State::getIdByIso($fieldData)) {
                     $this->object->{$fieldName} = State::getIdByIso($fieldData);
                     $this->needUpdate();

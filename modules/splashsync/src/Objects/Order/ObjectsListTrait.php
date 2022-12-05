@@ -19,7 +19,7 @@ use DbQuery;
 use Splash\Core\SplashCore      as Splash;
 
 /**
- * Acces to Orders Objects Lists
+ * Access to Order Objects Lists
  */
 trait ObjectsListTrait
 {

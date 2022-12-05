@@ -15,8 +15,8 @@
 
 namespace Splash\Local\Objects\Order;
 
-use ArrayObject;
 use OrderDetail;
+use PrestaShopException;
 use Splash\Core\SplashCore      as Splash;
 use Splash\Local\Objects\Invoice;
 use Splash\Local\Objects\Product;
@@ -159,8 +159,8 @@ trait ItemsTrait
                     //====================================================================//
                     // Order Line Product Id
                 case 'product_id':
-                    $unikId = Product::getUnikIdStatic($product["product_id"], $product["product_attribute_id"]);
-                    $value = self::objects()->encode("Product", $unikId);
+                    $uniqueId = Product::getUnikIdStatic($product["product_id"], $product["product_attribute_id"]);
+                    $value = self::objects()->encode("Product", $uniqueId);
 
                     break;
                     //====================================================================//
@@ -198,12 +198,14 @@ trait ItemsTrait
     /**
      * Write Given Fields
      *
-     * @param string $fieldName Field Identifier / Name
-     * @param mixed  $fieldData Field Data
+     * @param string       $fieldName Field Identifier / Name
+     * @param null|array[] $fieldData Field Data
+     *
+     * @throws PrestaShopException
      *
      * @return void
      */
-    protected function setProductsFields(string $fieldName, $fieldData)
+    protected function setProductsFields(string $fieldName, ?array $fieldData): void
     {
         //====================================================================//
         // Safety Check
@@ -212,7 +214,7 @@ trait ItemsTrait
         }
         //====================================================================//
         // Verify Lines List & Update if Needed
-        foreach ($fieldData as $productItem) {
+        foreach ($fieldData ?? array() as $productItem) {
             //====================================================================//
             // Update Product Line
             $this->updateProduct(array_shift($this->Products), $productItem);
@@ -331,15 +333,17 @@ trait ItemsTrait
     /**
      * Write Data to Current Item
      *
-     * @param null|array        $currentProduct Current Item Data Array
-     * @param array|ArrayObject $productItem    Input Item Data Array
+     * @param null|array $currentProduct Current Item Data Array
+     * @param array      $productItem    Input Item Data Array
+     *
+     * @throws PrestaShopException
      *
      * @return void
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    private function updateProduct(?array $currentProduct, $productItem)
+    private function updateProduct(?array $currentProduct, array $productItem): void
     {
         //====================================================================//
         // Not A Product Line => Skipped
@@ -376,12 +380,12 @@ trait ItemsTrait
 
         //====================================================================//
         // Update Price
-        $ttcPrice = (float) self::prices()->TaxIncluded($productItem["unit_price"]);
+        $ttcPrice = (float) self::prices()->taxIncluded($productItem["unit_price"]);
         if ($orderDetail->unit_price_tax_incl != $ttcPrice) {
             $orderDetail->unit_price_tax_incl = $ttcPrice;
             $update = true;
         }
-        $htPrice = (float) self::prices()->TaxExcluded($productItem["unit_price"]);
+        $htPrice = (float) self::prices()->taxExcluded($productItem["unit_price"]);
         if ($orderDetail->unit_price_tax_excl != $htPrice) {
             $orderDetail->unit_price_tax_excl = $htPrice;
             $orderDetail->product_price = $htPrice;
@@ -390,9 +394,9 @@ trait ItemsTrait
 
         //====================================================================//
         // Update Product Link
-        $unikId = (string) self::objects()->Id($productItem["product_id"]);
-        $productId = Product::getId($unikId);
-        $attributeId = Product::getAttribute($unikId);
+        $uniqueId = (string) self::objects()->id($productItem["product_id"]);
+        $productId = Product::getId($uniqueId);
+        $attributeId = Product::getAttribute($uniqueId);
         if ($orderDetail->product_id != $productId) {
             $orderDetail->product_id = $productId;
             $update = true;
@@ -409,11 +413,11 @@ trait ItemsTrait
         }
 
         if (!$orderDetail->id) {
-            if (true != $orderDetail->add()) {
+            if (!$orderDetail->add()) {
                 Splash::log()->err("ErrLocalTpl", __CLASS__, __FUNCTION__, "Unable to Create new Order Line.");
             }
         } else {
-            if (true != $orderDetail->update()) {
+            if (!$orderDetail->update()) {
                 Splash::log()->err("ErrLocalTpl", __CLASS__, __FUNCTION__, "Unable to Update Order Line.");
             }
         }
@@ -468,7 +472,7 @@ trait ItemsTrait
     {
         //====================================================================//
         // Get Carrier by Id
-        if (empty($this->carrier) || empty($this->carrier->name)) {
+        if (!isset($this->carrier) || empty($this->carrier->name)) {
             return $this->spl->l("Delivery");
         }
         //====================================================================//

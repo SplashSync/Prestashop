@@ -99,12 +99,12 @@ trait CoreTrait
     /**
      * Read requested Field
      *
-     * @param string      $key       Input List Key
-     * @param null|string $fieldName Field Identifier / Name
+     * @param string $key       Input List Key
+     * @param string $fieldName Field Identifier / Name
      *
      * @return void
      */
-    protected function getCoreFields(string $key, ?string $fieldName): void
+    protected function getCoreFields(string $key, string $fieldName): void
     {
         //====================================================================//
         // READ Fields
@@ -167,7 +167,7 @@ trait CoreTrait
                 //====================================================================//
                 // Customer Object Id Writings
             case 'id_customer':
-                $this->setIdCustomer($fieldData);
+                $this->setIdCustomer((string) $fieldData);
 
                 break;
             default:
