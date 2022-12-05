@@ -388,8 +388,11 @@ class AttributesManager
      *
      * @return null|Attribute
      */
-    private static function getAttributeByName(?AttributeGroup $group, ?string $name, string $isoCode = null): ?Attribute
-    {
+    private static function getAttributeByName(
+        ?AttributeGroup $group,
+        ?string $name,
+        string $isoCode = null
+    ): ?Attribute {
         //====================================================================//
         // Ensure Group Id is Valid
         if (!($group instanceof AttributeGroup)) {
