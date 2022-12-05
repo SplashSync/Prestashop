@@ -23,7 +23,7 @@ trait ConfiguratorAwareTrait
     /**
      * {@inheritdoc}
      */
-    public function description()
+    public function description(): array
     {
         $description = parent::description();
         //====================================================================//

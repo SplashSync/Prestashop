@@ -71,28 +71,28 @@ class CreditNote extends AbstractObject
      *
      * @var bool
      */
-    protected static $DISABLED = true;
+    protected static bool $disabled = true;
 
     /**
      * Object Name (Translated by Module)
      *
      * @var string
      */
-    protected static $NAME = "Customer Credit Note";
+    protected static string $name = "Customer Credit Note";
 
     /**
      * Object Description (Translated by Module)
      *
      * @var string
      */
-    protected static $DESCRIPTION = "Prestashop Customers Credit Notes Object";
+    protected static string $description = "Prestashop Customers Credit Notes Object";
 
     /**
      * Object Icon (FontAwesome or Glyph ico tag)
      *
      * @var string
      */
-    protected static $ICO = "fa fa-eur";
+    protected static string $ico = "fa fa-eur";
 
     //====================================================================//
     // Object Synchronization Limitations
@@ -103,24 +103,24 @@ class CreditNote extends AbstractObject
      *
      * @var bool
      */
-    protected static $ALLOW_PUSH_CREATED = false;
+    protected static bool $allowPushCreated = false;
 
     /**
      * Allow Update Of Existing Local Objects
      *
      * @var bool
      */
-    protected static $ALLOW_PUSH_UPDATED = false;
+    protected static bool $allowPushUpdated = false;
 
     /**
      * Allow Delete Of Existing Local Objects
      *
      * @var bool
      */
-    protected static $ALLOW_PUSH_DELETED = false;
+    protected static bool $allowPushDeleted = false;
 
     //====================================================================//
-    // Object Synchronistion Recommended Configuration
+    // Object Synchronization Recommended Configuration
     //====================================================================//
 
     /**
@@ -128,21 +128,21 @@ class CreditNote extends AbstractObject
      *
      * @var bool
      */
-    protected static $ENABLE_PUSH_CREATED = false;
+    protected static bool $enablePushCreated = false;
 
     /**
-     * Enable Update Of Existing Local Objects when Modified Remotly
+     * Enable Update Of Existing Local Objects when Modified Remotely
      *
      * @var bool
      */
-    protected static $ENABLE_PUSH_UPDATED = false;
+    protected static bool $enablePushUpdated = false;
 
     /**
-     * Enable Delete Of Existing Local Objects when Deleted Remotly
+     * Enable Delete Of Existing Local Objects when Deleted Remotely
      *
      * @var bool
      */
-    protected static $ENABLE_PUSH_DELETED = false;
+    protected static bool $enablePushDeleted = false;
 
     //====================================================================//
     // General Class Variables
@@ -172,17 +172,17 @@ class CreditNote extends AbstractObject
     /**
      * @var OrderSlip
      */
-    protected $object;
+    protected object $object;
 
     /**
      * @var Currency
      */
-    private $currency;
+    private Currency $currency;
 
     /**
      * @var SplashSync
      */
-    private $spl;
+    private SplashSync $spl;
 
     //====================================================================//
     // Class Constructor

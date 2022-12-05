@@ -39,7 +39,7 @@ trait MultishopObjectTrait
     /**
      * {@inheritdoc}
      */
-    public function fields()
+    public function fields(): array
     {
         //====================================================================//
         // Check if Multi-shop Mode is Active
@@ -57,32 +57,32 @@ trait MultishopObjectTrait
     /**
      * Override Get Function to Map MultiStore Fields
      *
-     * @param null|string            $objectId
-     * @param null|array|ArrayObject $fieldsList
-     *
-     * @throws Exception
+     * @param null|string $objectId
+     * @param null|array|ArrayObject $fields
      *
      * @return array|ArrayObject|false
+     *
+     * @throws Exception
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public function get($objectId = null, $fieldsList = null)
+    public function get(string $objectId, array $fields): ?array
     {
         //====================================================================//
         // Detect ArrayObjects
-        $fieldsList = ($fieldsList instanceof ArrayObject) ? $fieldsList->getArrayCopy() : $fieldsList;
+        $fields = ($fields instanceof ArrayObject) ? $fields->getArrayCopy() : $fields;
         //====================================================================//
         // Check if Multi-shop Mode is Active
         if (!MSM::isFeatureActive()) {
-            return $this->coreGet($objectId, $fieldsList);
+            return $this->coreGet($objectId, $fields);
         }
         //====================================================================//
         // Load Core Fields from All Shop Context
         MSF::loadFields($this->coreFields());
         //====================================================================//
         // Read Data for All Shop Context
-        $allShopData = $this->getAllShopsData($objectId, $fieldsList);
+        $allShopData = $this->getAllShopsData($objectId, $fields);
         //====================================================================//
         // Object Not Found => Exit
         if (!is_array($allShopData)) {
@@ -94,7 +94,7 @@ trait MultishopObjectTrait
         foreach (MSM::getShopIds() as $shopId) {
             //====================================================================//
             // Load Fields for Single Shop Context
-            $singleShopFields = array_intersect((array) $fieldsList, MSF::getSingleShopFields($shopId));
+            $singleShopFields = array_intersect((array) $fields, MSF::getSingleShopFields($shopId));
             //====================================================================//
             // Ensure We have Fields to Read
             if (empty($singleShopFields)) {
@@ -124,27 +124,28 @@ trait MultishopObjectTrait
     }
 
     /**
-     * @param null|string            $objectId
-     * @param null|array|ArrayObject $list
+     * @param null|string $objectId
+     * @param array $objectData
      *
      * @return false|string
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @throws Exception
      */
-    public function set($objectId = null, $list = null)
+    public function set(?string $objectId, array $objectData): ?string
     {
         //====================================================================//
         // Detect ArrayObjects
-        $list = ($list instanceof ArrayObject) ? $list->getArrayCopy() : $list;
+        $objectData = ($objectData instanceof ArrayObject) ? $objectData->getArrayCopy() : $objectData;
         //====================================================================//
         // Check if Multi-shop Mode is Active
         if (!MSM::isFeatureActive()) {
-            return $this->coreSet($objectId, $list);
+            return $this->coreSet($objectId, $objectData);
         }
         //====================================================================//
         // Write Data for All Shop Context
-        $allShopData = MSF::extractData((array) $list, null);
+        $allShopData = MSF::extractData((array) $objectData, null);
         if (!empty($allShopData)) {
             MSM::setContext();
             $objectId = $this->coreSet($objectId, $allShopData);
@@ -159,7 +160,7 @@ trait MultishopObjectTrait
         foreach (MSM::getShopIds() as $shopId) {
             //====================================================================//
             // Extract Data for Single Shop Context
-            $multiShopData = MSF::extractData((array) $list, $shopId);
+            $multiShopData = MSF::extractData((array) $objectData, $shopId);
             if (empty($multiShopData)) {
                 continue;
             }

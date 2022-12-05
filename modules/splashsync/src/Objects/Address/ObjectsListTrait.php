@@ -31,7 +31,7 @@ trait ObjectsListTrait
     /**
      * {@inheritdoc}
      */
-    public function objectsList($filter = null, $params = null)
+    public function objectsList(string $filter = null, array $params = array()): array
     {
         //====================================================================//
         // Stack Trace

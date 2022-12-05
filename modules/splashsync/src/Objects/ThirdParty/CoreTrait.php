@@ -34,12 +34,13 @@ trait CoreTrait
         //====================================================================//
         // Email
         $this->fieldsFactory()->create(SPL_T_EMAIL)
-            ->Identifier("email")
-            ->Name(Translate::getAdminTranslation("Email address", "AdminCustomers"))
-            ->MicroData("http://schema.org/ContactPoint", "email")
-            ->Association("firstname", "lastname")
+            ->identifier("email")
+            ->name(Translate::getAdminTranslation("Email address", "AdminCustomers"))
+            ->microData("http://schema.org/ContactPoint", "email")
+            ->association("firstname", "lastname")
             ->isRequired()
-            ->isListed();
+            ->isListed()
+        ;
     }
 
     /**

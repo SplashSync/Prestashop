@@ -71,21 +71,21 @@ class Order extends AbstractObject
      *
      * @var string
      */
-    protected static $NAME = "Customer Order";
+    protected static string $name = "Customer Order";
 
     /**
      * Object Description (Translated by Module)
      *
      * @var string
      */
-    protected static $DESCRIPTION = "Prestashop Customers Order Object";
+    protected static string $description = "Prestashop Customers Order Object";
 
     /**
      * Object Icon (FontAwesome or Glyph ico tag)
      *
      * @var string
      */
-    protected static $ICO = "fa fa-shopping-cart ";
+    protected static string $ico = "fa fa-shopping-cart ";
 
     //====================================================================//
     // Object Synchronistion Recommended Configuration
@@ -96,21 +96,21 @@ class Order extends AbstractObject
      *
      * @var bool
      */
-    protected static $ENABLE_PUSH_CREATED = false;
+    protected static bool $enablePushCreated = false;
 
     /**
      * Enable Update Of Existing Local Objects when Modified Remotly
      *
      * @var bool
      */
-    protected static $ENABLE_PUSH_UPDATED = false;
+    protected static bool $enablePushUpdated = false;
 
     /**
      * Enable Delete Of Existing Local Objects when Deleted Remotly
      *
      * @var bool
      */
-    protected static $ENABLE_PUSH_DELETED = false;
+    protected static bool $enablePushDeleted = false;
 
     //====================================================================//
     // General Class Variables
@@ -134,17 +134,17 @@ class Order extends AbstractObject
     /**
      * @var psOrder
      */
-    protected $object;
+    protected object $object;
 
     /**
      * @var Currency
      */
-    private $Currency;
+    private Currency $Currency;
 
     /**
      * @var SplashSync
      */
-    private $spl;
+    private SplashSync $spl;
 
     /**
      * Class Constructor
@@ -165,7 +165,7 @@ class Order extends AbstractObject
     /**
      * {@inheritdoc}
      */
-    public function description()
+    public function description(): array
     {
         //====================================================================//
         // Stack Trace
@@ -186,7 +186,7 @@ class Order extends AbstractObject
             // Object Icon Class (Font Awesome or Glyph. ie "fa fa-user")
             "icon" => $this->getIcon(),
             // Is This Object Enabled or Not?
-            "disabled" => $this->getIsDisabled(),
+            "disabled" => $this->isDisabled(),
             //====================================================================//
             // Object Limitations
             "allow_push_created" => Splash::isDebugMode(),
@@ -194,12 +194,12 @@ class Order extends AbstractObject
             "allow_push_deleted" => Splash::isDebugMode(),
             //====================================================================//
             // Object Default Configuration
-            "enable_push_created" => (bool) static::$ENABLE_PUSH_CREATED,
-            "enable_push_updated" => (bool) static::$ENABLE_PUSH_UPDATED,
-            "enable_push_deleted" => (bool) static::$ENABLE_PUSH_DELETED,
-            "enable_pull_created" => (bool) static::$ENABLE_PULL_CREATED,
-            "enable_pull_updated" => (bool) static::$ENABLE_PULL_UPDATED,
-            "enable_pull_deleted" => (bool) static::$ENABLE_PULL_DELETED
+            "enable_push_created" => (bool) static::$enablePushCreated,
+            "enable_push_updated" => (bool) static::$enablePushUpdated,
+            "enable_push_deleted" => (bool) static::$enablePushDeleted,
+            "enable_pull_created" => (bool) static::$enablePullCreated,
+            "enable_pull_updated" => (bool) static::$enablePullUpdated,
+            "enable_pull_deleted" => (bool) static::$enablePullDeleted
         );
 
         //====================================================================//

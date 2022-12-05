@@ -159,13 +159,9 @@ trait CRUDTrait
     }
 
     /**
-     * Delete requested Object
-     *
-     * @param string $objectId Object ID.  If NULL, Object needs to be created.
-     *
-     * @return bool
+     * {@inheritdoc}
      */
-    public function delete($objectId = null): bool
+    public function delete(string $objectId): bool
     {
         //====================================================================//
         // Stack Trace
@@ -195,10 +191,10 @@ trait CRUDTrait
     /**
      * {@inheritdoc}
      */
-    public function getObjectIdentifier()
+    public function getObjectIdentifier(): ?string
     {
         if (!isset($this->object->id)) {
-            return false;
+            return null;
         }
 
         return (string) $this->object->id;

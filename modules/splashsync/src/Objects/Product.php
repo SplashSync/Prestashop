@@ -73,7 +73,7 @@ class Product extends AbstractObject
     /**
      * @var psProduct
      */
-    protected $object;
+    protected object $object;
 
     //====================================================================//
     // Object Definition Parameters
@@ -84,21 +84,21 @@ class Product extends AbstractObject
      *
      * @var string
      */
-    protected static $NAME = "Product";
+    protected static string $name = "Product";
 
     /**
      * Object Description (Translated by Module)
      *
      * @var string
      */
-    protected static $DESCRIPTION = "Prestashop Product Object";
+    protected static string $description = "Prestashop Product Object";
 
     /**
      * Object Icon (FontAwesome or Glyph ico tag)
      *
      * @var string
      */
-    protected static $ICO = "fa fa-product-hunt";
+    protected static string $ico = "fa fa-product-hunt";
 
     //====================================================================//
     // Object Synchronization Recommended Configuration
@@ -107,7 +107,7 @@ class Product extends AbstractObject
     /**
      * @var bool Enable Creation Of New Local Objects when Not Existing
      */
-    protected static $ENABLE_PUSH_CREATED = false;
+    protected static bool $enablePushCreated = false;
 
     //====================================================================//
     // General Class Variables
@@ -125,12 +125,12 @@ class Product extends AbstractObject
      *
      * @var Currency
      */
-    protected $Currency;
+    protected Currency $Currency;
 
     /**
      * @var SplashSync
      */
-    private $spl;
+    private SplashSync $spl;
 
     //====================================================================//
     // Class Constructor

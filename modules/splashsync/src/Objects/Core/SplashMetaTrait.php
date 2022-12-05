@@ -59,7 +59,7 @@ trait SplashMetaTrait
         // READ Fields
         switch ($fieldName) {
             case 'splash_id':
-                $this->out[$fieldName] = self::getSplashId(self::$NAME, (int) $this->object->id);
+                $this->out[$fieldName] = self::getSplashId(self::$name, (int) $this->object->id);
 
                 break;
             default:

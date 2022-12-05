@@ -58,36 +58,36 @@ class Activity extends AbstractWidget
      *
      * @var string
      */
-    protected static $NAME = "Prestashop Activity Widget";
+    protected static string $name = "Prestashop Activity Widget";
 
     /**
      * Widget Description (Translated by Module)
      *
      * @var string
      */
-    protected static $DESCRIPTION = "Display Main Activity of your E-Commerce";
+    protected static string $description = "Display Main Activity of your E-Commerce";
 
     /**
      * Widget Icon (FontAwesome or Glyph ico tag)
      *
      * @var string
      */
-    protected static $ICO = "fa fa-map-signs";
+    protected static string $ico = "fa fa-map-signs";
 
     /**
      * @var Currency
      */
-    private $currency;
+    private Currency $currency;
 
     /**
      * @var SplashSync
      */
-    private $spl;
+    private SplashSync $spl;
 
     /**
      * @var array
      */
-    private $sparkOptions = array(
+    private array $sparkOptions = array(
         "AllowHtml" => true,
         "Width" => self::SIZE_XS
     );
@@ -99,7 +99,7 @@ class Activity extends AbstractWidget
     /**
      * {@inheritdoc}
      */
-    public function get($params = array())
+    public function get(array $parameters = array()): ?array
     {
         //====================================================================//
         // Stack Trace
@@ -115,7 +115,7 @@ class Activity extends AbstractWidget
         //====================================================================//
         // Build Activity Block
         //====================================================================//
-        $this->buildActivityBlock($params);
+        $this->buildActivityBlock($parameters);
 
         //====================================================================//
         // Set Blocks to Widget
@@ -140,7 +140,7 @@ class Activity extends AbstractWidget
      *
      * @return void
      */
-    private function buildActivityBlock($inputs = array())
+    private function buildActivityBlock(array $inputs = array())
     {
         //====================================================================//
         // Verify Inputs
@@ -171,8 +171,8 @@ class Activity extends AbstractWidget
 
         //====================================================================//
         // Build data Array
-        $rawData = $this->getData($this->DateStart, $this->DateEnd);
-        $refineData = $this->refineData($this->DateStart, $this->DateEnd, $rawData);
+        $rawData = $this->getData($this->dateStart, $this->dateEnd);
+        $refineData = $this->refineData($this->dateStart, $this->dateEnd, $rawData);
         $activityData = $this->addupData($refineData);
 
         //====================================================================//

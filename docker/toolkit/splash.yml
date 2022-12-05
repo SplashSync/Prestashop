@@ -28,8 +28,9 @@ splash:
             host:               false
             connector:          soap
             config:  
+                Extended:           true
                 WsIdentifier:       ThisIsPsLastKey
-                WsEncryptionKey:    ThisTokenIsNotSoSecretChangeIt                
+                WsEncryptionKey:    ThisTokenIsNotSoSecretChangeIt
                 WsHost:             http://latest.prestashop.local
                 WsPath:             /modules/splashsync/vendor/splash/phpcore/soap.php
 
@@ -42,6 +43,7 @@ splash:
             host:               false
             connector:          soap
             config:
+                Extended:           true
                 WsIdentifier:       ThisIsPs80Key
                 WsEncryptionKey:    ThisTokenIsNotSoSecretChangeIt
                 WsHost:             http://ps8-0.prestashop.local
@@ -56,35 +58,36 @@ splash:
             host:               false
             connector:          soap
             config:
+                Extended:           true
                 WsIdentifier:       ThisIsPs17Key
                 WsEncryptionKey:    ThisTokenIsNotSoSecretChangeIt
                 WsHost:             http://ps1-7.prestashop.local
                 WsPath:             /modules/splashsync/vendor/splash/phpcore/soap.php
 
-        ########################################################################
-        # Prestashop 1.6
-        ps-1-6:
-            id:                 ThisIsPs16Key
-            key:                ThisTokenIsNotSoSecretChangeIt
-            name:               Prestashop 1.6
-            host:               false
-            connector:          soap
-            config:
-                WsIdentifier:       ThisIsPs16Key
-                WsEncryptionKey:    ThisTokenIsNotSoSecretChangeIt
-                WsHost:             http://ps1-6.prestashop.local
-                WsPath:             /modules/splashsync/vendor/splash/phpcore/soap.php
+#         ########################################################################
+#         # Prestashop 1.6
+#         ps-1-6:
+#             id:                 ThisIsPs16Key
+#             key:                ThisTokenIsNotSoSecretChangeIt
+#             name:               Prestashop 1.6
+#             host:               false
+#             connector:          soap
+#             config:
+#                 WsIdentifier:       ThisIsPs16Key
+#                 WsEncryptionKey:    ThisTokenIsNotSoSecretChangeIt
+#                 WsHost:             http://ps1-6.prestashop.local
+#                 WsPath:             /modules/splashsync/vendor/splash/phpcore/soap.php
 
-        ########################################################################
-        # Prestashop Nginx
-        ps-nginx:
-            id:                 ThisIsPsNginxKey
-            key:                ThisTokenIsNotSoSecretChangeIt
-            name:               Prestashop Nginx
-            host:               false
-            connector:          soap
-            config:
-                WsIdentifier:       ThisIsPsNginxKey
-                WsEncryptionKey:    ThisTokenIsNotSoSecretChangeIt
-                WsHost:             http://nginx.prestashop.local
-                WsPath:             /modules/splashsync/vendor/splash/phpcore/soap.php
+#         ########################################################################
+#         # Prestashop Nginx
+#         ps-nginx:
+#             id:                 ThisIsPsNginxKey
+#             key:                ThisTokenIsNotSoSecretChangeIt
+#             name:               Prestashop Nginx
+#             host:               false
+#             connector:          soap
+#             config:
+#                 WsIdentifier:       ThisIsPsNginxKey
+#                 WsEncryptionKey:    ThisTokenIsNotSoSecretChangeIt
+#                 WsHost:             http://nginx.prestashop.local
+#                 WsPath:             /modules/splashsync/vendor/splash/phpcore/soap.php

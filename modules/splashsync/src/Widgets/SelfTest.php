@@ -18,7 +18,7 @@ namespace   Splash\Local\Widgets;
 use Splash\Templates\Widgets\SelfTestTemplate;
 
 /**
- * @abstract    Template Widget for Splash Modules
+ * Template Widget for Splash Modules
  *
  * @author B. Paquier <contact@splashsync.com>
  */

@@ -15,6 +15,7 @@
 
 namespace Splash\Local;
 
+use ArrayObject;
 use Configuration;
 use Context;
 use Employee;
@@ -45,7 +46,7 @@ class Local implements LocalClassInterface
     /**
      * @var SplashSync
      */
-    private static $splashSyncModule;
+    private static SplashSync $splashSyncModule;
 
     //====================================================================//
     // *******************************************************************//
@@ -56,7 +57,7 @@ class Local implements LocalClassInterface
     /**
      * {@inheritdoc}
      */
-    public function parameters()
+    public function parameters(): array
     {
         $parameters = array();
 
@@ -99,7 +100,7 @@ class Local implements LocalClassInterface
     /**
      * {@inheritdoc}
      */
-    public function includes()
+    public function includes(): bool
     {
         //====================================================================//
         // When Library is called in both client & server mode
@@ -157,11 +158,11 @@ class Local implements LocalClassInterface
     /**
      * {@inheritdoc}
      */
-    public function selfTest()
+    public function selfTest(): bool
     {
         //====================================================================//
         // Safety Check => PHP Min Version
-        if (PHP_VERSION < 7.1) {
+        if (PHP_VERSION < 7.4) {
             return Splash::log()->err("Splash Module for Prestashop require at least PHP 7.1");
         }
         //====================================================================//
@@ -211,7 +212,7 @@ class Local implements LocalClassInterface
     /**
      * {@inheritdoc}
      */
-    public function informations($informations)
+    public function informations(ArrayObject $informations): ArrayObject
     {
         //====================================================================//
         // Init Response Object
