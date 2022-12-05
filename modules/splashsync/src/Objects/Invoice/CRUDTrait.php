@@ -39,9 +39,9 @@ trait CRUDTrait
     protected $ShippingTaxCalculator;
 
     /**
-     * @var Carrier
+     * @var null|Carrier
      */
-    protected $carrier;
+    protected ?Carrier $carrier;
 
     /**
      * Load Request Object
