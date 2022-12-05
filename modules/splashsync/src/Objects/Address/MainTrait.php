@@ -17,7 +17,6 @@ namespace Splash\Local\Objects\Address;
 
 use Country;
 use PrestaShopException;
-use Splash\Client\Splash;
 use State;
 use Translate;
 
@@ -193,8 +192,8 @@ trait MainTrait
     /**
      * Write Given Fields
      *
-     * @param string $fieldName Field Identifier / Name
-     * @param string|null $fieldData Field Data
+     * @param string      $fieldName Field Identifier / Name
+     * @param null|string $fieldData Field Data
      *
      * @return void
      */

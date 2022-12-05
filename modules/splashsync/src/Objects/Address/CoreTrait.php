@@ -99,7 +99,7 @@ trait CoreTrait
     /**
      * Read requested Field
      *
-     * @param string $key       Input List Key
+     * @param string      $key       Input List Key
      * @param null|string $fieldName Field Identifier / Name
      *
      * @return void
@@ -145,7 +145,7 @@ trait CoreTrait
     /**
      * Write Given Fields
      *
-     * @param string $fieldName Field Identifier / Name
+     * @param string      $fieldName Field Identifier / Name
      * @param null|string $fieldData Field Data
      *
      * @return void
