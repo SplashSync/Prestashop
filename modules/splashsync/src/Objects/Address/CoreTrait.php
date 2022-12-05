@@ -100,11 +100,11 @@ trait CoreTrait
      * Read requested Field
      *
      * @param string $key       Input List Key
-     * @param string $fieldName Field Identifier / Name
+     * @param null|string $fieldName Field Identifier / Name
      *
      * @return void
      */
-    protected function getCoreFields(string $key, string $fieldName): void
+    protected function getCoreFields(string $key, ?string $fieldName): void
     {
         //====================================================================//
         // READ Fields
@@ -146,11 +146,11 @@ trait CoreTrait
      * Write Given Fields
      *
      * @param string $fieldName Field Identifier / Name
-     * @param string $fieldData Field Data
+     * @param null|string $fieldData Field Data
      *
      * @return void
      */
-    protected function setCoreFields(string $fieldName, string $fieldData): void
+    protected function setCoreFields(string $fieldName, ?string $fieldData): void
     {
         //====================================================================//
         // WRITE Field
