@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2021 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -188,27 +188,27 @@ trait DeliveryTrait
                 $this->getSimple($fieldName, "delivery");
 
                 break;
-            //====================================================================//
-            // Delivery Contact Full Name
+                //====================================================================//
+                // Delivery Contact Full Name
             case 'fullname':
                 $this->out[$fieldName] = $this->delivery->firstname." ".$this->delivery->lastname;
 
                 break;
-            //====================================================================//
-            // Country ISO Id - READ With Convertion
+                //====================================================================//
+                // Country ISO Id - READ With Convertion
             case 'id_country':
                 $this->out[$fieldName] = Country::getIsoById($this->delivery->id_country);
 
                 break;
-            //====================================================================//
-            // State Name - READ With Convertion
+                //====================================================================//
+                // State Name - READ With Convertion
             case 'state':
                 $state = new State($this->delivery->id_state);
                 $this->out[$fieldName] = $state->name;
 
                 break;
-            //====================================================================//
-            // State ISO Id - READ With Convertion
+                //====================================================================//
+                // State ISO Id - READ With Convertion
             case 'id_state':
                 //====================================================================//
                 // READ With Convertion

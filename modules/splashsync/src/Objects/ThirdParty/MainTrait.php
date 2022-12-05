@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2021 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -236,8 +236,8 @@ trait MainTrait
                 }
 
                 break;
-            //====================================================================//
-            // Gender Type
+                //====================================================================//
+                // Gender Type
             case 'gender_type':
                 if (empty($this->object->id_gender)) {
                     $this->out[$fieldName] = 0;
@@ -349,8 +349,8 @@ trait MainTrait
                 $this->setSimple($fieldName, $fieldData);
 
                 break;
-            //====================================================================//
-            // Write APE With Verification
+                //====================================================================//
+                // Write APE With Verification
             case 'ape':
                 if (!Validate::isApe($fieldData)) {
                     Splash::log()->war("MsgLocalTpl", __CLASS__, __FUNCTION__, "Given APE Code is Invalid. Skipped");

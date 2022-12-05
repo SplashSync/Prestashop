@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2021 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -119,20 +119,20 @@ trait CoreTrait
                 $this->getSimple($fieldName);
 
                 break;
-            //====================================================================//
-            // Customer Object Id Readings
+                //====================================================================//
+                // Customer Object Id Readings
             case 'id_customer':
                 $this->out[$fieldName] = self::objects()->encode("ThirdParty", $this->object->{$fieldName});
 
                 break;
-            //====================================================================//
-            // Active Flag
+                //====================================================================//
+                // Active Flag
             case 'active':
                 $this->out[$fieldName] = !self::isDeleted($this->object);
 
                 break;
-            //====================================================================//
-            // Deleted Flag
+                //====================================================================//
+                // Deleted Flag
             case 'deleted':
                 $this->out[$fieldName] = self::isDeleted($this->object);
 
@@ -165,8 +165,8 @@ trait CoreTrait
                 $this->setSimple($fieldName, $fieldData);
 
                 break;
-            //====================================================================//
-            // Customer Object Id Writings
+                //====================================================================//
+                // Customer Object Id Writings
             case 'id_customer':
                 $this->setIdCustomer($fieldData);
 

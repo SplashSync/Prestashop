@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2021 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -156,8 +156,8 @@ trait ItemsTrait
                     $value = self::objects()->Encode("Product", $unikId);
 
                     break;
-                //====================================================================//
-                // Order Line Direct Reading Data
+                    //====================================================================//
+                    // Order Line Direct Reading Data
                 case 'product_name':
                 case 'product_quantity':
                     $value = $product[$fieldId];
@@ -167,8 +167,8 @@ trait ItemsTrait
                     $value = 0;
 
                     break;
-                //====================================================================//
-                // Order Line Unit Price
+                    //====================================================================//
+                    // Order Line Unit Price
                 case 'unit_price':
                     //====================================================================//
                     // In Case Cart Rule Exists
@@ -191,8 +191,8 @@ trait ItemsTrait
                     );
 
                     break;
-                //====================================================================//
-                // Order Line Tax Name
+                    //====================================================================//
+                    // Order Line Tax Name
                 case 'tax_name':
                     $value = OrderDetail::getTaxCalculatorStatic($product["id_order_detail"])->getTaxesName();
 
@@ -265,8 +265,8 @@ trait ItemsTrait
                 $value = null;
 
                 break;
-            //====================================================================//
-            // Order Line Direct Reading Data
+                //====================================================================//
+                // Order Line Direct Reading Data
             case 'product_name':
                 $value = $this->getCarrierName();
 
@@ -279,8 +279,8 @@ trait ItemsTrait
                 $value = 0;
 
                 break;
-            //====================================================================//
-            // Order Line Unit Price
+                //====================================================================//
+                // Order Line Unit Price
             case 'unit_price':
                 $value = $this->getShippingPrice();
 

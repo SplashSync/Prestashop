@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2021 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -57,12 +57,12 @@ trait MultishopObjectTrait
     /**
      * Override Get Function to Map MultiStore Fields
      *
-     * @param null|string $objectId
+     * @param null|string            $objectId
      * @param null|array|ArrayObject $fields
      *
-     * @return array|ArrayObject|false
-     *
      * @throws Exception
+     *
+     * @return array|ArrayObject|false
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
@@ -125,13 +125,14 @@ trait MultishopObjectTrait
 
     /**
      * @param null|string $objectId
-     * @param array $objectData
+     * @param array       $objectData
+     *
+     * @throws Exception
      *
      * @return false|string
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @throws Exception
      */
     public function set(?string $objectId, array $objectData): ?string
     {

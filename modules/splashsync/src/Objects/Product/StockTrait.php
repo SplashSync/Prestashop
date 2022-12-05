@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2021 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -106,15 +106,15 @@ trait StockTrait
                 $this->out[$fieldName] = $this->getStockQuantity();
 
                 break;
-            //====================================================================//
-            // Out Of Stock
+                //====================================================================//
+                // Out Of Stock
             case 'outofstock':
                 $quantity = $this->getStockQuantity();
                 $this->out[$fieldName] = ($quantity > 0) ? false : true;
 
                 break;
-            //====================================================================//
-            // Minimum Order Quantity
+                //====================================================================//
+                // Minimum Order Quantity
             case 'minimal_quantity':
                 if (($this->AttributeId)) {
                     $this->out[$fieldName] = (int) $this->Attribute->{$fieldName};
@@ -197,8 +197,8 @@ trait StockTrait
                 }
 
                 break;
-            //====================================================================//
-            // Minimum Order Quantity
+                //====================================================================//
+                // Minimum Order Quantity
             case 'minimal_quantity':
                 if (Validate::isUnsignedInt($fieldData)) {
                     if ($this->AttributeId) {

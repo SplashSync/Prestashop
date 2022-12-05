@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2021 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -106,8 +106,8 @@ trait CoreTrait
                 }
 
                 break;
-            //====================================================================//
-            // Customer Object Id Readings
+                //====================================================================//
+                // Customer Object Id Readings
             case 'id_customer':
                 if (!$this->isOrderObject()) {
                     $this->out[$fieldName] = self::objects()->encode("ThirdParty", $this->Order->{$fieldName});
@@ -116,8 +116,8 @@ trait CoreTrait
                 }
 
                 break;
-            //====================================================================//
-            // Customer Email
+                //====================================================================//
+                // Customer Email
             case 'email':
                 if ($this instanceof Order) {
                     $customerId = $this->object->id_customer;
@@ -135,8 +135,8 @@ trait CoreTrait
                 $this->out[$fieldName] = $customer->email;
 
                 break;
-            //====================================================================//
-            // Order Official Date
+                //====================================================================//
+                // Order Official Date
             case 'order_date':
                 $this->out[$fieldName] = date(SPL_T_DATECAST, (int) strtotime((string) $this->object->date_add));
 
@@ -171,8 +171,8 @@ trait CoreTrait
                 }
 
                 break;
-            //====================================================================//
-            // Customer Object Id
+                //====================================================================//
+                // Customer Object Id
             case 'id_customer':
                 if (!$this->isOrderObject()) {
                     $this->setSimple($fieldName, self::objects()->Id($fieldData), "Order");

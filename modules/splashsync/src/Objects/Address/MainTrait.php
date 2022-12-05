@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2021 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -129,21 +129,21 @@ trait MainTrait
                 $this->getSimple($fieldName);
 
                 break;
-            //====================================================================//
-            // Country ISO Id - READ With Conversion
+                //====================================================================//
+                // Country ISO Id - READ With Conversion
             case 'id_country':
                 $this->out[$fieldName] = Country::getIsoById($this->object->id_country);
 
                 break;
-            //====================================================================//
-            // State Name - READ With Conversion
+                //====================================================================//
+                // State Name - READ With Conversion
             case 'state':
                 $state = new State($this->object->id_state);
                 $this->out[$fieldName] = $state->name;
 
                 break;
-            //====================================================================//
-            // State ISO Id - READ With Conversion
+                //====================================================================//
+                // State ISO Id - READ With Conversion
             case 'id_state':
                 //====================================================================//
                 // READ With Conversion
@@ -208,8 +208,8 @@ trait MainTrait
                 }
 
                 break;
-            //====================================================================//
-            // State ISO Id - READ With Conversion
+                //====================================================================//
+                // State ISO Id - READ With Conversion
             case 'id_state':
                 if ($this->object->{$fieldName} != State::getIdByIso($fieldData)) {
                     $this->object->{$fieldName} = State::getIdByIso($fieldData);
