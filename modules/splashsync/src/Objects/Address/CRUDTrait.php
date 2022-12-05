@@ -28,9 +28,9 @@ trait CRUDTrait
      *
      * @param string $objectId Object id
      *
-     * @return Address|false
+     * @return null|Address
      */
-    public function load($objectId)
+    public function load(string $objectId): ?Address
     {
         //====================================================================//
         // Stack Trace
@@ -39,7 +39,7 @@ trait CRUDTrait
         // Load Object
         $object = new Address((int) $objectId);
         if ($object->id != $objectId) {
-            return Splash::log()->errTrace("Unable to load Customer Address (".$objectId.").");
+            return Splash::log()->errNull("Unable to load Customer Address (".$objectId.").");
         }
         //====================================================================//
         // Check Deleted Flag
@@ -53,9 +53,9 @@ trait CRUDTrait
     /**
      * Create Request Object
      *
-     * @return Address|false
+     * @return null|Address
      */
-    public function create()
+    public function create(): ?Address
     {
         //====================================================================//
         // Stack Trace
@@ -64,25 +64,25 @@ trait CRUDTrait
         //====================================================================//
         // Check Address Minimum Fields Are Given
         if (empty($this->in["id_customer"])) {
-            return Splash::log()->err("ErrLocalFieldMissing", __CLASS__, __FUNCTION__, "id_customer");
+            return Splash::log()->errNull("ErrLocalFieldMissing", __CLASS__, __FUNCTION__, "id_customer");
         }
         if (empty($this->in["firstname"])) {
-            return Splash::log()->err("ErrLocalFieldMissing", __CLASS__, __FUNCTION__, "firstname");
+            return Splash::log()->errNull("ErrLocalFieldMissing", __CLASS__, __FUNCTION__, "firstname");
         }
         if (empty($this->in["lastname"])) {
-            return Splash::log()->err("ErrLocalFieldMissing", __CLASS__, __FUNCTION__, "lastname");
+            return Splash::log()->errNull("ErrLocalFieldMissing", __CLASS__, __FUNCTION__, "lastname");
         }
         if (empty($this->in["address1"])) {
-            return Splash::log()->err("ErrLocalFieldMissing", __CLASS__, __FUNCTION__, "address1");
+            return Splash::log()->errNull("ErrLocalFieldMissing", __CLASS__, __FUNCTION__, "address1");
         }
         if (empty($this->in["postcode"])) {
-            return Splash::log()->err("ErrLocalFieldMissing", __CLASS__, __FUNCTION__, "postcode");
+            return Splash::log()->errNull("ErrLocalFieldMissing", __CLASS__, __FUNCTION__, "postcode");
         }
         if (empty($this->in["city"])) {
-            return Splash::log()->err("ErrLocalFieldMissing", __CLASS__, __FUNCTION__, "city");
+            return Splash::log()->errNull("ErrLocalFieldMissing", __CLASS__, __FUNCTION__, "city");
         }
         if (empty($this->in["id_country"])) {
-            return Splash::log()->err("ErrLocalFieldMissing", __CLASS__, __FUNCTION__, "id_country");
+            return Splash::log()->errNull("ErrLocalFieldMissing", __CLASS__, __FUNCTION__, "id_country");
         }
 
         //====================================================================//
@@ -95,9 +95,9 @@ trait CRUDTrait
      *
      * @param bool $needed Is This Update Needed
      *
-     * @return false|string Object ID
+     * @return null|string Object ID
      */
-    public function update(bool $needed)
+    public function update(bool $needed): ?string
     {
         //====================================================================//
         // Stack Trace
@@ -128,10 +128,9 @@ trait CRUDTrait
         // If Id Given = > Update Object
         //====================================================================//
         if (!empty($this->object->id)) {
-            if (true != $this->object->update()) {
-                return Splash::log()->errTrace("Unable to Update Customer Address (".$this->object->id.").");
+            if (!$this->object->update()) {
+                return Splash::log()->errNull("Unable to Update Customer Address (".$this->object->id.").");
             }
-            Splash::log()->deb("MsgLocalTpl", __CLASS__, __FUNCTION__, "Customer Address Updated");
 
             return $this->getObjectIdentifier();
         }
@@ -142,10 +141,9 @@ trait CRUDTrait
 
         //====================================================================//
         // Create Object In Database
-        if (true != $this->object->add()) {
-            return Splash::log()->err("Unable to create new Customer Address.");
+        if (!$this->object->add()) {
+            return Splash::log()->errNull("Unable to create new Customer Address.");
         }
-        Splash::log()->deb("MsgLocalTpl", __CLASS__, __FUNCTION__, "Customer Address Created");
 
         //====================================================================//
         // UPDATE/CREATE SPLASH ID
@@ -181,7 +179,7 @@ trait CRUDTrait
         //====================================================================//
         // Delete Object From DataBase
         //====================================================================//
-        if (true != $address->delete()) {
+        if (!$address->delete()) {
             return Splash::log()->errTrace("Unable to delete (".$objectId.").");
         }
 
@@ -207,10 +205,10 @@ trait CRUDTrait
      */
     public static function isDeleted(Address $address): bool
     {
-        if (!isset($address->deleted)) {
-            return false;
+        if (!empty($address->deleted)) {
+            return true;
         }
 
-        return $address->deleted;
+        return false;
     }
 }

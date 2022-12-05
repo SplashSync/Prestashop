@@ -16,6 +16,7 @@
 namespace Splash\Local\Objects\Address;
 
 use Country;
+use PrestaShopException;
 use State;
 use Translate;
 
@@ -29,7 +30,7 @@ trait MainTrait
      *
      * @return void
      */
-    private function buildMainFields()
+    private function buildMainFields(): void
     {
         $groupName = Translate::getAdminTranslation("Address", "AdminCustomers");
 
@@ -112,6 +113,8 @@ trait MainTrait
      * @param string $key       Input List Key
      * @param string $fieldName Field Identifier / Name
      *
+     * @throws PrestaShopException
+     *
      * @return void
      */
     private function getMainFields(string $key, string $fieldName): void
@@ -190,11 +193,11 @@ trait MainTrait
      * Write Given Fields
      *
      * @param string $fieldName Field Identifier / Name
-     * @param mixed  $fieldData Field Data
+     * @param string $fieldData Field Data
      *
      * @return void
      */
-    private function setCountryFields(string $fieldName, $fieldData): void
+    private function setCountryFields(string $fieldName, string $fieldData): void
     {
         //====================================================================//
         // WRITE Field

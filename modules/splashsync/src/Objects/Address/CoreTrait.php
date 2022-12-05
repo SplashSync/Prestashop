@@ -37,9 +37,8 @@ trait CoreTrait
             ->identifier("alias")
             ->name($this->spl->l("Address alias"))
             ->description(Translate::getAdminTranslation("Address alias", "AdminAddresses"))
-            ->MicroData("http://schema.org/PostalAddress", "name")
+            ->microData("http://schema.org/PostalAddress", "name")
         ;
-
         //====================================================================//
         // Customer
         $this->fieldsFactory()->create((string) self::objects()->encode("ThirdParty", SPL_T_ID))
@@ -147,11 +146,11 @@ trait CoreTrait
      * Write Given Fields
      *
      * @param string $fieldName Field Identifier / Name
-     * @param mixed  $fieldData Field Data
+     * @param string $fieldData Field Data
      *
      * @return void
      */
-    protected function setCoreFields(string $fieldName, $fieldData): void
+    protected function setCoreFields(string $fieldName, string $fieldData): void
     {
         //====================================================================//
         // WRITE Field
