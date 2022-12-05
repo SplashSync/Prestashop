@@ -15,6 +15,7 @@
 
 namespace Splash\Local\Objects\Core;
 
+use PrestaShopDatabaseException;
 use Splash\Local\Services\MultiShopManager as MSM;
 use Translate;
 
@@ -26,7 +27,7 @@ trait SplashMetaTrait
     /**
      * @var null|string
      */
-    protected $NewSplashId;
+    protected ?string $NewSplashId = null;
 
     /**
      * Build Fields using FieldFactory
@@ -38,11 +39,12 @@ trait SplashMetaTrait
         //====================================================================//
         // Splash Unique Object Id
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
-            ->Identifier("splash_id")
-            ->Name("Splash Id")
-            ->Group(Translate::getAdminTranslation("Meta", "AdminThemes"))
+            ->identifier("splash_id")
+            ->name("Splash Id")
+            ->group(Translate::getAdminTranslation("Meta", "AdminThemes"))
             ->addOption("shop", MSM::MODE_ALL)
-            ->MicroData("http://splashync.com/schemas", "ObjectId");
+            ->microData("http://splashync.com/schemas", "ObjectId")
+        ;
     }
 
     /**
@@ -72,19 +74,21 @@ trait SplashMetaTrait
     /**
      * Write Given Fields
      *
-     * @param string $fieldName Field Identifier / Name
-     * @param mixed  $fieldData Field Data
+     * @param string      $fieldName Field Identifier / Name
+     * @param null|string $fieldData Field Data
+     *
+     * @throws PrestaShopDatabaseException
      *
      * @return void
      */
-    protected function setSplashMetaFields(string $fieldName, $fieldData): void
+    protected function setSplashMetaFields(string $fieldName, ?string $fieldData): void
     {
         //====================================================================//
         // WRITE Fields
         switch ($fieldName) {
             case 'splash_id':
                 if ($this->object->id) {
-                    self::setSplashId(self::$NAME, $this->object->id, $fieldData);
+                    self::setSplashId(self::$name, $this->object->id, $fieldData);
                 } else {
                     $this->NewSplashId = $fieldData;
                 }
