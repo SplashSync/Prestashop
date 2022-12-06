@@ -62,31 +62,41 @@ stages:
         - curl -s https://raw.githubusercontent.com/BadPixxel/Php-Sdk/main/ci/composer.sh | sh
 
 Q-Ps-1.7-Php-7.4:
-  image:      prestashop/prestashop:1.7-7.4
-  <<: *quality
+    image:      prestashop/prestashop:1.7-7.4
+    <<: *quality
+
+Q-Ps-8.0-Php-7.4:
+    image:      prestashop/prestashop:8.0-7.4
+    allow_failure:  true
+    retry:          0
+    <<: *quality
 
 ################################################################
 # Functional Tests
 ################################################################
 
-# .functional:   &functional
+.functional:   &functional
 # #    when:       manual
-#     stage:      functional
-#     tags:       ['Dedicated']
+    stage:      functional
+    tags:       ['Dedicated']
 # #     retry:      2
-#     artifacts:
-#         when: always
-#         paths:
-#             - $CI_PROJECT_DIR/splash.json
-#             - $CI_PROJECT_DIR/splash.yml
-#         reports:
-#             junit: "$CI_PROJECT_DIR/*-report.xml"
-#     services:
-#       - name: mysql:5.7
-#     ################################################################
-#     # Before Script
-#     before_script:
-#         - sh $CI_PROJECT_DIR/ci/before_script.sh
+    artifacts:
+        when: always
+        paths:
+            - $CI_PROJECT_DIR/splash.json
+            - $CI_PROJECT_DIR/splash.yml
+        reports:
+            junit: "$CI_PROJECT_DIR/*-report.xml"
+    services:
+      - name: mysql:5.7
+    ################################################################
+    # Before Script
+    before_script:
+        - sh $CI_PROJECT_DIR/ci/before_script.sh
+    ################################################################
+    # Test Script
+    script:
+        - sh $CI_PROJECT_DIR/ci/functional.sh
 #     ################################################################
 #     # Test Script
 #     script:
@@ -135,9 +145,9 @@ Q-Ps-1.7-Php-7.4:
 #     retry:          0
 #     <<: *functional
 #
-# F-Ps-1.7-Php-7.4:
-#     image:      prestashop/prestashop:1.7-7.4
-#     <<: *functional
+F-Ps-1.7-Php-7.4:
+    image:      prestashop/prestashop:1.7-7.4
+    <<: *functional
 
 # Ps-1.7-Php-7.3:
 #   image:      prestashop/prestashop:1.7-7.3-apache
