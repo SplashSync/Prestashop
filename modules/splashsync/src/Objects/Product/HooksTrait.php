@@ -278,8 +278,8 @@ trait HooksTrait
      * This function is called after each action on a Combination object
      *
      * @param Combination $combination Prestashop Combination Object
-     * @param string $action      Performed Action
-     * @param string $comment     Action Comment
+     * @param string      $action      Performed Action
+     * @param string      $comment     Action Comment
      *
      * @return bool
      */

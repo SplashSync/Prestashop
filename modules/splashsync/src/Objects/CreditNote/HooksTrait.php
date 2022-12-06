@@ -81,8 +81,8 @@ trait HooksTrait
      * This function is called after each action on a Credit Note object
      *
      * @param OrderSlip $order   Prestashop OrderSlip Object
-     * @param string $action  Performed Action
-     * @param string $comment Action Comment
+     * @param string    $action  Performed Action
+     * @param string    $comment Action Comment
      *
      * @return bool
      */

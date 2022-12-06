@@ -171,7 +171,7 @@ class SplashSync extends Module
         }
         //====================================================================//
         // Register Module Products Hooks
-        if (!$this->registerHook('actionProductUpdate')  ||
+        if (!$this->registerHook('actionProductUpdate') ||
             !$this->registerHook('actionUpdateQuantity') ||
             !$this->registerHook('actionObjectProductAddAfter') ||
             !$this->registerHook('actionObjectProductUpdateAfter') ||
@@ -925,8 +925,9 @@ class SplashSync extends Module
     /**
      * Execute Server SelfTests
      *
-     * @return string
      * @throws Exception
+     *
+     * @return string
      */
     private function displayTest()
     {
@@ -993,8 +994,9 @@ class SplashSync extends Module
     /**
      * Execute Server SelfTests
      *
-     * @return void
      * @throws Exception
+     *
+     * @return void
      */
     private function displayTestSelfTests()
     {

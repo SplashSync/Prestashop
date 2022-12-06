@@ -80,8 +80,8 @@ trait HooksTrait
      * This function is called after each action on a address object
      *
      * @param Address $address Prestashop Address Object
-     * @param string $action  Performed Action
-     * @param string $comment Action Comment
+     * @param string  $action  Performed Action
+     * @param string  $comment Action Comment
      *
      * @return bool
      */
