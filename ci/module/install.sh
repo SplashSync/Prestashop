@@ -23,22 +23,22 @@ echo "----------------------------------------------------"
 ################################################################################
 # Move Module Contents to Install Folder
 echo "Move Module Contents to Prestashop Modules Directory"
-mkdir     $TRAVIS_BUILD_DIR/modules/splashsync
-cp -Rf    $TMP_DIR/modules/splashsync/*              $TRAVIS_BUILD_DIR/modules/splashsync/
+mkdir     $WEB_DIR/modules/splashsync
+cp -Rf    $CI_PROJECT_DIR/modules/splashsync/*              $WEB_DIR/modules/splashsync/
 
 ################################################################################
 # Move Configuration Files to Prestashop Root Directory
 echo Move Configuration Files to Prestashop Root Directory
-mkdir     $TRAVIS_BUILD_DIR/grumphp
-mkdir     $TRAVIS_BUILD_DIR/travis
-cp -f     $TMP_DIR/grumphp.yml                       $TRAVIS_BUILD_DIR/grumphp.yml
-cp -f     $TMP_DIR/composer.json                     $TRAVIS_BUILD_DIR/composer.json
-cp -f     $TMP_DIR/composer.lock                     $TRAVIS_BUILD_DIR/composer.lock
-cp -Rf    $TMP_DIR/grumphp/*                         $TRAVIS_BUILD_DIR/grumphp/
-cp -Rf    $TMP_DIR/travis/*                          $TRAVIS_BUILD_DIR/travis/
+mkdir     $CI_PROJECT_DIR/grumphp
+mkdir     $CI_PROJECT_DIR/travis
+cp -f     $CI_PROJECT_DIR/grumphp.yml                       $WEB_DIR/grumphp.yml
+cp -f     $CI_PROJECT_DIR/composer.json                     $WEB_DIR/composer.json
+cp -f     $CI_PROJECT_DIR/composer.lock                     $WEB_DIR/composer.lock
+cp -Rf    $CI_PROJECT_DIR/grumphp/*                         $WEB_DIR/grumphp/
+cp -Rf    $CI_PROJECT_DIR/ci/*                              $WEB_DIR/ci/
 
 ################################################################################
 # Move Git Files to Prestashop Root Directory
 echo "Move Git Files to Prestashop Root Directory"
-mkdir     $TRAVIS_BUILD_DIR/.git
-cp -Rf    $TMP_DIR/.git/*                            $TRAVIS_BUILD_DIR/.git/
+mkdir     $WEB_DIR/.git
+cp -Rf    $CI_PROJECT_DIR/.git/*                            $WEB_DIR/.git/

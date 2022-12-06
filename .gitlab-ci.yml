@@ -23,9 +23,9 @@ variables:
   MYSQL_ROOT_PASSWORD:      admin
   DOCKER_DRIVER:            overlay2
   COMPOSER_MEMORY_LIMIT:    -1
-  TMP_DIR:                  /builds/SplashSync/Prestashop
-  SCRIPTS_DIR:              /builds/SplashSync/Prestashop/travis
-  TRAVIS_BUILD_DIR:         /var/www/html
+#   TMP_DIR:                  /builds/SplashSync/Prestashop
+#   SCRIPTS_DIR:              /builds/SplashSync/Prestashop/ci
+  WEB_DIR:                  /var/www/html
   DB_SERVER:                mysql
   PS_INSTALL_AUTO:          1
   SPLASH_NO_APACHE:         1
@@ -61,32 +61,30 @@ stages:
     ################################################################
     # Before Script
     before_script:
-        - sh /builds/SplashSync/Prestashop/ci/before_script.sh
+        - sh $CI_PROJECT_DIR/ci/before_script.sh
     ################################################################
     # Test Script
     script:
-      - cd $TMP_DIR
-      ################################################################################
-      # Build Module (Composer)
-      - curl -s https://raw.githubusercontent.com/BadPixxel/Php-Sdk/main/ci/composer.sh | sh
-      ################################################################################
-      # Install Prestashop + WebServer (Apache & PHP-Fpm)
-      - cat $CI_PROJECT_DIR/docker/docker-entrypoint.sh | bash
+#       - cd $TMP_DIR
+#       ################################################################################
+#       # Build Module (Composer)
+#       - curl -s https://raw.githubusercontent.com/BadPixxel/Php-Sdk/main/ci/composer.sh | sh
+#       ################################################################################
+#       # Install Prestashop + WebServer (Apache & PHP-Fpm)
+#       - cat $CI_PROJECT_DIR/docker/docker-entrypoint.sh | bash
       ################################################################################
       # Install Module
-      - bash $SCRIPTS_DIR/module/install.sh
+      - bash $CI_PROJECT_DIR/ci/module/install.sh
       ################################################################################
       # Run Grumphp Main Test Sequence
-      - cd $TMP_DIR
+      - cd $WEB_DIR
       - php modules/splashsync/vendor/bin/grumphp run -n --testsuite=travis
       ################################################################################
       # Run Grumphp CsFixer Test Sequence
-      - cd $TRAVIS_BUILD_DIR
-      - composer install
       - php modules/splashsync/vendor/bin/grumphp run -n --testsuite=csfixer
       ################################################################################
       # Run Grumphp Php Stan Test Sequence
-      - if [ -f "/var/www/html/vendor/autoload.php" ]; then php modules/splashsync/vendor/bin/grumphp run -n --testsuite=phpstan; fi
+      - php modules/splashsync/vendor/bin/grumphp run -n --testsuite=phpstan;
 
 Q-Ps-1.7-Php-7.4:
   image:      prestashop/prestashop:1.7-7.4
@@ -96,75 +94,75 @@ Q-Ps-1.7-Php-7.4:
 # Functional Tests
 ################################################################
 
-.functional:   &functional
-#    when:       manual
-    stage:      functional
-    tags:       ['Dedicated']
-#     retry:      2
-    artifacts:
-        when: always
-        paths:
-            - $CI_PROJECT_DIR/splash.json
-            - $CI_PROJECT_DIR/splash.yml
-        reports:
-            junit: "$CI_PROJECT_DIR/*-report.xml"
-    services:
-      - name: mysql:5.7
-    ################################################################
-    # Before Script
-    before_script:
-        - sh /builds/SplashSync/Prestashop/ci/before_script.sh
-    ################################################################
-    # Test Script
-    script:
-      - cd $TMP_DIR
-      ################################################################################
-      # Build Module (Composer)
-      - curl -s https://raw.githubusercontent.com/BadPixxel/Php-Sdk/main/ci/composer.sh | sh
-      ################################################################################
-      # Install Prestashop + WebServer (Apache & PHP-Fpm)
-      - cat $CI_PROJECT_DIR/docker/docker-entrypoint.sh | bash
-      ################################################################################
-      # Install Module
-      - bash $SCRIPTS_DIR/module/install.sh
-#       ################################################################################
-#       # Run Grumphp Main Test Sequence
+# .functional:   &functional
+# #    when:       manual
+#     stage:      functional
+#     tags:       ['Dedicated']
+# #     retry:      2
+#     artifacts:
+#         when: always
+#         paths:
+#             - $CI_PROJECT_DIR/splash.json
+#             - $CI_PROJECT_DIR/splash.yml
+#         reports:
+#             junit: "$CI_PROJECT_DIR/*-report.xml"
+#     services:
+#       - name: mysql:5.7
+#     ################################################################
+#     # Before Script
+#     before_script:
+#         - sh $CI_PROJECT_DIR/ci/before_script.sh
+#     ################################################################
+#     # Test Script
+#     script:
 #       - cd $TMP_DIR
-#       - php modules/splashsync/vendor/bin/grumphp run -n --testsuite=travis
 #       ################################################################################
-#       # Run Grumphp CsFixer Test Sequence
-      - cd $TRAVIS_BUILD_DIR
-      - composer install
-#       - php modules/splashsync/vendor/bin/grumphp run -n --testsuite=csfixer
+#       # Build Module (Composer)
+#       - curl -s https://raw.githubusercontent.com/BadPixxel/Php-Sdk/main/ci/composer.sh | sh
 #       ################################################################################
-#       # Run Grumphp Php Stan Test Sequence
-#       - if [ -f "/var/www/html/vendor/autoload.php" ]; then php modules/splashsync/vendor/bin/grumphp run -n --testsuite=phpstan; fi
-      ################################################################################
-      # Run PhpUnit Core Test Sequence (Will Enable the Module)
-      - modules/splashsync/vendor/bin/phpunit -c travis/phpunit.xml.dist modules/splashsync/vendor/splash/phpcore/Tests/Core/ --log-junit $CI_PROJECT_DIR/core-report.xml
-      ################################################################################
-      # ALL PHP   =>  Run PhpUnit Local Sequence with No Data Inside
-      - modules/splashsync/vendor/bin/phpunit -c travis/phpunit.xml.dist --testsuite=Local --log-junit $CI_PROJECT_DIR/local-report.xml
-      ################################################################################
-      # Run PhpUnit Test Sequence
-      - php modules/splashsync/vendor/bin/phpunit -c travis/phpunit.xml.dist --log-junit $CI_PROJECT_DIR/standard-report.xml
-      ################################################################################
-      # Run PhpUnit Product with MSF Sequence
-      - php travis/setup_shops.php && php travis/setup_shops.php
-      - modules/splashsync/vendor/bin/phpunit -c travis/phpunit.products.xml --log-junit $CI_PROJECT_DIR/msf-report.xml
-      ################################################################################
-      # Run Grumphp Splash Manifest Sequence
-      - php modules/splashsync/vendor/bin/grumphp run -n --tasks=build-manifest
-
-F-Ps-8.0-Php-7.4:
-    image:      prestashop/prestashop:8.0-7.4
-    allow_failure:  true
-    retry:          0
-    <<: *functional
-
-F-Ps-1.7-Php-7.4:
-    image:      prestashop/prestashop:1.7-7.4
-    <<: *functional
+#       # Install Prestashop + WebServer (Apache & PHP-Fpm)
+#       - cat $CI_PROJECT_DIR/docker/docker-entrypoint.sh | bash
+#       ################################################################################
+#       # Install Module
+#       - bash $SCRIPTS_DIR/module/install.sh
+# #       ################################################################################
+# #       # Run Grumphp Main Test Sequence
+# #       - cd $TMP_DIR
+# #       - php modules/splashsync/vendor/bin/grumphp run -n --testsuite=travis
+# #       ################################################################################
+# #       # Run Grumphp CsFixer Test Sequence
+#       - cd $TRAVIS_BUILD_DIR
+#       - composer install
+# #       - php modules/splashsync/vendor/bin/grumphp run -n --testsuite=csfixer
+# #       ################################################################################
+# #       # Run Grumphp Php Stan Test Sequence
+# #       - if [ -f "/var/www/html/vendor/autoload.php" ]; then php modules/splashsync/vendor/bin/grumphp run -n --testsuite=phpstan; fi
+#       ################################################################################
+#       # Run PhpUnit Core Test Sequence (Will Enable the Module)
+#       - modules/splashsync/vendor/bin/phpunit -c travis/phpunit.xml.dist modules/splashsync/vendor/splash/phpcore/Tests/Core/ --log-junit $CI_PROJECT_DIR/core-report.xml
+#       ################################################################################
+#       # ALL PHP   =>  Run PhpUnit Local Sequence with No Data Inside
+#       - modules/splashsync/vendor/bin/phpunit -c travis/phpunit.xml.dist --testsuite=Local --log-junit $CI_PROJECT_DIR/local-report.xml
+#       ################################################################################
+#       # Run PhpUnit Test Sequence
+#       - php modules/splashsync/vendor/bin/phpunit -c travis/phpunit.xml.dist --log-junit $CI_PROJECT_DIR/standard-report.xml
+#       ################################################################################
+#       # Run PhpUnit Product with MSF Sequence
+#       - php travis/setup_shops.php && php travis/setup_shops.php
+#       - modules/splashsync/vendor/bin/phpunit -c travis/phpunit.products.xml --log-junit $CI_PROJECT_DIR/msf-report.xml
+#       ################################################################################
+#       # Run Grumphp Splash Manifest Sequence
+#       - php modules/splashsync/vendor/bin/grumphp run -n --tasks=build-manifest
+#
+# F-Ps-8.0-Php-7.4:
+#     image:      prestashop/prestashop:8.0-7.4
+#     allow_failure:  true
+#     retry:          0
+#     <<: *functional
+#
+# F-Ps-1.7-Php-7.4:
+#     image:      prestashop/prestashop:1.7-7.4
+#     <<: *functional
 
 # Ps-1.7-Php-7.3:
 #   image:      prestashop/prestashop:1.7-7.3-apache
