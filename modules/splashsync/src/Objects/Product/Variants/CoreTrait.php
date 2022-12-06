@@ -252,6 +252,27 @@ trait CoreTrait
     /**
      * Write Given Fields
      *
+     * @param string $fieldName Field Identifier / Name
+     *
+     * @return void
+     */
+    protected function setVariantsCreateFields(string $fieldName): void
+    {
+        //====================================================================//
+        // WRITE Field
+        switch ($fieldName) {
+            case 'default_on':
+            case 'variants':
+                break;
+            default:
+                return;
+        }
+        unset($this->in[$fieldName]);
+    }
+
+    /**
+     * Write Given Fields
+     *
      * @param string   $fieldName Field Identifier / Name
      * @param null|int $fieldData Field Data
      *
@@ -262,9 +283,6 @@ trait CoreTrait
         //====================================================================//
         // WRITE Field
         switch ($fieldName) {
-            case 'default_on':
-            case 'variants':
-                break;
             case 'default_id':
                 //====================================================================//
                 // Check if Valid Data
@@ -293,7 +311,7 @@ trait CoreTrait
      *
      * @return void
      */
-    protected function setVariantsParentFields($fieldName, $fieldData)
+    protected function setVariantsParentFields(string $fieldName, $fieldData)
     {
         //====================================================================//
         // WRITE Field
