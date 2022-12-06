@@ -135,14 +135,14 @@ trait ChecksumTrait
     /**
      * Compute Md5 String from Product Information
      *
-     * @param string      $title      Product Title without Options
+     * @param null|string $title      Product Title without Options
      * @param null|string $sku        Product Reference
      * @param array       $attributes Array of Product Attributes ($Code => $Value)
      *
      * @return string $Md5              Unik Checksum
      */
     private static function getMd5StringFromValues(
-        string $title,
+        ?string $title,
         string $sku = null,
         array $attributes = array()
     ): string {
