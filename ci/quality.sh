@@ -34,7 +34,8 @@ bash $CI_PROJECT_DIR/ci/module/install.sh
 ################################################################################
 # Run Grumphp Quality Tests Suites
 subtitle "QUALITY --> Grumphp Verifications"
-cd  $WEB_DIR
+cd  $CI_PROJECT_DIR
 php modules/splashsync/vendor/bin/grumphp run -n --testsuite=travis
 php modules/splashsync/vendor/bin/grumphp run -n --testsuite=csfixer
+cd  $WEB_DIR
 php modules/splashsync/vendor/bin/grumphp run -n --testsuite=phpstan
