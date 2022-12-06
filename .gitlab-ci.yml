@@ -65,6 +65,7 @@ stages:
     ################################################################
     # Test Script
     script:
+    - sh $CI_PROJECT_DIR/ci/quality.sh
 #       - cd $TMP_DIR
 #       ################################################################################
 #       # Build Module (Composer)
@@ -72,19 +73,19 @@ stages:
 #       ################################################################################
 #       # Install Prestashop + WebServer (Apache & PHP-Fpm)
 #       - cat $CI_PROJECT_DIR/docker/docker-entrypoint.sh | bash
-      ################################################################################
-      # Install Module
-      - bash $CI_PROJECT_DIR/ci/module/install.sh
-      ################################################################################
-      # Run Grumphp Main Test Sequence
-      - cd $WEB_DIR
-      - php modules/splashsync/vendor/bin/grumphp run -n --testsuite=travis
-      ################################################################################
-      # Run Grumphp CsFixer Test Sequence
-      - php modules/splashsync/vendor/bin/grumphp run -n --testsuite=csfixer
-      ################################################################################
-      # Run Grumphp Php Stan Test Sequence
-      - php modules/splashsync/vendor/bin/grumphp run -n --testsuite=phpstan;
+#       ################################################################################
+#       # Install Module
+#       - bash $CI_PROJECT_DIR/ci/module/install.sh
+#       ################################################################################
+#       # Run Grumphp Main Test Sequence
+#       - cd $WEB_DIR
+#       - php modules/splashsync/vendor/bin/grumphp run -n --testsuite=travis
+#       ################################################################################
+#       # Run Grumphp CsFixer Test Sequence
+#       - php modules/splashsync/vendor/bin/grumphp run -n --testsuite=csfixer
+#       ################################################################################
+#       # Run Grumphp Php Stan Test Sequence
+#       - php modules/splashsync/vendor/bin/grumphp run -n --testsuite=phpstan;
 
 Q-Ps-1.7-Php-7.4:
   image:      prestashop/prestashop:1.7-7.4
