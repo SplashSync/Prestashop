@@ -145,7 +145,7 @@ Q-Ps-1.7-Php-7.4:
 #       - php modules/splashsync/vendor/bin/grumphp run -n --testsuite=travis
 #       ################################################################################
 #       # Run Grumphp CsFixer Test Sequence
-#       - cd $TRAVIS_BUILD_DIR
+      - cd $TRAVIS_BUILD_DIR
       - composer install
 #       - php modules/splashsync/vendor/bin/grumphp run -n --testsuite=csfixer
 #       ################################################################################
