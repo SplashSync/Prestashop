@@ -61,6 +61,7 @@ stages:
     ################################################################
     # Before Script
     before_script:
+        - sh /builds/SplashSync/Prestashop/ci/before_script.sh
         - apt-get update
         - apt-get install -y zip unzip git
         - php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
