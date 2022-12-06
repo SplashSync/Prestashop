@@ -36,7 +36,7 @@ trait HooksTrait
      *
      * @return bool
      */
-    public function hookactionObjectOrderSlipAddAfter($params)
+    public function hookactionObjectOrderSlipAddAfter(array $params): bool
     {
         return $this->hookactionCreditNote(
             $params["object"],
@@ -52,7 +52,7 @@ trait HooksTrait
      *
      * @return bool
      */
-    public function hookactionObjectOrderSlipUpdateAfter($params)
+    public function hookactionObjectOrderSlipUpdateAfter(array $params): bool
     {
         return $this->hookactionCreditNote(
             $params["object"],
@@ -68,7 +68,7 @@ trait HooksTrait
      *
      * @return bool
      */
-    public function hookactionObjectOrderSlipDeleteAfter($params)
+    public function hookactionObjectOrderSlipDeleteAfter(array $params): bool
     {
         return $this->hookactionCreditNote(
             $params["object"],
@@ -81,17 +81,17 @@ trait HooksTrait
      * This function is called after each action on a Credit Note object
      *
      * @param OrderSlip $order   Prestashop OrderSlip Object
-     * @param string    $action  Performed Action
-     * @param string    $comment Action Comment
+     * @param string $action  Performed Action
+     * @param string $comment Action Comment
      *
      * @return bool
      */
-    private function hookactionCreditNote($order, $action, $comment)
+    private function hookactionCreditNote(OrderSlip $order, string $action, string $comment)
     {
         //====================================================================//
         // Retrieve Customer Id
         $objectId = null;
-        if (isset($order->id)) {
+        if (!empty($order->id)) {
             $objectId = $order->id;
         }
         //====================================================================//

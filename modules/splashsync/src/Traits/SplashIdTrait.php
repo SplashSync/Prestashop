@@ -27,6 +27,8 @@ trait SplashIdTrait
      * Check Splash ID Storage Table Exists
      *
      * @return bool global test result
+     *
+     * @phpstan-impure
      */
     public static function checkSplashIdTable(): bool
     {

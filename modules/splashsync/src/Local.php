@@ -136,7 +136,6 @@ class Local implements LocalClassInterface
         //====================================================================//
         // When Library is called in server mode ONLY
         //====================================================================//
-        /** @phpstan-ignore-next-line */
         if (!empty(SPLASH_SERVER_MODE)) {
             //====================================================================//
             // Load Default User
@@ -199,7 +198,6 @@ class Local implements LocalClassInterface
             // Create Table
             self::createSplashIdTable();
             // Check Again
-            /** @phpstan-ignore-next-line  */
             if (!self::checkSplashIdTable()) {
                 return Splash::log()->err("ErrSelfTestNoTable");
             }

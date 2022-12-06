@@ -116,8 +116,6 @@ trait HooksTrait
      * @param string $action  Performed Action
      * @param string $comment Action Comment
      *
-     * @throws PrestaShopException
-     *
      * @return bool
      */
     private function hookactionOrder(object $order, string $action, string $comment): bool
@@ -148,12 +146,16 @@ trait HooksTrait
         // Commit Update For Order
         $errors += !$this->doCommit("Order", $orderId, $action, $comment);
         if (SPL_A_UPDATE == $action) {
-            //====================================================================//
-            // Commit Update For Order Invoices
-            $invoices = new PrestaShopCollection('OrderInvoice');
-            $invoices->where('id_order', '=', $orderId);
-            foreach ($invoices as $invoice) {
-                $errors += !$this->doCommit("Invoice", (string) $invoice->id, $action, $comment);
+            try {
+                //====================================================================//
+                // Commit Update For Order Invoices
+                $invoices = new PrestaShopCollection('OrderInvoice');
+                $invoices->where('id_order', '=', $orderId);
+                foreach ($invoices as $invoice) {
+                    $errors += !$this->doCommit("Invoice", (string) $invoice->id, $action, $comment);
+                }
+            } catch (PrestaShopException $e) {
+                $errors++;
             }
         }
 
@@ -173,6 +175,7 @@ trait HooksTrait
     {
         //====================================================================//
         // Retrieve Customer Id
+        /** @var null|int $objectId */
         $objectId = null;
         if (isset($order->id_order_invoice)) {
             $objectId = $order->id_order_invoice;

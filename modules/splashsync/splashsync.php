@@ -171,26 +171,21 @@ class SplashSync extends Module
         }
         //====================================================================//
         // Register Module Products Hooks
-        if (!$this->registerHook('actionProductSave') ||
-                !$this->registerHook('actionProductAdd') ||
-                !$this->registerHook('actionObjectProductAddAfter') ||
-                !$this->registerHook('actionObjectProductUpdateAfter') ||
-                !$this->registerHook('actionUpdateQuantity') ||
-                !$this->registerHook('actionProductUpdate') ||
-                !$this->registerHook('actionProductDelete')) {
+        if (!$this->registerHook('actionProductUpdate')  ||
+            !$this->registerHook('actionUpdateQuantity') ||
+            !$this->registerHook('actionObjectProductAddAfter') ||
+            !$this->registerHook('actionObjectProductUpdateAfter') ||
+            !$this->registerHook('actionObjectProductDeleteAfter')
+        ) {
             return false;
         }
         //====================================================================//
         // Register Module Products Attributes Hooks
-        if (!$this->registerHook('actionObjectProductAddAfter') ||
-                !$this->registerHook('actionObjectProductUpdateAfter') ||
-                !$this->registerHook('actionObjectProductDeleteAfter') ||
-                !$this->registerHook('actionProductAttributeDelete')) {
-            return false;
-        }
-        if (!$this->registerHook('actionObjectCombinationAddAfter') ||
-                !$this->registerHook('actionObjectCombinationUpdateAfter') ||
-                !$this->registerHook('actionObjectCombinationDeleteAfter')) {
+        if (!$this->registerHook('actionProductAttributeDelete') ||
+            !$this->registerHook('actionObjectCombinationAddAfter') ||
+            !$this->registerHook('actionObjectCombinationUpdateAfter') ||
+            !$this->registerHook('actionObjectCombinationDeleteAfter')
+        ) {
             return false;
         }
         //====================================================================//
@@ -353,11 +348,12 @@ class SplashSync extends Module
         // Read Current Notifications
         $notifications = array();
         if (is_file($bufferFile) && function_exists("json_decode")) {
+            /** @var null|array $notifications */
             $notifications = json_decode((string) file_get_contents($bufferFile), true);
         }
         //====================================================================//
         // Merge Cookie With Log
-        Splash\Client\Splash::log()->merge($notifications);
+        Splash\Client\Splash::log()->merge($notifications ?? array());
         //====================================================================//
         //  Smart Notifications => Filter Messages, Only Warnings & Errors
         if (Splash\Client\Splash::configuration()->SmartNotify) {
@@ -521,6 +517,7 @@ class SplashSync extends Module
      */
     protected function debugHook($name, $objectId, $other = null)
     {
+        /** @phpstan-ignore-next-line  */
         if (_PS_MODE_DEV_ == true) {
             Splash\Client\Splash::log()->war("Hook => ".$name." => Id ".$objectId);
             if (!empty($other)) {
@@ -853,30 +850,36 @@ class SplashSync extends Module
         }
         //====================================================================//
         // Verify USER ID
+        /** @var string $serverId */
         $serverId = Tools::getValue('SPLASH_WS_ID');
         if (empty($serverId) || !Validate::isString($serverId)) {
             $output .= $this->displayError($this->l('Invalid User Identifier'));
         }
         //====================================================================//
         // Verify USER KEY
+        /** @var string $userKey */
         $userKey = Tools::getValue('SPLASH_WS_KEY');
         if (empty($userKey) || !Validate::isString($userKey)) {
             $output .= $this->displayError($this->l('Invalid User Encryption Key'));
         }
         //====================================================================//
         // Verify User Id
+        /** @var string $userId */
         $userId = Tools::getValue('SPLASH_USER_ID');
-        if (empty($userId) || !Validate::isInt($userId)) {
+        if (empty($userId) || !Validate::isInt((int) $userId)) {
             $output .= $this->displayError($this->l('Invalid User'));
         }
         //====================================================================//
         // Verify Expert Mode
+        /** @var string $expert */
         $expert = Tools::getValue('SPLASH_WS_EXPERT');
         if (!$expert || !Configuration::get('SPLASH_WS_EXPERT')) {
             $wsHost = "https://www.splashsync.com/ws/soap";
             $wsMethod = "SOAP";
         } else {
+            /** @var string $wsHost */
             $wsHost = Tools::getValue('SPLASH_WS_HOST');
+            /** @var string $wsMethod */
             $wsMethod = Tools::getValue('SPLASH_WS_METHOD');
         }
         //====================================================================//
@@ -890,7 +893,7 @@ class SplashSync extends Module
             $output .= $this->displayError($this->l('Invalid WebService Protocol'));
         }
         //====================================================================//
-        // Verify Ther is No Error on Core Configuration
+        // Verify There is No Error on Core Configuration
         if (null != $output) {
             return $output;
         }
@@ -902,17 +905,17 @@ class SplashSync extends Module
         Configuration::updateValue('SPLASH_WS_METHOD', trim($wsMethod));
         Configuration::updateValue('SPLASH_WS_KEY', trim($userKey));
         Configuration::updateValue('SPLASH_USER_ID', trim($userId));
-        Configuration::updateValue('SPLASH_SMART_NOTIFY', trim(Tools::getValue('SPLASH_SMART_NOTIFY')));
-        Configuration::updateValue('SPLASH_SYNC_VIRTUAL', trim(Tools::getValue('SPLASH_SYNC_VIRTUAL')));
-        Configuration::updateValue('SPLASH_SYNC_PACKS', trim(Tools::getValue('SPLASH_SYNC_PACKS')));
-        Configuration::updateValue('SPLASH_CONFIGURATOR', trim(Tools::getValue('SPLASH_CONFIGURATOR')));
+        Configuration::updateValue('SPLASH_SMART_NOTIFY', Tools::getValue('SPLASH_SMART_NOTIFY'));
+        Configuration::updateValue('SPLASH_SYNC_VIRTUAL', Tools::getValue('SPLASH_SYNC_VIRTUAL'));
+        Configuration::updateValue('SPLASH_SYNC_PACKS', Tools::getValue('SPLASH_SYNC_PACKS'));
+        Configuration::updateValue('SPLASH_CONFIGURATOR', Tools::getValue('SPLASH_CONFIGURATOR'));
 
         //====================================================================//
         // Update Orders Status Values
         if (\Splash\Local\Services\OrderStatusManager::isAllowedWrite()) {
             foreach (\Splash\Local\Services\OrderStatusManager::getAllStatus() as $status) {
                 $fieldName = $status["field"];
-                Configuration::updateValue($fieldName, trim(Tools::getValue($fieldName)));
+                Configuration::updateValue($fieldName, Tools::getValue($fieldName));
             }
         }
 
@@ -923,6 +926,7 @@ class SplashSync extends Module
      * Execute Server SelfTests
      *
      * @return string
+     * @throws Exception
      */
     private function displayTest()
     {
@@ -990,6 +994,7 @@ class SplashSync extends Module
      * Execute Server SelfTests
      *
      * @return void
+     * @throws Exception
      */
     private function displayTestSelfTests()
     {

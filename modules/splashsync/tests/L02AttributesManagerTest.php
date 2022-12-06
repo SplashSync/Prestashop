@@ -62,8 +62,7 @@ class L02AttributesManagerTest extends ObjectsCase
 
         //====================================================================//
         //   Load UnKnown Attribute Group
-        $unknownGroupId = Manager::touchGroup(uniqid(), null);
-        $this->assertFalse($unknownGroupId);
+        $this->assertNull(Manager::touchGroup(uniqid(), null));
 
         //====================================================================//
         //   Clean Log
@@ -171,7 +170,7 @@ class L02AttributesManagerTest extends ObjectsCase
         $this->assertEquals($group->id, $attribute->id_attribute_group);
         foreach (SLM::getAvailableLanguages() as $langId => $isoCode) {
             // Values are All Same (Default Language)
-            // @phpstan-ignore-next-line
+            /** @phpstan-ignore-next-line  */
             $this->assertEquals($dfValue, $attribute->name[$langId]);
         }
 
@@ -179,6 +178,7 @@ class L02AttributesManagerTest extends ObjectsCase
         //   Verify Attributes Value Identification
         foreach (SLM::getAvailableLanguages() as $langId => $isoCode) {
             // Values are All Same (Default Language)
+            /** @phpstan-ignore-next-line  */
             $this->assertSame($attribute, Manager::touchAttribute($group, $dfValue));
         }
 
@@ -224,7 +224,6 @@ class L02AttributesManagerTest extends ObjectsCase
         Manager::getAllGroups(true);
         //====================================================================//
         //   Load Attribute Group
-        $deletedGroupId = Manager::touchGroup($code, null);
-        $this->assertFalse($deletedGroupId);
+        $this->assertNull(Manager::touchGroup($code, null));
     }
 }
