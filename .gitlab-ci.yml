@@ -109,9 +109,9 @@ stages:
       # Run Grumphp Splash Manifest Sequence
       - php modules/splashsync/vendor/bin/grumphp run -n --tasks=build-manifest
 
-Ps-8.0-Php-7.4:
-  image:      prestashop/prestashop:8.0-7.4
-  <<: *functionnal
+# Ps-8.0-Php-7.4:
+#   image:      prestashop/prestashop:8.0-7.4
+#   <<: *functionnal
 
 Ps-1.7-Php-7.4:
   image:      prestashop/prestashop:1.7-7.4

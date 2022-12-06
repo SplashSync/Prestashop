@@ -15,7 +15,7 @@
 
 namespace Splash\Local\Objects\Order;
 
-use Order;
+use Splash\Local\Objects\Order;
 
 /**
  * Access to Order Address Fields

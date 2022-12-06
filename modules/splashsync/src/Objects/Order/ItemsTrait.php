@@ -309,7 +309,7 @@ trait ItemsTrait
     {
         //====================================================================//
         // Check if List field & Init List Array
-        $fieldId = self::lists()->InitOutput($this->out, "lines", $fieldName);
+        $fieldId = self::lists()->initOutput($this->out, "lines", $fieldName);
         if (!$fieldId) {
             return;
         }

@@ -72,6 +72,8 @@ class L05AdvancedDiscountsTest extends ObjectsCase
     /**
      * Test Reading An Order Without Discounts
      *
+     * @throws Exception
+     *
      * @return void
      */
     public function testOrderWithoutDiscount()
