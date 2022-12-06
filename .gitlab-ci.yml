@@ -51,13 +51,13 @@ stages:
 #     retry:      2
     artifacts:
         when: always
-        paths:
-            - $CI_PROJECT_DIR/splash.json
-            - $CI_PROJECT_DIR/splash.yml
+#         paths:
+#             - $CI_PROJECT_DIR/splash.json
+#             - $CI_PROJECT_DIR/splash.yml
         reports:
             junit: "$CI_PROJECT_DIR/*-report.xml"
-    services:
-      - name: mysql:5.7
+#     services:
+#       - name: mysql:5.7
     ################################################################
     # Before Script
     before_script:

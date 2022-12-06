@@ -37,6 +37,8 @@ cp -f     $CI_PROJECT_DIR/composer.lock                     $WEB_DIR/composer.lo
 cp -Rf    $CI_PROJECT_DIR/grumphp/*                         $WEB_DIR/grumphp/
 cp -Rf    $CI_PROJECT_DIR/ci/*                              $WEB_DIR/ci/
 
+ls -l  $WEB_DIR
+ls -l  $WEB_DIR/grumphp/
 ################################################################################
 # Move Git Files to Prestashop Root Directory
 echo "Move Git Files to Prestashop Root Directory"
