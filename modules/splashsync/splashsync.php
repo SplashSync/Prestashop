@@ -343,6 +343,13 @@ class SplashSync extends Module
      */
     public function importMessages()
     {
+        //====================================================================//
+        // When Library is called in TRAVIS CI mode ONLY
+        //====================================================================//
+        if (!empty(Splash\Client\Splash::input("SPLASH_TRAVIS"))) {
+            return;
+        }
+
         $bufferFile = $this->getMessageBufferPath();
         //====================================================================//
         // Read Current Notifications
