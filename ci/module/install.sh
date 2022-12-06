@@ -29,8 +29,8 @@ cp -Rf    $CI_PROJECT_DIR/modules/splashsync/*              $WEB_DIR/modules/spl
 ################################################################################
 # Move Configuration Files to Prestashop Root Directory
 echo Move Configuration Files to Prestashop Root Directory
-mkdir     $CI_PROJECT_DIR/grumphp
-mkdir     $CI_PROJECT_DIR/travis
+mkdir     $WEB_DIR/grumphp
+mkdir     $WEB_DIR/travis
 cp -f     $CI_PROJECT_DIR/grumphp.yml                       $WEB_DIR/grumphp.yml
 cp -f     $CI_PROJECT_DIR/composer.json                     $WEB_DIR/composer.json
 cp -f     $CI_PROJECT_DIR/composer.lock                     $WEB_DIR/composer.lock
