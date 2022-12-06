@@ -120,7 +120,7 @@ trait ChecksumTrait
      * @return string $Md5              Unik Checksum
      */
     private static function getMd5ChecksumFromValues(
-        string $title = null,
+        ?string $title,
         string $sku = null,
         array $attributes = array()
     ): string {
