@@ -21,7 +21,7 @@ set -e
 
 ################################################################
 # import Layout Functions
-. functions.sh
+. /builds/SplashSync/Prestashop/ci/functions.sh
 
 ################################################################
 # Render Splash Screen
