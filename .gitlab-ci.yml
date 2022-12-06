@@ -46,7 +46,7 @@ stages:
 
 .quality:   &quality
 #    when:       manual
-    stage:      tests
+    stage:      quality
     tags:       ['Dedicated']
 #     retry:      2
     artifacts:
