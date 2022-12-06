@@ -29,5 +29,17 @@ splashscreen "BEFORE SCRIPT"
 
 ################################################################
 # Packages Install
-title "INIT --> Install Additional Packages"
+subtitle "INIT --> Install Additional Packages"
 apt-get update && apt-get install -y zip unzip git
+
+################################################################
+# Install Composer & Run Composer Update
+subtitle "INIT --> Run Composer"
+curl -s https://raw.githubusercontent.com/BadPixxel/Php-Sdk/main/ci/composer.sh | sh
+
+################################################################
+# Setup PHP Configuration
+subtitle "INIT --> Override PHP Configs"
+echo "memory_limit=-1"                                                              >> /usr/local/etc/php/conf.d/memory.ini
+echo "error_reporting = E_COMPILE_ERROR|E_RECOVERABLE_ERROR|E_ERROR|E_CORE_ERROR"   >> /usr/local/etc/php/conf.d/errors.ini
+
