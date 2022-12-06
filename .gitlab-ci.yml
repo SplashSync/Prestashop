@@ -94,7 +94,7 @@ stages:
       # Run Grumphp Php Stan Test Sequence
       - if [ -f "/var/www/html/vendor/autoload.php" ]; then php modules/splashsync/vendor/bin/grumphp run -n --testsuite=phpstan; fi
 
-Ps-1.7-Php-7.4:
+Q-Ps-1.7-Php-7.4:
   image:      prestashop/prestashop:1.7-7.4
   <<: *quality
 
@@ -168,15 +168,15 @@ Ps-1.7-Php-7.4:
       # Run Grumphp Splash Manifest Sequence
       - php modules/splashsync/vendor/bin/grumphp run -n --tasks=build-manifest
 
-Ps-8.0-Php-7.4:
+F-Ps-8.0-Php-7.4:
     image:      prestashop/prestashop:8.0-7.4
     allow_failure:  true
     retry:          0
-    <<: *functionnal
+    <<: *functional
 
-Ps-1.7-Php-7.4:
-  image:      prestashop/prestashop:1.7-7.4
-  <<: *functional
+F-Ps-1.7-Php-7.4:
+    image:      prestashop/prestashop:1.7-7.4
+    <<: *functional
 
 # Ps-1.7-Php-7.3:
 #   image:      prestashop/prestashop:1.7-7.3-apache
