@@ -146,7 +146,7 @@ Q-Ps-1.7-Php-7.4:
 #       ################################################################################
 #       # Run Grumphp CsFixer Test Sequence
 #       - cd $TRAVIS_BUILD_DIR
-#       - composer install
+      - composer install
 #       - php modules/splashsync/vendor/bin/grumphp run -n --testsuite=csfixer
 #       ################################################################################
 #       # Run Grumphp Php Stan Test Sequence
