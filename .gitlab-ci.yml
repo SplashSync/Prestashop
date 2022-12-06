@@ -104,7 +104,7 @@ Q-Ps-1.7-Php-7.4:
 
 .functional:   &functional
 #    when:       manual
-    stage:      tests
+    stage:      functional
     tags:       ['Dedicated']
 #     retry:      2
     artifacts:
