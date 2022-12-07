@@ -15,10 +15,8 @@
 
 namespace Splash\Local\Objects\Product;
 
-use Attribute;
 use Combination;
 use PrestaShopException;
-use Product;
 use Splash\Client\Splash      as Splash;
 use Splash\Local\Services\LanguagesManager as SLM;
 

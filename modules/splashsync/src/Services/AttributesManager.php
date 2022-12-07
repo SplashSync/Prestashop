@@ -15,16 +15,16 @@
 
 namespace Splash\Local\Services;
 
-use Attribute;
 use AttributeGroup;
 use Language;
 use PrestaShopException;
 use Splash\Core\SplashCore      as Splash;
+use Splash\Local\ClassAlias\PsProductAttribute as Attribute;
 use Splash\Local\Services\LanguagesManager as SLM;
 use Tools;
 
 /**
- * Prestahop Products Variants Attributes Manager
+ * Prestashop Products Variants Attributes Manager
  */
 class AttributesManager
 {
@@ -278,7 +278,7 @@ class AttributesManager
         }
         //====================================================================//
         // Ensure Name is Valid
-        if (!is_string($name) || empty($name)) {
+        if (empty($name)) {
             return Splash::log()->errNull("Attribute Name is not a String.");
         }
         //====================================================================//

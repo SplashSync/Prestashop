@@ -20,6 +20,7 @@ parameters:
 
             # Know Prestashop Backward
             - '#Static method ImageCore::getImages\(\) invoked with 4 parameters, 2-3 required.#'
+            - '#Class Splash\\Local\\ClassAlias\\PsProductAttribute does not have a constructor and must be instantiated without any parameters.#'
 
             # Splash Fixes
             - '#Access to an undefined property object::\$options#'
