@@ -65,7 +65,7 @@ services:
          - ./.git:/var/www/html/.git:ro
          - ./modules/splashsync:/var/www/html/modules/splashsync:ro
          - ./grumphp:/var/www/html/grumphp:ro
-         - ./travis:/var/www/html/travis:ro
+         - ./ci:/var/www/html/ci:ro
          - ./phpunit.xml.dist:/var/www/html/phpunit.xml.dist:ro
          - ./grumphp.yml:/var/www/html/grumphp.yml:ro
         # Docker EntryPoint
@@ -105,7 +105,7 @@ services:
 #          - ./.git:/var/www/html/.git:ro
 #          - ./modules/splashsync:/var/www/html/modules/splashsync:ro
 #          - ./grumphp:/var/www/html/grumphp:ro
-#          - ./travis:/var/www/html/travis:ro
+#          - ./ci:/var/www/html/ci:ro
 #          - ./phpunit.xml.dist:/var/www/html/phpunit.xml.dist:ro
 #          - ./grumphp.yml:/var/www/html/grumphp.yml:ro
 #         # Docker EntryPoint
@@ -142,7 +142,7 @@ services:
          - "./docker/config/splash.json:/var/www/html/config/splash.json:ro"
         # Module Sources
          - ./modules/splashsync:/var/www/html/modules/splashsync:ro
-         - ./travis:/var/www/html/travis:ro
+         - ./ci:/var/www/html/ci:ro
          - ./phpunit.xml.dist:/var/www/html/phpunit.xml.dist:ro
         # Docker EntryPoint
          - ./docker/docker-entrypoint.sh:/var/www/html/modules/docker-entrypoint.sh:ro
@@ -177,7 +177,7 @@ services:
          - "./docker/config/splash.json:/var/www/html/config/splash.json:ro"
         # Module Sources
          - ./modules/splashsync:/var/www/html/modules/splashsync:ro
-         - ./travis:/var/www/html/travis:ro
+         - ./ci:/var/www/html/ci:ro
          - ./phpunit.xml.dist:/var/www/html/phpunit.xml.dist:ro
         # Docker EntryPoint
          - ./docker/docker-entrypoint.sh:/var/www/html/modules/docker-entrypoint.sh:ro

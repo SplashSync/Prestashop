@@ -86,7 +86,7 @@ if [ ! -f ./config/settings.inc.php  ]; then
 			--all_languages=$PS_ALL_LANGUAGES --newsletter=0 --send_email=0 --ssl=$PS_ENABLE_SSL
 
 		if [ $? -ne 0 ]; then
-			echo 'warning: PrestaShop installation failed.'
+			echo 'warning: Prestashop installation failed.'
 		fi
 
 		echo "\n* Install SplashSync Module";
@@ -111,12 +111,12 @@ fi
 if [ "$PS_RUN_TESTS" = 1 ]; then
     echo "\n* Execute Module Tests...";
     /var/www/html/modules/splashsync/vendor/bin/phpunit -c /var/www/html/travis/phpunit.xml.dist
-    php /var/www/html/travis/setup_shops.php && php /var/www/html/travis/setup_shops.php
+    php /var/www/html/ci/setup_shops.php && php /var/www/html/ci/setup_shops.php
     /var/www/html/modules/splashsync/vendor/bin/phpunit -c /var/www/html/travis/phpunit.xml.dist
 fi
 
 echo "\n* Redo Splash Module Install\n";
-php ./travis/setup_module.php
+php ./ci/setup_module.php
 
 echo "\n* Clear Cache...";
 rm -Rf /var/www/html/var

@@ -19,6 +19,7 @@ use Configuration;
 use Exception;
 use Splash\Client\Splash;
 use Splash\Components\CommitsManager;
+use Splash\Components\FieldsManager;
 use Splash\Local\Services\MultiShopFieldsManager as MSF;
 use Splash\Local\Services\MultiShopManager as MSM;
 use Splash\Tests\Tools\ObjectsCase;
@@ -118,7 +119,11 @@ class L10MsfProductsTest extends ObjectsCase
             //====================================================================//
             // Add Msf Fields to List
             $shopField = $field;
-            $shopField['id'] = MSF::MSF_PREFIX.$shopId."_".$field['id'];
+            if ($list = FieldsManager::isListField($field['id'])) {
+                $shopField['id'] = $list['fieldname']."@".MSF::MSF_PREFIX.$shopId."_".$list['listname'];
+            } else {
+                $shopField['id'] = MSF::MSF_PREFIX.$shopId."_".$field['id'];
+            }
             $this->fields[$shopField['id']] = $shopField;
         }
 
@@ -169,6 +174,16 @@ class L10MsfProductsTest extends ObjectsCase
      */
     private function getShopDataSet(array $field, int $shopId): array
     {
+        //====================================================================//
+        // Detect List Fields
+        if ($list = FieldsManager::isListField($field['id'])) {
+            return MSF::encodeData(
+                array($list['listname'] => self::fakeListData($field)),
+                $shopId
+            );
+        }
+        //====================================================================//
+        // Simple Fields
         return MSF::encodeData(
             array($field['id'] => self::fakeFieldData(
                 $field['type'],

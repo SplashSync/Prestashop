@@ -86,10 +86,8 @@ trait ImagesTrait
             ->group($groupName)
             ->microData("http://schema.org/Product", "image")
             ->isReadOnly(self::isSourceCatalogMode())
+            ->addOption("shop", MSM::MODE_ALL)
         ;
-        if (Tools::version_compare(_PS_VERSION_, "1.7.7", '<=') || MSM::isLightMode()) {
-            $this->fieldsFactory()->addOption("shop", MSM::MODE_ALL);
-        }
 
         //====================================================================//
         // Product Images => Position
@@ -100,11 +98,9 @@ trait ImagesTrait
             ->microData("http://schema.org/Product", "positionImage")
             ->group($groupName)
             ->isReadOnly(self::isSourceCatalogMode())
+            ->addOption("shop", MSM::MODE_ALL)
             ->isNotTested()
         ;
-        if (Tools::version_compare(_PS_VERSION_, "1.7.7", '<=') || MSM::isLightMode()) {
-            $this->fieldsFactory()->addOption("shop", MSM::MODE_ALL);
-        }
 
         //====================================================================//
         // Product Images => Is Cover
@@ -115,11 +111,9 @@ trait ImagesTrait
             ->microData("http://schema.org/Product", "isCover")
             ->group($groupName)
             ->isReadOnly(self::isSourceCatalogMode())
+            ->addOption("shop", MSM::MODE_ALL)
             ->isNotTested()
         ;
-        if (Tools::version_compare(_PS_VERSION_, "1.7.7", '<=') || MSM::isLightMode()) {
-            $this->fieldsFactory()->addOption("shop", MSM::MODE_ALL);
-        }
 
         //====================================================================//
         // Product Images => Is Visible Image
@@ -130,11 +124,9 @@ trait ImagesTrait
             ->microData("http://schema.org/Product", "isVisibleImage")
             ->group($groupName)
             ->isReadOnly(self::isSourceCatalogMode())
+            ->addOption("shop", MSM::MODE_ALL)
             ->isNotTested()
         ;
-        if (Tools::version_compare(_PS_VERSION_, "1.7.7", '<=') || MSM::isLightMode()) {
-            $this->fieldsFactory()->addOption("shop", MSM::MODE_ALL);
-        }
     }
 
     /**
@@ -171,7 +163,7 @@ trait ImagesTrait
             }
             //====================================================================//
             // Insert Data in List
-            self::lists()->Insert($this->out, "images", $fieldName, $index, $value);
+            self::lists()->insert($this->out, "images", $fieldName, $index, $value);
         }
         unset($this->in[$key]);
     }
