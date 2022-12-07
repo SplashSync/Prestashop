@@ -137,8 +137,8 @@ pages:
         # Build Documentation
         - php modules/splashsync/vendor/bin/grumphp run --tasks=build-docs
     artifacts:
-    paths:
-        - public
+        paths:
+            - public
 
 #################################################################
 ## Build Documentation
@@ -158,5 +158,5 @@ module:
         # Build Documentation
         - php modules/splashsync/vendor/bin/grumphp run --tasks=build-module
     artifacts:
-    paths:
-        - build
+        paths:
+            - build
