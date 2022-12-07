@@ -15,10 +15,10 @@
 
 namespace Splash\Tests;
 
-use Attribute;
 use AttributeGroup;
 use Combination;
 use Splash\Client\Splash;
+use Splash\Local\ClassAlias\PsProductAttribute as Attribute;
 use Splash\Local\Services\AttributesManager as Manager;
 use Splash\Local\Services\LanguagesManager as SLM;
 use Splash\Tests\Tools\ObjectsCase;
