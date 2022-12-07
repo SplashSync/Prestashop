@@ -38,7 +38,7 @@ cat $CI_PROJECT_DIR/docker/docker-entrypoint.sh | bash
 subtitle "FUNCTIONAL --> Install Module"
 bash $CI_PROJECT_DIR/ci/module/install.sh
 cd  $WEB_DIR
-composer dump-autoload
+composer install
 
  ################################################################################
  # Run PhpUnit Core Test Sequence (Will Enable the Module)
