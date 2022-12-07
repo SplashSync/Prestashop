@@ -45,6 +45,9 @@ class L10MsfProductsTest extends ObjectsCase
      * @throws Exception
      *
      * @return void
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function testSetSingleFieldFromModule(
         string $testSequence,
