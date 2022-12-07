@@ -45,7 +45,7 @@ composer install
 subtitle "FUNCTIONAL --> Enable Module"
 modules/splashsync/vendor/bin/phpunit \
   modules/splashsync/vendor/splash/phpcore/Tests/Core/ \
-  -c $CI_PROJECT_DIR/ci/phpunit.xml.dist \
+  -c $WEB_DIR/ci/phpunit.xml.dist \
   --log-junit $CI_PROJECT_DIR/core-report.xml
 
 ################################################################################
@@ -53,24 +53,24 @@ modules/splashsync/vendor/bin/phpunit \
 subtitle "FUNCTIONAL --> Local Test Sequence"
 modules/splashsync/vendor/bin/phpunit \
   --testsuite=Local \
-  -c $CI_PROJECT_DIR/ci/phpunit.xml.dist \
+  -c $WEB_DIR/ci/phpunit.xml.dist \
   --log-junit $CI_PROJECT_DIR/local-report.xml
 
 ################################################################################
 # Run PhpUnit Test Sequence
 subtitle "FUNCTIONAL --> Full Test Sequence"
 modules/splashsync/vendor/bin/phpunit \
- -c $CI_PROJECT_DIR/ci/phpunit.xml.dist \
+ -c $WEB_DIR/ci/phpunit.xml.dist \
  --log-junit $CI_PROJECT_DIR/standard-report.xml
 
 ################################################################################
 # Run PhpUnit Product with MSF Sequence
 subtitle "FUNCTIONAL --> Enable MSF Mode"
-php $CI_PROJECT_DIR/ci/setup_shops.php && php $CI_PROJECT_DIR/ci/setup_shops.php
+php $WEB_DIR/ci/setup_shops.php && php $WEB_DIR/ci/setup_shops.php
 
 subtitle "FUNCTIONAL --> Msf Products Test Sequence"
 modules/splashsync/vendor/bin/phpunit \
- -c $CI_PROJECT_DIR/ci/phpunit.products.xml \
+ -c $WEB_DIR/ci/phpunit.products.xml \
  --log-junit $CI_PROJECT_DIR/msf-report.xml
 
 ################################################################################
