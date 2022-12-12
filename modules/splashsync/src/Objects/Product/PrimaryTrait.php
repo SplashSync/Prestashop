@@ -19,7 +19,9 @@ namespace   Splash\Local\Objects\Product;
 // Prestashop Static Classes
 use Db;
 use DbQuery;
+use Shop;
 use Splash\Core\SplashCore      as Splash;
+use Splash\Local\Services\MultiShopFieldsManager;
 
 /**
  * Search Products by Primary Keys
@@ -39,6 +41,12 @@ trait PrimaryTrait
         if (empty($keys)) {
             return null;
         }
+        //====================================================================//
+        // Extract Multi-Shop Keys
+        $keys = MultiShopFieldsManager::extractData(
+            $keys,
+            Shop::getContextShopID(true)
+        );
         //====================================================================//
         // Build query
         $sql = new DbQuery();
