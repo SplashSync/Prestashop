@@ -117,8 +117,9 @@ trait CRUDTrait
         //====================================================================//
         // If NO Password Given = > Create Random Password
         if (empty($this->object->passwd)) {
-            $this->object->passwd = (string) Tools::passwdGen();
-            Splash::log()->war("New Customer Password Generated - ".$this->object->passwd);
+            $plainPassword = "#".Tools::passwdGen(12);
+            $this->object->setWsPasswd($plainPassword);
+            Splash::log()->war("New Customer Password Generated - ".$plainPassword);
         }
 
         //====================================================================//
