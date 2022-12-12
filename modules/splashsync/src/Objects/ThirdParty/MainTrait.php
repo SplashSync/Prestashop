@@ -63,6 +63,7 @@ trait MainTrait
             ->name(Translate::getAdminTranslation("Company", "AdminCustomers"))
             ->microData("http://schema.org/Organization", "legalName")
             ->isReadOnly(isset(Splash::configuration()->PsUseFullCompanyNames))
+            ->isIndexed()
             ->isListed()
         ;
         //====================================================================//
