@@ -155,6 +155,7 @@ trait DeliveryTrait
             ->group($groupName)
             ->name(Translate::getAdminTranslation("Home phone", "AdminAddresses"))
             ->microData("http://schema.org/PostalAddress", "telephone")
+            ->isIndexed()
             ->isReadOnly()
         ;
         //====================================================================//
@@ -164,6 +165,7 @@ trait DeliveryTrait
             ->group($groupName)
             ->name(Translate::getAdminTranslation("Mobile phone", "AdminAddresses"))
             ->microData("http://schema.org/Person", "telephone")
+            ->isIndexed()
             ->isReadOnly()
         ;
     }

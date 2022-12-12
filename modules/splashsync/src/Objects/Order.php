@@ -24,6 +24,7 @@ use Splash\Local\Local;
 use Splash\Models\AbstractObject;
 use Splash\Models\Objects\IntelParserTrait;
 use Splash\Models\Objects\ObjectsTrait;
+use Splash\Models\Objects\PrimaryKeysAwareInterface;
 use Splash\Models\Objects\SimpleFieldsTrait;
 use SplashSync;
 
@@ -33,7 +34,7 @@ use SplashSync;
  * @SuppressWarnings(PHPMD.CamelCasePropertyName)
  * @SuppressWarnings(PHPMD.TooManyFields)
  */
-class Order extends AbstractObject
+class Order extends AbstractObject implements PrimaryKeysAwareInterface
 {
     // Splash Php Core Traits
     use IntelParserTrait;
@@ -51,6 +52,7 @@ class Order extends AbstractObject
     // Prestashop Order Traits
     use Order\ObjectsListTrait;
     use Order\CRUDTrait;
+    use Order\PrimaryTrait;
     use Order\CoreTrait;
     use Order\MainTrait;
     use Order\AddressTrait;

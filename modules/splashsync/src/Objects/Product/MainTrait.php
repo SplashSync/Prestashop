@@ -124,6 +124,7 @@ trait MainTrait
             ->microData("http://schema.org/Product", "mpn")
             ->addOption("shop", MSM::MODE_ALL)
             ->isListed()
+            ->isIndexed()
         ;
         //====================================================================//
         // UPC
@@ -133,6 +134,7 @@ trait MainTrait
             ->microData("http://schema.org/Product", "gtin12")
             ->group($groupName)
             ->addOption("shop", MSM::MODE_ALL)
+            ->isIndexed()
         ;
         //====================================================================//
         // EAN
@@ -142,6 +144,7 @@ trait MainTrait
             ->microData("http://schema.org/Product", "gtin13")
             ->group($groupName)
             ->addOption("shop", MSM::MODE_ALL)
+            ->isIndexed()
         ;
         //====================================================================//
         // ISBN
@@ -152,6 +155,7 @@ trait MainTrait
                 ->microData("http://schema.org/Product", "gtin14")
                 ->group($groupName)
                 ->addOption("shop", MSM::MODE_ALL)
+                ->isIndexed()
             ;
             if (Splash::isTravisMode()) {
                 //====================================================================//

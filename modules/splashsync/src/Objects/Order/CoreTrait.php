@@ -60,6 +60,7 @@ trait CoreTrait
             ->identifier("email")
             ->name(Translate::getAdminTranslation("Email address", "AdminCustomers"))
             ->microData("http://schema.org/ContactPoint", "email")
+            ->isIndexed()
             ->isReadOnly()
         ;
         //====================================================================//
@@ -70,6 +71,8 @@ trait CoreTrait
             ->microData("http://schema.org/Order", "orderNumber")
             ->addOption("maxLength", "8")
             ->isRequired()
+            ->isPrimary($this->isOrderObject())
+            ->isIndexed(!$this->isOrderObject())
             ->isListed()
         ;
         //====================================================================//

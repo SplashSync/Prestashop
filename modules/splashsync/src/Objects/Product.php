@@ -26,6 +26,7 @@ use Splash\Local\Local;
 use Splash\Models\AbstractObject;
 use Splash\Models\Objects\ListsTrait;
 use Splash\Models\Objects\ObjectsTrait;
+use Splash\Models\Objects\PrimaryKeysAwareInterface;
 use Splash\Models\Objects\SimpleFieldsTrait;
 use SplashSync;
 use Tools;
@@ -35,7 +36,7 @@ use Tools;
  *
  * @SuppressWarnings(PHPMD.CamelCasePropertyName)
  */
-class Product extends AbstractObject
+class Product extends AbstractObject implements PrimaryKeysAwareInterface
 {
     //====================================================================//
     // Splash Php Core Traits
@@ -55,6 +56,7 @@ class Product extends AbstractObject
     // Prestashop Products Traits
     use Product\ObjectsListTrait;
     use Product\CRUDTrait;
+    use Product\PrimaryTrait;
     use Product\CoreTrait;
     use Product\CoverImageTrait;
     use Product\MainTrait;

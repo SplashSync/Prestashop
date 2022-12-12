@@ -45,6 +45,7 @@ trait CoreTrait
             ->addOption("shop", MSM::MODE_ALL)
             ->isListed()
             ->isRequired()
+            ->isPrimary()
         ;
 
         //====================================================================//

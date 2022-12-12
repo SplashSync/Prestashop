@@ -57,6 +57,7 @@ trait DescTrait
                 ->setMultilang($isoLang)
                 ->addOption("shop", MSM::MODE_ALL)
                 ->isRequired(LanguagesManager::isDefaultLanguage($isoLang))
+                ->isIndexed(LanguagesManager::isDefaultLanguage($isoLang))
             ;
             //====================================================================//
             // Name with Options

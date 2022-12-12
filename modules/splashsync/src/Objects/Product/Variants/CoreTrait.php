@@ -82,6 +82,7 @@ trait CoreTrait
             ->name("Parent SKU")
             ->group(Translate::getAdminTranslation("Meta", "AdminThemes"))
             ->microData("http://schema.org/Product", "isVariationOfName")
+            ->isIndexed()
             ->isNotTested()
         ;
 

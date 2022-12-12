@@ -56,7 +56,6 @@ trait PricesTrait
                 )." (".$this->Currency->sign.")"
             )
             ->microData("http://schema.org/Product", "price")
-            ->isListed()
         ;
         //====================================================================//
         // Product Selling Base Price

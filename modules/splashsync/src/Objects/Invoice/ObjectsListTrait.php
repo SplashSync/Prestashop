@@ -21,7 +21,7 @@ use Splash\Core\SplashCore      as Splash;
 use Splash\Local\Services\LanguagesManager as SLM;
 
 /**
- * Acces to Invoices Objects Lists
+ * Access to Invoice Objects Lists
  *
  * @author      B. Paquier <contact@splashsync.com>
  */

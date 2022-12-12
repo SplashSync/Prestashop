@@ -52,6 +52,7 @@ trait TrackingTrait
             ->name("Tracking Number")
             ->microData("http://schema.org/ParcelDelivery", "trackingNumber")
             ->group("Tracking")
+            ->isIndexed()
         ;
         //====================================================================//
         // Order Tracking Url

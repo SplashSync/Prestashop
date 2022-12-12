@@ -15,52 +15,62 @@
 
 namespace   Splash\Local\Objects\Order;
 
+//====================================================================//
+// Prestashop Static Classes
+use Db;
 use DbQuery;
 use Splash\Core\SplashCore      as Splash;
 
 /**
- * Access to Order Objects Lists
+ * Search Order by Primary Keys
  */
-trait ObjectsListTrait
+trait PrimaryTrait
 {
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
-    public function objectsList(string $filter = null, array $params = array()): array
+    public function getByPrimary(array $keys): ?string
     {
         //====================================================================//
         // Stack Trace
         Splash::log()->trace();
-
+        //====================================================================//
+        // Safety Check
+        if (empty($keys)) {
+            return null;
+        }
         //====================================================================//
         // Build query
         $sql = new DbQuery();
         //====================================================================//
         // Build SELECT
         $sql->select("o.`id_order`      as id");            // Order Id
-        $sql->select("o.`id_customer`   as id_customer");   // Customer Id
         $sql->select("o.`reference`     as reference");     // Order Internal Reference
-        $sql->select("c.`firstname`     as firstname");     // Customer Firstname
-        $sql->select("c.`lastname`      as lastname");      // Customer Lastname
-        $sql->select("o.`date_add`      as order_date");     // Order Date
-        $sql->select("o.`total_paid_tax_excl`");            // Order Total HT
-        $sql->select("o.`total_paid_tax_incl`");            // Order Total TTC
         //====================================================================//
         // Build FROM
         $sql->from("orders", 'o');
-        $sql->leftJoin("customer", 'c', 'c.id_customer = o.id_customer');
         //====================================================================//
         // Setup filters
-        if (!empty($filter)) {
-            $where = " LOWER( o.id_order )      LIKE LOWER( '%".pSQL($filter)."%') ";
-            $where .= " OR LOWER( o.reference )  LIKE LOWER( '%".pSQL($filter)."%') ";
-            $where .= " OR LOWER( c.firstname )  LIKE LOWER( '%".pSQL($filter)."%') ";
-            $where .= " OR LOWER( c.lastname )   LIKE LOWER( '%".pSQL($filter)."%') ";
-            $where .= " OR LOWER( o.date_add )   LIKE LOWER( '%".pSQL($filter)."%') ";
+        // Add filters with names conversions. Added LOWER function to be NON case sensitive
+        if (!empty($keys['reference']) && is_string($keys['reference'])) {
+            //====================================================================//
+            // Search in Customer Email
+            $where = " LOWER( o.`reference` ) = LOWER( '".pSQL($keys['reference'])."') ";
             $sql->where($where);
         }
         //====================================================================//
-        // Execute Generic Search
-        return $this->getObjectsListGenericData($sql, "order_date", $params);
+        // Execute Request
+        $result = Db::getInstance()->executeS($sql);
+        if (!is_array($result) || Db::getInstance()->getNumberError()) {
+            return Splash::log()->errNull(Db::getInstance()->getMsgError());
+        }
+        //====================================================================//
+        // Ensure Only One Result Found
+        if (1 != count($result) || empty($result[0]['id'])) {
+            return null;
+        }
+        //====================================================================//
+        // Result Found
+        return $result[0]['id'];
     }
 }
