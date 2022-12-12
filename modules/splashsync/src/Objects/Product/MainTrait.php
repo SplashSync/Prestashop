@@ -146,7 +146,7 @@ trait MainTrait
         //====================================================================//
         // ISBN
         if (Tools::version_compare(_PS_VERSION_, "1.7", '>=')) {
-            $this->fieldsFactory()->create(SPL_T_INT)
+            $this->fieldsFactory()->create(Splash::isTravisMode() ? SPL_T_VARCHAR : SPL_T_INT)
                 ->identifier("isbn")
                 ->name(Translate::getAdminTranslation("ISBN Code", "AdminProducts"))
                 ->microData("http://schema.org/Product", "gtin14")
