@@ -67,9 +67,7 @@ trait CoverImageTrait
                 break;
             case 'cover_image_url':
                 $imgInfo = $this->getCoverImageDetails();
-                if ($imgInfo) {
-                    $this->out[$fieldName] = $imgInfo['url'];
-                }
+                $this->out[$fieldName] = $imgInfo ? $imgInfo['url'] : null;
 
                 break;
             default:

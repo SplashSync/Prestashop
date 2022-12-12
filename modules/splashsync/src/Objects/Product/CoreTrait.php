@@ -35,16 +35,17 @@ trait CoreTrait
         //====================================================================//
         // Reference
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
-            ->Identifier("ref")
-            ->Name(Translate::getAdminTranslation("Reference", "AdminProducts"))
-            ->Description(Translate::getAdminTranslation(
+            ->identifier("ref")
+            ->name(Translate::getAdminTranslation("Reference", "AdminProducts"))
+            ->description(Translate::getAdminTranslation(
                 'Your internal reference code for this product.',
                 "AdminProducts"
             ))
-            ->isListed()
-            ->MicroData("http://schema.org/Product", "model")
+            ->microData("http://schema.org/Product", "model")
             ->addOption("shop", MSM::MODE_ALL)
-            ->isRequired();
+            ->isListed()
+            ->isRequired()
+        ;
 
         //====================================================================//
         // Type
@@ -55,7 +56,8 @@ trait CoreTrait
             ->group(Translate::getAdminTranslation("Meta", "AdminThemes"))
             ->microData("http://schema.org/Product", "type")
             ->addOption("shop", MSM::MODE_ALL)
-            ->isReadOnly();
+            ->isReadOnly()
+        ;
     }
 
     /**
@@ -111,6 +113,9 @@ trait CoreTrait
                 } else {
                     $this->setSimple("reference", $fieldData);
                 }
+                //====================================================================//
+                // Register Field for Update
+                $this->addMsfUpdateFields($this->AttributeId ? "Attribute" : "Product", "reference");
 
                 break;
             default:

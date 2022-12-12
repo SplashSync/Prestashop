@@ -238,7 +238,7 @@ trait MultishopObjectTrait
             return;
         }
         //====================================================================//
-        // Add Multilang Field to Update List
+        // Add Multi-lang Field to Update List
         if (!isset($this->updateFields[$type][$name])) {
             $this->updateFields[$type][$name] = array();
         }

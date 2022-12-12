@@ -16,6 +16,7 @@
 namespace Splash\Local\Objects\Product;
 
 use Configuration;
+use Splash\Client\Splash;
 use Splash\Components\UnitConverter as Units;
 use Splash\Local\Services\MultiShopManager as MSM;
 use Tools;
@@ -152,6 +153,15 @@ trait MainTrait
                 ->group($groupName)
                 ->addOption("shop", MSM::MODE_ALL)
             ;
+            if (Splash::isTravisMode()) {
+                //====================================================================//
+                // Register Fake ISBN
+                $this->fieldsFactory()
+                    ->addChoice("9781566199094", "Fake ISBN 1")
+                    ->addChoice("9781566199049", "Fake ISBN 2")
+                    ->addChoice("9781566199069", "Fake ISBN 3")
+                ;
+            }
         }
     }
 
@@ -266,6 +276,7 @@ trait MainTrait
                 // If Simple Product
                 if (!isset($this->Attribute)) {
                     $this->setSimpleFloat($fieldName, $fieldData);
+                    $this->addMsfUpdateFields("Product", $fieldName);
 
                     break;
                 }
@@ -297,6 +308,8 @@ trait MainTrait
      * @param mixed  $fieldData Field Data
      *
      * @return void
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function setBarCodeFields(string $fieldName, $fieldData): void
     {
@@ -329,6 +342,9 @@ trait MainTrait
             default:
                 return;
         }
+        //====================================================================//
+        // Register Field for Update
+        $this->addMsfUpdateFields($this->AttributeId ? "Attribute" : "Product", $fieldName);
         unset($this->in[$fieldName]);
     }
 
@@ -378,5 +394,6 @@ trait MainTrait
         //====================================================================//
         //  Write Converted Value
         $this->setSimpleFloat($fieldName, $fieldData);
+        $this->addMsfUpdateFields("Product", $fieldName);
     }
 }
