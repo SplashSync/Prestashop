@@ -54,7 +54,6 @@ trait PrimaryTrait
         $sql->limit(5);
         //====================================================================//
         // Build JOIN
-        $sqlWhere = '(pl.id_product = p.id_product AND pl.id_lang = ';
         $sql->leftJoin("product_attribute", 'pa', '(pa.id_product = p.id_product) ');
         //====================================================================//
         // Setup filters
