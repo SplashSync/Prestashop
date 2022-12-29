@@ -16,6 +16,7 @@
 namespace   Splash\Local\Objects;
 
 use Configuration;
+use Context;
 use Currency;
 use OrderSlip;
 use PrestaShopCollection;
@@ -203,8 +204,8 @@ class CreditNote extends AbstractObject
         $this->spl = Local::getLocalModule();
         //====================================================================//
         // Load Default Currency
-        /** @var \Context $context */
-        $context = \Context::getContext();
+        /** @var Context $context */
+        $context = Context::getContext();
         $this->currency = new Currency((int) Configuration::get('PS_CURRENCY_DEFAULT'));
         $context->currency = $this->currency;
         //====================================================================//
@@ -219,6 +220,6 @@ class CreditNote extends AbstractObject
      */
     protected function getObjectShopId(): int
     {
-        return $this->Order->id_shop;
+        return (int) $this->Order->id_shop;
     }
 }

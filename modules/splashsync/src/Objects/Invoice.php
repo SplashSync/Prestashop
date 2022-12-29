@@ -168,14 +168,14 @@ class Invoice extends AbstractObject
     protected object $object;
 
     /**
-     * @var Currency
-     */
-    private Currency $Currency;
-
-    /**
      * @var SplashSync
      */
     private SplashSync $spl;
+
+    /**
+     * @var Currency
+     */
+    private Currency $currency;
 
     //====================================================================//
     // Class Constructor
@@ -199,7 +199,7 @@ class Invoice extends AbstractObject
         $this->spl = Local::getLocalModule();
         //====================================================================//
         // Load OsWs Currency
-        $this->Currency = new Currency((int) Configuration::get('PS_CURRENCY_DEFAULT'));
+        $this->currency = new Currency((int) Configuration::get('PS_CURRENCY_DEFAULT'));
     }
 
     /**
@@ -209,6 +209,6 @@ class Invoice extends AbstractObject
      */
     protected function getObjectShopId(): int
     {
-        return $this->Order->id_shop;
+        return (int) $this->Order->id_shop;
     }
 }

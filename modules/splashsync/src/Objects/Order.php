@@ -141,7 +141,7 @@ class Order extends AbstractObject implements PrimaryKeysAwareInterface
     /**
      * @var Currency
      */
-    private Currency $Currency;
+    private Currency $currency;
 
     /**
      * @var SplashSync
@@ -161,7 +161,7 @@ class Order extends AbstractObject implements PrimaryKeysAwareInterface
         $this->spl = Local::getLocalModule();
         //====================================================================//
         // Load Default Currency
-        $this->Currency = new Currency((int) Configuration::get('PS_CURRENCY_DEFAULT'));
+        $this->currency = new Currency((int) Configuration::get('PS_CURRENCY_DEFAULT'));
     }
 
     /**

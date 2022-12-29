@@ -21,6 +21,7 @@ use Splash\Core\SplashCore      as Splash;
 use Splash\Local\Objects\Invoice;
 use Splash\Local\Objects\Product;
 use Splash\Local\Services\DiscountsManager;
+use Splash\Local\Services\LanguagesManager;
 use Splash\Models\Objects\ListsTrait;
 use Splash\Models\Objects\PricesTrait;
 use Tools;
@@ -169,12 +170,12 @@ trait ItemsTrait
                     //====================================================================//
                     // Build Price Array
                     $value = self::prices()->Encode(
-                        (double)    Tools::convertPrice($product["unit_price_tax_excl"], $this->Currency),
+                        (double)    Tools::convertPrice($product["unit_price_tax_excl"], $this->currency),
                         (double)    OrderDetail::getTaxCalculatorStatic($product["id_order_detail"])->getTotalRate(),
                         null,
-                        $this->Currency->iso_code,
-                        $this->Currency->sign,
-                        $this->Currency->name
+                        $this->currency->iso_code,
+                        LanguagesManager::getCurrencySymbol($this->currency),
+                        LanguagesManager::getCurrencyName($this->currency)
                     );
 
                     break;
@@ -323,7 +324,7 @@ trait ItemsTrait
         $index = count($this->Products) + 1;
         //====================================================================//
         // Insert Data in List
-        $discountItems = DiscountsManager::getDiscountItems($this->object, $this->Currency);
+        $discountItems = DiscountsManager::getDiscountItems($this->object, $this->currency);
         foreach ($discountItems as $discountItem) {
             self::lists()->insert($this->out, "lines", $fieldName, $index, $discountItem[$fieldId]);
             $index++;
@@ -357,7 +358,7 @@ trait ItemsTrait
             // Create New OrderDetail Item
             $orderDetail = new OrderDetail();
             $orderDetail->id_order = (int) $this->object->id;
-            $orderDetail->id_shop = $this->object->id_shop;
+            $orderDetail->id_shop = (int) $this->object->id_shop;
             $orderDetail->id_warehouse = 0;
         } else {
             $orderDetail = new OrderDetail($currentProduct["id_order_detail"]);
@@ -454,12 +455,12 @@ trait ItemsTrait
         //====================================================================//
         // Build Price Array
         return self::prices()->encode(
-            (double)    Tools::convertPrice($this->object->total_shipping_tax_excl, $this->Currency),
+            (double)    Tools::convertPrice($this->object->total_shipping_tax_excl, $this->currency),
             (double)    $taxPercent,
             null,
-            $this->Currency->iso_code,
-            $this->Currency->sign,
-            $this->Currency->name
+            $this->currency->iso_code,
+            LanguagesManager::getCurrencySymbol($this->currency),
+            LanguagesManager::getCurrencyName($this->currency)
         );
     }
 

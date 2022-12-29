@@ -127,7 +127,7 @@ class Product extends AbstractObject implements PrimaryKeysAwareInterface
      *
      * @var Currency
      */
-    protected Currency $Currency;
+    protected Currency $currency;
 
     /**
      * @var SplashSync
@@ -158,8 +158,8 @@ class Product extends AbstractObject implements PrimaryKeysAwareInterface
         // Load Default Currency
         /** @var Context $context */
         $context = Context::getContext();
-        $this->Currency = Currency::getCurrencyInstance((int) Configuration::get('PS_CURRENCY_DEFAULT'));
-        $context->currency = $this->Currency;
+        $this->currency = Currency::getCurrencyInstance((int) Configuration::get('PS_CURRENCY_DEFAULT'));
+        $context->currency = $this->currency;
     }
 
     /**

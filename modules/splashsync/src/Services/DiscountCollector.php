@@ -15,9 +15,7 @@
 
 namespace Splash\Local\Services;
 
-use Cart;
 use CartRule;
-use Context;
 use Currency;
 use Db;
 use Order;
@@ -327,15 +325,14 @@ class DiscountCollector
      */
     private static function toDiscountDbValues(Order $order, array $rawDiscounts): array
     {
-        /** @var Context $context */
-        $context = Context::getContext();
+        $langId = LanguagesManager::getDefaultLangId();
         $data = array();
         foreach ($rawDiscounts as $cartRuleId => $discount) {
             $cartRule = self::getCartRule($cartRuleId);
             if (!$cartRule) {
                 continue;
             }
-            $cartRuleName = $cartRule->name[$context->language->id]
+            $cartRuleName = $cartRule->name[$langId]
                 ?? ($cartRule->name[array_keys($cartRule->name)[0] ?? 1] ?? '');
 
             foreach ($discount as $taxRate => $tax) {
@@ -366,8 +363,7 @@ class DiscountCollector
      */
     private static function toDiscountItems(Currency $currency, array $rawDiscounts): array
     {
-        /** @var Context $context */
-        $context = Context::getContext();
+        $langId = LanguagesManager::getDefaultLangId();
         $data = array();
         foreach ($rawDiscounts as $cartRuleId => $discount) {
             foreach ($discount as $taxRate => $tax) {
@@ -376,7 +372,7 @@ class DiscountCollector
                     if (!$cartRule) {
                         continue;
                     }
-                    $cartRuleName = $cartRule->name[$context->language->id]
+                    $cartRuleName = $cartRule->name[$langId]
                         ?? ($cartRule->name[array_keys($cartRule->name)[0] ?? 1] ?? '');
                     //====================================================================//
                     // Compute Item Price
@@ -385,8 +381,8 @@ class DiscountCollector
                         (double)    $taxRate,
                         null,
                         $currency->iso_code,
-                        $currency->sign,
-                        $currency->name
+                        LanguagesManager::getCurrencySymbol($currency),
+                        LanguagesManager::getCurrencyName($currency)
                     );
                     //====================================================================//
                     // Add Item to List

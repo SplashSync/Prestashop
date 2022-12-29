@@ -261,9 +261,6 @@ trait MultishopObjectTrait
         }
         //====================================================================//
         // Return Updated Fields
-        return isset($this->updateFields[$type])
-            ? $this->updateFields[$type]
-            : array()
-        ;
+        return $this->updateFields[$type] ?? array();
     }
 }

@@ -177,7 +177,7 @@ trait CRUDTrait
         //====================================================================//
         // Create a New Order Carrier
         $carrier = new \OrderCarrier();
-        $carrier->id_order = $this->object->id;
+        $carrier->id_order = (int) $this->object->id;
         $carrier->id_carrier = 1;
         if (!$carrier->add()) {
             return Splash::log()->errNull("Unable to Create new Order Carrier.");

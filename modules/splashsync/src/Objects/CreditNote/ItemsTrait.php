@@ -20,6 +20,7 @@ use Db;
 use OrderDetail;
 use Splash\Core\SplashCore as Splash;
 use Splash\Local\Objects\Product;
+use Splash\Local\Services\LanguagesManager;
 use Splash\Models\Objects\ListsTrait;
 use Splash\Models\Objects\PricesTrait;
 use Tools;
@@ -183,8 +184,8 @@ trait ItemsTrait
                         (double)    $vatRate,
                         null,
                         $this->currency->iso_code,
-                        $this->currency->sign,
-                        $this->currency->name
+                        LanguagesManager::getCurrencySymbol($this->currency),
+                        LanguagesManager::getCurrencyName($this->currency)
                     );
 
                     break;
@@ -199,7 +200,7 @@ trait ItemsTrait
             }
             //====================================================================//
             // Insert Data in List
-            self::lists()->Insert($this->out, "lines", $fieldName, $index, $value);
+            self::lists()->insert($this->out, "lines", $fieldName, $index, $value);
         }
 
         unset($this->in[$key]);
@@ -324,8 +325,8 @@ trait ItemsTrait
             (double)    $taxPercent,
             null,
             $this->currency->iso_code,
-            $this->currency->sign,
-            $this->currency->name
+            LanguagesManager::getCurrencySymbol($this->currency),
+            LanguagesManager::getCurrencyName($this->currency)
         );
     }
 

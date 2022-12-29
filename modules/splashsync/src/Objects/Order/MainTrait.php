@@ -17,6 +17,7 @@ namespace Splash\Local\Objects\Order;
 
 //====================================================================//
 // Prestashop Static Classes
+use Splash\Local\Services\LanguagesManager;
 use Translate;
 
 /**
@@ -35,7 +36,7 @@ trait MainTrait
         // PRICES INFORMATIONS
         //====================================================================//
 
-        $currencySuffix = " (".$this->Currency->sign.")";
+        $currencySuffix = " (".LanguagesManager::getCurrencySymbol($this->currency).")";
 
         //====================================================================//
         // Order Total Price HT

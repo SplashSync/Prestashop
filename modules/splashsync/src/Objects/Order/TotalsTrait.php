@@ -17,6 +17,7 @@ namespace Splash\Local\Objects\Order;
 
 //====================================================================//
 // Prestashop Static Classes
+use Splash\Local\Services\LanguagesManager;
 use Tools;
 
 /**
@@ -35,7 +36,7 @@ trait TotalsTrait
         // PRICES INFORMATIONS
         //====================================================================//
 
-        $currencySuffix = " (".$this->Currency->sign.")";
+        $currencySuffix = " (".LanguagesManager::getCurrencySymbol($this->currency).")";
 
         //====================================================================//
         // Order Total Price
@@ -83,10 +84,10 @@ trait TotalsTrait
                 $this->out[$fieldName] = self::prices()->encode(
                     null,
                     self::toVatPercents($this->object->total_paid_tax_excl, $this->object->total_paid_tax_incl),
-                    (double)    Tools::convertPrice($this->object->total_paid_tax_incl, $this->Currency),
-                    $this->Currency->iso_code,
-                    $this->Currency->sign,
-                    $this->Currency->name
+                    (double)    Tools::convertPrice($this->object->total_paid_tax_incl, $this->currency),
+                    $this->currency->iso_code,
+                    LanguagesManager::getCurrencySymbol($this->currency),
+                    LanguagesManager::getCurrencyName($this->currency)
                 );
 
                 break;
@@ -103,10 +104,10 @@ trait TotalsTrait
                 $this->out[$fieldName] = self::prices()->encode(
                     null,
                     (double)    $taxPercent,
-                    (double)    Tools::convertPrice($this->object->total_shipping_tax_incl, $this->Currency),
-                    $this->Currency->iso_code,
-                    $this->Currency->sign,
-                    $this->Currency->name
+                    (double)    Tools::convertPrice($this->object->total_shipping_tax_incl, $this->currency),
+                    $this->currency->iso_code,
+                    LanguagesManager::getCurrencySymbol($this->currency),
+                    LanguagesManager::getCurrencyName($this->currency)
                 );
 
                 break;
@@ -117,10 +118,10 @@ trait TotalsTrait
                         $this->object->total_discounts_tax_excl,
                         $this->object->total_discounts_tax_incl
                     ),
-                    (double)    Tools::convertPrice($this->object->total_discounts_tax_incl, $this->Currency),
-                    $this->Currency->iso_code,
-                    $this->Currency->sign,
-                    $this->Currency->name
+                    (double)    Tools::convertPrice($this->object->total_discounts_tax_incl, $this->currency),
+                    $this->currency->iso_code,
+                    LanguagesManager::getCurrencySymbol($this->currency),
+                    LanguagesManager::getCurrencyName($this->currency)
                 );
 
                 break;

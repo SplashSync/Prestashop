@@ -44,38 +44,39 @@ trait MultishopTrait
         //====================================================================//
         // Prestashop Shop ID
         $this->fieldsFactory()->create(SPL_T_INT)
-            ->Identifier("id_shop")
-            ->Name("Shop ID")
-            ->Group(Translate::getAdminTranslation("Meta", "AdminThemes"))
-            ->MicroData("http://schema.org/Author", "identifier")
-            ->isReadOnly();
-
+            ->identifier("id_shop")
+            ->name("Shop ID")
+            ->group(Translate::getAdminTranslation("Meta", "AdminThemes"))
+            ->microData("http://schema.org/Author", "identifier")
+            ->isReadOnly()
+        ;
         //====================================================================//
         // Prestashop Shop Code
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
-            ->Identifier("shop_code")
-            ->Name("Shop Code")
-            ->Group(Translate::getAdminTranslation("Meta", "AdminThemes"))
-            ->MicroData("http://schema.org/Author", "alternateName")
-            ->isReadOnly();
-
+            ->identifier("shop_code")
+            ->name("Shop Code")
+            ->group(Translate::getAdminTranslation("Meta", "AdminThemes"))
+            ->microData("http://schema.org/Author", "alternateName")
+            ->isReadOnly()
+        ;
         //====================================================================//
         // Prestashop Shop Name
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
-            ->Identifier("shop_name")
-            ->Name("Shop Name")
-            ->Group(Translate::getAdminTranslation("Meta", "AdminThemes"))
-            ->MicroData("http://schema.org/Author", "name")
-            ->isReadOnly();
-
+            ->identifier("shop_name")
+            ->name("Shop Name")
+            ->group(Translate::getAdminTranslation("Meta", "AdminThemes"))
+            ->microData("http://schema.org/Author", "name")
+            ->isReadOnly()
+        ;
         //====================================================================//
         // Prestashop Shop Url
         $this->fieldsFactory()->create(SPL_T_URL)
-            ->Identifier("shop_url")
-            ->Name("Shop Url")
-            ->Group(Translate::getAdminTranslation("Meta", "AdminThemes"))
-            ->MicroData("http://schema.org/Author", "url")
-            ->isReadOnly();
+            ->identifier("shop_url")
+            ->name("Shop Url")
+            ->group(Translate::getAdminTranslation("Meta", "AdminThemes"))
+            ->microData("http://schema.org/Author", "url")
+            ->isReadOnly()
+        ;
     }
 
     /**
@@ -86,7 +87,7 @@ trait MultishopTrait
      *
      * @return void
      */
-    protected function getMultishopFields($key, $fieldName)
+    protected function getMultishopFields(string $key, string $fieldName): void
     {
         //====================================================================//
         // READ Fields
@@ -125,6 +126,6 @@ trait MultishopTrait
      */
     protected function getObjectShopId(): int
     {
-        return $this->object->id_shop;
+        return (int) $this->object->id_shop;
     }
 }
