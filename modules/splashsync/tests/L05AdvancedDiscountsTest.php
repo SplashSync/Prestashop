@@ -51,7 +51,7 @@ class L05AdvancedDiscountsTest extends ObjectsCase
         Splash::configuration()->PsUseAdvancedDiscounts = true;
         //====================================================================//
         // Force Delete Storage Table
-        Db::getInstance()->execute("DROP TABLE `"._DB_PREFIX_.DiscountsManager::TABLE."`");
+        Db::getInstance()->execute("DROP TABLE IF EXISTS `"._DB_PREFIX_.DiscountsManager::TABLE."`");
         $this->assertFalse(DiscountsManager::hasStorageTable());
         $this->assertFalse(DiscountsManager::isFeatureActive());
         //====================================================================//
