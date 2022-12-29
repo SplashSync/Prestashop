@@ -274,12 +274,12 @@ trait CoreTrait
     /**
      * Write Given Fields
      *
-     * @param string   $fieldName Field Identifier / Name
-     * @param null|int $fieldData Field Data
+     * @param string      $fieldName Field Identifier / Name
+     * @param null|string $fieldData Field Data
      *
      * @return void
      */
-    protected function setVariantsCoreFields(string $fieldName, ?int $fieldData): void
+    protected function setVariantsCoreFields(string $fieldName, ?string $fieldData): void
     {
         //====================================================================//
         // WRITE Field

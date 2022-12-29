@@ -355,7 +355,7 @@ trait HooksTrait
         if (empty(Configuration::get("SPLASH_SYNC_PACKS"))) {
             //====================================================================//
             // Check if Product is a Pack
-            if (Pack::isPack($product->id)) {
+            if (Pack::isPack((int) $product->id)) {
                 Splash::log()->war("Products Pack: Commit Skipped.");
 
                 return false;

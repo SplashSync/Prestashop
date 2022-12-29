@@ -17,6 +17,7 @@ namespace Splash\Local\Objects\Product;
 
 use Combination;
 use Splash\Core\SplashCore      as Splash;
+use Splash\Local\Services\LanguagesManager;
 use Splash\Local\Services\TaxManager;
 use Splash\Models\Objects\PricesTrait as SplashPricesTrait;
 use Tools;
@@ -41,6 +42,7 @@ trait PricesTrait
      */
     protected function buildPricesFields(): void
     {
+        $symbol = LanguagesManager::getCurrencySymbol($this->currency);
         //====================================================================//
         // PRICES INFORMATIONS
         //====================================================================//
@@ -53,7 +55,7 @@ trait PricesTrait
                 Translate::getAdminTranslation(
                     "Price (tax excl.)",
                     "AdminProducts"
-                )." (".$this->Currency->sign.")"
+                )." (".$symbol.")"
             )
             ->microData("http://schema.org/Product", "price")
         ;
@@ -65,7 +67,7 @@ trait PricesTrait
                 Translate::getAdminTranslation(
                     "Price (tax excl.)",
                     "AdminProducts"
-                )." Base (".$this->Currency->sign.")"
+                )." Base (".$symbol.")"
             )
             ->microData("http://schema.org/Product", "basePrice")
         ;
@@ -77,7 +79,7 @@ trait PricesTrait
                 Translate::getAdminTranslation(
                     "Wholesale price",
                     "AdminProducts"
-                )." Base (".$this->Currency->sign.")"
+                )." Base (".$symbol.")"
             )
             ->microData("http://schema.org/Product", "wholesalePrice")
         ;
@@ -89,7 +91,7 @@ trait PricesTrait
                 Translate::getAdminTranslation(
                     "Sale price",
                     "AdminProducts"
-                )." (".$this->Currency->sign.")"
+                )." (".$symbol.")"
             )
             ->microData("http://schema.org/Product", "reducedPrice")
             ->isReadOnly()
@@ -118,7 +120,7 @@ trait PricesTrait
                 // Read Price
                 $priceHT = (double) Tools::convertPrice(
                     $this->getProductPrice(),
-                    $this->Currency
+                    $this->currency
                 );
                 $taxPercent = (double) $this->object->getTaxesRate();
                 //====================================================================//
@@ -127,16 +129,16 @@ trait PricesTrait
                     $priceHT,
                     $taxPercent,
                     null,
-                    $this->Currency->iso_code,
-                    $this->Currency->sign,
-                    $this->Currency->name
+                    $this->currency->iso_code,
+                    LanguagesManager::getCurrencySymbol($this->currency),
+                    LanguagesManager::getCurrencyName($this->currency)
                 );
 
                 break;
             case 'price-base':
                 //====================================================================//
                 // Read Price
-                $priceHT = (double) Tools::convertPrice($this->object->base_price, $this->Currency);
+                $priceHT = (double) Tools::convertPrice($this->object->base_price, $this->currency);
                 $taxPercent = (double) $this->object->getTaxesRate();
                 //====================================================================//
                 // Build Price Array
@@ -144,9 +146,9 @@ trait PricesTrait
                     $priceHT,
                     $taxPercent,
                     null,
-                    $this->Currency->iso_code,
-                    $this->Currency->sign,
-                    $this->Currency->name
+                    $this->currency->iso_code,
+                    LanguagesManager::getCurrencySymbol($this->currency),
+                    LanguagesManager::getCurrencyName($this->currency)
                 );
 
                 break;
@@ -154,9 +156,9 @@ trait PricesTrait
                 //====================================================================//
                 // Read Price
                 if ($this->Attribute && ($this->Attribute->wholesale_price > 0)) {
-                    $priceHT = (double) Tools::convertPrice($this->Attribute->wholesale_price, $this->Currency);
+                    $priceHT = (double) Tools::convertPrice($this->Attribute->wholesale_price, $this->currency);
                 } else {
-                    $priceHT = (double) Tools::convertPrice((float) $this->object->wholesale_price, $this->Currency);
+                    $priceHT = (double) Tools::convertPrice((float) $this->object->wholesale_price, $this->currency);
                 }
                 $taxPercent = (double)  $this->object->getTaxesRate();
                 //====================================================================//
@@ -165,9 +167,9 @@ trait PricesTrait
                     $priceHT,
                     $taxPercent,
                     null,
-                    $this->Currency->iso_code,
-                    $this->Currency->sign,
-                    $this->Currency->name
+                    $this->currency->iso_code,
+                    LanguagesManager::getCurrencySymbol($this->currency),
+                    LanguagesManager::getCurrencyName($this->currency)
                 );
 
                 break;
@@ -207,9 +209,9 @@ trait PricesTrait
                     $priceHT,
                     $taxPercent,
                     null,
-                    $this->Currency->iso_code,
-                    $this->Currency->sign,
-                    $this->Currency->name
+                    $this->currency->iso_code,
+                    LanguagesManager::getCurrencySymbol($this->currency),
+                    LanguagesManager::getCurrencyName($this->currency)
                 );
 
                 break;

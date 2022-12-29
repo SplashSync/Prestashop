@@ -192,7 +192,7 @@ trait StockTrait
                     // Update Stock in DataBase
                     StockAvailable::setQuantity(
                         $this->ProductId,
-                        $this->AttributeId,
+                        (int) $this->AttributeId,
                         $fieldData,
                         // @phpstan-ignore-next-line
                         Shop::getContextShopID(true),

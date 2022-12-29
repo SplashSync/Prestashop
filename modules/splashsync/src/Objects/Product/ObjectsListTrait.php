@@ -165,18 +165,19 @@ trait ObjectsListTrait
      */
     private function getTransformedProductArray($product)
     {
+        $currencySymbol = SLM::getCurrencySymbol($this->currency);
         //====================================================================//
         // Init Buffer Array
         $dataBuffer = array();
         //====================================================================//
-        // Read Product Attributes Conbination
+        // Read Product Attributes Combination
         $productClass = new Product();
         $productClass->id = $product["id"];
         //====================================================================//
         // Fill Product Base Data to Buffer
         $dataBuffer["price_type"] = "HT";
         $dataBuffer["vat"] = "";
-        $dataBuffer["currency"] = $this->Currency->sign;
+        $dataBuffer["currency"] = $currencySymbol;
         $dataBuffer["available_for_order"] = $product["available_for_order"];
         $dataBuffer["created"] = $product["created"];
         $dataBuffer["modified"] = $product["modified"];

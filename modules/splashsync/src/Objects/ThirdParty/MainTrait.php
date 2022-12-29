@@ -294,12 +294,12 @@ trait MainTrait
     /**
      * Write Given Fields
      *
-     * @param string $fieldName Field Identifier / Name
-     * @param string $fieldData Field Data
+     * @param string      $fieldName Field Identifier / Name
+     * @param null|string $fieldData Field Data
      *
      * @return void
      */
-    protected function setIdentificationFields(string $fieldName, string $fieldData)
+    protected function setIdentificationFields(string $fieldName, ?string $fieldData)
     {
         //====================================================================//
         // WRITE Fields
@@ -307,13 +307,8 @@ trait MainTrait
             //====================================================================//
             // Write SIRET With Verification
             case 'siret':
-                if (!Validate::isSiret($fieldData)) {
-                    Splash::log()->war(
-                        "MsgLocalTpl",
-                        __CLASS__,
-                        __FUNCTION__,
-                        "Given SIRET Number is Invalid. Skipped"
-                    );
+                if (!$fieldData || !Validate::isSiret($fieldData)) {
+                    Splash::log()->war("Given SIRET Number is Invalid. Skipped");
 
                     break;
                 }
@@ -323,8 +318,8 @@ trait MainTrait
                 //====================================================================//
                 // Write APE With Verification
             case 'ape':
-                if (!Validate::isApe($fieldData)) {
-                    Splash::log()->war("MsgLocalTpl", __CLASS__, __FUNCTION__, "Given APE Code is Invalid. Skipped");
+                if (!$fieldData || !Validate::isApe($fieldData)) {
+                    Splash::log()->war("Given APE Code is Invalid. Skipped");
 
                     break;
                 }
@@ -363,7 +358,7 @@ trait MainTrait
                 $gendertype = $genders->getFirst();
                 //====================================================================//
                 // Unknown Gender Type => Take First Available Gender
-                if ((false == $gendertype)) {
+                if (!$gendertype) {
                     $genders = Gender::getGenders(LanguagesManager::getDefaultLangId());
                     /** @var false|Gender */
                     $gendertype = $genders->getFirst();

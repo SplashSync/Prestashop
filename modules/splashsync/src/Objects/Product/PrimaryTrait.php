@@ -86,7 +86,7 @@ trait PrimaryTrait
         }
         //====================================================================//
         // Result Found
-        return $this->getUnikId(
+        return (string) $this->getUnikId(
             $result[0]['id'] ?? null,
             $result[0]['id_attribute'] ?? 0
         );

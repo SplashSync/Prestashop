@@ -20,6 +20,7 @@ use Context;
 use Image;
 use ImageManager;
 use ImageType;
+use Link;
 use Shop;
 use Splash\Core\SplashCore      as Splash;
 use Splash\Local\Services\LanguagesManager as SLM;
@@ -207,6 +208,7 @@ trait ImagesTrait
         // Get Images Link from Context
         /** @var Context $context */
         $context = Context::getContext();
+        /** @var Link $publicUrl */
         $publicUrl = $context->link;
         //====================================================================//
         // Fetch Images Object
@@ -708,7 +710,7 @@ trait ImagesTrait
         }
         //====================================================================//
         // Write Image On Folder
-        $path = dirname($objectImage->getPathForCreation());
+        $path = dirname((string) $objectImage->getPathForCreation());
         $filename = "/".$objectImage->id.".".$objectImage->image_format;
         Splash::file()->writeFile($path, $filename, $newImageFile["md5"], $newImageFile["raw"]);
 
@@ -722,7 +724,7 @@ trait ImagesTrait
      *
      * @return void
      */
-    private function cleanImages($objectImagesList)
+    private function cleanImages(?array $objectImagesList)
     {
         //====================================================================//
         // If Variant Product Mode => Skip
