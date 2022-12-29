@@ -36,7 +36,7 @@ trait HooksTrait
      *
      * @return bool
      */
-    public function hookactionObjectProductAddAfter(array $params): bool
+    public function hookActionObjectProductAddAfter(array $params): bool
     {
         return $this->hookactionProduct($params["object"], SPL_A_CREATE, $this->l('Product Created on Prestashop'));
     }
@@ -51,7 +51,7 @@ trait HooksTrait
      *
      * @return bool
      */
-    public function hookactionProductUpdate(array $params): bool
+    public function hookActionProductUpdate(array $params): bool
     {
         //====================================================================//
         // Check We Are on Database Module request
@@ -78,7 +78,7 @@ trait HooksTrait
      *
      * @return bool
      */
-    public function hookactionObjectProductUpdateAfter(array $params): bool
+    public function hookActionObjectProductUpdateAfter(array $params): bool
     {
         return $this->hookactionProduct($params["object"], SPL_A_UPDATE, $this->l('Product Updated on Prestashop'));
     }
@@ -90,7 +90,7 @@ trait HooksTrait
      *
      * @return bool
      */
-    public function hookactionObjectProductDeleteAfter(array $params): bool
+    public function hookActionObjectProductDeleteAfter(array $params): bool
     {
         return $this->hookactionProduct($params["object"], SPL_A_DELETE, $this->l('Product Deleted on Prestashop'));
     }
@@ -102,7 +102,7 @@ trait HooksTrait
      *
      * @return bool
      */
-    public function hookactionObjectCombinationAddAfter(array $params): bool
+    public function hookActionObjectCombinationAddAfter(array $params): bool
     {
         return $this->hookactionCombination(
             $params["object"],
@@ -118,7 +118,7 @@ trait HooksTrait
      *
      * @return bool
      */
-    public function hookactionObjectCombinationUpdateAfter(array $params): bool
+    public function hookActionObjectCombinationUpdateAfter(array $params): bool
     {
         return $this->hookactionCombination(
             $params["object"],
@@ -134,7 +134,7 @@ trait HooksTrait
      *
      * @return bool
      */
-    public function hookactionObjectCombinationDeleteAfter(array $params): bool
+    public function hookActionObjectCombinationDeleteAfter(array $params): bool
     {
         return $this->hookactionCombination(
             $params["object"],
@@ -154,7 +154,7 @@ trait HooksTrait
      *
      * @return bool
      */
-    public function hookactionUpdateQuantity(array $params): bool
+    public function hookActionUpdateQuantity(array $params): bool
     {
         //====================================================================//
         // Log
@@ -248,7 +248,7 @@ trait HooksTrait
      *
      * @return bool
      */
-    private function hookactionProduct($product, $action, $comment)
+    private function hookActionProduct($product, $action, $comment)
     {
         //====================================================================//
         // Safety Check
@@ -283,7 +283,7 @@ trait HooksTrait
      *
      * @return bool
      */
-    private function hookactionCombination(Combination $combination, string $action, string $comment): bool
+    private function hookActionCombination(Combination $combination, string $action, string $comment): bool
     {
         //====================================================================//
         // Retrieve Combination Id
