@@ -77,7 +77,7 @@ class SplashSync extends Module
         $this->version = '2.8.0-dev';
         $this->author = 'SplashSync';
         $this->need_instance = 0;
-        $this->ps_versions_compliancy = array('min' => '1.6', 'max' => '8.99.99');
+        $this->ps_versions_compliancy = array('min' => '1.7', 'max' => '8.99.99');
         $this->module_key = '48032a9ff6cc3a4a43a0ea2acf7ccf10';
 
         //====================================================================//
@@ -388,20 +388,15 @@ class SplashSync extends Module
      */
     public function hookDisplayBackOfficeHeader()
     {
-        //====================================================================//
-        // Ensure Jquery is Loaded
-        if (\Tools::version_compare(_PS_VERSION_, "1.7", '<')) {
-            $this->context->controller->addJquery();
-        }
+        /** @var \AdminController $controller */
+        $controller = $this->context->controller;
         //====================================================================//
         // Register Not Js & Css
-        $this->context->controller->addCss($this->_path.'views/css/noty.css');
-        $this->context->controller->addCss($this->_path.'views/css/themes/mint.css');
-        $this->context->controller->addCss($this->_path.'views/css/themes/semanticui.css');
-        $this->context->controller->addJS($this->_path.'views/js/noty.min.js');
+        $controller->addCss($this->_path.'views/css/noty.css');
+        $controller->addJS($this->_path.'views/js/noty.min.js');
         //====================================================================//
         // Register Splash Js
-        $this->context->controller->addJS($this->_path.'views/js/splash.js');
+        $controller->addJS($this->_path.'views/js/splash.js');
     }
 
     /**
@@ -437,7 +432,9 @@ class SplashSync extends Module
         }
         //====================================================================//
         // Assign Smarty Variables
-        $this->context->smarty->assign('notifications', $notifications);
+        if ($this->context->smarty) {
+            $this->context->smarty->assign('notifications', $notifications);
+        }
         //====================================================================//
         // Clear Notifications Logs in Cookie
         if (is_file($bufferFile) && function_exists("json_encode")) {
@@ -631,12 +628,12 @@ class SplashSync extends Module
             'type' => 'checkbox',
             'name' => 'SPLASH',
             'label' => $this->l('Smart Notifications'),
-            'hint' => $this->l('On changes, display only warning & errors notifcations.'),
+            'hint' => $this->l('On changes, display only warning & errors notifications.'),
             'values' => array(
                 'query' => array(
                     array(
                         'id' => 'SMART_NOTIFY',
-                        'name' => $this->l('On changes, display only warning & errors notifcations.'),
+                        'name' => $this->l('On changes, display only warning & errors notifications.'),
                         'val' => '1'
                     ),
                 ),
@@ -934,7 +931,7 @@ class SplashSync extends Module
      *
      * @throws Exception
      *
-     * @return string
+     * @return bool|string
      */
     private function displayTest()
     {
@@ -948,7 +945,6 @@ class SplashSync extends Module
         //====================================================================//
         $helper = new HelperList();
 
-        // @phpstan-ignore-next-line
         $helper->shopLinkType = '';
         $helper->simple_header = true;
 
@@ -1106,10 +1102,12 @@ class SplashSync extends Module
     {
         /** @var Context $context */
         $context = Context::getContext();
+        /** @var Cookie $cookie */
+        $cookie = $context->cookie;
 
         return sys_get_temp_dir()
             ."/splashPsNotifications-"
-            .($context->cookie->__get("session_token") ?: "admin")
+            .($cookie->__get("session_token") ?: "admin")
             .".json";
     }
 }

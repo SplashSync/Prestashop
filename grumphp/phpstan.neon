@@ -36,5 +36,6 @@ parameters:
             - '#Call to static method getIdsPacks\(\) on an unknown class AdvancedPack.#'
     excludePaths:
             - '%currentWorkingDirectory%/modules/splashsync/vendor/*'
+            - '%currentWorkingDirectory%/modules/splashsync/src/ClassAlias/*'
     dynamicConstantNames:
             - "SPLASH_SERVER_MODE"

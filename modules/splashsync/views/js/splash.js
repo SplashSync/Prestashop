@@ -51,7 +51,7 @@ function showInfo(message)              { displayNotification("info",message); }
 function displayNotification(type, message, timeout = "2500"){
     new Noty({
         layout: 'bottomRight', 
-        theme: 'semanticui',
+        theme: 'relax',
         type: type,
         text: message, 
         timeout: timeout,

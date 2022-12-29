@@ -59,6 +59,11 @@ stages:
         - cd $CI_PROJECT_DIR
         - curl -s https://raw.githubusercontent.com/BadPixxel/Php-Sdk/main/ci/after.sh | sh
 
+Q-Ps-8.0-Php-8.1:
+    image:      prestashop/prestashop:8.0-8.1
+    allow_failure:  true
+    <<: *quality
+
 Q-Ps-8.0-Php-8.0:
     image:      prestashop/prestashop:8.0-8.0
     allow_failure:  true
