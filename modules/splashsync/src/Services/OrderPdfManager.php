@@ -73,7 +73,7 @@ class OrderPdfManager
             self::PDF_TTL
         );
 
-        return $infos ? $infos : null;
+        return $infos ?: null;
     }
 
     /**
@@ -83,7 +83,7 @@ class OrderPdfManager
      *
      * @return null|array
      */
-    public static function getOrderSlipPdfInfos(Order $order)
+    public static function getOrderSlipPdfInfos(Order $order): ?array
     {
         //====================================================================//
         // IF Order has Invoice
@@ -114,7 +114,7 @@ class OrderPdfManager
             self::PDF_TTL
         );
 
-        return $infos ? $infos : null;
+        return $infos ?: null;
     }
 
     /**
@@ -162,6 +162,9 @@ class OrderPdfManager
         KernelManager::ensureKernel();
         /** @var Context $context */
         $context = Context::getContext();
+        if (!$context->smarty) {
+            return "Smarty not Found";
+        }
         //====================================================================//
         // Generate Pdf
         $pdf = new PDF($object, $template, $context->smarty);

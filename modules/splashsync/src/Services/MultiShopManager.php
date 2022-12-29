@@ -20,6 +20,7 @@ use Context;
 use Country;
 use Currency;
 use Exception;
+use PrestaShop\PrestaShop\Adapter\LegacyContext;
 use Shop;
 use ShopUrl;
 use Splash\Core\SplashCore as Splash;
@@ -63,13 +64,13 @@ class MultiShopManager
     private static array $countriesCache;
 
     /**
-     * Name of Ps Symfony Legacy Context Class
+     * Ps Symfony Legacy Context Class
      *
      * @since PS 1.7
      *
-     * @var string
+     * @var null|LegacyContext
      */
-    private static string $legacyContextClass = "\\PrestaShop\\PrestaShop\\Adapter\\LegacyContext";
+    private static ?LegacyContext $legacyContext = null;
 
     /**
      * Check if Splash MultiShop Feature is Active
@@ -189,8 +190,9 @@ class MultiShopManager
             }
             // Setup Shop Context
             Shop::setContext(Shop::CONTEXT_ALL);
-            if (class_exists(self::$legacyContextClass)) {
-                self::$legacyContextClass::getContext()->shop->setContext(Shop::CONTEXT_ALL);
+            if (self::$legacyContext) {
+                /** @phpstan-ignore-next-line */
+                self::$legacyContext->getContext()->shop->setContext(Shop::CONTEXT_ALL);
             }
             // Setup Global Context
             /** @var Context $context */
@@ -209,8 +211,9 @@ class MultiShopManager
             }
             // Setup Shop Context
             Shop::setContext(Shop::CONTEXT_SHOP, $shopId);
-            if (class_exists(self::$legacyContextClass)) {
-                self::$legacyContextClass::getContext()->shop->setContext(Shop::CONTEXT_SHOP, $shopId);
+            if (self::$legacyContext) {
+                /** @phpstan-ignore-next-line */
+                self::$legacyContext->getContext()->shop->setContext(Shop::CONTEXT_SHOP, $shopId);
             }
             // Setup Global Context
             /** @var Context $context */
@@ -232,11 +235,11 @@ class MultiShopManager
      */
     public static function initLegacyContext(): bool
     {
-        if (class_exists(self::$legacyContextClass) && !isset(Context::getContext()->employee->id)) {
+        if (class_exists(LegacyContext::class) && !isset(Context::getContext()->employee->id)) {
             /** @phpstan-ignore-next-line */
             Context::getContext()->employee = null;
-            $legacyContext = new self::$legacyContextClass();
-            $legacyContext->getContext();
+            self::$legacyContext = new LegacyContext();
+            self::$legacyContext->getContext();
 
             return true;
         }

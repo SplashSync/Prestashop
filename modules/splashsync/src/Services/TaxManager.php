@@ -16,9 +16,9 @@
 namespace Splash\Local\Services;
 
 use Configuration;
-use Context;
 use Db;
 use DbQuery;
+use PrestaShopDatabaseException;
 use Splash\Core\SplashCore as Splash;
 use TaxRule;
 
@@ -30,16 +30,16 @@ class TaxManager
     /**
      * Return Product Image Array from Prestashop Object Class
      *
-     * @param float $taxRate   Product Tax Rate in Percent
-     * @param int   $countryId Country Id
+     * @param float    $taxRate   Product Tax Rate in Percent
+     * @param null|int $countryId Country ID
      *
-     * @return false|int Tax Rate Group Id
+     * @throws PrestaShopDatabaseException
+     *
+     * @return null|int Tax Rate Group ID
      */
-    public static function getTaxRateGroupId($taxRate, $countryId = null)
+    public static function getTaxRateGroupId(float $taxRate, int $countryId = null): ?int
     {
-        /** @var Context $context */
-        $context = Context::getContext();
-        $langId = $context->language->id;
+        $langId = LanguagesManager::getDefaultLangId();
         if (is_null($countryId)) {
             $countryId = Configuration::get('PS_COUNTRY_DEFAULT');
         }
@@ -75,7 +75,7 @@ class TaxManager
         // Execute final request
         $result = Db::getInstance()->executeS($sql);
         if (Db::getInstance()->getNumberError()) {
-            return false;
+            return null;
         }
         //====================================================================//
         // Extract First Result
@@ -85,7 +85,7 @@ class TaxManager
             return $newTaxRate["id_tax_rules_group"];
         }
 
-        return false;
+        return null;
     }
 
     /**
@@ -100,9 +100,7 @@ class TaxManager
     {
         //====================================================================//
         // Get default Language Id
-        /** @var Context $context */
-        $context = Context::getContext();
-        $langId = $context->language->id;
+        $langId = LanguagesManager::getDefaultLangId();
         //====================================================================//
         // For All Tax Rules of This Group, Search for Closest Rate
         $bestRate = 0;

@@ -16,8 +16,8 @@
 namespace Splash\Local\Services;
 
 use Context;
+use Currency;
 use Language;
-use Splash\Core\SplashCore      as Splash;
 use Tools;
 
 /**
@@ -60,8 +60,10 @@ class LanguagesManager
     {
         /** @var Context $context */
         $context = Context::getContext();
+        /** @var Language $language */
+        $language = $context->language;
 
-        return self::langEncode($context->language->language_code);
+        return self::langEncode($language->language_code);
     }
 
     /**
@@ -73,8 +75,10 @@ class LanguagesManager
     {
         /** @var Context $context */
         $context = Context::getContext();
+        /** @var Language $language */
+        $language = $context->language;
 
-        return $context->language->id;
+        return $language->id;
     }
 
     /**
@@ -155,6 +159,44 @@ class LanguagesManager
         unset(self::$extra[self::getDefaultLangId()]);
 
         return self::$extra;
+    }
+
+    /**
+     * Get Currency Name
+     *
+     * @param Currency $currency
+     *
+     * @return string
+     */
+    public static function getCurrencySymbol(Currency $currency): string
+    {
+        if (is_string($currency->symbol)) {
+            return $currency->symbol;
+        }
+        if (isset($currency->symbol[self::getDefaultLangId()])) {
+            return $currency->symbol[self::getDefaultLangId()];
+        }
+
+        return array_values($currency->symbol)[0] ?? "";
+    }
+
+    /**
+     * Get Currency Name
+     *
+     * @param Currency $currency
+     *
+     * @return string
+     */
+    public static function getCurrencyName(Currency $currency): string
+    {
+        if (is_string($currency->name)) {
+            return $currency->name;
+        }
+        if (isset($currency->name[self::getDefaultLangId()])) {
+            return $currency->name[self::getDefaultLangId()];
+        }
+
+        return array_values($currency->name)[0] ?? "";
     }
 
     /**

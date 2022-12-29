@@ -237,8 +237,8 @@ class DiscountsManager
                 (double)    $result["tax_rate"],
                 null,
                 $currency->iso_code,
-                $currency->sign,
-                $currency->name
+                LanguagesManager::getCurrencySymbol($currency),
+                LanguagesManager::getCurrencyName($currency)
             );
             //====================================================================//
             // Add Item to List
@@ -292,8 +292,8 @@ class DiscountsManager
             (double)    $taxPercent,
             null,
             $currency->iso_code,
-            $currency->sign,
-            $currency->name
+            LanguagesManager::getCurrencySymbol($currency),
+            LanguagesManager::getCurrencyName($currency)
         );
     }
 }
