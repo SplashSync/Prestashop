@@ -235,7 +235,8 @@ class MultiShopManager
         if (class_exists(self::$legacyContextClass) && !isset(Context::getContext()->employee->id)) {
             /** @phpstan-ignore-next-line */
             Context::getContext()->employee = null;
-            self::$legacyContextClass::getContext();
+            $legacyContext = new self::$legacyContextClass();
+            $legacyContext->getContext();
 
             return true;
         }
