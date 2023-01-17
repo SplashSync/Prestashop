@@ -3,11 +3,11 @@
         "WsMethod":                 "SOAP",
         "PsUseOrderPdf":            true,
         "PsUseMultiShopParser":     true,
-        "PsIsLightMultiShop":       true,
+        "PsIsLightMultiShop":       false,
         "PsIsSourceCatalog":        false,
         "PsUseAdvancedDiscounts":   true,
         "PsUseDiscountsCollector":  true,
-        "PsUseDiscountsRulesNames": true,
+        "PsUseDiscountsRulesNames": false,
         "PsCommitOrderToAddresses": false
     },
     "Address": { 

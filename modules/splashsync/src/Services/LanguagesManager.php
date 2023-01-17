@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2021 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -16,8 +16,8 @@
 namespace Splash\Local\Services;
 
 use Context;
+use Currency;
 use Language;
-use Splash\Core\SplashCore      as Splash;
 use Tools;
 
 /**
@@ -40,28 +40,30 @@ class LanguagesManager
     /**
      * List of All Available Languages (Encoded)
      *
-     * @var array
+     * @var null|array
      */
-    private static $languages;
+    private static ?array $languages;
 
     /**
      * List of All Extra Languages (All - Default)
      *
-     * @var array
+     * @var null|array
      */
-    private static $extra;
+    private static ?array $extra;
 
     /**
      * Get Default Local Language ISO Code
      *
      * @return string
      */
-    public static function getDefaultLanguage()
+    public static function getDefaultLanguage(): string
     {
         /** @var Context $context */
         $context = Context::getContext();
+        /** @var Language $language */
+        $language = $context->language;
 
-        return self::langEncode($context->language->language_code);
+        return self::langEncode($language->language_code);
     }
 
     /**
@@ -69,12 +71,14 @@ class LanguagesManager
      *
      * @return int
      */
-    public static function getDefaultLangId()
+    public static function getDefaultLangId(): int
     {
         /** @var Context $context */
         $context = Context::getContext();
+        /** @var Language $language */
+        $language = $context->language;
 
-        return $context->language->id;
+        return $language->id;
     }
 
     /**
@@ -84,7 +88,7 @@ class LanguagesManager
      *
      * @return bool
      */
-    public static function isDefaultLanguage($isoCode)
+    public static function isDefaultLanguage(string $isoCode): bool
     {
         return ($isoCode == self::getDefaultLanguage());
     }
@@ -94,9 +98,9 @@ class LanguagesManager
      *
      * @param string $isoCode Language Code in Splash ISO Format
      *
-     * @return false|int
+     * @return null|int
      */
-    public static function getPsLangId($isoCode)
+    public static function getPsLangId(string $isoCode): ?int
     {
         //====================================================================//
         // For Each Available Language
@@ -106,7 +110,7 @@ class LanguagesManager
             }
         }
 
-        return false;
+        return null;
     }
 
     /**
@@ -114,25 +118,25 @@ class LanguagesManager
      *
      * @return array
      */
-    public static function getAvailableLanguages()
+    public static function getAvailableLanguages(): array
     {
         //====================================================================//
         // Load From Cache
-        if (isset(static::$languages)) {
-            return static::$languages;
+        if (isset(self::$languages)) {
+            return self::$languages;
         }
 
         //====================================================================//
         // Build ISO Languages Array
-        static::$languages = array();
+        self::$languages = array();
         //====================================================================//
         // For Each Available Language
         /** @var array $psLanguage */
         foreach (Language::getLanguages() as $psLanguage) {
-            static::$languages[$psLanguage["id_lang"]] = self::langEncode($psLanguage["language_code"]);
+            self::$languages[$psLanguage["id_lang"]] = self::langEncode($psLanguage["language_code"]);
         }
 
-        return static::$languages;
+        return self::$languages;
     }
 
     /**
@@ -140,32 +144,70 @@ class LanguagesManager
      *
      * @return array
      */
-    public static function getExtraLanguages()
+    public static function getExtraLanguages(): array
     {
         //====================================================================//
         // Load From Cache
-        if (isset(static::$extra)) {
-            return static::$extra;
+        if (isset(self::$extra)) {
+            return self::$extra;
         }
         //====================================================================//
         // Load All
-        static::$extra = static::$languages;
+        self::$extra = self::getAvailableLanguages();
         //====================================================================//
         // Remove Default
-        unset(static::$extra[self::getDefaultLangId()]);
+        unset(self::$extra[self::getDefaultLangId()]);
 
-        return static::$extra;
+        return self::$extra;
     }
 
     /**
-     * Decode Multilang FieldName with ISO Code
+     * Get Currency Name
+     *
+     * @param Currency $currency
+     *
+     * @return string
+     */
+    public static function getCurrencySymbol(Currency $currency): string
+    {
+        if (is_string($currency->symbol)) {
+            return $currency->symbol;
+        }
+        if (isset($currency->symbol[self::getDefaultLangId()])) {
+            return $currency->symbol[self::getDefaultLangId()];
+        }
+
+        return array_values($currency->symbol)[0] ?? "";
+    }
+
+    /**
+     * Get Currency Name
+     *
+     * @param Currency $currency
+     *
+     * @return string
+     */
+    public static function getCurrencyName(Currency $currency): string
+    {
+        if (is_string($currency->name)) {
+            return $currency->name;
+        }
+        if (isset($currency->name[self::getDefaultLangId()])) {
+            return $currency->name[self::getDefaultLangId()];
+        }
+
+        return array_values($currency->name)[0] ?? "";
+    }
+
+    /**
+     * Decode Multi-lang FieldName with ISO Code
      *
      * @param string $fieldName Complete Field Name
      * @param string $isoCode   Language Code in Splash Format
      *
      * @return string Base Field Name or Empty String
      */
-    public static function fieldNameDecode($fieldName, $isoCode)
+    public static function fieldNameDecode(string $fieldName, string $isoCode): string
     {
         //====================================================================//
         // Default Language => No code in FieldName

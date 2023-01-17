@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2021 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -17,6 +17,7 @@ namespace   Splash\Local\Objects\Core;
 
 use Db;
 use DbQuery;
+use PrestaShopDatabaseException;
 use Splash\Core\SplashCore      as Splash;
 
 /**
@@ -29,9 +30,11 @@ trait ObjectsListCommonsTrait
      *
      * @param string $sql
      *
+     * @throws PrestaShopDatabaseException
+     *
      * @return false|int
      */
-    protected function getObjectListTotal($sql)
+    protected function getObjectListTotal(string $sql)
     {
         //====================================================================//
         // Stack Trace
@@ -48,7 +51,7 @@ trait ObjectsListCommonsTrait
     }
 
     /**
-     * Get Raw Data Array for an Sql Request
+     * Get Raw Data Array for a Sql Request
      *
      * @param DbQuery    $sql
      * @param string     $sortField
@@ -56,7 +59,7 @@ trait ObjectsListCommonsTrait
      *
      * @return array|false
      */
-    protected function getObjectsListRawData($sql, $sortField, $params = null)
+    protected function getObjectsListRawData(DbQuery $sql, string $sortField, array $params = null)
     {
         //====================================================================//
         // Stack Trace
@@ -89,9 +92,11 @@ trait ObjectsListCommonsTrait
      * @param string     $sortField
      * @param null|array $params
      *
+     * @throws PrestaShopDatabaseException
+     *
      * @return array
      */
-    protected function getObjectsListGenericData($sql, $sortField, $params = null)
+    protected function getObjectsListGenericData(DbQuery $sql, string $sortField, array $params = null)
     {
         //====================================================================//
         // Stack Trace

@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2021 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -16,6 +16,7 @@
 namespace Splash\Local\Objects\ThirdParty;
 
 use Customer;
+use PrestaShopException;
 use Splash\Core\SplashCore      as Splash;
 use Tools;
 
@@ -29,9 +30,9 @@ trait CRUDTrait
      *
      * @param string $objectId Object id
      *
-     * @return Customer|false
+     * @return null|Customer
      */
-    public function load($objectId)
+    public function load(string $objectId): ?Customer
     {
         //====================================================================//
         // Stack Trace
@@ -40,7 +41,7 @@ trait CRUDTrait
         // Load Object
         $object = new Customer((int) $objectId);
         if ($object->id != $objectId) {
-            return Splash::log()->err(
+            return Splash::log()->errNull(
                 "ErrLocalTpl",
                 __CLASS__,
                 __FUNCTION__,
@@ -54,9 +55,9 @@ trait CRUDTrait
     /**
      * Create Request Object
      *
-     * @return Customer|false New Object
+     * @return null|Customer New Object
      */
-    public function create()
+    public function create(): ?Customer
     {
         //====================================================================//
         // Stack Trace
@@ -64,13 +65,13 @@ trait CRUDTrait
         //====================================================================//
         // Check Customer Name is given
         if (empty($this->in["firstname"])) {
-            return Splash::log()->err("ErrLocalFieldMissing", __CLASS__, __FUNCTION__, "firstname");
+            return Splash::log()->errNull("ErrLocalFieldMissing", __CLASS__, __FUNCTION__, "firstname");
         }
         if (empty($this->in["lastname"])) {
-            return Splash::log()->err("ErrLocalFieldMissing", __CLASS__, __FUNCTION__, "lastname");
+            return Splash::log()->errNull("ErrLocalFieldMissing", __CLASS__, __FUNCTION__, "lastname");
         }
         if (empty($this->in["email"])) {
-            return Splash::log()->err("ErrLocalFieldMissing", __CLASS__, __FUNCTION__, "email");
+            return Splash::log()->errNull("ErrLocalFieldMissing", __CLASS__, __FUNCTION__, "email");
         }
         //====================================================================//
         // Create Empty Customer
@@ -82,9 +83,9 @@ trait CRUDTrait
      *
      * @param bool $needed Is This Update Needed
      *
-     * @return false|string Object ID
+     * @return null|string Object ID
      */
-    public function update(bool $needed)
+    public function update(bool $needed): ?string
     {
         //====================================================================//
         // Stack Trace
@@ -96,16 +97,15 @@ trait CRUDTrait
         // If Id Given = > Update Object
         //====================================================================//
         if (!empty($this->object->id)) {
-            if (true != $this->object->update()) {
-                return Splash::log()->err(
-                    "ErrLocalTpl",
-                    __CLASS__,
-                    __FUNCTION__,
-                    "Unable to update (".$this->object->id.")."
-                );
-            }
+            try {
+                if (!$this->object->update()) {
+                    return Splash::log()->errNull("Unable to update (".$this->object->id.").");
+                }
+            } catch (PrestaShopException $e) {
+                Splash::log()->report($e);
 
-            Splash::log()->deb("MsgLocalTpl", __CLASS__, __FUNCTION__, "Customer Updated");
+                return Splash::log()->errNull("Unable to update (".$this->object->id.").");
+            }
 
             return $this->getObjectIdentifier();
         }
@@ -117,27 +117,28 @@ trait CRUDTrait
         //====================================================================//
         // If NO Password Given = > Create Random Password
         if (empty($this->object->passwd)) {
-            $this->object->passwd = (string) Tools::passwdGen();
-            Splash::log()->war(
-                "MsgLocalTpl",
-                __CLASS__,
-                __FUNCTION__,
-                "New Customer Password Generated - ".$this->object->passwd
-            );
+            $plainPassword = "#".Tools::passwdGen(12);
+            $this->object->setWsPasswd($plainPassword);
+            Splash::log()->war("New Customer Password Generated - ".$plainPassword);
         }
 
         //====================================================================//
         // Create Object In Database
-        if (true != $this->object->add(true, true)) {
-            return Splash::log()->err("ErrLocalTpl", __CLASS__, __FUNCTION__, "Unable to create Customer. ");
+        try {
+            if (!$this->object->add(true, true)) {
+                return Splash::log()->errNull("Unable to create Customer. ");
+            }
+        } catch (PrestaShopException $e) {
+            Splash::log()->report($e);
+
+            return Splash::log()->errNull("Unable to update (".$this->object->id.").");
         }
-        Splash::log()->deb("MsgLocalTpl", __CLASS__, __FUNCTION__, "Customer Created");
 
         //====================================================================//
         // UPDATE/CREATE SPLASH ID
         //====================================================================//
         if (!is_null($this->NewSplashId)) {
-            self::setSplashId(self::$NAME, $this->object->id, $this->NewSplashId);
+            self::setSplashId(self::$name, $this->object->id, $this->NewSplashId);
             $this->NewSplashId = null;
         }
 
@@ -145,13 +146,9 @@ trait CRUDTrait
     }
 
     /**
-     * Delete requested Object
-     *
-     * @param string $objectId Object Id.  If NULL, Object needs to be created.
-     *
-     * @return bool
+     * {@inheritdoc}
      */
-    public function delete($objectId = null)
+    public function delete(string $objectId): bool
     {
         //====================================================================//
         // Stack Trace
@@ -183,10 +180,10 @@ trait CRUDTrait
     /**
      * {@inheritdoc}
      */
-    public function getObjectIdentifier()
+    public function getObjectIdentifier(): ?string
     {
         if (!isset($this->object->id)) {
-            return false;
+            return null;
         }
 
         return (string) $this->object->id;

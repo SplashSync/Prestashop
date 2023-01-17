@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2021 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -24,7 +24,6 @@
 namespace   Splash\Local\Widgets;
 
 use AdminStatsController;
-use ArrayObject;
 use Configuration;
 use Currency;
 use Splash\Core\SplashCore      as Splash;
@@ -45,7 +44,7 @@ class Activity extends AbstractWidget
      *
      * @var array
      */
-    public static $OPTIONS = array(
+    public static array $options = array(
         "Width" => self::SIZE_XL
     );
 
@@ -58,36 +57,36 @@ class Activity extends AbstractWidget
      *
      * @var string
      */
-    protected static $NAME = "Prestashop Activity Widget";
+    protected static string $name = "Prestashop Activity Widget";
 
     /**
      * Widget Description (Translated by Module)
      *
      * @var string
      */
-    protected static $DESCRIPTION = "Display Main Activity of your E-Commerce";
+    protected static string $description = "Display Main Activity of your E-Commerce";
 
     /**
      * Widget Icon (FontAwesome or Glyph ico tag)
      *
      * @var string
      */
-    protected static $ICO = "fa fa-map-signs";
+    protected static string $ico = "fa fa-map-signs";
 
     /**
      * @var Currency
      */
-    private $currency;
+    private Currency $currency;
 
     /**
      * @var SplashSync
      */
-    private $spl;
+    private SplashSync $spl;
 
     /**
      * @var array
      */
-    private $sparkOptions = array(
+    private array $sparkOptions = array(
         "AllowHtml" => true,
         "Width" => self::SIZE_XS
     );
@@ -99,7 +98,7 @@ class Activity extends AbstractWidget
     /**
      * {@inheritdoc}
      */
-    public function get($params = array())
+    public function get(array $parameters = array()): ?array
     {
         //====================================================================//
         // Stack Trace
@@ -115,7 +114,7 @@ class Activity extends AbstractWidget
         //====================================================================//
         // Build Activity Block
         //====================================================================//
-        $this->buildActivityBlock($params);
+        $this->buildActivityBlock($parameters);
 
         //====================================================================//
         // Set Blocks to Widget
@@ -136,18 +135,14 @@ class Activity extends AbstractWidget
     /**
      * Block Building - Inputs Parameters
      *
-     * @param null|array|ArrayObject $inputs
+     * @param array $inputs
      *
      * @return void
      */
-    private function buildActivityBlock($inputs = array())
+    private function buildActivityBlock(array $inputs = array()): void
     {
         //====================================================================//
         // Verify Inputs
-        if (!is_array($inputs) && !($inputs instanceof ArrayObject)) {
-            $this->blocksFactory()
-                ->addNotificationsBlock(array("warning" => "Inputs is not an Array!"));
-        }
         if (!isset($inputs["DateStart"]) || !isset($inputs["DateEnd"])) {
             $this->blocksFactory()->addNotificationsBlock(array("warning" => "No Date Range Defined!"));
 
@@ -165,14 +160,11 @@ class Activity extends AbstractWidget
         //====================================================================//
         // Load Splash Module
         $this->spl = Local::getLocalModule();
-        if (false == $this->spl) {
-            return;
-        }
 
         //====================================================================//
         // Build data Array
-        $rawData = $this->getData($this->DateStart, $this->DateEnd);
-        $refineData = $this->refineData($this->DateStart, $this->DateEnd, $rawData);
+        $rawData = $this->getData((string) $this->dateStart, (string) $this->dateEnd);
+        $refineData = $this->refineData((string) $this->dateStart, (string) $this->dateEnd, $rawData);
         $activityData = $this->addupData($refineData);
 
         //====================================================================//
@@ -221,7 +213,7 @@ class Activity extends AbstractWidget
      *
      * @return array
      */
-    private function getData($dateFrom, $dateTo)
+    private function getData(string $dateFrom, string $dateTo)
     {
         // We need the following figures to calculate our stats
         $tmpData = array(

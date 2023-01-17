@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2021 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -29,7 +29,7 @@ class CategoryManager
      *
      * @var array
      */
-    private static $cache = array();
+    private static array $cache = array();
 
     /**
      * Get Product Categories List
@@ -184,10 +184,10 @@ class CategoryManager
     public static function getAllCategoriesList(int $langId = null)
     {
         $index = (int) $langId;
-        if (!isset(static::$cache[$index])) {
-            static::$cache[$index] = Category::getCategories(is_null($langId) ? false : $langId, false, false);
+        if (!isset(self::$cache[$index])) {
+            self::$cache[$index] = Category::getCategories(is_null($langId) ? false : $langId, false, false);
         }
 
-        return static::$cache[$index];
+        return self::$cache[$index];
     }
 }

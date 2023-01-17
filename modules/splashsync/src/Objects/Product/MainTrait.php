@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2021 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -16,6 +16,7 @@
 namespace Splash\Local\Objects\Product;
 
 use Configuration;
+use Splash\Client\Splash;
 use Splash\Components\UnitConverter as Units;
 use Splash\Local\Services\MultiShopManager as MSM;
 use Tools;
@@ -32,7 +33,7 @@ trait MainTrait
     /**
      * @var array
      */
-    private static $psDims = array(
+    private static array $psDims = array(
         "m" => Units::LENGTH_M,
         "cm" => Units::LENGTH_CM,
         "mm" => Units::LENGTH_MM,
@@ -44,42 +45,48 @@ trait MainTrait
      * Build Address Fields using FieldFactory
      *
      * @return void
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    protected function buildMainFields()
+    protected function buildMainFields(): void
     {
         $groupName = Translate::getAdminTranslation("Shipping", "AdminProducts");
         //====================================================================//
         // Weight
         $this->fieldsFactory()->create(SPL_T_DOUBLE)
-            ->Identifier("weight")
-            ->Name(Translate::getAdminTranslation("Package weight", "AdminProducts"))
-            ->Group($groupName)
+            ->identifier("weight")
+            ->name(Translate::getAdminTranslation("Package weight", "AdminProducts"))
+            ->microData("http://schema.org/Product", "weight")
+            ->group($groupName)
             ->addOption("shop", MSM::MODE_ALL)
-            ->MicroData("http://schema.org/Product", "weight");
+        ;
         //====================================================================//
         // Height
         $this->fieldsFactory()->create(SPL_T_DOUBLE)
-            ->Identifier("height")
-            ->Name(Translate::getAdminTranslation("Package height", "AdminProducts"))
-            ->Group($groupName)
+            ->identifier("height")
+            ->name(Translate::getAdminTranslation("Package height", "AdminProducts"))
+            ->microData("http://schema.org/Product", "height")
+            ->group($groupName)
             ->addOption("shop", MSM::MODE_ALL)
-            ->MicroData("http://schema.org/Product", "height");
+        ;
         //====================================================================//
         // Depth
         $this->fieldsFactory()->create(SPL_T_DOUBLE)
-            ->Identifier("depth")
-            ->Name(Translate::getAdminTranslation("Package depth", "AdminProducts"))
-            ->Group($groupName)
+            ->identifier("depth")
+            ->name(Translate::getAdminTranslation("Package depth", "AdminProducts"))
+            ->microData("http://schema.org/Product", "depth")
+            ->group($groupName)
             ->addOption("shop", MSM::MODE_ALL)
-            ->MicroData("http://schema.org/Product", "depth");
+        ;
         //====================================================================//
         // Width
         $this->fieldsFactory()->create(SPL_T_DOUBLE)
-            ->Identifier("width")
-            ->Name(Translate::getAdminTranslation("Package width", "AdminProducts"))
-            ->Group($groupName)
+            ->identifier("width")
+            ->name(Translate::getAdminTranslation("Package width", "AdminProducts"))
+            ->microData("http://schema.org/Product", "width")
+            ->group($groupName)
             ->addOption("shop", MSM::MODE_ALL)
-            ->MicroData("http://schema.org/Product", "width");
+        ;
 
         //====================================================================//
         // COMPUTED INFORMATIONS
@@ -88,20 +95,22 @@ trait MainTrait
         //====================================================================//
         // Surface
         $this->fieldsFactory()->create(SPL_T_DOUBLE)
-            ->Identifier("surface")
-            ->Name($this->spl->l("Surface"))
-            ->Group($groupName)
-            ->MicroData("http://schema.org/Product", "surface")
-            ->isReadOnly();
+            ->identifier("surface")
+            ->name($this->spl->l("Surface"))
+            ->group($groupName)
+            ->microData("http://schema.org/Product", "surface")
+            ->isReadOnly()
+        ;
         //====================================================================//
         // Volume
         $this->fieldsFactory()->create(SPL_T_DOUBLE)
-            ->Identifier("volume")
-            ->Name($this->spl->l("Volume"))
-            ->Group($groupName)
+            ->identifier("volume")
+            ->name($this->spl->l("Volume"))
+            ->microData("http://schema.org/Product", "volume")
+            ->group($groupName)
             ->addOption("shop", MSM::MODE_ALL)
-            ->MicroData("http://schema.org/Product", "volume")
-            ->isReadOnly();
+            ->isReadOnly()
+        ;
 
         //====================================================================//
         // PRODUCT BARCODES
@@ -110,37 +119,53 @@ trait MainTrait
         //====================================================================//
         // Supplier Reference
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
-            ->Identifier("supplier_reference")
-            ->Name(Translate::getAdminTranslation("Supplier reference", "AdminProducts"))
+            ->identifier("supplier_reference")
+            ->name(Translate::getAdminTranslation("Supplier reference", "AdminProducts"))
+            ->microData("http://schema.org/Product", "mpn")
             ->addOption("shop", MSM::MODE_ALL)
-            ->MicroData("http://schema.org/Product", "mpn")
             ->isListed()
+            ->isIndexed()
         ;
         //====================================================================//
         // UPC
         $this->fieldsFactory()->create(SPL_T_INT)
-            ->Identifier("upc")
-            ->Name(Translate::getAdminTranslation("UPC Code", "AdminProducts"))
-            ->Group($groupName)
+            ->identifier("upc")
+            ->name(Translate::getAdminTranslation("UPC Code", "AdminProducts"))
+            ->microData("http://schema.org/Product", "gtin12")
+            ->group($groupName)
             ->addOption("shop", MSM::MODE_ALL)
-            ->MicroData("http://schema.org/Product", "gtin12");
+            ->isIndexed()
+        ;
         //====================================================================//
         // EAN
         $this->fieldsFactory()->create(SPL_T_INT)
-            ->Identifier("ean13")
-            ->Name(Translate::getAdminTranslation("EAN Code", "AdminProducts"))
-            ->Group($groupName)
+            ->identifier("ean13")
+            ->name(Translate::getAdminTranslation("EAN Code", "AdminProducts"))
+            ->microData("http://schema.org/Product", "gtin13")
+            ->group($groupName)
             ->addOption("shop", MSM::MODE_ALL)
-            ->MicroData("http://schema.org/Product", "gtin13");
+            ->isIndexed()
+        ;
         //====================================================================//
         // ISBN
         if (Tools::version_compare(_PS_VERSION_, "1.7", '>=')) {
-            $this->fieldsFactory()->create(SPL_T_INT)
-                ->Identifier("isbn")
-                ->Name(Translate::getAdminTranslation("ISBN Code", "AdminProducts"))
-                ->Group($groupName)
+            $this->fieldsFactory()->create(Splash::isTravisMode() ? SPL_T_VARCHAR : SPL_T_INT)
+                ->identifier("isbn")
+                ->name(Translate::getAdminTranslation("ISBN Code", "AdminProducts"))
+                ->microData("http://schema.org/Product", "gtin14")
+                ->group($groupName)
                 ->addOption("shop", MSM::MODE_ALL)
-                ->MicroData("http://schema.org/Product", "gtin14");
+                ->isIndexed()
+            ;
+            if (Splash::isTravisMode()) {
+                //====================================================================//
+                // Register Fake ISBN
+                $this->fieldsFactory()
+                    ->addChoice("9781566199094", "Fake ISBN 1")
+                    ->addChoice("9781566199049", "Fake ISBN 2")
+                    ->addChoice("9781566199069", "Fake ISBN 3")
+                ;
+            }
         }
     }
 
@@ -152,7 +177,7 @@ trait MainTrait
      *
      * @return void
      */
-    protected function getMainFields($key, $fieldName)
+    protected function getMainFields(string $key, string $fieldName): void
     {
         //====================================================================//
         // READ Fields
@@ -161,7 +186,7 @@ trait MainTrait
             // PRODUCT SPECIFICATIONS
             //====================================================================//
             case 'weight':
-                if ($this->AttributeId) {
+                if ($this->Attribute) {
                     $this->out[$fieldName] = (float) $this->object->weight + $this->Attribute->weight;
                 } else {
                     $this->out[$fieldName] = (float) $this->object->weight;
@@ -175,11 +200,14 @@ trait MainTrait
 
                 break;
             case 'surface':
-                $this->out[$fieldName] = (float) $this->object->depth * $this->object->width;
+                $this->out[$fieldName] = (float) $this->object->depth * (float) $this->object->width;
 
                 break;
             case 'volume':
-                $this->out[$fieldName] = (float) $this->object->height * $this->object->depth * $this->object->width;
+                $this->out[$fieldName] = (float) $this->object->height
+                    * (float) $this->object->depth
+                    * (float) $this->object->width
+                ;
 
                 break;
             default:
@@ -199,7 +227,7 @@ trait MainTrait
      *
      * @return void
      */
-    protected function getBarCodeFields($key, $fieldName)
+    protected function getBarCodeFields(string $key, string $fieldName): void
     {
         //====================================================================//
         // READ Fields
@@ -230,12 +258,12 @@ trait MainTrait
     /**
      * Write Given Fields
      *
-     * @param string $fieldName Field Identifier / Name
-     * @param mixed  $fieldData Field Data
+     * @param string      $fieldName Field Identifier / Name
+     * @param null|scalar $fieldData Field Data
      *
      * @return void
      */
-    protected function setMainFields($fieldName, $fieldData)
+    protected function setMainFields(string $fieldName, $fieldData): void
     {
         //====================================================================//
         // WRITE Field
@@ -247,11 +275,12 @@ trait MainTrait
                 //====================================================================//
                 // If product as attributes
                 $currentWeight = $this->object->{$fieldName};
-                $currentWeight += isset($this->Attribute->{$fieldName}) ? $this->Attribute->{$fieldName} : 0;
+                $currentWeight += $this->Attribute->{$fieldName} ?? 0;
                 //====================================================================//
                 // If Simple Product
-                if (!$this->AttributeId) {
+                if (!isset($this->Attribute)) {
                     $this->setSimpleFloat($fieldName, $fieldData);
+                    $this->addMsfUpdateFields("Product", $fieldName);
 
                     break;
                 }
@@ -283,8 +312,10 @@ trait MainTrait
      * @param mixed  $fieldData Field Data
      *
      * @return void
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    protected function setBarCodeFields($fieldName, $fieldData)
+    protected function setBarCodeFields(string $fieldName, $fieldData): void
     {
         //====================================================================//
         // WRITE Field
@@ -298,9 +329,9 @@ trait MainTrait
                     : $this->setSimple($fieldName, $fieldData);
 
                 break;
-            //====================================================================//
-            // PRODUCT BARCODES
-            //====================================================================//
+                //====================================================================//
+                // PRODUCT BARCODES
+                //====================================================================//
             case 'upc':
             case 'ean13':
             case 'isbn':
@@ -315,6 +346,9 @@ trait MainTrait
             default:
                 return;
         }
+        //====================================================================//
+        // Register Field for Update
+        $this->addMsfUpdateFields($this->AttributeId ? "Attribute" : "Product", $fieldName);
         unset($this->in[$fieldName]);
     }
 
@@ -325,7 +359,7 @@ trait MainTrait
      *
      * @return void
      */
-    private function getDimField($fieldName)
+    private function getDimField(string $fieldName): void
     {
         //====================================================================//
         //  Load System Dimension Unit
@@ -335,8 +369,8 @@ trait MainTrait
         $realData = $this->object->{ $fieldName };
         //====================================================================//
         //  Convert Current Value
-        if (isset(static::$psDims[$dimUnit])) {
-            $realData = self::units()->normalizeLength((float) $realData, static::$psDims[$dimUnit]);
+        if (isset(self::$psDims[$dimUnit])) {
+            $realData = self::units()->normalizeLength((float) $realData, self::$psDims[$dimUnit]);
         }
         //====================================================================//
         //  return Normalized Value
@@ -346,23 +380,24 @@ trait MainTrait
     /**
      * Write Dimension Field with Unit Conversion
      *
-     * @param string $fieldName Field Identifier / Name
-     * @param mixed  $fieldData Field Data
+     * @param string      $fieldName Field Identifier / Name
+     * @param null|scalar $fieldData Field Data
      *
      * @return void
      */
-    private function setDimField($fieldName, $fieldData)
+    private function setDimField(string $fieldName, $fieldData)
     {
         //====================================================================//
-        //  Load System Dimenssion Unit
+        //  Load System Dimension Unit
         $dimUnit = Configuration::get('PS_DIMENSION_UNIT');
         //====================================================================//
         //  Convert Current Value
-        if (isset(static::$psDims[$dimUnit])) {
-            $fieldData = self::units()->convertLength((float) $fieldData, static::$psDims[$dimUnit]);
+        if (isset(self::$psDims[$dimUnit])) {
+            $fieldData = self::units()->convertLength((float) $fieldData, self::$psDims[$dimUnit]);
         }
         //====================================================================//
         //  Write Converted Value
         $this->setSimpleFloat($fieldName, $fieldData);
+        $this->addMsfUpdateFields("Product", $fieldName);
     }
 }

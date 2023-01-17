@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2021 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -19,14 +19,14 @@ use DbQuery;
 use Splash\Core\SplashCore      as Splash;
 
 /**
- * Acces to Orders Objects Lists
+ * Access to Order Objects Lists
  */
 trait ObjectsListTrait
 {
     /**
      * {@inheritdoc}
      */
-    public function objectsList($filter = null, $params = null)
+    public function objectsList(string $filter = null, array $params = array()): array
     {
         //====================================================================//
         // Stack Trace
@@ -43,9 +43,6 @@ trait ObjectsListTrait
         $sql->select("c.`firstname`     as firstname");     // Customer Firstname
         $sql->select("c.`lastname`      as lastname");      // Customer Lastname
         $sql->select("o.`date_add`      as order_date");     // Order Date
-//        $sql->select("a.`city` as city");               // Customer Address City
-//        $sql->select("c.`name` as country");         // Customer Address Country
-//        $sql->select("a.`date_upd` as modified");       // Customer Last Modification Date
         $sql->select("o.`total_paid_tax_excl`");            // Order Total HT
         $sql->select("o.`total_paid_tax_incl`");            // Order Total TTC
         //====================================================================//

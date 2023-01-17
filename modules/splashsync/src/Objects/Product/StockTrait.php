@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2021 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -16,6 +16,7 @@
 namespace Splash\Local\Objects\Product;
 
 use Pack;
+use PrestaShopException;
 use Shop;
 use Splash\Core\SplashCore      as Splash;
 use Splash\Local\Services\MultiShopManager as MSM;
@@ -39,7 +40,7 @@ trait StockTrait
      *
      * @return void
      */
-    protected function buildStockFields()
+    protected function buildStockFields(): void
     {
         //====================================================================//
         // PRODUCT STOCKS
@@ -91,6 +92,8 @@ trait StockTrait
      * @param string $key       Input List Key
      * @param string $fieldName Field Identifier / Name
      *
+     * @throws PrestaShopException
+     *
      * @return void
      */
     protected function getStockFields(string $key, string $fieldName)
@@ -106,17 +109,17 @@ trait StockTrait
                 $this->out[$fieldName] = $this->getStockQuantity();
 
                 break;
-            //====================================================================//
-            // Out Of Stock
+                //====================================================================//
+                // Out Of Stock
             case 'outofstock':
                 $quantity = $this->getStockQuantity();
                 $this->out[$fieldName] = ($quantity > 0) ? false : true;
 
                 break;
-            //====================================================================//
-            // Minimum Order Quantity
+                //====================================================================//
+                // Minimum Order Quantity
             case 'minimal_quantity':
-                if (($this->AttributeId)) {
+                if (isset($this->Attribute)) {
                     $this->out[$fieldName] = (int) $this->Attribute->{$fieldName};
                 } else {
                     $this->out[$fieldName] = (int) $this->object->{$fieldName};
@@ -164,11 +167,13 @@ trait StockTrait
      * Write Given Fields
      *
      * @param string $fieldName Field Identifier / Name
-     * @param mixed  $fieldData Field Data
+     * @param int    $fieldData Field Data
+     *
+     * @throws PrestaShopException
      *
      * @return void
      */
-    protected function setStockFields(string $fieldName, $fieldData)
+    protected function setStockFields(string $fieldName, int $fieldData)
     {
         //====================================================================//
         // WRITE Field
@@ -187,7 +192,7 @@ trait StockTrait
                     // Update Stock in DataBase
                     StockAvailable::setQuantity(
                         $this->ProductId,
-                        $this->AttributeId,
+                        (int) $this->AttributeId,
                         $fieldData,
                         // @phpstan-ignore-next-line
                         Shop::getContextShopID(true),
@@ -197,8 +202,8 @@ trait StockTrait
                 }
 
                 break;
-            //====================================================================//
-            // Minimum Order Quantity
+                //====================================================================//
+                // Minimum Order Quantity
             case 'minimal_quantity':
                 if (Validate::isUnsignedInt($fieldData)) {
                     if ($this->AttributeId) {
@@ -220,12 +225,12 @@ trait StockTrait
     /**
      * Write Given Fields
      *
-     * @param string $fieldName Field Identifier / Name
-     * @param mixed  $fieldData Field Data
+     * @param string      $fieldName Field Identifier / Name
+     * @param null|string $fieldData Field Data
      *
      * @return void
      */
-    protected function setStockLocationFields(string $fieldName, $fieldData)
+    protected function setStockLocationFields(string $fieldName, ?string $fieldData): void
     {
         //====================================================================//
         // WRITE Field
@@ -235,15 +240,15 @@ trait StockTrait
             case 'stock_location':
                 $current = StockAvailable::getLocation(
                     $this->ProductId,
-                    $this->AttributeId,
+                    (int) $this->AttributeId,
                     Shop::getContextShopID(true)
                 );
                 if ($current != $fieldData) {
                     StockAvailable::setLocation(
                         $this->ProductId,
-                        $fieldData,
+                        (string) $fieldData,
                         Shop::getContextShopID(true),
-                        $this->AttributeId
+                        (int) $this->AttributeId
                     );
                     $this->needUpdate($this->AttributeId ? "Attribute" : "object");
                 }
@@ -257,6 +262,8 @@ trait StockTrait
 
     /**
      * Override of Generic Stocks reading to manage MSf Mode
+     *
+     * @throws PrestaShopException
      *
      * @return int
      */

@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2021 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -51,7 +51,7 @@ class L05AdvancedDiscountsTest extends ObjectsCase
         Splash::configuration()->PsUseAdvancedDiscounts = true;
         //====================================================================//
         // Force Delete Storage Table
-        Db::getInstance()->execute("DROP TABLE `"._DB_PREFIX_.DiscountsManager::TABLE."`");
+        Db::getInstance()->execute("DROP TABLE IF EXISTS `"._DB_PREFIX_.DiscountsManager::TABLE."`");
         $this->assertFalse(DiscountsManager::hasStorageTable());
         $this->assertFalse(DiscountsManager::isFeatureActive());
         //====================================================================//
@@ -71,6 +71,8 @@ class L05AdvancedDiscountsTest extends ObjectsCase
 
     /**
      * Test Reading An Order Without Discounts
+     *
+     * @throws Exception
      *
      * @return void
      */

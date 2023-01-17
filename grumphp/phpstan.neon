@@ -14,22 +14,15 @@ parameters:
             - '#Parameter \#1 \$id of class [a-zA-Z0-9]+ constructor expects null\, string given.#'
             - '#Parameter \#1 \$id of class [a-zA-Z0-9]+ constructor expects null\, int given.#'
             - '#Parameter \#2 \$idLang of class Image constructor expects null\, int given.#'
-#            - '#[a-zA-Z0-9\\_\#]+ class Currency constructor expects null, string given#'
-#            - '#[a-zA-Z0-9\\_\#]+ class Address constructor expects int|null, bool|int|null given#'
             - "#Property CustomerCore::\\$passwd \\(int\\) does not accept string.#"
             - '#Parameter \#2 \$idAttributeGroup of static method AttributeGroupCore::getAttributes\(\) expects bool\, int given.#'
             - '#Parameter \#4 \$id_shop of static method StockAvailableCore::setQuantity\(\) expects null\, int given.#'
 
             # Know Prestashop Backward
             - '#Static method ImageCore::getImages\(\) invoked with 4 parameters, 2-3 required.#'
+            - '#Class Splash\\Local\\ClassAlias\\PsProductAttribute does not have a constructor and must be instantiated without any parameters.#'
 
             # Splash Fixes
-#            - '#Call to an undefined method [a-zA-Z0-9\\_]+ObjectInterface::load()#'
-#            - '#Call to an undefined method [a-zA-Z0-9\\_]+ObjectInterface::getAttributeGroupByCode()#'
-#            - '#Call to an undefined method [a-zA-Z0-9\\_]+ObjectInterface::addAttributeGroup()#'
-#            - '#Call to an undefined method [a-zA-Z0-9\\_]+ObjectInterface::getAttributeByCode()#'
-#            - '#Call to an undefined method [a-zA-Z0-9\\_]+ObjectInterface::addAttributeValue()#'
-#            - '#Call to an undefined method [a-zA-Z0-9\\_]+ObjectInterface::getMultilang()#'
             - '#Access to an undefined property object::\$options#'
             - '#Access to an undefined property ObjectModel::[a-zA-Z0-9$\\_]#'
             - '#Access to an undefined property Context::[a-zA-Z0-9$\\_]#'
@@ -41,3 +34,8 @@ parameters:
 
             # PN Advanced Packs
             - '#Call to static method getIdsPacks\(\) on an unknown class AdvancedPack.#'
+    excludePaths:
+            - '%currentWorkingDirectory%/modules/splashsync/vendor/*'
+            - '%currentWorkingDirectory%/modules/splashsync/src/ClassAlias/*'
+    dynamicConstantNames:
+            - "SPLASH_SERVER_MODE"

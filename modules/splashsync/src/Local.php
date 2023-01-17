@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2021 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -15,6 +15,7 @@
 
 namespace Splash\Local;
 
+use ArrayObject;
 use Configuration;
 use Context;
 use Employee;
@@ -45,7 +46,7 @@ class Local implements LocalClassInterface
     /**
      * @var SplashSync
      */
-    private static $splashSyncModule;
+    private static SplashSync $splashSyncModule;
 
     //====================================================================//
     // *******************************************************************//
@@ -56,7 +57,7 @@ class Local implements LocalClassInterface
     /**
      * {@inheritdoc}
      */
-    public function parameters()
+    public function parameters(): array
     {
         $parameters = array();
 
@@ -99,7 +100,7 @@ class Local implements LocalClassInterface
     /**
      * {@inheritdoc}
      */
-    public function includes()
+    public function includes(): bool
     {
         //====================================================================//
         // When Library is called in both client & server mode
@@ -157,11 +158,11 @@ class Local implements LocalClassInterface
     /**
      * {@inheritdoc}
      */
-    public function selfTest()
+    public function selfTest(): bool
     {
         //====================================================================//
         // Safety Check => PHP Min Version
-        if (PHP_VERSION < 7.1) {
+        if (PHP_VERSION < 7.4) {
             return Splash::log()->err("Splash Module for Prestashop require at least PHP 7.1");
         }
         //====================================================================//
@@ -211,7 +212,7 @@ class Local implements LocalClassInterface
     /**
      * {@inheritdoc}
      */
-    public function informations($informations)
+    public function informations(ArrayObject $informations): ArrayObject
     {
         //====================================================================//
         // Init Response Object
@@ -285,9 +286,9 @@ class Local implements LocalClassInterface
         }
         //====================================================================//
         // Init Msf Test Sequence
-        if (0 === strpos($name, "Msf")) {
+        if (0 === strpos((string) $name, "Msf")) {
             $shopId = 0;
-            sscanf($name, "Msf_%d", $shopId);
+            sscanf((string) $name, "Msf_%d", $shopId);
             MSM::setContext();
             Configuration::updateValue('SPLASH_MSF_FOCUSED', (int) $shopId);
 
@@ -399,8 +400,8 @@ class Local implements LocalClassInterface
     {
         //====================================================================//
         // Load Local Splash Sync Module
-        if (isset(static::$splashSyncModule)) {
-            return static::$splashSyncModule;
+        if (isset(self::$splashSyncModule)) {
+            return self::$splashSyncModule;
         }
         //====================================================================//
         // Safety Check
@@ -409,9 +410,9 @@ class Local implements LocalClassInterface
         }
         //====================================================================//
         // Create New Splash Module Instance
-        static::$splashSyncModule = new \SplashSync();
+        self::$splashSyncModule = new \SplashSync();
 
-        return static::$splashSyncModule;
+        return self::$splashSyncModule;
     }
 
     //====================================================================//
@@ -489,6 +490,7 @@ class Local implements LocalClassInterface
      * Check Configuration & Inform User of Custom Parameters Activated
      *
      * @return void
+     *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function selfTestInfos()
@@ -543,23 +545,23 @@ class Local implements LocalClassInterface
         Splash::log()->trace();
         //====================================================================//
         // Load Local Splash Sync Module
-        if (!isset(static::$splashSyncModule)) {
-            static::$splashSyncModule = $this->getLocalModule();
+        if (!isset(self::$splashSyncModule)) {
+            self::$splashSyncModule = $this->getLocalModule();
         }
         //====================================================================//
         // Check if Module is Installed & Enabled
-        if (static::$splashSyncModule->isEnabled('splashsync')) {
+        if (self::$splashSyncModule->isEnabled('splashsync')) {
             return true;
         }
         //====================================================================//
         // Execute Module is Uninstall
-        if (static::$splashSyncModule->uninstall()) {
+        if (self::$splashSyncModule->uninstall()) {
             Splash::log()->msg('[SPLASH] Splash Module Unintall Done');
         }
         //====================================================================//
         // Execute Module is Install
-        static::$splashSyncModule->updateTranslationsAfterInstall(false);
-        if (static::$splashSyncModule->install()) {
+        self::$splashSyncModule->updateTranslationsAfterInstall(false);
+        if (self::$splashSyncModule->install()) {
             Splash::log()->msg('[SPLASH] Splash Module Intall Done');
             echo Splash::log()->getConsoleLog(true);
 
@@ -568,7 +570,7 @@ class Local implements LocalClassInterface
         //====================================================================//
         // Import & Display Errors
         Splash::log()->err('[SPLASH] Splash Module Install Failed');
-        foreach (static::$splashSyncModule->getErrors() as $error) {
+        foreach (self::$splashSyncModule->getErrors() as $error) {
             Splash::log()->err('[SPLASH] Mod. Install : '.$error);
         }
         echo Splash::log()->getConsoleLog(true);

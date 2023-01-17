@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2021 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -67,9 +67,7 @@ trait CoverImageTrait
                 break;
             case 'cover_image_url':
                 $imgInfo = $this->getCoverImageDetails();
-                if ($imgInfo) {
-                    $this->out[$fieldName] = $imgInfo['url'];
-                }
+                $this->out[$fieldName] = $imgInfo ? $imgInfo['url'] : null;
 
                 break;
             default:
@@ -93,6 +91,6 @@ trait CoverImageTrait
         }
         $imgInfos = $this->buildInfo((int) $imgResult["id_image"]);
 
-        return $imgInfos["image"] ?? null;
+        return is_array($imgInfos["image"] ?? null) ? $imgInfos["image"] : null;
     }
 }

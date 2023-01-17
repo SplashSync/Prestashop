@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2021 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -16,6 +16,7 @@
 namespace Splash\Local\Traits;
 
 use Db;
+use PrestaShopDatabaseException;
 
 /**
  * Prestashop Splash Id Storage Trait
@@ -23,11 +24,13 @@ use Db;
 trait SplashIdTrait
 {
     /**
-     * Check Splash Id Storage Table Exists
+     * Check Splash ID Storage Table Exists
      *
      * @return bool global test result
+     *
+     * @phpstan-impure
      */
-    public static function checkSplashIdTable()
+    public static function checkSplashIdTable(): bool
     {
         // List Tables
         Db::getInstance()
@@ -78,19 +81,21 @@ trait SplashIdTrait
     /**
      * Write Splash Id to Storage
      *
-     * @param string     $objectType Object Type
-     * @param int|string $objectId   Object Identifier
-     * @param string     $splashId   Splash Object Identifier
+     * @param string      $objectType Object Type
+     * @param int|string  $objectId   Object Identifier
+     * @param null|string $splashId   Splash Object Identifier
+     *
+     * @throws PrestaShopDatabaseException
      *
      * @return bool
      */
-    public static function setSplashId($objectType, $objectId, $splashId = null)
+    public static function setSplashId(string $objectType, $objectId, ?string $splashId = null): bool
     {
         if (empty($splashId)) {
             return false;
         }
 
-        // Read Splash Id
+        // Read Splash ID
         $current = self::getSplashId($objectType, $objectId);
         // Object is Unknown
         if (!$current) {
@@ -100,7 +105,7 @@ trait SplashIdTrait
                 "spl_id" => pSQL($splashId),
             ));
         }
-        // Splash Id Changed
+        // Splash ID Changed
         if ($current !== $splashId) {
             return Db::getInstance()->update(
                 "splash_links",

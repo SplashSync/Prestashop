@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2021 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -73,7 +73,7 @@ class OrderPdfManager
             self::PDF_TTL
         );
 
-        return $infos ? $infos : null;
+        return $infos ?: null;
     }
 
     /**
@@ -83,7 +83,7 @@ class OrderPdfManager
      *
      * @return null|array
      */
-    public static function getOrderSlipPdfInfos(Order $order)
+    public static function getOrderSlipPdfInfos(Order $order): ?array
     {
         //====================================================================//
         // IF Order has Invoice
@@ -114,7 +114,7 @@ class OrderPdfManager
             self::PDF_TTL
         );
 
-        return $infos ? $infos : null;
+        return $infos ?: null;
     }
 
     /**
@@ -122,11 +122,11 @@ class OrderPdfManager
      *
      * @param OrderInvoice $object
      * @param string       $template
-     * @param mixed        $fullPath
+     * @param string       $fullPath
      *
      * @return bool
      */
-    private static function createPdf(OrderInvoice $object, $template, $fullPath)
+    private static function createPdf(OrderInvoice $object, string $template, string $fullPath): bool
     {
         //====================================================================//
         // A File Already Exists => Exit
@@ -162,6 +162,9 @@ class OrderPdfManager
         KernelManager::ensureKernel();
         /** @var Context $context */
         $context = Context::getContext();
+        if (!$context->smarty) {
+            return "Smarty not Found";
+        }
         //====================================================================//
         // Generate Pdf
         $pdf = new PDF($object, $template, $context->smarty);

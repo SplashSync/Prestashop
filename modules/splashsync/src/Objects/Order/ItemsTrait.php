@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2021 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -15,12 +15,13 @@
 
 namespace Splash\Local\Objects\Order;
 
-use ArrayObject;
 use OrderDetail;
+use PrestaShopException;
 use Splash\Core\SplashCore      as Splash;
 use Splash\Local\Objects\Invoice;
 use Splash\Local\Objects\Product;
 use Splash\Local\Services\DiscountsManager;
+use Splash\Local\Services\LanguagesManager;
 use Splash\Models\Objects\ListsTrait;
 use Splash\Models\Objects\PricesTrait;
 use Tools;
@@ -156,30 +157,30 @@ trait ItemsTrait
                     $value = 0;
 
                     break;
-                //====================================================================//
-                // Order Line Product Id
+                    //====================================================================//
+                    // Order Line Product Id
                 case 'product_id':
-                    $unikId = Product::getUnikIdStatic($product["product_id"], $product["product_attribute_id"]);
-                    $value = self::objects()->encode("Product", $unikId);
+                    $uniqueId = Product::getUnikIdStatic($product["product_id"], $product["product_attribute_id"]);
+                    $value = self::objects()->encode("Product", $uniqueId);
 
                     break;
-                //====================================================================//
-                // Order Line Unit Price
+                    //====================================================================//
+                    // Order Line Unit Price
                 case 'unit_price':
                     //====================================================================//
                     // Build Price Array
                     $value = self::prices()->Encode(
-                        (double)    Tools::convertPrice($product["unit_price_tax_excl"], $this->Currency),
+                        (double)    Tools::convertPrice($product["unit_price_tax_excl"], $this->currency),
                         (double)    OrderDetail::getTaxCalculatorStatic($product["id_order_detail"])->getTotalRate(),
                         null,
-                        $this->Currency->iso_code,
-                        $this->Currency->sign,
-                        $this->Currency->name
+                        $this->currency->iso_code,
+                        LanguagesManager::getCurrencySymbol($this->currency),
+                        LanguagesManager::getCurrencyName($this->currency)
                     );
 
                     break;
-                //====================================================================//
-                // Order Line Tax Name
+                    //====================================================================//
+                    // Order Line Tax Name
                 case 'tax_name':
                     $value = OrderDetail::getTaxCalculatorStatic($product["id_order_detail"])->getTaxesName();
 
@@ -198,12 +199,14 @@ trait ItemsTrait
     /**
      * Write Given Fields
      *
-     * @param string $fieldName Field Identifier / Name
-     * @param mixed  $fieldData Field Data
+     * @param string       $fieldName Field Identifier / Name
+     * @param null|array[] $fieldData Field Data
+     *
+     * @throws PrestaShopException
      *
      * @return void
      */
-    protected function setProductsFields(string $fieldName, $fieldData)
+    protected function setProductsFields(string $fieldName, ?array $fieldData): void
     {
         //====================================================================//
         // Safety Check
@@ -212,7 +215,7 @@ trait ItemsTrait
         }
         //====================================================================//
         // Verify Lines List & Update if Needed
-        foreach ($fieldData as $productItem) {
+        foreach ($fieldData ?? array() as $productItem) {
             //====================================================================//
             // Update Product Line
             $this->updateProduct(array_shift($this->Products), $productItem);
@@ -267,15 +270,15 @@ trait ItemsTrait
                 $value = 0;
 
                 break;
-            //====================================================================//
-            // Order Line Product Id
+                //====================================================================//
+                // Order Line Product Id
             case 'product_reference':
             case 'product_id':
                 $value = null;
 
                 break;
-            //====================================================================//
-            // Order Line Unit Price
+                //====================================================================//
+                // Order Line Unit Price
             case 'unit_price':
                 $value = $this->getShippingPrice();
 
@@ -307,7 +310,7 @@ trait ItemsTrait
     {
         //====================================================================//
         // Check if List field & Init List Array
-        $fieldId = self::lists()->InitOutput($this->out, "lines", $fieldName);
+        $fieldId = self::lists()->initOutput($this->out, "lines", $fieldName);
         if (!$fieldId) {
             return;
         }
@@ -321,7 +324,7 @@ trait ItemsTrait
         $index = count($this->Products) + 1;
         //====================================================================//
         // Insert Data in List
-        $discountItems = DiscountsManager::getDiscountItems($this->object, $this->Currency);
+        $discountItems = DiscountsManager::getDiscountItems($this->object, $this->currency);
         foreach ($discountItems as $discountItem) {
             self::lists()->insert($this->out, "lines", $fieldName, $index, $discountItem[$fieldId]);
             $index++;
@@ -331,15 +334,17 @@ trait ItemsTrait
     /**
      * Write Data to Current Item
      *
-     * @param null|array        $currentProduct Current Item Data Array
-     * @param array|ArrayObject $productItem    Input Item Data Array
+     * @param null|array $currentProduct Current Item Data Array
+     * @param array      $productItem    Input Item Data Array
+     *
+     * @throws PrestaShopException
      *
      * @return void
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    private function updateProduct(?array $currentProduct, $productItem)
+    private function updateProduct(?array $currentProduct, array $productItem): void
     {
         //====================================================================//
         // Not A Product Line => Skipped
@@ -353,7 +358,7 @@ trait ItemsTrait
             // Create New OrderDetail Item
             $orderDetail = new OrderDetail();
             $orderDetail->id_order = (int) $this->object->id;
-            $orderDetail->id_shop = $this->object->id_shop;
+            $orderDetail->id_shop = (int) $this->object->id_shop;
             $orderDetail->id_warehouse = 0;
         } else {
             $orderDetail = new OrderDetail($currentProduct["id_order_detail"]);
@@ -376,12 +381,12 @@ trait ItemsTrait
 
         //====================================================================//
         // Update Price
-        $ttcPrice = (float) self::prices()->TaxIncluded($productItem["unit_price"]);
+        $ttcPrice = (float) self::prices()->taxIncluded($productItem["unit_price"]);
         if ($orderDetail->unit_price_tax_incl != $ttcPrice) {
             $orderDetail->unit_price_tax_incl = $ttcPrice;
             $update = true;
         }
-        $htPrice = (float) self::prices()->TaxExcluded($productItem["unit_price"]);
+        $htPrice = (float) self::prices()->taxExcluded($productItem["unit_price"]);
         if ($orderDetail->unit_price_tax_excl != $htPrice) {
             $orderDetail->unit_price_tax_excl = $htPrice;
             $orderDetail->product_price = $htPrice;
@@ -390,9 +395,9 @@ trait ItemsTrait
 
         //====================================================================//
         // Update Product Link
-        $unikId = (string) self::objects()->Id($productItem["product_id"]);
-        $productId = Product::getId($unikId);
-        $attributeId = Product::getAttribute($unikId);
+        $uniqueId = (string) self::objects()->id($productItem["product_id"]);
+        $productId = Product::getId($uniqueId);
+        $attributeId = Product::getAttribute($uniqueId);
         if ($orderDetail->product_id != $productId) {
             $orderDetail->product_id = $productId;
             $update = true;
@@ -409,11 +414,11 @@ trait ItemsTrait
         }
 
         if (!$orderDetail->id) {
-            if (true != $orderDetail->add()) {
+            if (!$orderDetail->add()) {
                 Splash::log()->err("ErrLocalTpl", __CLASS__, __FUNCTION__, "Unable to Create new Order Line.");
             }
         } else {
-            if (true != $orderDetail->update()) {
+            if (!$orderDetail->update()) {
                 Splash::log()->err("ErrLocalTpl", __CLASS__, __FUNCTION__, "Unable to Update Order Line.");
             }
         }
@@ -450,12 +455,12 @@ trait ItemsTrait
         //====================================================================//
         // Build Price Array
         return self::prices()->encode(
-            (double)    Tools::convertPrice($this->object->total_shipping_tax_excl, $this->Currency),
+            (double)    Tools::convertPrice($this->object->total_shipping_tax_excl, $this->currency),
             (double)    $taxPercent,
             null,
-            $this->Currency->iso_code,
-            $this->Currency->sign,
-            $this->Currency->name
+            $this->currency->iso_code,
+            LanguagesManager::getCurrencySymbol($this->currency),
+            LanguagesManager::getCurrencyName($this->currency)
         );
     }
 
@@ -468,7 +473,7 @@ trait ItemsTrait
     {
         //====================================================================//
         // Get Carrier by Id
-        if (empty($this->carrier) || empty($this->carrier->name)) {
+        if (!isset($this->carrier) || empty($this->carrier->name)) {
             return $this->spl->l("Delivery");
         }
         //====================================================================//

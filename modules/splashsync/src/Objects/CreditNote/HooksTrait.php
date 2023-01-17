@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2021 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -36,7 +36,7 @@ trait HooksTrait
      *
      * @return bool
      */
-    public function hookactionObjectOrderSlipAddAfter($params)
+    public function hookactionObjectOrderSlipAddAfter(array $params): bool
     {
         return $this->hookactionCreditNote(
             $params["object"],
@@ -52,7 +52,7 @@ trait HooksTrait
      *
      * @return bool
      */
-    public function hookactionObjectOrderSlipUpdateAfter($params)
+    public function hookactionObjectOrderSlipUpdateAfter(array $params): bool
     {
         return $this->hookactionCreditNote(
             $params["object"],
@@ -68,7 +68,7 @@ trait HooksTrait
      *
      * @return bool
      */
-    public function hookactionObjectOrderSlipDeleteAfter($params)
+    public function hookactionObjectOrderSlipDeleteAfter(array $params): bool
     {
         return $this->hookactionCreditNote(
             $params["object"],
@@ -86,12 +86,12 @@ trait HooksTrait
      *
      * @return bool
      */
-    private function hookactionCreditNote($order, $action, $comment)
+    private function hookactionCreditNote(OrderSlip $order, string $action, string $comment)
     {
         //====================================================================//
         // Retrieve Customer Id
         $objectId = null;
-        if (isset($order->id)) {
+        if (!empty($order->id)) {
             $objectId = $order->id;
         }
         //====================================================================//

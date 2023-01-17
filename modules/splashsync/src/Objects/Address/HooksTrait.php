@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2021 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -36,7 +36,7 @@ trait HooksTrait
      *
      * @return bool
      */
-    public function hookactionObjectAddressAddAfter($params)
+    public function hookactionObjectAddressAddAfter(array $params): bool
     {
         return $this->hookactionAddress(
             $params["object"],
@@ -52,7 +52,7 @@ trait HooksTrait
      *
      * @return bool
      */
-    public function hookactionObjectAddressUpdateAfter($params)
+    public function hookactionObjectAddressUpdateAfter(array $params): bool
     {
         return $this->hookactionAddress(
             $params["object"],
@@ -67,7 +67,7 @@ trait HooksTrait
      *
      * @return bool
      */
-    public function hookactionObjectAddressDeleteAfter($params)
+    public function hookactionObjectAddressDeleteAfter(array $params): bool
     {
         return $this->hookactionAddress(
             $params["object"],
@@ -85,7 +85,7 @@ trait HooksTrait
      *
      * @return bool
      */
-    private function hookactionAddress($address, $action, $comment)
+    private function hookactionAddress(Address $address, string $action, string $comment): bool
     {
         //====================================================================//
         // Safety Check
@@ -98,7 +98,7 @@ trait HooksTrait
         $result = $this->doCommit("Address", (string) $addressId, $action, $comment);
         //====================================================================//
         // Also Commit Update For Customer
-        if (isset($address->id_customer) && !empty($address->id_customer) && !Splash::isDebugMode()) {
+        if (!empty($address->id_customer) && !Splash::isDebugMode()) {
             //====================================================================//
             // Commit Update For Customer
             $this->doCommit("ThirdParty", (string) $address->id_customer, SPL_A_UPDATE, $comment);

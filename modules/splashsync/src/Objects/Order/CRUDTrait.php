@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2021 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -22,6 +22,7 @@ use Configuration;
 use Context;
 use Currency;
 use Order;
+use PrestaShopException;
 use Shop;
 use Splash\Core\SplashCore      as Splash;
 use Splash\Local\Services\DiscountsManager;
@@ -37,31 +38,31 @@ trait CRUDTrait
     /**
      * @var Order
      */
-    protected $Order;
+    protected Order $Order;
 
     /**
      * @var TaxCalculator.
      */
-    protected $ShippingTaxCalculator;
+    protected TaxCalculator $ShippingTaxCalculator;
 
     /**
-     * @var Carrier
+     * @var null|Carrier
      */
-    protected $carrier;
+    protected ?Carrier $carrier;
 
     /**
      * @var Cart
      */
-    private $Cart;
+    private Cart $Cart;
 
     /**
      * Load Request Object
      *
      * @param string $objectId Object id
      *
-     * @return false|Order
+     * @return null|Order
      */
-    public function load($objectId)
+    public function load(string $objectId): ?Order
     {
         //====================================================================//
         // Stack Trace
@@ -70,7 +71,7 @@ trait CRUDTrait
         // Load Object
         $object = new Order((int) $objectId);
         if ($object->id != $objectId) {
-            return Splash::log()->errTrace("Unable to load Order (".$objectId.").");
+            return Splash::log()->errNull("Unable to load Order (".$objectId.").");
         }
 
         //====================================================================//
@@ -110,9 +111,11 @@ trait CRUDTrait
     /**
      * Create Request Object
      *
-     * @return false|Order New Object
+     * @throws PrestaShopException
+     *
+     * @return null|Order New Object
      */
-    public function create()
+    public function create(): ?Order
     {
         //====================================================================//
         // Stack Trace
@@ -127,8 +130,8 @@ trait CRUDTrait
         // Create a New Cart
         $this->Cart = new Cart();
         $this->Cart->id_currency = (int) Configuration::get('PS_CURRENCY_DEFAULT');
-        if (true != $this->Cart->add()) {
-            return Splash::log()->errTrace("Unable to Create new Order Cart.");
+        if (!$this->Cart->add()) {
+            return Splash::log()->errNull("Unable to Create new Order Cart.");
         }
 
         //====================================================================//
@@ -138,7 +141,7 @@ trait CRUDTrait
         //====================================================================//
         // Setup Minimal Data
         $this->object->current_state = 0;
-        $this->object->id_cart = $this->Cart->id;
+        $this->object->id_cart = (int) $this->Cart->id;
         $this->object->id_currency = (int) Configuration::get('PS_CURRENCY_DEFAULT');
         $this->object->conversion_rate = 1;
         $this->object->id_carrier = 1;
@@ -156,22 +159,33 @@ trait CRUDTrait
         $this->object->round_mode = (int) Configuration::get('PS_PRICE_ROUND_MODE');
         $this->object->round_type = (int) Configuration::get('PS_ROUND_TYPE');
 
-        $this->setCoreFields("id_customer", $this->in["id_customer"]);
-
-        $this->setAddressFields("id_address_delivery", $this->in["id_address_delivery"]);
-        $this->setAddressFields("id_address_invoice", $this->in["id_address_invoice"]);
-
+        if (is_scalar($this->in["id_customer"] ?? null)) {
+            $this->setCoreFields("id_customer", (string) $this->in["id_customer"]);
+        }
+        if (is_scalar($this->in["id_address_delivery"] ?? null)) {
+            $this->setAddressFields("id_address_delivery", (string) $this->in["id_address_delivery"]);
+        }
+        if (is_scalar($this->in["id_address_invoice"] ?? null)) {
+            $this->setAddressFields("id_address_invoice", (string) $this->in["id_address_invoice"]);
+        }
         //====================================================================//
         // Persist Order in Database
-        if (true != $this->object->add()) {
-            return Splash::log()->errTrace("Unable to Create new Order.");
+        if (!$this->object->add()) {
+            return Splash::log()->errNull("Unable to Create new Order.");
+        }
+
+        //====================================================================//
+        // Create a New Order Carrier
+        $carrier = new \OrderCarrier();
+        $carrier->id_order = (int) $this->object->id;
+        $carrier->id_carrier = 1;
+        if (!$carrier->add()) {
+            return Splash::log()->errNull("Unable to Create new Order Carrier.");
         }
 
         //====================================================================//
         // Create Empty Order Products List
         $this->Products = array();
-
-        Splash::log()->deb("New Order Created");
 
         return $this->object;
     }
@@ -181,9 +195,9 @@ trait CRUDTrait
      *
      * @param bool $needed Is This Update Needed
      *
-     * @return false|string Object Id
+     * @return null|string Object ID
      */
-    public function update(bool $needed)
+    public function update(bool $needed): ?string
     {
         //====================================================================//
         // Stack Trace
@@ -196,17 +210,16 @@ trait CRUDTrait
         // If Id Given = > Update Object
         //====================================================================//
         if (!empty($this->object->id)) {
-            if (true != $this->object->update()) {
-                return Splash::log()->errTrace("Unable to Update Order (".$this->object->id.").");
+            if (!$this->object->update()) {
+                return Splash::log()->errNull("Unable to Update Order (".$this->object->id.").");
             }
-            Splash::log()->deb("Order Updated");
         }
 
         //====================================================================//
         // UPDATE/CREATE SPLASH ID
         //====================================================================//
         if (!is_null($this->NewSplashId)) {
-            self::setSplashId(self::$NAME, (int) $this->object->id, $this->NewSplashId);
+            self::setSplashId(self::$name, (int) $this->object->id, $this->NewSplashId);
             $this->NewSplashId = null;
         }
 
@@ -214,13 +227,11 @@ trait CRUDTrait
     }
 
     /**
-     * Delete requested Object
+     * {@inheritdoc}
      *
-     * @param string $objectId Object Id.  If NULL, Object needs to be created.
-     *
-     * @return bool
+     * @throws PrestaShopException
      */
-    public function delete($objectId = null): bool
+    public function delete(string $objectId): bool
     {
         //====================================================================//
         // Stack Trace
@@ -228,7 +239,9 @@ trait CRUDTrait
 
         //====================================================================//
         // An Order Cannot Get Deleted
-        Splash::log()->errTrace("You Cannot Delete Prestashop Orders");
+        if (!Splash::isDebugMode()) {
+            return Splash::log()->errTrace("You Cannot Delete Prestashop Orders");
+        }
 
         //====================================================================//
         // Load Object From DataBase
@@ -248,10 +261,10 @@ trait CRUDTrait
     /**
      * {@inheritdoc}
      */
-    public function getObjectIdentifier()
+    public function getObjectIdentifier(): ?string
     {
         if (!isset($this->object->id)) {
-            return false;
+            return null;
         }
 
         return (string) $this->object->id;

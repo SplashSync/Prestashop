@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2021 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -36,7 +36,7 @@ trait CategoriesTrait
      *
      * @return void
      */
-    protected function buildCategoriesFields()
+    protected function buildCategoriesFields(): void
     {
         $fieldName = Translate::getAdminTranslation("Categories", "AdminCatalogFeature");
 
@@ -46,11 +46,11 @@ trait CategoriesTrait
 
         //====================================================================//
         // Categories Slugs
-        $this->fieldsFactory()->Create(SPL_T_INLINE)
-            ->Identifier("categories")
-            ->Name($fieldName)
-            ->Description($fieldName." Rewrite Url")
-            ->MicroData("http://schema.org/Product", "category")
+        $this->fieldsFactory()->create(SPL_T_INLINE)
+            ->identifier("categories")
+            ->name($fieldName)
+            ->description($fieldName." Rewrite Url")
+            ->microData("http://schema.org/Product", "category")
             ->addChoices(CategoryManager::getAllCategoriesChoices())
             ->setPreferNone()
         ;
@@ -69,11 +69,11 @@ trait CategoriesTrait
         foreach (LanguagesManager::getAvailableLanguages() as $langId => $isoLang) {
             //====================================================================//
             // Categories Names
-            $this->fieldsFactory()->Create(SPL_T_INLINE)
-                ->Identifier("categories_names")
-                ->Name($fieldName." Name")
-                ->Description($fieldName." Names")
-                ->MicroData("http://schema.org/Product", "categoryName")
+            $this->fieldsFactory()->create(SPL_T_INLINE)
+                ->identifier("categories_names")
+                ->name($fieldName." Name")
+                ->description($fieldName." Names")
+                ->microData("http://schema.org/Product", "categoryName")
                 ->setMultilang($isoLang)
                 ->addChoices(CategoryManager::getAllCategoriesChoices($langId))
                 ->setPreferNone()
@@ -95,7 +95,7 @@ trait CategoriesTrait
      *
      * @return void
      */
-    protected function getCategoriesFields($key, $fieldName)
+    protected function getCategoriesFields(string $key, string $fieldName): void
     {
         //====================================================================//
         // READ Fields
@@ -124,13 +124,13 @@ trait CategoriesTrait
      *
      * @return void
      */
-    protected function getCategoriesMultilangFields($key, $fieldName)
+    protected function getCategoriesMultiLangFields(string $key, string $fieldName): void
     {
         //====================================================================//
         // Walk on Available Languages
         foreach (LanguagesManager::getAvailableLanguages() as $idLang => $isoLang) {
             //====================================================================//
-            // Decode Multilang Field Name
+            // Decode Multi-lang Field Name
             $baseFieldName = LanguagesManager::fieldNameDecode($fieldName, $isoLang);
             //====================================================================//
             // READ Fields
@@ -149,12 +149,12 @@ trait CategoriesTrait
     /**
      * Write Given Fields
      *
-     * @param string $fieldName Field Identifier / Name
-     * @param mixed  $fieldData Field Data
+     * @param string      $fieldName Field Identifier / Name
+     * @param null|string $fieldData Field Data
      *
      * @return void
      */
-    protected function setCategoriesFields($fieldName, $fieldData)
+    protected function setCategoriesFields(string $fieldName, ?string $fieldData): void
     {
         //====================================================================//
         // WRITE Field

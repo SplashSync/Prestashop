@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2021 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -29,38 +29,40 @@ trait TrackingTrait
     {
         //====================================================================//
         // Order Shipping Method
-        $this->fieldsFactory()->Create(SPL_T_VARCHAR)
-            ->Identifier("carrier_name")
-            ->Name("Shipping Method")
-            ->MicroData("http://schema.org/ParcelDelivery", "provider")
+        $this->fieldsFactory()->create(SPL_T_VARCHAR)
+            ->identifier("carrier_name")
+            ->name("Shipping Method")
+            ->microData("http://schema.org/ParcelDelivery", "provider")
             ->group("Tracking")
-            ->isReadOnly();
-
+            ->isReadOnly()
+        ;
         //====================================================================//
         // Order Shipping Method Description
-        $this->fieldsFactory()->Create(SPL_T_VARCHAR)
-            ->Identifier("carrier_code")
-            ->Name("Carrier Code")
-            ->MicroData("http://schema.org/ParcelDelivery", "identifier")
+        $this->fieldsFactory()->create(SPL_T_VARCHAR)
+            ->identifier("carrier_code")
+            ->name("Carrier Code")
+            ->microData("http://schema.org/ParcelDelivery", "identifier")
             ->group("Tracking")
-            ->isReadOnly();
-
+            ->isReadOnly()
+        ;
         //====================================================================//
         // Order Tracking Number
-        $this->fieldsFactory()->Create(SPL_T_VARCHAR)
-            ->Identifier("track_number")
-            ->Name("Tracking Number")
-            ->MicroData("http://schema.org/ParcelDelivery", "trackingNumber")
-            ->group("Tracking");
-
+        $this->fieldsFactory()->create(SPL_T_VARCHAR)
+            ->identifier("track_number")
+            ->name("Tracking Number")
+            ->microData("http://schema.org/ParcelDelivery", "trackingNumber")
+            ->group("Tracking")
+            ->isIndexed()
+        ;
         //====================================================================//
         // Order Tracking Url
-        $this->fieldsFactory()->Create(SPL_T_URL)
-            ->Identifier("track_url")
-            ->Name("Tracking Url")
-            ->MicroData("http://schema.org/ParcelDelivery", "trackingUrl")
+        $this->fieldsFactory()->create(SPL_T_URL)
+            ->identifier("track_url")
+            ->name("Tracking Url")
+            ->microData("http://schema.org/ParcelDelivery", "trackingUrl")
             ->group("Tracking")
-            ->isReadOnly();
+            ->isReadOnly()
+        ;
     }
 
     /**
@@ -71,7 +73,7 @@ trait TrackingTrait
      *
      * @return void
      */
-    protected function getTrackingFields($key, $fieldName)
+    protected function getTrackingFields(string $key, string $fieldName): void
     {
         //====================================================================//
         // READ Fields
@@ -109,12 +111,12 @@ trait TrackingTrait
     /**
      * Write Given Fields
      *
-     * @param string $fieldName Field Identifier / Name
-     * @param mixed  $fieldData Field Data
+     * @param string      $fieldName Field Identifier / Name
+     * @param null|string $fieldData Field Data
      *
      * @return void
      */
-    protected function setTrackingFields($fieldName, $fieldData)
+    protected function setTrackingFields(string $fieldName, ?string $fieldData)
     {
         //====================================================================//
         // WRITE Field
@@ -145,7 +147,7 @@ trait TrackingTrait
      *
      * @return string
      */
-    private function getOrderTrackingUrl()
+    private function getOrderTrackingUrl(): string
     {
         //====================================================================//
         // Check Carrier has Url

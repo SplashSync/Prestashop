@@ -6,19 +6,17 @@
 
     "minimum-stability": "dev",
     "prefer-stable": true,
-    
-    "config": {
-        "vendor-dir":                   "modules/splashsync/vendor",
-        "bin-dir":                      "modules/splashsync/vendor/bin",
-        "preferred-install":            "dist",
-        "platform": {
-            "php":                      "7.2.0"
-        },
-        "allow-plugins": {
-            "phpro/grumphp": true
-        }
+
+    "require": {
+        "php":                              "^7.4|^8.0",
+        "splash/phpcore":                   "dev-master"
     },
-    
+
+    "require-dev": {
+        "splash/console":                   "dev-master",
+        "badpixxel/php-sdk":                "~2.0"
+    },
+
     "autoload": {
         "psr-4": { "Splash\\Local\\": "modules/splashsync/src" },
         "exclude-from-classmap": [
@@ -31,13 +29,15 @@
         "psr-4": { "Splash\\Tests\\": "modules/splashsync/tests" }
     },
 
-    "require": {
-        "php":                              "^7.2",
-        "splash/phpcore":                   "~1.7"
-    },
-
-    "require-dev": {
-        "splash/console":                   "dev-master",
-        "badpixxel/php-sdk":                "~1.0"
+    "config": {
+        "vendor-dir":                   "modules/splashsync/vendor",
+        "bin-dir":                      "modules/splashsync/vendor/bin",
+        "preferred-install":            "dist",
+        "platform": {
+            "php":                      "7.4.0"
+        },
+        "allow-plugins": {
+            "phpro/grumphp": true
+        }
     }
 }

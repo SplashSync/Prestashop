@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2021 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -31,7 +31,7 @@ trait CoreTrait
      *
      * @return bool
      */
-    protected function isOrderObject()
+    protected function isOrderObject(): bool
     {
         return ($this instanceof Order);
     }
@@ -46,41 +46,44 @@ trait CoreTrait
         //====================================================================//
         // Customer Object
         $this->fieldsFactory()->create((string) self::objects()->encode("ThirdParty", SPL_T_ID))
-            ->Identifier("id_customer")
-            ->Name(Translate::getAdminTranslation("Customer ID", "AdminCustomerThreads"))
+            ->identifier("id_customer")
+            ->name(Translate::getAdminTranslation("Customer ID", "AdminCustomerThreads"))
             ->isRequired();
         if (!$this->isOrderObject()) {
-            $this->fieldsFactory()->MicroData("http://schema.org/Invoice", "customer");
+            $this->fieldsFactory()->microData("http://schema.org/Invoice", "customer");
         } else {
-            $this->fieldsFactory()->MicroData("http://schema.org/Organization", "ID");
+            $this->fieldsFactory()->microData("http://schema.org/Organization", "ID");
         }
-
         //====================================================================//
         // Customer Email
         $this->fieldsFactory()->create(SPL_T_EMAIL)
-            ->Identifier("email")
-            ->Name(Translate::getAdminTranslation("Email address", "AdminCustomers"))
-            ->MicroData("http://schema.org/ContactPoint", "email")
-            ->isReadOnly();
-
+            ->identifier("email")
+            ->name(Translate::getAdminTranslation("Email address", "AdminCustomers"))
+            ->microData("http://schema.org/ContactPoint", "email")
+            ->isIndexed()
+            ->isReadOnly()
+        ;
         //====================================================================//
         // Reference
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
             ->identifier("reference")
             ->name(Translate::getAdminTranslation("Reference", "AdminOrders"))
-            ->MicroData("http://schema.org/Order", "orderNumber")
+            ->microData("http://schema.org/Order", "orderNumber")
             ->addOption("maxLength", "8")
             ->isRequired()
-            ->isListed();
-
+            ->isPrimary($this->isOrderObject())
+            ->isIndexed(!$this->isOrderObject())
+            ->isListed()
+        ;
         //====================================================================//
         // Order Date
         $this->fieldsFactory()->create(SPL_T_DATE)
-            ->Identifier("order_date")
-            ->Name(Translate::getAdminTranslation("Date", "AdminProducts"))
-            ->MicroData("http://schema.org/Order", "orderDate")
+            ->identifier("order_date")
+            ->name(Translate::getAdminTranslation("Date", "AdminProducts"))
+            ->microData("http://schema.org/Order", "orderDate")
             ->isReadOnly()
-            ->isListed();
+            ->isListed()
+        ;
     }
 
     /**
@@ -91,7 +94,7 @@ trait CoreTrait
      *
      * @return void
      */
-    private function getCoreFields($key, $fieldName)
+    private function getCoreFields(string $key, string $fieldName): void
     {
         //====================================================================//
         // READ Fields
@@ -106,18 +109,18 @@ trait CoreTrait
                 }
 
                 break;
-            //====================================================================//
-            // Customer Object Id Readings
+                //====================================================================//
+                // Customer Object Id Readings
             case 'id_customer':
-                if (!$this->isOrderObject()) {
-                    $this->out[$fieldName] = self::objects()->encode("ThirdParty", $this->Order->{$fieldName});
-                } else {
+                if ($this instanceof Order) {
                     $this->out[$fieldName] = self::objects()->encode("ThirdParty", $this->object->{$fieldName});
+                } else {
+                    $this->out[$fieldName] = self::objects()->encode("ThirdParty", $this->Order->{$fieldName});
                 }
 
                 break;
-            //====================================================================//
-            // Customer Email
+                //====================================================================//
+                // Customer Email
             case 'email':
                 if ($this instanceof Order) {
                     $customerId = $this->object->id_customer;
@@ -135,8 +138,8 @@ trait CoreTrait
                 $this->out[$fieldName] = $customer->email;
 
                 break;
-            //====================================================================//
-            // Order Official Date
+                //====================================================================//
+                // Order Official Date
             case 'order_date':
                 $this->out[$fieldName] = date(SPL_T_DATECAST, (int) strtotime((string) $this->object->date_add));
 
@@ -151,12 +154,12 @@ trait CoreTrait
     /**
      * Write Given Fields
      *
-     * @param string $fieldName Field Identifier / Name
-     * @param mixed  $fieldData Field Data
+     * @param string      $fieldName Field Identifier / Name
+     * @param null|string $fieldData Field Data
      *
      * @return void
      */
-    private function setCoreFields($fieldName, $fieldData)
+    private function setCoreFields(string $fieldName, ?string $fieldData): void
     {
         //====================================================================//
         // WRITE Field
@@ -171,13 +174,20 @@ trait CoreTrait
                 }
 
                 break;
-            //====================================================================//
-            // Customer Object Id
+                //====================================================================//
+                // Customer Object Id
             case 'id_customer':
                 if (!$this->isOrderObject()) {
-                    $this->setSimple($fieldName, self::objects()->Id($fieldData), "Order");
+                    $this->setSimple(
+                        $fieldName,
+                        self::objects()->id((string) $fieldData),
+                        "Order"
+                    );
                 } else {
-                    $this->setSimple($fieldName, self::objects()->Id($fieldData));
+                    $this->setSimple(
+                        $fieldName,
+                        self::objects()->id((string) $fieldData)
+                    );
                 }
 
                 break;

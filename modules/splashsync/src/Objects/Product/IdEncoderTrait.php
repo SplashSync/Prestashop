@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2021 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -33,7 +33,7 @@ trait IdEncoderTrait
     public function getUnikId($productId = null, $attributeId = 0)
     {
         if (is_null($productId)) {
-            return self::getUnikIdStatic($this->ProductId, $this->AttributeId);
+            return self::getUnikIdStatic($this->ProductId, $this->AttributeId ?? 0);
         }
 
         return self::getUnikIdStatic($productId, $attributeId);
@@ -45,9 +45,9 @@ trait IdEncoderTrait
      * @param int $productId   Product Identifier
      * @param int $attributeId Product Combinaison Identifier
      *
-     * @return string $UnikId
+     * @return string
      */
-    public static function getUnikIdStatic($productId, $attributeId)
+    public static function getUnikIdStatic($productId, $attributeId): string
     {
         //====================================================================//
         // No Attribite Id
@@ -67,42 +67,42 @@ trait IdEncoderTrait
     }
 
     /**
-     * Revert UnikId to decode id_product
+     * Revert UniqueId to decode id_product
      *
-     * @param int|string $unikId Product UnikId
+     * @param int|string $uniqueId Product UniqueId
      *
      * @return int $id_product
      */
-    public static function getId($unikId)
+    public static function getId($uniqueId)
     {
-        return self::decodeIdsStatic($unikId)['pId'];
+        return self::decodeIdsStatic($uniqueId)['pId'];
     }
 
     /**
-     * Revert UnikId to decode id_product_attribute
+     * Revert UniqueId to decode id_product_attribute
      *
-     * @param int|string $unikId Product UnikId
+     * @param int|string $uniqueId Product UniqueId
      *
      * @return int $id_product_attribute
      */
-    public static function getAttribute($unikId)
+    public static function getAttribute($uniqueId)
     {
-        return self::decodeIdsStatic($unikId)['aId'];
+        return self::decodeIdsStatic($uniqueId)['aId'];
     }
 
     /**
-     * Decode UnikId to array
+     * Decode UniqueId to array
      *
-     * @param int|string $unikId Product UnikId
+     * @param int|string $uniqueId Product UniqueId
      *
      * @return array
      */
-    private static function decodeIdsStatic($unikId)
+    private static function decodeIdsStatic($uniqueId)
     {
         //====================================================================//
         // Id Splash Id String Given
-        if (false !== strpos((string) $unikId, '@@')) {
-            $decoded = explode('@@', (string) $unikId);
+        if (false !== strpos((string) $uniqueId, '@@')) {
+            $decoded = explode('@@', (string) $uniqueId);
 
             return array(
                 'pId' => (int) $decoded[0],
@@ -112,8 +112,8 @@ trait IdEncoderTrait
         //====================================================================//
         // Standard Id Decoder
         return array(
-            'pId' => (int) $unikId & 0xFFFFF,
-            'aId' => (int) $unikId >> 20,
+            'pId' => (int) $uniqueId & 0xFFFFF,
+            'aId' => (int) $uniqueId >> 20,
         );
     }
 }

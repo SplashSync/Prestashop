@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2021 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -20,6 +20,7 @@ use Db;
 use OrderDetail;
 use Splash\Core\SplashCore as Splash;
 use Splash\Local\Objects\Product;
+use Splash\Local\Services\LanguagesManager;
 use Splash\Models\Objects\ListsTrait;
 use Splash\Models\Objects\PricesTrait;
 use Tools;
@@ -34,14 +35,14 @@ trait ItemsTrait
     use PricesTrait;
 
     /**
-     * @var Carrier
+     * @var null|Carrier
      */
-    protected $carrier;
+    protected ?Carrier $carrier;
 
     /**
      * @var bool
      */
-    private $hasCartRule = false;
+    private bool $hasCartRule = false;
 
     /**
      * Build Fields using FieldFactory
@@ -53,68 +54,65 @@ trait ItemsTrait
         //====================================================================//
         // Order Line Product Identifier
         $this->fieldsFactory()->create((string) self::objects()->Encode("Product", SPL_T_ID))
-            ->Identifier("product_id")
-            ->InList("lines")
-            ->Name(Translate::getAdminTranslation("Product ID", "AdminImport"))
-            ->MicroData("http://schema.org/Product", "productID")
-            ->Group(Translate::getAdminTranslation("Products", "AdminOrders"))
-            ->Association("product_name@lines", "product_quantity@lines", "product_id@lines", "unit_price@lines")
+            ->identifier("product_id")
+            ->inList("lines")
+            ->name(Translate::getAdminTranslation("Product ID", "AdminImport"))
+            ->microData("http://schema.org/Product", "productID")
+            ->group(Translate::getAdminTranslation("Products", "AdminOrders"))
+            ->association("product_name@lines", "product_quantity@lines", "product_id@lines", "unit_price@lines")
         ;
-
         //====================================================================//
         // Order Line Description
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
-            ->Identifier("product_name")
-            ->InList("lines")
-            ->Name(Translate::getAdminTranslation("Short description", "AdminProducts"))
-            ->MicroData("http://schema.org/partOfInvoice", "description")
-            ->Group(Translate::getAdminTranslation("Products", "AdminOrders"))
-            ->Association("product_name@lines", "product_quantity@lines", "product_id@lines", "unit_price@lines")
+            ->identifier("product_name")
+            ->inList("lines")
+            ->name(Translate::getAdminTranslation("Short description", "AdminProducts"))
+            ->microData("http://schema.org/partOfInvoice", "description")
+            ->group(Translate::getAdminTranslation("Products", "AdminOrders"))
+            ->association("product_name@lines", "product_quantity@lines", "product_id@lines", "unit_price@lines")
         ;
-
         //====================================================================//
         // Order Line Quantity
         $this->fieldsFactory()->create(SPL_T_INT)
-            ->Identifier("product_quantity")
-            ->InList("lines")
-            ->Name(Translate::getAdminTranslation("Quantity", "AdminOrders"))
-            ->MicroData("http://schema.org/QuantitativeValue", "value")
-            ->Group(Translate::getAdminTranslation("Products", "AdminOrders"))
-            ->Association("product_name@lines", "product_quantity@lines", "product_id@lines", "unit_price@lines")
+            ->identifier("product_quantity")
+            ->inList("lines")
+            ->name(Translate::getAdminTranslation("Quantity", "AdminOrders"))
+            ->microData("http://schema.org/QuantitativeValue", "value")
+            ->group(Translate::getAdminTranslation("Products", "AdminOrders"))
+            ->association("product_name@lines", "product_quantity@lines", "product_id@lines", "unit_price@lines")
         ;
-
         //====================================================================//
         // Order Line Unit Price
         $this->fieldsFactory()->create(SPL_T_PRICE)
-            ->Identifier("unit_price")
-            ->InList("lines")
-            ->Name(Translate::getAdminTranslation("Price", "AdminOrders"))
-            ->MicroData("http://schema.org/PriceSpecification", "price")
-            ->Group(Translate::getAdminTranslation("Products", "AdminOrders"))
-            ->Association("product_name@lines", "product_quantity@lines", "product_id@lines", "unit_price@lines")
+            ->identifier("unit_price")
+            ->inList("lines")
+            ->name(Translate::getAdminTranslation("Price", "AdminOrders"))
+            ->microData("http://schema.org/PriceSpecification", "price")
+            ->group(Translate::getAdminTranslation("Products", "AdminOrders"))
+            ->association("product_name@lines", "product_quantity@lines", "product_id@lines", "unit_price@lines")
         ;
 
         //====================================================================//
         // Order Line Tax Name
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
-            ->Identifier("tax_name")
-            ->InList("lines")
-            ->Name(Translate::getAdminTranslation("Tax Name", "AdminOrders"))
-            ->MicroData("http://schema.org/PriceSpecification", "valueAddedTaxName")
-            ->Association("product_name@lines", "product_quantity@lines", "unit_price@lines")
-            ->Group(Translate::getAdminTranslation("Products", "AdminOrders"))
+            ->identifier("tax_name")
+            ->inList("lines")
+            ->name(Translate::getAdminTranslation("Tax Name", "AdminOrders"))
+            ->microData("http://schema.org/PriceSpecification", "valueAddedTaxName")
+            ->association("product_name@lines", "product_quantity@lines", "unit_price@lines")
+            ->group(Translate::getAdminTranslation("Products", "AdminOrders"))
             ->isReadOnly()
         ;
 
         //====================================================================//
         // Order Line Discount
         $this->fieldsFactory()->create(SPL_T_DOUBLE)
-            ->Identifier("reduction_percent")
-            ->InList("lines")
-            ->Name(Translate::getAdminTranslation("Discount (%)", "AdminGroups"))
-            ->MicroData("http://schema.org/Order", "discount")
-            ->Group(Translate::getAdminTranslation("Products", "AdminOrders"))
-            ->Association("product_name@lines", "product_quantity@lines", "unit_price@lines")
+            ->identifier("reduction_percent")
+            ->inList("lines")
+            ->name(Translate::getAdminTranslation("Discount (%)", "AdminGroups"))
+            ->microData("http://schema.org/Order", "discount")
+            ->group(Translate::getAdminTranslation("Products", "AdminOrders"))
+            ->association("product_name@lines", "product_quantity@lines", "unit_price@lines")
             ->isReadOnly()
         ;
     }
@@ -129,11 +127,11 @@ trait ItemsTrait
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    protected function getProductsFields($key, $fieldName)
+    protected function getProductsFields(string $key, string $fieldName): void
     {
         //====================================================================//
         // Check if List field & Init List Array
-        $fieldId = self::lists()->InitOutput($this->out, "lines", $fieldName);
+        $fieldId = self::lists()->initOutput($this->out, "lines", $fieldName);
         if (!$fieldId) {
             return;
         }
@@ -152,12 +150,12 @@ trait ItemsTrait
                 //====================================================================//
                 // Order Line Product Id
                 case 'product_id':
-                    $unikId = Product::getUnikIdStatic($product["product_id"], $product["product_attribute_id"]);
-                    $value = self::objects()->Encode("Product", $unikId);
+                    $uniqueId = Product::getUnikIdStatic($product["product_id"], $product["product_attribute_id"]);
+                    $value = self::objects()->encode("Product", $uniqueId);
 
                     break;
-                //====================================================================//
-                // Order Line Direct Reading Data
+                    //====================================================================//
+                    // Order Line Direct Reading Data
                 case 'product_name':
                 case 'product_quantity':
                     $value = $product[$fieldId];
@@ -167,8 +165,8 @@ trait ItemsTrait
                     $value = 0;
 
                     break;
-                //====================================================================//
-                // Order Line Unit Price
+                    //====================================================================//
+                    // Order Line Unit Price
                 case 'unit_price':
                     //====================================================================//
                     // In Case Cart Rule Exists
@@ -186,13 +184,13 @@ trait ItemsTrait
                         (double)    $vatRate,
                         null,
                         $this->currency->iso_code,
-                        $this->currency->sign,
-                        $this->currency->name
+                        LanguagesManager::getCurrencySymbol($this->currency),
+                        LanguagesManager::getCurrencyName($this->currency)
                     );
 
                     break;
-                //====================================================================//
-                // Order Line Tax Name
+                    //====================================================================//
+                    // Order Line Tax Name
                 case 'tax_name':
                     $value = OrderDetail::getTaxCalculatorStatic($product["id_order_detail"])->getTaxesName();
 
@@ -202,7 +200,7 @@ trait ItemsTrait
             }
             //====================================================================//
             // Insert Data in List
-            self::lists()->Insert($this->out, "lines", $fieldName, $index, $value);
+            self::lists()->insert($this->out, "lines", $fieldName, $index, $value);
         }
 
         unset($this->in[$key]);
@@ -213,7 +211,7 @@ trait ItemsTrait
      *
      * @return bool
      */
-    protected function checkCustomerCartRule()
+    protected function checkCustomerCartRule(): bool
     {
         //====================================================================//
         // Compute Customer Cart Rule Code Filter
@@ -245,11 +243,11 @@ trait ItemsTrait
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    private function getShippingFields($key, $fieldName)
+    private function getShippingFields(string $key, string $fieldName)
     {
         //====================================================================//
         // Check if List field & Init List Array
-        $fieldId = self::lists()->InitOutput($this->out, "lines", $fieldName);
+        $fieldId = self::lists()->initOutput($this->out, "lines", $fieldName);
         //====================================================================//
         // Check if List field
         // Check If Order has Discounts
@@ -265,8 +263,8 @@ trait ItemsTrait
                 $value = null;
 
                 break;
-            //====================================================================//
-            // Order Line Direct Reading Data
+                //====================================================================//
+                // Order Line Direct Reading Data
             case 'product_name':
                 $value = $this->getCarrierName();
 
@@ -279,8 +277,8 @@ trait ItemsTrait
                 $value = 0;
 
                 break;
-            //====================================================================//
-            // Order Line Unit Price
+                //====================================================================//
+                // Order Line Unit Price
             case 'unit_price':
                 $value = $this->getShippingPrice();
 
@@ -295,7 +293,7 @@ trait ItemsTrait
 
         //====================================================================//
         // Insert Data in List
-        self::lists()->Insert($this->out, "lines", $fieldName, count($this->Products), $value);
+        self::lists()->insert($this->out, "lines", $fieldName, count($this->Products), $value);
     }
 
     /**
@@ -322,13 +320,13 @@ trait ItemsTrait
         }
         //====================================================================//
         // Build Price Array
-        return self::prices()->Encode(
+        return self::prices()->encode(
             (double)    $price,
             (double)    $taxPercent,
             null,
             $this->currency->iso_code,
-            $this->currency->sign,
-            $this->currency->name
+            LanguagesManager::getCurrencySymbol($this->currency),
+            LanguagesManager::getCurrencyName($this->currency)
         );
     }
 
@@ -337,11 +335,11 @@ trait ItemsTrait
      *
      * @return string
      */
-    private function getCarrierName()
+    private function getCarrierName(): string
     {
         //====================================================================//
         // Get Carrier by Id
-        if (empty($this->carrier) || empty($this->carrier->name)) {
+        if (!isset($this->carrier) || empty($this->carrier->name)) {
             return $this->spl->l("Delivery");
         }
         //====================================================================//
@@ -354,7 +352,7 @@ trait ItemsTrait
      *
      * @return bool
      */
-    private function hasCustomerCartRule()
+    private function hasCustomerCartRule(): bool
     {
         return $this->hasCartRule;
     }

@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2021 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -59,21 +59,21 @@ class Address extends AbstractObject
      *
      * @var string
      */
-    protected static $NAME = "Address";
+    protected static string $name = "Address";
 
     /**
      * Object Description (Translated by Module)
      *
      * @var string
      */
-    protected static $DESCRIPTION = "Prestashop Customers Address Object";
+    protected static string $description = "Prestashop Customers Address Object";
 
     /**
      * Object Icon (FontAwesome or Glyph ico tag)
      *
      * @var string
      */
-    protected static $ICO = "fa fa-envelope-o";
+    protected static string $ico = "fa fa-envelope-o";
 
     //====================================================================//
     // Object Synchronization Recommended Configuration
@@ -82,7 +82,7 @@ class Address extends AbstractObject
     /**
      * @var bool Enable Creation Of New Local Objects when Not Existing
      */
-    protected static $ENABLE_PUSH_CREATED = false;
+    protected static bool $enablePushCreated = false;
 
     //====================================================================//
     // General Class Variables
@@ -91,12 +91,12 @@ class Address extends AbstractObject
     /**
      * @var psAddress
      */
-    protected $object;
+    protected object $object;
 
     /**
      * @var SplashSync
      */
-    private $spl;
+    private SplashSync $spl;
 
     //====================================================================//
     // Class Constructor

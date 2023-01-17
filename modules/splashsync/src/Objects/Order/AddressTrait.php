@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2021 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -14,6 +14,8 @@
  */
 
 namespace Splash\Local\Objects\Order;
+
+use Splash\Local\Objects\Order;
 
 /**
  * Access to Order Address Fields
@@ -30,18 +32,19 @@ trait AddressTrait
         //====================================================================//
         // Billing Address
         $this->fieldsFactory()->create((string) self::objects()->encode("Address", SPL_T_ID))
-            ->Identifier("id_address_invoice")
-            ->Name('Billing Address ID')
-            ->MicroData("http://schema.org/Order", "billingAddress")
-            ->isRequired();
-
+            ->identifier("id_address_invoice")
+            ->name('Billing Address ID')
+            ->microData("http://schema.org/Order", "billingAddress")
+            ->isRequired()
+        ;
         //====================================================================//
         // Shipping Address
         $this->fieldsFactory()->create((string) self::objects()->encode("Address", SPL_T_ID))
-            ->Identifier("id_address_delivery")
-            ->Name('Shipping Address ID')
-            ->MicroData("http://schema.org/Order", "orderDelivery")
-            ->isRequired();
+            ->identifier("id_address_delivery")
+            ->name('Shipping Address ID')
+            ->microData("http://schema.org/Order", "orderDelivery")
+            ->isRequired()
+        ;
     }
 
     /**
@@ -52,7 +55,7 @@ trait AddressTrait
      *
      * @return void
      */
-    private function getAddressFields($key, $fieldName)
+    private function getAddressFields(string $key, string $fieldName): void
     {
         //====================================================================//
         // READ Fields
@@ -61,10 +64,10 @@ trait AddressTrait
             // Customer Address Ids
             case 'id_address_invoice':
             case 'id_address_delivery':
-                if (!$this->isOrderObject()) {
-                    $this->out[$fieldName] = self::objects()->encode("Address", $this->Order->{$fieldName});
-                } else {
+                if ($this instanceof Order) {
                     $this->out[$fieldName] = self::objects()->encode("Address", $this->object->{$fieldName});
+                } else {
+                    $this->out[$fieldName] = self::objects()->encode("Address", $this->Order->{$fieldName});
                 }
 
                 break;
@@ -77,12 +80,12 @@ trait AddressTrait
     /**
      * Write Given Fields
      *
-     * @param string $fieldName Field Identifier / Name
-     * @param mixed  $fieldData Field Data
+     * @param string      $fieldName Field Identifier / Name
+     * @param null|string $fieldData Field Data
      *
      * @return void
      */
-    private function setAddressFields($fieldName, $fieldData)
+    private function setAddressFields(string $fieldName, ?string $fieldData)
     {
         //====================================================================//
         // WRITE Field
@@ -91,7 +94,7 @@ trait AddressTrait
             // Customer Address Ids
             case 'id_address_invoice':
             case 'id_address_delivery':
-                $this->setSimple($fieldName, self::objects()->Id($fieldData));
+                $this->setSimple($fieldName, self::objects()->id((string) $fieldData));
 
                 break;
             default:

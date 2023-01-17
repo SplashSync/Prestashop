@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2021 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -20,7 +20,7 @@ namespace Splash\Local\Objects\ThirdParty;
 use Translate;
 
 /**
- * Access to thirdparty Core Fields
+ * Access to ThirdParty Core Fields
  */
 trait CoreTrait
 {
@@ -29,17 +29,19 @@ trait CoreTrait
      *
      * @return void
      */
-    private function buildCoreFields()
+    protected function buildCoreFields(): void
     {
         //====================================================================//
         // Email
         $this->fieldsFactory()->create(SPL_T_EMAIL)
-            ->Identifier("email")
-            ->Name(Translate::getAdminTranslation("Email address", "AdminCustomers"))
-            ->MicroData("http://schema.org/ContactPoint", "email")
-            ->Association("firstname", "lastname")
+            ->identifier("email")
+            ->name(Translate::getAdminTranslation("Email address", "AdminCustomers"))
+            ->microData("http://schema.org/ContactPoint", "email")
+            ->association("firstname", "lastname")
             ->isRequired()
-            ->isListed();
+            ->isPrimary()
+            ->isListed()
+        ;
     }
 
     /**
@@ -50,7 +52,7 @@ trait CoreTrait
      *
      * @return void
      */
-    private function getCoreFields($key, $fieldName)
+    protected function getCoreFields(string $key, string $fieldName): void
     {
         //====================================================================//
         // READ Field
@@ -67,11 +69,11 @@ trait CoreTrait
      * Write Given Fields
      *
      * @param string $fieldName Field Identifier / Name
-     * @param mixed  $fieldData Field Data
+     * @param string $fieldData Field Data
      *
      * @return void
      */
-    private function setCoreFields($fieldName, $fieldData)
+    protected function setCoreFields(string $fieldName, string $fieldData): void
     {
         //====================================================================//
         // WRITE Fields

@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2021 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -37,7 +37,7 @@ class Demo extends AbstractWidget
     //====================================================================//
     // Define Standard Options for this Widget
     // Override this array to change default options for your widget
-    public static $OPTIONS = array(
+    public static array $options = array(
         "Width" => self::SIZE_XL
     );
 
@@ -46,32 +46,32 @@ class Demo extends AbstractWidget
     //====================================================================//
 
     /**
-     * Widget Disable Flag. Uncomment thius line to Override this flag and disable Object.
+     * Widget Disable Flag. Uncomment this line to Override this flag and disable Object.
      *
      * @var bool
      */
-    protected static $DISABLED = true;
+    protected static bool $disabled = true;
 
     /**
      * Widget Name (Translated by Module)
      *
      * @var string
      */
-    protected static $NAME = "Demo Widget";
+    protected static string $name = "Demo Widget";
 
     /**
      * Widget Description (Translated by Module)
      *
      * @var string
      */
-    protected static $DESCRIPTION = "TEST & DEMONSTRATION WIDGET";
+    protected static string $description = "TEST & DEMONSTRATION WIDGET";
 
     /**
      * Widget Icon (FontAwesome or Glyph ico tag)
      *
      * @var string
      */
-    protected static $ICO = "fa fa-magic";
+    protected static string $ico = "fa fa-magic";
 
     //====================================================================//
     // Class Main Functions
@@ -80,9 +80,9 @@ class Demo extends AbstractWidget
     /**
      * Return Widget Customs Parameters
      *
-     * @return array|false
+     * @return array
      */
-    public function getParameters()
+    public function getParameters(): array
     {
         //====================================================================//
         // Reference
@@ -100,13 +100,13 @@ class Demo extends AbstractWidget
 
         //====================================================================//
         // Publish Fields
-        return $this->fieldsFactory()->publish();
+        return $this->fieldsFactory()->publish() ?? array();
     }
 
     /**
      * {@inheritdoc}
      */
-    public function get($params = array())
+    public function get(array $parameters = array()): ?array
     {
         //====================================================================//
         // Stack Trace
@@ -127,7 +127,7 @@ class Demo extends AbstractWidget
         //====================================================================//
         // Build Inputs Block
         //====================================================================//
-        $this->buildParametersBlock($params);
+        $this->buildParametersBlock($parameters);
 
         //====================================================================//
         // Build Inputs Block

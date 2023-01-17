@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2021 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -20,6 +20,7 @@ use Context;
 use Country;
 use Currency;
 use Exception;
+use PrestaShop\PrestaShop\Adapter\LegacyContext;
 use Shop;
 use ShopUrl;
 use Splash\Core\SplashCore as Splash;
@@ -46,30 +47,30 @@ class MultiShopManager
      *
      * @var array
      */
-    private static $shopIds;
+    private static array $shopIds;
 
     /**
      * List of Shops Objects Cache
      *
      * @var Shop[]
      */
-    private static $shopsCache;
+    private static array $shopsCache;
 
     /**
      * List of Country Objects Cache
      *
      * @var Country[]
      */
-    private static $countriesCache;
+    private static array $countriesCache;
 
     /**
-     * Name of Ps Symfony Legacy Context Class
+     * Ps Symfony Legacy Context Class
      *
      * @since PS 1.7
      *
-     * @var string
+     * @var null|LegacyContext
      */
-    private static $legacyContextClass = "\\PrestaShop\\PrestaShop\\Adapter\\LegacyContext";
+    private static ?LegacyContext $legacyContext = null;
 
     /**
      * Check if Splash MultiShop Feature is Active
@@ -168,13 +169,13 @@ class MultiShopManager
      * Setup Prestashop MultiShops Context
      *
      * @param null|int $shopId
-     * @param mixed    $force
+     * @param bool     $force
      *
      * @throws Exception
      *
      * @return bool
      */
-    public static function setContext(int $shopId = null, $force = false): bool
+    public static function setContext(int $shopId = null, bool $force = false): bool
     {
         //====================================================================//
         // Check if Multi-Shop Feature is Active
@@ -189,8 +190,9 @@ class MultiShopManager
             }
             // Setup Shop Context
             Shop::setContext(Shop::CONTEXT_ALL);
-            if (class_exists(static::$legacyContextClass)) {
-                static::$legacyContextClass::getContext()->shop->setContext(Shop::CONTEXT_ALL);
+            if (self::$legacyContext) {
+                /** @phpstan-ignore-next-line */
+                self::$legacyContext->getContext()->shop->setContext(Shop::CONTEXT_ALL);
             }
             // Setup Global Context
             /** @var Context $context */
@@ -209,8 +211,9 @@ class MultiShopManager
             }
             // Setup Shop Context
             Shop::setContext(Shop::CONTEXT_SHOP, $shopId);
-            if (class_exists(static::$legacyContextClass)) {
-                static::$legacyContextClass::getContext()->shop->setContext(Shop::CONTEXT_SHOP, $shopId);
+            if (self::$legacyContext) {
+                /** @phpstan-ignore-next-line */
+                self::$legacyContext->getContext()->shop->setContext(Shop::CONTEXT_SHOP, $shopId);
             }
             // Setup Global Context
             /** @var Context $context */
@@ -232,10 +235,11 @@ class MultiShopManager
      */
     public static function initLegacyContext(): bool
     {
-        if (class_exists(static::$legacyContextClass) && !isset(Context::getContext()->employee->id)) {
+        if (class_exists(LegacyContext::class) && !isset(Context::getContext()->employee->id)) {
             /** @phpstan-ignore-next-line */
             Context::getContext()->employee = null;
-            static::$legacyContextClass::getContext();
+            self::$legacyContext = new LegacyContext();
+            self::$legacyContext->getContext();
 
             return true;
         }
@@ -309,7 +313,7 @@ class MultiShopManager
         //====================================================================//
         // Add a New Shop Url
         $shopUrl = new ShopUrl();
-        $shopUrl->id_shop = $shop->id;
+        $shopUrl->id_shop = (int) $shop->id;
         $shopUrl->domain = 'localhost';
         $shopUrl->domain_ssl = 'localhost';
         $shopUrl->virtual_uri = strtolower($name);

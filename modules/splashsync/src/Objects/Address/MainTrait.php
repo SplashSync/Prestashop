@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2021 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -16,6 +16,7 @@
 namespace Splash\Local\Objects\Address;
 
 use Country;
+use PrestaShopException;
 use State;
 use Translate;
 
@@ -29,7 +30,7 @@ trait MainTrait
      *
      * @return void
      */
-    private function buildMainFields()
+    private function buildMainFields(): void
     {
         $groupName = Translate::getAdminTranslation("Address", "AdminCustomers");
 
@@ -112,6 +113,8 @@ trait MainTrait
      * @param string $key       Input List Key
      * @param string $fieldName Field Identifier / Name
      *
+     * @throws PrestaShopException
+     *
      * @return void
      */
     private function getMainFields(string $key, string $fieldName): void
@@ -129,21 +132,21 @@ trait MainTrait
                 $this->getSimple($fieldName);
 
                 break;
-            //====================================================================//
-            // Country ISO Id - READ With Conversion
+                //====================================================================//
+                // Country ISO Id - READ With Conversion
             case 'id_country':
                 $this->out[$fieldName] = Country::getIsoById($this->object->id_country);
 
                 break;
-            //====================================================================//
-            // State Name - READ With Conversion
+                //====================================================================//
+                // State Name - READ With Conversion
             case 'state':
                 $state = new State($this->object->id_state);
                 $this->out[$fieldName] = $state->name;
 
                 break;
-            //====================================================================//
-            // State ISO Id - READ With Conversion
+                //====================================================================//
+                // State ISO Id - READ With Conversion
             case 'id_state':
                 //====================================================================//
                 // READ With Conversion
@@ -189,12 +192,12 @@ trait MainTrait
     /**
      * Write Given Fields
      *
-     * @param string $fieldName Field Identifier / Name
-     * @param mixed  $fieldData Field Data
+     * @param string      $fieldName Field Identifier / Name
+     * @param null|string $fieldData Field Data
      *
      * @return void
      */
-    private function setCountryFields(string $fieldName, $fieldData): void
+    private function setCountryFields(string $fieldName, ?string $fieldData): void
     {
         //====================================================================//
         // WRITE Field
@@ -202,15 +205,18 @@ trait MainTrait
             //====================================================================//
             // Country ISO Id - READ With Conversion
             case 'id_country':
-                if ($this->object->{$fieldName} != Country::getByIso($fieldData)) {
-                    $this->object->{$fieldName} = Country::getByIso($fieldData);
+                /** @var false|int $countryId */
+                $countryId = Country::getByIso((string) $fieldData);
+                if ($countryId && ($this->object->{$fieldName} != $countryId)) {
+                    $this->object->{$fieldName} = $countryId;
                     $this->needUpdate();
                 }
 
                 break;
-            //====================================================================//
-            // State ISO Id - READ With Conversion
+                //====================================================================//
+                // State ISO Id - READ With Conversion
             case 'id_state':
+                $fieldData = (string) $fieldData;
                 if ($this->object->{$fieldName} != State::getIdByIso($fieldData)) {
                     $this->object->{$fieldName} = State::getIdByIso($fieldData);
                     $this->needUpdate();

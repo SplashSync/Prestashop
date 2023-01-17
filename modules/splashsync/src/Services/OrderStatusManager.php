@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2021 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -16,6 +16,7 @@
 namespace Splash\Local\Services;
 
 use Configuration;
+use Exception;
 use OrderState;
 use Splash\Client\Splash      as Splash;
 use Splash\Local\Services\LanguagesManager as SLM;
@@ -51,26 +52,28 @@ class OrderStatusManager
      *
      * @var array
      */
-    private static $psKnownStatus;
+    private static array $psKnownStatus;
 
     /**
      * Splash Orders Definition Array Cache
      *
-     * @var array
+     * @var null|array
      */
-    private static $definition;
+    private static ?array $definition;
 
     /**
-     * Check if Writing to Orders is Aloowed
+     * Check if Writing to Orders is Allowed
+     *
+     * @throws Exception
      *
      * @return bool
      */
-    public static function isAllowedWrite()
+    public static function isAllowedWrite(): bool
     {
-        if (!isset(static::$definition)) {
-            static::$definition = Splash::object("Order")->description();
+        if (!isset(self::$definition)) {
+            self::$definition = Splash::object("Order")->description();
         }
-        if (is_array(static::$definition) && !empty(static::$definition["allow_push_updated"])) {
+        if (is_array(self::$definition) && !empty(self::$definition["allow_push_updated"])) {
             return true;
         }
 
@@ -82,14 +85,14 @@ class OrderStatusManager
      *
      * @return array
      */
-    public static function getOrderStatusChoices()
+    public static function getOrderStatusChoices(): array
     {
         //====================================================================//
         // Load Prestashop Status List
         $psStates = OrderState::getOrderStates(SLM::getDefaultLangId());
         $choices = array();
         //====================================================================//
-        // Walk on Prestatshop States List
+        // Walk on Prestashop States List
         foreach ($psStates as $psState) {
             //====================================================================//
             // If State is Know
@@ -113,7 +116,7 @@ class OrderStatusManager
      *
      * @return array
      */
-    public static function getOrderFormStatusChoices()
+    public static function getOrderFormStatusChoices(): array
     {
         //====================================================================//
         // Load Prestashop Status List
@@ -131,7 +134,7 @@ class OrderStatusManager
      *
      * @return array
      */
-    public static function getAllStatus()
+    public static function getAllStatus(): array
     {
         $statuses = array();
         //====================================================================//
@@ -153,9 +156,11 @@ class OrderStatusManager
      *
      * @param int $psStateId
      *
+     * @throws Exception
+     *
      * @return bool
      */
-    public static function isKnown(int $psStateId)
+    public static function isKnown(int $psStateId): bool
     {
         //====================================================================//
         // Load List of Known PS States
@@ -170,9 +175,11 @@ class OrderStatusManager
      *
      * @param int $psStateId
      *
+     * @throws Exception
+     *
      * @return null|string
      */
-    public static function getSplashCode(int $psStateId)
+    public static function getSplashCode(int $psStateId): ?string
     {
         //====================================================================//
         // Load List of Known PS States
@@ -191,9 +198,11 @@ class OrderStatusManager
      *
      * @param string $splashStatus Splash generic Status Name
      *
+     * @throws Exception
+     *
      * @return null|int
      */
-    public static function getPrestashopState($splashStatus)
+    public static function getPrestashopState(string $splashStatus): ?int
     {
         //====================================================================//
         // Load List of Known PS States
@@ -214,22 +223,24 @@ class OrderStatusManager
     /**
      * Build List of Orders Status to Setup
      *
+     * @throws Exception
+     *
      * @return array
      */
-    private static function getKnownStatus()
+    private static function getKnownStatus(): array
     {
         //====================================================================//
         // Already Loaded
-        if (isset(static::$psKnownStatus)) {
-            return static::$psKnownStatus;
+        if (isset(self::$psKnownStatus)) {
+            return self::$psKnownStatus;
         }
         //====================================================================//
         // Load Default Orders Statuses
-        static::$psKnownStatus = static::$psOrderStatus;
+        self::$psKnownStatus = self::$psOrderStatus;
         //====================================================================//
         // NOT ALLOWED WRITE => STOP HERE
         if (!self::isAllowedWrite()) {
-            return static::$psKnownStatus;
+            return self::$psKnownStatus;
         }
         //====================================================================//
         // Complete Status from User Settings
@@ -238,10 +249,10 @@ class OrderStatusManager
             // Load Target Status from Settings
             $psStateId = Configuration::get('SPLASH_ORDER_'.strtoupper($status));
             if ($psStateId > 0) {
-                static::$psKnownStatus[$psStateId] = $status;
+                self::$psKnownStatus[$psStateId] = $status;
             }
         }
 
-        return static::$psKnownStatus;
+        return self::$psKnownStatus;
     }
 }

@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2021 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -26,6 +26,7 @@ use Splash\Local\Local;
 use Splash\Models\AbstractObject;
 use Splash\Models\Objects\ListsTrait;
 use Splash\Models\Objects\ObjectsTrait;
+use Splash\Models\Objects\PrimaryKeysAwareInterface;
 use Splash\Models\Objects\SimpleFieldsTrait;
 use SplashSync;
 use Tools;
@@ -35,7 +36,7 @@ use Tools;
  *
  * @SuppressWarnings(PHPMD.CamelCasePropertyName)
  */
-class Product extends AbstractObject
+class Product extends AbstractObject implements PrimaryKeysAwareInterface
 {
     //====================================================================//
     // Splash Php Core Traits
@@ -47,7 +48,7 @@ class Product extends AbstractObject
     use Core\DatesTrait;
     use Core\SplashMetaTrait;
     use Core\ObjectsListCommonsTrait;
-    use Core\MultilangTrait;
+    use Core\MultiLangTrait;
     use Core\MultishopObjectTrait;
     use Core\ConfiguratorAwareTrait;
     use \Splash\Local\Traits\SplashIdTrait;
@@ -55,6 +56,7 @@ class Product extends AbstractObject
     // Prestashop Products Traits
     use Product\ObjectsListTrait;
     use Product\CRUDTrait;
+    use Product\PrimaryTrait;
     use Product\CoreTrait;
     use Product\CoverImageTrait;
     use Product\MainTrait;
@@ -73,7 +75,7 @@ class Product extends AbstractObject
     /**
      * @var psProduct
      */
-    protected $object;
+    protected object $object;
 
     //====================================================================//
     // Object Definition Parameters
@@ -84,21 +86,21 @@ class Product extends AbstractObject
      *
      * @var string
      */
-    protected static $NAME = "Product";
+    protected static string $name = "Product";
 
     /**
      * Object Description (Translated by Module)
      *
      * @var string
      */
-    protected static $DESCRIPTION = "Prestashop Product Object";
+    protected static string $description = "Prestashop Product Object";
 
     /**
      * Object Icon (FontAwesome or Glyph ico tag)
      *
      * @var string
      */
-    protected static $ICO = "fa fa-product-hunt";
+    protected static string $ico = "fa fa-product-hunt";
 
     //====================================================================//
     // Object Synchronization Recommended Configuration
@@ -107,7 +109,7 @@ class Product extends AbstractObject
     /**
      * @var bool Enable Creation Of New Local Objects when Not Existing
      */
-    protected static $ENABLE_PUSH_CREATED = false;
+    protected static bool $enablePushCreated = false;
 
     //====================================================================//
     // General Class Variables
@@ -125,12 +127,12 @@ class Product extends AbstractObject
      *
      * @var Currency
      */
-    protected $Currency;
+    protected Currency $currency;
 
     /**
      * @var SplashSync
      */
-    private $spl;
+    private SplashSync $spl;
 
     //====================================================================//
     // Class Constructor
@@ -156,8 +158,8 @@ class Product extends AbstractObject
         // Load Default Currency
         /** @var Context $context */
         $context = Context::getContext();
-        $this->Currency = Currency::getCurrencyInstance((int) Configuration::get('PS_CURRENCY_DEFAULT'));
-        $context->currency = $this->Currency;
+        $this->currency = Currency::getCurrencyInstance((int) Configuration::get('PS_CURRENCY_DEFAULT'));
+        $context->currency = $this->currency;
     }
 
     /**

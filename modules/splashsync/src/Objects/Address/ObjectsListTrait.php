@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2021 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -15,11 +15,11 @@
 
 namespace   Splash\Local\Objects\Address;
 
-use Context;
 //====================================================================//
 // Prestashop Static Classes
 use DbQuery;
 use Splash\Core\SplashCore      as Splash;
+use Splash\Local\Services\LanguagesManager;
 
 /**
  * Acces to Address Objects Lists
@@ -31,13 +31,12 @@ trait ObjectsListTrait
     /**
      * {@inheritdoc}
      */
-    public function objectsList($filter = null, $params = null)
+    public function objectsList(string $filter = null, array $params = array()): array
     {
         //====================================================================//
         // Stack Trace
         Splash::log()->trace();
-        /** @var Context $context */
-        $context = Context::getContext();
+        $langId = LanguagesManager::getDefaultLangId();
         //====================================================================//
         // Build query
         $sql = new DbQuery();
@@ -56,17 +55,17 @@ trait ObjectsListTrait
         $sql->leftJoin(
             "country_lang",
             'c',
-            'c.id_country = a.id_country AND id_lang = '.$context->language->id." "
+            'c.id_country = a.id_country AND id_lang = '.$langId." "
         );
         //====================================================================//
         // Setup filters
         if (!empty($filter)) {
-            // Add filters with names convertions. Added LOWER function to be NON case sensitive
-            $sqlfilter = " LOWER( a.firstname )     LIKE LOWER( '%".pSQL($filter)."%') ";
-            $sqlfilter .= " OR LOWER( a.lastname )   LIKE LOWER( '%".pSQL($filter)."%') ";
-            $sqlfilter .= " OR LOWER( a.company )    LIKE LOWER( '%".pSQL($filter)."%') ";
-            $sqlfilter .= " OR LOWER( c.name )       LIKE LOWER( '%".pSQL($filter)."%') ";
-            $sql->where($sqlfilter);
+            // Add filters with names conversion. Added LOWER function to be NON Case Sensitive
+            $sqlFilter = " LOWER( a.firstname )     LIKE LOWER( '%".pSQL($filter)."%') ";
+            $sqlFilter .= " OR LOWER( a.lastname )   LIKE LOWER( '%".pSQL($filter)."%') ";
+            $sqlFilter .= " OR LOWER( a.company )    LIKE LOWER( '%".pSQL($filter)."%') ";
+            $sqlFilter .= " OR LOWER( c.name )       LIKE LOWER( '%".pSQL($filter)."%') ";
+            $sql->where($sqlFilter);
         }
         //====================================================================//
         // Execute Generic Search

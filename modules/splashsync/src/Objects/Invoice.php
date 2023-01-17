@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2021 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -71,21 +71,21 @@ class Invoice extends AbstractObject
      *
      * @var string
      */
-    protected static $NAME = "Customer Invoice";
+    protected static string $name = "Customer Invoice";
 
     /**
      * Object Description (Translated by Module)
      *
      * @var string
      */
-    protected static $DESCRIPTION = "Prestashop Customers Invoice Object";
+    protected static string $description = "Prestashop Customers Invoice Object";
 
     /**
      * Object Icon (FontAwesome or Glyph ico tag)
      *
      * @var string
      */
-    protected static $ICO = "fa fa-money";
+    protected static string $ico = "fa fa-money";
 
     //====================================================================//
     // Object Synchronization Limitations
@@ -96,21 +96,21 @@ class Invoice extends AbstractObject
      *
      * @var bool
      */
-    protected static $ALLOW_PUSH_CREATED = false;
+    protected static bool $allowPushCreated = false;
 
     /**
      * Allow Update Of Existing Local Objects
      *
      * @var bool
      */
-    protected static $ALLOW_PUSH_UPDATED = false;
+    protected static bool $allowPushUpdated = false;
 
     /**
      * Allow Delete Of Existing Local Objects
      *
      * @var bool
      */
-    protected static $ALLOW_PUSH_DELETED = false;
+    protected static bool $allowPushDeleted = false;
 
     //====================================================================//
     // Object Synchronization Recommended Configuration
@@ -121,21 +121,21 @@ class Invoice extends AbstractObject
      *
      * @var bool
      */
-    protected static $ENABLE_PUSH_CREATED = false;
+    protected static bool $enablePushCreated = false;
 
     /**
-     * Enable Update Of Existing Local Objects when Modified Remotly
+     * Enable Update Of Existing Local Objects when Modified Remotely
      *
      * @var bool
      */
-    protected static $ENABLE_PUSH_UPDATED = false;
+    protected static bool $enablePushUpdated = false;
 
     /**
-     * Enable Delete Of Existing Local Objects when Deleted Remotly
+     * Enable Delete Of Existing Local Objects when Deleted Remotely
      *
      * @var bool
      */
-    protected static $ENABLE_PUSH_DELETED = false;
+    protected static bool $enablePushDeleted = false;
 
     //====================================================================//
     // General Class Variables
@@ -165,17 +165,17 @@ class Invoice extends AbstractObject
     /**
      * @var OrderInvoice
      */
-    protected $object;
-
-    /**
-     * @var Currency
-     */
-    private $Currency;
+    protected object $object;
 
     /**
      * @var SplashSync
      */
-    private $spl;
+    private SplashSync $spl;
+
+    /**
+     * @var Currency
+     */
+    private Currency $currency;
 
     //====================================================================//
     // Class Constructor
@@ -199,7 +199,7 @@ class Invoice extends AbstractObject
         $this->spl = Local::getLocalModule();
         //====================================================================//
         // Load OsWs Currency
-        $this->Currency = new Currency((int) Configuration::get('PS_CURRENCY_DEFAULT'));
+        $this->currency = new Currency((int) Configuration::get('PS_CURRENCY_DEFAULT'));
     }
 
     /**
@@ -209,6 +209,6 @@ class Invoice extends AbstractObject
      */
     protected function getObjectShopId(): int
     {
-        return $this->Order->id_shop;
+        return (int) $this->Order->id_shop;
     }
 }

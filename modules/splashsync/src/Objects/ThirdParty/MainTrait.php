@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2021 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -16,6 +16,7 @@
 namespace Splash\Local\Objects\ThirdParty;
 
 use Gender;
+use PrestaShopException;
 use Splash\Core\SplashCore      as Splash;
 use Splash\Local\Services\LanguagesManager;
 use Translate;
@@ -31,7 +32,7 @@ trait MainTrait
      *
      * @return void
      */
-    private function buildMainFields()
+    protected function buildMainFields()
     {
         //====================================================================//
         // Firstname
@@ -62,6 +63,7 @@ trait MainTrait
             ->name(Translate::getAdminTranslation("Company", "AdminCustomers"))
             ->microData("http://schema.org/Organization", "legalName")
             ->isReadOnly(isset(Splash::configuration()->PsUseFullCompanyNames))
+            ->isIndexed()
             ->isListed()
         ;
         //====================================================================//
@@ -105,7 +107,7 @@ trait MainTrait
      *
      * @return void
      */
-    private function buildGenderFields()
+    protected function buildGenderFields(): void
     {
         //====================================================================//
         // Gender Name
@@ -138,7 +140,7 @@ trait MainTrait
      *
      * @return void
      */
-    private function getMainFields(string $key, string $fieldName): void
+    protected function getMainFields(string $key, string $fieldName): void
     {
         //====================================================================//
         // READ Fields
@@ -164,7 +166,7 @@ trait MainTrait
      *
      * @return void
      */
-    private function getMainComputedFields(string $key, string $fieldName): void
+    protected function getMainComputedFields(string $key, string $fieldName): void
     {
         //====================================================================//
         // READ Fields
@@ -213,7 +215,7 @@ trait MainTrait
      *
      * @return void
      */
-    private function getGenderFields(string $key, string $fieldName): void
+    protected function getGenderFields(string $key, string $fieldName): void
     {
         //====================================================================//
         // READ Fields
@@ -236,8 +238,8 @@ trait MainTrait
                 }
 
                 break;
-            //====================================================================//
-            // Gender Type
+                //====================================================================//
+                // Gender Type
             case 'gender_type':
                 if (empty($this->object->id_gender)) {
                     $this->out[$fieldName] = 0;
@@ -252,6 +254,127 @@ trait MainTrait
                 return;
         }
         unset($this->in[$key]);
+    }
+
+    /**
+     * Write Given Fields
+     *
+     * @param string $fieldName Field Identifier / Name
+     * @param mixed  $fieldData Field Data
+     *
+     * @return void
+     */
+    protected function setMainFields(string $fieldName, $fieldData): void
+    {
+        //====================================================================//
+        // WRITE Fields
+        switch ($fieldName) {
+            case 'firstname':
+            case 'lastname':
+            case 'passwd':
+            case 'website':
+                $this->setSimple($fieldName, $fieldData);
+
+                break;
+            case 'company':
+                if ($this->object->{$fieldName} == "Prestashop(".$this->object->id.")") {
+                    $this->setSimple($fieldName, "");
+
+                    break;
+                }
+                $this->setSimple($fieldName, $fieldData);
+
+                break;
+            default:
+                return;
+        }
+        unset($this->in[$fieldName]);
+    }
+
+    /**
+     * Write Given Fields
+     *
+     * @param string      $fieldName Field Identifier / Name
+     * @param null|string $fieldData Field Data
+     *
+     * @return void
+     */
+    protected function setIdentificationFields(string $fieldName, ?string $fieldData)
+    {
+        //====================================================================//
+        // WRITE Fields
+        switch ($fieldName) {
+            //====================================================================//
+            // Write SIRET With Verification
+            case 'siret':
+                if (!$fieldData || !Validate::isSiret($fieldData)) {
+                    Splash::log()->war("Given SIRET Number is Invalid. Skipped");
+
+                    break;
+                }
+                $this->setSimple($fieldName, $fieldData);
+
+                break;
+                //====================================================================//
+                // Write APE With Verification
+            case 'ape':
+                if (!$fieldData || !Validate::isApe($fieldData)) {
+                    Splash::log()->war("Given APE Code is Invalid. Skipped");
+
+                    break;
+                }
+                $this->setSimple($fieldName, $fieldData);
+
+                break;
+            default:
+                return;
+        }
+        unset($this->in[$fieldName]);
+    }
+
+    /**
+     * Write Given Fields
+     *
+     * @param string $fieldName Field Identifier / Name
+     * @param mixed  $fieldData Field Data
+     *
+     * @throws PrestaShopException
+     *
+     * @return void
+     */
+    protected function setGenderFields(string $fieldName, $fieldData): void
+    {
+        //====================================================================//
+        // WRITE Fields
+        switch ($fieldName) {
+            //====================================================================//
+            // Gender Type
+            case 'gender_type':
+                //====================================================================//
+                // Identify Gender Type
+                $genders = Gender::getGenders(LanguagesManager::getDefaultLangId());
+                $genders->where("type", "=", $fieldData);
+                /** @var false|Gender */
+                $gendertype = $genders->getFirst();
+                //====================================================================//
+                // Unknown Gender Type => Take First Available Gender
+                if (!$gendertype) {
+                    $genders = Gender::getGenders(LanguagesManager::getDefaultLangId());
+                    /** @var false|Gender */
+                    $gendertype = $genders->getFirst();
+                    Splash::log()->warTrace("This Gender Type doesn't exist.");
+                }
+                //====================================================================//
+                // Update Gender Type
+                if ($gendertype) {
+                    $this->setSimple("id_gender", $gendertype->id_gender);
+                }
+
+                break;
+            default:
+                return;
+        }
+        unset($this->in[$fieldName]);
     }
 
     /**
@@ -283,129 +406,5 @@ trait MainTrait
         //====================================================================//
         // Generic FallBack Mode
         return "Prestashop(".$this->object->id.")";
-    }
-
-    /**
-     * Write Given Fields
-     *
-     * @param string $fieldName Field Identifier / Name
-     * @param mixed  $fieldData Field Data
-     *
-     * @return void
-     */
-    private function setMainFields(string $fieldName, $fieldData): void
-    {
-        //====================================================================//
-        // WRITE Fields
-        switch ($fieldName) {
-            case 'firstname':
-            case 'lastname':
-            case 'passwd':
-            case 'website':
-                $this->setSimple($fieldName, $fieldData);
-
-                break;
-            case 'company':
-                if ($this->object->{$fieldName} == "Prestashop(".$this->object->id.")") {
-                    $this->setSimple($fieldName, "");
-
-                    break;
-                }
-                $this->setSimple($fieldName, $fieldData);
-
-                break;
-            default:
-                return;
-        }
-        unset($this->in[$fieldName]);
-    }
-
-    /**
-     * Write Given Fields
-     *
-     * @param string $fieldName Field Identifier / Name
-     * @param mixed  $fieldData Field Data
-     *
-     * @return void
-     */
-    private function setIdentificationFields($fieldName, $fieldData)
-    {
-        //====================================================================//
-        // WRITE Fields
-        switch ($fieldName) {
-            //====================================================================//
-            // Write SIRET With Verification
-            case 'siret':
-                if (!Validate::isSiret($fieldData)) {
-                    Splash::log()->war(
-                        "MsgLocalTpl",
-                        __CLASS__,
-                        __FUNCTION__,
-                        "Given SIRET Number is Invalid. Skipped"
-                    );
-
-                    break;
-                }
-                $this->setSimple($fieldName, $fieldData);
-
-                break;
-            //====================================================================//
-            // Write APE With Verification
-            case 'ape':
-                if (!Validate::isApe($fieldData)) {
-                    Splash::log()->war("MsgLocalTpl", __CLASS__, __FUNCTION__, "Given APE Code is Invalid. Skipped");
-
-                    break;
-                }
-                $this->setSimple($fieldName, $fieldData);
-
-                break;
-            default:
-                return;
-        }
-        unset($this->in[$fieldName]);
-    }
-
-    /**
-     * Write Given Fields
-     *
-     * @param string $fieldName Field Identifier / Name
-     * @param mixed  $fieldData Field Data
-     *
-     * @return void
-     */
-    private function setGenderFields(string $fieldName, $fieldData): void
-    {
-        //====================================================================//
-        // WRITE Fields
-        switch ($fieldName) {
-            //====================================================================//
-            // Gender Type
-            case 'gender_type':
-                //====================================================================//
-                // Identify Gender Type
-                $genders = Gender::getGenders(LanguagesManager::getDefaultLangId());
-                $genders->where("type", "=", $fieldData);
-                /** @var false|Gender */
-                $gendertype = $genders->getFirst();
-                //====================================================================//
-                // Unknown Gender Type => Take First Available Gender
-                if ((false == $gendertype)) {
-                    $genders = Gender::getGenders(LanguagesManager::getDefaultLangId());
-                    /** @var false|Gender */
-                    $gendertype = $genders->getFirst();
-                    Splash::log()->warTrace("This Gender Type doesn't exist.");
-                }
-                //====================================================================//
-                // Update Gender Type
-                if ($gendertype) {
-                    $this->setSimple("id_gender", $gendertype->id_gender);
-                }
-
-                break;
-            default:
-                return;
-        }
-        unset($this->in[$fieldName]);
     }
 }

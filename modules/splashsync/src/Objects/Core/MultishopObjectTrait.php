@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2021 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -15,7 +15,6 @@
 
 namespace Splash\Local\Objects\Core;
 
-use ArrayObject;
 use Exception;
 use Shop;
 use Splash\Core\SplashCore as Splash;
@@ -34,12 +33,12 @@ trait MultishopObjectTrait
     /**
      * @var array[]
      */
-    private $updateFields = array();
+    private array $updateFields = array();
 
     /**
      * {@inheritdoc}
      */
-    public function fields()
+    public function fields(): array
     {
         //====================================================================//
         // Check if Multi-shop Mode is Active
@@ -57,36 +56,33 @@ trait MultishopObjectTrait
     /**
      * Override Get Function to Map MultiStore Fields
      *
-     * @param null|string            $objectId
-     * @param null|array|ArrayObject $fieldsList
+     * @param string $objectId
+     * @param array  $fields
      *
      * @throws Exception
      *
-     * @return array|ArrayObject|false
+     * @return null|array
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public function get($objectId = null, $fieldsList = null)
+    public function get(string $objectId, array $fields): ?array
     {
-        //====================================================================//
-        // Detect ArrayObjects
-        $fieldsList = ($fieldsList instanceof ArrayObject) ? $fieldsList->getArrayCopy() : $fieldsList;
         //====================================================================//
         // Check if Multi-shop Mode is Active
         if (!MSM::isFeatureActive()) {
-            return $this->coreGet($objectId, $fieldsList);
+            return $this->coreGet($objectId, $fields);
         }
         //====================================================================//
         // Load Core Fields from All Shop Context
         MSF::loadFields($this->coreFields());
         //====================================================================//
         // Read Data for All Shop Context
-        $allShopData = $this->getAllShopsData($objectId, $fieldsList);
+        $allShopData = $this->getAllShopsData($objectId, $fields);
         //====================================================================//
         // Object Not Found => Exit
         if (!is_array($allShopData)) {
-            return false;
+            return null;
         }
         //====================================================================//
         // Walk on Shops to Read Shops Fields
@@ -94,7 +90,7 @@ trait MultishopObjectTrait
         foreach (MSM::getShopIds() as $shopId) {
             //====================================================================//
             // Load Fields for Single Shop Context
-            $singleShopFields = array_intersect((array) $fieldsList, MSF::getSingleShopFields($shopId));
+            $singleShopFields = array_intersect((array) $fields, MSF::getSingleShopFields($shopId));
             //====================================================================//
             // Ensure We have Fields to Read
             if (empty($singleShopFields)) {
@@ -120,31 +116,30 @@ trait MultishopObjectTrait
         }
         //====================================================================//
         // Return Object Data of False
-        return empty($objectData) ? false : $objectData;
+        return empty($objectData) ? null : $objectData;
     }
 
     /**
-     * @param null|string            $objectId
-     * @param null|array|ArrayObject $list
+     * @param null|string $objectId
+     * @param array       $objectData
      *
-     * @return false|string
+     * @throws Exception
+     *
+     * @return null|string
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public function set($objectId = null, $list = null)
+    public function set(?string $objectId, array $objectData): ?string
     {
-        //====================================================================//
-        // Detect ArrayObjects
-        $list = ($list instanceof ArrayObject) ? $list->getArrayCopy() : $list;
         //====================================================================//
         // Check if Multi-shop Mode is Active
         if (!MSM::isFeatureActive()) {
-            return $this->coreSet($objectId, $list);
+            return $this->coreSet($objectId, $objectData);
         }
         //====================================================================//
         // Write Data for All Shop Context
-        $allShopData = MSF::extractData((array) $list, null);
+        $allShopData = MSF::extractData((array) $objectData, null);
         if (!empty($allShopData)) {
             MSM::setContext();
             $objectId = $this->coreSet($objectId, $allShopData);
@@ -159,7 +154,7 @@ trait MultishopObjectTrait
         foreach (MSM::getShopIds() as $shopId) {
             //====================================================================//
             // Extract Data for Single Shop Context
-            $multiShopData = MSF::extractData((array) $list, $shopId);
+            $multiShopData = MSF::extractData((array) $objectData, $shopId);
             if (empty($multiShopData)) {
                 continue;
             }
@@ -176,20 +171,20 @@ trait MultishopObjectTrait
             };
         }
 
-        return $objectId ?: false;
+        return $objectId ?: null;
     }
 
     /**
      * Get All MultiStore Shared Fields
      *
-     * @param null|string $objectId
-     * @param null|array  $fieldsList
+     * @param string $objectId
+     * @param array  $fieldsList
      *
-     * @throws Exception
+     *@throws Exception
      *
-     * @return array|ArrayObject|false
+     * @return null|array
      */
-    public function getAllShopsData($objectId = null, $fieldsList = null)
+    public function getAllShopsData(string $objectId, array $fieldsList): ?array
     {
         //====================================================================//
         // Load Fields for All Shop Context
@@ -206,7 +201,7 @@ trait MultishopObjectTrait
         }
         //====================================================================//
         // Object Not Found => Exit
-        return is_array($allShopData) ? $allShopData : false;
+        return is_array($allShopData) ? $allShopData : null;
     }
 
     /**
@@ -243,7 +238,7 @@ trait MultishopObjectTrait
             return;
         }
         //====================================================================//
-        // Add Multilang Field to Update List
+        // Add Multi-lang Field to Update List
         if (!isset($this->updateFields[$type][$name])) {
             $this->updateFields[$type][$name] = array();
         }
@@ -266,9 +261,6 @@ trait MultishopObjectTrait
         }
         //====================================================================//
         // Return Updated Fields
-        return isset($this->updateFields[$type])
-            ? $this->updateFields[$type]
-            : array()
-        ;
+        return $this->updateFields[$type] ?? array();
     }
 }

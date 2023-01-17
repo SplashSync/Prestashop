@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2021 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -16,8 +16,10 @@
 namespace Splash\Tests;
 
 use Configuration;
+use Exception;
 use Splash\Client\Splash;
 use Splash\Components\CommitsManager;
+use Splash\Components\FieldsManager;
 use Splash\Local\Services\MultiShopFieldsManager as MSF;
 use Splash\Local\Services\MultiShopManager as MSM;
 use Splash\Tests\Tools\ObjectsCase;
@@ -33,19 +35,26 @@ class L10MsfProductsTest extends ObjectsCase
     use ObjectsSetTestsTrait;
 
     /**
-     * @param string $testSequence
-     * @param string $objectType
-     * @param mixed  $field
-     * @param bool   $variant
+     * @param string     $testSequence
+     * @param string     $objectType
+     * @param null|array $field
+     * @param bool       $variant
      *
      * @dataProvider objectMsfProductFieldsProvider
      *
-     * @throws \Exception
+     * @throws Exception
      *
      * @return void
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public function testSetSingleFieldFromModule(string $testSequence, string $objectType, $field, $variant = false)
-    {
+    public function testSetSingleFieldFromModule(
+        string $testSequence,
+        string $objectType,
+        ?array $field,
+        bool $variant = false
+    ) {
         //====================================================================//
         //   NOT in Msf Mode
         if (is_null($field)) {
@@ -97,9 +106,9 @@ class L10MsfProductsTest extends ObjectsCase
         if (!is_array($allShopsRedoData)) {
             return;
         }
-        unset($allShopsRedoData[$field->id]);
+        unset($allShopsRedoData[$field['id']]);
         $redoObjectId = Splash::object($objectType)->set($objectId, $allShopsRedoData);
-        $allShopsRedoData[$field->id] = $allShopsOriginData[$field->id];
+        $allShopsRedoData[$field['id']] = $allShopsOriginData[$field['id']];
         $this->assertEquals($objectId, $redoObjectId);
 
         //====================================================================//
@@ -112,9 +121,13 @@ class L10MsfProductsTest extends ObjectsCase
             }
             //====================================================================//
             // Add Msf Fields to List
-            $shopField = clone $field;
-            $shopField->id = MSF::MSF_PREFIX.$shopId."_".$field->id;
-            $this->fields[$shopField->id] = $shopField;
+            $shopField = $field;
+            if ($list = FieldsManager::isListField($field['id'])) {
+                $shopField['id'] = $list['fieldname']."@".MSF::MSF_PREFIX.$shopId."_".$list['listname'];
+            } else {
+                $shopField['id'] = MSF::MSF_PREFIX.$shopId."_".$field['id'];
+            }
+            $this->fields[$shopField['id']] = $shopField;
         }
 
         //====================================================================//
@@ -125,9 +138,11 @@ class L10MsfProductsTest extends ObjectsCase
     /**
      * Build List of Msf Product Fields to Tests
      *
+     * @throws Exception
+     *
      * @return array
      */
-    public function objectMsfProductFieldsProvider()
+    public function objectMsfProductFieldsProvider(): array
     {
         $coreSequences = $this->objectFieldsProvider();
         $sequences = array();
@@ -153,20 +168,30 @@ class L10MsfProductsTest extends ObjectsCase
     /**
      * Build Object Data for One Shop Only
      *
-     * @param mixed $field
+     * @param array $field
      * @param int   $shopId
      *
-     * @throws \Exception
+     * @throws Exception
      *
      * @return array
      */
-    private function getShopDataSet($field, int $shopId): array
+    private function getShopDataSet(array $field, int $shopId): array
     {
+        //====================================================================//
+        // Detect List Fields
+        if ($list = FieldsManager::isListField($field['id'])) {
+            return MSF::encodeData(
+                array($list['listname'] => self::fakeListData($field)),
+                $shopId
+            );
+        }
+        //====================================================================//
+        // Simple Fields
         return MSF::encodeData(
-            array($field->id => self::fakeFieldData(
-                $field->type,
-                self::toArray($field->choices),
-                self::toArray($field->options)
+            array($field['id'] => self::fakeFieldData(
+                $field['type'],
+                self::toArray($field['choices']),
+                self::toArray($field['options'])
             )),
             $shopId
         );
@@ -199,25 +224,25 @@ class L10MsfProductsTest extends ObjectsCase
     /**
      * Check if Field is Allowed for Testing
      *
-     * @param mixed $field
+     * @param array $field
      *
      * @return bool
      */
-    private function isAllowedFieldForTesting($field): bool
+    private function isAllowedFieldForTesting(array $field): bool
     {
         //====================================================================//
         //   Ensure Field is R/W Field
-        if (empty($field->read) || empty($field->write) || !empty($field->notest)) {
+        if (empty($field['read']) || empty($field['write']) || !empty($field['notest'])) {
             return false;
         }
         //====================================================================//
         //   Ensure Field is Msf Field
-        if (is_array($field->options) && array_key_exists("shop", $field->options)) {
-            if (MSM::MODE_ALL == $field->options["shop"]) {
+        if (is_array($field['options']) && array_key_exists("shop", $field['options'])) {
+            if (MSM::MODE_ALL == $field['options']["shop"]) {
                 return false;
             }
         }
-        if (!isset($field->id) || (false !== strpos($field->id, "_shop_"))) {
+        if (!isset($field['id']) || (false !== strpos($field['id'], "_shop_"))) {
             return false;
         }
 

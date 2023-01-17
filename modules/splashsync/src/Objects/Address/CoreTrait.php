@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2021 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -37,9 +37,8 @@ trait CoreTrait
             ->identifier("alias")
             ->name($this->spl->l("Address alias"))
             ->description(Translate::getAdminTranslation("Address alias", "AdminAddresses"))
-            ->MicroData("http://schema.org/PostalAddress", "name")
+            ->microData("http://schema.org/PostalAddress", "name")
         ;
-
         //====================================================================//
         // Customer
         $this->fieldsFactory()->create((string) self::objects()->encode("ThirdParty", SPL_T_ID))
@@ -119,20 +118,20 @@ trait CoreTrait
                 $this->getSimple($fieldName);
 
                 break;
-            //====================================================================//
-            // Customer Object Id Readings
+                //====================================================================//
+                // Customer Object Id Readings
             case 'id_customer':
                 $this->out[$fieldName] = self::objects()->encode("ThirdParty", $this->object->{$fieldName});
 
                 break;
-            //====================================================================//
-            // Active Flag
+                //====================================================================//
+                // Active Flag
             case 'active':
                 $this->out[$fieldName] = !self::isDeleted($this->object);
 
                 break;
-            //====================================================================//
-            // Deleted Flag
+                //====================================================================//
+                // Deleted Flag
             case 'deleted':
                 $this->out[$fieldName] = self::isDeleted($this->object);
 
@@ -146,12 +145,12 @@ trait CoreTrait
     /**
      * Write Given Fields
      *
-     * @param string $fieldName Field Identifier / Name
-     * @param mixed  $fieldData Field Data
+     * @param string      $fieldName Field Identifier / Name
+     * @param null|string $fieldData Field Data
      *
      * @return void
      */
-    protected function setCoreFields(string $fieldName, $fieldData): void
+    protected function setCoreFields(string $fieldName, ?string $fieldData): void
     {
         //====================================================================//
         // WRITE Field
@@ -165,10 +164,10 @@ trait CoreTrait
                 $this->setSimple($fieldName, $fieldData);
 
                 break;
-            //====================================================================//
-            // Customer Object Id Writings
+                //====================================================================//
+                // Customer Object Id Writings
             case 'id_customer':
-                $this->setIdCustomer($fieldData);
+                $this->setIdCustomer((string) $fieldData);
 
                 break;
             default:

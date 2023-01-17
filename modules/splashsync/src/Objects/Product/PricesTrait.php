@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2021 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -17,6 +17,7 @@ namespace Splash\Local\Objects\Product;
 
 use Combination;
 use Splash\Core\SplashCore      as Splash;
+use Splash\Local\Services\LanguagesManager;
 use Splash\Local\Services\TaxManager;
 use Splash\Models\Objects\PricesTrait as SplashPricesTrait;
 use Tools;
@@ -41,6 +42,7 @@ trait PricesTrait
      */
     protected function buildPricesFields(): void
     {
+        $symbol = LanguagesManager::getCurrencySymbol($this->currency);
         //====================================================================//
         // PRICES INFORMATIONS
         //====================================================================//
@@ -48,53 +50,50 @@ trait PricesTrait
         //====================================================================//
         // Product Selling Price
         $this->fieldsFactory()->create(SPL_T_PRICE)
-            ->Identifier("price")
-            ->Name(
+            ->identifier("price")
+            ->name(
                 Translate::getAdminTranslation(
                     "Price (tax excl.)",
                     "AdminProducts"
-                )." (".$this->Currency->sign.")"
+                )." (".$symbol.")"
             )
-            ->MicroData("http://schema.org/Product", "price")
-            ->isListed()
+            ->microData("http://schema.org/Product", "price")
         ;
-
         //====================================================================//
         // Product Selling Base Price
         $this->fieldsFactory()->create(SPL_T_PRICE)
-            ->Identifier("price-base")
-            ->Name(
+            ->identifier("price-base")
+            ->name(
                 Translate::getAdminTranslation(
                     "Price (tax excl.)",
                     "AdminProducts"
-                )." Base (".$this->Currency->sign.")"
+                )." Base (".$symbol.")"
             )
-            ->MicroData("http://schema.org/Product", "basePrice")
+            ->microData("http://schema.org/Product", "basePrice")
         ;
-
         //====================================================================//
         // WholeSale Price
         $this->fieldsFactory()->create(SPL_T_PRICE)
-            ->Identifier("price-wholesale")
-            ->Name(
+            ->identifier("price-wholesale")
+            ->name(
                 Translate::getAdminTranslation(
                     "Wholesale price",
                     "AdminProducts"
-                )." Base (".$this->Currency->sign.")"
+                )." Base (".$symbol.")"
             )
-            ->MicroData("http://schema.org/Product", "wholesalePrice");
-
+            ->microData("http://schema.org/Product", "wholesalePrice")
+        ;
         //====================================================================//
         // Reduced Price
         $this->fieldsFactory()->create(SPL_T_PRICE)
-            ->Identifier("price-reduced")
-            ->Name(
+            ->identifier("price-reduced")
+            ->name(
                 Translate::getAdminTranslation(
                     "Sale price",
                     "AdminProducts"
-                )." (".$this->Currency->sign.")"
+                )." (".$symbol.")"
             )
-            ->MicroData("http://schema.org/Product", "reducedPrice")
+            ->microData("http://schema.org/Product", "reducedPrice")
             ->isReadOnly()
         ;
     }
@@ -121,7 +120,7 @@ trait PricesTrait
                 // Read Price
                 $priceHT = (double) Tools::convertPrice(
                     $this->getProductPrice(),
-                    $this->Currency
+                    $this->currency
                 );
                 $taxPercent = (double) $this->object->getTaxesRate();
                 //====================================================================//
@@ -130,16 +129,16 @@ trait PricesTrait
                     $priceHT,
                     $taxPercent,
                     null,
-                    $this->Currency->iso_code,
-                    $this->Currency->sign,
-                    $this->Currency->name
+                    $this->currency->iso_code,
+                    LanguagesManager::getCurrencySymbol($this->currency),
+                    LanguagesManager::getCurrencyName($this->currency)
                 );
 
                 break;
             case 'price-base':
                 //====================================================================//
                 // Read Price
-                $priceHT = (double) Tools::convertPrice($this->object->base_price, $this->Currency);
+                $priceHT = (double) Tools::convertPrice($this->object->base_price, $this->currency);
                 $taxPercent = (double) $this->object->getTaxesRate();
                 //====================================================================//
                 // Build Price Array
@@ -147,19 +146,19 @@ trait PricesTrait
                     $priceHT,
                     $taxPercent,
                     null,
-                    $this->Currency->iso_code,
-                    $this->Currency->sign,
-                    $this->Currency->name
+                    $this->currency->iso_code,
+                    LanguagesManager::getCurrencySymbol($this->currency),
+                    LanguagesManager::getCurrencyName($this->currency)
                 );
 
                 break;
             case 'price-wholesale':
                 //====================================================================//
                 // Read Price
-                if ($this->AttributeId && ($this->Attribute->wholesale_price > 0)) {
-                    $priceHT = (double) Tools::convertPrice($this->Attribute->wholesale_price, $this->Currency);
+                if ($this->Attribute && ($this->Attribute->wholesale_price > 0)) {
+                    $priceHT = (double) Tools::convertPrice($this->Attribute->wholesale_price, $this->currency);
                 } else {
-                    $priceHT = (double) Tools::convertPrice((float) $this->object->wholesale_price, $this->Currency);
+                    $priceHT = (double) Tools::convertPrice((float) $this->object->wholesale_price, $this->currency);
                 }
                 $taxPercent = (double)  $this->object->getTaxesRate();
                 //====================================================================//
@@ -168,9 +167,9 @@ trait PricesTrait
                     $priceHT,
                     $taxPercent,
                     null,
-                    $this->Currency->iso_code,
-                    $this->Currency->sign,
-                    $this->Currency->name
+                    $this->currency->iso_code,
+                    LanguagesManager::getCurrencySymbol($this->currency),
+                    LanguagesManager::getCurrencyName($this->currency)
                 );
 
                 break;
@@ -191,7 +190,7 @@ trait PricesTrait
      *
      * @return void
      */
-    protected function getReducedPricesFields($key, $fieldName)
+    protected function getReducedPricesFields(?string $key, string $fieldName): void
     {
         //====================================================================//
         // READ Fields
@@ -210,9 +209,9 @@ trait PricesTrait
                     $priceHT,
                     $taxPercent,
                     null,
-                    $this->Currency->iso_code,
-                    $this->Currency->sign,
-                    $this->Currency->name
+                    $this->currency->iso_code,
+                    LanguagesManager::getCurrencySymbol($this->currency),
+                    LanguagesManager::getCurrencyName($this->currency)
                 );
 
                 break;
@@ -229,11 +228,13 @@ trait PricesTrait
      * Write Given Fields
      *
      * @param string $fieldName Field Identifier / Name
-     * @param mixed  $fieldData Field Data
+     * @param array  $fieldData Field Data
      *
      * @return void
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    protected function setPricesFields($fieldName, $fieldData)
+    protected function setPricesFields(string $fieldName, array $fieldData): void
     {
         //====================================================================//
         // WRITE Field
@@ -252,7 +253,9 @@ trait PricesTrait
 
                 //====================================================================//
                 // Compare Prices
-                if (!self::prices()->Compare($this->out["price-base"], $fieldData)) {
+                if (!is_array($this->out["price-base"])
+                    || !self::prices()->compare($this->out["price-base"], $fieldData)
+                ) {
                     $this->object->price = $fieldData["ht"];
                     $this->object->base_price = $fieldData["ht"];
                     $this->addMsfUpdateFields("Product", "price");
@@ -270,13 +273,15 @@ trait PricesTrait
 
                 //====================================================================//
                 // Compare Prices
-                if (self::prices()->Compare($this->out["price-wholesale"], $fieldData)) {
+                if (is_array($this->out["price-wholesale"])
+                    && self::prices()->compare($this->out["price-wholesale"], $fieldData)
+                ) {
                     break;
                 }
 
                 //====================================================================//
                 // Update product Wholesale Price with Attribute
-                if ($this->AttributeId) {
+                if ($this->Attribute) {
                     $this->Attribute->wholesale_price = $fieldData["ht"];
                     $this->addMsfUpdateFields("Attribute", "wholesale_price");
                     $this->needUpdate("Attribute");
@@ -304,15 +309,19 @@ trait PricesTrait
      * @param array $newPrice New Product Price Array
      *
      * @return void
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    private function updateProductPrice($newPrice)
+    private function updateProductPrice(array $newPrice): void
     {
         //====================================================================//
         // Read Current Product Price (Via Out Buffer)
         $this->getPricesFields(null, "price");
         //====================================================================//
         // Verify Price Need to be Updated
-        if (self::prices()->Compare($this->out["price"], $newPrice)) {
+        if (is_array($this->out["price"])
+            && self::prices()->compare($this->out["price"], $newPrice)
+        ) {
             return;
         }
         //====================================================================//
@@ -363,7 +372,7 @@ trait PricesTrait
      *
      * @return void
      */
-    private function updateAttributePrice($newPrice)
+    private function updateAttributePrice(array $newPrice): void
     {
         //====================================================================//
         // Detect New Base Price
@@ -372,7 +381,11 @@ trait PricesTrait
         } else {
             $basePrice = $this->object->base_price;
         }
-
+        //====================================================================//
+        // Safety Check
+        if (!isset($this->Attribute)) {
+            return;
+        }
         //====================================================================//
         // Evaluate Attribute Price
         $priceHT = $newPrice["ht"] - $basePrice;
@@ -390,7 +403,7 @@ trait PricesTrait
      *
      * @return float
      */
-    private function getProductPrice()
+    private function getProductPrice(): float
     {
         //====================================================================//
         // Read Product Base Price

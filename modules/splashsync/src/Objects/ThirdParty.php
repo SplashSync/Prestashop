@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2021 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -22,6 +22,7 @@ use Splash\Local\Traits\SplashIdTrait;
 use Splash\Models\AbstractObject;
 use Splash\Models\Objects\IntelParserTrait;
 use Splash\Models\Objects\ObjectsTrait;
+use Splash\Models\Objects\PrimaryKeysAwareInterface;
 use Splash\Models\Objects\SimpleFieldsTrait;
 use SplashSync;
 
@@ -30,7 +31,7 @@ use SplashSync;
  *
  * @SuppressWarnings(PHPMD.CamelCasePropertyName)
  */
-class ThirdParty extends AbstractObject
+class ThirdParty extends AbstractObject implements PrimaryKeysAwareInterface
 {
     // Splash Php Core Traits
     use IntelParserTrait;
@@ -47,6 +48,7 @@ class ThirdParty extends AbstractObject
     // Prestashop ThirdParty Traits
     use ThirdParty\ObjectsListTrait;
     use ThirdParty\CRUDTrait;
+    use ThirdParty\PrimaryTrait;
     use ThirdParty\CoreTrait;
     use ThirdParty\MainTrait;
     use ThirdParty\AddressTrait;
@@ -56,7 +58,7 @@ class ThirdParty extends AbstractObject
     /**
      * @var Customer
      */
-    protected $object;
+    protected object $object;
 
     //====================================================================//
     // Object Definition Parameters
@@ -67,21 +69,21 @@ class ThirdParty extends AbstractObject
      *
      * @var string
      */
-    protected static $NAME = "ThirdParty";
+    protected static string $name = "ThirdParty";
 
     /**
      * Object Description (Translated by Module)
      *
      * @var string
      */
-    protected static $DESCRIPTION = "Prestashop Customer Object";
+    protected static string $description = "Prestashop Customer Object";
 
     /**
      * Object Icon (FontAwesome or Glyph ico tag)
      *
      * @var string
      */
-    protected static $ICO = "fa fa-user";
+    protected static string $ico = "fa fa-user";
 
     //====================================================================//
     // Object Synchronization Recommended Configuration
@@ -90,12 +92,12 @@ class ThirdParty extends AbstractObject
     /**
      * @var bool Enable Creation Of New Local Objects when Not Existing
      */
-    protected static $ENABLE_PUSH_CREATED = false;
+    protected static bool $enablePushCreated = false;
 
     /**
      * @var SplashSync
      */
-    private $spl;
+    private SplashSync $spl;
 
     //====================================================================//
     // Class Constructor

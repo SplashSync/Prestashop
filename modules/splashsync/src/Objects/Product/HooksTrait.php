@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2021 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -36,7 +36,7 @@ trait HooksTrait
      *
      * @return bool
      */
-    public function hookactionObjectProductAddAfter($params)
+    public function hookActionObjectProductAddAfter(array $params): bool
     {
         return $this->hookactionProduct($params["object"], SPL_A_CREATE, $this->l('Product Created on Prestashop'));
     }
@@ -51,7 +51,7 @@ trait HooksTrait
      *
      * @return bool
      */
-    public function hookactionProductUpdate($params)
+    public function hookActionProductUpdate(array $params): bool
     {
         //====================================================================//
         // Check We Are on Database Module request
@@ -78,7 +78,7 @@ trait HooksTrait
      *
      * @return bool
      */
-    public function hookactionObjectProductUpdateAfter($params)
+    public function hookActionObjectProductUpdateAfter(array $params): bool
     {
         return $this->hookactionProduct($params["object"], SPL_A_UPDATE, $this->l('Product Updated on Prestashop'));
     }
@@ -90,7 +90,7 @@ trait HooksTrait
      *
      * @return bool
      */
-    public function hookactionObjectProductDeleteAfter($params)
+    public function hookActionObjectProductDeleteAfter(array $params): bool
     {
         return $this->hookactionProduct($params["object"], SPL_A_DELETE, $this->l('Product Deleted on Prestashop'));
     }
@@ -102,7 +102,7 @@ trait HooksTrait
      *
      * @return bool
      */
-    public function hookactionObjectCombinationAddAfter($params)
+    public function hookActionObjectCombinationAddAfter(array $params): bool
     {
         return $this->hookactionCombination(
             $params["object"],
@@ -118,7 +118,7 @@ trait HooksTrait
      *
      * @return bool
      */
-    public function hookactionObjectCombinationUpdateAfter($params)
+    public function hookActionObjectCombinationUpdateAfter(array $params): bool
     {
         return $this->hookactionCombination(
             $params["object"],
@@ -134,7 +134,7 @@ trait HooksTrait
      *
      * @return bool
      */
-    public function hookactionObjectCombinationDeleteAfter($params)
+    public function hookActionObjectCombinationDeleteAfter(array $params): bool
     {
         return $this->hookactionCombination(
             $params["object"],
@@ -154,7 +154,7 @@ trait HooksTrait
      *
      * @return bool
      */
-    public function hookactionUpdateQuantity($params)
+    public function hookActionUpdateQuantity(array $params): bool
     {
         //====================================================================//
         // Log
@@ -194,9 +194,9 @@ trait HooksTrait
      *
      * @param array|PsProduct $product Prestashop Product Object
      *
-     * @return array Array of Unik Ids
+     * @return array Array of Unique Ids
      */
-    private function getActionProductIds($product)
+    private function getActionProductIds($product): array
     {
         //====================================================================//
         // Ensure Input is Product Class
@@ -248,7 +248,7 @@ trait HooksTrait
      *
      * @return bool
      */
-    private function hookactionProduct($product, $action, $comment)
+    private function hookActionProduct($product, $action, $comment)
     {
         //====================================================================//
         // Safety Check
@@ -283,7 +283,7 @@ trait HooksTrait
      *
      * @return bool
      */
-    private function hookactionCombination($combination, $action, $comment)
+    private function hookActionCombination(Combination $combination, string $action, string $comment): bool
     {
         //====================================================================//
         // Retrieve Combination Id
@@ -332,7 +332,7 @@ trait HooksTrait
      *
      * @return bool
      */
-    private function isAllowedProductCommit($product)
+    private function isAllowedProductCommit($product): bool
     {
         //====================================================================//
         // Ensure Input is Product Class
@@ -355,7 +355,7 @@ trait HooksTrait
         if (empty(Configuration::get("SPLASH_SYNC_PACKS"))) {
             //====================================================================//
             // Check if Product is a Pack
-            if (Pack::isPack($product->id)) {
+            if (Pack::isPack((int) $product->id)) {
                 Splash::log()->war("Products Pack: Commit Skipped.");
 
                 return false;
@@ -388,6 +388,7 @@ trait HooksTrait
         }
         //====================================================================//
         // IS STORE COMMANDER
+        /** @var string $requestUri */
         $requestUri = filter_input(INPUT_SERVER, 'REQUEST_URI');
         if (false !== strpos($requestUri, "/modules/storecommander/")) {
             return true;

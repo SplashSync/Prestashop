@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2021 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -31,7 +31,7 @@ trait CoreTrait
      *
      * @var null|array
      */
-    private $combinations;
+    private ?array $combinations;
 
     //====================================================================//
     // Fields Generation Functions
@@ -42,7 +42,7 @@ trait CoreTrait
      *
      * @return void
      */
-    protected function buildVariantsCoreFields()
+    protected function buildVariantsCoreFields(): void
     {
         if (!Combination::isFeatureActive()) {
             return;
@@ -51,38 +51,40 @@ trait CoreTrait
         //====================================================================//
         // Is Default Product Variant
         $this->fieldsFactory()->create(SPL_T_BOOL)
-            ->Identifier("default_on")
-            ->Name('Is default variant')
-            ->Group(Translate::getAdminTranslation("Meta", "AdminThemes"))
-            ->MicroData("http://schema.org/Product", "isDefaultVariation")
-            ->isReadOnly();
-
+            ->identifier("default_on")
+            ->name('Is default variant')
+            ->group(Translate::getAdminTranslation("Meta", "AdminThemes"))
+            ->microData("http://schema.org/Product", "isDefaultVariation")
+            ->isReadOnly()
+        ;
         //====================================================================//
         // Default Product Variant
         $this->fieldsFactory()->create((string) self::objects()->encode("Product", SPL_T_ID))
-            ->Identifier("default_id")
-            ->Name('Default Variant')
-            ->Group(Translate::getAdminTranslation("Meta", "AdminThemes"))
-            ->MicroData("http://schema.org/Product", "DefaultVariation")
-            ->isNotTested();
-
+            ->identifier("default_id")
+            ->name('Default Variant')
+            ->group(Translate::getAdminTranslation("Meta", "AdminThemes"))
+            ->microData("http://schema.org/Product", "DefaultVariation")
+            ->isNotTested()
+        ;
         //====================================================================//
         // Product Variation Parent Link
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
-            ->Identifier("parent_id")
-            ->Name("Parent")
-            ->Group(Translate::getAdminTranslation("Meta", "AdminThemes"))
-            ->MicroData("http://schema.org/Product", "isVariationOf")
-            ->isReadOnly();
-
+            ->identifier("parent_id")
+            ->name("Parent")
+            ->group(Translate::getAdminTranslation("Meta", "AdminThemes"))
+            ->microData("http://schema.org/Product", "isVariationOf")
+            ->isReadOnly()
+        ;
         //====================================================================//
         // Product Variation Parent Link
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
-            ->Identifier("parent_ref")
-            ->Name("Parent SKU")
-            ->Group(Translate::getAdminTranslation("Meta", "AdminThemes"))
-            ->MicroData("http://schema.org/Product", "isVariationOfName")
-            ->isNotTested();
+            ->identifier("parent_ref")
+            ->name("Parent SKU")
+            ->group(Translate::getAdminTranslation("Meta", "AdminThemes"))
+            ->microData("http://schema.org/Product", "isVariationOfName")
+            ->isIndexed()
+            ->isNotTested()
+        ;
 
         //====================================================================//
         // CHILD PRODUCTS INFORMATIONS
@@ -90,12 +92,13 @@ trait CoreTrait
 
         //====================================================================//
         // Product Variation List - Product Link
-        $this->fieldsFactory()->Create((string) self::objects()->Encode("Product", SPL_T_ID))
-            ->Identifier("id")
-            ->Name("Variants")
-            ->InList("variants")
-            ->MicroData("http://schema.org/Product", "Variants")
-            ->isNotTested();
+        $this->fieldsFactory()->create((string) self::objects()->Encode("Product", SPL_T_ID))
+            ->identifier("id")
+            ->name("Variants")
+            ->inList("variants")
+            ->microData("http://schema.org/Product", "Variants")
+            ->isNotTested()
+        ;
         //====================================================================//
         // MSF Light Mode => Visible Only on ALL Sites
         if (MSM::isLightMode()) {
@@ -103,12 +106,13 @@ trait CoreTrait
         }
         //====================================================================//
         // Product Variation List - Product SKU
-        $this->fieldsFactory()->Create(SPL_T_VARCHAR)
-            ->Identifier("sku")
-            ->Name("Variant SKU")
-            ->InList("variants")
-            ->MicroData("http://schema.org/Product", "VariationName")
-            ->isReadOnly();
+        $this->fieldsFactory()->create(SPL_T_VARCHAR)
+            ->identifier("sku")
+            ->name("Variant SKU")
+            ->inList("variants")
+            ->microData("http://schema.org/Product", "VariationName")
+            ->isReadOnly()
+        ;
         //====================================================================//
         // MSF Light Mode => Visible Only on ALL Sites
         if (MSM::isLightMode()) {
@@ -128,7 +132,7 @@ trait CoreTrait
      *
      * @return void
      */
-    protected function getVariantsParentFields($key, $fieldName)
+    protected function getVariantsParentFields(string $key, string $fieldName): void
     {
         //====================================================================//
         // READ Fields
@@ -161,7 +165,7 @@ trait CoreTrait
      *
      * @return void
      */
-    protected function getVariantsDefaultsFields($key, $fieldName)
+    protected function getVariantsDefaultsFields(string $key, string $fieldName): void
     {
         //====================================================================//
         // READ Fields
@@ -201,7 +205,7 @@ trait CoreTrait
      *
      * @return void
      */
-    protected function getVariantChildsFields($key, $fieldName)
+    protected function getVariantChildsFields(string $key, string $fieldName): void
     {
         //====================================================================//
         // Check if List field & Init List Array
@@ -227,7 +231,9 @@ trait CoreTrait
         unset($this->in[$key]);
         //====================================================================//
         // Sort Variants by Code
-        ksort($this->out["variants"]);
+        if (is_array($this->out["variants"])) {
+            ksort($this->out["variants"]);
+        }
     }
 
     /**
@@ -248,11 +254,10 @@ trait CoreTrait
      * Write Given Fields
      *
      * @param string $fieldName Field Identifier / Name
-     * @param mixed  $fieldData Field Data
      *
      * @return void
      */
-    protected function setVariantsCoreFields($fieldName, $fieldData)
+    protected function setVariantsCreateFields(string $fieldName): void
     {
         //====================================================================//
         // WRITE Field
@@ -260,13 +265,32 @@ trait CoreTrait
             case 'default_on':
             case 'variants':
                 break;
+            default:
+                return;
+        }
+        unset($this->in[$fieldName]);
+    }
+
+    /**
+     * Write Given Fields
+     *
+     * @param string      $fieldName Field Identifier / Name
+     * @param null|string $fieldData Field Data
+     *
+     * @return void
+     */
+    protected function setVariantsCoreFields(string $fieldName, ?string $fieldData): void
+    {
+        //====================================================================//
+        // WRITE Field
+        switch ($fieldName) {
             case 'default_id':
                 //====================================================================//
                 // Check if Valid Data
-                if (!$this->AttributeId || ($this->ProductId != $this->getId($fieldData))) {
+                if (!$this->AttributeId || ($this->ProductId != $this->getId((int) $fieldData))) {
                     break;
                 }
-                $attributeId = $this->getAttribute($fieldData);
+                $attributeId = $this->getAttribute((int) $fieldData);
                 if (!$attributeId || ($attributeId == $this->object->getDefaultIdProductAttribute())) {
                     break;
                 }
@@ -288,7 +312,7 @@ trait CoreTrait
      *
      * @return void
      */
-    protected function setVariantsParentFields($fieldName, $fieldData)
+    protected function setVariantsParentFields(string $fieldName, $fieldData)
     {
         //====================================================================//
         // WRITE Field
