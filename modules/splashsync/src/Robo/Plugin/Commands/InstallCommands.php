@@ -29,10 +29,11 @@ class InstallCommands extends \Robo\Tasks
      *
      * @description Install Splash Module
      *
-     * @param mixed $world
-     * @param mixed $test
+     * @param ConsoleIO $consoleIO
+     *
+     * @return void
      */
-    public function install(ConsoleIO $io, $world = "Cool", $test = "Cool")
+    public function install(ConsoleIO $consoleIO)
     {
         //====================================================================//
         // Init Splash for Local Includes
@@ -42,10 +43,10 @@ class InstallCommands extends \Robo\Tasks
         //====================================================================//
         // Install Module
         if ($local->getLocalModule()->install()) {
-            $io->success("Splash Module Installed");
+            $consoleIO->success("Splash Module Installed");
         }
         if ($logs = Splash::log()->getConsoleLog(true)) {
-            $io->say($logs);
+            $consoleIO->say($logs);
         }
     }
 
@@ -54,10 +55,11 @@ class InstallCommands extends \Robo\Tasks
      *
      * @description Uninstall Splash Module
      *
-     * @param mixed $world
-     * @param mixed $test
+     * @param ConsoleIO $consoleIO
+     *
+     * @return void
      */
-    public function uninstall(ConsoleIO $io, $world = "Cool", $test = "Cool")
+    public function uninstall(ConsoleIO $consoleIO)
     {
         //====================================================================//
         // Init Splash for Local Includes
@@ -67,10 +69,10 @@ class InstallCommands extends \Robo\Tasks
         //====================================================================//
         // Uninstall Splash Module
         if ($local->getLocalModule()->uninstall()) {
-            $io->success("Splash Module Uninstalled");
+            $consoleIO->success("Splash Module Uninstalled");
         }
         if ($logs = Splash::log()->getConsoleLog(true)) {
-            $io->say($logs);
+            $consoleIO->say($logs);
         }
     }
 }

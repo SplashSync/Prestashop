@@ -28,18 +28,23 @@ class DeployCommands extends Tasks
      *
      * @description Deploy Prestashop Module for Production
      *
-     * @param mixed $version
-     * @param mixed $projectDir
+     * @param ConsoleIO $consoleIO
+     * @param bool      $dev        Include Dev Dependencies
+     * @param mixed     $version    Module Version
+     * @param mixed     $projectDir Project Install Dir
+     *
+     * @return void
      */
-    public function deploy(ConsoleIO $io, $version = '@stable', $projectDir = '/var/www/html')
+    public function deploy(ConsoleIO $consoleIO, bool $dev = false, $version = '@stable', $projectDir = '/var/www/html')
     {
         $tmpPath = $this->_tmpDir();
         $installDir = $projectDir."/modules/splashsync";
         //====================================================================//
         // Init
-        $io->title("Deploy Splash module for Prestashop");
-        $io->definitionList(
+        $consoleIO->title("Deploy Splash module for Prestashop");
+        $consoleIO->definitionList(
             array("Module Version" => $version),
+            array("Include Dev" => ($dev ? "<info>YES</info>" : "<comment>No</comment>")),
             array("Prestashop Dir" => $projectDir),
             array("Temporary Dir" => $tmpPath),
             array("Module Dir" => $installDir)
@@ -50,71 +55,24 @@ class DeployCommands extends Tasks
             ->source('splash/prestashop')
             ->version($version)
             ->target($tmpPath)
-            ->noDev(true)
+            ->dev($dev)
             ->noInteraction()
             ->disablePlugins()
-            ->keepVcs(false)
+            ->noScripts()
             ->run()
         ;
         //====================================================================//
         // Move project to Prestashop Modules Dir
-        $this->_mirrorDir($tmpPath."/modules/splashsync", $installDir);
+        $this
+            ->taskCopyDir(array($tmpPath."/modules/splashsync" => $installDir))
+            ->exclude(array($tmpPath."/modules/splashsync/vendor/amphp/parallel-functions/docs/asset"))
+            ->run()
+        ;
         //====================================================================//
         // List Installed Files
         $this->taskExec('ls')->arg('-l')->arg($installDir)->run();
         //====================================================================//
         // Notify User
-        $io->success(sprintf("Splash Module %s deployed in %s", $version, $installDir));
+        $consoleIO->success(sprintf("Splash Module %s deployed in %s", $version, $installDir));
     }
-
-//    /**
-//     * @command Prestashop:deploy-dev
-//     * @description Deploy Prestashop Module for Dev
-//     */
-//    function deployForDev(ConsoleIO $io, $version = '@stable', $projectDir = '/var/www/html')
-//    {
-//        $tmpPath = $this->_tmpDir();
-//        $installDir = $projectDir."/modules/splashsync";
-//        //====================================================================//
-//        // Init
-//        $io->title("Deploy Splash module for Prestashop");
-//        $io->definitionList(
-//            array("Module Version" => $version),
-//            array("Prestashop Dir" => $projectDir),
-//            array("Temporary Dir" => $tmpPath),
-//            array("Module Dir" => $installDir)
-//        );
-//        //====================================================================//
-//        // Create Composer Project
-//        $this->taskComposerCreateProject()
-//            ->source('splash/prestashop')
-//            ->version($version)
-//            ->target($tmpPath)
-//            ->noDev()
-//            ->noInteraction()
-//            ->disablePlugins()
-//            ->keepVcs(false)
-//            ->run()
-//        ;
-//
-//        $this->taskComposerRequire()
-//            ->dependency("consolidation/robo","@stable")
-//            ->dev()
-//            ->noInteraction()
-//            ->run()
-//        ;
-//
-//        $this->taskComposerUpdate()->run();
-//
-//        //====================================================================//
-//        // Move project to Prestashop Modules Dir
-//        $this->_mirrorDir($tmpPath."/modules/splashsync", $installDir);
-//        //====================================================================//
-//        // List Installed Files
-//        $this->taskExec('ls')->arg('-l')->arg($installDir)->run();
-//        $this->taskExec('ls')->arg('-l')->arg($installDir."/vendor")->run();
-//        //====================================================================//
-//        // Notify User
-//        $io->success(sprintf("Splash Module %s deployed in %s", $version, $installDir));
-//    }
 }

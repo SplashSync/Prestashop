@@ -28,8 +28,12 @@ class BuildCommands extends \Robo\Tasks
      * @command Prestashop:build
      *
      * @description Build Prestashop Console
+     *
+     * @param ConsoleIO $consoleIO
+     *
+     * @return void
      */
-    public function build(ConsoleIO $io)
+    public function build(ConsoleIO $consoleIO)
     {
         $tmpPath = $this->_tmpDir();
         //====================================================================//
@@ -73,7 +77,7 @@ class BuildCommands extends \Robo\Tasks
         $this->_exec('php build/robo.phar');
         //====================================================================//
         // Notify User
-        $io->success(sprintf("Console Build in %s", 'bin/robo.phar'));
+        $consoleIO->success(sprintf("Console Build in %s", 'bin/robo.phar'));
     }
 
     /**
