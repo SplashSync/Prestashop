@@ -29,7 +29,7 @@ class BuildCommands extends \Robo\Tasks
      *
      * @description Build Prestashop Console
      *
-     * @param ConsoleIO $consoleIO
+     * @phpstan-param ConsoleIO $consoleIO
      *
      * @return void
      */

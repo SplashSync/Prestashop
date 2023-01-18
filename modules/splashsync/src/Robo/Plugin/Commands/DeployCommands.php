@@ -28,10 +28,11 @@ class DeployCommands extends Tasks
      *
      * @description Deploy Prestashop Module for Production
      *
-     * @param ConsoleIO $consoleIO
-     * @param bool      $dev        Include Dev Dependencies
-     * @param mixed     $version    Module Version
-     * @param mixed     $projectDir Project Install Dir
+     * @phpstan-param ConsoleIO $consoleIO
+     *
+     * @param bool  $dev        Include Dev Dependencies
+     * @param mixed $version    Module Version
+     * @param mixed $projectDir Project Install Dir
      *
      * @return void
      */

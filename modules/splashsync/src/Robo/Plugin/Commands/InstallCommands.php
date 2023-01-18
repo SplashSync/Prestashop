@@ -29,7 +29,7 @@ class InstallCommands extends \Robo\Tasks
      *
      * @description Install Splash Module
      *
-     * @param ConsoleIO $consoleIO
+     * @phpstan-param ConsoleIO $consoleIO
      *
      * @return void
      */
@@ -55,7 +55,7 @@ class InstallCommands extends \Robo\Tasks
      *
      * @description Uninstall Splash Module
      *
-     * @param ConsoleIO $consoleIO
+     * @phpstan-param ConsoleIO $consoleIO
      *
      * @return void
      */
