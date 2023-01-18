@@ -173,14 +173,14 @@ services:
         depends_on:
             - mysql
         volumes:
-        # Push Configuration Override
-         - "./docker/config/splash.json:/var/www/html/config/splash.json:ro"
-        # Module Sources
-         - ./modules/splashsync:/var/www/html/modules/splashsync:ro
-         - ./ci:/var/www/html/ci:ro
-         - ./phpunit.xml.dist:/var/www/html/phpunit.xml.dist:ro
-        # Docker EntryPoint
-         - ./docker/docker-entrypoint.sh:/var/www/html/modules/docker-entrypoint.sh:ro
+            # Push Configuration Override
+            - "./docker/config/splash.json:/var/www/html/config/splash.json:ro"
+            # Module Sources
+            - ./modules/splashsync:/var/www/html/modules/splashsync:ro
+            - ./ci:/var/www/html/ci:ro
+            - ./phpunit.xml.dist:/var/www/html/phpunit.xml.dist:ro
+            # Docker EntryPoint
+            - ./docker/docker-entrypoint.sh:/var/www/html/modules/docker-entrypoint.sh:ro
         environment:
             - DB_SERVER=mysql
             - DB_NAME=Prestashop__1p7

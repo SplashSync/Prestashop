@@ -14,7 +14,8 @@
 
     "require-dev": {
         "splash/console":                   "dev-master",
-        "badpixxel/php-sdk":                "~2.0"
+        "badpixxel/php-sdk":                "~2.0",
+        "consolidation/robo":               "@stable"
     },
 
     "autoload": {

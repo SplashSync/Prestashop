@@ -54,10 +54,10 @@ class SplashSync extends Module
     public $confirmUninstall;
 
     /** @var array */
-    private $dataList = array();
+    private array $dataList = array();
 
     /** @var array */
-    private $fieldsList = array();
+    private array $fieldsList = array();
 
     //====================================================================//
     // *******************************************************************//
@@ -95,8 +95,10 @@ class SplashSync extends Module
         $this->displayName = $this->l('Splash Sync Connector');
         // Module Short Description
         $this->description = 'SplashSync Universal Synchronization Module for Prestashop.';
-        // Unistall Message
+        // Uninstall Message
         $this->confirmUninstall = $this->l('Are you sure you want to uninstall?');
+        // Disable Translations Update After Install
+        self::$update_translations_after_install = false;
 
         //====================================================================//
         // WebService
