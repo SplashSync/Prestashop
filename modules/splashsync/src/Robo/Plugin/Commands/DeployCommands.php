@@ -64,11 +64,8 @@ class DeployCommands extends Tasks
         ;
         //====================================================================//
         // Move project to Prestashop Modules Dir
-        $this
-            ->taskCopyDir(array($tmpPath."/modules/splashsync" => $installDir))
-            ->exclude(array($tmpPath."/modules/splashsync/vendor/amphp/parallel-functions/docs/asset"))
-            ->run()
-        ;
+        $this->_cleanDir($installDir);
+        $this->_mirrorDir($tmpPath."/modules/splashsync", $installDir);
         //====================================================================//
         // List Installed Files
         $this->taskExec('ls')->arg('-l')->arg($installDir)->run();
