@@ -6,7 +6,6 @@ Splash Php Module for Prestashop E-Commerce Platforms.
 This module implement Splash Sync connector for Prestashop. 
 It provides access to multiples Objects for automated synchronization though Splash Sync dedicated protocol.
 
-[![Build Status](https://travis-ci.org/SplashSync/Prestashop.svg?branch=master)](https://travis-ci.org/SplashSync/Prestashop)
 [![Latest Stable Version](https://poser.pugx.org/splash/prestashop/v/stable)](https://packagist.org/packages/splash/prestashop)
 [![Latest Unstable Version](https://poser.pugx.org/splash/prestashop/v/unstable)](https://packagist.org/packages/splash/prestashop)
 [![License](https://poser.pugx.org/splash/prestashop/license)](https://packagist.org/packages/splash/prestashop)
@@ -19,8 +18,8 @@ It provides access to multiples Objects for automated synchronization though Spl
 
 ## Requirements
 
-* PHP 7.2+
-* PrestaShop 1.6+
+* PHP 7.4 | 8.0+
+* PrestaShop 1.7+
 * An active Splash Sync User Account
 
 ## Documentation
