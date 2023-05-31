@@ -362,8 +362,8 @@ trait ImagesTrait
         // Generic & Combination Mode => Update Only if Position Given
         if (isset($imgArray["position"]) && is_numeric($imgArray["position"])) {
             $position = (int) $imgArray["position"];
-        //====================================================================//
-        // Generic Mode Only => Use List Index
+            //====================================================================//
+            // Generic Mode Only => Use List Index
         } elseif (!$this->AttributeId || (Splash::isDebugMode())) {
             $position = $this->imgPosition;
         }
