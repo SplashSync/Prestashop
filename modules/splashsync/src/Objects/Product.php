@@ -166,7 +166,7 @@ class Product extends AbstractObject implements PrimaryKeysAwareInterface
      * Check if Source Product Catalog Mode is Active
      *
      * In this mode:
-     * - ALL Products Textual Informations are Read Only
+     * - ALL Products Textual Information are Read Only
      * - BUT External can create Products with minimal Infos (SKU, Name)
      *
      * @return bool

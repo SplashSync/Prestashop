@@ -166,14 +166,14 @@ trait StockTrait
     /**
      * Write Given Fields
      *
-     * @param string $fieldName Field Identifier / Name
-     * @param int    $fieldData Field Data
+     * @param string   $fieldName Field Identifier / Name
+     * @param null|int $fieldData Field Data
      *
      * @throws PrestaShopException
      *
      * @return void
      */
-    protected function setStockFields(string $fieldName, int $fieldData)
+    protected function setStockFields(string $fieldName, ?int $fieldData): void
     {
         //====================================================================//
         // WRITE Field
@@ -193,7 +193,7 @@ trait StockTrait
                     StockAvailable::setQuantity(
                         $this->ProductId,
                         (int) $this->AttributeId,
-                        $fieldData,
+                        (int) $fieldData,
                         // @phpstan-ignore-next-line
                         Shop::getContextShopID(true),
                         (bool) Shop::getContextShopID(true)
@@ -205,12 +205,12 @@ trait StockTrait
                 //====================================================================//
                 // Minimum Order Quantity
             case 'minimal_quantity':
-                if (Validate::isUnsignedInt($fieldData)) {
+                if (Validate::isUnsignedInt((int) $fieldData)) {
                     if ($this->AttributeId) {
-                        $this->setSimple($fieldName, $fieldData, "Attribute");
+                        $this->setSimple($fieldName, (int) $fieldData, "Attribute");
                         $this->addMsfUpdateFields("Attribute", "minimal_quantity");
                     } else {
-                        $this->setSimple($fieldName, $fieldData);
+                        $this->setSimple($fieldName, (int) $fieldData);
                         $this->addMsfUpdateFields("Product", "minimal_quantity");
                     }
                 }
