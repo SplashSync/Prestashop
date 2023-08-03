@@ -180,7 +180,7 @@ trait MultishopObjectTrait
      * @param string $objectId
      * @param array  $fieldsList
      *
-     *@throws Exception
+     * @throws Exception
      *
      * @return null|array
      */
