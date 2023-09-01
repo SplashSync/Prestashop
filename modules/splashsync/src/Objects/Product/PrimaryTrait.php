@@ -84,6 +84,7 @@ trait PrimaryTrait
         if (1 != count($result)) {
             return null;
         }
+
         //====================================================================//
         // Result Found
         return (string) $this->getUnikId(

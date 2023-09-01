@@ -403,6 +403,7 @@ trait MainTrait
         if (!empty($this->object->company)) {
             return $this->object->company;
         }
+
         //====================================================================//
         // Generic FallBack Mode
         return "Prestashop(".$this->object->id.")";

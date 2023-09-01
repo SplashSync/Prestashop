@@ -73,6 +73,7 @@ class PmAdvancedPack
         if (!self::isFeatureActive()) {
             return false;
         }
+
         //====================================================================//
         // Check if Product Id is on List
         return in_array($productId, self::getIdsPacks(), true);

@@ -211,6 +211,7 @@ trait CRUDTrait
             if ($this->AttributeId) {
                 return $this->deleteAttribute();
             }
+
             //====================================================================//
             // Else Delete Product From DataBase
             return $this->object->delete();

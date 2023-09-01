@@ -67,6 +67,7 @@ trait ObjectsListTrait
             $sqlFilter .= " OR LOWER( c.name )       LIKE LOWER( '%".pSQL($filter)."%') ";
             $sql->where($sqlFilter);
         }
+
         //====================================================================//
         // Execute Generic Search
         return $this->getObjectsListGenericData($sql, "lastname", $params);

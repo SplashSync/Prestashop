@@ -184,6 +184,7 @@ trait HooksTrait
                 array_push($unikId, $productId);
             }
         }
+
         //====================================================================//
         // Commit Update For Product
         return $this->doCommit("Product", $unikId, SPL_A_UPDATE, $this->l('Product Stock Updated on Prestashop'));
@@ -269,6 +270,7 @@ trait HooksTrait
         if (empty($idList)) {
             return true;
         }
+
         //====================================================================//
         // Commit Update For Product
         return $this->doCommit("Product", $idList, $action, $comment);

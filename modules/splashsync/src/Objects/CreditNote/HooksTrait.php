@@ -102,6 +102,7 @@ trait HooksTrait
         if (empty($objectId)) {
             Splash::log()->err("ErrLocalTpl", "CreditNote", __FUNCTION__, "Unable to Read Order Slip Id.");
         }
+
         //====================================================================//
         // Commit Update For Invoice
         return $this->doCommit("CreditNote", (string) $objectId, $action, $comment);

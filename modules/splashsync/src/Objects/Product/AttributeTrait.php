@@ -211,6 +211,7 @@ trait AttributeTrait
         if (!empty($attrList)) {
             return true;
         }
+
         //====================================================================//
         // Also Delete Product From DataBase
         return $this->object->delete();

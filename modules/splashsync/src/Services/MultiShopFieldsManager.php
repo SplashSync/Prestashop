@@ -347,6 +347,7 @@ class MultiShopFieldsManager
         if (!self::isListField($coreField['type'])) {
             return self::MSF_PREFIX.$shopId."_".$coreField['id'];
         }
+
         //====================================================================//
         // This is a List Field
         return self::fieldName($coreField['id'])

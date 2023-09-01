@@ -190,6 +190,7 @@ trait HooksTrait
         if (empty($objectId)) {
             Splash::log()->err("ErrLocalTpl", "Invoice", __FUNCTION__, "Unable to Read Order Invoice Id.");
         }
+
         //====================================================================//
         // Commit Update For Invoice
         return $this->doCommit("Invoice", (string) $objectId, $action, $comment);

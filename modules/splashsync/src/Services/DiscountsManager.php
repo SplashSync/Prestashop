@@ -59,6 +59,7 @@ class DiscountsManager
         if (empty(Splash::configuration()->PsUseAdvancedDiscounts)) {
             return false;
         }
+
         //====================================================================//
         // Check if Storage Table Exists
         return self::hasStorageTable();
@@ -285,6 +286,7 @@ class DiscountsManager
         } else {
             $taxPercent = 0;
         }
+
         //====================================================================//
         // Build Price Array
         return self::prices()->encode(

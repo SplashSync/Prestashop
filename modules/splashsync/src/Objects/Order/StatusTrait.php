@@ -246,6 +246,7 @@ trait StatusTrait
         if ($this->object->hasBeenPaid()) {
             return "OrderProcessing";
         }
+
         //====================================================================//
         // Default Status => Order is Closed & Delivered
         // Used for Orders imported to Prestashop that do not have Prestashop Status

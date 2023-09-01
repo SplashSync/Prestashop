@@ -160,6 +160,7 @@ trait TrackingTrait
         if (empty($trackingNumber)) {
             return "";
         }
+
         //====================================================================//
         // Return Carrier Tracking Url
         return str_replace("@", $trackingNumber, $this->carrier->url);

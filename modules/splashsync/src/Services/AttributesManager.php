@@ -86,6 +86,7 @@ class AttributesManager
         //====================================================================//
         // Ensure Loading of Attribute Group List
         self::getAllGroups();
+
         //====================================================================//
         // Return Attribute Group
         return self::$groups[$groupId] ?? null;
@@ -223,6 +224,7 @@ class AttributesManager
         if (is_null(self::$attributes)) {
             return null;
         }
+
         //====================================================================//
         // Return Attribute Values
         return self::$attributes[$group->id][$attributeId] ?? null;

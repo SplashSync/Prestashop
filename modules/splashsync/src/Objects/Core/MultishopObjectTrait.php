@@ -48,6 +48,7 @@ trait MultishopObjectTrait
         //====================================================================//
         // Load Core Fields from All Shop Context
         $fields = MSF::loadFields($this->coreFields());
+
         //====================================================================//
         // Redo Override Fields from Local Configurator
         return Splash::configurator()->overrideFields(self::getType(), $fields);
@@ -114,6 +115,7 @@ trait MultishopObjectTrait
         if (!empty($objectData) && !isset($objectData["id"])) {
             $objectData["id"] = $objectId;
         }
+
         //====================================================================//
         // Return Object Data of False
         return empty($objectData) ? null : $objectData;
@@ -199,6 +201,7 @@ trait MultishopObjectTrait
             MSM::setContext();
             $allShopData = $this->coreGet($objectId, $allShopFields);
         }
+
         //====================================================================//
         // Object Not Found => Exit
         return is_array($allShopData) ? $allShopData : null;
@@ -259,6 +262,7 @@ trait MultishopObjectTrait
         if (!Shop::isFeatureActive()) {
             return null;
         }
+
         //====================================================================//
         // Return Updated Fields
         return $this->updateFields[$type] ?? array();

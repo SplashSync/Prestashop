@@ -229,6 +229,7 @@ trait ImagesTrait
             _PS_PROD_IMG_DIR_.$objectImage->getImgFolder(),
             $publicUrl->getImageLink($imageName, (string) $imageId)
         );
+
         //====================================================================//
         // Encode Image Information Array
         return new ArrayObject(

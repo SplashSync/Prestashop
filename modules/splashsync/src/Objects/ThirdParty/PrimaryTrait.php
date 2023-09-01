@@ -69,6 +69,7 @@ trait PrimaryTrait
         if (1 != count($result) || empty($result[0]['id'])) {
             return null;
         }
+
         //====================================================================//
         // Result Found
         return $result[0]['id'];

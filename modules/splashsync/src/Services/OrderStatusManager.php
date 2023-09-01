@@ -165,6 +165,7 @@ class OrderStatusManager
         //====================================================================//
         // Load List of Known PS States
         $knowStates = self::getKnownStatus();
+
         //====================================================================//
         // PS State is Known
         return isset($knowStates[$psStateId]);

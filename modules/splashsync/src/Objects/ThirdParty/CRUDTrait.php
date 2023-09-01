@@ -73,6 +73,7 @@ trait CRUDTrait
         if (empty($this->in["email"])) {
             return Splash::log()->errNull("ErrLocalFieldMissing", __CLASS__, __FUNCTION__, "email");
         }
+
         //====================================================================//
         // Create Empty Customer
         return new Customer();

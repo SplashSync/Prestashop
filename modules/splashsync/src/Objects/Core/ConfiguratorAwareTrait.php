@@ -37,6 +37,7 @@ trait ConfiguratorAwareTrait
         if (!class_exists($configuratorClass) || !is_subclass_of($configuratorClass, AbstractConfigurator::class)) {
             return $description;
         }
+
         //====================================================================//
         // Apply Overrides & Return Object Description Array
         return (new $configuratorClass())->overrideDescription(static::getType(), $description);

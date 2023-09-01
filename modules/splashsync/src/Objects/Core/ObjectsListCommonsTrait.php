@@ -45,6 +45,7 @@ trait ObjectsListCommonsTrait
         if (Db::getInstance()->getNumberError()) {
             return Splash::log()->errTrace(Db::getInstance()->getMsgError());
         }
+
         //====================================================================//
         // Compute Total Number of Results
         return Db::getInstance()->numRows();

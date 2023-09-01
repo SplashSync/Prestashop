@@ -61,6 +61,7 @@ trait IdEncoderTrait
                 return (string) $productId.'@@'.(string) $attributeId;
             }
         }
+
         //====================================================================//
         // Generate Standard Id
         return (string) ($productId + ($attributeId << 20));
@@ -109,6 +110,7 @@ trait IdEncoderTrait
                 'aId' => (int) $decoded[1],
             );
         }
+
         //====================================================================//
         // Standard Id Decoder
         return array(

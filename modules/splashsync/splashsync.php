@@ -441,6 +441,7 @@ class SplashSync extends Module
         if (is_file($bufferFile) && function_exists("json_encode")) {
             file_put_contents($bufferFile, json_encode(array()));
         }
+
         //====================================================================//
         // Render Footer
         return $this->display(__FILE__, 'footer.tpl');

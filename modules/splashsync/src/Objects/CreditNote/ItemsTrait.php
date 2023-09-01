@@ -318,6 +318,7 @@ trait ItemsTrait
         if ($this->hasCustomerCartRule()) {
             $price = $taxPercent = 0;
         }
+
         //====================================================================//
         // Build Price Array
         return self::prices()->encode(
@@ -342,6 +343,7 @@ trait ItemsTrait
         if (!isset($this->carrier) || empty($this->carrier->name)) {
             return $this->spl->l("Delivery");
         }
+
         //====================================================================//
         // Return Carrier Name
         return $this->carrier->name;

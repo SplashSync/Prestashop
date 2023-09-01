@@ -97,6 +97,7 @@ trait CRUDTrait
         if (!$product || !$this->createAttribute()) {
             return null;
         }
+
         //====================================================================//
         // Return Product
         return $product;

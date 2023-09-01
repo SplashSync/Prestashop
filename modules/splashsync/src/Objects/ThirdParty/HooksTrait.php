@@ -91,6 +91,7 @@ trait HooksTrait
         if (empty($customerId)) {
             Splash::log()->err("ErrLocalTpl", __CLASS__, __FUNCTION__, "Unable to Read Customer Id.");
         }
+
         //====================================================================//
         // Commit Update For Product
         return $this->doCommit("ThirdParty", $customerId, $action, $comment);

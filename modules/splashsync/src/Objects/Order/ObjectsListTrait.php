@@ -59,6 +59,7 @@ trait ObjectsListTrait
             $where .= " OR LOWER( o.date_add )   LIKE LOWER( '%".pSQL($filter)."%') ";
             $sql->where($where);
         }
+
         //====================================================================//
         // Execute Generic Search
         return $this->getObjectsListGenericData($sql, "order_date", $params);

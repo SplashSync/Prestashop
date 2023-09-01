@@ -47,6 +47,7 @@ class MarketplaceVendorConfigurator extends StockOnlyConfigurator
                 "enable_push_deleted" => 0,
             ));
         }
+
         //====================================================================//
         // Other Types => NO Sync
         return array_replace_recursive($description, array(

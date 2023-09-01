@@ -185,6 +185,7 @@ class L10MsfProductsTest extends ObjectsCase
                 $shopId
             );
         }
+
         //====================================================================//
         // Simple Fields
         return MSF::encodeData(
@@ -216,6 +217,7 @@ class L10MsfProductsTest extends ObjectsCase
         if ("Product" != $sequence["1"]) {
             return false;
         }
+
         //====================================================================//
         //   Ensure Field is R/W Field
         return $this->isAllowedFieldForTesting($sequence["2"]);
