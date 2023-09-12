@@ -241,7 +241,7 @@ services:
         container_name: toolkit.prestashop.local
         volumes:
             # Specify Local Configuration File
-            - './docker/toolkit/splash.yml:/app/config/packages/splash.yml:ro'
+            - './docker/toolkit/splash.yaml:/app/config/packages/splash.yaml:ro'
         hostname:           toolkit.wordpress.local
         networks:
             prestashop:      { ipv4_address: 172.102.0.100, aliases: [ toolkit.prestashop.local ] }
