@@ -40,16 +40,16 @@ variables:
 ################################################################
 # Defined Pipeline Stages
 stages:
-  - quality
-  - functional
-  - deploy
+  - Quality
+  - Functional
+  - Builds
 
 ################################################################
 # Code Quality Tests
 ################################################################
 
 .quality:   &quality
-    stage:      quality
+    stage:      Quality
     tags:       ['Dedicated']
     ################################################################
     # Before Script
@@ -88,7 +88,7 @@ Q-Ps-1.7-Php-7.4:
 ################################################################
 
 .functional:   &functional
-    stage:      functional
+    stage:      Functional
     tags:       ['Dedicated']
     retry:      1
     artifacts:
