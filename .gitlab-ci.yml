@@ -22,6 +22,10 @@ include:
   - remote: 'https://raw.githubusercontent.com/BadPixxel/Php-Sdk/main/gitlab/pages.yaml'
 
 ################################################################
+# Define Default Image
+image: registry.gitlab.com/badpixxel-projects/php-sdk:php-8.0
+
+################################################################
 # Set any variables we need
 variables:
   # Configure mysql environment variables (https://hub.docker.com/r/_/mysql/)
