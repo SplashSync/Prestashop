@@ -16,6 +16,12 @@
 ################################################################################
 
 ################################################################
+# Include Pipeline Templates
+include:
+  - remote: 'https://raw.githubusercontent.com/BadPixxel/Php-Sdk/main/gitlab/module.yaml'
+  - remote: 'https://raw.githubusercontent.com/BadPixxel/Php-Sdk/main/gitlab/pages.yaml'
+
+################################################################
 # Set any variables we need
 variables:
   # Configure mysql environment variables (https://hub.docker.com/r/_/mysql/)
@@ -124,38 +130,38 @@ F-Ps-1.7-Php-7.4:
     image:      prestashop/prestashop:1.7-7.4
     <<: *functional
 
-#################################################################
-## Build Documentation
-#################################################################
-pages:
-    image:      jekyll/minimal:latest
-    stage:      deploy
-    tags:       [ Dedicated ]
-    ################################################################################
-    # Run Test Script
-    script:
-        - wget -qO - https://gitlab.com/badpixxel-robo/jekyll/-/raw/main/scripts/gitlab-pages.sh | sh
-    artifacts:
-        paths:
-            - public
-
-#################################################################
-## Build Documentation
-#################################################################
-module:
-    image:      registry.gitlab.com/splashsync/php-console:pages
-    stage:      deploy
-    tags:       ['Dedicated']
-    retry:      2
-    services:
-        - docker:dind
-    ################################################################################
-    # Run Test Script
-    script:
-        # Run Composer to Build deps
-        - curl -s https://raw.githubusercontent.com/BadPixxel/Php-Sdk/main/ci/composer.sh  | bash
-        # Build Documentation
-        - php modules/splashsync/vendor/bin/grumphp run --tasks=build-module
-    artifacts:
-        paths:
-            - build
+##################################################################
+### Build Documentation
+##################################################################
+#pages:
+#    image:      jekyll/minimal:latest
+#    stage:      deploy
+#    tags:       [ Dedicated ]
+#    ################################################################################
+#    # Run Test Script
+#    script:
+#        - wget -qO - https://gitlab.com/badpixxel-robo/jekyll/-/raw/main/scripts/gitlab-pages.sh | sh
+#    artifacts:
+#        paths:
+#            - public
+#
+##################################################################
+### Build Documentation
+##################################################################
+#module:
+#    image:      registry.gitlab.com/splashsync/php-console:pages
+#    stage:      deploy
+#    tags:       ['Dedicated']
+#    retry:      2
+#    services:
+#        - docker:dind
+#    ################################################################################
+#    # Run Test Script
+#    script:
+#        # Run Composer to Build deps
+#        - curl -s https://raw.githubusercontent.com/BadPixxel/Php-Sdk/main/ci/composer.sh  | bash
+#        # Build Documentation
+#        - php modules/splashsync/vendor/bin/grumphp run --tasks=build-module
+#    artifacts:
+#        paths:
+#            - build
