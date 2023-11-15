@@ -290,6 +290,9 @@ class SplashSync extends Module
         if (\Splash\Local\Services\OrderStatusManager::isAllowedWrite()) {
             $fieldsForm[] = $this->getOrderFormArray();
         }
+        //====================================================================//
+        // Build Display Payments Method Form Array
+        $fieldsForm[] = $this->getPaymentMethodsFormArray();
 
         $helper = new HelperForm();
 
@@ -324,14 +327,21 @@ class SplashSync extends Module
         $helper->fields_value['SPLASH_SYNC_VIRTUAL'] = Configuration::get('SPLASH_SYNC_VIRTUAL');
         $helper->fields_value['SPLASH_SYNC_PACKS'] = Configuration::get('SPLASH_SYNC_PACKS');
         $helper->fields_value['SPLASH_CONFIGURATOR'] = Configuration::get('SPLASH_CONFIGURATOR');
+        $helper->fields_value['SPLASH_PAYMENT_TRANSLATIONS'] = Configuration::get('SPLASH_PAYMENT_TRANSLATIONS');
 
         //====================================================================//
-        // Load Oders Status Values
+        // Load Orders Status Values
         if (\Splash\Local\Services\OrderStatusManager::isAllowedWrite()) {
             foreach (\Splash\Local\Services\OrderStatusManager::getAllStatus() as $status) {
                 $fieldName = $status['field'];
                 $helper->fields_value[$fieldName] = Configuration::get($fieldName);
             }
+        }
+        //====================================================================//
+        // Load Payment Methods Values
+        foreach (array_keys(\Splash\Local\Services\PaymentMethodsManager::getUnknownMethods()) as $code) {
+            $fieldName = \Splash\Local\Services\PaymentMethodsManager::toFieldName($code);
+            $helper->fields_value[$fieldName] = Configuration::get($fieldName);
         }
 
         return $helper->generateForm($fieldsForm);
@@ -815,7 +825,7 @@ class SplashSync extends Module
                 'name' => $status['field'],
                 'options' => array(
                     'query' => $psStates,
-                    'id' => 'id_order_state',
+                    'id' => 'key',
                     'name' => 'name'
                 )
             );
@@ -827,6 +837,79 @@ class SplashSync extends Module
             'legend' => array(
                 'icon' => 'icon-cogs',
                 'title' => $this->l('Orders Writing Settings')
+            ),
+            'input' => $fields,
+            'submit' => array(
+                'title' => $this->l('Save'),
+                'class' => 'btn btn-default pull-right'
+            )
+        );
+
+        return $output;
+    }
+
+    /**
+     * Get Unknown Payment Methods Form Fields Array
+     *
+     * @return array
+     */
+    private function getPaymentMethodsFormArray()
+    {
+        //====================================================================//
+        // Init Fields List
+        $fields = array();
+        //====================================================================//
+        // Load Splash Payment Methods List
+        $splashMethods = array();
+        foreach (\Splash\Models\Objects\Invoice\PaymentMethods::getChoices() as $code => $name) {
+            $splashMethods[] = array('id' => $code, 'name' => $name);
+        }
+        //====================================================================//
+        // Enable Detect by Translation Mode
+        $translatedCount = count(\Splash\Local\Services\PaymentMethodsManager::getTranslationsFromConfig());
+
+        $fields[] = array(
+            'type' => 'checkbox',
+            'name' => 'SPLASH_PAYMENT',
+            'label' => sprintf("%s (%d Detected)", $this->l('Detect by Translations'), $translatedCount),
+            'hint' => $this->l('Use translated payments methods to detect Splash generic type.'),
+            'values' => array(
+                'query' => array(
+                    array(
+                        'id' => 'TRANSLATIONS',
+                        'name' => $this->l('Yes'),
+                        'val' => '1'
+                    ),
+                ),
+                'id' => 'id',
+                'name' => 'name'
+            )
+        );
+        //====================================================================//
+        // Populate Form
+        foreach (\Splash\Local\Services\PaymentMethodsManager::getUnknownMethods() as $code => $name) {
+            //====================================================================//
+            // Default User Id
+            $fields[] = array(
+                'label' => $name,
+                'cast' => 'strval',
+                'type' => 'select',
+                'name' => \Splash\Local\Services\PaymentMethodsManager::toFieldName($code),
+                'class' => "width-xl",
+                'options' => array(
+                    'query' => $splashMethods,
+                    'id' => 'id',
+                    'name' => 'name'
+                )
+            );
+        }
+        //====================================================================//
+        // Init Form array
+        $output = array();
+        $output['form'] = array(
+            'legend' => array(
+                'icon' => 'icon-cogs',
+                'title' => $this->l('Payments Methods Settings')
             ),
             'input' => $fields,
             'submit' => array(
@@ -915,6 +998,7 @@ class SplashSync extends Module
         Configuration::updateValue('SPLASH_SYNC_VIRTUAL', Tools::getValue('SPLASH_SYNC_VIRTUAL'));
         Configuration::updateValue('SPLASH_SYNC_PACKS', Tools::getValue('SPLASH_SYNC_PACKS'));
         Configuration::updateValue('SPLASH_CONFIGURATOR', Tools::getValue('SPLASH_CONFIGURATOR'));
+        Configuration::updateValue('SPLASH_PAYMENT_TRANSLATIONS', Tools::getValue('SPLASH_PAYMENT_TRANSLATIONS'));
 
         //====================================================================//
         // Update Orders Status Values
@@ -924,6 +1008,18 @@ class SplashSync extends Module
                 Configuration::updateValue($fieldName, Tools::getValue($fieldName));
             }
         }
+        //====================================================================//
+        // Update Payment Methods Values
+        foreach (array_keys(\Splash\Local\Services\PaymentMethodsManager::getUnknownMethods()) as $code) {
+            $fieldName = \Splash\Local\Services\PaymentMethodsManager::toFieldName($code);
+            Configuration::updateValue($fieldName, Tools::getValue($fieldName));
+        }
+        //====================================================================//
+        // Save Payment Methods Translations
+        Configuration::updateValue(
+            'SPLASH_PAYMENT_NAMES',
+            json_encode(\Splash\Local\Services\PaymentMethodsManager::getAllUsedNames())
+        );
 
         return $output;
     }

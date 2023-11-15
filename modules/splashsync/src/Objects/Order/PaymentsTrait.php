@@ -15,11 +15,12 @@
 
 namespace Splash\Local\Objects\Order;
 
-use Order;
 use OrderPayment;
 use PrestaShopCollection;
 use Splash\Core\SplashCore      as Splash;
 use Splash\Local\Objects\Invoice;
+use Splash\Local\Services\PaymentMethodsManager;
+use Splash\Models\Objects\Invoice\PaymentMethods;
 use Translate;
 
 /**
@@ -33,24 +34,6 @@ trait PaymentsTrait
      * @var bool
      */
     private bool $isCreditNoteMode = false;
-
-    /**
-     * Known Payment Method Codes Names
-     *
-     * @var array<string, string>
-     */
-    private array $knownPaymentMethods = array(
-        "bankwire" => "ByBankTransferInAdvance",
-        "ps_wirepayment" => "ByBankTransferInAdvance",
-
-        "cheque" => "CheckInAdvance",
-        "ps_checkpayment" => "CheckInAdvance",
-
-        "paypal" => "PayPal",
-        "amzpayments" => "PayPal",
-
-        "cashondelivery" => "COD",
-    );
 
     /**
      * Build Fields using FieldFactory
@@ -68,7 +51,7 @@ trait PaymentsTrait
             ->microData("http://schema.org/Invoice", "PaymentMethod")
             ->group(Translate::getAdminTranslation("Payment", "AdminPayment"))
             ->association("mode@payments", "amount@payments")
-            ->addChoices(array_flip($this->knownPaymentMethods))
+            ->addChoices(array_flip(PaymentMethodsManager::KNOWN))
         ;
         //====================================================================//
         // Raw Payment Line Payment Method
@@ -176,7 +159,11 @@ trait PaymentsTrait
                 //====================================================================//
                 // Payment Line - Raw Payment Mode
             case 'rawMode@payments':
-                return $orderPayment->payment_method;
+                return sprintf(
+                    "[%s] %s",
+                    $this->PaymentMethod ?? "??",
+                    $orderPayment->payment_method
+                );
                 //====================================================================//
                 // Payment Line - Payment Date
             case 'date@payments':
@@ -287,23 +274,24 @@ trait PaymentsTrait
     {
         //====================================================================//
         // If PhpUnit Mode => Read Order Payment Object
-        if (Splash::isDebugMode()) {
+        if (Splash::isTravisMode()) {
             return $orderPayment->payment_method;
         }
         //====================================================================//
-        // Payment Item Detect Payment Method Type from Default Payment "known" methods
-        if (array_key_exists($orderPayment->payment_method, $this->knownPaymentMethods)) {
-            return $this->knownPaymentMethods[$orderPayment->payment_method];
+        // Payment Item Detect Payment Method from "known" or "custom" codes
+        // With Translation Step first
+        if ($method = PaymentMethodsManager::fromTranslations($orderPayment->payment_method)) {
+            return $method;
         }
         //====================================================================//
-        // Order Item Detect Payment Method Type from Default Payment "known" methods
-        if (array_key_exists($this->PaymentMethod, $this->knownPaymentMethods)) {
-            return $this->knownPaymentMethods[$this->PaymentMethod];
+        // Order Item Detect Payment Method from "known" or "custom" codes
+        if ($method = PaymentMethodsManager::fromKnownOrCustom($this->PaymentMethod)) {
+            return $method;
         }
         //====================================================================//
         // Detect Payment Method is Credit Card Like Method
         if (!empty($orderPayment->card_brand)) {
-            return "DirectDebit";
+            return PaymentMethods::CREDIT_CARD;
         }
 
         return "Unknown";
@@ -366,7 +354,7 @@ trait PaymentsTrait
      *
      * @return bool
      */
-    private function updatePaymentData($orderPayment, $paymentItem)
+    private function updatePaymentData(OrderPayment $orderPayment, array $paymentItem): bool
     {
         $update = false;
 
