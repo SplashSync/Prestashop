@@ -136,7 +136,7 @@ class Local implements LocalClassInterface
         //====================================================================//
         // When Library is called in server mode ONLY
         //====================================================================//
-        if (!empty(SPLASH_SERVER_MODE)) {
+        if (Splash::isServerMode() || Splash::isTravisMode()) {
             //====================================================================//
             // Load Default User
             $this->loadLocalUser();
