@@ -67,6 +67,9 @@ trait ObjectsListTrait
             $sql->where($where);
         }
         //====================================================================//
+        // Change Default Sort Direction to get Most Recent First
+        $params["sortorder"] ??= "DESC";
+        //====================================================================//
         // Compute Total Number of Results
         $total = $this->getObjectListTotal($sql);
         //====================================================================//

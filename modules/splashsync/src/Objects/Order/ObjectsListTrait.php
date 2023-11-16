@@ -59,6 +59,9 @@ trait ObjectsListTrait
             $where .= " OR LOWER( o.date_add )   LIKE LOWER( '%".pSQL($filter)."%') ";
             $sql->where($where);
         }
+        //====================================================================//
+        // Change Default Sort Direction to get Most Recent First
+        $params["sortorder"] ??= "DESC";
 
         //====================================================================//
         // Execute Generic Search
