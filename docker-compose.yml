@@ -28,6 +28,7 @@
 # 172.102.0.16        ps1-6.prestashop.local
 # 172.102.0.17        ps1-7.prestashop.local
 # 172.102.0.80        ps8-0.prestashop.local
+# 172.102.0.81        ps8-1.prestashop.local
 # 172.102.0.100       toolkit.prestashop.local
 # 172.102.0.200       phpmyadmin.prestashop.local
 #
@@ -131,9 +132,44 @@ services:
 #             splashsync:     { aliases: [ nginx.prestashop.local ] }
 
     ################################################################################
+    # Prestashop 8.1
+    prestashop_8_1:
+        image: prestashop/prestashop:8.1.2-7.4-apache
+        container_name: ps8-1.prestashop.local
+        depends_on:
+            - mysql
+        volumes:
+            # Push Configuration Override
+            - "./docker/config/splash.json:/var/www/html/config/splash.json:ro"
+            # Module Sources
+            - ./modules/splashsync:/var/www/html/modules/splashsync:ro
+            - ./ci:/var/www/html/ci:ro
+            - ./phpunit.xml.dist:/var/www/html/phpunit.xml.dist:ro
+            # Docker EntryPoint
+            - ./docker/docker-entrypoint.sh:/var/www/html/modules/docker-entrypoint.sh:ro
+        environment:
+            - DB_SERVER=mysql
+            - DB_NAME=Prestashop__8p1
+            - DB_PREFIX=ps_8_1_
+            - PS_INSTALL_AUTO=1
+            - PS_DOMAIN=ps8-1.prestashop.local
+            - PS_FOLDER_ADMIN=_ad
+            - PS_FOLDER_INSTALL=installed
+            - ADMIN_MAIL=contact@splashsync.com
+            - ADMIN_PASSWD=splashsync
+            - SPLASH_WS_ID=ThisIsPs81Key
+            - SPLASH_WS_KEY=ThisTokenIsNotSoSecretChangeIt
+            - SPLASH_WS_HOST=http://toolkit.prestashop.local/ws/soap
+        command: sh /var/www/html/modules/docker-entrypoint.sh
+        hostname: ps8-1.prestashop.local
+        networks:
+            prestashop:     { ipv4_address: 172.102.0.81 }
+            splashsync:     { aliases: [ ps8-1.prestashop.local ] }
+
+    ################################################################################
     # Prestashop 8.0
     prestashop_8_0:
-        image: prestashop/prestashop:8.0.0-7.4-apache
+        image: prestashop/prestashop:8.0.5-7.4-apache
         container_name: ps8-0.prestashop.local
         depends_on:
             - mysql
@@ -168,7 +204,7 @@ services:
     ################################################################################
     # Prestashop 1.7       
     prestashop_1_7:
-        image: prestashop/prestashop:1.7.8.7-7.4-apache
+        image: prestashop/prestashop:1.7.8.10-7.4-apache
         container_name: ps1-7.prestashop.local
         depends_on:
             - mysql

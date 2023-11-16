@@ -35,6 +35,21 @@ splash:
                 WsPath:             /modules/splashsync/vendor/splash/phpcore/soap.php
 
         ########################################################################
+        # Prestashop 8.1
+        ps-8-1:
+            id:                 ThisIsPs81Key
+            key:                ThisTokenIsNotSoSecretChangeIt
+            name:               Prestashop 8.1
+            host:               false
+            connector:          soap
+            config:
+                Extended:           true
+                WsIdentifier:       ThisIsPs81Key
+                WsEncryptionKey:    ThisTokenIsNotSoSecretChangeIt
+                WsHost:             http://ps8-1.prestashop.local
+                WsPath:             /modules/splashsync/vendor/splash/phpcore/soap.php
+
+        ########################################################################
         # Prestashop 8.0
         ps-8-0:
             id:                 ThisIsPs80Key

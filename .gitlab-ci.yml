@@ -123,16 +123,25 @@ Q-Ps-1.7-Php-7.4:
     script:
         - sh $CI_PROJECT_DIR/ci/functional.sh
 
+F-Ps-8.1-Php-8.1:
+    image:      prestashop/prestashop:8.1-8.1
+    allow_failure:  true
+    retry:          0
+    <<: *functional
+
+F-Ps-8.1-Php-8.0:
+    image:      prestashop/prestashop:8.1-8.0
+    allow_failure:  true
+    retry:          0
+    <<: *functional
 
 F-Ps-8.0-Php-8.1:
     image:      prestashop/prestashop:8.0-8.1
-    allow_failure:  true
     retry:          0
     <<: *functional
 
 F-Ps-8.0-Php-8.0:
     image:      prestashop/prestashop:8.0-8.0
-    allow_failure:  true
     retry:          0
     <<: *functional
 
