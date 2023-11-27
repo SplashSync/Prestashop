@@ -38,6 +38,7 @@ class ThumbnailUpdater
         if (!file_exists($imagePath)) {
             return;
         }
+
         //====================================================================//
         // Fetch Defined Image Formats
         try {
