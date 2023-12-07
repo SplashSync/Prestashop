@@ -127,7 +127,7 @@ class CategoryManager
     }
 
     /**
-     * Serach in All Products Categories for a Given Name/Code
+     * Search in All Products Categories for a Given Name/Code
      *
      * @param string   $value
      * @param null|int $langId
@@ -181,7 +181,7 @@ class CategoryManager
      *
      * @return array
      */
-    public static function getAllCategoriesList(int $langId = null)
+    public static function getAllCategoriesList(int $langId = null): array
     {
         $index = (int) $langId;
         if (!isset(self::$cache[$index])) {
