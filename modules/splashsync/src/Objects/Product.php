@@ -69,6 +69,7 @@ class Product extends AbstractObject implements PrimaryKeysAwareInterface
     use Product\VariantsTrait;
     use Product\ChecksumTrait;
     use Product\MetaDataTrait;
+    use Product\MetaKeywordsTrait;
     use Product\IdEncoderTrait;
     use Product\CategoriesTrait;
 

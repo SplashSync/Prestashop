@@ -65,17 +65,6 @@ trait MetaDataTrait
                 ->setMultilang($isoLang)
             ;
             //====================================================================//
-            // Meta KeyWords
-            $this->fieldsFactory()->create(SPL_T_VARCHAR)
-                ->identifier("meta_keywords")
-                ->name(Translate::getAdminTranslation("Meta keywords", "AdminProducts"))
-                ->description($groupName." ".Translate::getAdminTranslation("Meta keywords", "AdminProducts"))
-                ->group($groupName)
-                ->microData("http://schema.org/Article", "keywords")
-                ->setMultilang($isoLang)
-                ->isReadOnly()
-            ;
-            //====================================================================//
             // Rewrite Url
             $this->fieldsFactory()->create(SPL_T_VARCHAR)
                 ->identifier("link_rewrite")
@@ -103,7 +92,7 @@ trait MetaDataTrait
         // Walk on Available Languages
         foreach (LanguagesManager::getAvailableLanguages() as $idLang => $isoLang) {
             //====================================================================//
-            // Decode Multilang Field Name
+            // Decode Multi-lang Field Name
             $baseFieldName = LanguagesManager::fieldNameDecode($fieldName, $isoLang);
             //====================================================================//
             // READ Fields
@@ -112,13 +101,6 @@ trait MetaDataTrait
                 case 'meta_description':
                 case 'meta_title':
                     $this->out[$fieldName] = $this->getMultiLang($baseFieldName, $idLang);
-                    unset($this->in[$key]);
-
-                    break;
-                case 'meta_keywords':
-                    //====================================================================//
-                    // Product Specific - Read Meta Keywords
-                    $this->out[$fieldName] = $this->object->getTags($idLang);
                     unset($this->in[$key]);
 
                     break;
