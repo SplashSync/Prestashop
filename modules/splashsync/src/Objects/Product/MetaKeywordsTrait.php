@@ -16,6 +16,7 @@
 namespace Splash\Local\Objects\Product;
 
 use Splash\Local\Services\LanguagesManager;
+use Splash\Local\Services\MultiShopManager as MSM;
 use Tag;
 use Translate;
 
@@ -48,6 +49,7 @@ trait MetaKeywordsTrait
                 ->group($groupName)
                 ->microData("http://schema.org/Article", "keywords")
                 ->setMultilang($isoLang)
+                ->addOption("shop", MSM::MODE_ALL)
                 ->isReadOnly(self::isSourceCatalogMode())
             ;
         }
