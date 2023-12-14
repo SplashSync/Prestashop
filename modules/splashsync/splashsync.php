@@ -378,6 +378,9 @@ class SplashSync extends Module
             Splash\Client\Splash::log()->smartFilter();
         }
         //====================================================================//
+        // Limit Log Buffer Size
+        Splash\Client\Splash::log()->slice();
+        //====================================================================//
         // Save Changes to File
         if (function_exists("json_encode")) {
             file_put_contents($bufferFile, json_encode(Splash\Client\Splash::log()));
