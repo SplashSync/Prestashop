@@ -103,10 +103,13 @@ class DiscountCollector
         self::collectRawDiscounts($order);
         //====================================================================//
         // Verify Collected Total
-        $totalTaxIncl = self::getDiscountTotalTaxIncl($order, self::$rawDiscounts);
+        $totalTaxIncl = Tools::ps_round(
+            self::getDiscountTotalTaxIncl($order, self::$rawDiscounts),
+            $currency->precision
+        );
         if (abs($totalTaxIncl - $order->total_discounts_tax_incl) > 0.001) {
             Splash::log()->err(sprintf(
-                "Collected Discounts amounts are different: %.2f vs %.2f",
+                "Collected Discounts amounts are different: %.5f vs %.5f",
                 $totalTaxIncl,
                 $order->total_discounts_tax_incl
             ));
