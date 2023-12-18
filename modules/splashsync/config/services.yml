@@ -1,0 +1,5 @@
+
+########################################################################
+# Splash Module Container Configuration
+imports:
+  - { resource: commands.yaml }

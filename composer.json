@@ -35,6 +35,7 @@
         "vendor-dir":                   "modules/splashsync/vendor",
         "bin-dir":                      "modules/splashsync/vendor/bin",
         "preferred-install":            "dist",
+        "prepend-autoloader":           false,
         "platform": {
             "php":                      "7.4.0"
         },

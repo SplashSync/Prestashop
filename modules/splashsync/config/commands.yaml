@@ -1,0 +1,21 @@
+
+services:
+    _defaults:
+        autowire:       true
+        autoconfigure:  true
+
+    ########################################################################
+    # Register Symfony Commands
+    ########################################################################
+
+    ########################################################################
+    # Splash Command: Create Discounts Collector Table
+    splash.commands.discounts.install:
+      class: Splash\Local\Command\Discounts\Install
+      tags: ['console.command']
+
+    ########################################################################
+    # Splash Command: Check Discounts Details for an Order
+    splash.commands.discounts.check:
+      class: Splash\Local\Command\Discounts\Check
+      tags: ['console.command']

@@ -173,6 +173,27 @@ class DiscountsManager
     }
 
     /**
+     * Delete Order Tax Details from Storage
+     *
+     * @throws PrestaShopDatabaseException
+     */
+    public static function deleteOrderDiscountsDetails(int $orderId): bool
+    {
+        //====================================================================//
+        // Execute request
+        Db::getInstance()->execute(
+            "DELETE FROM "._DB_PREFIX_.self::TABLE." WHERE id_order = ".$orderId
+        );
+        if (Db::getInstance()->getNumberError()) {
+            Splash::log()->errTrace(Db::getInstance()->getMsgError());
+
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
      * Build Order/Invoice Core Discount Item Values
      *
      * @param Order|OrderInvoice $object
