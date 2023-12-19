@@ -190,13 +190,6 @@ class SplashSync extends Module
             return false;
         }
         //====================================================================//
-        // Register Module Category Hooks
-        if (!$this->registerHook('actionCategoryAdd') ||
-                !$this->registerHook('actionCategoryUpdate') ||
-                !$this->registerHook('actionCategoryDelete')) {
-            return false;
-        }
-        //====================================================================//
         // Register Module Order Hooks
         if (!$this->registerHook('actionObjectOrderAddAfter') ||
                 !$this->registerHook('actionObjectOrderUpdateAfter') ||

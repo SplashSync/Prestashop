@@ -21,26 +21,15 @@ use Translate;
 /**
  * Access to Objects Shops Fields
  */
-trait MultishopTrait
+trait MultiShopTrait
 {
-    /**
-     * @var array
-     */
-    protected $shop;
-
     /**
      * Build Fields using FieldFactory
      *
      * @return void
      */
-    protected function buildMultishopFields()
+    protected function buildMultiShopFields()
     {
-        //====================================================================//
-        // Only if MultiShop Feature is Active
-        if (!Shop::isFeatureActive()) {
-            return;
-        }
-
         //====================================================================//
         // Prestashop Shop ID
         $this->fieldsFactory()->create(SPL_T_INT)
@@ -87,7 +76,7 @@ trait MultishopTrait
      *
      * @return void
      */
-    protected function getMultishopFields(string $key, string $fieldName): void
+    protected function getMultiShopFields(string $key, string $fieldName): void
     {
         //====================================================================//
         // READ Fields

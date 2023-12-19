@@ -45,7 +45,7 @@ class Order extends AbstractObject implements PrimaryKeysAwareInterface
     use Core\DatesTrait;
     use Core\SplashMetaTrait;
     use Core\ObjectsListCommonsTrait;
-    use Core\MultishopTrait;
+    use Core\MultiShopTrait;
     use Core\ConfiguratorAwareTrait;
     use \Splash\Local\Traits\SplashIdTrait;
 
