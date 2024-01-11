@@ -53,13 +53,13 @@ trait CRUDTrait
         }
         //====================================================================//
         // Clear Price Cache
-        \Product::flushPriceCache();
+        Product::flushPriceCache();
 
         //====================================================================//
         // If $id Given => Load Product Object From DataBase
         //====================================================================//
 
-        $this->object = new Product($this->ProductId, true, null, \Shop::getContextShopID(true));
+        $this->object = new Product($this->ProductId, true, null, Shop::getContextShopID(true));
         if ($this->object->id != $this->ProductId) {
             return Splash::log()->errNull("Unable to fetch Product (".$this->ProductId.")");
         }

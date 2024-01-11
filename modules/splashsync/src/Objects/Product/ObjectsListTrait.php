@@ -197,8 +197,8 @@ trait ObjectsListTrait
             $dataBuffer["stock"] = $productClass->getQuantity($product["id"]);
             $dataBuffer["price"] = $productClass->getPrice(false, null, 3);
             $dataBuffer["price-base"] = $productClass->getPrice(false, null, 3);
-        //====================================================================//
-        // Fill Product Combination Data to Buffer
+            //====================================================================//
+            // Fill Product Combination Data to Buffer
         } else {
             $dataBuffer["id"] = (int) $this->getUnikId($product["id"], $product["id_attribute"]);
             $dataBuffer["ref"] = (empty($product["ref_attribute"]) && !empty($product["ref"]))

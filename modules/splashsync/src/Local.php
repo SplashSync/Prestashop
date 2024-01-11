@@ -410,7 +410,7 @@ class Local implements LocalClassInterface
         }
         //====================================================================//
         // Create New Splash Module Instance
-        self::$splashSyncModule = new \SplashSync();
+        self::$splashSyncModule = new SplashSync();
 
         return self::$splashSyncModule;
     }
@@ -438,35 +438,26 @@ class Local implements LocalClassInterface
         //====================================================================//
         // Scan All Folders from Root Directory
         $scanRaw = scandir($homedir, 1);
-        if (false == $scanRaw) {
+        if (!$scanRaw) {
             return false;
         }
         $scan = array_diff($scanRaw, array('..', '.'));
-        if (false == $scan) {
+        if (!$scan) {
             return false;
         }
-
         //====================================================================//
         // Identify Admin Folder
+        $adminFiles = array("");
         foreach ($scan as $filename) {
+            $path = $homedir."/".$filename;
             //====================================================================//
-            // Filename Is Folder
-            if (!is_dir($homedir."/".$filename)) {
-                continue;
-            }
-            //====================================================================//
-            // This Folder Includes Admin Files
-            if (!is_file($homedir."/".$filename."/"."ajax-tab.php")) {
-                continue;
-            }
-            //====================================================================//
-            // This Folder Includes Admin Files
-            if (!is_file($homedir."/".$filename."/"."backup.php")) {
+            // This is a Folder & Includes Required Admin Files
+            if (!$this->isAdminFolder($path)) {
                 continue;
             }
             //====================================================================//
             // Define Folder As Admin Folder
-            define('_PS_ADMIN_DIR_', $homedir."/".$filename);
+            define('_PS_ADMIN_DIR_', $path);
 
             return _PS_ADMIN_DIR_;
         }
@@ -527,6 +518,28 @@ class Local implements LocalClassInterface
                 Splash::log()->war("FEATURE: Custom configurator is Active: ".$configurator::getName());
             }
         }
+    }
+
+    /**
+     * Check if Path is Prestashop Admin Folder
+     */
+    private function isAdminFolder(string $path): bool
+    {
+        //====================================================================//
+        // Filename Is Folder
+        if (!is_dir($path)) {
+            return false;
+        }
+        //====================================================================//
+        // Ensure Required Admin Files are there
+        $requiredFiles = array("init.php", "header.inc.php");
+        foreach ($requiredFiles as $filename) {
+            if (!is_file($path."/".$filename)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     //====================================================================//

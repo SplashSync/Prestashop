@@ -40,12 +40,12 @@ require_once "src/Traits/SplashIdTrait.php";
  */
 class SplashSync extends Module
 {
-    use \Splash\Local\Objects\ThirdParty\HooksTrait;
-    use \Splash\Local\Objects\Address\HooksTrait;
-    use \Splash\Local\Objects\Product\HooksTrait;
-    use \Splash\Local\Objects\Order\HooksTrait;
-    use \Splash\Local\Objects\CreditNote\HooksTrait;
-    use \Splash\Local\Traits\SplashIdTrait;
+    use Splash\Local\Objects\ThirdParty\HooksTrait;
+    use Splash\Local\Objects\Address\HooksTrait;
+    use Splash\Local\Objects\Product\HooksTrait;
+    use Splash\Local\Objects\Order\HooksTrait;
+    use Splash\Local\Objects\CreditNote\HooksTrait;
+    use Splash\Local\Traits\SplashIdTrait;
 
     /** @var bool */
     public $bootstrap = true;
@@ -162,12 +162,12 @@ class SplashSync extends Module
             return false;
         }
         // Ps 1.6 => Notify on Footer
-        if (\Tools::version_compare(_PS_VERSION_, "1.7", '<')
+        if (Tools::version_compare(_PS_VERSION_, "1.7", '<')
                 && !$this->registerHook('displayBackOfficeFooter')) {
             return false;
         }
         // Ps 1.7 => Notify on Admin End Contents
-        if (!\Tools::version_compare(_PS_VERSION_, "1.7", '<')
+        if (!Tools::version_compare(_PS_VERSION_, "1.7", '<')
                 && !$this->registerHook('displayAdminEndContent')) {
             return false;
         }
@@ -280,7 +280,7 @@ class SplashSync extends Module
         $fieldsForm[] = $this->getOptionFormArray();
         //====================================================================//
         // Build Display Orders Form Array
-        if (\Splash\Local\Services\OrderStatusManager::isAllowedWrite()) {
+        if (Splash\Local\Services\OrderStatusManager::isAllowedWrite()) {
             $fieldsForm[] = $this->getOrderFormArray();
         }
         //====================================================================//
@@ -324,16 +324,16 @@ class SplashSync extends Module
 
         //====================================================================//
         // Load Orders Status Values
-        if (\Splash\Local\Services\OrderStatusManager::isAllowedWrite()) {
-            foreach (\Splash\Local\Services\OrderStatusManager::getAllStatus() as $status) {
+        if (Splash\Local\Services\OrderStatusManager::isAllowedWrite()) {
+            foreach (Splash\Local\Services\OrderStatusManager::getAllStatus() as $status) {
                 $fieldName = $status['field'];
                 $helper->fields_value[$fieldName] = Configuration::get($fieldName);
             }
         }
         //====================================================================//
         // Load Payment Methods Values
-        foreach (array_keys(\Splash\Local\Services\PaymentMethodsManager::getUnknownMethods()) as $code) {
-            $fieldName = \Splash\Local\Services\PaymentMethodsManager::toFieldName($code);
+        foreach (array_keys(Splash\Local\Services\PaymentMethodsManager::getUnknownMethods()) as $code) {
+            $fieldName = Splash\Local\Services\PaymentMethodsManager::toFieldName($code);
             $helper->fields_value[$fieldName] = Configuration::get($fieldName);
         }
 
@@ -395,7 +395,7 @@ class SplashSync extends Module
      */
     public function hookDisplayBackOfficeHeader()
     {
-        /** @var \AdminController $controller */
+        /** @var AdminController $controller */
         $controller = $this->context->controller;
         //====================================================================//
         // Register Not Js & Css
@@ -682,12 +682,12 @@ class SplashSync extends Module
                 'query' => array(
                     array('id' => null, 'name' => 'None, use generic configuration'),
                     array(
-                        'id' => \Splash\Local\Configurators\StockOnlyConfigurator::class,
-                        'name' => \Splash\Local\Configurators\StockOnlyConfigurator::getName()
+                        'id' => Splash\Local\Configurators\StockOnlyConfigurator::class,
+                        'name' => Splash\Local\Configurators\StockOnlyConfigurator::getName()
                     ),
                     array(
-                        'id' => \Splash\Local\Configurators\MarketplaceVendorConfigurator::class,
-                        'name' => \Splash\Local\Configurators\MarketplaceVendorConfigurator::getName()
+                        'id' => Splash\Local\Configurators\MarketplaceVendorConfigurator::class,
+                        'name' => Splash\Local\Configurators\MarketplaceVendorConfigurator::getName()
                     ),
                 ),
                 'id' => 'id',
@@ -807,10 +807,10 @@ class SplashSync extends Module
         $fields = array();
         //====================================================================//
         // Load Prestashop Status List
-        $psStates = \Splash\Local\Services\OrderStatusManager::getOrderFormStatusChoices();
+        $psStates = Splash\Local\Services\OrderStatusManager::getOrderFormStatusChoices();
         //====================================================================//
         // Populate Form
-        foreach (\Splash\Local\Services\OrderStatusManager::getAllStatus() as $status) {
+        foreach (Splash\Local\Services\OrderStatusManager::getAllStatus() as $status) {
             //====================================================================//
             // Default User Id
             $fields[] = array(
@@ -857,12 +857,12 @@ class SplashSync extends Module
         //====================================================================//
         // Load Splash Payment Methods List
         $splashMethods = array();
-        foreach (\Splash\Models\Objects\Invoice\PaymentMethods::getChoices() as $code => $name) {
+        foreach (Splash\Models\Objects\Invoice\PaymentMethods::getChoices() as $code => $name) {
             $splashMethods[] = array('id' => $code, 'name' => $name);
         }
         //====================================================================//
         // Enable Detect by Translation Mode
-        $translatedCount = count(\Splash\Local\Services\PaymentMethodsManager::getTranslationsFromConfig());
+        $translatedCount = count(Splash\Local\Services\PaymentMethodsManager::getTranslationsFromConfig());
 
         $fields[] = array(
             'type' => 'checkbox',
@@ -883,14 +883,14 @@ class SplashSync extends Module
         );
         //====================================================================//
         // Populate Form
-        foreach (\Splash\Local\Services\PaymentMethodsManager::getUnknownMethods() as $code => $name) {
+        foreach (Splash\Local\Services\PaymentMethodsManager::getUnknownMethods() as $code => $name) {
             //====================================================================//
             // Default User Id
             $fields[] = array(
                 'label' => $name,
                 'cast' => 'strval',
                 'type' => 'select',
-                'name' => \Splash\Local\Services\PaymentMethodsManager::toFieldName($code),
+                'name' => Splash\Local\Services\PaymentMethodsManager::toFieldName($code),
                 'class' => "width-xl",
                 'options' => array(
                     'query' => $splashMethods,
@@ -998,23 +998,23 @@ class SplashSync extends Module
 
         //====================================================================//
         // Update Orders Status Values
-        if (\Splash\Local\Services\OrderStatusManager::isAllowedWrite()) {
-            foreach (\Splash\Local\Services\OrderStatusManager::getAllStatus() as $status) {
+        if (Splash\Local\Services\OrderStatusManager::isAllowedWrite()) {
+            foreach (Splash\Local\Services\OrderStatusManager::getAllStatus() as $status) {
                 $fieldName = $status["field"];
                 Configuration::updateValue($fieldName, Tools::getValue($fieldName));
             }
         }
         //====================================================================//
         // Update Payment Methods Values
-        foreach (array_keys(\Splash\Local\Services\PaymentMethodsManager::getUnknownMethods()) as $code) {
-            $fieldName = \Splash\Local\Services\PaymentMethodsManager::toFieldName($code);
+        foreach (array_keys(Splash\Local\Services\PaymentMethodsManager::getUnknownMethods()) as $code) {
+            $fieldName = Splash\Local\Services\PaymentMethodsManager::toFieldName($code);
             Configuration::updateValue($fieldName, Tools::getValue($fieldName));
         }
         //====================================================================//
         // Save Payment Methods Translations
         Configuration::updateValue(
             'SPLASH_PAYMENT_NAMES',
-            json_encode(\Splash\Local\Services\PaymentMethodsManager::getAllUsedNames())
+            json_encode(Splash\Local\Services\PaymentMethodsManager::getAllUsedNames())
         );
 
         return $output;

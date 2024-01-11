@@ -285,8 +285,8 @@ trait PricesTrait
                     $this->Attribute->wholesale_price = $fieldData["ht"];
                     $this->addMsfUpdateFields("Attribute", "wholesale_price");
                     $this->needUpdate("Attribute");
-                //====================================================================//
-                // Update product Price without Attribute
+                    //====================================================================//
+                    // Update product Price without Attribute
                 } else {
                     $this->object->wholesale_price = $fieldData["ht"];
                     $this->addMsfUpdateFields("Product", "wholesale_price");
@@ -328,8 +328,8 @@ trait PricesTrait
         // Update product Price with Attribute
         if ($this->AttributeId) {
             $this->updateAttributePrice($newPrice);
-        //====================================================================//
-        // Update product Price without Attribute
+            //====================================================================//
+            // Update product Price without Attribute
         } else {
             if (abs($newPrice["ht"] - $this->object->price) > 1E-6) {
                 $this->object->price = (float) number_format(round($newPrice["ht"], 9), 9, ".", "");
