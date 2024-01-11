@@ -18,7 +18,6 @@ namespace Splash\Local\Services;
 use Combination;
 use Db;
 use Module;
-use PrestaShopException;
 use Shop;
 use Splash\Core\SplashCore as Splash;
 
@@ -49,8 +48,6 @@ class WkCombination
      * @param null|int         $attributeId Ps Product Attribute ID
      * @param null|Combination $attribute   Ps Product Attribute Class
      *
-     * @throws PrestaShopException
-     *
      * @return bool return TRUE if Product Attribute is Disabled
      */
     public static function isDisabled(?int $attributeId, ?Combination $attribute): bool
@@ -72,7 +69,11 @@ class WkCombination
             .' AND `id_shop` = '.(int) Shop::getContextShopID()
         ;
 
-        return !empty(Db::getInstance()->executeS($sql));
+        try {
+            return !empty(Db::getInstance()->executeS($sql));
+        } catch (\PrestaShopDatabaseException $e) {
+            return false;
+        }
     }
 
     /**
@@ -100,6 +101,11 @@ class WkCombination
         // Not on Attribute Context => Skip
         if (($attributeId <= 0) || !($attribute instanceof Combination)) {
             return false;
+        }
+        //====================================================================//
+        // Compare Product Attribute Status
+        if (!self::isDisabled($attributeId, $attribute) == $value) {
+            return true;
         }
         //====================================================================//
         // Update Product Attribute Status
