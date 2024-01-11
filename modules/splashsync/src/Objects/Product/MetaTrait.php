@@ -18,6 +18,7 @@ namespace Splash\Local\Objects\Product;
 use PrestaShopException;
 use Splash\Local\Services\LanguagesManager as SLM;
 use Splash\Local\Services\TotSwitchAttributes;
+use Splash\Local\Services\WkCombination;
 use Translate;
 
 /**
@@ -109,8 +110,15 @@ trait MetaTrait
                 break;
             case 'available_for_order':
                 //====================================================================//
-                // For Compatibility with Tot Switch Attribute  Module
+                // For Compatibility with Tot Switch Attribute Module
                 if (TotSwitchAttributes::isDisabled($this->AttributeId, $this->Attribute)) {
+                    $this->out[$fieldName] = false;
+
+                    break;
+                }
+                //====================================================================//
+                // For Compatibility with Webkul Prestashop Combination Module
+                if (WkCombination::isDisabled($this->AttributeId, $this->Attribute)) {
                     $this->out[$fieldName] = false;
 
                     break;
@@ -189,7 +197,17 @@ trait MetaTrait
             case 'available_for_order':
                 //====================================================================//
                 // For Compatibility with Tot Switch Attribute  Module
-                if (TotSwitchAttributes::setAvailablility($this->AttributeId, $this->Attribute, (bool) $fieldData)) {
+                if (TotSwitchAttributes::setAvailability($this->AttributeId, $this->Attribute, (bool) $fieldData)) {
+                    break;
+                }
+                //====================================================================//
+                // For Compatibility with Webkul Prestashop Combination Module
+                if (WkCombination::setAvailability(
+                    $this->ProductId,
+                    $this->AttributeId,
+                    $this->Attribute,
+                    (bool) $fieldData
+                )) {
                     break;
                 }
 

@@ -20,16 +20,15 @@ use Db;
 use Module;
 use PrestaShopException;
 use Shop;
+use Splash\Core\SplashCore as Splash;
 
 /**
- * Bridge to Manage Compatibility with 202 Commerce Tot Switch Attribute Module
- *
- * @link URL description
+ * Bridge to Manage Compatibility with Webkul Prestashop Combination Activate/Deactivate
  */
-class TotSwitchAttributes
+class WkCombination
 {
     /**
-     * Check if Tot Switch Attribute Module is Active
+     * Check if Webkul Prestashop Combination Module is Active
      *
      * @return bool
      */
@@ -37,7 +36,7 @@ class TotSwitchAttributes
     {
         //====================================================================//
         // Check if Module is Active
-        if (!Module::isEnabled("totswitchattribute")) {
+        if (!Module::isEnabled("wkcombinationcustomize")) {
             return false;
         }
 
@@ -67,14 +66,11 @@ class TotSwitchAttributes
             return false;
         }
         //====================================================================//
-        // Check Shop Context
-        $shopId = Shop::getContextShopID(true);
-        $shopSql = $shopId ? ' AND id_shop = '.$shopId : "";
-        //====================================================================//
         // Check if Product Attribute Id is Disabled
-        $sql = 'SELECT id_product_attribute, id_shop';
-        $sql .= ' FROM `'._DB_PREFIX_.'tot_switch_attribute_disabled`';
-        $sql .= ' WHERE id_product_attribute = '.$attributeId.' '.$shopSql;
+        $sql = 'SELECT * FROM `'._DB_PREFIX_.'wk_combination_status`'
+            .' WHERE `id_ps_product_attribute` = '.(int) $attributeId
+            .' AND `id_shop` = '.(int) Shop::getContextShopID()
+        ;
 
         return !empty(Db::getInstance()->executeS($sql));
     }
@@ -82,14 +78,19 @@ class TotSwitchAttributes
     /**
      * Update Product Combination Status if Possible
      *
+     * @param null|int         $productId   Ps Product ID
      * @param null|int         $attributeId Ps Product Attribute ID
      * @param null|Combination $attribute   Ps Product Attribute Class
      * @param bool             $value       New Product Attribute Status
      *
      * @return bool return TRUE if Product Attribute Status Updated
      */
-    public static function setAvailability(?int $attributeId, ?Combination $attribute, bool $value): bool
-    {
+    public static function setAvailability(
+        int $productId,
+        ?int $attributeId,
+        ?Combination $attribute,
+        bool $value
+    ): bool {
         //====================================================================//
         // Check if Module is Active
         if (!self::isFeatureActive()) {
@@ -102,75 +103,72 @@ class TotSwitchAttributes
         }
         //====================================================================//
         // Update Product Attribute Status
-        self::updateProductAttribute($attributeId, $value);
+        self::updateProductAttribute($productId, $attributeId, $value);
 
         return true;
     }
 
     /**
-     * Update product attribute
-     *
-     * @param int  $idProductAttribute
-     * @param bool $value
-     *
-     * @return int|true
-     *
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * Update product attribute status
      */
-    private static function updateProductAttribute($idProductAttribute, $value)
+    private static function updateProductAttribute(int $idProduct, ?int $idAttribute, bool $value): void
     {
-        $idShops = null;
         $sql = array();
-
         //====================================================================//
         // Detect Shop Id
         $idShop = Shop::getContextShopID(true);
         if (null == $idShop) {
             $idShops = Shop::getContextListShopID();
         }
-
         //====================================================================//
         // Prepare Sql For Updates
         if (!$value) {
             if (is_array($idShops)) {
                 foreach ($idShops as $idShop) {
-                    // add row in table for each shop
-                    $sql[] = 'REPLACE INTO `'
-                            ._DB_PREFIX_.'tot_switch_attribute_disabled`(`id_product_attribute`, `id_shop`)
-                    VALUES ('.(int)$idProductAttribute.', '.(int)$idShop.');';
+                    $sql[] = self::getDisableSql($idProduct, $idAttribute, $idShop);
                 }
             } else {
-                // add row in table
-                $sql[] = 'REPLACE INTO `'._DB_PREFIX_.'tot_switch_attribute_disabled`(`id_product_attribute`, `id_shop`)
-                VALUES ('.(int)$idProductAttribute.', '.(int)$idShop.');';
+                $sql[] = self::getDisableSql($idProduct, $idAttribute, 1);
             }
         } else {
             if (is_array($idShops)) {
                 foreach ($idShops as $idShop) {
-                    // delete row from table for each shop
-                    $sql[] = 'DELETE FROM `'._DB_PREFIX_.'tot_switch_attribute_disabled`
-                    WHERE `id_product_attribute` = '.(int)$idProductAttribute.'
-                    AND `id_shop` = '.(int)$idShop.';';
+                    $sql[] = self::getEnableSql($idProduct, $idAttribute, $idShop);
                 }
             } else {
-                // delete row from table
-                $sql[] = 'DELETE FROM `'._DB_PREFIX_.'tot_switch_attribute_disabled`
-                WHERE `id_product_attribute` = '.(int)$idProductAttribute.'
-                AND `id_shop` = '.(int)$idShop.';';
+                $sql[] = self::getEnableSql($idProduct, $idAttribute, 1);
             }
         }
-
         //====================================================================//
         // Execute Updates
-        $result = true;
-        if (!empty($sql) && is_array($sql)) {
-            foreach ($sql as $request) {
-                if (!Db::getInstance()->execute($request)) {
-                    $result &= false;
-                }
+        foreach ($sql as $request) {
+            if (!Db::getInstance()->execute($request)) {
+                Splash::log()->errNull("Fail to update Product Attribute Webkul Status.");
             }
         }
+    }
 
-        return $result;
+    /**
+     * Get Disable Product Attribute SQL
+     */
+    private static function getDisableSql(int $idProduct, int $idAttribute, int $idShop): string
+    {
+        return 'REPLACE INTO `'
+            ._DB_PREFIX_.'wk_combination_status`(`id_ps_product`, `id_ps_product_attribute`, `id_shop`)'
+            .' VALUES ('.$idProduct.', '.$idAttribute.', '.$idShop.');'
+        ;
+    }
+
+    /**
+     * Get Enable Product Attribute SQL
+     */
+    private static function getEnableSql(int $idProduct, int $idAttribute, int $idShop): string
+    {
+        return 'DELETE FROM `'._DB_PREFIX_.'wk_combination_status`'
+            .' WHERE `id_ps_product` = '.$idProduct
+            .' AND `id_ps_product_attribute` = '.$idAttribute
+            .' AND `id_shop` = '.$idShop
+            .';'
+        ;
     }
 }
