@@ -447,7 +447,6 @@ class Local implements LocalClassInterface
         }
         //====================================================================//
         // Identify Admin Folder
-        $adminFiles = array("");
         foreach ($scan as $filename) {
             $path = $homedir."/".$filename;
             //====================================================================//
