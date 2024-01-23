@@ -36,7 +36,7 @@ php /usr/local/bin/wall-e add:composer
 
 ################################################################################
 # Install Prestashop Db & Assets
-php /usr/local/bin/wall-e prestashop:install:docker 1
+php /usr/local/bin/wall-e prestashop:install:docker
 php /usr/local/bin/wall-e prestashop:configure
 
 echo "* Clear Cache...";
