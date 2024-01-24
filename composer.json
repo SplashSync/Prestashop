@@ -41,5 +41,17 @@
         "allow-plugins": {
             "phpro/grumphp": true
         }
+    },
+    "scripts": {
+        "auto-scripts": [
+            "cp modules/splashsync/vendor/splash/phpcore/.htaccess  modules/splashsync/vendor/.htaccess"
+        ],
+        "post-install-cmd": [
+            "@auto-scripts"
+        ],
+        "post-update-cmd": [
+            "@auto-scripts"
+        ]
     }
+
 }
