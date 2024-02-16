@@ -48,7 +48,7 @@ class PmAdvancedPack
      *
      * @return array
      */
-    public static function getIdsPacks()
+    public static function getIdsPacks(): array
     {
         //====================================================================//
         // Check if Module is Active
