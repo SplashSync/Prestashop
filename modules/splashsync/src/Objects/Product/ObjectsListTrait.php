@@ -147,10 +147,13 @@ trait ObjectsListTrait
         //====================================================================//
         // Setup Pack Products Filters
         if (empty(Configuration::get("SPLASH_SYNC_PACKS"))) {
-            $where .= empty($where) ? "" : " AND ";
-            $where .= !PmAdvancedPack::isFeatureActive()
-                    ? " (p.cache_is_pack != 1)"
-                    : " (p.id_product NOT IN (".implode(", ", PmAdvancedPack::getIdsPacks())."))";
+            if (!PmAdvancedPack::isFeatureActive()) {
+                $where .= empty($where) ? "" : " AND ";
+                $where .= " (p.cache_is_pack != 1)";
+            } elseif (!empty($packIds = PmAdvancedPack::getIdsPacks())) {
+                $where .= empty($where) ? "" : " AND ";
+                $where .= " (p.id_product NOT IN (".implode(", ", $packIds)."))";
+            }
         }
 
         return $where;
