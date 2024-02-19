@@ -66,11 +66,19 @@ trait ImagesTrait
     private array $newImagesArray;
 
     /**
+     * Images Legend Cache
+     *
+     * @var null|array
+     */
+    private ?array $imagesLegendCache = null;
+
+
+    /**
      * Build Fields using FieldFactory
      *
      * @return void
      */
-    protected function buildImagesFields()
+    protected function buildImagesFields(): void
     {
         $groupName = Translate::getAdminTranslation("Images", "AdminProducts");
 
@@ -80,7 +88,7 @@ trait ImagesTrait
 
         //====================================================================//
         // Product Images List
-        $this->fieldsFactory()->create(SPL_T_IMG)
+        self::fieldsFactory()->create(SPL_T_IMG)
             ->identifier("image")
             ->inList("images")
             ->name(Translate::getAdminTranslation("Images", "AdminProducts"))
@@ -92,7 +100,7 @@ trait ImagesTrait
 
         //====================================================================//
         // Product Images => Position
-        $this->fieldsFactory()->create(SPL_T_INT)
+        self::fieldsFactory()->create(SPL_T_INT)
             ->identifier("position")
             ->inList("images")
             ->name(Translate::getAdminTranslation("Position", "AdminProducts"))
@@ -104,8 +112,21 @@ trait ImagesTrait
         ;
 
         //====================================================================//
+        // Product Images => Legend
+        self::fieldsFactory()->create(SPL_T_VARCHAR)
+            ->identifier("legend")
+            ->inList("images")
+            ->name(Translate::getAdminTranslation("Legend", "AdminProducts"))
+            ->microData("http://schema.org/Product", "legendImage")
+            ->group($groupName)
+            ->isReadOnly(self::isSourceCatalogMode())
+            ->addOption("shop", MSM::MODE_ALL)
+            ->isNotTested()
+        ;
+
+        //====================================================================//
         // Product Images => Is Cover
-        $this->fieldsFactory()->create(SPL_T_BOOL)
+        self::fieldsFactory()->create(SPL_T_BOOL)
             ->identifier("cover")
             ->inList("images")
             ->name(Translate::getAdminTranslation("Cover", "AdminProducts"))
@@ -118,7 +139,7 @@ trait ImagesTrait
 
         //====================================================================//
         // Product Images => Is Visible Image
-        $this->fieldsFactory()->create(SPL_T_BOOL)
+        self::fieldsFactory()->create(SPL_T_BOOL)
             ->identifier("visible")
             ->inList("images")
             ->name(Translate::getAdminTranslation("Visible", "AdminProducts"))
@@ -156,6 +177,7 @@ trait ImagesTrait
                 case "position":
                 case "visible":
                 case "cover":
+                case "legend":
                     $value = $image[$fieldId];
 
                     break;
@@ -222,9 +244,9 @@ trait ImagesTrait
                 : 'Image';
         //====================================================================//
         // Encode Image in Splash Format
+        $imageLegend = $objectImage->legend ?: $objectImage->id.".".$objectImage->image_format;
         $splashImage = self::images()->encode(
-            // @phpstan-ignore-next-line
-            ($objectImage->legend?:$objectImage->id.".".$objectImage->image_format),
+            $imageLegend,
             $objectImage->id.".".$objectImage->image_format,
             _PS_PROD_IMG_DIR_.$objectImage->getImgFolder(),
             $publicUrl->getImageLink($imageName, (string) $imageId)
@@ -239,6 +261,7 @@ trait ImagesTrait
                 "position" => $objectImage->position,
                 "cover" => $objectImage->cover,
                 "visible" => $this->isVisibleImage($imageId),
+                "legend" => $imageLegend,
             ),
             ArrayObject::ARRAY_AS_PROPS
         );
@@ -700,7 +723,7 @@ trait ImagesTrait
         //====================================================================//
         // Create New Image Object
         $objectImage = new Image();
-        $objectImage->legend = isset($newImageFile["name"]) ? $newImageFile["name"] : $newImageFile["filename"];
+        $objectImage->legend = $newImageFile["name"] ?? $newImageFile["filename"];
         $objectImage->id_product = $this->ProductId;
         $objectImage->position = $position;
         $objectImage->cover = $isCover;
