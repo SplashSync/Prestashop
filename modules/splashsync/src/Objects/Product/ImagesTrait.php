@@ -81,6 +81,7 @@ trait ImagesTrait
     protected function buildImagesFields(): void
     {
         $groupName = Translate::getAdminTranslation("Images", "AdminProducts");
+        $this->fieldsFactory()->setDefaultLanguage(SLM::getDefaultLanguage());
 
         //====================================================================//
         // PRODUCT IMAGES
@@ -112,19 +113,6 @@ trait ImagesTrait
         ;
 
         //====================================================================//
-        // Product Images => Legend
-        self::fieldsFactory()->create(SPL_T_VARCHAR)
-            ->identifier("legend")
-            ->inList("images")
-            ->name(Translate::getAdminTranslation("Legend", "AdminProducts"))
-            ->microData("http://schema.org/Product", "legendImage")
-            ->group($groupName)
-            ->isReadOnly(self::isSourceCatalogMode())
-            ->addOption("shop", MSM::MODE_ALL)
-            ->isNotTested()
-        ;
-
-        //====================================================================//
         // Product Images => Is Cover
         self::fieldsFactory()->create(SPL_T_BOOL)
             ->identifier("cover")
@@ -149,6 +137,22 @@ trait ImagesTrait
             ->addOption("shop", MSM::MODE_ALL)
             ->isNotTested()
         ;
+
+        //====================================================================//
+        // Product Images => Legends
+        foreach (SLM::getAvailableLanguages() as $isoLang) {
+            self::fieldsFactory()->create(SPL_T_VARCHAR)
+                ->identifier("legend")
+                ->name(Translate::getAdminTranslation("Legend", "AdminProducts"))
+                ->microData("http://schema.org/Product", "legendImage")
+                ->group($groupName)
+                ->setMultilang($isoLang)
+                ->inList("images")
+                ->isReadOnly(self::isSourceCatalogMode())
+                ->addOption("shop", MSM::MODE_ALL)
+                ->isNotTested()
+            ;
+        }
     }
 
     /**
@@ -172,18 +176,10 @@ trait ImagesTrait
         foreach ($this->getImagesInfoArray() as $index => $image) {
             //====================================================================//
             // Prepare
-            switch ($fieldId) {
-                case "image":
-                case "position":
-                case "visible":
-                case "cover":
-                case "legend":
-                    $value = $image[$fieldId];
-
-                    break;
-                default:
-                    return;
+            if (!array_key_exists($fieldId, (array) $image)) {
+                return;
             }
+            $value = $image[$fieldId];
             //====================================================================//
             // Insert Data in List
             self::lists()->insert($this->out, "images", $fieldName, $index, $value);
@@ -234,34 +230,48 @@ trait ImagesTrait
         $publicUrl = $context->link;
         //====================================================================//
         // Fetch Images Object
-        $objectImage = new Image((int) $imageId, SLM::getDefaultLangId());
+        $objectImage = new Image((int) $imageId);
         //====================================================================//
         // Detect Image Name
         /** @var array $linkRewrite */
         $linkRewrite = $this->object->link_rewrite;
         $imageName = !empty($linkRewrite)
                 ? array_values($linkRewrite)[0]
-                : 'Image';
+                : 'Image'
+        ;
+        $filename = $objectImage->id.".".$objectImage->image_format;
+        //====================================================================//
+        // Extract Image Legends
+        $legends = array();
+        $defaultLegend = $filename;
+        foreach (SLM::getAvailableLanguages() as $langId => $isoCode) {
+            if (SLM::isDefaultLanguage($isoCode)) {
+                $legends["legend"] = $objectImage->legend[$langId] ?? $filename ;
+                $defaultLegend = $objectImage->legend[$langId] ?? $filename;
+            } else {
+                $legends[sprintf("legend_%s", $isoCode)] = $objectImage->legend[$langId] ?? $filename ;
+            }
+        }
         //====================================================================//
         // Encode Image in Splash Format
-        $imageLegend = $objectImage->legend ?: $objectImage->id.".".$objectImage->image_format;
         $splashImage = self::images()->encode(
-            $imageLegend,
+            $defaultLegend,
             $objectImage->id.".".$objectImage->image_format,
             _PS_PROD_IMG_DIR_.$objectImage->getImgFolder(),
             $publicUrl->getImageLink($imageName, (string) $imageId)
         );
-
         //====================================================================//
         // Encode Image Information Array
         return new ArrayObject(
-            array(
-                "id" => $imageId,
-                "image" => $splashImage,
-                "position" => $objectImage->position,
-                "cover" => $objectImage->cover,
-                "visible" => $this->isVisibleImage($imageId),
-                "legend" => $imageLegend,
+            array_merge(
+                array(
+                    "id" => $imageId,
+                    "image" => $splashImage,
+                    "position" => $objectImage->position,
+                    "cover" => $objectImage->cover,
+                    "visible" => $this->isVisibleImage($imageId),
+                ),
+                $legends
             ),
             ArrayObject::ARRAY_AS_PROPS
         );
@@ -432,6 +442,17 @@ trait ImagesTrait
         return (bool) $imgArray["cover"];
     }
 
+    private function getImageLegend($imgArray): ?bool
+    {
+        //====================================================================//
+        // Cover Flag is Available
+        if (!isset($imgArray["legend"])) {
+            return null;
+        }
+
+        return (bool) $imgArray["legend"];
+    }
+
     /**
      * Update Image Cover Flag (Using AttributeId, Given Position or List Index)
      *
@@ -453,6 +474,44 @@ trait ImagesTrait
         if ($psImage->cover !== $isCover) {
             $psImage->cover = $isCover;
             $this->needUpdate("Image");
+        }
+    }
+
+    private function updateImageLegends(Image &$psImage, array $imgArray): void
+    {
+        $legend = $this->getImageLegend($imgArray);
+        //====================================================================//
+        // Legend is Available
+        if (is_null($legend)) {
+            return;
+        }
+        //====================================================================//
+        // Walk on All Languages
+        foreach (SLM::getAvailableLanguages() as $langId => $isoCode) {
+            $baseFieldId = SLM::fieldNameDecode($legend, $isoCode);
+
+            switch ($baseFieldId) {
+                case "legend":
+                    $legend = $imgArray["legend"];
+                    //====================================================================///
+                    // Verify Data Length
+                    $maxLength = Image::$definition["fields"]["legend"]["size"] ?? 128;
+                    if (Tools::strlen((string) $legend) > $maxLength) {
+                        Splash::log()->warTrace("Name is too long for attachement, value truncated...");
+                        $legend = substr((string) $legend, 0, $maxLength);
+                    }
+                    break;
+                default:
+                    $legend = $imgArray[$baseFieldId] ?? $imgArray["legend"];
+                    break;
+            }
+        }
+
+        //====================================================================//
+        // Update Image if Legend Changed
+        if ($psImage->legend !== $legend) {
+            $psImage->legend = $legend;
+            $this->needUpdate("Legend");
         }
     }
 
@@ -671,6 +730,7 @@ trait ImagesTrait
             // Update Image Position in List
             $this->updateImagePosition($psImage, $value);
             $this->updateImageCoverFlag($psImage, $value);
+            $this->updateImageLegends($psImage, $value);
             //====================================================================//
             // Update Image Object in Database
             $this->updateImage($psImage);
