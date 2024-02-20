@@ -487,7 +487,7 @@ trait ImagesTrait
         }
         //====================================================================//
         // Walk on All Languages
-        foreach (SLM::getAvailableLanguages() as $langId => $isoCode) {
+        foreach (SLM::getAvailableLanguages() as $isoCode) {
             $baseFieldId = SLM::fieldNameDecode($legend, $isoCode);
 
             switch ($baseFieldId) {
