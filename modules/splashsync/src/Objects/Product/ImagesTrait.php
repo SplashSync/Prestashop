@@ -72,7 +72,6 @@ trait ImagesTrait
      */
     private ?array $imagesLegendCache = null;
 
-
     /**
      * Build Fields using FieldFactory
      *
@@ -260,6 +259,7 @@ trait ImagesTrait
             _PS_PROD_IMG_DIR_.$objectImage->getImgFolder(),
             $publicUrl->getImageLink($imageName, (string) $imageId)
         );
+
         //====================================================================//
         // Encode Image Information Array
         return new ArrayObject(
@@ -356,7 +356,7 @@ trait ImagesTrait
     {
         //====================================================================//
         // Fetch Images Object
-        $psImage = new Image($psImageId, SLM::getDefaultLangId());
+        $psImage = new Image($psImageId);
         //====================================================================//
         // Compute Md5 CheckSum for this Image
         $checkSum = md5_file(
@@ -442,17 +442,6 @@ trait ImagesTrait
         return (bool) $imgArray["cover"];
     }
 
-    private function getImageLegend($imgArray): ?bool
-    {
-        //====================================================================//
-        // Cover Flag is Available
-        if (!isset($imgArray["legend"])) {
-            return null;
-        }
-
-        return (bool) $imgArray["legend"];
-    }
-
     /**
      * Update Image Cover Flag (Using AttributeId, Given Position or List Index)
      *
@@ -479,39 +468,35 @@ trait ImagesTrait
 
     private function updateImageLegends(Image &$psImage, array $imgArray): void
     {
-        $legend = $this->getImageLegend($imgArray);
-        //====================================================================//
-        // Legend is Available
-        if (is_null($legend)) {
-            return;
-        }
         //====================================================================//
         // Walk on All Languages
-        foreach (SLM::getAvailableLanguages() as $isoCode) {
-            $baseFieldId = SLM::fieldNameDecode($legend, $isoCode);
-
-            switch ($baseFieldId) {
-                case "legend":
-                    $legend = $imgArray["legend"];
-                    //====================================================================///
-                    // Verify Data Length
-                    $maxLength = Image::$definition["fields"]["legend"]["size"] ?? 128;
-                    if (Tools::strlen((string) $legend) > $maxLength) {
-                        Splash::log()->warTrace("Name is too long for attachement, value truncated...");
-                        $legend = substr((string) $legend, 0, $maxLength);
-                    }
-                    break;
-                default:
-                    $legend = $imgArray[$baseFieldId] ?? $imgArray["legend"];
-                    break;
+        foreach (SLM::getAvailableLanguages() as $langId => $isoCode) {
+            // creating array key
+            $arrayKey = SLM::isDefaultLanguage($isoCode)
+                ? "legend"
+                : sprintf("legend_%s", $isoCode)
+            ;
+            //Check if data is received
+            if (!array_key_exists($arrayKey, $imgArray)) {
+                continue;
             }
-        }
-
-        //====================================================================//
-        // Update Image if Legend Changed
-        if ($psImage->legend !== $legend) {
-            $psImage->legend = $legend;
-            $this->needUpdate("Legend");
+            $current = $psImage->legend[$langId] ?? null;
+            /**
+             * @var null|string $newValue
+             */
+            $newValue = $imgArray[$arrayKey];
+            if ($current === $newValue) {
+                continue;
+            }
+            //====================================================================///
+            // Verify Data Length
+            $maxLength = Image::$definition["fields"]["legend"]["size"] ?? 128;
+            if (Tools::strlen($newValue) > $maxLength) {
+                Splash::log()->warTrace("Name is too long for attachement, value truncated...");
+                $newValue = substr($newValue, 0, $maxLength);
+            }
+            $psImage->legend[$langId] = $newValue;
+            $this->needUpdate("Image");
         }
     }
 
