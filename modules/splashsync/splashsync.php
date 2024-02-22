@@ -821,7 +821,7 @@ class SplashSync extends Module
                 'name' => $status['field'],
                 'options' => array(
                     'query' => $psStates,
-                    'id' => 'key',
+                    'id' => 'id_order_state',
                     'name' => 'name'
                 )
             );
@@ -849,7 +849,7 @@ class SplashSync extends Module
      *
      * @return array
      */
-    private function getPaymentMethodsFormArray()
+    private function getPaymentMethodsFormArray(): array
     {
         //====================================================================//
         // Init Fields List
