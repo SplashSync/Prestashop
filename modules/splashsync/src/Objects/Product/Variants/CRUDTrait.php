@@ -112,9 +112,9 @@ trait CRUDTrait
      *
      * @param array|ArrayObject $variants Input Product Variants Array
      *
-     * @return null|string Product Id
+     * @return null|string Product ID
      */
-    private function getBaseProduct($variants)
+    private function getBaseProduct($variants): ?string
     {
         //====================================================================//
         // Stack Trace
@@ -136,7 +136,7 @@ trait CRUDTrait
             //====================================================================//
             // Extract Variable Product Id
             $variantProductId = self::objects()->id($variant["id"]);
-            if (false !== $variantProductId) {
+            if (!empty($variantProductId)) {
                 return $variantProductId;
             }
         }
