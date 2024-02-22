@@ -143,7 +143,7 @@ trait ImagesTrait
             $this->fieldsFactory()->create(SPL_T_VARCHAR)
                 ->identifier("legend")
                 ->name(Translate::getAdminTranslation("Legend", "AdminProducts"))
-                ->microData("http://schema.org/Product", "legendImage")
+                ->microData("http://schema.org/Product", "imageName")
                 ->group($groupName)
                 ->setMultilang($isoLang)
                 ->inList("images")
