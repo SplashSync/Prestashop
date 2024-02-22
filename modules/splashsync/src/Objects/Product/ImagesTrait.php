@@ -88,7 +88,7 @@ trait ImagesTrait
 
         //====================================================================//
         // Product Images List
-        self::fieldsFactory()->create(SPL_T_IMG)
+        $this->fieldsFactory()->create(SPL_T_IMG)
             ->identifier("image")
             ->inList("images")
             ->name(Translate::getAdminTranslation("Images", "AdminProducts"))
@@ -100,7 +100,7 @@ trait ImagesTrait
 
         //====================================================================//
         // Product Images => Position
-        self::fieldsFactory()->create(SPL_T_INT)
+        $this->fieldsFactory()->create(SPL_T_INT)
             ->identifier("position")
             ->inList("images")
             ->name(Translate::getAdminTranslation("Position", "AdminProducts"))
@@ -113,7 +113,7 @@ trait ImagesTrait
 
         //====================================================================//
         // Product Images => Is Cover
-        self::fieldsFactory()->create(SPL_T_BOOL)
+        $this->fieldsFactory()->create(SPL_T_BOOL)
             ->identifier("cover")
             ->inList("images")
             ->name(Translate::getAdminTranslation("Cover", "AdminProducts"))
@@ -126,7 +126,7 @@ trait ImagesTrait
 
         //====================================================================//
         // Product Images => Is Visible Image
-        self::fieldsFactory()->create(SPL_T_BOOL)
+        $this->fieldsFactory()->create(SPL_T_BOOL)
             ->identifier("visible")
             ->inList("images")
             ->name(Translate::getAdminTranslation("Visible", "AdminProducts"))
@@ -140,7 +140,7 @@ trait ImagesTrait
         //====================================================================//
         // Product Images => Legends
         foreach (SLM::getAvailableLanguages() as $isoLang) {
-            self::fieldsFactory()->create(SPL_T_VARCHAR)
+            $this->fieldsFactory()->create(SPL_T_VARCHAR)
                 ->identifier("legend")
                 ->name(Translate::getAdminTranslation("Legend", "AdminProducts"))
                 ->microData("http://schema.org/Product", "legendImage")
@@ -466,6 +466,9 @@ trait ImagesTrait
         }
     }
 
+    /**
+     * Update PS Image multi-langs legends
+     */
     private function updateImageLegends(Image &$psImage, array $imgArray): void
     {
         //====================================================================//
@@ -476,14 +479,13 @@ trait ImagesTrait
                 ? "legend"
                 : sprintf("legend_%s", $isoCode)
             ;
-            //Check if data is received
+            //====================================================================//
+            // Check if data was received
             if (!array_key_exists($arrayKey, $imgArray)) {
                 continue;
             }
             $current = $psImage->legend[$langId] ?? null;
-            /**
-             * @var null|string $newValue
-             */
+            /** @var null|string $newValue */
             $newValue = $imgArray[$arrayKey];
             if ($current === $newValue) {
                 continue;
@@ -492,7 +494,7 @@ trait ImagesTrait
             // Verify Data Length
             $maxLength = Image::$definition["fields"]["legend"]["size"] ?? 128;
             if (Tools::strlen($newValue) > $maxLength) {
-                Splash::log()->warTrace("Name is too long for attachement, value truncated...");
+                Splash::log()->warTrace("Legend is too long for image, value truncated...");
                 $newValue = substr($newValue, 0, $maxLength);
             }
             $psImage->legend[$langId] = $newValue;
