@@ -103,7 +103,7 @@ trait CoreTrait
             // Direct Readings
             case 'reference':
                 if (!$this->isOrderObject()) {
-                    $this->getSimple($fieldName, "Order");
+                    $this->getSimple($fieldName, "order");
                 } else {
                     $this->getSimple($fieldName);
                 }
@@ -160,7 +160,7 @@ trait CoreTrait
             // Direct Writing
             case 'reference':
                 if (!$this->isOrderObject()) {
-                    $this->setSimple($fieldName, $fieldData, "Order");
+                    $this->setSimple($fieldName, $fieldData, "order");
                 } else {
                     $this->setSimple($fieldName, $fieldData);
                 }
@@ -173,7 +173,7 @@ trait CoreTrait
                     $this->setSimple(
                         $fieldName,
                         self::objects()->id((string) $fieldData),
-                        "Order"
+                        "order"
                     );
                 } else {
                     $this->setSimple(

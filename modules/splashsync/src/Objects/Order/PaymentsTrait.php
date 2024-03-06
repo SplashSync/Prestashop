@@ -224,7 +224,7 @@ trait PaymentsTrait
     /**
      * Enable/Disable Credit Notes Mode
      *
-     * @param bool $enable Enable / Disbale Flag
+     * @param bool $enable Enable / Disable Flag
      *
      * @return void
      */
