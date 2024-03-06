@@ -112,21 +112,13 @@ trait CoreTrait
                 //====================================================================//
                 // Customer Object Id Readings
             case 'id_customer':
-                if ($this instanceof Order) {
-                    $this->out[$fieldName] = self::objects()->encode("ThirdParty", $this->object->{$fieldName});
-                } else {
-                    $this->out[$fieldName] = self::objects()->encode("ThirdParty", $this->Order->{$fieldName});
-                }
+                $this->out[$fieldName] = self::objects()->encode("ThirdParty", $this->getOrder()->{$fieldName});
 
                 break;
                 //====================================================================//
                 // Customer Email
             case 'email':
-                if ($this instanceof Order) {
-                    $customerId = $this->object->id_customer;
-                } else {
-                    $customerId = $this->Order->id_customer;
-                }
+                $customerId = $this->getOrder()->id_customer;
                 //====================================================================//
                 // Load Customer
                 $customer = new Customer($customerId);

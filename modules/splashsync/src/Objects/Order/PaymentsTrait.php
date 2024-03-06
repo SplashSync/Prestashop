@@ -318,12 +318,8 @@ trait PaymentsTrait
             //====================================================================//
             // Create New OrderDetail Item
             $orderPayment = new OrderPayment();
-            $orderPayment->order_reference = is_a($this, "Splash\\Local\\Objects\\Order")
-                    ? $this->object->reference
-                    : $this->Order->reference;
-            $orderPayment->id_currency = is_a($this, "Splash\\Local\\Objects\\Order")
-                    ? $this->object->id_currency
-                    : $this->Order->id_currency;
+            $orderPayment->order_reference = $this->getOrder()->reference;
+            $orderPayment->id_currency = $this->getOrder()->id_currency;
             $orderPayment->conversion_rate = 1;
         }
 
@@ -334,11 +330,11 @@ trait PaymentsTrait
         }
 
         if (!$orderPayment->id) {
-            if (true != $orderPayment->add()) {
+            if (!$orderPayment->add()) {
                 return Splash::log()->err("ErrLocalTpl", __CLASS__, __FUNCTION__, "Unable to Create new Payment Line.");
             }
         } else {
-            if (true != $orderPayment->update()) {
+            if (!$orderPayment->update()) {
                 return Splash::log()->err("ErrLocalTpl", __CLASS__, __FUNCTION__, "Unable to Update Payment Line.");
             }
         }

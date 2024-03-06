@@ -93,17 +93,10 @@ trait TotalsTrait
                 break;
             case 'price_shipping':
                 //====================================================================//
-                // Compute Tax Rate Using Tax Calculator
-                if ($this->object->total_shipping_tax_incl != $this->object->total_shipping_tax_excl) {
-                    $taxPercent = $this->ShippingTaxCalculator->getTotalRate();
-                } else {
-                    $taxPercent = 0;
-                }
-                //====================================================================//
                 // Build Price Array
                 $this->out[$fieldName] = self::prices()->encode(
                     null,
-                    (double)    $taxPercent,
+                    (double)    $this->object->carrier_tax_rate,
                     (double)    Tools::convertPrice($this->object->total_shipping_tax_incl, $this->currency),
                     $this->currency->iso_code,
                     LanguagesManager::getCurrencySymbol($this->currency),

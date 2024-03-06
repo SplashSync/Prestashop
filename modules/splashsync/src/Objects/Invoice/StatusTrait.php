@@ -99,7 +99,7 @@ trait StatusTrait
             //====================================================================//
             case 'status':
                 $delta = $this->object->getTotalPaid() - $this->object->total_paid_tax_incl;
-                if (!$this->Order->valid) {
+                if (!$this->order->valid) {
                     $this->out[$fieldName] = "PaymentCanceled";
                 } elseif (($delta < 1E-6) || ($delta > 0)) {
                     $this->out[$fieldName] = "PaymentComplete";
@@ -112,11 +112,11 @@ trait StatusTrait
                 // INVOICE PAYMENT STATUS
                 //====================================================================//
             case 'isCanceled':
-                $this->out[$fieldName] = !$this->Order->valid;
+                $this->out[$fieldName] = !$this->order->valid;
 
                 break;
             case 'isValidated':
-                $this->out[$fieldName] = $this->Order->valid;
+                $this->out[$fieldName] = $this->order->valid;
 
                 break;
             case 'isPaid':

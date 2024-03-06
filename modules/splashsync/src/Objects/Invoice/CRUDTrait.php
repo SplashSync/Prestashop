@@ -15,13 +15,11 @@
 
 namespace Splash\Local\Objects\Invoice;
 
-use Address;
 use Carrier;
 use Order;
 use OrderInvoice;
 use Splash\Core\SplashCore      as Splash;
 use Splash\Local\Services\DiscountsManager;
-use TaxCalculator;
 
 /**
  * Prestashop Invoices CRUD Functions
@@ -31,12 +29,7 @@ trait CRUDTrait
     /**
      * @var Order
      */
-    protected $Order;
-
-    /**
-     * @var TaxCalculator
-     */
-    protected $ShippingTaxCalculator;
+    protected Order $order;
 
     /**
      * @var null|Carrier
@@ -45,12 +38,8 @@ trait CRUDTrait
 
     /**
      * Load Request Object
-     *
-     * @param string $objectId Object id
-     *
-     * @return false|OrderInvoice
      */
-    public function load($objectId)
+    public function load(string $objectId): ?OrderInvoice
     {
         //====================================================================//
         // Stack Trace
@@ -60,27 +49,22 @@ trait CRUDTrait
         // Load Object
         $object = new OrderInvoice((int) $objectId);
         if ($object->id != $objectId) {
-            return Splash::log()->errTrace("Unable to load Invoice (".$objectId.").");
+            return Splash::log()->errNull("Unable to load Invoice (".$objectId.").");
         }
-        $this->Order = new Order($object->id_order);
-        if ($this->Order->id != $object->id_order) {
-            return Splash::log()->errTrace("Unable to load Invoice Order (".$object->id_order.").");
+        $this->order = new Order($object->id_order);
+        if ($this->order->id != $object->id_order) {
+            return Splash::log()->errNull("Unable to load Invoice Order (".$object->id_order.").");
         }
 
         //====================================================================//
         // Load Order Products
         $this->Products = $object->getProductsDetail();
         $this->Payments = $object->getOrderPaymentCollection();
-        $this->PaymentMethod = $this->Order->module;
+        $this->PaymentMethod = $this->order->module;
 
         //====================================================================//
         // Load Order Carrier
-        $this->carrier = new Carrier($this->Order->id_carrier);
-
-        //====================================================================//
-        // Load Shipping Tax Calculator
-        // @phpstan-ignore-next-line
-        $this->ShippingTaxCalculator = $this->carrier->getTaxCalculator(new Address($this->Order->id_address_delivery));
+        $this->carrier = new Carrier($this->getOrder()->id_carrier);
 
         //====================================================================//
         // Flush Order Discount Cache
@@ -157,5 +141,13 @@ trait CRUDTrait
         }
 
         return (string) $this->object->id;
+    }
+
+    /**
+     * Get Current Invoice Order
+     */
+    public function getOrder(): Order
+    {
+        return $this->order;
     }
 }

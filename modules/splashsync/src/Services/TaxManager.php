@@ -18,8 +18,8 @@ namespace Splash\Local\Services;
 use Configuration;
 use Db;
 use DbQuery;
+use Exception;
 use PrestaShopDatabaseException;
-use Splash\Core\SplashCore as Splash;
 use TaxRule;
 
 /**
@@ -92,7 +92,7 @@ class TaxManager
      * Identify Best Tax Rate from Raw Computed Value
      *
      * @param float $taxRate        Product Tax Rate in Percent
-     * @param int   $taxRateGroupId Product Tax Rate Group Id
+     * @param int   $taxRateGroupId Product Tax Rate Group ID
      *
      * @return float
      */
@@ -111,5 +111,51 @@ class TaxManager
         }
 
         return $bestRate;
+    }
+
+    /**
+     * Identify Best Tax Rule from Raw Computed Value & Country ID
+     */
+    public static function getBestTaxForCountry(float $taxRate, int $countryId): ?\Tax
+    {
+        //====================================================================//
+        // Load list of Tax rates Associated with this Country
+        try {
+            $taxRulesRates = Db::getInstance()->executeS(
+                '
+                SELECT rg.`id_tax_rules_group`, t.`id_tax`, t.`rate`
+                FROM `'._DB_PREFIX_.'tax_rules_group` rg
+                LEFT JOIN `'._DB_PREFIX_.'tax_rule` tr ON (tr.`id_tax_rules_group` = rg.`id_tax_rules_group`)
+                LEFT JOIN `'._DB_PREFIX_.'tax` t ON (t.`id_tax` = tr.`id_tax`)
+                WHERE tr.`id_country` = '.$countryId.'
+                AND t.`active` = 1
+                AND tr.`id_state` = 0
+                AND 0 between `zipcode_from` AND `zipcode_to`'
+            );
+        } catch (Exception $e) {
+            return null;
+        }
+        //====================================================================//
+        // Search for Closest Rate
+        $bestRate = $bestRuleId = 0;
+        foreach ($taxRulesRates as $taxRulesRate) {
+            if (abs($taxRate - $taxRulesRate['rate']) < abs($taxRate - $bestRate)) {
+                $bestRuleId = $taxRulesRate['id_tax'];
+                $bestRate = $taxRulesRate['rate'];
+            }
+        }
+        //====================================================================//
+        // Safety Check - Identified Value is Valid
+        if (abs($taxRate - $bestRate) > 0.01) {
+            return null;
+        }
+
+        //====================================================================//
+        // Return Identified Tax Rule
+        try {
+            return new \Tax($bestRuleId, LanguagesManager::getDefaultLangId());
+        } catch (Exception $e) {
+            return null;
+        }
     }
 }

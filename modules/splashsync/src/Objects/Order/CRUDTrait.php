@@ -15,7 +15,6 @@
 
 namespace Splash\Local\Objects\Order;
 
-use Address;
 use Carrier;
 use Cart;
 use Configuration;
@@ -28,7 +27,6 @@ use Splash\Core\SplashCore      as Splash;
 use Splash\Local\Services\DiscountsManager;
 use Splash\Local\Services\LanguagesManager as SLM;
 use Splash\Local\Services\MultiShopManager as MSM;
-use TaxCalculator;
 
 /**
  * Prestashop Orders CRUD Functions
@@ -36,24 +34,9 @@ use TaxCalculator;
 trait CRUDTrait
 {
     /**
-     * @var Order
-     */
-    protected Order $Order;
-
-    /**
-     * @var TaxCalculator.
-     */
-    protected TaxCalculator $ShippingTaxCalculator;
-
-    /**
      * @var null|Carrier
      */
     protected ?Carrier $carrier;
-
-    /**
-     * @var Cart
-     */
-    private Cart $Cart;
 
     /**
      * Load Request Object
@@ -83,11 +66,6 @@ trait CRUDTrait
         //====================================================================//
         // Load Order Carrier
         $this->carrier = new Carrier($object->id_carrier, SLM::getDefaultLangId());
-
-        //====================================================================//
-        // Load Shipping Tax Calculator
-        // @phpstan-ignore-next-line
-        $this->ShippingTaxCalculator = $this->carrier->getTaxCalculator(new Address($object->id_address_delivery));
 
         //====================================================================//
         // Flush Order Discount Cache
@@ -128,9 +106,9 @@ trait CRUDTrait
 
         //====================================================================//
         // Create a New Cart
-        $this->Cart = new Cart();
-        $this->Cart->id_currency = (int) Configuration::get('PS_CURRENCY_DEFAULT');
-        if (!$this->Cart->add()) {
+        $cart = new Cart();
+        $cart->id_currency = (int) Configuration::get('PS_CURRENCY_DEFAULT');
+        if (!$cart->add()) {
             return Splash::log()->errNull("Unable to Create new Order Cart.");
         }
 
@@ -141,7 +119,7 @@ trait CRUDTrait
         //====================================================================//
         // Setup Minimal Data
         $this->object->current_state = 0;
-        $this->object->id_cart = (int) $this->Cart->id;
+        $this->object->id_cart = (int) $cart->id;
         $this->object->id_currency = (int) Configuration::get('PS_CURRENCY_DEFAULT');
         $this->object->conversion_rate = 1;
         $this->object->id_carrier = 1;
@@ -268,5 +246,13 @@ trait CRUDTrait
         }
 
         return (string) $this->object->id;
+    }
+
+    /**
+     * Get Current Order
+     */
+    public function getOrder(): Order
+    {
+        return $this->object;
     }
 }

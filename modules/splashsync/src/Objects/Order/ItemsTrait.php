@@ -22,6 +22,7 @@ use Splash\Local\Objects\Invoice;
 use Splash\Local\Objects\Product;
 use Splash\Local\Services\DiscountsManager;
 use Splash\Local\Services\LanguagesManager;
+use Splash\Local\Services\OrderTaxManager;
 use Splash\Models\Objects\ListsTrait;
 use Splash\Models\Objects\PricesTrait;
 use Tools;
@@ -284,7 +285,9 @@ trait ItemsTrait
 
                 break;
             case 'tax_name':
-                $value = $this->ShippingTaxCalculator->getTaxesName();
+                //====================================================================//
+                // Compute Tax Name Using Tax Calculator or Detection
+                $value = OrderTaxManager::getShippingTaxName($this->getOrder());
 
                 break;
             default:
@@ -440,24 +443,14 @@ trait ItemsTrait
 
     /**
      * Get Order Shipping Price
-     *
-     * @return array|string
      */
-    private function getShippingPrice()
+    private function getShippingPrice(): ?array
     {
-        //====================================================================//
-        // Compute Tax Rate Using Tax Calculator
-        if ($this->object->total_shipping_tax_incl != $this->object->total_shipping_tax_excl) {
-            $taxPercent = $this->ShippingTaxCalculator->getTotalRate();
-        } else {
-            $taxPercent = 0;
-        }
-
         //====================================================================//
         // Build Price Array
         return self::prices()->encode(
             (double)    Tools::convertPrice($this->object->total_shipping_tax_excl, $this->currency),
-            (double)    $taxPercent,
+            (double)    $this->getOrder()->carrier_tax_rate,
             null,
             $this->currency->iso_code,
             LanguagesManager::getCurrencySymbol($this->currency),
