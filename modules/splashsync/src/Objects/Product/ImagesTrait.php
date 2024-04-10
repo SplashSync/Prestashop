@@ -254,7 +254,7 @@ trait ImagesTrait
         //====================================================================//
         // Encode Image in Splash Format
         $splashImage = self::images()->encode(
-            $defaultLegend,
+            $defaultLegend ?: $filename,
             $objectImage->id.".".$objectImage->image_format,
             _PS_PROD_IMG_DIR_.$objectImage->getImgFolder(),
             $publicUrl->getImageLink($imageName, (string) $imageId)
