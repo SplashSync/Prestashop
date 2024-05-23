@@ -15,6 +15,7 @@
 
 namespace Splash\Local\Objects\CreditNote;
 
+use Exception;
 use OrderSlip;
 use Splash\Core\SplashCore      as Splash;
 
@@ -34,6 +35,8 @@ trait HooksTrait
      *
      * @param array $params
      *
+     * @throws Exception
+     *
      * @return bool
      */
     public function hookactionObjectOrderSlipAddAfter(array $params): bool
@@ -50,6 +53,8 @@ trait HooksTrait
      *
      * @param array $params
      *
+     * @throws Exception
+     *
      * @return bool
      */
     public function hookactionObjectOrderSlipUpdateAfter(array $params): bool
@@ -65,6 +70,8 @@ trait HooksTrait
      * This hook is called after a Credit Note is deleted
      *
      * @param array $params
+     *
+     * @throws Exception
      *
      * @return bool
      */
@@ -84,10 +91,17 @@ trait HooksTrait
      * @param string    $action  Performed Action
      * @param string    $comment Action Comment
      *
+     * @throws Exception
+     *
      * @return bool
      */
-    private function hookactionCreditNote(OrderSlip $order, string $action, string $comment)
+    private function hookactionCreditNote(OrderSlip $order, string $action, string $comment): bool
     {
+        //====================================================================//
+        // Safety Check - Credit Notes are Enabled
+        if (!in_array("CreditNote", Splash::objects(), true)) {
+            return true;
+        }
         //====================================================================//
         // Retrieve Customer Id
         $objectId = null;
@@ -100,7 +114,7 @@ trait HooksTrait
         //====================================================================//
         // Safety Check
         if (empty($objectId)) {
-            Splash::log()->err("ErrLocalTpl", "CreditNote", __FUNCTION__, "Unable to Read Order Slip Id.");
+            return Splash::log()->err("ErrLocalTpl", "CreditNote", __FUNCTION__, "Unable to Read Order Slip Id.");
         }
 
         //====================================================================//
