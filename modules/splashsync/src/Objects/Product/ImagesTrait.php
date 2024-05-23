@@ -463,6 +463,11 @@ trait ImagesTrait
         if ($psImage->cover !== $isCover) {
             $psImage->cover = $isCover;
             $this->needUpdate("Image");
+            //====================================================================//
+            // Delete Cover Flag for Other Images
+            if ($isCover) {
+                Image::deleteCover($psImage->id_product);
+            }
         }
     }
 
@@ -594,6 +599,7 @@ trait ImagesTrait
             if (!file_exists($imagePath.'.jpg')) {
                 continue;
             }
+
             foreach (ImageType::getImagesTypes("products") as $imageType) {
                 $imgThumb = _PS_PROD_IMG_DIR_.$imageObj->getExistingImgPath();
                 $imgThumb .= '-'.Tools::stripslashes($imageType['name']).'.jpg';
@@ -699,13 +705,12 @@ trait ImagesTrait
             //====================================================================//
             // Search For Image In Current List
             $psImage = $this->searchImage($value["image"]["md5"]);
-            if (false == $psImage) {
+            if (!$psImage) {
                 //====================================================================//
                 // If Not found, Add this object to list
                 $psImage = $this->addImageToProduct(
                     $inImage,
-                    (int) $this->getImagePosition($value),
-                    (bool) $this->getImageCoverFlag($value)
+                    (int) $this->getImagePosition($value)
                 );
             }
             //====================================================================//
@@ -752,11 +757,10 @@ trait ImagesTrait
      *
      * @param array $imgArray Splash Image Definition Array
      * @param int   $position Image Position (On Base Product Sheet)
-     * @param bool  $isCover  Image is Cover Image
      *
      * @return false|Image
      */
-    private function addImageToProduct(array $imgArray, int $position, bool $isCover)
+    private function addImageToProduct(array $imgArray, int $position)
     {
         //====================================================================//
         // Read File from Splash Server
@@ -773,7 +777,6 @@ trait ImagesTrait
         $objectImage->legend = $newImageFile["name"] ?? $newImageFile["filename"];
         $objectImage->id_product = $this->ProductId;
         $objectImage->position = $position;
-        $objectImage->cover = $isCover;
         //====================================================================//
         // Write Image To Database
         if (!$objectImage->add()) {

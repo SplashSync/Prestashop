@@ -60,6 +60,13 @@ trait MetaTrait
             ->microData("http://schema.org/Product", "onsale")
         ;
         //====================================================================//
+        // Display Price
+        $this->fieldsFactory()->create(SPL_T_BOOL)
+            ->identifier("show_price")
+            ->name($this->spl->l("Show Price"))
+            ->microData("http://schema.org/Product", "showPrice")
+        ;
+        //====================================================================//
         // Online Only
         $this->fieldsFactory()->create(SPL_T_BOOL)
             ->identifier("online_only")
@@ -103,6 +110,7 @@ trait MetaTrait
             // OTHERS INFORMATIONS
             //====================================================================//
             case 'active':
+            case 'show_price':
             case 'on_sale':
             case 'online_only':
                 $this->getSimpleBool($fieldName);
@@ -188,6 +196,7 @@ trait MetaTrait
             //====================================================================//
             // Direct Writings
             case 'active':
+            case 'show_price':
             case 'on_sale':
             case 'online_only':
                 $this->setSimple($fieldName, $fieldData);
