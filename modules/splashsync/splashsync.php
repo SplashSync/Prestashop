@@ -350,7 +350,7 @@ class SplashSync extends Module
         //====================================================================//
         // When Library is called in TRAVIS CI mode ONLY
         //====================================================================//
-        if (!empty(Splash\Client\Splash::input("SPLASH_TRAVIS"))) {
+        if (Splash\Client\Splash::isTravisMode() || Splash\Client\Splash::isServerMode()) {
             return;
         }
 
