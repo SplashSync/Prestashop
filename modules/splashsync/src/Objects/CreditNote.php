@@ -220,6 +220,6 @@ class CreditNote extends AbstractObject
      */
     protected function getObjectShopId(): int
     {
-        return (int) $this->Order->id_shop;
+        return (int) $this->order->id_shop;
     }
 }

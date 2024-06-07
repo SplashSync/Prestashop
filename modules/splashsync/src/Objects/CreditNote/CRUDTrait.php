@@ -30,21 +30,17 @@ trait CRUDTrait
     /**
      * @var Order
      */
-    protected $Order;
+    protected Order $order;
 
     /**
      * @var TaxCalculator
      */
-    protected $shippingTaxCalculator;
+    protected TaxCalculator $shippingTaxCalculator;
 
     /**
      * Load Request Object
-     *
-     * @param string $objectId Object id
-     *
-     * @return false|OrderSlip
      */
-    public function load($objectId)
+    public function load(string $objectId): ?OrderSlip
     {
         //====================================================================//
         // Stack Trace
@@ -54,30 +50,30 @@ trait CRUDTrait
         // Load Object
         $this->object = new OrderSlip((int) $objectId);
         if ($this->object->id != $objectId) {
-            return Splash::log()->errTrace("Unable to load Credit Note (".$objectId.").");
+            return Splash::log()->errNull("Unable to load Credit Note (".$objectId.").");
         }
-        $this->Order = new Order($this->object->id_order);
-        if ($this->Order->id != $this->object->id_order) {
-            return Splash::log()->errTrace("Unable to load Credity Note Order (".$this->object->id_order.").");
+        $this->order = new Order($this->object->id_order);
+        if ($this->order->id != $this->object->id_order) {
+            return Splash::log()->errNull("Unable to load Credity Note Order (".$this->object->id_order.").");
         }
 
         //====================================================================//
         // Load Credit Note Products
-        $this->Products = $this->object->getOrdersSlipProducts((int) $objectId, $this->Order);
-        $this->Payments = $this->Order->getOrderPaymentCollection();
-        $this->PaymentMethod = $this->Order->module;
+        $this->Products = $this->object->getOrdersSlipProducts((int) $objectId, $this->order);
+        $this->Payments = $this->order->getOrderPaymentCollection();
+        $this->PaymentMethod = $this->order->module;
         //====================================================================//
         // Identify if a Customer Cart Rule Exists for this Credit Note
         $this->checkCustomerCartRule();
 
         //====================================================================//
         // Load Order Carrier
-        $this->carrier = new Carrier($this->Order->id_carrier);
+        $this->carrier = new Carrier($this->order->id_carrier);
 
         //====================================================================//
         // Load Shipping Tax Calculator
         // @phpstan-ignore-next-line
-        $this->shippingTaxCalculator = $this->carrier->getTaxCalculator(new Address($this->Order->id_address_delivery));
+        $this->shippingTaxCalculator = $this->carrier->getTaxCalculator(new Address($this->order->id_address_delivery));
 
         return $this->object;
     }
@@ -150,5 +146,13 @@ trait CRUDTrait
         }
 
         return (string) $this->object->id;
+    }
+
+    /**
+     * Get Current Credit Note Order
+     */
+    public function getOrder(): Order
+    {
+        return $this->order;
     }
 }

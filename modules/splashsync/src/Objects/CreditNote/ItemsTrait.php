@@ -215,7 +215,7 @@ trait ItemsTrait
     {
         //====================================================================//
         // Compute Customer Cart Rule Code Filter
-        $ruleCodeFilter = sprintf('C%1$dO%2$d', $this->Order->id_customer, $this->Order->id);
+        $ruleCodeFilter = sprintf('C%1$dO%2$d', $this->order->id_customer, $this->order->id);
         //====================================================================//
         // Prepare Cart Rule Select Query
         $sql = 'SELECT * FROM `'._DB_PREFIX_.'cart_rule`';
