@@ -48,3 +48,4 @@ save-commands.json
 /modules/splashsync/.php_cs.cache
 /public/
 /.php-cs-fixer.cache
+/modules/splashsync/docs/assets/img/.comments/logo.jpg.xml
