@@ -18,6 +18,7 @@ namespace   Splash\Local\Objects;
 use Address as psAddress;
 use Splash\Core\SplashCore      as Splash;
 use Splash\Local\Local;
+use Splash\Local\Traits\SplashIdTrait;
 use Splash\Models\AbstractObject;
 use Splash\Models\Objects\IntelParserTrait;
 use Splash\Models\Objects\ObjectsTrait;
@@ -41,7 +42,8 @@ class Address extends AbstractObject
     use Core\SplashMetaTrait;
     use Core\ObjectsListCommonsTrait;
     use Core\ConfiguratorAwareTrait;
-    use \Splash\Local\Traits\SplashIdTrait;
+    use Core\MultiShopTrait;
+    use SplashIdTrait;
 
     // Prestashop Address Traits
     use Address\ObjectsListTrait;

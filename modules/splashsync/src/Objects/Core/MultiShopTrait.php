@@ -15,6 +15,7 @@
 
 namespace Splash\Local\Objects\Core;
 
+use Address;
 use Shop;
 use Translate;
 
@@ -115,6 +116,15 @@ trait MultiShopTrait
      */
     protected function getObjectShopId(): int
     {
+        //====================================================================//
+        // Address has No Shop Information
+        if ($this->object instanceof Address) {
+            $customer = new \Customer((int) $this->object->id_customer);
+            ;
+
+            return $customer->id_shop ?? 1;
+        }
+
         return (int) $this->object->id_shop;
     }
 }
