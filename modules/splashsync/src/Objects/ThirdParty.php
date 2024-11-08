@@ -43,6 +43,7 @@ class ThirdParty extends AbstractObject implements PrimaryKeysAwareInterface
     use Core\SplashMetaTrait;
     use Core\ObjectsListCommonsTrait;
     use Core\ConfiguratorAwareTrait;
+    use Core\MultiShopTrait;
     use SplashIdTrait;
 
     // Prestashop ThirdParty Traits
@@ -51,6 +52,7 @@ class ThirdParty extends AbstractObject implements PrimaryKeysAwareInterface
     use ThirdParty\PrimaryTrait;
     use ThirdParty\CoreTrait;
     use ThirdParty\MainTrait;
+    use ThirdParty\GroupsTrait;
     use ThirdParty\AddressTrait;
     use ThirdParty\AddressesTrait;
     use ThirdParty\MetaTrait;
