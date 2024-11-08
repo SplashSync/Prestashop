@@ -13,14 +13,14 @@
  *  file that was distributed with this source code.
  */
 
-namespace   Splash\Local\Objects;
+namespace Splash\Local\Objects;
 
 use Configuration;
 use Currency;
 use OrderInvoice;
 use PrestaShopCollection;
 use Shop;
-use Splash\Core\SplashCore      as Splash;
+use Splash\Core\SplashCore as Splash;
 use Splash\Local\Local;
 use Splash\Models\AbstractObject;
 use Splash\Models\Objects\IntelParserTrait;

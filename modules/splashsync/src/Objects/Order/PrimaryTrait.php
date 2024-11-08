@@ -13,13 +13,13 @@
  *  file that was distributed with this source code.
  */
 
-namespace   Splash\Local\Objects\Order;
+namespace Splash\Local\Objects\Order;
 
 //====================================================================//
 // Prestashop Static Classes
 use Db;
 use DbQuery;
-use Splash\Core\SplashCore      as Splash;
+use Splash\Core\SplashCore as Splash;
 
 /**
  * Search Order by Primary Keys

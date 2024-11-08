@@ -13,12 +13,12 @@
  *  file that was distributed with this source code.
  */
 
-namespace   Splash\Local\Objects\Core;
+namespace Splash\Local\Objects\Core;
 
 use Db;
 use DbQuery;
 use PrestaShopDatabaseException;
-use Splash\Core\SplashCore      as Splash;
+use Splash\Core\SplashCore as Splash;
 
 /**
  * Common Acces to Objects Lists Functions

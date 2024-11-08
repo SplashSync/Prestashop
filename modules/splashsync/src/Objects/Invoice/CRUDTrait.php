@@ -18,7 +18,7 @@ namespace Splash\Local\Objects\Invoice;
 use Carrier;
 use Order;
 use OrderInvoice;
-use Splash\Core\SplashCore      as Splash;
+use Splash\Core\SplashCore as Splash;
 use Splash\Local\Services\DiscountsManager;
 
 /**

@@ -22,7 +22,7 @@ use ImageManager;
 use ImageType;
 use Link;
 use Shop;
-use Splash\Core\SplashCore      as Splash;
+use Splash\Core\SplashCore as Splash;
 use Splash\Local\Services\LanguagesManager as SLM;
 use Splash\Local\Services\MultiShopManager as MSM;
 use Splash\Models\Objects\ImagesTrait as SplashImagesTrait;

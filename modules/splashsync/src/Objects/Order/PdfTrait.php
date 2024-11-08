@@ -15,7 +15,7 @@
 
 namespace Splash\Local\Objects\Order;
 
-use Splash\Core\SplashCore      as Splash;
+use Splash\Core\SplashCore as Splash;
 use Splash\Local\Services\OrderPdfManager;
 use Translate;
 

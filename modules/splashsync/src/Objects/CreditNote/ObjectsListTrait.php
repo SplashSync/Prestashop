@@ -13,10 +13,10 @@
  *  file that was distributed with this source code.
  */
 
-namespace   Splash\Local\Objects\CreditNote;
+namespace Splash\Local\Objects\CreditNote;
 
 use DbQuery;
-use Splash\Core\SplashCore      as Splash;
+use Splash\Core\SplashCore as Splash;
 
 /**
  * Acces to Invoices Objects Lists

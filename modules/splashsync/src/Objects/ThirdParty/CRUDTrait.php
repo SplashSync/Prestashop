@@ -17,7 +17,7 @@ namespace Splash\Local\Objects\ThirdParty;
 
 use Customer;
 use PrestaShopException;
-use Splash\Core\SplashCore      as Splash;
+use Splash\Core\SplashCore as Splash;
 use Tools;
 
 /**

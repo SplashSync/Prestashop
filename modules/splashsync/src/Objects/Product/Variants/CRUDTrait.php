@@ -17,7 +17,7 @@ namespace Splash\Local\Objects\Product\Variants;
 
 use ArrayObject;
 use Product;
-use Splash\Core\SplashCore      as Splash;
+use Splash\Core\SplashCore as Splash;
 
 /**
  * Prestashop Product Variants CRUD Functions

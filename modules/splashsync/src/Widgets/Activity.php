@@ -21,12 +21,12 @@
 // *******************************************************************//
 //====================================================================//
 
-namespace   Splash\Local\Widgets;
+namespace Splash\Local\Widgets;
 
 use AdminStatsController;
 use Configuration;
 use Currency;
-use Splash\Core\SplashCore      as Splash;
+use Splash\Core\SplashCore as Splash;
 use Splash\Local\Local;
 use Splash\Models\AbstractWidget;
 use SplashSync;

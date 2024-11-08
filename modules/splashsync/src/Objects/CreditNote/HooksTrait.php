@@ -17,7 +17,7 @@ namespace Splash\Local\Objects\CreditNote;
 
 use Exception;
 use OrderSlip;
-use Splash\Core\SplashCore      as Splash;
+use Splash\Core\SplashCore as Splash;
 
 /**
  * Prestashop Hooks for Credit Notes

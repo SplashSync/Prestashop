@@ -19,7 +19,7 @@ use Address;
 use Carrier;
 use Order;
 use OrderSlip;
-use Splash\Core\SplashCore      as Splash;
+use Splash\Core\SplashCore as Splash;
 use TaxCalculator;
 
 /**

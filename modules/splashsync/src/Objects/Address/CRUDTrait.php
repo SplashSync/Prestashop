@@ -16,7 +16,7 @@
 namespace Splash\Local\Objects\Address;
 
 use Address;
-use Splash\Core\SplashCore      as Splash;
+use Splash\Core\SplashCore as Splash;
 
 /**
  * Prestashop ThirdParty CRUD Functions

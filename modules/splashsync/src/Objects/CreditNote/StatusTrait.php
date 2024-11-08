@@ -13,7 +13,7 @@
  *  file that was distributed with this source code.
  */
 
-namespace   Splash\Local\Objects\CreditNote;
+namespace Splash\Local\Objects\CreditNote;
 
 use Translate;
 

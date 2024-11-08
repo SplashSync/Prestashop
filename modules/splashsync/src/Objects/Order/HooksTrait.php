@@ -18,7 +18,7 @@ namespace Splash\Local\Objects\Order;
 use Order;
 use PrestaShopCollection;
 use PrestaShopException;
-use Splash\Core\SplashCore      as Splash;
+use Splash\Core\SplashCore as Splash;
 
 /**
  * Prestashop Hooks for Order & Invoices

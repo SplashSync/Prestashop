@@ -13,13 +13,13 @@
  *  file that was distributed with this source code.
  */
 
-namespace   Splash\Local\Objects\ThirdParty;
+namespace Splash\Local\Objects\ThirdParty;
 
 //====================================================================//
 // Prestashop Static Classes
 use Db;
 use DbQuery;
-use Splash\Core\SplashCore      as Splash;
+use Splash\Core\SplashCore as Splash;
 
 /**
  * Search ThirdParty by Primary Keys

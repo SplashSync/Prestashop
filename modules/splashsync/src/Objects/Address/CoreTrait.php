@@ -16,7 +16,7 @@
 namespace Splash\Local\Objects\Address;
 
 use Customer;
-use Splash\Core\SplashCore      as Splash;
+use Splash\Core\SplashCore as Splash;
 use Translate;
 
 /**

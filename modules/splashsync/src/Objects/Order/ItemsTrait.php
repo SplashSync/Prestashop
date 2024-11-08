@@ -17,7 +17,7 @@ namespace Splash\Local\Objects\Order;
 
 use OrderDetail;
 use PrestaShopException;
-use Splash\Core\SplashCore      as Splash;
+use Splash\Core\SplashCore as Splash;
 use Splash\Local\Objects\Invoice;
 use Splash\Local\Objects\Product;
 use Splash\Local\Services\DiscountsManager;

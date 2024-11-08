@@ -17,7 +17,7 @@ namespace Splash\Local\Objects\Order;
 
 use OrderPayment;
 use PrestaShopCollection;
-use Splash\Core\SplashCore      as Splash;
+use Splash\Core\SplashCore as Splash;
 use Splash\Local\Objects\Invoice;
 use Splash\Local\Services\PaymentMethodsManager;
 use Splash\Models\Objects\Invoice\PaymentMethods;

@@ -20,7 +20,7 @@ use Context;
 use Order;
 use OrderInvoice;
 use PDF;
-use Splash\Client\Splash      as Splash;
+use Splash\Client\Splash as Splash;
 use Splash\Local\Services\LanguagesManager as SLM;
 use Splash\Models\Helpers\FilesHelper;
 

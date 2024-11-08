@@ -21,7 +21,7 @@ use Db;
 use Order;
 use OrderDetail;
 use PrestaShopDatabaseException;
-use Splash\Core\SplashCore      as Splash;
+use Splash\Core\SplashCore as Splash;
 use Splash\Models\Objects\PricesTrait;
 use Tools;
 use Validate;

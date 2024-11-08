@@ -16,7 +16,7 @@
 namespace Splash\Local\Objects\Product\Variants;
 
 use Combination;
-use Splash\Core\SplashCore      as Splash;
+use Splash\Core\SplashCore as Splash;
 use Splash\Local\Services\LanguagesManager as SLM;
 use Splash\Local\Services\MultiShopManager as MSM;
 use Translate;

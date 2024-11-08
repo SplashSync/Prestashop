@@ -13,10 +13,10 @@
  *  file that was distributed with this source code.
  */
 
-namespace   Splash\Local\Objects\Order;
+namespace Splash\Local\Objects\Order;
 
 use DbQuery;
-use Splash\Core\SplashCore      as Splash;
+use Splash\Core\SplashCore as Splash;
 
 /**
  * Access to Order Objects Lists

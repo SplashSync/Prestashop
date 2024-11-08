@@ -17,7 +17,7 @@ namespace Splash\Local\Objects\ThirdParty;
 
 use Gender;
 use PrestaShopException;
-use Splash\Core\SplashCore      as Splash;
+use Splash\Core\SplashCore as Splash;
 use Splash\Local\Services\LanguagesManager;
 use Translate;
 use Validate;

@@ -19,7 +19,7 @@ use ArrayObject;
 use AttributeGroup;
 use Combination;
 use Product;
-use Splash\Core\SplashCore      as Splash;
+use Splash\Core\SplashCore as Splash;
 use Splash\Local\ClassAlias\PsProductAttribute as Attribute;
 use Splash\Local\Services\AttributesManager as Manager;
 use Splash\Local\Services\LanguagesManager as SLM;

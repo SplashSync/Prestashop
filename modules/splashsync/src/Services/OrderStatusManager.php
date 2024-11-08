@@ -18,7 +18,7 @@ namespace Splash\Local\Services;
 use Configuration;
 use Exception;
 use OrderState;
-use Splash\Client\Splash      as Splash;
+use Splash\Client\Splash as Splash;
 use Splash\Local\Services\LanguagesManager as SLM;
 use Splash\Models\Objects\Order\Status as SplashStatus;
 

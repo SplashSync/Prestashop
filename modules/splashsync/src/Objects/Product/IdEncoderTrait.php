@@ -15,7 +15,7 @@
 
 namespace Splash\Local\Objects\Product;
 
-use Splash\Core\SplashCore      as Splash;
+use Splash\Core\SplashCore as Splash;
 
 /**
  * Prestashop Product IDs Encoding/Decoding Functions

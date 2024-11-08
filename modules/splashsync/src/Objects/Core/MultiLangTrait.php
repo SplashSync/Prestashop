@@ -16,7 +16,7 @@
 namespace Splash\Local\Objects\Core;
 
 use Product;
-use Splash\Core\SplashCore      as Splash;
+use Splash\Core\SplashCore as Splash;
 use Tools;
 
 /**

@@ -21,10 +21,10 @@
 // *******************************************************************//
 //====================================================================//
 
-namespace   Splash\Local\Widgets;
+namespace Splash\Local\Widgets;
 
 use ArrayObject;
-use Splash\Core\SplashCore      as Splash;
+use Splash\Core\SplashCore as Splash;
 use Splash\Models\AbstractWidget;
 
 /**

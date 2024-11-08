@@ -16,7 +16,7 @@
 namespace Splash\Local\Objects\Core;
 
 use Order;
-use Splash\Client\Splash      as Splash;
+use Splash\Client\Splash as Splash;
 use Splash\Local\Services\OrderPdfManager;
 
 /**

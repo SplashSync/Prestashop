@@ -23,7 +23,7 @@ use Currency;
 use Order;
 use PrestaShopException;
 use Shop;
-use Splash\Core\SplashCore      as Splash;
+use Splash\Core\SplashCore as Splash;
 use Splash\Local\Services\DiscountsManager;
 use Splash\Local\Services\LanguagesManager as SLM;
 use Splash\Local\Services\MultiShopManager as MSM;

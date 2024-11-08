@@ -18,7 +18,7 @@ namespace Splash\Local\Services;
 use AttributeGroup;
 use Language;
 use PrestaShopException;
-use Splash\Core\SplashCore      as Splash;
+use Splash\Core\SplashCore as Splash;
 use Splash\Local\ClassAlias\PsProductAttribute as Attribute;
 use Splash\Local\Services\LanguagesManager as SLM;
 use Tools;

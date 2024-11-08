@@ -18,7 +18,7 @@ namespace Splash\Local\Objects\Product;
 use Pack;
 use PrestaShopException;
 use Shop;
-use Splash\Core\SplashCore      as Splash;
+use Splash\Core\SplashCore as Splash;
 use Splash\Local\Services\MultiShopManager as MSM;
 use StockAvailable;
 use Tools;

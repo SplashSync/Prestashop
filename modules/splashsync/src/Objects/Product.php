@@ -13,7 +13,7 @@
  *  file that was distributed with this source code.
  */
 
-namespace   Splash\Local\Objects;
+namespace Splash\Local\Objects;
 
 use Combination;
 use Configuration;
@@ -21,7 +21,7 @@ use Context;
 use Currency;
 use Product as psProduct;
 use Shop;
-use Splash\Core\SplashCore      as Splash;
+use Splash\Core\SplashCore as Splash;
 use Splash\Local\Local;
 use Splash\Models\AbstractObject;
 use Splash\Models\Objects\ListsTrait;

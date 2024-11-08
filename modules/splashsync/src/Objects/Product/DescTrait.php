@@ -18,7 +18,7 @@ namespace Splash\Local\Objects\Product;
 use Configuration;
 use Language;
 use Product;
-use Splash\Core\SplashCore      as Splash;
+use Splash\Core\SplashCore as Splash;
 use Splash\Local\Services\LanguagesManager;
 use Splash\Local\Services\MultiShopManager as MSM;
 use Translate;

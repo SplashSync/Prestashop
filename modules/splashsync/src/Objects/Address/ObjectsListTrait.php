@@ -13,12 +13,12 @@
  *  file that was distributed with this source code.
  */
 
-namespace   Splash\Local\Objects\Address;
+namespace Splash\Local\Objects\Address;
 
 //====================================================================//
 // Prestashop Static Classes
 use DbQuery;
-use Splash\Core\SplashCore      as Splash;
+use Splash\Core\SplashCore as Splash;
 use Splash\Local\Services\LanguagesManager;
 
 /**

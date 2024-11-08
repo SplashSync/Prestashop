@@ -16,7 +16,7 @@
 namespace Splash\Local\Objects\Product;
 
 use Combination;
-use Splash\Core\SplashCore      as Splash;
+use Splash\Core\SplashCore as Splash;
 use Splash\Local\Services\LanguagesManager;
 use Splash\Local\Services\TaxManager;
 use Splash\Models\Objects\PricesTrait as SplashPricesTrait;

@@ -13,13 +13,13 @@
  *  file that was distributed with this source code.
  */
 
-namespace   Splash\Local\Objects\Product;
+namespace Splash\Local\Objects\Product;
 
 use Configuration;
 use DbQuery;
 use Product;
 use Shop;
-use Splash\Core\SplashCore      as Splash;
+use Splash\Core\SplashCore as Splash;
 use Splash\Local\Services\LanguagesManager as SLM;
 use Splash\Local\Services\PmAdvancedPack;
 
