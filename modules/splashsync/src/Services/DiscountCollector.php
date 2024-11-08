@@ -189,11 +189,19 @@ class DiscountCollector
                 $taxRate = OrderDetail::getTaxCalculatorStatic($product['id_order_detail'])->getTotalRate();
                 //====================================================================//
                 // Amount Without taxes
-                $ratio = (float)$product['total_price_tax_excl'] / (float) $order->total_products;
-                $amontTaxExcl = (float)($freeShippingRule['value_tax_excl'] ?? 0) * $ratio;
+                if (!empty($order->total_products)) {
+                    $ratio = (float) $product['total_price_tax_excl'] / (float) $order->total_products;
+                } else {
+                    $ratio = 1.0;
+                }
+                $amontTaxExcl = (float) ($freeShippingRule['value_tax_excl'] ?? 0) * $ratio;
                 //====================================================================//
                 // Amount With taxes
-                $ratio = (float) $product['total_price_tax_incl'] / (float) $order->total_products_wt;
+                if (!empty($order->total_products)) {
+                    $ratio = (float) $product['total_price_tax_incl'] / (float) $order->total_products_wt;
+                } else {
+                    $ratio = 1.0;
+                }
                 $amontTaxIncl = (float) ($freeShippingRule['value'] ?? 0) * $ratio;
                 //====================================================================//
                 // Sum to Discounts
@@ -268,7 +276,7 @@ class DiscountCollector
                 //====================================================================//
                 // Amount Without taxes
                 if ($totalProductsDiscountedTaxExcl > 0) {
-                    $ratio = (float)$product['total_price_tax_excl'] / (float)$totalProductsDiscountedTaxExcl;
+                    $ratio = (float) $product['total_price_tax_excl'] / (float) $totalProductsDiscountedTaxExcl;
                 } else {
                     $ratio = 1;
                 }
@@ -276,11 +284,11 @@ class DiscountCollector
                 //====================================================================//
                 // Amount With taxes
                 if ($totalProductsDiscountedTaxIncl > 0) {
-                    $ratio = (float)$product['total_price_tax_incl'] / (float)$totalProductsDiscountedTaxIncl;
+                    $ratio = (float) $product['total_price_tax_incl'] / (float) $totalProductsDiscountedTaxIncl;
                 } else {
                     $ratio = 1;
                 }
-                $amontTaxIncl = (float)$totalDiscounts[$cartRuleId]['with_taxes'] * $ratio;
+                $amontTaxIncl = (float) $totalDiscounts[$cartRuleId]['with_taxes'] * $ratio;
                 //====================================================================//
                 // Sum to Discounts
                 self::addRawDiscountValue((int) $cartRuleId, $taxRate, $taxName, $amontTaxExcl, $amontTaxIncl);
