@@ -351,7 +351,7 @@ class DiscountCollector
                     $data[] = array(
                         'id_order' => $order->id,
                         'cart_rule_name' => $cartRuleName,
-                        'cart_rule_description' => $cartRule->description,
+                        'cart_rule_description' => Db::getInstance()->_escape($cartRule->description),
                         'tax_name' => $taxName,
                         'tax_rate' => $taxRate,
                         'amount' => $amounts['without_taxes'] ?? 0,
