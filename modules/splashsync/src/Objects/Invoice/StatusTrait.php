@@ -98,10 +98,9 @@ trait StatusTrait
             // INVOICE STATUS
             //====================================================================//
             case 'status':
-                $delta = $this->object->getTotalPaid() - $this->object->total_paid_tax_incl;
                 if (!$this->order->valid) {
                     $this->out[$fieldName] = "PaymentCanceled";
-                } elseif (($delta < 1E-6) || ($delta > 0)) {
+                } elseif ($this->isPaidInvoice()) {
                     $this->out[$fieldName] = "PaymentComplete";
                 } else {
                     $this->out[$fieldName] = "PaymentDue";
@@ -120,8 +119,7 @@ trait StatusTrait
 
                 break;
             case 'isPaid':
-                $delta = $this->object->getTotalPaid() - $this->object->total_paid_tax_incl;
-                $this->out[$fieldName] = (($delta < 1E-6) || ($delta > 0));
+                $this->out[$fieldName] = $this->isPaidInvoice();
 
                 break;
             default:
@@ -129,6 +127,18 @@ trait StatusTrait
         }
 
         unset($this->in[$key]);
+    }
+
+    /**
+     * Check if Invoice is Paid
+     *
+     * @return bool
+     */
+    private function isPaidInvoice(): bool
+    {
+        $delta = $this->object->getTotalPaid() - $this->object->total_paid_tax_incl;
+
+        return  ((abs($delta) < 1E-6) || ($delta > 0));
     }
 
     //====================================================================//
