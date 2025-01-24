@@ -37,7 +37,7 @@
     },
 
     "require-dev": {
-        "splash/console":                   "dev-master",
+        "splash/console":                   "^1.0",
         "badpixxel/php-sdk":                "~1.0"
     }
 }

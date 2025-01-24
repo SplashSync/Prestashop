@@ -49,6 +49,7 @@ class Address extends AbstractObject
     use Address\CoreTrait;
     use Address\MainTrait;
     use Address\OptionalTrait;
+    use Address\RelaisPointTrait;
 
     //====================================================================//
     // Object Definition Parameters

@@ -18,6 +18,7 @@ namespace Splash\Local\Objects\ThirdParty;
 //====================================================================//
 // Prestashop Static Classes
 use Splash\Local\Services\LanguagesManager;
+use Splash\Core\SplashCore as Splash;
 use Translate;
 
 /**
@@ -35,12 +36,13 @@ trait AddressesTrait
         //====================================================================//
         // Address List
         $this->fieldsFactory()->create((string) self::objects()->Encode("Address", SPL_T_ID))
-            ->Identifier("address")
-            ->InList("contacts")
-            ->Name(Translate::getAdminTranslation("Address", "AdminCustomers"))
-            ->MicroData("http://schema.org/Organization", "address")
-            ->Group(Translate::getAdminTranslation("Addresses", "AdminCustomers"))
-            ->isReadOnly();
+            ->identifier("address")
+            ->inList("contacts")
+            ->name(Translate::getAdminTranslation("Address", "AdminCustomers"))
+            ->microData("http://schema.org/Organization", "address")
+            ->group(Translate::getAdminTranslation("Addresses", "AdminCustomers"))
+            ->isReadOnly()
+        ;
     }
 
     /**
@@ -81,8 +83,10 @@ trait AddressesTrait
             $this->out["contacts"] = array();
         }
         //====================================================================//
-        // Read Address List
-        $addressList = $this->object->getAddresses(LanguagesManager::getDefaultLangId());
+        // Read Address List from Database (Also Collect Deleted Addresses)
+        $sql = 'SELECT DISTINCT a.* FROM `' . _DB_PREFIX_ . 'address` a 
+                    WHERE `id_customer` = ' . (int) $this->object->id;
+        $addressList = \Db::getInstance(_PS_USE_SQL_SLAVE_)->executeS($sql);
         //====================================================================//
         // If Address List Is Empty => Null
         if (empty($addressList)) {
