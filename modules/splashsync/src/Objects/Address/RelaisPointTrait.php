@@ -27,7 +27,7 @@ trait RelaisPointTrait
      *
      * @return void
      */
-    private function buildRelaisPointFields()
+    protected function buildRelaisPointFields()
     {
         //====================================================================//
         // Estimated Relay Point Code
@@ -47,7 +47,7 @@ trait RelaisPointTrait
      *
      * @return void
      */
-    private function getRelaisPointFields($key, $fieldName)
+    protected function getRelaisPointFields($key, $fieldName)
     {
         //====================================================================//
         // READ Fields
@@ -64,11 +64,10 @@ trait RelaisPointTrait
 
         unset($this->in[$key]);
     }
-
     /**
      * Check if Address is a Relay Point
      */
-    protected static function isRelayPoint(Address $address): bool
+    private static function isRelayPoint(Address $address): bool
     {
         //====================================================================//
         // MUST be a Deleted
