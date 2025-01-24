@@ -17,7 +17,7 @@ namespace Splash\Local\Objects\ThirdParty;
 
 //====================================================================//
 // Prestashop Static Classes
-use Splash\Local\Services\LanguagesManager;
+use Db;
 use Translate;
 
 /**
@@ -71,8 +71,6 @@ trait AddressesTrait
 
     /**
      * Read requested Field
-     *
-     * @return void
      */
     private function getAddressesList(): void
     {
@@ -82,8 +80,11 @@ trait AddressesTrait
             $this->out["contacts"] = array();
         }
         //====================================================================//
-        // Read Address List
-        $addressList = $this->object->getAddresses(LanguagesManager::getDefaultLangId());
+        // Read Address List from Database (Also Collect Deleted Addresses)
+        $sql = 'SELECT DISTINCT a.* FROM `'._DB_PREFIX_.'address` a 
+                    WHERE `id_customer` = '.(int) $this->object->id
+        ;
+        $addressList = Db::getInstance()->executeS($sql);
         //====================================================================//
         // If Address List Is Empty => Null
         if (empty($addressList)) {
