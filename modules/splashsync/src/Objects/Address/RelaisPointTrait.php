@@ -73,8 +73,12 @@ trait RelaisPointTrait
         //====================================================================//
         // Validate Code Format
         $code = $address->other;
-        if (empty($code) || !is_string($code) || strlen($code) > 12) {
+        if (empty($code) || !is_string($code) || strlen($code) > 24) {
             return false;
+        }
+        // Take Care of GLS Formats
+        if (0 == strpos("GLS_", $code)) {
+            $code = str_replace(array("_", "-"), "", $code);
         }
         if (!preg_match("/^[a-zA-Z0-9]+$/", $code)) {
             return false;
