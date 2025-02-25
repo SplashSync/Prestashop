@@ -55,7 +55,10 @@ trait RelaisPointTrait
             //====================================================================//
             // Direct Readings
             case 'relay_point_code':
-                $this->out[$fieldName] = self::isRelayPoint($this->object) ? $this->object->other : null;
+                $this->out[$fieldName] = self::isRelayPoint($this->object)
+                    ? self::filterRelayPointCode($this->object)
+                    : null
+                ;
 
                 break;
             default:
@@ -64,6 +67,7 @@ trait RelaisPointTrait
 
         unset($this->in[$key]);
     }
+
     /**
      * Check if Address is a Relay Point
      */
@@ -76,8 +80,8 @@ trait RelaisPointTrait
         }
         //====================================================================//
         // Validate Code Format
-        $code = $address->other;
-        if (empty($code) || !is_string($code) || strlen($code) > 12) {
+        $code = self::filterRelayPointCode($address);
+        if (empty($code)) {
             return false;
         }
         if (!preg_match("/^[a-zA-Z0-9]+$/", $code)) {
@@ -86,4 +90,28 @@ trait RelaisPointTrait
 
         return true;
     }
+
+    /**
+     * Filter Relay Point Code
+     */
+    private static function filterRelayPointCode(Address $address): string
+    {
+        //====================================================================//
+        // Validate Code Format
+        $code = $address->other;
+        if (empty($code) || !is_string($code)) {
+            return "";
+        }
+        //====================================================================//
+        // Take Care of GLS Formats
+        if (0 == strpos("GLS_", $code)) {
+            $parts = explode("-", $code);
+            if (is_array($parts) && count($parts) == 2) {
+                $code = $parts[1];
+            }
+        }
+
+        return $code;
+    }
+
 }
