@@ -17,6 +17,7 @@ namespace Splash\Local\Objects\ThirdParty;
 
 //====================================================================//
 // Prestashop Static Classes
+use Db;
 use Translate;
 
 /**
@@ -84,7 +85,7 @@ trait AddressesTrait
         // Read Address List from Database (Also Collect Deleted Addresses)
         $sql = 'SELECT DISTINCT a.* FROM `'._DB_PREFIX_.'address` a 
                     WHERE `id_customer` = '.(int) $this->object->id;
-        $addressList = \Db::getInstance(_PS_USE_SQL_SLAVE_)->executeS($sql);
+        $addressList = Db::getInstance()->executeS($sql);
         //====================================================================//
         // If Address List Is Empty => Null
         if (empty($addressList)) {
