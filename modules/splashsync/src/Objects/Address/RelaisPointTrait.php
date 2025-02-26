@@ -113,5 +113,4 @@ trait RelaisPointTrait
 
         return $code;
     }
-
 }
