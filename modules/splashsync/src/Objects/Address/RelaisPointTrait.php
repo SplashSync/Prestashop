@@ -106,7 +106,7 @@ trait RelaisPointTrait
         // Take Care of GLS Formats
         if (0 == strpos("GLS_", $code)) {
             $parts = explode("-", $code);
-            if (is_array($parts) && count($parts) == 2) {
+            if (is_array($parts) && 2 == count($parts)) {
                 $code = $parts[1];
             }
         }
