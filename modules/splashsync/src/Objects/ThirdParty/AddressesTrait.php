@@ -88,7 +88,7 @@ trait AddressesTrait
         $addressList = Db::getInstance()->executeS($sql);
         //====================================================================//
         // If Address List Is Empty => Null
-        if (empty($addressList)) {
+        if (empty($addressList) || !is_iterable($addressList)) {
             return;
         }
         //====================================================================//
