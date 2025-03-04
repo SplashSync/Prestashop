@@ -202,22 +202,22 @@ services:
     ################################################################################
     # Splash Toolkit Container   
     toolkit:
-        image: 'splashsync/toolkit'
-        container_name: toolkit.prestashop.local
+        image:              'splashsync/toolkit'
+        container_name:     toolkit.prestashop.local
+        hostname:           toolkit.prestashop.local
         volumes:
             # Specify Local Configuration File
-            - './docker/toolkit/splash.yml:/app/config/packages/splash.yml:ro'
-        hostname:           toolkit.wordpress.local
+            - './docker/toolkit/splash.yaml:/app/config/packages/splash.yaml:ro'
         networks:
-            prestashop:      { ipv4_address: 172.102.0.100, aliases: [ toolkit.prestashop.local ] }
+            prestashop:     { ipv4_address: 172.102.0.100, aliases: [ toolkit.prestashop.local ] }
             splashsync:     { aliases: [ toolkit.prestashop.local ] }
 
     ################################################################################
     # PhpMyAdmin Container
     phpmyadmin:
-        image: phpmyadmin/phpmyadmin:5
-        container_name: phpmyadmin.prestashop.local
-        logging: { driver: "none" }
+        image:              phpmyadmin/phpmyadmin:5
+        container_name:     phpmyadmin.prestashop.local
+        logging:            { driver: "none" }
         depends_on:
             - mysql
         environment:
