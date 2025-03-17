@@ -196,17 +196,34 @@ trait MainTrait
             case 'height':
             case 'depth':
             case 'width':
-                $this->getDimField($fieldName);
+                //====================================================================//
+                // Get Conversion Factor
+                $factor = $this->getLengthConverterFactor();
+                //====================================================================//
+                //  Read Field Data
+                $this->out[$fieldName] = self::units()->normalizeLength((float) $this->object->{ $fieldName }, $factor);
 
                 break;
             case 'surface':
-                $this->out[$fieldName] = (float) $this->object->depth * (float) $this->object->width;
+                //====================================================================//
+                // Get Conversion Factor
+                $factor = $this->getLengthConverterFactor();
+                //====================================================================//
+                // Get Surface with Unit Conversion
+                $this->out[$fieldName] = self::units()->normalizeLength((float) $this->object->depth, $factor)
+                        * self::units()->normalizeLength((float) $this->object->width, $factor)
+                ;
 
                 break;
             case 'volume':
-                $this->out[$fieldName] = (float) $this->object->height
-                    * (float) $this->object->depth
-                    * (float) $this->object->width
+                //====================================================================//
+                // Get Conversion Factor
+                $factor = $this->getLengthConverterFactor();
+                //====================================================================//
+                // Get Volume with Unit Conversion
+                $this->out[$fieldName] = self::units()->normalizeLength((float) $this->object->height, $factor)
+                    * self::units()->normalizeLength((float) $this->object->depth, $factor)
+                    * self::units()->normalizeLength((float) $this->object->width, $factor)
                 ;
 
                 break;
@@ -353,31 +370,6 @@ trait MainTrait
     }
 
     /**
-     * Read Dimension Field with Unit Conversion
-     *
-     * @param string $fieldName Field Identifier / Name
-     *
-     * @return void
-     */
-    private function getDimField(string $fieldName): void
-    {
-        //====================================================================//
-        //  Load System Dimension Unit
-        $dimUnit = Configuration::get('PS_DIMENSION_UNIT');
-        //====================================================================//
-        //  Read Field Data
-        $realData = $this->object->{ $fieldName };
-        //====================================================================//
-        //  Convert Current Value
-        if (isset(self::$psDims[$dimUnit])) {
-            $realData = self::units()->normalizeLength((float) $realData, self::$psDims[$dimUnit]);
-        }
-        //====================================================================//
-        //  return Normalized Value
-        $this->out[$fieldName] = $realData;
-    }
-
-    /**
      * Write Dimension Field with Unit Conversion
      *
      * @param string      $fieldName Field Identifier / Name
@@ -399,5 +391,19 @@ trait MainTrait
         //  Write Converted Value
         $this->setSimpleFloat($fieldName, $fieldData);
         $this->addMsfUpdateFields("Product", $fieldName);
+    }
+
+    /**
+     * Load Unit Length Conversion Factor from Configuration
+     */
+    private function getLengthConverterFactor(): float
+    {
+        //====================================================================//
+        //  Load System Dimension Unit
+        $dimUnit = Configuration::get('PS_DIMENSION_UNIT');
+
+        //====================================================================//
+        //  Get Conversion Factor
+        return self::$psDims[$dimUnit] ?? 1;
     }
 }
