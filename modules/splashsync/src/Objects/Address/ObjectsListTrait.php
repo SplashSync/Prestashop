@@ -1,6 +1,5 @@
 <?php
-
-/*
+/**
  *  This file is part of SplashSync Project.
  *
  *  Copyright (C) Splash Sync  <www.splashsync.com>
@@ -11,20 +10,28 @@
  *
  *  For the full copyright and license information, please view the LICENSE
  *  file that was distributed with this source code.
+ *
+ * @author Splash Sync
+ *
+ * @copyright Splash Sync SAS
+ *
+ * @license MIT
  */
 
 namespace Splash\Local\Objects\Address;
 
-//====================================================================//
-// Prestashop Static Classes
 use DbQuery;
 use Splash\Core\SplashCore as Splash;
 use Splash\Local\Services\LanguagesManager;
 
+// phpcs:disable PSR1.Files.SideEffects
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+// phpcs:enable PSR1.Files.SideEffects
+
 /**
- * Acces to Address Objects Lists
- *
- * @author      B. Paquier <contact@splashsync.com>
+ * Access to Address Objects Lists
  */
 trait ObjectsListTrait
 {
