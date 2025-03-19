@@ -12,9 +12,7 @@
  *  file that was distributed with this source code.
  *
  * @author Splash Sync
- *
  * @copyright Splash Sync SAS
- *
  * @license MIT
  */
 
@@ -36,14 +34,14 @@ class StockOnlyConfigurator extends StaticConfigurator
      *
      * @var array
      */
-    protected static $writableFields = array("ref", "stock");
+    protected static $writableFields = array('ref', 'stock');
 
     /**
      * {@inheritdoc}
      */
     public static function getName(): string
     {
-        return "Stock Only: @Products, Only Skus & Stocks are Writable";
+        return 'Stock Only: @Products, Only Skus & Stocks are Writable';
     }
 
     /**
@@ -54,7 +52,7 @@ class StockOnlyConfigurator extends StaticConfigurator
         Splash::log()->trace();
         //====================================================================//
         // Check if Configuration is Empty
-        if ("Product" != $objectType) {
+        if ('Product' != $objectType) {
             return $fields;
         }
         //====================================================================//
@@ -62,12 +60,12 @@ class StockOnlyConfigurator extends StaticConfigurator
         foreach ($fields as $index => $field) {
             //====================================================================//
             // Check if Field Shall be Written
-            if (in_array($field["id"], self::$writableFields, true)) {
+            if (in_array($field['id'], self::$writableFields, true)) {
                 continue;
             }
             //====================================================================//
             // Update Field Definition
-            $fields[$index] = self::updateField($field, array("write" => "0"));
+            $fields[$index] = self::updateField($field, array('write' => '0'));
         }
 
         return $fields;

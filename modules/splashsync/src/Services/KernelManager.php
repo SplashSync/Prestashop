@@ -12,9 +12,7 @@
  *  file that was distributed with this source code.
  *
  * @author Splash Sync
- *
  * @copyright Splash Sync SAS
- *
  * @license MIT
  */
 
@@ -45,14 +43,14 @@ class KernelManager
         global $kernel;
         //====================================================================//
         // Only for PrestaShop > 1.7 => Load Vendor Dir
-        $autoload = __DIR__.'/../../../../vendor/autoload.php';
+        $autoload = __DIR__ . '/../../../../vendor/autoload.php';
         if (file_exists($autoload)) {
             require_once $autoload;
         }
         //====================================================================//
         // Only for PrestaShop > 1.7 => Load Vendor Dir
-        if (class_exists("AppKernel") && empty($kernel)) {
-            $kernel = new AppKernel("prod", false);
+        if (class_exists('AppKernel') && empty($kernel)) {
+            $kernel = new AppKernel('prod', false);
             $kernel->boot();
         }
     }

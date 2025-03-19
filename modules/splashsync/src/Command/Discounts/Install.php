@@ -12,9 +12,7 @@
  *  file that was distributed with this source code.
  *
  * @author Splash Sync
- *
  * @copyright Splash Sync SAS
- *
  * @license MIT
  */
 
@@ -44,7 +42,7 @@ class Install extends Command
     {
         $this
             ->setName('splash:discount-collector:install')
-            ->setDescription("Check install of Advanced Discounts Collector")
+            ->setDescription('Check install of Advanced Discounts Collector')
             ->addOption(
                 'create',
                 null,
@@ -64,7 +62,7 @@ class Install extends Command
         $this->displayResult(
             $output,
             DiscountsManager::hasStorageTable(),
-            "Storage Table Exists"
+            'Storage Table Exists'
         );
         //====================================================================//
         // Check if Parser Table needs to be created
@@ -72,7 +70,7 @@ class Install extends Command
             $this->displayResult(
                 $output,
                 DiscountsManager::createStorageTable(),
-                "Storage Table Created"
+                'Storage Table Created'
             );
         }
         //====================================================================//
@@ -80,7 +78,7 @@ class Install extends Command
         $this->displayResult(
             $output,
             DiscountsManager::isFeatureActive(),
-            "Discount Parser is Enabled"
+            'Discount Parser is Enabled'
         );
         if (!DiscountsManager::isFeatureActive()) {
             return 1;

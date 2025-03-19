@@ -12,9 +12,7 @@
  *  file that was distributed with this source code.
  *
  * @author Splash Sync
- *
  * @copyright Splash Sync SAS
- *
  * @license MIT
  */
 
@@ -38,12 +36,12 @@ use Splash\Tests\Tools\ObjectsCase;
 class L05AdvancedDiscountsTest extends ObjectsCase
 {
     const LINES_FIELDS = array(
-        "product_name@lines",
-        "product_id@lines",
-        "product_quantity@lines",
-        "reduction_percent@lines",
-        "unit_price@lines",
-        "tax_name@lines",
+        'product_name@lines',
+        'product_id@lines',
+        'product_quantity@lines',
+        'reduction_percent@lines',
+        'unit_price@lines',
+        'tax_name@lines',
     );
 
     /**
@@ -56,7 +54,7 @@ class L05AdvancedDiscountsTest extends ObjectsCase
         Splash::configuration()->PsUseAdvancedDiscounts = true;
         //====================================================================//
         // Force Delete Storage Table
-        Db::getInstance()->execute("DROP TABLE IF EXISTS `"._DB_PREFIX_.DiscountsManager::TABLE."`");
+        Db::getInstance()->execute('DROP TABLE IF EXISTS `' . _DB_PREFIX_ . DiscountsManager::TABLE . '`');
         $this->assertFalse(DiscountsManager::hasStorageTable());
         $this->assertFalse(DiscountsManager::isFeatureActive());
         //====================================================================//
@@ -88,7 +86,7 @@ class L05AdvancedDiscountsTest extends ObjectsCase
         $psOrder = $this->createAnOrder();
         //====================================================================//
         //   Read Splash Order
-        $orderData = Splash::object("Order")->get((string) $psOrder->id, self::LINES_FIELDS);
+        $orderData = Splash::object('Order')->get((string) $psOrder->id, self::LINES_FIELDS);
         $this->assertIsArray($orderData);
         $this->assertEmpty($this->extractDiscountLines($orderData));
     }
@@ -119,17 +117,17 @@ class L05AdvancedDiscountsTest extends ObjectsCase
 
         //====================================================================//
         //   Read Splash Order
-        $orderData = Splash::object("Order")->get((string) $psOrder->id, self::LINES_FIELDS);
+        $orderData = Splash::object('Order')->get((string) $psOrder->id, self::LINES_FIELDS);
         //====================================================================//
         //   Verify Splash Order Discounts
         $this->assertIsArray($orderData);
         $discountLines = $this->extractDiscountLines($orderData);
         $this->assertNotEmpty($discountLines);
         $this->assertCount(1, $discountLines);
-        $this->assertEmpty($discountLines[0]["product_id"]);
-        $this->assertEquals(1, $discountLines[0]["product_quantity"]);
-        $this->assertEquals(20, $discountLines[0]["unit_price"]["vat"]);
-        $this->assertEquals(-10, $discountLines[0]["unit_price"]["ht"]);
+        $this->assertEmpty($discountLines[0]['product_id']);
+        $this->assertEquals(1, $discountLines[0]['product_quantity']);
+        $this->assertEquals(20, $discountLines[0]['unit_price']['vat']);
+        $this->assertEquals(-10, $discountLines[0]['unit_price']['ht']);
     }
 
     /**
@@ -158,27 +156,27 @@ class L05AdvancedDiscountsTest extends ObjectsCase
         //====================================================================//
         //   Setup Ps Order Advanced Discount
         Db::getInstance()->insert(DiscountsManager::TABLE, array(
-            "id_order" => $psOrder->id,
-            "cart_rule_name" => "Text Cart Rule",
-            "cart_rule_description" => "Text Cart Rule Description",
-            "tax_name" => "TVA FR 20",
-            "tax_rate" => 20,
-            "amount" => 10,
-            "amount_wt" => 12,
+            'id_order' => $psOrder->id,
+            'cart_rule_name' => 'Text Cart Rule',
+            'cart_rule_description' => 'Text Cart Rule Description',
+            'tax_name' => 'TVA FR 20',
+            'tax_rate' => 20,
+            'amount' => 10,
+            'amount_wt' => 12,
         ));
         Db::getInstance()->insert(DiscountsManager::TABLE, array(
-            "id_order" => $psOrder->id,
-            "cart_rule_name" => "Text Cart Rule",
-            "cart_rule_description" => "Text Cart Rule Description",
-            "tax_name" => "TVA FR 10",
-            "tax_rate" => 10,
-            "amount" => 10,
-            "amount_wt" => 11,
+            'id_order' => $psOrder->id,
+            'cart_rule_name' => 'Text Cart Rule',
+            'cart_rule_description' => 'Text Cart Rule Description',
+            'tax_name' => 'TVA FR 10',
+            'tax_rate' => 10,
+            'amount' => 10,
+            'amount_wt' => 11,
         ));
 
         //====================================================================//
         //   Read Splash Order
-        $orderData = Splash::object("Order")->get((string) $psOrder->id, self::LINES_FIELDS);
+        $orderData = Splash::object('Order')->get((string) $psOrder->id, self::LINES_FIELDS);
         //====================================================================//
         //   Verify Splash Order Discounts
         $this->assertIsArray($orderData);
@@ -186,17 +184,17 @@ class L05AdvancedDiscountsTest extends ObjectsCase
         $this->assertNotEmpty($discountLines);
         $this->assertCount(2, $discountLines);
         // Verify First Discount Line
-        $this->assertEmpty($discountLines[0]["product_id"]);
-        $this->assertEquals(1, $discountLines[0]["product_quantity"]);
-        $this->assertEquals("TVA FR 20", $discountLines[0]["tax_name"]);
-        $this->assertEquals(20, $discountLines[0]["unit_price"]["vat"]);
-        $this->assertEquals(-10, $discountLines[0]["unit_price"]["ht"]);
+        $this->assertEmpty($discountLines[0]['product_id']);
+        $this->assertEquals(1, $discountLines[0]['product_quantity']);
+        $this->assertEquals('TVA FR 20', $discountLines[0]['tax_name']);
+        $this->assertEquals(20, $discountLines[0]['unit_price']['vat']);
+        $this->assertEquals(-10, $discountLines[0]['unit_price']['ht']);
         // Verify Second Discount Line
-        $this->assertEmpty($discountLines[1]["product_id"]);
-        $this->assertEquals(1, $discountLines[1]["product_quantity"]);
-        $this->assertEquals("TVA FR 10", $discountLines[1]["tax_name"]);
-        $this->assertEquals(10, $discountLines[1]["unit_price"]["vat"]);
-        $this->assertEquals(-10, $discountLines[1]["unit_price"]["ht"]);
+        $this->assertEmpty($discountLines[1]['product_id']);
+        $this->assertEquals(1, $discountLines[1]['product_quantity']);
+        $this->assertEquals('TVA FR 10', $discountLines[1]['tax_name']);
+        $this->assertEquals(10, $discountLines[1]['unit_price']['vat']);
+        $this->assertEquals(-10, $discountLines[1]['unit_price']['ht']);
 
         //====================================================================//
         // Disable feature
@@ -205,14 +203,14 @@ class L05AdvancedDiscountsTest extends ObjectsCase
 
         //====================================================================//
         //   Read Splash Order
-        $orderDataCore = Splash::object("Order")->get((string) $psOrder->id, self::LINES_FIELDS);
+        $orderDataCore = Splash::object('Order')->get((string) $psOrder->id, self::LINES_FIELDS);
         //====================================================================//
         //   Verify Splash Order Discounts
         $this->assertIsArray($orderDataCore);
         $discountLinesCore = $this->extractDiscountLines($orderDataCore);
         $this->assertNotEmpty($discountLinesCore);
         $this->assertCount(1, $discountLinesCore);
-        $this->assertEquals(-20, $discountLinesCore[0]["unit_price"]["ht"]);
+        $this->assertEquals(-20, $discountLinesCore[0]['unit_price']['ht']);
     }
 
     /**
@@ -245,17 +243,17 @@ class L05AdvancedDiscountsTest extends ObjectsCase
         $this->assertInstanceOf(OrderInvoice::class, $psInvoice);
         //====================================================================//
         //   Read Splash Invoice
-        $invoiceData = Splash::object("Invoice")->get((string) $psInvoice->id, self::LINES_FIELDS);
+        $invoiceData = Splash::object('Invoice')->get((string) $psInvoice->id, self::LINES_FIELDS);
         //====================================================================//
         //   Verify Splash Invoice Discounts
         $this->assertIsArray($invoiceData);
         $discountLines = $this->extractDiscountLines($invoiceData);
         $this->assertNotEmpty($discountLines);
         $this->assertCount(1, $discountLines);
-        $this->assertEmpty($discountLines[0]["product_id"]);
-        $this->assertEquals(1, $discountLines[0]["product_quantity"]);
-        $this->assertEquals(20, $discountLines[0]["unit_price"]["vat"]);
-        $this->assertEquals(-10, $discountLines[0]["unit_price"]["ht"]);
+        $this->assertEmpty($discountLines[0]['product_id']);
+        $this->assertEquals(1, $discountLines[0]['product_quantity']);
+        $this->assertEquals(20, $discountLines[0]['unit_price']['vat']);
+        $this->assertEquals(-10, $discountLines[0]['unit_price']['ht']);
     }
 
     /**
@@ -284,22 +282,22 @@ class L05AdvancedDiscountsTest extends ObjectsCase
         //====================================================================//
         //   Setup Ps Order Advanced Discount
         Db::getInstance()->insert(DiscountsManager::TABLE, array(
-            "id_order" => $psOrder->id,
-            "cart_rule_name" => "Text Cart Rule",
-            "cart_rule_description" => "Text Cart Rule Description",
-            "tax_name" => "TVA FR 20",
-            "tax_rate" => 20,
-            "amount" => 33,
-            "amount_wt" => 39.6,
+            'id_order' => $psOrder->id,
+            'cart_rule_name' => 'Text Cart Rule',
+            'cart_rule_description' => 'Text Cart Rule Description',
+            'tax_name' => 'TVA FR 20',
+            'tax_rate' => 20,
+            'amount' => 33,
+            'amount_wt' => 39.6,
         ));
         Db::getInstance()->insert(DiscountsManager::TABLE, array(
-            "id_order" => $psOrder->id,
-            "cart_rule_name" => "Text Cart Rule",
-            "cart_rule_description" => "Text Cart Rule Description",
-            "tax_name" => "TVA FR 10",
-            "tax_rate" => 10,
-            "amount" => 69,
-            "amount_wt" => 75.9,
+            'id_order' => $psOrder->id,
+            'cart_rule_name' => 'Text Cart Rule',
+            'cart_rule_description' => 'Text Cart Rule Description',
+            'tax_name' => 'TVA FR 10',
+            'tax_rate' => 10,
+            'amount' => 69,
+            'amount_wt' => 75.9,
         ));
         //====================================================================//
         //   Set Order State to Delivered
@@ -312,7 +310,7 @@ class L05AdvancedDiscountsTest extends ObjectsCase
 
         //====================================================================//
         //   Read Splash Invoice
-        $invoiceData = Splash::object("Invoice")->get((string) $psInvoice->id, self::LINES_FIELDS);
+        $invoiceData = Splash::object('Invoice')->get((string) $psInvoice->id, self::LINES_FIELDS);
         //====================================================================//
         //   Verify Splash Order Discounts
         $this->assertIsArray($invoiceData);
@@ -320,17 +318,17 @@ class L05AdvancedDiscountsTest extends ObjectsCase
         $this->assertNotEmpty($discountLines);
         $this->assertCount(2, $discountLines);
         // Verify First Discount Line
-        $this->assertEmpty($discountLines[0]["product_id"]);
-        $this->assertEquals(1, $discountLines[0]["product_quantity"]);
-        $this->assertEquals("TVA FR 20", $discountLines[0]["tax_name"]);
-        $this->assertEquals(20, $discountLines[0]["unit_price"]["vat"]);
-        $this->assertEquals(-33, $discountLines[0]["unit_price"]["ht"]);
+        $this->assertEmpty($discountLines[0]['product_id']);
+        $this->assertEquals(1, $discountLines[0]['product_quantity']);
+        $this->assertEquals('TVA FR 20', $discountLines[0]['tax_name']);
+        $this->assertEquals(20, $discountLines[0]['unit_price']['vat']);
+        $this->assertEquals(-33, $discountLines[0]['unit_price']['ht']);
         // Verify Second Discount Line
-        $this->assertEmpty($discountLines[1]["product_id"]);
-        $this->assertEquals(1, $discountLines[1]["product_quantity"]);
-        $this->assertEquals("TVA FR 10", $discountLines[1]["tax_name"]);
-        $this->assertEquals(10, $discountLines[1]["unit_price"]["vat"]);
-        $this->assertEquals(-69, $discountLines[1]["unit_price"]["ht"]);
+        $this->assertEmpty($discountLines[1]['product_id']);
+        $this->assertEquals(1, $discountLines[1]['product_quantity']);
+        $this->assertEquals('TVA FR 10', $discountLines[1]['tax_name']);
+        $this->assertEquals(10, $discountLines[1]['unit_price']['vat']);
+        $this->assertEquals(-69, $discountLines[1]['unit_price']['ht']);
 
         //====================================================================//
         // Disable feature
@@ -339,14 +337,14 @@ class L05AdvancedDiscountsTest extends ObjectsCase
 
         //====================================================================//
         //   Read Splash $psInvoice
-        $invoiceDataCore = Splash::object("Invoice")->get((string) $psInvoice->id, self::LINES_FIELDS);
+        $invoiceDataCore = Splash::object('Invoice')->get((string) $psInvoice->id, self::LINES_FIELDS);
         //====================================================================//
         //   Verify Splash Order Discounts
         $this->assertIsArray($invoiceDataCore);
         $discountLinesCore = $this->extractDiscountLines($invoiceDataCore);
         $this->assertNotEmpty($discountLinesCore);
         $this->assertCount(1, $discountLinesCore);
-        $this->assertEquals(-102, $discountLinesCore[0]["unit_price"]["ht"]);
+        $this->assertEquals(-102, $discountLinesCore[0]['unit_price']['ht']);
     }
 
     /**
@@ -367,15 +365,15 @@ class L05AdvancedDiscountsTest extends ObjectsCase
         }
         //====================================================================//
         //   Create Fake Order Data
-        $this->fields = $this->fakeFieldsList("Order", array("product_id@lines"), true);
+        $this->fields = $this->fakeFieldsList('Order', array('product_id@lines'), true);
         $fakeData = $this->fakeObjectData($this->fields);
         //====================================================================//
         //   Execute Action Directly on Module
-        $objectId = Splash::object("Order")->set(null, $fakeData);
+        $objectId = Splash::object('Order')->set(null, $fakeData);
         $this->assertIsString($objectId);
         //====================================================================//
         //   Load Order Object
-        $splashOrder = Splash::object("Order");
+        $splashOrder = Splash::object('Order');
         $this->assertInstanceOf(SplashOrder::class, $splashOrder);
         $psOrder = $splashOrder->load($objectId);
         $this->assertNotEmpty($psOrder);
@@ -391,13 +389,13 @@ class L05AdvancedDiscountsTest extends ObjectsCase
      */
     private function extractDiscountLines(array $orderData): array
     {
-        $this->assertArrayHasKey("lines", $orderData);
-        $discountsDesc = Local::getLocalModule()->l("Discount");
+        $this->assertArrayHasKey('lines', $orderData);
+        $discountsDesc = Local::getLocalModule()->l('Discount');
         $discounts = array();
 
-        foreach ($orderData["lines"] as $itemLine) {
-            $this->assertArrayHasKey("product_name", $itemLine);
-            if ($itemLine["product_name"] == $discountsDesc) {
+        foreach ($orderData['lines'] as $itemLine) {
+            $this->assertArrayHasKey('product_name', $itemLine);
+            if ($itemLine['product_name'] == $discountsDesc) {
                 $discounts[] = $itemLine;
             }
         }

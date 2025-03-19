@@ -12,9 +12,7 @@
  *  file that was distributed with this source code.
  *
  * @author Splash Sync
- *
  * @copyright Splash Sync SAS
- *
  * @license MIT
  */
 
@@ -73,21 +71,21 @@ class Address extends AbstractObject
      *
      * @var string
      */
-    protected static string $name = "Address";
+    protected static string $name = 'Address';
 
     /**
      * Object Description (Translated by Module)
      *
      * @var string
      */
-    protected static string $description = "Prestashop Customers Address Object";
+    protected static string $description = 'Prestashop Customers Address Object';
 
     /**
      * Object Icon (FontAwesome or Glyph ico tag)
      *
      * @var string
      */
-    protected static string $ico = "fa fa-envelope-o";
+    protected static string $ico = 'fa fa-envelope-o';
 
     //====================================================================//
     // Object Synchronization Recommended Configuration
@@ -120,7 +118,7 @@ class Address extends AbstractObject
     {
         //====================================================================//
         //  Load Local Translation File
-        Splash::translator()->load("objects@local");
+        Splash::translator()->load('objects@local');
 
         //====================================================================//
         // Load Splash Module

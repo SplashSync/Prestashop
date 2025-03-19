@@ -12,9 +12,7 @@
  *  file that was distributed with this source code.
  *
  * @author Splash Sync
- *
  * @copyright Splash Sync SAS
- *
  * @license MIT
  */
 
@@ -68,36 +66,36 @@ class Local implements LocalClassInterface
 
         //====================================================================//
         // Server Identification Parameters
-        $parameters["WsIdentifier"] = Configuration::get('SPLASH_WS_ID');
-        $parameters["WsEncryptionKey"] = Configuration::get('SPLASH_WS_KEY');
+        $parameters['WsIdentifier'] = Configuration::get('SPLASH_WS_ID');
+        $parameters['WsEncryptionKey'] = Configuration::get('SPLASH_WS_KEY');
         //====================================================================//
         // If Expert Mode => Allow Overide of Communication Protocol
         if ((Configuration::get('SPLASH_WS_EXPERT')) && !empty(Configuration::get('SPLASH_WS_METHOD'))) {
-            $parameters["WsMethod"] = Configuration::get('SPLASH_WS_METHOD');
+            $parameters['WsMethod'] = Configuration::get('SPLASH_WS_METHOD');
         }
         //====================================================================//
         // If Expert Mode => Allow Override of Server Host Address
         if ((Configuration::get('SPLASH_WS_EXPERT')) && !empty(Configuration::get('SPLASH_WS_HOST'))) {
-            $parameters["WsHost"] = Configuration::get('SPLASH_WS_HOST');
+            $parameters['WsHost'] = Configuration::get('SPLASH_WS_HOST');
         }
         //====================================================================//
         // Smart Notifications
-        $parameters["SmartNotify"] = (bool) Configuration::get("SPLASH_SMART_NOTIFY");
+        $parameters['SmartNotify'] = (bool) Configuration::get('SPLASH_SMART_NOTIFY');
         //====================================================================//
         // Setup Custom Json Configuration Path to (../config/splash.json)
-        $parameters["ConfiguratorPath"] = $this->getHomeFolder()."/config/splash.json";
+        $parameters['ConfiguratorPath'] = $this->getHomeFolder() . '/config/splash.json';
         //====================================================================//
         // Setup Extensions Path
-        $parameters["ExtensionsPath"] = array(
-            $this->getHomeFolder()."/modules/splashsyncadvancepack/src",
-            $this->getHomeFolder()."/modules/splash-extensions",
+        $parameters['ExtensionsPath'] = array(
+            $this->getHomeFolder() . '/modules/splashsyncadvancepack/src',
+            $this->getHomeFolder() . '/modules/splash-extensions',
         );
         //====================================================================//
         // Override Module Parameters with Local User Selected Default Lang
-        $parameters["DefaultLanguage"] = SLM::getDefaultLanguage();
+        $parameters['DefaultLanguage'] = SLM::getDefaultLanguage();
         //====================================================================//
         // Override Module Local Name in Logs
-        $parameters["localname"] = Configuration::get('PS_SHOP_NAME');
+        $parameters['localname'] = Configuration::get('PS_SHOP_NAME');
 
         return $parameters;
     }
@@ -127,11 +125,11 @@ class Local implements LocalClassInterface
             if ($home) {
                 //====================================================================//
                 // Prestashop Main Includes
-                require_once($home.'/config/config.inc.php');
+                require_once($home . '/config/config.inc.php');
 
                 //====================================================================//
                 // Splash Module Class Includes
-                require_once($home.'/modules/splashsync/splashsync.php');
+                require_once($home . '/modules/splashsync/splashsync.php');
             }
             //====================================================================//
             // Override Product Definition for Compatibility with PS 1.7
@@ -153,7 +151,7 @@ class Local implements LocalClassInterface
         //====================================================================//
         // When Library is called in TRAVIS CI mode ONLY
         //====================================================================//
-        if (!empty(Splash::input("SPLASH_TRAVIS"))) {
+        if (!empty(Splash::input('SPLASH_TRAVIS'))) {
             $this->onTravisIncludes();
         }
 
@@ -168,33 +166,33 @@ class Local implements LocalClassInterface
         //====================================================================//
         // Safety Check => PHP Min Version
         if (PHP_VERSION < 7.4) {
-            return Splash::log()->err("Splash Module for Prestashop require at least PHP 7.1");
+            return Splash::log()->err('Splash Module for Prestashop require at least PHP 7.1');
         }
         //====================================================================//
         //  Load Local Translation File
-        Splash::translator()->load("main@local");
+        Splash::translator()->load('main@local');
         //====================================================================//
         //  Verify - Server Identifier Given
         if (empty(Configuration::get('SPLASH_WS_ID'))) {
-            return Splash::log()->err("ErrSelfTestNoWsId");
+            return Splash::log()->err('ErrSelfTestNoWsId');
         }
         //====================================================================//
         //  Verify - Server Encrypt Key Given
         if (empty(Configuration::get('SPLASH_WS_KEY'))) {
-            return Splash::log()->err("ErrSelfTestNoWsKey");
+            return Splash::log()->err('ErrSelfTestNoWsKey');
         }
         //====================================================================//
         //  Verify - User Selected
         if (empty(Configuration::get('SPLASH_USER_ID'))) {
-            return Splash::log()->err("ErrSelfTestNoUser");
+            return Splash::log()->err('ErrSelfTestNoUser');
         }
         //====================================================================//
         //  Verify - Languages Codes Are in Valid Format
         /** @var array $language */
         foreach (Language::getLanguages() as $language) {
-            $tmp = explode("-", $language["language_code"]);
+            $tmp = explode('-', $language['language_code']);
             if (2 != count($tmp)) {
-                return Splash::log()->err("ErrSelfTestLangCode", $language["language_code"]);
+                return Splash::log()->err('ErrSelfTestLangCode', $language['language_code']);
             }
         }
         //====================================================================//
@@ -204,7 +202,7 @@ class Local implements LocalClassInterface
             self::createSplashIdTable();
             // Check Again
             if (!self::checkSplashIdTable()) {
-                return Splash::log()->err("ErrSelfTestNoTable");
+                return Splash::log()->err('ErrSelfTestNoTable');
             }
         }
         //====================================================================//
@@ -225,38 +223,38 @@ class Local implements LocalClassInterface
 
         //====================================================================//
         // Server General Description
-        $response->shortdesc = "Splash for Prestashop "._PS_VERSION_;
-        $response->longdesc = "Splash Connector Module for Prestashop Open Source e-commerce solution.";
+        $response->shortdesc = 'Splash for Prestashop ' . _PS_VERSION_;
+        $response->longdesc = 'Splash Connector Module for Prestashop Open Source e-commerce solution.';
 
         //====================================================================//
         // Company Informations
         $response->company = Configuration::get('PS_SHOP_NAME')    ?
-                Configuration::get('PS_SHOP_NAME')      :   "...";
+                Configuration::get('PS_SHOP_NAME')      :   '...';
         $response->address = Configuration::get('PS_SHOP_ADDR1')   ?
-                Configuration::get('PS_SHOP_ADDR1')."</br>".Configuration::get('PS_SHOP_ADDR2')   :   "...";
+                Configuration::get('PS_SHOP_ADDR1') . '</br>' . Configuration::get('PS_SHOP_ADDR2')   :   '...';
         $response->zip = Configuration::get('PS_SHOP_CODE')    ?
-                Configuration::get('PS_SHOP_CODE')      :   "...";
+                Configuration::get('PS_SHOP_CODE')      :   '...';
         $response->town = Configuration::get('PS_SHOP_CITY')    ?
-                Configuration::get('PS_SHOP_CITY')      :   "...";
+                Configuration::get('PS_SHOP_CITY')      :   '...';
         $response->country = Configuration::get('PS_SHOP_COUNTRY') ?
-                Configuration::get('PS_SHOP_COUNTRY')   :   "...";
-        $response->www = Configuration::get('PS_SHOP_DOMAIN').__PS_BASE_URI__;
+                Configuration::get('PS_SHOP_COUNTRY')   :   '...';
+        $response->www = Configuration::get('PS_SHOP_DOMAIN') . __PS_BASE_URI__;
         $response->email = Configuration::get('PS_SHOP_EMAIL')   ?
-                Configuration::get('PS_SHOP_EMAIL')     :   "...";
+                Configuration::get('PS_SHOP_EMAIL')     :   '...';
         $response->phone = Configuration::get('PS_SHOP_PHONE')   ?
-                Configuration::get('PS_SHOP_PHONE')     :   "...";
+                Configuration::get('PS_SHOP_PHONE')     :   '...';
 
         //====================================================================//
         // Server Logo & Images
-        $response->icoraw = Splash::file()->readFileContents(_PS_IMG_DIR_."favicon.ico");
-        $response->logourl = "http://".Configuration::get('PS_SHOP_DOMAIN').__PS_BASE_URI__;
-        $response->logourl .= "img/".Configuration::get('PS_LOGO');
-        $response->logoraw = Splash::file()->readFileContents(_PS_IMG_DIR_.Configuration::get('PS_LOGO'));
+        $response->icoraw = Splash::file()->readFileContents(_PS_IMG_DIR_ . 'favicon.ico');
+        $response->logourl = 'http://' . Configuration::get('PS_SHOP_DOMAIN') . __PS_BASE_URI__;
+        $response->logourl .= 'img/' . Configuration::get('PS_LOGO');
+        $response->logoraw = Splash::file()->readFileContents(_PS_IMG_DIR_ . Configuration::get('PS_LOGO'));
 
         //====================================================================//
         // Server Informations
-        $response->servertype = "Prestashop "._PS_VERSION_;
-        $response->serverurl = Configuration::get('PS_SHOP_DOMAIN').__PS_BASE_URI__;
+        $response->servertype = 'Prestashop ' . _PS_VERSION_;
+        $response->serverurl = Configuration::get('PS_SHOP_DOMAIN') . __PS_BASE_URI__;
 
         //====================================================================//
         // Current Module Version
@@ -278,22 +276,22 @@ class Local implements LocalClassInterface
     {
         //====================================================================//
         // List Tests Sequences
-        if ("List" == $name) {
+        if ('List' == $name) {
             if (!MSM::isFeatureActive()) {
-                return array("None");
+                return array('None');
             }
-            $sequences = array("All Shops");
+            $sequences = array('All Shops');
             foreach (MSM::getShopIds() as $shopId) {
-                $sequences[] = "Msf_".$shopId;
+                $sequences[] = 'Msf_' . $shopId;
             }
 
             return $sequences;
         }
         //====================================================================//
         // Init Msf Test Sequence
-        if (0 === strpos((string) $name, "Msf")) {
+        if (0 === strpos((string) $name, 'Msf')) {
             $shopId = 0;
-            sscanf((string) $name, "Msf_%d", $shopId);
+            sscanf((string) $name, 'Msf_%d', $shopId);
             MSM::setContext();
             Configuration::updateValue('SPLASH_MSF_FOCUSED', (int) $shopId);
 
@@ -318,7 +316,7 @@ class Local implements LocalClassInterface
 
         //====================================================================//
         // Server Actives Languages List
-        $parameters["Langs"] = SLM::getAvailableLanguages();
+        $parameters['Langs'] = SLM::getAvailableLanguages();
 
         return $parameters;
     }
@@ -351,7 +349,7 @@ class Local implements LocalClassInterface
 
         //====================================================================//
         // Safety Check
-        if (!class_exists("Employee")) {
+        if (!class_exists('Employee')) {
             return Splash::log()->err('Commons  - Unable To Load Employee Class Definition.');
         }
 
@@ -376,7 +374,7 @@ class Local implements LocalClassInterface
         // Setup Remote User
         $context->employee = $user;
 
-        return Splash::log()->deb('Commons  - Employee Loaded from Splash Parameters => '.$user->email);
+        return Splash::log()->deb('Commons  - Employee Loaded from Splash Parameters => ' . $user->email);
     }
 
     /**
@@ -388,7 +386,7 @@ class Local implements LocalClassInterface
     {
         //====================================================================//
         // Only On MultiShop Mode on PS 1.7.X
-        if (Tools::version_compare(_PS_VERSION_, "1.7", '<')) {
+        if (Tools::version_compare(_PS_VERSION_, '1.7', '<')) {
             return;
         }
         //====================================================================//
@@ -410,7 +408,7 @@ class Local implements LocalClassInterface
         }
         //====================================================================//
         // Safety Check
-        if (!class_exists("SplashSync")) {
+        if (!class_exists('SplashSync')) {
             Splash::log()->err('Commons  - Unable To Load Splash Module Class Definition.');
         }
         //====================================================================//
@@ -453,7 +451,7 @@ class Local implements LocalClassInterface
         //====================================================================//
         // Identify Admin Folder
         foreach ($scan as $filename) {
-            $path = $homedir."/".$filename;
+            $path = $homedir . '/' . $filename;
             //====================================================================//
             // This is a Folder & Includes Required Admin Files
             if (!$this->isAdminFolder($path)) {
@@ -491,27 +489,27 @@ class Local implements LocalClassInterface
     private function selfTestInfos()
     {
         if (!empty(Splash::configuration()->PsUseMultiShopParser)) {
-            Splash::log()->war("FEATURE: Multi-shop mode is Active!");
+            Splash::log()->war('FEATURE: Multi-shop mode is Active!');
             if (!empty(Splash::configuration()->PsIsLightMultiShop)) {
-                Splash::log()->war("FEATURE: Multi-shop light mode is also Active...");
+                Splash::log()->war('FEATURE: Multi-shop light mode is also Active...');
             }
         }
         if (!empty(Splash::configuration()->PsIsSourceCatalog)) {
-            Splash::log()->war("FEATURE: Source Catalog mode is Active! Your products informations are now readonly.");
+            Splash::log()->war('FEATURE: Source Catalog mode is Active! Your products informations are now readonly.');
         }
         //====================================================================//
         // Discounts Tax Details Detection
         if (!empty(Splash::configuration()->PsUseAdvancedDiscounts)) {
             Splash::log()->war(
-                "FEATURE: Advanced Discounts is Active! Read Discounts details from table \\'order_discount_tax\\'."
+                'FEATURE: Advanced Discounts is Active! Read Discounts details from table \\\'order_discount_tax\\\'.'
             );
         }
         if (!empty(Splash::configuration()->PsUseDiscountsCollector)) {
             Splash::log()->war(
-                "FEATURE: Discounts Collector is Active! Splash detect Discounts details from Order Carts."
+                'FEATURE: Discounts Collector is Active! Splash detect Discounts details from Order Carts.'
             );
             if (!DiscountsManager::hasStorageTable()) {
-                Splash::log()->err("FEATURE: Discounts Collector table doesn't exists.");
+                Splash::log()->err('FEATURE: Discounts Collector table doesn\'t exists.');
             }
         }
         //====================================================================//
@@ -519,7 +517,7 @@ class Local implements LocalClassInterface
         if (!empty(Configuration::get('SPLASH_WS_EXPERT'))) {
             $configurator = (string) Configuration::get('SPLASH_CONFIGURATOR');
             if (class_exists($configurator) && is_subclass_of($configurator, AbstractConfigurator::class)) {
-                Splash::log()->war("FEATURE: Custom configurator is Active: ".$configurator::getName());
+                Splash::log()->war('FEATURE: Custom configurator is Active: ' . $configurator::getName());
             }
         }
     }
@@ -536,9 +534,9 @@ class Local implements LocalClassInterface
         }
         //====================================================================//
         // Ensure Required Admin Files are there
-        $requiredFiles = array("init.php", "header.inc.php");
+        $requiredFiles = array('init.php', 'header.inc.php');
         foreach ($requiredFiles as $filename) {
-            if (!is_file($path."/".$filename)) {
+            if (!is_file($path . '/' . $filename)) {
                 return false;
             }
         }
@@ -588,7 +586,7 @@ class Local implements LocalClassInterface
         // Import & Display Errors
         Splash::log()->err('[SPLASH] Splash Module Install Failed');
         foreach (self::$splashSyncModule->getErrors() as $error) {
-            Splash::log()->err('[SPLASH] Mod. Install : '.$error);
+            Splash::log()->err('[SPLASH] Mod. Install : ' . $error);
         }
         echo Splash::log()->getConsoleLog(true);
 

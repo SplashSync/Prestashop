@@ -12,9 +12,7 @@
  *  file that was distributed with this source code.
  *
  * @author Splash Sync
- *
  * @copyright Splash Sync SAS
- *
  * @license MIT
  */
 
@@ -44,7 +42,7 @@ trait HooksTrait
      */
     public function hookActionObjectCustomerAddAfter(array $params): bool
     {
-        return $this->hookActionCustomer($params["object"], SPL_A_CREATE, $this->l('Customer Created on Prestashop'));
+        return $this->hookActionCustomer($params['object'], SPL_A_CREATE, $this->l('Customer Created on Prestashop'));
     }
 
     /**
@@ -52,7 +50,7 @@ trait HooksTrait
      */
     public function hookActionObjectCustomerUpdateAfter(array $params): bool
     {
-        return $this->hookActionCustomer($params["object"], SPL_A_UPDATE, $this->l('Customer Updated on Prestashop'));
+        return $this->hookActionCustomer($params['object'], SPL_A_UPDATE, $this->l('Customer Updated on Prestashop'));
     }
 
     /**
@@ -60,7 +58,7 @@ trait HooksTrait
      */
     public function hookActionObjectCustomerDeleteAfter(array $params): bool
     {
-        return $this->hookActionCustomer($params["object"], SPL_A_DELETE, $this->l('Customer Deleted on Prestashop'));
+        return $this->hookActionCustomer($params['object'], SPL_A_DELETE, $this->l('Customer Deleted on Prestashop'));
     }
 
     /**
@@ -84,15 +82,15 @@ trait HooksTrait
         }
         //====================================================================//
         // Log
-        $this->debugHook(__FUNCTION__, $customerId." >> ".$comment);
+        $this->debugHook(__FUNCTION__, $customerId . ' >> ' . $comment);
         //====================================================================//
         // Safety Check
         if (empty($customerId)) {
-            Splash::log()->err("ErrLocalTpl", __CLASS__, __FUNCTION__, "Unable to Read Customer Id.");
+            Splash::log()->err('ErrLocalTpl', __CLASS__, __FUNCTION__, 'Unable to Read Customer Id.');
         }
 
         //====================================================================//
         // Commit Update For Product
-        return $this->doCommit("ThirdParty", $customerId, $action, $comment);
+        return $this->doCommit('ThirdParty', $customerId, $action, $comment);
     }
 }

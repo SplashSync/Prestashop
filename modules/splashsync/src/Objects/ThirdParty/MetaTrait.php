@@ -12,9 +12,7 @@
  *  file that was distributed with this source code.
  *
  * @author Splash Sync
- *
  * @copyright Splash Sync SAS
- *
  * @license MIT
  */
 
@@ -43,26 +41,26 @@ trait MetaTrait
         //====================================================================//
         // Active
         $this->fieldsFactory()->create(SPL_T_BOOL)
-            ->identifier("active")
-            ->name(Translate::getAdminTranslation("Enabled", "AdminCustomers"))
-            ->microData("http://schema.org/Organization", "active")
+            ->identifier('active')
+            ->name(Translate::getAdminTranslation('Enabled', 'AdminCustomers'))
+            ->microData('http://schema.org/Organization', 'active')
             ->isListed()
         ;
         //====================================================================//
         // Newsletter
         $this->fieldsFactory()->create(SPL_T_BOOL)
-            ->identifier("newsletter")
-            ->name(Translate::getAdminTranslation("Newsletter", "AdminCustomers"))
-            ->group(Translate::getAdminTranslation("Meta", "AdminThemes"))
-            ->microData("http://schema.org/Organization", "newsletter")
+            ->identifier('newsletter')
+            ->name(Translate::getAdminTranslation('Newsletter', 'AdminCustomers'))
+            ->group(Translate::getAdminTranslation('Meta', 'AdminThemes'))
+            ->microData('http://schema.org/Organization', 'newsletter')
         ;
         //====================================================================//
         // Advertising
         $this->fieldsFactory()->create(SPL_T_BOOL)
-            ->identifier("optin")
-            ->name(Translate::getAdminTranslation("Opt-in", "AdminCustomers"))
-            ->group(Translate::getAdminTranslation("Meta", "AdminThemes"))
-            ->microData("http://schema.org/Organization", "advertising")
+            ->identifier('optin')
+            ->name(Translate::getAdminTranslation('Opt-in', 'AdminCustomers'))
+            ->group(Translate::getAdminTranslation('Meta', 'AdminThemes'))
+            ->microData('http://schema.org/Organization', 'advertising')
         ;
     }
 

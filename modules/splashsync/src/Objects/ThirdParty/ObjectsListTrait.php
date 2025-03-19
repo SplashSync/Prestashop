@@ -12,9 +12,7 @@
  *  file that was distributed with this source code.
  *
  * @author Splash Sync
- *
  * @copyright Splash Sync SAS
- *
  * @license MIT
  */
 
@@ -48,37 +46,37 @@ trait ObjectsListTrait
         $sql = new DbQuery();
         //====================================================================//
         // Build SELECT
-        $sql->select("c.`id_customer` as id");          // Customer Id
-        $sql->select("c.`company` as company");         // Customer Compagny Name
-        $sql->select("c.`firstname` as firstname");     // Customer Firstname
-        $sql->select("c.`lastname` as lastname");       // Customer Lastname
-        $sql->select("c.`email` as email");             // Customer email
-        $sql->select("c.`active` as active");           // Customer status
-        $sql->select("c.`date_upd` as modified");       // Customer Last Modification Date
+        $sql->select('c.`id_customer` as id');          // Customer Id
+        $sql->select('c.`company` as company');         // Customer Compagny Name
+        $sql->select('c.`firstname` as firstname');     // Customer Firstname
+        $sql->select('c.`lastname` as lastname');       // Customer Lastname
+        $sql->select('c.`email` as email');             // Customer email
+        $sql->select('c.`active` as active');           // Customer status
+        $sql->select('c.`date_upd` as modified');       // Customer Last Modification Date
         //====================================================================//
         // Build FROM
-        $sql->from("customer", 'c');
+        $sql->from('customer', 'c');
         //====================================================================//
         // Setup filters
         // Add filters with names convertions. Added LOWER function to be NON case sensitive
         if (!empty($filter) && is_string($filter)) {
             //====================================================================//
             // Search in Customer Company
-            $where = " LOWER( c.`company` )        LIKE LOWER( '%".pSQL($filter)."%') ";
+            $where = ' LOWER( c.`company` )        LIKE LOWER( \'%' . pSQL($filter) . '%\') ';
             //====================================================================//
             // Search in Customer FirstName
-            $where .= " OR LOWER( c.`firstname` )   LIKE LOWER( '%".pSQL($filter)."%') ";
+            $where .= ' OR LOWER( c.`firstname` )   LIKE LOWER( \'%' . pSQL($filter) . '%\') ';
             //====================================================================//
             // Search in Customer LastName
-            $where .= " OR LOWER( c.`lastname` )    LIKE LOWER( '%".pSQL($filter)."%') ";
+            $where .= ' OR LOWER( c.`lastname` )    LIKE LOWER( \'%' . pSQL($filter) . '%\') ';
             //====================================================================//
             // Search in Customer Email
-            $where .= " OR LOWER( c.`email` )       LIKE LOWER( '%".pSQL($filter)."%') ";
+            $where .= ' OR LOWER( c.`email` )       LIKE LOWER( \'%' . pSQL($filter) . '%\') ';
             $sql->where($where);
         }
 
         //====================================================================//
         // Execute Generic Search
-        return $this->getObjectsListGenericData($sql, "lastname", $params);
+        return $this->getObjectsListGenericData($sql, 'lastname', $params);
     }
 }

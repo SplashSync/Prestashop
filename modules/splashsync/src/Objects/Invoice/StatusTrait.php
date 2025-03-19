@@ -12,9 +12,7 @@
  *  file that was distributed with this source code.
  *
  * @author Splash Sync
- *
  * @copyright Splash Sync SAS
- *
  * @license MIT
  */
 
@@ -43,9 +41,9 @@ trait StatusTrait
         //====================================================================//
         // Order Current Status
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
-            ->Identifier("status")
-            ->Name(Translate::getAdminTranslation("Status", "AdminOrders"))
-            ->MicroData("http://schema.org/Invoice", "paymentStatus")
+            ->Identifier('status')
+            ->Name(Translate::getAdminTranslation('Status', 'AdminOrders'))
+            ->MicroData('http://schema.org/Invoice', 'paymentStatus')
             ->isReadOnly()
             ->isNotTested();
 
@@ -53,38 +51,38 @@ trait StatusTrait
         // INVOICE STATUS FLAGS
         //====================================================================//
 
-        $prefix = Translate::getAdminTranslation("Status", "AdminOrders")." ";
+        $prefix = Translate::getAdminTranslation('Status', 'AdminOrders') . ' ';
 
         //====================================================================//
         // Is Canceled
         // => There is no Diffrence Between a Draft & Canceled Order on Prestashop.
         //      Any Non Validated Order is considered as Canceled
         $this->fieldsFactory()->create(SPL_T_BOOL)
-            ->Identifier("isCanceled")
-            ->Name($prefix.$this->spl->l("Canceled"))
-            ->MicroData("http://schema.org/PaymentStatusType", "PaymentDeclined")
-            ->Association("isCanceled", "isValidated")
-            ->Group(Translate::getAdminTranslation("Meta", "AdminThemes"))
+            ->Identifier('isCanceled')
+            ->Name($prefix . $this->spl->l('Canceled'))
+            ->MicroData('http://schema.org/PaymentStatusType', 'PaymentDeclined')
+            ->Association('isCanceled', 'isValidated')
+            ->Group(Translate::getAdminTranslation('Meta', 'AdminThemes'))
             ->isReadOnly();
 
         //====================================================================//
         // Is Validated
         $this->fieldsFactory()->create(SPL_T_BOOL)
-            ->Identifier("isValidated")
-            ->Name($prefix.Translate::getAdminTranslation("Valid", "AdminCartRules"))
-            ->MicroData("http://schema.org/PaymentStatusType", "PaymentDue")
-            ->Association("isCanceled", "isValidated")
-            ->Group(Translate::getAdminTranslation("Meta", "AdminThemes"))
+            ->Identifier('isValidated')
+            ->Name($prefix . Translate::getAdminTranslation('Valid', 'AdminCartRules'))
+            ->MicroData('http://schema.org/PaymentStatusType', 'PaymentDue')
+            ->Association('isCanceled', 'isValidated')
+            ->Group(Translate::getAdminTranslation('Meta', 'AdminThemes'))
             ->isReadOnly();
 
         //====================================================================//
         // Is Paid
         $this->fieldsFactory()->create(SPL_T_BOOL)
-            ->Identifier("isPaid")
-            ->Name($prefix.$this->spl->l("Paid"))
-            ->MicroData("http://schema.org/PaymentStatusType", "PaymentComplete")
+            ->Identifier('isPaid')
+            ->Name($prefix . $this->spl->l('Paid'))
+            ->MicroData('http://schema.org/PaymentStatusType', 'PaymentComplete')
             ->isReadOnly()
-            ->Group(Translate::getAdminTranslation("Meta", "AdminThemes"))
+            ->Group(Translate::getAdminTranslation('Meta', 'AdminThemes'))
             ->isNotTested();
     }
 
@@ -110,11 +108,11 @@ trait StatusTrait
             //====================================================================//
             case 'status':
                 if (!$this->order->valid) {
-                    $this->out[$fieldName] = "PaymentCanceled";
+                    $this->out[$fieldName] = 'PaymentCanceled';
                 } elseif ($this->isPaidInvoice()) {
-                    $this->out[$fieldName] = "PaymentComplete";
+                    $this->out[$fieldName] = 'PaymentComplete';
                 } else {
-                    $this->out[$fieldName] = "PaymentDue";
+                    $this->out[$fieldName] = 'PaymentDue';
                 }
 
                 break;

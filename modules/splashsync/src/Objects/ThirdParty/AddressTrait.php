@@ -12,9 +12,7 @@
  *  file that was distributed with this source code.
  *
  * @author Splash Sync
- *
  * @copyright Splash Sync SAS
- *
  * @license MIT
  */
 
@@ -43,77 +41,77 @@ trait AddressTrait
      */
     private function buildPrimaryAddressPart1Fields(): void
     {
-        $groupName = Translate::getAdminTranslation("Address", "AdminCustomers");
+        $groupName = Translate::getAdminTranslation('Address', 'AdminCustomers');
 
         //====================================================================//
         // Address
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
-            ->identifier("address1")
+            ->identifier('address1')
             ->name($groupName)
-            ->microData("http://schema.org/PostalAddress", "streetAddress")
+            ->microData('http://schema.org/PostalAddress', 'streetAddress')
             ->group($groupName)
             ->isReadOnly()
         ;
         //====================================================================//
         // Address Complement
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
-            ->identifier("address2")
-            ->name($groupName." (2)")
-            ->microData("http://schema.org/PostalAddress", "postOfficeBoxNumber")
+            ->identifier('address2')
+            ->name($groupName . ' (2)')
+            ->microData('http://schema.org/PostalAddress', 'postOfficeBoxNumber')
             ->group($groupName)
             ->isReadOnly()
         ;
         //====================================================================//
         // Zip Code
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
-            ->identifier("postcode")
-            ->name(Translate::getAdminTranslation("Zip/Postal Code", "AdminAddresses"))
-            ->microData("http://schema.org/PostalAddress", "postalCode")
+            ->identifier('postcode')
+            ->name(Translate::getAdminTranslation('Zip/Postal Code', 'AdminAddresses'))
+            ->microData('http://schema.org/PostalAddress', 'postalCode')
             ->group($groupName)
             ->isReadOnly()
         ;
         //====================================================================//
         // City Name
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
-            ->identifier("city")
-            ->name(Translate::getAdminTranslation("City", "AdminAddresses"))
-            ->microData("http://schema.org/PostalAddress", "addressLocality")
+            ->identifier('city')
+            ->name(Translate::getAdminTranslation('City', 'AdminAddresses'))
+            ->microData('http://schema.org/PostalAddress', 'addressLocality')
             ->group($groupName)
             ->isReadOnly()
         ;
         //====================================================================//
         // State Name
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
-            ->identifier("state")
-            ->name(Translate::getAdminTranslation("State", "AdminAddresses"))
-            ->microData("http://schema.org/PostalAddress", "addressRegion")
+            ->identifier('state')
+            ->name(Translate::getAdminTranslation('State', 'AdminAddresses'))
+            ->microData('http://schema.org/PostalAddress', 'addressRegion')
             ->group($groupName)
             ->isReadOnly()
         ;
         //====================================================================//
         // State code
         $this->fieldsFactory()->create(SPL_T_STATE)
-            ->identifier("id_state")
-            ->name(Translate::getAdminTranslation("State", "AdminAddresses")." (Code)")
-            ->microData("http://schema.org/PostalAddress", "addressRegion")
+            ->identifier('id_state')
+            ->name(Translate::getAdminTranslation('State', 'AdminAddresses') . ' (Code)')
+            ->microData('http://schema.org/PostalAddress', 'addressRegion')
             ->group($groupName)
             ->isReadOnly()
         ;
         //====================================================================//
         // Country Name
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
-            ->identifier("country")
-            ->name(Translate::getAdminTranslation("Country", "AdminAddresses"))
-            ->microData("http://schema.org/PostalAddress", "addressCountry")
+            ->identifier('country')
+            ->name(Translate::getAdminTranslation('Country', 'AdminAddresses'))
+            ->microData('http://schema.org/PostalAddress', 'addressCountry')
             ->group($groupName)
             ->isReadOnly()
         ;
         //====================================================================//
         // Country ISO Code
         $this->fieldsFactory()->create(SPL_T_COUNTRY)
-            ->identifier("id_country")
-            ->name(Translate::getAdminTranslation("Country", "AdminAddresses")." (Code)")
-            ->microData("http://schema.org/PostalAddress", "addressCountry")
+            ->identifier('id_country')
+            ->name(Translate::getAdminTranslation('Country', 'AdminAddresses') . ' (Code)')
+            ->microData('http://schema.org/PostalAddress', 'addressCountry')
             ->group($groupName)
             ->isReadOnly()
         ;
@@ -126,14 +124,14 @@ trait AddressTrait
      */
     private function buildPrimaryAddressPart2Fields(): void
     {
-        $groupName = Translate::getAdminTranslation("Address", "AdminCustomers");
+        $groupName = Translate::getAdminTranslation('Address', 'AdminCustomers');
 
         //====================================================================//
         // Phone
         $this->fieldsFactory()->create(SPL_T_PHONE)
-            ->identifier("phone")
-            ->name(Translate::getAdminTranslation("Home phone", "AdminAddresses"))
-            ->microData("http://schema.org/PostalAddress", "telephone")
+            ->identifier('phone')
+            ->name(Translate::getAdminTranslation('Home phone', 'AdminAddresses'))
+            ->microData('http://schema.org/PostalAddress', 'telephone')
             ->group($groupName)
             ->isIndexed()
             ->isReadOnly()
@@ -141,9 +139,9 @@ trait AddressTrait
         //====================================================================//
         // Mobile Phone
         $this->fieldsFactory()->create(SPL_T_PHONE)
-            ->identifier("phone_mobile")
-            ->name(Translate::getAdminTranslation("Mobile phone", "AdminAddresses"))
-            ->microData("http://schema.org/Person", "telephone")
+            ->identifier('phone_mobile')
+            ->name(Translate::getAdminTranslation('Mobile phone', 'AdminAddresses'))
+            ->microData('http://schema.org/Person', 'telephone')
             ->group($groupName)
             ->isIndexed()
             ->isReadOnly()
@@ -151,9 +149,9 @@ trait AddressTrait
         //====================================================================//
         // VAT Number
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
-            ->identifier("vat_number")
-            ->name(Translate::getAdminTranslation("VAT Number", "AdminAddresses"))
-            ->microData("http://schema.org/Organization", "vatID")
+            ->identifier('vat_number')
+            ->name(Translate::getAdminTranslation('VAT Number', 'AdminAddresses'))
+            ->microData('http://schema.org/Organization', 'vatID')
             ->isReadOnly()
         ;
     }

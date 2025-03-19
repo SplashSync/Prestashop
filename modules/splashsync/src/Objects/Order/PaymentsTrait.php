@@ -12,9 +12,7 @@
  *  file that was distributed with this source code.
  *
  * @author Splash Sync
- *
  * @copyright Splash Sync SAS
- *
  * @license MIT
  */
 
@@ -56,52 +54,52 @@ trait PaymentsTrait
         //====================================================================//
         // Payment Line Payment Method
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
-            ->identifier("mode")
-            ->inList("payments")
-            ->name(Translate::getAdminTranslation("Payment method", "AdminOrders"))
-            ->microData("http://schema.org/Invoice", "PaymentMethod")
-            ->group(Translate::getAdminTranslation("Payment", "AdminPayment"))
-            ->association("mode@payments", "amount@payments")
+            ->identifier('mode')
+            ->inList('payments')
+            ->name(Translate::getAdminTranslation('Payment method', 'AdminOrders'))
+            ->microData('http://schema.org/Invoice', 'PaymentMethod')
+            ->group(Translate::getAdminTranslation('Payment', 'AdminPayment'))
+            ->association('mode@payments', 'amount@payments')
             ->addChoices(array_flip(PaymentMethodsManager::KNOWN))
         ;
         //====================================================================//
         // Raw Payment Line Payment Method
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
-            ->identifier("rawMode")
-            ->inList("payments")
-            ->name(Translate::getAdminTranslation("Payment method", "AdminOrders")." Raw")
-            ->group(Translate::getAdminTranslation("Payment", "AdminPayment"))
+            ->identifier('rawMode')
+            ->inList('payments')
+            ->name(Translate::getAdminTranslation('Payment method', 'AdminOrders') . ' Raw')
+            ->group(Translate::getAdminTranslation('Payment', 'AdminPayment'))
             ->isReadOnly()
         ;
         //====================================================================//
         // Payment Line Date
         $this->fieldsFactory()->create(SPL_T_DATE)
-            ->identifier("date")
-            ->inList("payments")
-            ->name(Translate::getAdminTranslation("Date", "AdminProducts"))
-            ->microData("http://schema.org/PaymentChargeSpecification", "validFrom")
-            ->group(Translate::getAdminTranslation("Payment", "AdminPayment"))
+            ->identifier('date')
+            ->inList('payments')
+            ->name(Translate::getAdminTranslation('Date', 'AdminProducts'))
+            ->microData('http://schema.org/PaymentChargeSpecification', 'validFrom')
+            ->group(Translate::getAdminTranslation('Payment', 'AdminPayment'))
             ->isReadOnly()
         ;
         //====================================================================//
         // Payment Line Payment Identifier
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
-            ->identifier("number")
-            ->inList("payments")
-            ->name(Translate::getAdminTranslation("Transaction ID", "AdminOrders"))
-            ->microData("http://schema.org/Invoice", "paymentMethodId")
-            ->group(Translate::getAdminTranslation("Payment", "AdminPayment"))
-            ->association("mode@payments", "amount@payments")
+            ->identifier('number')
+            ->inList('payments')
+            ->name(Translate::getAdminTranslation('Transaction ID', 'AdminOrders'))
+            ->microData('http://schema.org/Invoice', 'paymentMethodId')
+            ->group(Translate::getAdminTranslation('Payment', 'AdminPayment'))
+            ->association('mode@payments', 'amount@payments')
         ;
         //====================================================================//
         // Payment Line Amount
         $this->fieldsFactory()->create(SPL_T_DOUBLE)
-            ->identifier("amount")
-            ->inList("payments")
-            ->name(Translate::getAdminTranslation("Amount", "AdminOrders"))
-            ->microData("http://schema.org/PaymentChargeSpecification", "price")
-            ->group(Translate::getAdminTranslation("Payment", "AdminPayment"))
-            ->association("mode@payments", "amount@payments")
+            ->identifier('amount')
+            ->inList('payments')
+            ->name(Translate::getAdminTranslation('Amount', 'AdminOrders'))
+            ->microData('http://schema.org/PaymentChargeSpecification', 'price')
+            ->group(Translate::getAdminTranslation('Payment', 'AdminPayment'))
+            ->association('mode@payments', 'amount@payments')
         ;
     }
 
@@ -117,7 +115,7 @@ trait PaymentsTrait
     {
         //====================================================================//
         // Check if List field & Init List Array
-        $fieldId = self::lists()->InitOutput($this->out, "payments", $fieldName);
+        $fieldId = self::lists()->InitOutput($this->out, 'payments', $fieldName);
         if (!$fieldId) {
             return;
         }
@@ -145,7 +143,7 @@ trait PaymentsTrait
             }
             //====================================================================//
             // Insert Data in List
-            self::lists()->Insert($this->out, "payments", $fieldName, $index, $value);
+            self::lists()->Insert($this->out, 'payments', $fieldName, $index, $value);
         }
         unset($this->in[$key]);
     }
@@ -171,8 +169,8 @@ trait PaymentsTrait
                 // Payment Line - Raw Payment Mode
             case 'rawMode@payments':
                 return sprintf(
-                    "[%s] %s",
-                    $this->PaymentMethod ?? "??",
+                    '[%s] %s',
+                    $this->PaymentMethod ?? '??',
                     $orderPayment->payment_method
                 );
                 //====================================================================//
@@ -204,7 +202,7 @@ trait PaymentsTrait
     {
         //====================================================================//
         // Safety Check
-        if ("payments" !== $fieldName) {
+        if ('payments' !== $fieldName) {
             return;
         }
 
@@ -305,7 +303,7 @@ trait PaymentsTrait
             return PaymentMethods::CREDIT_CARD;
         }
 
-        return "Unknown";
+        return 'Unknown';
     }
 
     /**
@@ -342,11 +340,11 @@ trait PaymentsTrait
 
         if (!$orderPayment->id) {
             if (!$orderPayment->add()) {
-                return Splash::log()->err("ErrLocalTpl", __CLASS__, __FUNCTION__, "Unable to Create new Payment Line.");
+                return Splash::log()->err('ErrLocalTpl', __CLASS__, __FUNCTION__, 'Unable to Create new Payment Line.');
             }
         } else {
             if (!$orderPayment->update()) {
-                return Splash::log()->err("ErrLocalTpl", __CLASS__, __FUNCTION__, "Unable to Update Payment Line.");
+                return Splash::log()->err('ErrLocalTpl', __CLASS__, __FUNCTION__, 'Unable to Update Payment Line.');
             }
         }
 
@@ -367,22 +365,22 @@ trait PaymentsTrait
 
         //====================================================================//
         // Update Payment Method
-        if (isset($paymentItem["mode"]) && ($orderPayment->payment_method != $paymentItem["mode"])) {
-            $orderPayment->payment_method = $paymentItem["mode"];
+        if (isset($paymentItem['mode']) && ($orderPayment->payment_method != $paymentItem['mode'])) {
+            $orderPayment->payment_method = $paymentItem['mode'];
             $update = true;
         }
 
         //====================================================================//
         // Update Payment Amount
-        if (isset($paymentItem["amount"]) && ($orderPayment->amount != $paymentItem["amount"])) {
-            $orderPayment->amount = $paymentItem["amount"];
+        if (isset($paymentItem['amount']) && ($orderPayment->amount != $paymentItem['amount'])) {
+            $orderPayment->amount = $paymentItem['amount'];
             $update = true;
         }
 
         //====================================================================//
         // Update Payment Number
-        if (isset($paymentItem["number"]) && ($orderPayment->transaction_id != $paymentItem["number"])) {
-            $orderPayment->transaction_id = $paymentItem["number"];
+        if (isset($paymentItem['number']) && ($orderPayment->transaction_id != $paymentItem['number'])) {
+            $orderPayment->transaction_id = $paymentItem['number'];
             $update = true;
         }
 

@@ -12,9 +12,7 @@
  *  file that was distributed with this source code.
  *
  * @author Splash Sync
- *
  * @copyright Splash Sync SAS
- *
  * @license MIT
  */
 
@@ -48,7 +46,7 @@ class TotSwitchAttributes
     {
         //====================================================================//
         // Check if Module is Active
-        if (!Module::isEnabled("totswitchattribute")) {
+        if (!Module::isEnabled('totswitchattribute')) {
             return false;
         }
 
@@ -80,12 +78,12 @@ class TotSwitchAttributes
         //====================================================================//
         // Check Shop Context
         $shopId = Shop::getContextShopID(true);
-        $shopSql = $shopId ? ' AND id_shop = '.$shopId : "";
+        $shopSql = $shopId ? ' AND id_shop = ' . $shopId : '';
         //====================================================================//
         // Check if Product Attribute Id is Disabled
         $sql = 'SELECT id_product_attribute, id_shop';
-        $sql .= ' FROM `'._DB_PREFIX_.'tot_switch_attribute_disabled`';
-        $sql .= ' WHERE id_product_attribute = '.$attributeId.' '.$shopSql;
+        $sql .= ' FROM `' . _DB_PREFIX_ . 'tot_switch_attribute_disabled`';
+        $sql .= ' WHERE id_product_attribute = ' . $attributeId . ' ' . $shopSql;
 
         return !empty(Db::getInstance()->executeS($sql));
     }
@@ -147,27 +145,27 @@ class TotSwitchAttributes
                 foreach ($idShops as $idShop) {
                     // add row in table for each shop
                     $sql[] = 'REPLACE INTO `'
-                            ._DB_PREFIX_.'tot_switch_attribute_disabled`(`id_product_attribute`, `id_shop`)
-                    VALUES ('.(int)$idProductAttribute.', '.(int)$idShop.');';
+                            . _DB_PREFIX_ . 'tot_switch_attribute_disabled`(`id_product_attribute`, `id_shop`)
+                    VALUES (' . (int)$idProductAttribute . ', ' . (int)$idShop . ');';
                 }
             } else {
                 // add row in table
-                $sql[] = 'REPLACE INTO `'._DB_PREFIX_.'tot_switch_attribute_disabled`(`id_product_attribute`, `id_shop`)
-                VALUES ('.(int)$idProductAttribute.', '.(int)$idShop.');';
+                $sql[] = 'REPLACE INTO `' . _DB_PREFIX_ . 'tot_switch_attribute_disabled`(`id_product_attribute`, `id_shop`)
+                VALUES (' . (int)$idProductAttribute . ', ' . (int)$idShop . ');';
             }
         } else {
             if (is_array($idShops)) {
                 foreach ($idShops as $idShop) {
                     // delete row from table for each shop
-                    $sql[] = 'DELETE FROM `'._DB_PREFIX_.'tot_switch_attribute_disabled`
-                    WHERE `id_product_attribute` = '.(int)$idProductAttribute.'
-                    AND `id_shop` = '.(int)$idShop.';';
+                    $sql[] = 'DELETE FROM `' . _DB_PREFIX_ . 'tot_switch_attribute_disabled`
+                    WHERE `id_product_attribute` = ' . (int)$idProductAttribute . '
+                    AND `id_shop` = ' . (int)$idShop . ';';
                 }
             } else {
                 // delete row from table
-                $sql[] = 'DELETE FROM `'._DB_PREFIX_.'tot_switch_attribute_disabled`
-                WHERE `id_product_attribute` = '.(int)$idProductAttribute.'
-                AND `id_shop` = '.(int)$idShop.';';
+                $sql[] = 'DELETE FROM `' . _DB_PREFIX_ . 'tot_switch_attribute_disabled`
+                WHERE `id_product_attribute` = ' . (int)$idProductAttribute . '
+                AND `id_shop` = ' . (int)$idShop . ';';
             }
         }
 

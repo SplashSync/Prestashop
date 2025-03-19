@@ -12,9 +12,7 @@
  *  file that was distributed with this source code.
  *
  * @author Splash Sync
- *
  * @copyright Splash Sync SAS
- *
  * @license MIT
  */
 
@@ -29,12 +27,12 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-require_once "src/Objects/ThirdParty/HooksTrait.php";
-require_once "src/Objects/Address/HooksTrait.php";
-require_once "src/Objects/Product/HooksTrait.php";
-require_once "src/Objects/Order/HooksTrait.php";
-require_once "src/Objects/CreditNote/HooksTrait.php";
-require_once "src/Traits/SplashIdTrait.php";
+require_once 'src/Objects/ThirdParty/HooksTrait.php';
+require_once 'src/Objects/Address/HooksTrait.php';
+require_once 'src/Objects/Product/HooksTrait.php';
+require_once 'src/Objects/Order/HooksTrait.php';
+require_once 'src/Objects/CreditNote/HooksTrait.php';
+require_once 'src/Traits/SplashIdTrait.php';
 
 /**
  * Splash Sync Prestashop Module Main Class
@@ -108,10 +106,10 @@ class SplashSync extends Module
         //====================================================================//
         // WebService
         //====================================================================//
-        if (!class_exists("Splash")) {
+        if (!class_exists('Splash')) {
             //====================================================================//
             // Splash Module & Dependencies Autoloader
-            require_once(dirname(__FILE__)."/vendor/autoload.php");
+            require_once(dirname(__FILE__) . '/vendor/autoload.php');
             //====================================================================//
             // Init Splash Module
             Splash\Client\Splash::core();
@@ -167,12 +165,12 @@ class SplashSync extends Module
             return false;
         }
         // Ps 1.6 => Notify on Footer
-        if (Tools::version_compare(_PS_VERSION_, "1.7", '<')
+        if (Tools::version_compare(_PS_VERSION_, '1.7', '<')
                 && !$this->registerHook('displayBackOfficeFooter')) {
             return false;
         }
         // Ps 1.7 => Notify on Admin End Contents
-        if (!Tools::version_compare(_PS_VERSION_, "1.7", '<')
+        if (!Tools::version_compare(_PS_VERSION_, '1.7', '<')
                 && !$this->registerHook('displayAdminEndContent')) {
             return false;
         }
@@ -299,7 +297,7 @@ class SplashSync extends Module
         $helper->module = $this;
         $helper->name_controller = $this->name;
         $helper->token = Tools::getAdminTokenLite('AdminModules');
-        $helper->currentIndex = AdminController::$currentIndex.'&configure='.$this->name;
+        $helper->currentIndex = AdminController::$currentIndex . '&configure=' . $this->name;
 
         //====================================================================//
         // Language
@@ -311,7 +309,7 @@ class SplashSync extends Module
         $helper->title = $this->displayName;
         $helper->show_toolbar = true;        // false -> remove toolbar
         $helper->toolbar_scroll = true;      // yes - > Toolbar is always visible on the top of the screen.
-        $helper->submit_action = 'submit'.$this->name;
+        $helper->submit_action = 'submit' . $this->name;
 
         //====================================================================//
         // Load current value
@@ -363,7 +361,7 @@ class SplashSync extends Module
         //====================================================================//
         // Read Current Notifications
         $notifications = array();
-        if (is_file($bufferFile) && function_exists("json_decode")) {
+        if (is_file($bufferFile) && function_exists('json_decode')) {
             /** @var null|array $notifications */
             $notifications = json_decode((string) file_get_contents($bufferFile), true);
         }
@@ -380,7 +378,7 @@ class SplashSync extends Module
         Splash\Client\Splash::log()->slice();
         //====================================================================//
         // Save Changes to File
-        if (function_exists("json_encode")) {
+        if (function_exists('json_encode')) {
             file_put_contents($bufferFile, json_encode(Splash\Client\Splash::log()));
         }
     }
@@ -404,11 +402,11 @@ class SplashSync extends Module
         $controller = $this->context->controller;
         //====================================================================//
         // Register Not Js & Css
-        $controller->addCss($this->_path.'views/css/noty.css');
-        $controller->addJS($this->_path.'views/js/noty.min.js');
+        $controller->addCss($this->_path . 'views/css/noty.css');
+        $controller->addJS($this->_path . 'views/js/noty.min.js');
         //====================================================================//
         // Register Splash Js
-        $controller->addJS($this->_path.'views/js/splash.js');
+        $controller->addJS($this->_path . 'views/js/splash.js');
     }
 
     /**
@@ -439,7 +437,7 @@ class SplashSync extends Module
         //====================================================================//
         // Read Current Notifications
         $notifications = array();
-        if (is_file($bufferFile) && function_exists("json_decode")) {
+        if (is_file($bufferFile) && function_exists('json_decode')) {
             $notifications = json_decode((string) file_get_contents($bufferFile), true);
         }
         //====================================================================//
@@ -449,7 +447,7 @@ class SplashSync extends Module
         }
         //====================================================================//
         // Clear Notifications Logs in Cookie
-        if (is_file($bufferFile) && function_exists("json_encode")) {
+        if (is_file($bufferFile) && function_exists('json_encode')) {
             file_put_contents($bufferFile, json_encode(array()));
         }
 
@@ -482,16 +480,16 @@ class SplashSync extends Module
         // Safety Checks
         if (is_scalar($objectId)) {
             Splash\Client\Splash::log()
-                ->deb("Splash Commit => ".$objectType." Action = ".$action." Id = ".$objectId, " : ".$comment);
+                ->deb('Splash Commit => ' . $objectType . ' Action = ' . $action . ' Id = ' . $objectId, ' : ' . $comment);
         } elseif (is_array($objectId) && empty($objectId)) {
             return true;
         } elseif (is_array($objectId)) {
             Splash\Client\Splash::log()->deb(
-                "Splash Commit => ".$objectType." Action = ".$action." Ids (x".implode(", ", $objectId).") ".$comment
+                'Splash Commit => ' . $objectType . ' Action = ' . $action . ' Ids (x' . implode(', ', $objectId) . ') ' . $comment
             );
         } else {
             return Splash\Client\Splash::log()
-                ->err("Splash Hook Error : Wrong Id List Given => ".print_r($objectId, true));
+                ->err('Splash Hook Error : Wrong Id List Given => ' . print_r($objectId, true));
         }
 
         //====================================================================//
@@ -506,10 +504,10 @@ class SplashSync extends Module
         // Prepare User Name for Logging
         if (!empty(Context::getContext()->employee)) {
             $userName = Context::getContext()->employee->firstname;
-            $userName .= " ".Context::getContext()->employee->lastname;
+            $userName .= ' ' . Context::getContext()->employee->lastname;
         }
         if (!isset($userName)) {
-            $userName = $this->l('Unknown').$this->l('Employee');
+            $userName = $this->l('Unknown') . $this->l('Employee');
         }
         //====================================================================//
         // Commit Action on remotes nodes (Master & Slaves)
@@ -536,9 +534,9 @@ class SplashSync extends Module
     {
         /** @phpstan-ignore-next-line  */
         if (_PS_MODE_DEV_ == true) {
-            Splash\Client\Splash::log()->war("Hook => ".$name." => Id ".$objectId);
+            Splash\Client\Splash::log()->war('Hook => ' . $name . ' => Id ' . $objectId);
             if (!empty($other)) {
-                Splash\Client\Splash::log()->war("Raw => ".print_r($other, true));
+                Splash\Client\Splash::log()->war('Raw => ' . print_r($other, true));
             }
 
             return true;
@@ -598,8 +596,8 @@ class SplashSync extends Module
             'name' => 'SPLASH_WS_METHOD',
             'options' => array(
                 'query' => array(
-                    array('id' => 'SOAP', 'name' => "Generic PHP SOAP"),
-                    array('id' => 'NuSOAP', 'name' => "NuSOAP Library"),
+                    array('id' => 'SOAP', 'name' => 'Generic PHP SOAP'),
+                    array('id' => 'NuSOAP', 'name' => 'NuSOAP Library'),
                 ),
                 'id' => 'id',
                 'name' => 'name'
@@ -820,7 +818,7 @@ class SplashSync extends Module
             // Default User Id
             $fields[] = array(
                 'label' => $status['name'],
-                'hint' => $status["desc"],
+                'hint' => $status['desc'],
                 'cast' => 'intval',
                 'type' => 'select',
                 'name' => $status['field'],
@@ -872,7 +870,7 @@ class SplashSync extends Module
         $fields[] = array(
             'type' => 'checkbox',
             'name' => 'SPLASH_PAYMENT',
-            'label' => sprintf("%s (%d Detected)", $this->l('Detect by Translations'), $translatedCount),
+            'label' => sprintf('%s (%d Detected)', $this->l('Detect by Translations'), $translatedCount),
             'hint' => $this->l('Use translated payments methods to detect Splash generic type.'),
             'values' => array(
                 'query' => array(
@@ -896,7 +894,7 @@ class SplashSync extends Module
                 'cast' => 'strval',
                 'type' => 'select',
                 'name' => Splash\Local\Services\PaymentMethodsManager::toFieldName($code),
-                'class' => "width-xl",
+                'class' => 'width-xl',
                 'options' => array(
                     'query' => $splashMethods,
                     'id' => 'id',
@@ -935,7 +933,7 @@ class SplashSync extends Module
         $output = null;
         //====================================================================//
         // Verify Form was Submited
-        if (!Tools::isSubmit('submit'.$this->name)) {
+        if (!Tools::isSubmit('submit' . $this->name)) {
             return $output;
         }
         //====================================================================//
@@ -964,8 +962,8 @@ class SplashSync extends Module
         /** @var string $expert */
         $expert = Tools::getValue('SPLASH_WS_EXPERT');
         if (!$expert || !Configuration::get('SPLASH_WS_EXPERT')) {
-            $wsHost = "https://www.splashsync.com/ws/soap";
-            $wsMethod = "SOAP";
+            $wsHost = 'https://www.splashsync.com/ws/soap';
+            $wsMethod = 'SOAP';
         } else {
             /** @var string $wsHost */
             $wsHost = Tools::getValue('SPLASH_WS_HOST');
@@ -979,7 +977,7 @@ class SplashSync extends Module
         }
         //====================================================================//
         // Verify WS Method
-        if (empty($wsMethod) || !Validate::isString($wsMethod) || !in_array($wsMethod, array("NuSOAP", "SOAP"), true)) {
+        if (empty($wsMethod) || !Validate::isString($wsMethod) || !in_array($wsMethod, array('NuSOAP', 'SOAP'), true)) {
             $output .= $this->displayError($this->l('Invalid WebService Protocol'));
         }
         //====================================================================//
@@ -1005,7 +1003,7 @@ class SplashSync extends Module
         // Update Orders Status Values
         if (Splash\Local\Services\OrderStatusManager::isAllowedWrite()) {
             foreach (Splash\Local\Services\OrderStatusManager::getAllStatus() as $status) {
-                $fieldName = $status["field"];
+                $fieldName = $status['field'];
                 Configuration::updateValue($fieldName, Tools::getValue($fieldName));
             }
         }
@@ -1050,10 +1048,10 @@ class SplashSync extends Module
         $helper->identifier = 'id';
         $helper->show_toolbar = true;
         $helper->title = $this->l('Module Basics Tests');
-        $helper->table = $this->name.'_categories';
+        $helper->table = $this->name . '_categories';
 
         $helper->token = Tools::getAdminTokenLite('AdminModules');
-        $helper->currentIndex = AdminController::$currentIndex.'&configure='.$this->name;
+        $helper->currentIndex = AdminController::$currentIndex . '&configure=' . $this->name;
 
         return $helper->generateList($this->dataList, $this->fieldsList);
     }
@@ -1080,7 +1078,7 @@ class SplashSync extends Module
             ),
             'desc' => array(
                 'title' => $this->l('Description'),
-                'width' => "auto",
+                'width' => 'auto',
                 'type' => 'text',
             ),
             'result' => array(
@@ -1121,17 +1119,17 @@ class SplashSync extends Module
         //====================================================================//
         // List Objects
         //====================================================================//
-        $objectsList = count(Splash\Client\Splash::objects()).' (';
+        $objectsList = count(Splash\Client\Splash::objects()) . ' (';
         foreach (Splash\Client\Splash::objects() as $value) {
-            $objectsList .= $value.", ";
+            $objectsList .= $value . ', ';
         }
-        $objectsList .= ")";
+        $objectsList .= ')';
 
         $this->dataList[] = array(
-            "id" => count($this->dataList) + 1,
-            "name" => $this->l('Available Objects'),
-            "desc" => $this->l('List of all Available objects on this server.'),
-            "result" => $objectsList,
+            'id' => count($this->dataList) + 1,
+            'name' => $this->l('Available Objects'),
+            'desc' => $this->l('List of all Available objects on this server.'),
+            'result' => $objectsList,
         );
         //====================================================================//
         // Post Splash Messages
@@ -1157,10 +1155,10 @@ class SplashSync extends Module
         }
 
         $this->dataList[] = array(
-            "id" => count($this->dataList) + 1,
-            "name" => $this->l('Ping Test'),
-            "desc" => $this->l('Test to Ping Splash Server.'),
-            "result" => $result,
+            'id' => count($this->dataList) + 1,
+            'name' => $this->l('Ping Test'),
+            'desc' => $this->l('Test to Ping Splash Server.'),
+            'result' => $result,
         );
         //====================================================================//
         // Post Splash Messages
@@ -1176,10 +1174,10 @@ class SplashSync extends Module
         }
 
         $this->dataList[] = array(
-            "id" => count($this->dataList) + 1,
-            "name" => $this->l('Connect Test'),
-            "desc" => $this->l('Test to Connect to Splash Server.'),
-            "result" => $result,
+            'id' => count($this->dataList) + 1,
+            'name' => $this->l('Connect Test'),
+            'desc' => $this->l('Test to Connect to Splash Server.'),
+            'result' => $result,
         );
         //====================================================================//
         // Post Splash Messages
@@ -1205,8 +1203,8 @@ class SplashSync extends Module
         $cookie = $context->cookie;
 
         return sys_get_temp_dir()
-            ."/splashPsNotifications-"
-            .($cookie->__get("session_token") ?: "admin")
-            .".json";
+            . '/splashPsNotifications-'
+            . ($cookie->__get('session_token') ?: 'admin')
+            . '.json';
     }
 }

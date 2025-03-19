@@ -12,9 +12,7 @@
  *  file that was distributed with this source code.
  *
  * @author Splash Sync
- *
  * @copyright Splash Sync SAS
- *
  * @license MIT
  */
 
@@ -49,34 +47,34 @@ trait ObjectsListTrait
         $sql = new DbQuery();
         //====================================================================//
         // Build SELECT
-        $sql->select("a.`id_address` as id");          // Customer Id
-        $sql->select("a.`company` as company");         // Customer Compagny Name
-        $sql->select("a.`firstname` as firstname");     // Customer Firstname
-        $sql->select("a.`lastname` as lastname");       // Customer Lastname
-        $sql->select("a.`city` as city");               // Customer Address City
-        $sql->select("c.`name` as country");         // Customer Address Country
-        $sql->select("a.`date_upd` as modified");       // Customer Last Modification Date
+        $sql->select('a.`id_address` as id');           // Customer Id
+        $sql->select('a.`company` as company');         // Customer Company Name
+        $sql->select('a.`firstname` as firstname');     // Customer Firstname
+        $sql->select('a.`lastname` as lastname');       // Customer Lastname
+        $sql->select('a.`city` as city');               // Customer Address City
+        $sql->select('c.`name` as country');            // Customer Address Country
+        $sql->select('a.`date_upd` as modified');       // Customer Last Modification Date
         //====================================================================//
         // Build FROM
-        $sql->from("address", 'a');
+        $sql->from('address', 'a');
         $sql->leftJoin(
-            "country_lang",
+            'country_lang',
             'c',
-            'c.id_country = a.id_country AND id_lang = '.$langId." "
+            'c.id_country = a.id_country AND id_lang = ' . $langId . ' '
         );
         //====================================================================//
         // Setup filters
         if (!empty($filter)) {
             // Add filters with names conversion. Added LOWER function to be NON Case Sensitive
-            $sqlFilter = " LOWER( a.firstname )     LIKE LOWER( '%".pSQL($filter)."%') ";
-            $sqlFilter .= " OR LOWER( a.lastname )   LIKE LOWER( '%".pSQL($filter)."%') ";
-            $sqlFilter .= " OR LOWER( a.company )    LIKE LOWER( '%".pSQL($filter)."%') ";
-            $sqlFilter .= " OR LOWER( c.name )       LIKE LOWER( '%".pSQL($filter)."%') ";
+            $sqlFilter = ' LOWER( a.firstname )     LIKE LOWER( \'%' . pSQL($filter) . '%\') ';
+            $sqlFilter .= ' OR LOWER( a.lastname )   LIKE LOWER( \'%' . pSQL($filter) . '%\') ';
+            $sqlFilter .= ' OR LOWER( a.company )    LIKE LOWER( \'%' . pSQL($filter) . '%\') ';
+            $sqlFilter .= ' OR LOWER( c.name )       LIKE LOWER( \'%' . pSQL($filter) . '%\') ';
             $sql->where($sqlFilter);
         }
 
         //====================================================================//
         // Execute Generic Search
-        return $this->getObjectsListGenericData($sql, "lastname", $params);
+        return $this->getObjectsListGenericData($sql, 'lastname', $params);
     }
 }

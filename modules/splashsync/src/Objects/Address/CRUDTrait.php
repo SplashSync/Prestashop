@@ -12,9 +12,7 @@
  *  file that was distributed with this source code.
  *
  * @author Splash Sync
- *
  * @copyright Splash Sync SAS
- *
  * @license MIT
  */
 
@@ -50,12 +48,12 @@ trait CRUDTrait
         // Load Object
         $object = new Address((int) $objectId);
         if ($object->id != $objectId) {
-            return Splash::log()->errNull("Unable to load Customer Address (".$objectId.").");
+            return Splash::log()->errNull('Unable to load Customer Address (' . $objectId . ').');
         }
         //====================================================================//
         // Check Deleted Flag
         if (self::isDeleted($object)) {
-            Splash::log()->war("This Address is marked as Deleted.");
+            Splash::log()->war('This Address is marked as Deleted.');
         }
 
         return $object;
@@ -74,26 +72,26 @@ trait CRUDTrait
 
         //====================================================================//
         // Check Address Minimum Fields Are Given
-        if (empty($this->in["id_customer"])) {
-            return Splash::log()->errNull("ErrLocalFieldMissing", __CLASS__, __FUNCTION__, "id_customer");
+        if (empty($this->in['id_customer'])) {
+            return Splash::log()->errNull('ErrLocalFieldMissing', __CLASS__, __FUNCTION__, 'id_customer');
         }
-        if (empty($this->in["firstname"])) {
-            return Splash::log()->errNull("ErrLocalFieldMissing", __CLASS__, __FUNCTION__, "firstname");
+        if (empty($this->in['firstname'])) {
+            return Splash::log()->errNull('ErrLocalFieldMissing', __CLASS__, __FUNCTION__, 'firstname');
         }
-        if (empty($this->in["lastname"])) {
-            return Splash::log()->errNull("ErrLocalFieldMissing", __CLASS__, __FUNCTION__, "lastname");
+        if (empty($this->in['lastname'])) {
+            return Splash::log()->errNull('ErrLocalFieldMissing', __CLASS__, __FUNCTION__, 'lastname');
         }
-        if (empty($this->in["address1"])) {
-            return Splash::log()->errNull("ErrLocalFieldMissing", __CLASS__, __FUNCTION__, "address1");
+        if (empty($this->in['address1'])) {
+            return Splash::log()->errNull('ErrLocalFieldMissing', __CLASS__, __FUNCTION__, 'address1');
         }
-        if (empty($this->in["postcode"])) {
-            return Splash::log()->errNull("ErrLocalFieldMissing", __CLASS__, __FUNCTION__, "postcode");
+        if (empty($this->in['postcode'])) {
+            return Splash::log()->errNull('ErrLocalFieldMissing', __CLASS__, __FUNCTION__, 'postcode');
         }
-        if (empty($this->in["city"])) {
-            return Splash::log()->errNull("ErrLocalFieldMissing", __CLASS__, __FUNCTION__, "city");
+        if (empty($this->in['city'])) {
+            return Splash::log()->errNull('ErrLocalFieldMissing', __CLASS__, __FUNCTION__, 'city');
         }
-        if (empty($this->in["id_country"])) {
-            return Splash::log()->errNull("ErrLocalFieldMissing", __CLASS__, __FUNCTION__, "id_country");
+        if (empty($this->in['id_country'])) {
+            return Splash::log()->errNull('ErrLocalFieldMissing', __CLASS__, __FUNCTION__, 'id_country');
         }
 
         //====================================================================//
@@ -119,19 +117,19 @@ trait CRUDTrait
         //====================================================================//
         // Check Deleted Flag
         if (self::isDeleted($this->object)) {
-            Splash::log()->war("This Address is marked as Deleted. Update was Skipped");
+            Splash::log()->war('This Address is marked as Deleted. Update was Skipped');
 
             return $this->getObjectIdentifier();
         }
         //====================================================================//
         // Create Address Alias if Not Given
         if (empty($this->object->alias)) {
-            $this->object->alias = $this->spl->l("My Address");
+            $this->object->alias = $this->spl->l('My Address');
             Splash::log()->war(
-                "MsgLocalTpl",
+                'MsgLocalTpl',
                 __CLASS__,
                 __FUNCTION__,
-                "New Address Alias Generated - ".$this->object->alias
+                'New Address Alias Generated - ' . $this->object->alias
             );
         }
 
@@ -140,7 +138,7 @@ trait CRUDTrait
         //====================================================================//
         if (!empty($this->object->id)) {
             if (!$this->object->update()) {
-                return Splash::log()->errNull("Unable to Update Customer Address (".$this->object->id.").");
+                return Splash::log()->errNull('Unable to Update Customer Address (' . $this->object->id . ').');
             }
 
             return $this->getObjectIdentifier();
@@ -153,14 +151,14 @@ trait CRUDTrait
         //====================================================================//
         // Create Object In Database
         if (!$this->object->add()) {
-            return Splash::log()->errNull("Unable to create new Customer Address.");
+            return Splash::log()->errNull('Unable to create new Customer Address.');
         }
 
         //====================================================================//
         // UPDATE/CREATE SPLASH ID
         //====================================================================//
         if (!is_null($this->NewSplashId)) {
-            self::setSplashId("Address", (int) $this->object->id, $this->NewSplashId);
+            self::setSplashId('Address', (int) $this->object->id, $this->NewSplashId);
             $this->NewSplashId = null;
         }
 
@@ -178,20 +176,20 @@ trait CRUDTrait
         //====================================================================//
         // Safety Checks
         if (empty($objectId)) {
-            return Splash::log()->err("ErrSchNoObjectId", __CLASS__."::".__FUNCTION__);
+            return Splash::log()->err('ErrSchNoObjectId', __CLASS__ . '::' . __FUNCTION__);
         }
         //====================================================================//
         // Load Object From DataBase
         //====================================================================//
         $address = new Address((int) $objectId);
         if ($address->id != $objectId) {
-            return Splash::log()->warTrace("Unable to load (".$objectId.").");
+            return Splash::log()->warTrace('Unable to load (' . $objectId . ').');
         }
         //====================================================================//
         // Delete Object From DataBase
         //====================================================================//
         if (!$address->delete()) {
-            return Splash::log()->errTrace("Unable to delete (".$objectId.").");
+            return Splash::log()->errTrace('Unable to delete (' . $objectId . ').');
         }
 
         return true;

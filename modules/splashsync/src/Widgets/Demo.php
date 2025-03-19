@@ -12,9 +12,7 @@
  *  file that was distributed with this source code.
  *
  * @author Splash Sync
- *
  * @copyright Splash Sync SAS
- *
  * @license MIT
  */
 
@@ -49,7 +47,7 @@ class Demo extends AbstractWidget
     // Define Standard Options for this Widget
     // Override this array to change default options for your widget
     public static array $options = array(
-        "Width" => self::SIZE_XL
+        'Width' => self::SIZE_XL
     );
 
     //====================================================================//
@@ -68,21 +66,21 @@ class Demo extends AbstractWidget
      *
      * @var string
      */
-    protected static string $name = "Demo Widget";
+    protected static string $name = 'Demo Widget';
 
     /**
      * Widget Description (Translated by Module)
      *
      * @var string
      */
-    protected static string $description = "TEST & DEMONSTRATION WIDGET";
+    protected static string $description = 'TEST & DEMONSTRATION WIDGET';
 
     /**
      * Widget Icon (FontAwesome or Glyph ico tag)
      *
      * @var string
      */
-    protected static string $ico = "fa fa-magic";
+    protected static string $ico = 'fa fa-magic';
 
     //====================================================================//
     // Class Main Functions
@@ -98,16 +96,16 @@ class Demo extends AbstractWidget
         //====================================================================//
         // Reference
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
-            ->identifier("text_input")
-            ->name("Text Input")
-            ->description("Widget Specific Custom text Input");
+            ->identifier('text_input')
+            ->name('Text Input')
+            ->description('Widget Specific Custom text Input');
 
         //====================================================================//
         // Reference
         $this->fieldsFactory()->create(SPL_T_INT)
-            ->identifier("integer_input")
-            ->name("Numeric Input")
-            ->description("Widget Specific Custom Numeric Input");
+            ->identifier('integer_input')
+            ->name('Numeric Input')
+            ->description('Widget Specific Custom Numeric Input');
 
         //====================================================================//
         // Publish Fields
@@ -170,7 +168,7 @@ class Demo extends AbstractWidget
     {
         //====================================================================//
         // Into Text Block
-        $this->blocksFactory()->addTextBlock("This is a Demo Text Block!!"."You can repeat me as much as you want!");
+        $this->blocksFactory()->addTextBlock('This is a Demo Text Block!!' . 'You can repeat me as much as you want!');
     }
 
     /**
@@ -186,18 +184,18 @@ class Demo extends AbstractWidget
         // verify Inputs
         if (!is_array($inputs) && !($inputs instanceof ArrayObject)) {
             $this->blocksFactory()
-                ->addNotificationsBlock(array("warning" => "Inputs is not an Array!"));
+                ->addNotificationsBlock(array('warning' => 'Inputs is not an Array!'));
 
             return;
         }
         //====================================================================//
         // Parameters Table Block
         $tableContents = array();
-        $tableContents[] = array("Received ".count($inputs)." inputs parameters","Value");
+        $tableContents[] = array('Received ' . count($inputs) . ' inputs parameters','Value');
         foreach ($inputs as $key => $value) {
             $tableContents[] = array($key, $value);
         }
-        $this->blocksFactory()->addTableBlock($tableContents, array("Width" => self::SIZE_M));
+        $this->blocksFactory()->addTableBlock($tableContents, array('Width' => self::SIZE_M));
     }
 
     /**
@@ -210,12 +208,12 @@ class Demo extends AbstractWidget
         //====================================================================//
         // Notifications Block
         $notifications = array(
-            "error" => "This is a Sample Error Notification",
-            "warning" => "This is a Sample Warning Notification",
-            "success" => "This is a Sample Success Notification",
-            "info" => "This is a Sample Infomation Notification",
+            'error' => 'This is a Sample Error Notification',
+            'warning' => 'This is a Sample Warning Notification',
+            'success' => 'This is a Sample Success Notification',
+            'info' => 'This is a Sample Infomation Notification',
         );
 
-        $this->blocksFactory()->addNotificationsBlock($notifications, array("Width" => self::SIZE_M));
+        $this->blocksFactory()->addNotificationsBlock($notifications, array('Width' => self::SIZE_M));
     }
 }

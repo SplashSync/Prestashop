@@ -12,9 +12,7 @@
  *  file that was distributed with this source code.
  *
  * @author Splash Sync
- *
  * @copyright Splash Sync SAS
- *
  * @license MIT
  */
 
@@ -43,18 +41,18 @@ trait CoreTrait
     {
         //====================================================================//
         // Order Object
-        $this->fieldsFactory()->create((string) self::objects()->encode("Order", SPL_T_ID))
-            ->identifier("id_order")
+        $this->fieldsFactory()->create((string) self::objects()->encode('Order', SPL_T_ID))
+            ->identifier('id_order')
             ->name($this->spl->l('Order'))
-            ->microData("http://schema.org/Invoice", "referencesOrder")
+            ->microData('http://schema.org/Invoice', 'referencesOrder')
             ->isReadOnly()
         ;
         //====================================================================//
         // Invoice Reference
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
-            ->identifier("number")
-            ->name(Translate::getAdminTranslation("Invoice number", "AdminInvoices"))
-            ->microData("http://schema.org/Invoice", "confirmationNumber")
+            ->identifier('number')
+            ->name(Translate::getAdminTranslation('Invoice number', 'AdminInvoices'))
+            ->microData('http://schema.org/Invoice', 'confirmationNumber')
             ->isReadOnly()
             ->isIndexed()
             ->isListed()
@@ -77,12 +75,12 @@ trait CoreTrait
             case 'number':
                 $this->out[$fieldName] = ($this->object->number)
                     ? $this->object->getInvoiceNumberFormatted(SLM::getDefaultLangId())
-                    : "DRAFT#".$this->object->id
+                    : 'DRAFT#' . $this->object->id
                 ;
 
                 break;
             case 'id_order':
-                $this->out[$fieldName] = self::objects()->encode("Order", $this->object->{$fieldName});
+                $this->out[$fieldName] = self::objects()->encode('Order', $this->object->{$fieldName});
 
                 break;
             default:

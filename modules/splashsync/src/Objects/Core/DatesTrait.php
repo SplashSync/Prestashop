@@ -12,9 +12,7 @@
  *  file that was distributed with this source code.
  *
  * @author Splash Sync
- *
  * @copyright Splash Sync SAS
- *
  * @license MIT
  */
 
@@ -43,19 +41,19 @@ trait DatesTrait
         //====================================================================//
         // Creation Date
         $this->fieldsFactory()->create(SPL_T_DATETIME)
-            ->Identifier("date_add")
-            ->Name(Translate::getAdminTranslation("Creation", "AdminSupplyOrders"))
-            ->Group(Translate::getAdminTranslation("Meta", "AdminThemes"))
-            ->MicroData("http://schema.org/DataFeedItem", "dateCreated")
+            ->Identifier('date_add')
+            ->Name(Translate::getAdminTranslation('Creation', 'AdminSupplyOrders'))
+            ->Group(Translate::getAdminTranslation('Meta', 'AdminThemes'))
+            ->MicroData('http://schema.org/DataFeedItem', 'dateCreated')
             ->isReadOnly();
 
         //====================================================================//
         // Last Change Date
         $this->fieldsFactory()->create(SPL_T_DATETIME)
-            ->Identifier("date_upd")
-            ->Name(Translate::getAdminTranslation("Last modification", "AdminSupplyOrders"))
-            ->Group(Translate::getAdminTranslation("Meta", "AdminThemes"))
-            ->MicroData("http://schema.org/DataFeedItem", "dateModified")
+            ->Identifier('date_upd')
+            ->Name(Translate::getAdminTranslation('Last modification', 'AdminSupplyOrders'))
+            ->Group(Translate::getAdminTranslation('Meta', 'AdminThemes'))
+            ->MicroData('http://schema.org/DataFeedItem', 'dateModified')
             ->isReadOnly();
     }
 

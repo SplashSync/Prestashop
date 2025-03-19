@@ -12,9 +12,7 @@
  *  file that was distributed with this source code.
  *
  * @author Splash Sync
- *
  * @copyright Splash Sync SAS
- *
  * @license MIT
  */
 
@@ -48,7 +46,7 @@ class Check extends Command
     {
         $this
             ->setName('splash:discount-collector:check')
-            ->setDescription("Check Order cache on Advanced Discounts Collector")
+            ->setDescription('Check Order cache on Advanced Discounts Collector')
             ->addArgument(
                 'orderId',
                 InputArgument::REQUIRED,
@@ -72,13 +70,13 @@ class Check extends Command
     {
         //====================================================================//
         // Splash Module Class Includes
-        require_once(_PS_ROOT_DIR_.'/modules/splashsync/splashsync.php');
+        require_once(_PS_ROOT_DIR_ . '/modules/splashsync/splashsync.php');
         //====================================================================//
         // Check if Parser is Enabled
         $this->displayResult(
             $output,
             DiscountsManager::isFeatureActive(),
-            "Discount Parser is Enabled"
+            'Discount Parser is Enabled'
         );
         if (!DiscountsManager::isFeatureActive()) {
             return 1;
@@ -88,9 +86,9 @@ class Check extends Command
         $currency = new Currency((int) Configuration::get('PS_CURRENCY_DEFAULT'));
         //====================================================================//
         // Safety Check
-        $orderId = $input->getArgument("orderId");
+        $orderId = $input->getArgument('orderId');
         if (!$orderId || !is_string($orderId)) {
-            $this->displayResult($output, false, "No Order ID provided");
+            $this->displayResult($output, false, 'No Order ID provided');
 
             return 0;
         }
@@ -99,7 +97,7 @@ class Check extends Command
         $this->displayResult(
             $output,
             DiscountsManager::hasOrderDiscountsDetails($orderId, $currency),
-            sprintf("Order %s has Discount Details", $orderId)
+            sprintf('Order %s has Discount Details', $orderId)
         );
         //====================================================================//
         // If Clear Details Requested
@@ -107,7 +105,7 @@ class Check extends Command
             $this->displayResult(
                 $output,
                 DiscountsManager::deleteOrderDiscountsDetails($orderId),
-                sprintf("Order %s Discount Details now Deleted", $orderId)
+                sprintf('Order %s Discount Details now Deleted', $orderId)
             );
         }
 

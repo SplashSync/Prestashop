@@ -12,9 +12,7 @@
  *  file that was distributed with this source code.
  *
  * @author Splash Sync
- *
  * @copyright Splash Sync SAS
- *
  * @license MIT
  */
 
@@ -51,17 +49,17 @@ trait PdfTrait
         //====================================================================//
         // Invoice PDF
         $this->fieldsFactory()->create(SPL_T_STREAM)
-            ->Identifier("pdf_invoice")
-            ->Name(Translate::getAdminTranslation("Invoices", "AdminNavigationMenu"))
-            ->MicroData("http://schema.org/Order", "invoicePdf")
+            ->Identifier('pdf_invoice')
+            ->Name(Translate::getAdminTranslation('Invoices', 'AdminNavigationMenu'))
+            ->MicroData('http://schema.org/Order', 'invoicePdf')
             ->isReadOnly();
 
         //====================================================================//
         // Delivery PDF
         $this->fieldsFactory()->create(SPL_T_STREAM)
-            ->Identifier("pdf_delivery")
-            ->Name(Translate::getAdminTranslation("Delivery", "AdminNavigationMenu"))
-            ->MicroData("http://schema.org/Order", "deliveryPdf")
+            ->Identifier('pdf_delivery')
+            ->Name(Translate::getAdminTranslation('Delivery', 'AdminNavigationMenu'))
+            ->MicroData('http://schema.org/Order', 'deliveryPdf')
             ->isReadOnly();
     }
 

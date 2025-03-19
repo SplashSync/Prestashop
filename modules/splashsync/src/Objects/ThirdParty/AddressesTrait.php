@@ -12,9 +12,7 @@
  *  file that was distributed with this source code.
  *
  * @author Splash Sync
- *
  * @copyright Splash Sync SAS
- *
  * @license MIT
  */
 
@@ -43,12 +41,12 @@ trait AddressesTrait
     {
         //====================================================================//
         // Address List
-        $this->fieldsFactory()->create((string) self::objects()->Encode("Address", SPL_T_ID))
-            ->identifier("address")
-            ->inList("contacts")
-            ->name(Translate::getAdminTranslation("Address", "AdminCustomers"))
-            ->microData("http://schema.org/Organization", "address")
-            ->group(Translate::getAdminTranslation("Addresses", "AdminCustomers"))
+        $this->fieldsFactory()->create((string) self::objects()->Encode('Address', SPL_T_ID))
+            ->identifier('address')
+            ->inList('contacts')
+            ->name(Translate::getAdminTranslation('Address', 'AdminCustomers'))
+            ->microData('http://schema.org/Organization', 'address')
+            ->group(Translate::getAdminTranslation('Addresses', 'AdminCustomers'))
             ->isReadOnly()
         ;
     }
@@ -85,8 +83,8 @@ trait AddressesTrait
     {
         //====================================================================//
         // Create List If Not Existing
-        if (!isset($this->out["contacts"]) || !is_array($this->out["contacts"])) {
-            $this->out["contacts"] = array();
+        if (!isset($this->out['contacts']) || !is_array($this->out['contacts'])) {
+            $this->out['contacts'] = array();
         }
         //====================================================================//
         // Collect All User Addresses
@@ -104,8 +102,8 @@ trait AddressesTrait
         //====================================================================//
         // Run Through Address List
         foreach ($addressIds as $index => $addressId) {
-            $this->out["contacts"][$index] = array(
-                "address" => self::objects()->Encode("Address", (string) $addressId)
+            $this->out['contacts'][$index] = array(
+                'address' => self::objects()->Encode('Address', (string) $addressId)
             );
         }
     }
@@ -120,8 +118,8 @@ trait AddressesTrait
         $addressIds = array();
         //====================================================================//
         // Read Address List from Database (Also Collect Deleted Addresses)
-        $sql = 'SELECT DISTINCT a.id_address FROM `'._DB_PREFIX_.'address` a 
-                    WHERE `id_customer` = '.(int) $this->object->id;
+        $sql = 'SELECT DISTINCT a.id_address FROM `' . _DB_PREFIX_ . 'address` a 
+                    WHERE `id_customer` = ' . (int) $this->object->id;
 
         try {
             $addressList = Db::getInstance()->executeS($sql);
@@ -136,7 +134,7 @@ trait AddressesTrait
         //====================================================================//
         // Run Through Address List
         foreach ($addressList as $address) {
-            if ($addressId = (int) $address["id_address"] ?? null) {
+            if ($addressId = (int) $address['id_address'] ?? null) {
                 $addressIds[$addressId] = $addressId;
             }
         }
@@ -155,8 +153,8 @@ trait AddressesTrait
         //====================================================================//
         // Read Address List from Orders Table
         $sql = 'SELECT DISTINCT o.id_address_delivery, o.id_address_invoice 
-                    FROM `'._DB_PREFIX_.'orders` o 
-                    WHERE `id_customer` = '.(int) $this->object->id;
+                    FROM `' . _DB_PREFIX_ . 'orders` o 
+                    WHERE `id_customer` = ' . (int) $this->object->id;
 
         try {
             $addressList = Db::getInstance()->executeS($sql);
@@ -171,10 +169,10 @@ trait AddressesTrait
         //====================================================================//
         // Run Through Address List
         foreach ($addressList as $address) {
-            if ($addressId = (int) $address["id_address_delivery"] ?? null) {
+            if ($addressId = (int) $address['id_address_delivery'] ?? null) {
                 $addressIds[$addressId] = $addressId;
             }
-            if ($addressId = (int) $address["id_address_invoice"] ?? null) {
+            if ($addressId = (int) $address['id_address_invoice'] ?? null) {
                 $addressIds[$addressId] = $addressId;
             }
         }

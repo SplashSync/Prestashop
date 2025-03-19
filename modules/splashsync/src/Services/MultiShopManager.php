@@ -12,9 +12,7 @@
  *  file that was distributed with this source code.
  *
  * @author Splash Sync
- *
  * @copyright Splash Sync SAS
- *
  * @license MIT
  */
 
@@ -41,17 +39,17 @@ class MultiShopManager
     /**
      * In This Mode, Field is Read & Write in CONTEXT_ALL
      */
-    const MODE_ALL = "all";
+    const MODE_ALL = 'all';
 
     /**
      * In This Mode, Field is Read in CONTEXT_ALL and Write in All Shops
      */
-    const MODE_MULTI = "multi";
+    const MODE_MULTI = 'multi';
 
     /**
      * In This Mode, Field is Read in CONTEXT_ALL and Write is NOT Allowed
      */
-    const MODE_NONE = "none";
+    const MODE_NONE = 'none';
 
     /**
      * List of Shops Ids
@@ -104,7 +102,7 @@ class MultiShopManager
         }
         //====================================================================//
         // When Library is called in TRAVIS CI mode ONLY
-        if (!empty(Splash::input("SPLASH_TRAVIS"))) {
+        if (!empty(Splash::input('SPLASH_TRAVIS'))) {
             return true;
         }
 
@@ -171,7 +169,7 @@ class MultiShopManager
         // From PS
         self::$shopIds = array();
         foreach (Shop::getShops(false) as $shop) {
-            self::$shopIds[] = $shop["id_shop"];
+            self::$shopIds[] = $shop['id_shop'];
         }
 
         return self::$shopIds;
@@ -197,7 +195,7 @@ class MultiShopManager
         //====================================================================//
         // Check if All Shop Context
         if (is_null($shopId)) {
-            if (method_exists(Shop::class, "resetContext")) {
+            if (method_exists(Shop::class, 'resetContext')) {
                 Shop::resetContext();
             }
             // Setup Shop Context
@@ -218,7 +216,7 @@ class MultiShopManager
         //====================================================================//
         // Check if Shop is Active
         if (in_array($shopId, self::getShopIds(), false)) {
-            if (method_exists(Shop::class, "resetContext")) {
+            if (method_exists(Shop::class, 'resetContext')) {
                 Shop::resetContext();
             }
             // Setup Shop Context
@@ -275,7 +273,7 @@ class MultiShopManager
             self::$shopsCache[$shopId] = new Shop($shopId);
         }
         if (!(self::$shopsCache[$shopId] instanceof Shop)) {
-            throw new Exception("Unable to load Requested Shop");
+            throw new Exception('Unable to load Requested Shop');
         }
 
         return self::$shopsCache[$shopId];
@@ -295,7 +293,7 @@ class MultiShopManager
             self::$countriesCache[$countryId] = new Country($countryId);
         }
         if (!(self::$countriesCache[$countryId] instanceof Country)) {
-            throw new Exception("Unable to load Requested Country");
+            throw new Exception('Unable to load Requested Country');
         }
 
         return self::$countriesCache[$countryId];
@@ -312,13 +310,13 @@ class MultiShopManager
         // Ensure Feature is Active
         if (!Shop::isFeatureActive()) {
             self::setContext();
-            Configuration::updateValue("PS_MULTISHOP_FEATURE_ACTIVE", '1');
+            Configuration::updateValue('PS_MULTISHOP_FEATURE_ACTIVE', '1');
         }
         //====================================================================//
         // Add a New Shop
         $shop = new Shop();
         $shop->name = $name;
-        $shop->theme_name = "classic";
+        $shop->theme_name = 'classic';
         $shop->id_shop_group = 1;
         $shop->id_category = 2;
         $shop->add();
@@ -336,6 +334,6 @@ class MultiShopManager
         Configuration::loadConfiguration();
         Shop::cacheShops(true);
 
-        return (int) \Db::getInstance()->getValue('SELECT COUNT(*) FROM '._DB_PREFIX_.'shop');
+        return (int) \Db::getInstance()->getValue('SELECT COUNT(*) FROM ' . _DB_PREFIX_ . 'shop');
     }
 }

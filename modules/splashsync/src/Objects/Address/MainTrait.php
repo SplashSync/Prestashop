@@ -12,9 +12,7 @@
  *  file that was distributed with this source code.
  *
  * @author Splash Sync
- *
  * @copyright Splash Sync SAS
- *
  * @license MIT
  */
 
@@ -43,41 +41,41 @@ trait MainTrait
      */
     private function buildMainFields(): void
     {
-        $groupName = Translate::getAdminTranslation("Address", "AdminCustomers");
+        $groupName = Translate::getAdminTranslation('Address', 'AdminCustomers');
 
         //====================================================================//
         // Address
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
-            ->identifier("address1")
+            ->identifier('address1')
             ->name($groupName)
-            ->microData("http://schema.org/PostalAddress", "streetAddress")
+            ->microData('http://schema.org/PostalAddress', 'streetAddress')
             ->group($groupName)
             ->isRequired()
         ;
         //====================================================================//
         // Address Complement
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
-            ->identifier("address2")
-            ->name($groupName." (2)")
+            ->identifier('address2')
+            ->name($groupName . ' (2)')
             ->group($groupName)
-            ->microData("http://schema.org/PostalAddress", "postOfficeBoxNumber")
+            ->microData('http://schema.org/PostalAddress', 'postOfficeBoxNumber')
         ;
         //====================================================================//
         // Zip Code
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
-            ->identifier("postcode")
-            ->name(Translate::getAdminTranslation("Zip/Postal Code", "AdminAddresses"))
-            ->microData("http://schema.org/PostalAddress", "postalCode")
+            ->identifier('postcode')
+            ->name(Translate::getAdminTranslation('Zip/Postal Code', 'AdminAddresses'))
+            ->microData('http://schema.org/PostalAddress', 'postalCode')
             ->group($groupName)
-            ->addOption("maxLength", "12")
+            ->addOption('maxLength', '12')
             ->isRequired()
         ;
         //====================================================================//
         // City Name
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
-            ->identifier("city")
-            ->name(Translate::getAdminTranslation("City", "AdminAddresses"))
-            ->microData("http://schema.org/PostalAddress", "addressLocality")
+            ->identifier('city')
+            ->name(Translate::getAdminTranslation('City', 'AdminAddresses'))
+            ->microData('http://schema.org/PostalAddress', 'addressLocality')
             ->group($groupName)
             ->isRequired()
             ->isListed()
@@ -85,24 +83,24 @@ trait MainTrait
         //====================================================================//
         // State Name
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
-            ->identifier("state")
-            ->name(Translate::getAdminTranslation("State", "AdminAddresses"))
+            ->identifier('state')
+            ->name(Translate::getAdminTranslation('State', 'AdminAddresses'))
             ->group($groupName)
             ->isReadOnly()
         ;
         //====================================================================//
         // State code
         $this->fieldsFactory()->create(SPL_T_STATE)
-            ->identifier("id_state")
-            ->name(Translate::getAdminTranslation("State", "AdminAddresses")." (Code)")
+            ->identifier('id_state')
+            ->name(Translate::getAdminTranslation('State', 'AdminAddresses') . ' (Code)')
             ->group($groupName)
-            ->microData("http://schema.org/PostalAddress", "addressRegion")
+            ->microData('http://schema.org/PostalAddress', 'addressRegion')
         ;
         //====================================================================//
         // Country Name
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
-            ->identifier("country")
-            ->name(Translate::getAdminTranslation("Country", "AdminAddresses"))
+            ->identifier('country')
+            ->name(Translate::getAdminTranslation('Country', 'AdminAddresses'))
             ->group($groupName)
             ->isReadOnly()
             ->isListed()
@@ -110,9 +108,9 @@ trait MainTrait
         //====================================================================//
         // Country ISO Code
         $this->fieldsFactory()->create(SPL_T_COUNTRY)
-            ->identifier("id_country")
-            ->name(Translate::getAdminTranslation("Country", "AdminAddresses")." (Code)")
-            ->microData("http://schema.org/PostalAddress", "addressCountry")
+            ->identifier('id_country')
+            ->name(Translate::getAdminTranslation('Country', 'AdminAddresses') . ' (Code)')
+            ->microData('http://schema.org/PostalAddress', 'addressCountry')
             ->group($groupName)
             ->isRequired()
         ;

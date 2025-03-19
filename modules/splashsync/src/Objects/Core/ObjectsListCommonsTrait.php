@@ -12,9 +12,7 @@
  *  file that was distributed with this source code.
  *
  * @author Splash Sync
- *
  * @copyright Splash Sync SAS
- *
  * @license MIT
  */
 
@@ -78,14 +76,14 @@ trait ObjectsListCommonsTrait
         Splash::log()->trace();
         //====================================================================//
         // Setup sortorder
-        $sqlSortField = empty($params["sortfield"])    ?   $sortField  :   pSQL($params["sortfield"]);
-        $sqlSortOrder = empty($params["sortorder"])    ?   "ASC"       :   pSQL($params["sortorder"]);
+        $sqlSortField = empty($params['sortfield'])    ?   $sortField  :   pSQL($params['sortfield']);
+        $sqlSortOrder = empty($params['sortorder'])    ?   'ASC'       :   pSQL($params['sortorder']);
         // Build ORDER BY
-        $sql->orderBy('`'.pSQL($sqlSortField).'` '.pSQL($sqlSortOrder));
+        $sql->orderBy('`' . pSQL($sqlSortField) . '` ' . pSQL($sqlSortOrder));
         //====================================================================//
         // Build LIMIT
-        $sqlLimitMax = empty($params["max"])        ?   50  :   pSQL($params["max"]);
-        $sqlLimitOff = empty($params["offset"])     ?   0   :   pSQL($params["offset"]);
+        $sqlLimitMax = empty($params['max'])        ?   50  :   pSQL($params['max']);
+        $sqlLimitOff = empty($params['offset'])     ?   0   :   pSQL($params['offset']);
         $sql->limit((int) $sqlLimitMax, (int)  $sqlLimitOff);
         //====================================================================//
         // Execute final request
@@ -132,9 +130,9 @@ trait ObjectsListCommonsTrait
         }
         //====================================================================//
         // Prepare List result meta infos
-        $data["meta"]["current"] = count($data);   // Store Current Number of results
-        $data["meta"]["total"] = $total;         // Store Total Number of results
-        Splash::log()->deb("MsgLocalTpl", __CLASS__, __FUNCTION__, (count($data) - 1)." Objects Found.");
+        $data['meta']['current'] = count($data);   // Store Current Number of results
+        $data['meta']['total'] = $total;         // Store Total Number of results
+        Splash::log()->deb('MsgLocalTpl', __CLASS__, __FUNCTION__, (count($data) - 1) . ' Objects Found.');
 
         return $data;
     }

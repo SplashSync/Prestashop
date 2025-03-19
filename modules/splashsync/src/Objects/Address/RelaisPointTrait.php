@@ -12,9 +12,7 @@
  *  file that was distributed with this source code.
  *
  * @author Splash Sync
- *
  * @copyright Splash Sync SAS
- *
  * @license MIT
  */
 
@@ -43,9 +41,9 @@ trait RelaisPointTrait
         //====================================================================//
         // Estimated Relay Point Code
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
-            ->identifier("relay_point_code")
-            ->name("Estimated Relay Point Code")
-            ->microData("http://schema.org/PostalAddress", "identifier")
+            ->identifier('relay_point_code')
+            ->name('Estimated Relay Point Code')
+            ->microData('http://schema.org/PostalAddress', 'identifier')
             ->isReadOnly()
         ;
     }
@@ -90,7 +88,7 @@ trait RelaisPointTrait
         if (empty($code)) {
             return false;
         }
-        if (!preg_match("/^[a-zA-Z0-9]+$/", $code)) {
+        if (!preg_match('/^[a-zA-Z0-9]+$/', $code)) {
             return false;
         }
 
@@ -106,12 +104,12 @@ trait RelaisPointTrait
         // Validate Code Format
         $code = $address->other;
         if (empty($code) || !is_string($code)) {
-            return "";
+            return '';
         }
         //====================================================================//
         // Take Care of GLS Formats
-        if (0 == strpos("GLS_", $code)) {
-            $parts = explode("-", $code);
+        if (0 == strpos('GLS_', $code)) {
+            $parts = explode('-', $code);
             if (is_array($parts) && 2 == count($parts)) {
                 $code = $parts[1];
             }

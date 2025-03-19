@@ -12,9 +12,7 @@
  *  file that was distributed with this source code.
  *
  * @author Splash Sync
- *
  * @copyright Splash Sync SAS
- *
  * @license MIT
  */
 
@@ -41,11 +39,11 @@ class L02AttributesManagerTest extends ObjectsCase
      */
     public function testFeatureIsActive()
     {
-        $this->assertNotEmpty(Combination::isFeatureActive(), "Combination feature is Not Active");
+        $this->assertNotEmpty(Combination::isFeatureActive(), 'Combination feature is Not Active');
         $this->assertEquals(
             SLM::getDefaultLanguage(),
-            "en_US",
-            "This test rely on Fact that Default language is en_US"
+            'en_US',
+            'This test rely on Fact that Default language is en_US'
         );
     }
 
@@ -58,12 +56,12 @@ class L02AttributesManagerTest extends ObjectsCase
     {
         //====================================================================//
         //   Load Known Attribute Group
-        $attributeGroup = Manager::touchGroup("Size", null);
+        $attributeGroup = Manager::touchGroup('Size', null);
         $this->assertNotEmpty($attributeGroup);
         $this->assertInstanceOf(AttributeGroup::class, $attributeGroup);
         // @phpstan-ignore-next-line
         $this->assertIsIterable($attributeGroup->name);
-        $this->assertContains("Size", $attributeGroup->name);
+        $this->assertContains('Size', $attributeGroup->name);
 
         //====================================================================//
         //   Load UnKnown Attribute Group
@@ -83,10 +81,10 @@ class L02AttributesManagerTest extends ObjectsCase
     {
         //====================================================================//
         //   Generate Random Attribute Group Infos
-        $code = "tstVariant".rand(100, 999);
+        $code = 'tstVariant' . rand(100, 999);
         $names = array();
         foreach (SLM::getAvailableLanguages() as $isoCode) {
-            $names[$isoCode] = implode("-", array($code, SLM::getPsLangId($isoCode), rand(100, 999)));
+            $names[$isoCode] = implode('-', array($code, SLM::getPsLangId($isoCode), rand(100, 999)));
         }
         $dfName = $names[SLM::getDefaultLanguage()];
 
@@ -157,7 +155,7 @@ class L02AttributesManagerTest extends ObjectsCase
         //   Create a New Attribute Values Names
         $values = array();
         foreach (SLM::getAvailableLanguages() as $isoCode) {
-            $values[$isoCode] = implode("-", array($code, SLM::getPsLangId($isoCode), rand(100, 999)));
+            $values[$isoCode] = implode('-', array($code, SLM::getPsLangId($isoCode), rand(100, 999)));
         }
         $dfValue = $values[SLM::getDefaultLanguage()];
 

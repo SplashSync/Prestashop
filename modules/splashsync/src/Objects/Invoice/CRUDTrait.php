@@ -12,9 +12,7 @@
  *  file that was distributed with this source code.
  *
  * @author Splash Sync
- *
  * @copyright Splash Sync SAS
- *
  * @license MIT
  */
 
@@ -60,11 +58,11 @@ trait CRUDTrait
         // Load Object
         $object = new OrderInvoice((int) $objectId);
         if ($object->id != $objectId) {
-            return Splash::log()->errNull("Unable to load Invoice (".$objectId.").");
+            return Splash::log()->errNull('Unable to load Invoice (' . $objectId . ').');
         }
         $this->order = new Order($object->id_order);
         if ($this->order->id != $object->id_order) {
-            return Splash::log()->errNull("Unable to load Invoice Order (".$object->id_order.").");
+            return Splash::log()->errNull('Unable to load Invoice Order (' . $object->id_order . ').');
         }
 
         //====================================================================//
@@ -96,7 +94,7 @@ trait CRUDTrait
         Splash::log()->trace();
         //====================================================================//
         // An Invoice Cannot Get deleted
-        Splash::log()->errTrace("You Cannot Create Prestashop Invoices");
+        Splash::log()->errTrace('You Cannot Create Prestashop Invoices');
 
         return null;
     }
@@ -119,7 +117,7 @@ trait CRUDTrait
 
         //====================================================================//
         // An Invoice Cannot Get deleted
-        Splash::log()->errTrace("You Cannot Update Prestashop Invoices");
+        Splash::log()->errTrace('You Cannot Update Prestashop Invoices');
 
         return (string) $this->object->id;
     }
@@ -137,7 +135,7 @@ trait CRUDTrait
 
         //====================================================================//
         // An Invoice Cannot Get deleted
-        Splash::log()->errTrace("You Cannot Delete Prestashop Invoices");
+        Splash::log()->errTrace('You Cannot Delete Prestashop Invoices');
 
         return true;
     }

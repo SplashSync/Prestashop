@@ -12,9 +12,7 @@
  *  file that was distributed with this source code.
  *
  * @author Splash Sync
- *
  * @copyright Splash Sync SAS
- *
  * @license MIT
  */
 
@@ -67,11 +65,11 @@ class L04VariantsIdsTest extends TestCase
         //====================================================================//
         // NO ATTRIBUTE ID => Single Int
         $response[] = array(12345, 0, 12345 );
-        $response[] = array(12345, "0", 12345 );
+        $response[] = array(12345, '0', 12345 );
         $response[] = array(12345, null, 12345 );
-        $response[] = array("12345", 0, 12345 );
-        $response[] = array("12345", "0", 12345 );
-        $response[] = array("12345", null, 12345 );
+        $response[] = array('12345', 0, 12345 );
+        $response[] = array('12345', '0', 12345 );
+        $response[] = array('12345', null, 12345 );
 
         //====================================================================//
         // OLD ENCODING => Both Ids on A Single Int
@@ -89,7 +87,7 @@ class L04VariantsIdsTest extends TestCase
         for ($i = 0; $i < 100; $i++) {
             $pId = rand(0xFFFFF + 1, PHP_INT_MAX);
             $aId = rand(0x7FF + 1, PHP_INT_MAX);
-            $response[] = array($pId, $aId, $pId."@@".$aId);
+            $response[] = array($pId, $aId, $pId . '@@' . $aId);
         }
 
         return $response;

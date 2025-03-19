@@ -12,9 +12,7 @@
  *  file that was distributed with this source code.
  *
  * @author Splash Sync
- *
  * @copyright Splash Sync SAS
- *
  * @license MIT
  */
 
@@ -45,64 +43,64 @@ trait CoreTrait
         //====================================================================//
         // Alias
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
-            ->identifier("alias")
-            ->name($this->spl->l("Address alias"))
-            ->description(Translate::getAdminTranslation("Address alias", "AdminAddresses"))
-            ->microData("http://schema.org/PostalAddress", "name")
+            ->identifier('alias')
+            ->name($this->spl->l('Address alias'))
+            ->description(Translate::getAdminTranslation('Address alias', 'AdminAddresses'))
+            ->microData('http://schema.org/PostalAddress', 'name')
         ;
         //====================================================================//
         // Customer
-        $this->fieldsFactory()->create((string) self::objects()->encode("ThirdParty", SPL_T_ID))
-            ->identifier("id_customer")
-            ->name(Translate::getAdminTranslation("Customer ID", "AdminCustomerThreads"))
-            ->microData("http://schema.org/Organization", "ID")
+        $this->fieldsFactory()->create((string) self::objects()->encode('ThirdParty', SPL_T_ID))
+            ->identifier('id_customer')
+            ->name(Translate::getAdminTranslation('Customer ID', 'AdminCustomerThreads'))
+            ->microData('http://schema.org/Organization', 'ID')
             ->isRequired()
         ;
         //====================================================================//
         // Company
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
-            ->identifier("company")
-            ->name(Translate::getAdminTranslation("Company", "AdminCustomers"))
-            ->microData("http://schema.org/Organization", "legalName")
+            ->identifier('company')
+            ->name(Translate::getAdminTranslation('Company', 'AdminCustomers'))
+            ->microData('http://schema.org/Organization', 'legalName')
             ->isListed()
         ;
         //====================================================================//
         // Firstname
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
-            ->identifier("firstname")
-            ->name(Translate::getAdminTranslation("First name", "AdminCustomers"))
-            ->microData("http://schema.org/Person", "familyName")
-            ->association("firstname", "lastname")
+            ->identifier('firstname')
+            ->name(Translate::getAdminTranslation('First name', 'AdminCustomers'))
+            ->microData('http://schema.org/Person', 'familyName')
+            ->association('firstname', 'lastname')
             ->isRequired()
             ->isListed()
         ;
         //====================================================================//
         // Lastname
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
-            ->identifier("lastname")
-            ->name(Translate::getAdminTranslation("Last name", "AdminCustomers"))
-            ->microData("http://schema.org/Person", "givenName")
-            ->association("firstname", "lastname")
+            ->identifier('lastname')
+            ->name(Translate::getAdminTranslation('Last name', 'AdminCustomers'))
+            ->microData('http://schema.org/Person', 'givenName')
+            ->association('firstname', 'lastname')
             ->isRequired()
             ->isListed()
         ;
         //====================================================================//
         // Active Flag
         $this->fieldsFactory()->create(SPL_T_BOOL)
-            ->identifier("active")
-            ->name("Is Active")
-            ->description("This Address is not hidden for Customer")
-            ->microData("http://schema.org/Person", "active")
-            ->group("Meta")
+            ->identifier('active')
+            ->name('Is Active')
+            ->description('This Address is not hidden for Customer')
+            ->microData('http://schema.org/Person', 'active')
+            ->group('Meta')
             ->isReadOnly()
         ;
         //====================================================================//
         // Deleted Flag
         $this->fieldsFactory()->create(SPL_T_BOOL)
-            ->identifier("deleted")
-            ->name("Is Deleted")
-            ->description("This Address is use and Deleted. Hidden to Customer")
-            ->group("Meta")
+            ->identifier('deleted')
+            ->name('Is Deleted')
+            ->description('This Address is use and Deleted. Hidden to Customer')
+            ->group('Meta')
             ->isReadOnly()
         ;
     }
@@ -132,7 +130,7 @@ trait CoreTrait
                 //====================================================================//
                 // Customer Object Id Readings
             case 'id_customer':
-                $this->out[$fieldName] = self::objects()->encode("ThirdParty", $this->object->{$fieldName});
+                $this->out[$fieldName] = self::objects()->encode('ThirdParty', $this->object->{$fieldName});
 
                 break;
                 //====================================================================//
@@ -206,18 +204,18 @@ trait CoreTrait
         }
         //====================================================================//
         // Verify Object Type
-        if (!$custoId || "ThirdParty" !== self::objects()->Type($customerIdString)) {
-            return Splash::log()->errTrace("Wrong Object Type (".self::objects()->Type($customerIdString).").");
+        if (!$custoId || 'ThirdParty' !== self::objects()->Type($customerIdString)) {
+            return Splash::log()->errTrace('Wrong Object Type (' . self::objects()->Type($customerIdString) . ').');
         }
         //====================================================================//
         // Verify Object Exists
         $customer = new Customer((int) $custoId);
         if ($customer->id != $custoId) {
-            return Splash::log()->errTrace("Unable to load Address Customer(".$custoId.").");
+            return Splash::log()->errTrace('Unable to load Address Customer(' . $custoId . ').');
         }
         //====================================================================//
         // Update Link
-        $this->setSimple("id_customer", $custoId);
+        $this->setSimple('id_customer', $custoId);
 
         return true;
     }

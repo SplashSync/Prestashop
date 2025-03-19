@@ -12,9 +12,7 @@
  *  file that was distributed with this source code.
  *
  * @author Splash Sync
- *
  * @copyright Splash Sync SAS
- *
  * @license MIT
  */
 
@@ -42,18 +40,18 @@ trait AddressTrait
     {
         //====================================================================//
         // Billing Address
-        $this->fieldsFactory()->create((string) self::objects()->encode("Address", SPL_T_ID))
-            ->identifier("id_address_invoice")
+        $this->fieldsFactory()->create((string) self::objects()->encode('Address', SPL_T_ID))
+            ->identifier('id_address_invoice')
             ->name('Billing Address ID')
-            ->microData("http://schema.org/Order", "billingAddress")
+            ->microData('http://schema.org/Order', 'billingAddress')
             ->isRequired()
         ;
         //====================================================================//
         // Shipping Address
-        $this->fieldsFactory()->create((string) self::objects()->encode("Address", SPL_T_ID))
-            ->identifier("id_address_delivery")
+        $this->fieldsFactory()->create((string) self::objects()->encode('Address', SPL_T_ID))
+            ->identifier('id_address_delivery')
             ->name('Shipping Address ID')
-            ->microData("http://schema.org/Order", "orderDelivery")
+            ->microData('http://schema.org/Order', 'orderDelivery')
             ->isRequired()
         ;
     }
@@ -75,7 +73,7 @@ trait AddressTrait
             // Customer Address Ids
             case 'id_address_invoice':
             case 'id_address_delivery':
-                $this->out[$fieldName] = self::objects()->encode("Address", $this->getOrder()->{$fieldName});
+                $this->out[$fieldName] = self::objects()->encode('Address', $this->getOrder()->{$fieldName});
 
                 break;
             default:

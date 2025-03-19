@@ -12,9 +12,7 @@
  *  file that was distributed with this source code.
  *
  * @author Splash Sync
- *
  * @copyright Splash Sync SAS
- *
  * @license MIT
  */
 
@@ -53,18 +51,18 @@ trait PrimaryTrait
         $sql = new DbQuery();
         //====================================================================//
         // Build SELECT
-        $sql->select("o.`id_order`      as id");            // Order Id
-        $sql->select("o.`reference`     as reference");     // Order Internal Reference
+        $sql->select('o.`id_order`      as id');            // Order Id
+        $sql->select('o.`reference`     as reference');     // Order Internal Reference
         //====================================================================//
         // Build FROM
-        $sql->from("orders", 'o');
+        $sql->from('orders', 'o');
         //====================================================================//
         // Setup filters
         // Add filters with names conversions. Added LOWER function to be NON case sensitive
         if (!empty($keys['reference']) && is_string($keys['reference'])) {
             //====================================================================//
             // Search in Customer Email
-            $where = " LOWER( o.`reference` ) = LOWER( '".pSQL($keys['reference'])."') ";
+            $where = ' LOWER( o.`reference` ) = LOWER( \'' . pSQL($keys['reference']) . '\') ';
             $sql->where($where);
         }
         //====================================================================//

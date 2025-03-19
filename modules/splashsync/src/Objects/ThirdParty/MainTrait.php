@@ -12,9 +12,7 @@
  *  file that was distributed with this source code.
  *
  * @author Splash Sync
- *
  * @copyright Splash Sync SAS
- *
  * @license MIT
  */
 
@@ -48,10 +46,10 @@ trait MainTrait
         //====================================================================//
         // Firstname
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
-            ->identifier("firstname")
-            ->name(Translate::getAdminTranslation("First name", "AdminCustomers"))
-            ->microData("http://schema.org/Person", "familyName")
-            ->association("firstname", "lastname")
+            ->identifier('firstname')
+            ->name(Translate::getAdminTranslation('First name', 'AdminCustomers'))
+            ->microData('http://schema.org/Person', 'familyName')
+            ->association('firstname', 'lastname')
             ->isReadOnly(isset(Splash::configuration()->PsUseFullCompanyNames))
             ->isRequired()
             ->isListed()
@@ -59,10 +57,10 @@ trait MainTrait
         //====================================================================//
         // Lastname
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
-            ->identifier("lastname")
-            ->name(Translate::getAdminTranslation("Last name", "AdminCustomers"))
-            ->microData("http://schema.org/Person", "givenName")
-            ->association("firstname", "lastname")
+            ->identifier('lastname')
+            ->name(Translate::getAdminTranslation('Last name', 'AdminCustomers'))
+            ->microData('http://schema.org/Person', 'givenName')
+            ->association('firstname', 'lastname')
             ->isReadOnly(isset(Splash::configuration()->PsUseFullCompanyNames))
             ->isRequired()
             ->isListed()
@@ -70,9 +68,9 @@ trait MainTrait
         //====================================================================//
         // Company
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
-            ->identifier("company")
-            ->name(Translate::getAdminTranslation("Company", "AdminCustomers"))
-            ->microData("http://schema.org/Organization", "legalName")
+            ->identifier('company')
+            ->name(Translate::getAdminTranslation('Company', 'AdminCustomers'))
+            ->microData('http://schema.org/Organization', 'legalName')
             ->isReadOnly(isset(Splash::configuration()->PsUseFullCompanyNames))
             ->isIndexed()
             ->isListed()
@@ -80,36 +78,36 @@ trait MainTrait
         //====================================================================//
         // Full Name
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
-            ->identifier("full_name")
-            ->name("[C] Full Name")
-            ->description("Company | Firstname + Lastname")
-            ->microData("http://schema.org/Organization", "alternateName")
+            ->identifier('full_name')
+            ->name('[C] Full Name')
+            ->description('Company | Firstname + Lastname')
+            ->microData('http://schema.org/Organization', 'alternateName')
             ->isReadOnly()
         ;
         //====================================================================//
         // SIRET
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
-            ->identifier("siret")
-            ->name(Translate::getAdminTranslation("SIRET", "AdminCustomers"))
-            ->microData("http://schema.org/Organization", "taxID")
-            ->group("ID")
+            ->identifier('siret')
+            ->name(Translate::getAdminTranslation('SIRET', 'AdminCustomers'))
+            ->microData('http://schema.org/Organization', 'taxID')
+            ->group('ID')
             ->isNotTested()
         ;
         //====================================================================//
         // APE
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
-            ->identifier("ape")
-            ->name(Translate::getAdminTranslation("APE", "AdminCustomers"))
-            ->microData("http://schema.org/Organization", "naics")
-            ->group("ID")
+            ->identifier('ape')
+            ->name(Translate::getAdminTranslation('APE', 'AdminCustomers'))
+            ->microData('http://schema.org/Organization', 'naics')
+            ->group('ID')
             ->isNotTested()
         ;
         //====================================================================//
         // WebSite
         $this->fieldsFactory()->create(SPL_T_URL)
-            ->identifier("website")
-            ->name(Translate::getAdminTranslation("Website", "AdminCustomers"))
-            ->microData("http://schema.org/Organization", "url")
+            ->identifier('website')
+            ->name(Translate::getAdminTranslation('Website', 'AdminCustomers'))
+            ->microData('http://schema.org/Organization', 'url')
         ;
     }
 
@@ -123,22 +121,22 @@ trait MainTrait
         //====================================================================//
         // Gender Name
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
-            ->identifier("gender_name")
-            ->name(Translate::getAdminTranslation("Social title", "AdminCustomers"))
-            ->microData("http://schema.org/Person", "honorificPrefix")
+            ->identifier('gender_name')
+            ->name(Translate::getAdminTranslation('Social title', 'AdminCustomers'))
+            ->microData('http://schema.org/Person', 'honorificPrefix')
             ->isReadOnly()
         ;
         //====================================================================//
         // Gender Type
-        $desc = Translate::getAdminTranslation("Social title", "AdminCustomers");
-        $desc .= " ; 0 => Male // 1 => Female // 2 => Neutral";
+        $desc = Translate::getAdminTranslation('Social title', 'AdminCustomers');
+        $desc .= ' ; 0 => Male // 1 => Female // 2 => Neutral';
         $this->fieldsFactory()->create(SPL_T_INT)
-            ->identifier("gender_type")
-            ->name(Translate::getAdminTranslation("Social title", "AdminCustomers")." (ID)")
-            ->microData("http://schema.org/Person", "gender")
+            ->identifier('gender_type')
+            ->name(Translate::getAdminTranslation('Social title', 'AdminCustomers') . ' (ID)')
+            ->microData('http://schema.org/Person', 'gender')
             ->description($desc)
-            ->group(Translate::getAdminTranslation("Meta", "AdminThemes"))
-            ->addChoices(array("0" => "Male", "1" => "female"))
+            ->group(Translate::getAdminTranslation('Meta', 'AdminThemes'))
+            ->addChoices(array('0' => 'Male', '1' => 'female'))
             ->isNotTested()
         ;
     }
@@ -187,7 +185,7 @@ trait MainTrait
                 //====================================================================//
                 // Read Only AllInOne Customer Name Mode
                 if (isset(Splash::configuration()->PsUseFullCompanyNames)) {
-                    $this->out[$fieldName] = " ";
+                    $this->out[$fieldName] = ' ';
 
                     break;
                 }
@@ -202,9 +200,9 @@ trait MainTrait
                 break;
             case 'full_name':
                 $this->out[$fieldName] = !empty($this->object->company)
-                    ? sprintf("%s [%s]", ucfirst($this->object->company), $this->object->id)
+                    ? sprintf('%s [%s]', ucfirst($this->object->company), $this->object->id)
                     : sprintf(
-                        "%s %s [%s]",
+                        '%s %s [%s]',
                         ucfirst($this->object->firstname),
                         $this->object->lastname,
                         $this->object->id
@@ -235,7 +233,7 @@ trait MainTrait
             // Gender Name
             case 'gender_name':
                 if (empty($this->object->id_gender)) {
-                    $this->out[$fieldName] = Splash::trans("Empty");
+                    $this->out[$fieldName] = Splash::trans('Empty');
 
                     break;
                 }
@@ -288,8 +286,8 @@ trait MainTrait
 
                 break;
             case 'company':
-                if ($this->object->{$fieldName} == "Prestashop(".$this->object->id.")") {
-                    $this->setSimple($fieldName, "");
+                if ($this->object->{$fieldName} == 'Prestashop(' . $this->object->id . ')') {
+                    $this->setSimple($fieldName, '');
 
                     break;
                 }
@@ -319,7 +317,7 @@ trait MainTrait
             // Write SIRET With Verification
             case 'siret':
                 if (!$fieldData || !Validate::isSiret($fieldData)) {
-                    Splash::log()->war("Given SIRET Number is Invalid. Skipped");
+                    Splash::log()->war('Given SIRET Number is Invalid. Skipped');
 
                     break;
                 }
@@ -330,7 +328,7 @@ trait MainTrait
                 // Write APE With Verification
             case 'ape':
                 if (!$fieldData || !Validate::isApe($fieldData)) {
-                    Splash::log()->war("Given APE Code is Invalid. Skipped");
+                    Splash::log()->war('Given APE Code is Invalid. Skipped');
 
                     break;
                 }
@@ -364,7 +362,7 @@ trait MainTrait
                 //====================================================================//
                 // Identify Gender Type
                 $genders = Gender::getGenders(LanguagesManager::getDefaultLangId());
-                $genders->where("type", "=", $fieldData);
+                $genders->where('type', '=', $fieldData);
                 /** @var false|Gender */
                 $gendertype = $genders->getFirst();
                 //====================================================================//
@@ -373,12 +371,12 @@ trait MainTrait
                     $genders = Gender::getGenders(LanguagesManager::getDefaultLangId());
                     /** @var false|Gender */
                     $gendertype = $genders->getFirst();
-                    Splash::log()->warTrace("This Gender Type doesn't exist.");
+                    Splash::log()->warTrace('This Gender Type doesn\'t exist.');
                 }
                 //====================================================================//
                 // Update Gender Type
                 if ($gendertype) {
-                    $this->setSimple("id_gender", $gendertype->id_gender);
+                    $this->setSimple('id_gender', $gendertype->id_gender);
                 }
 
                 break;
@@ -400,11 +398,11 @@ trait MainTrait
         if (isset(Splash::configuration()->PsUseFullCompanyNames)) {
             //====================================================================//
             // Customer Core Name
-            $fullName = sprintf("%s %s", $this->object->firstname, $this->object->lastname);
+            $fullName = sprintf('%s %s', $this->object->firstname, $this->object->lastname);
             //====================================================================//
             // Customer Company Name
             if (!empty($this->object->company)) {
-                $fullName .= " | ".$this->object->company;
+                $fullName .= ' | ' . $this->object->company;
             }
 
             return $fullName;
@@ -417,6 +415,6 @@ trait MainTrait
 
         //====================================================================//
         // Generic FallBack Mode
-        return "Prestashop(".$this->object->id.")";
+        return 'Prestashop(' . $this->object->id . ')';
     }
 }

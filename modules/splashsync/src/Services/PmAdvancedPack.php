@@ -12,9 +12,7 @@
  *  file that was distributed with this source code.
  *
  * @author Splash Sync
- *
  * @copyright Splash Sync SAS
- *
  * @license MIT
  */
 
@@ -43,14 +41,14 @@ class PmAdvancedPack
     {
         //====================================================================//
         // Check if Module is Active
-        if (!Module::isEnabled("pm_advancedpack")) {
+        if (!Module::isEnabled('pm_advancedpack')) {
             return false;
         }
 
         //====================================================================//
         // Include Module Classes
-        include_once _PS_ROOT_DIR_.'/modules/pm_advancedpack/AdvancedPack.php';
-        include_once _PS_ROOT_DIR_.'/modules/pm_advancedpack/AdvancedPackCoreClass.php';
+        include_once _PS_ROOT_DIR_ . '/modules/pm_advancedpack/AdvancedPack.php';
+        include_once _PS_ROOT_DIR_ . '/modules/pm_advancedpack/AdvancedPackCoreClass.php';
 
         return true;
     }

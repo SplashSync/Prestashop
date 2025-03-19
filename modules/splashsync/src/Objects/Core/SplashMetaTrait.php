@@ -12,9 +12,7 @@
  *  file that was distributed with this source code.
  *
  * @author Splash Sync
- *
  * @copyright Splash Sync SAS
- *
  * @license MIT
  */
 
@@ -50,11 +48,11 @@ trait SplashMetaTrait
         //====================================================================//
         // Splash Unique Object Id
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
-            ->identifier("splash_id")
-            ->name("Splash Id")
-            ->group(Translate::getAdminTranslation("Meta", "AdminThemes"))
-            ->addOption("shop", MSM::MODE_ALL)
-            ->microData("http://splashync.com/schemas", "ObjectId")
+            ->identifier('splash_id')
+            ->name('Splash Id')
+            ->group(Translate::getAdminTranslation('Meta', 'AdminThemes'))
+            ->addOption('shop', MSM::MODE_ALL)
+            ->microData('http://splashync.com/schemas', 'ObjectId')
         ;
     }
 

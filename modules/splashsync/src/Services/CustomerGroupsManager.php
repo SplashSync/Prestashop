@@ -12,9 +12,7 @@
  *  file that was distributed with this source code.
  *
  * @author Splash Sync
- *
  * @copyright Splash Sync SAS
- *
  * @license MIT
  */
 
@@ -45,7 +43,7 @@ class CustomerGroupsManager
 
         if (!isset($groups)) {
             foreach (Group::getGroups(SLM::getDefaultLangId()) as $definition) {
-                $name = $definition["name"] ?? $definition["id_group"];
+                $name = $definition['name'] ?? $definition['id_group'];
                 $groups[strtolower($name)] = $name;
             }
         }

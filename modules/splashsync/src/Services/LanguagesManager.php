@@ -12,9 +12,7 @@
  *  file that was distributed with this source code.
  *
  * @author Splash Sync
- *
  * @copyright Splash Sync SAS
- *
  * @license MIT
  */
 
@@ -42,10 +40,10 @@ class LanguagesManager
      * @var array
      */
     const KNOW_LANGS = array(
-        "en" => "en_US",
-        "fr" => "fr_FR",
-        "es" => "es_ES",
-        "it" => "it_IT",
+        'en' => 'en_US',
+        'fr' => 'fr_FR',
+        'es' => 'es_ES',
+        'it' => 'it_IT',
     );
 
     /**
@@ -144,7 +142,7 @@ class LanguagesManager
         // For Each Available Language
         /** @var array $psLanguage */
         foreach (Language::getLanguages() as $psLanguage) {
-            self::$languages[$psLanguage["id_lang"]] = self::langEncode($psLanguage["language_code"]);
+            self::$languages[$psLanguage['id_lang']] = self::langEncode($psLanguage['language_code']);
         }
 
         return self::$languages;
@@ -188,7 +186,7 @@ class LanguagesManager
             return $currency->symbol[self::getDefaultLangId()];
         }
 
-        return array_values($currency->symbol)[0] ?? "";
+        return array_values($currency->symbol)[0] ?? '';
     }
 
     /**
@@ -207,7 +205,7 @@ class LanguagesManager
             return $currency->name[self::getDefaultLangId()];
         }
 
-        return array_values($currency->name)[0] ?? "";
+        return array_values($currency->name)[0] ?? '';
     }
 
     /**
@@ -228,7 +226,7 @@ class LanguagesManager
         //====================================================================//
         // Other Languages => Check if Code is in FieldName
         if (false === strpos($fieldName, $isoCode)) {
-            return "";
+            return '';
         }
 
         return substr($fieldName, 0, strlen($fieldName) - strlen($isoCode) - 1);
@@ -250,11 +248,11 @@ class LanguagesManager
         }
         //====================================================================//
         // Split Language Code
-        $tmp = explode("-", $psCode);
+        $tmp = explode('-', $psCode);
         if (2 != count($tmp)) {
             $out = $psCode;
         } else {
-            $out = $tmp[0]."_".Tools::strtoupper($tmp[1]);
+            $out = $tmp[0] . '_' . Tools::strtoupper($tmp[1]);
         }
 
         return $out;

@@ -12,22 +12,20 @@
  *  file that was distributed with this source code.
  *
  * @author Splash Sync
- *
  * @copyright Splash Sync SAS
- *
  * @license MIT
  */
 
 global $header, $config, $finder;
 
-$sdkPath = $_SERVER['PWD']."/modules/splashsync/vendor/badpixxel/php-sdk/phpcs/";
+$sdkPath = $_SERVER['PWD'] . '/modules/splashsync/vendor/badpixxel/php-sdk/phpcs/';
 $dirs = array(
-    $_SERVER['PWD']."/modules/splashsync",
-    $_SERVER['PWD']."/grumphp",
-    $_SERVER['PWD']."/travis",
+    $_SERVER['PWD'] . '/modules/splashsync',
+    $_SERVER['PWD'] . '/grumphp',
+    $_SERVER['PWD'] . '/travis',
 );
 
-include_once $sdkPath."headers/splashsync.php";
+include_once $sdkPath . 'headers/splashsync.php';
 
 $finder = PhpCsFixer\Finder::create()
     ->in($dirs)
@@ -35,14 +33,16 @@ $finder = PhpCsFixer\Finder::create()
     ->exclude('tests/Fixtures')
     ->exclude('var');
 
-include_once $sdkPath."cs.rules.php";
+include_once $sdkPath . 'cs.rules.php';
 
 $config->setRules(array_replace($config->getRules(), array(
     'header_comment' => array(
-        'header' => ($header."\n\n@author Splash Sync \n@copyright Splash Sync SAS \n@license MIT"),
+        'header' => ($header . "\n\n@author Splash Sync \n@copyright Splash Sync SAS \n@license MIT"),
         'comment_type' => 'PHPDoc',
-        'separate' => 'bottom'
+        'separate' => 'bottom',
     ),
+    'concat_space' => array('spacing' => 'one'),
+    'single_quote' => array('strings_containing_single_quote_chars' => true)
 )));
 
 return $config;

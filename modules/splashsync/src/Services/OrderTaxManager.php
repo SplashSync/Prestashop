@@ -12,9 +12,7 @@
  *  file that was distributed with this source code.
  *
  * @author Splash Sync
- *
  * @copyright Splash Sync SAS
- *
  * @license MIT
  */
 
@@ -92,7 +90,7 @@ class OrderTaxManager
      */
     private static function getShippingTaxCalculator(Order $order): ?TaxCalculator
     {
-        $cacheKey = md5(sprintf("%s-%s", $order->id_carrier, $order->id_address_delivery));
+        $cacheKey = md5(sprintf('%s-%s', $order->id_carrier, $order->id_address_delivery));
 
         if (!array_key_exists($cacheKey, self::$taxCalculators)) {
             //====================================================================//

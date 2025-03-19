@@ -12,9 +12,7 @@
  *  file that was distributed with this source code.
  *
  * @author Splash Sync
- *
  * @copyright Splash Sync SAS
- *
  * @license MIT
  */
 
@@ -52,40 +50,40 @@ trait ObjectsListTrait
         $sql = new DbQuery();
         //====================================================================//
         // Build SELECT
-        $sql->select("i.`id_order_invoice`  as id");            // Invoice Id
-        $sql->select("o.`id_order`          as id_order");      // Order Id
-        $sql->select("o.`id_customer`       as id_customer");   // Customer Id
-        $sql->select("i.`number`            as number");        // Invoice Internal Reference
-        $sql->select("o.`reference`         as reference");     // Order Internal Reference
-        $sql->select("c.`firstname`         as firstname");     // Customer Firstname
-        $sql->select("c.`lastname`          as lastname");      // Customer Lastname
-        $sql->select("i.`date_add`          as order_date");    // Invoice Date
-        $sql->select("o.`total_paid_tax_excl`");                // Invoice Total HT
-        $sql->select("o.`total_paid_tax_incl`");                // Invoice Total TTC
+        $sql->select('i.`id_order_invoice`  as id');            // Invoice Id
+        $sql->select('o.`id_order`          as id_order');      // Order Id
+        $sql->select('o.`id_customer`       as id_customer');   // Customer Id
+        $sql->select('i.`number`            as number');        // Invoice Internal Reference
+        $sql->select('o.`reference`         as reference');     // Order Internal Reference
+        $sql->select('c.`firstname`         as firstname');     // Customer Firstname
+        $sql->select('c.`lastname`          as lastname');      // Customer Lastname
+        $sql->select('i.`date_add`          as order_date');    // Invoice Date
+        $sql->select('o.`total_paid_tax_excl`');                // Invoice Total HT
+        $sql->select('o.`total_paid_tax_incl`');                // Invoice Total TTC
         //====================================================================//
         // Build FROM
-        $sql->from("order_invoice", 'i');
-        $sql->leftJoin("orders", 'o', 'i.id_order = o.id_order');
-        $sql->leftJoin("customer", 'c', 'c.id_customer = o.id_customer');
+        $sql->from('order_invoice', 'i');
+        $sql->leftJoin('orders', 'o', 'i.id_order = o.id_order');
+        $sql->leftJoin('customer', 'c', 'c.id_customer = o.id_customer');
         //====================================================================//
         // Setup filters
         if (!empty($filter)) {
-            $where = " LOWER( i.number )        LIKE LOWER( '%".pSQL($filter)."%') ";
-            $where .= " OR LOWER( o.reference )  LIKE LOWER( '%".pSQL($filter)."%') ";
-            $where .= " OR LOWER( c.firstname )  LIKE LOWER( '%".pSQL($filter)."%') ";
-            $where .= " OR LOWER( c.lastname )   LIKE LOWER( '%".pSQL($filter)."%') ";
-            $where .= " OR LOWER( o.date_add )   LIKE LOWER( '%".pSQL($filter)."%') ";
+            $where = ' LOWER( i.number )        LIKE LOWER( \'%' . pSQL($filter) . '%\') ';
+            $where .= ' OR LOWER( o.reference )  LIKE LOWER( \'%' . pSQL($filter) . '%\') ';
+            $where .= ' OR LOWER( c.firstname )  LIKE LOWER( \'%' . pSQL($filter) . '%\') ';
+            $where .= ' OR LOWER( c.lastname )   LIKE LOWER( \'%' . pSQL($filter) . '%\') ';
+            $where .= ' OR LOWER( o.date_add )   LIKE LOWER( \'%' . pSQL($filter) . '%\') ';
             $sql->where($where);
         }
         //====================================================================//
         // Change Default Sort Direction to get Most Recent First
-        $params["sortorder"] ??= "DESC";
+        $params['sortorder'] ??= 'DESC';
         //====================================================================//
         // Compute Total Number of Results
         $total = $this->getObjectListTotal($sql);
         //====================================================================//
         // Execute Generic Search
-        $result = $this->getObjectsListRawData($sql, "order_date", $params);
+        $result = $this->getObjectsListRawData($sql, 'order_date', $params);
         if (false === $result) {
             return array();
         }
@@ -95,18 +93,18 @@ trait ObjectsListTrait
         //====================================================================//
         // For each result, read information and add to $Data
         foreach ($result as $key => $invoice) {
-            $object = new OrderInvoice($invoice["id"]);
-            $invoice["number"] = ($object->number)
+            $object = new OrderInvoice($invoice['id']);
+            $invoice['number'] = ($object->number)
                 ? $object->getInvoiceNumberFormatted(SLM::getDefaultLangId())
-                : "DRAFT#".$invoice["id"]
+                : 'DRAFT#' . $invoice['id']
             ;
             $data[$key] = $invoice;
         }
         //====================================================================//
         // Prepare List result meta infos
-        $data["meta"]["current"] = count($data);   // Store Current Number of results
-        $data["meta"]["total"] = $total;         // Store Total Number of results
-        Splash::log()->deb("MsgLocalTpl", __CLASS__, __FUNCTION__, (count($data) - 1)." Invoices Found.");
+        $data['meta']['current'] = count($data);    // Store Current Number of results
+        $data['meta']['total'] = $total;            // Store Total Number of results
+        Splash::log()->deb('MsgLocalTpl', __CLASS__, __FUNCTION__, (count($data) - 1) . ' Invoices Found.');
 
         return $data;
     }

@@ -12,9 +12,7 @@
  *  file that was distributed with this source code.
  *
  * @author Splash Sync
- *
  * @copyright Splash Sync SAS
- *
  * @license MIT
  */
 
@@ -46,7 +44,7 @@ class WkCombination
     {
         //====================================================================//
         // Check if Module is Active
-        if (!Module::isEnabled("wkcombinationcustomize")) {
+        if (!Module::isEnabled('wkcombinationcustomize')) {
             return false;
         }
 
@@ -75,9 +73,9 @@ class WkCombination
         }
         //====================================================================//
         // Check if Product Attribute Id is Disabled
-        $sql = 'SELECT * FROM `'._DB_PREFIX_.'wk_combination_status`'
-            .' WHERE `id_ps_product_attribute` = '.(int) $attributeId
-            .' AND `id_shop` = '.(int) Shop::getContextShopID()
+        $sql = 'SELECT * FROM `' . _DB_PREFIX_ . 'wk_combination_status`'
+            . ' WHERE `id_ps_product_attribute` = ' . (int) $attributeId
+            . ' AND `id_shop` = ' . (int) Shop::getContextShopID()
         ;
 
         try {
@@ -161,7 +159,7 @@ class WkCombination
         // Execute Updates
         foreach ($sql as $request) {
             if (!Db::getInstance()->execute($request)) {
-                Splash::log()->errNull("Fail to update Product Attribute Webkul Status.");
+                Splash::log()->errNull('Fail to update Product Attribute Webkul Status.');
             }
         }
     }
@@ -172,8 +170,8 @@ class WkCombination
     private static function getDisableSql(int $idProduct, int $idAttribute, int $idShop): string
     {
         return 'REPLACE INTO `'
-            ._DB_PREFIX_.'wk_combination_status`(`id_ps_product`, `id_ps_product_attribute`, `id_shop`)'
-            .' VALUES ('.$idProduct.', '.$idAttribute.', '.$idShop.');'
+            . _DB_PREFIX_ . 'wk_combination_status`(`id_ps_product`, `id_ps_product_attribute`, `id_shop`)'
+            . ' VALUES (' . $idProduct . ', ' . $idAttribute . ', ' . $idShop . ');'
         ;
     }
 
@@ -182,11 +180,11 @@ class WkCombination
      */
     private static function getEnableSql(int $idProduct, int $idAttribute, int $idShop): string
     {
-        return 'DELETE FROM `'._DB_PREFIX_.'wk_combination_status`'
-            .' WHERE `id_ps_product` = '.$idProduct
-            .' AND `id_ps_product_attribute` = '.$idAttribute
-            .' AND `id_shop` = '.$idShop
-            .';'
+        return 'DELETE FROM `' . _DB_PREFIX_ . 'wk_combination_status`'
+            . ' WHERE `id_ps_product` = ' . $idProduct
+            . ' AND `id_ps_product_attribute` = ' . $idAttribute
+            . ' AND `id_shop` = ' . $idShop
+            . ';'
         ;
     }
 }

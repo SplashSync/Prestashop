@@ -12,9 +12,7 @@
  *  file that was distributed with this source code.
  *
  * @author Splash Sync
- *
  * @copyright Splash Sync SAS
- *
  * @license MIT
  */
 
@@ -81,13 +79,13 @@ trait MultiLangTrait
         }
         //====================================================================//
         // Load Data Length from Product Class
-        if (is_null($maxLength) && isset(Product::$definition["fields"][$fieldName]["size"])) {
-            $maxLength = Product::$definition["fields"][$fieldName]["size"];
+        if (is_null($maxLength) && isset(Product::$definition['fields'][$fieldName]['size'])) {
+            $maxLength = Product::$definition['fields'][$fieldName]['size'];
         }
         //====================================================================//
         // Verify Data Length
         if (!is_null($maxLength) && (Tools::strlen($data) > $maxLength)) {
-            Splash::log()->warTrace("Text is too long for field ".$fieldName.", modification skipped.");
+            Splash::log()->warTrace('Text is too long for field ' . $fieldName . ', modification skipped.');
 
             return;
         }

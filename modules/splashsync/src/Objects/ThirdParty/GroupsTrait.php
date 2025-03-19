@@ -12,9 +12,7 @@
  *  file that was distributed with this source code.
  *
  * @author Splash Sync
- *
  * @copyright Splash Sync SAS
- *
  * @license MIT
  */
 
@@ -39,10 +37,10 @@ trait GroupsTrait
         //====================================================================//
         // Firstname
         $this->fieldsFactory()->create(SPL_T_INLINE)
-            ->identifier("groups")
-            ->name("Groups")
-            ->group("Meta")
-            ->microData("http://schema.org/Organization", "category")
+            ->identifier('groups')
+            ->name('Groups')
+            ->group('Meta')
+            ->microData('http://schema.org/Organization', 'category')
             ->addChoices(GroupsManager::getAllGroupNames())
             ->isReadOnly()
         ;

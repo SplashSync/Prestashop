@@ -12,9 +12,7 @@
  *  file that was distributed with this source code.
  *
  * @author Splash Sync
- *
  * @copyright Splash Sync SAS
- *
  * @license MIT
  */
 
@@ -47,33 +45,33 @@ trait TotalsTrait
         // PRICES INFORMATIONS
         //====================================================================//
 
-        $currencySuffix = " (".LanguagesManager::getCurrencySymbol($this->currency).")";
+        $currencySuffix = ' (' . LanguagesManager::getCurrencySymbol($this->currency) . ')';
 
         //====================================================================//
         // Order Total Price
         $this->fieldsFactory()->create(SPL_T_PRICE)
-            ->identifier("price_total")
-            ->name("Order Total".$currencySuffix)
-            ->microData("http://schema.org/Invoice", "total")
-            ->group("Totals")
+            ->identifier('price_total')
+            ->name('Order Total' . $currencySuffix)
+            ->microData('http://schema.org/Invoice', 'total')
+            ->group('Totals')
             ->isReadOnly()
         ;
         //====================================================================//
         // Order Total Shipping
         $this->fieldsFactory()->create(SPL_T_PRICE)
-            ->identifier("price_shipping")
-            ->name("Order Shipping".$currencySuffix)
-            ->microData("http://schema.org/Invoice", "totalShipping")
-            ->group("Totals")
+            ->identifier('price_shipping')
+            ->name('Order Shipping' . $currencySuffix)
+            ->microData('http://schema.org/Invoice', 'totalShipping')
+            ->group('Totals')
             ->isReadOnly()
         ;
         //====================================================================//
         // Order Total Shipping
         $this->fieldsFactory()->create(SPL_T_PRICE)
-            ->identifier("price_discount")
-            ->name("Order Discounts".$currencySuffix)
-            ->microData("http://schema.org/Invoice", "totalDiscount")
-            ->group("Totals")
+            ->identifier('price_discount')
+            ->name('Order Discounts' . $currencySuffix)
+            ->microData('http://schema.org/Invoice', 'totalDiscount')
+            ->group('Totals')
             ->isReadOnly()
         ;
     }

@@ -12,9 +12,7 @@
  *  file that was distributed with this source code.
  *
  * @author Splash Sync
- *
  * @copyright Splash Sync SAS
- *
  * @license MIT
  */
 
@@ -35,7 +33,7 @@ class MarketplaceVendorConfigurator extends StockOnlyConfigurator
      */
     public static function getName(): string
     {
-        return "Marketplace Client: @Products, Only Skus & Stocks are Writable, All the rest is disabled.";
+        return 'Marketplace Client: @Products, Only Skus & Stocks are Writable, All the rest is disabled.';
     }
 
     /**
@@ -48,29 +46,29 @@ class MarketplaceVendorConfigurator extends StockOnlyConfigurator
         Splash::log()->trace();
         //====================================================================//
         // Products => Allow Sync
-        if ("Product" == $objectType) {
+        if ('Product' == $objectType) {
             return array_replace_recursive($description, array(
-                "allow_push_created" => 0,
-                "allow_push_updated" => 1,
-                "allow_push_deleted" => 0,
-                "enable_push_created" => 0,
-                "enable_push_updated" => 1,
-                "enable_push_deleted" => 0,
+                'allow_push_created' => 0,
+                'allow_push_updated' => 1,
+                'allow_push_deleted' => 0,
+                'enable_push_created' => 0,
+                'enable_push_updated' => 1,
+                'enable_push_deleted' => 0,
             ));
         }
 
         //====================================================================//
         // Other Types => NO Sync
         return array_replace_recursive($description, array(
-            "allow_push_created" => 0,
-            "allow_push_updated" => 0,
-            "allow_push_deleted" => 0,
-            "enable_push_created" => 0,
-            "enable_push_updated" => 0,
-            "enable_push_deleted" => 0,
-            "enable_pull_created" => 0,
-            "enable_pull_updated" => 0,
-            "enable_pull_deleted" => 0,
+            'allow_push_created' => 0,
+            'allow_push_updated' => 0,
+            'allow_push_deleted' => 0,
+            'enable_push_created' => 0,
+            'enable_push_updated' => 0,
+            'enable_push_deleted' => 0,
+            'enable_pull_created' => 0,
+            'enable_pull_updated' => 0,
+            'enable_pull_deleted' => 0,
         ));
     }
 }

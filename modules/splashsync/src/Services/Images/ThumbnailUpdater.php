@@ -12,9 +12,7 @@
  *  file that was distributed with this source code.
  *
  * @author Splash Sync
- *
  * @copyright Splash Sync SAS
- *
  * @license MIT
  */
 
@@ -49,7 +47,7 @@ class ThumbnailUpdater
      */
     public static function update(
         string $imagePath,
-        string $objectType = "products"
+        string $objectType = 'products'
     ): void {
         //====================================================================//
         // Verify Image Exist on Server
@@ -70,8 +68,8 @@ class ThumbnailUpdater
             //====================================================================//
             // Build Target Image Path
             $thumbPath = pathinfo($imagePath, PATHINFO_DIRNAME);
-            $thumbPath .= "/".pathinfo($imagePath, PATHINFO_FILENAME);
-            $thumbPath .= '-'.stripslashes($imageType['name']).'.jpg';
+            $thumbPath .= '/' . pathinfo($imagePath, PATHINFO_FILENAME);
+            $thumbPath .= '-' . stripslashes($imageType['name']) . '.jpg';
             //====================================================================//
             // Execute Image Resize
             \ImageManager::resize(
@@ -91,7 +89,7 @@ class ThumbnailUpdater
      *
      * @return void
      */
-    public static function delete(string $imagePath, string $objectType = "products"): void
+    public static function delete(string $imagePath, string $objectType = 'products'): void
     {
         //====================================================================//
         // Fetch Defined Image Formats
@@ -106,8 +104,8 @@ class ThumbnailUpdater
             //====================================================================//
             // Build Target Image Path
             $thumbPath = pathinfo($imagePath, PATHINFO_DIRNAME);
-            $thumbPath .= "/".pathinfo($imagePath, PATHINFO_FILENAME);
-            $thumbPath .= '-'.stripslashes($imageType['name']).'.jpg';
+            $thumbPath .= '/' . pathinfo($imagePath, PATHINFO_FILENAME);
+            $thumbPath .= '-' . stripslashes($imageType['name']) . '.jpg';
             //====================================================================//
             // Verify Image Exist on Server
             if (!file_exists($thumbPath)) {
@@ -116,7 +114,7 @@ class ThumbnailUpdater
             //====================================================================//
             // Delete Image Thumbnail
             if (unlink($thumbPath)) {
-                Splash::log()->deb("MsgFileDeleted", __FUNCTION__, basename($imagePath));
+                Splash::log()->deb('MsgFileDeleted', __FUNCTION__, basename($imagePath));
             }
         }
     }

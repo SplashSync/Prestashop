@@ -12,9 +12,7 @@
  *  file that was distributed with this source code.
  *
  * @author Splash Sync
- *
  * @copyright Splash Sync SAS
- *
  * @license MIT
  */
 
@@ -43,10 +41,10 @@ trait CoreTrait
         //====================================================================//
         // Email
         $this->fieldsFactory()->create(SPL_T_EMAIL)
-            ->identifier("email")
-            ->name(Translate::getAdminTranslation("Email address", "AdminCustomers"))
-            ->microData("http://schema.org/ContactPoint", "email")
-            ->association("firstname", "lastname")
+            ->identifier('email')
+            ->name(Translate::getAdminTranslation('Email address', 'AdminCustomers'))
+            ->microData('http://schema.org/ContactPoint', 'email')
+            ->association('firstname', 'lastname')
             ->isRequired()
             ->isPrimary()
             ->isListed()

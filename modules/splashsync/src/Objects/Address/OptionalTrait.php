@@ -12,9 +12,7 @@
  *  file that was distributed with this source code.
  *
  * @author Splash Sync
- *
  * @copyright Splash Sync SAS
- *
  * @license MIT
  */
 
@@ -43,42 +41,42 @@ trait OptionalTrait
         //====================================================================//
         // Phone
         $this->fieldsFactory()->create(SPL_T_PHONE)
-            ->identifier("phone")
-            ->name(Translate::getAdminTranslation("Home phone", "AdminAddresses"))
-            ->microData("http://schema.org/PostalAddress", "telephone")
+            ->identifier('phone')
+            ->name(Translate::getAdminTranslation('Home phone', 'AdminAddresses'))
+            ->microData('http://schema.org/PostalAddress', 'telephone')
         ;
         //====================================================================//
         // Mobile Phone
         $this->fieldsFactory()->create(SPL_T_PHONE)
-            ->identifier("phone_mobile")
-            ->name(Translate::getAdminTranslation("Mobile phone", "AdminAddresses"))
-            ->microData("http://schema.org/Person", "telephone")
+            ->identifier('phone_mobile')
+            ->name(Translate::getAdminTranslation('Mobile phone', 'AdminAddresses'))
+            ->microData('http://schema.org/Person', 'telephone')
         ;
         //====================================================================//
         // SIRET
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
-            ->identifier("dni")
-            ->name($this->spl->l("Company ID Number"))
-            ->microData("http://schema.org/Organization", "taxID")
-            ->group("ID")
+            ->identifier('dni')
+            ->name($this->spl->l('Company ID Number'))
+            ->microData('http://schema.org/Organization', 'taxID')
+            ->group('ID')
             ->isNotTested()
         ;
         //====================================================================//
         // VAT Number
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
-            ->identifier("vat_number")
-            ->name($this->spl->l("VAT number"))
-            ->microData("http://schema.org/Organization", "vatID")
-            ->group("ID")
+            ->identifier('vat_number')
+            ->name($this->spl->l('VAT number'))
+            ->microData('http://schema.org/Organization', 'vatID')
+            ->group('ID')
             ->isNotTested()
         ;
         //====================================================================//
         // Note
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
-            ->identifier("other")
-            ->name($this->spl->l("Note"))
-            ->microData("http://schema.org/PostalAddress", "description")
-            ->group("Notes")
+            ->identifier('other')
+            ->name($this->spl->l('Note'))
+            ->microData('http://schema.org/PostalAddress', 'description')
+            ->group('Notes')
         ;
     }
 

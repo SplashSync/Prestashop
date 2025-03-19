@@ -12,9 +12,7 @@
  *  file that was distributed with this source code.
  *
  * @author Splash Sync
- *
  * @copyright Splash Sync SAS
- *
  * @license MIT
  */
 
@@ -51,7 +49,7 @@ trait HooksTrait
      */
     public function hookactionObjectOrderAddAfter(array $params): bool
     {
-        return $this->hookactionOrder($params["object"], SPL_A_CREATE, $this->l('Order Created on Prestashop'));
+        return $this->hookactionOrder($params['object'], SPL_A_CREATE, $this->l('Order Created on Prestashop'));
     }
 
     /**
@@ -63,7 +61,7 @@ trait HooksTrait
      */
     public function hookactionObjectOrderUpdateAfter(array $params): bool
     {
-        return $this->hookactionOrder($params["object"], SPL_A_UPDATE, $this->l('Order Updated on Prestashop'));
+        return $this->hookactionOrder($params['object'], SPL_A_UPDATE, $this->l('Order Updated on Prestashop'));
     }
 
     /**
@@ -75,7 +73,7 @@ trait HooksTrait
      */
     public function hookactionObjectOrderDeleteAfter(array $params): bool
     {
-        return $this->hookactionOrder($params["object"], SPL_A_DELETE, $this->l('Order Deleted on Prestashop'));
+        return $this->hookactionOrder($params['object'], SPL_A_DELETE, $this->l('Order Deleted on Prestashop'));
     }
 
     //====================================================================//
@@ -93,7 +91,7 @@ trait HooksTrait
      */
     public function hookactionObjectOrderInvoiceAddAfter(array $params): bool
     {
-        return $this->hookactionInvoice($params["object"], SPL_A_CREATE, $this->l('Invoice Created on Prestashop'));
+        return $this->hookactionInvoice($params['object'], SPL_A_CREATE, $this->l('Invoice Created on Prestashop'));
     }
 
     /**
@@ -105,7 +103,7 @@ trait HooksTrait
      */
     public function hookactionObjectOrderInvoiceUpdateAfter(array $params): bool
     {
-        return $this->hookactionInvoice($params["object"], SPL_A_UPDATE, $this->l('Invoice Updated on Prestashop'));
+        return $this->hookactionInvoice($params['object'], SPL_A_UPDATE, $this->l('Invoice Updated on Prestashop'));
     }
 
     /**
@@ -117,7 +115,7 @@ trait HooksTrait
      */
     public function hookactionObjectOrderInvoiceDeleteAfter(array $params): bool
     {
-        return $this->hookactionInvoice($params["object"], SPL_A_DELETE, $this->l('Invoice Deleted on Prestashop'));
+        return $this->hookactionInvoice($params['object'], SPL_A_DELETE, $this->l('Invoice Deleted on Prestashop'));
     }
 
     /**
@@ -142,11 +140,11 @@ trait HooksTrait
         }
         //====================================================================//
         // Log
-        $this->debugHook(__FUNCTION__, $orderId." >> ".$comment);
+        $this->debugHook(__FUNCTION__, $orderId . ' >> ' . $comment);
         //====================================================================//
         // Safety Check - ID is Valid
         if (empty($orderId)) {
-            return Splash::log()->errTrace("Unable to Read Order Id.");
+            return Splash::log()->errTrace('Unable to Read Order Id.');
         }
         //====================================================================//
         // Safety Check - Cart is Not Empty
@@ -155,7 +153,7 @@ trait HooksTrait
         }
         //====================================================================//
         // Commit Update For Order
-        $errors += !$this->doCommit("Order", $orderId, $action, $comment);
+        $errors += !$this->doCommit('Order', $orderId, $action, $comment);
         if (SPL_A_UPDATE == $action) {
             try {
                 //====================================================================//
@@ -163,7 +161,7 @@ trait HooksTrait
                 $invoices = new PrestaShopCollection('OrderInvoice');
                 $invoices->where('id_order', '=', $orderId);
                 foreach ($invoices as $invoice) {
-                    $errors += !$this->doCommit("Invoice", (string) $invoice->id, $action, $comment);
+                    $errors += !$this->doCommit('Invoice', (string) $invoice->id, $action, $comment);
                 }
             } catch (PrestaShopException $e) {
                 $errors++;
@@ -195,16 +193,16 @@ trait HooksTrait
         }
         //====================================================================//
         // Log
-        $this->debugHook(__FUNCTION__, $objectId." >> ".$comment);
+        $this->debugHook(__FUNCTION__, $objectId . ' >> ' . $comment);
         //====================================================================//
         // Safety Check
         if (empty($objectId)) {
-            Splash::log()->err("ErrLocalTpl", "Invoice", __FUNCTION__, "Unable to Read Order Invoice Id.");
+            Splash::log()->err('ErrLocalTpl', 'Invoice', __FUNCTION__, 'Unable to Read Order Invoice Id.');
         }
 
         //====================================================================//
         // Commit Update For Invoice
-        return $this->doCommit("Invoice", (string) $objectId, $action, $comment);
+        return $this->doCommit('Invoice', (string) $objectId, $action, $comment);
     }
 
     /**
@@ -231,12 +229,12 @@ trait HooksTrait
         //====================================================================//
         // Commit Update For Order Shipping Address
         if (!empty($order->id_address_delivery)) {
-            $errors += !$this->doCommit("Address", (string)$order->id_address_delivery, SPL_A_UPDATE, $comment);
+            $errors += !$this->doCommit('Address', (string)$order->id_address_delivery, SPL_A_UPDATE, $comment);
         }
         //====================================================================//
         // Commit Update For Order Billing Address
         if (!empty($order->id_address_invoice)) {
-            $errors += !$this->doCommit("Address", (string)$order->id_address_invoice, SPL_A_UPDATE, $comment);
+            $errors += !$this->doCommit('Address', (string)$order->id_address_invoice, SPL_A_UPDATE, $comment);
         }
 
         return !$errors;
@@ -255,7 +253,7 @@ trait HooksTrait
             return false;
         }
         if (empty($order->getProductsDetail())) {
-            Splash::log()->warTrace("Order has no Products.");
+            Splash::log()->warTrace('Order has no Products.');
 
             return true;
         }

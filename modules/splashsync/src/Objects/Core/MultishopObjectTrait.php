@@ -12,9 +12,7 @@
  *  file that was distributed with this source code.
  *
  * @author Splash Sync
- *
  * @copyright Splash Sync SAS
- *
  * @license MIT
  */
 
@@ -123,8 +121,8 @@ trait MultishopObjectTrait
         $objectData = array_merge($allShopData, $multiShopData);
         //====================================================================//
         // Ensure Object Id is Here
-        if (!empty($objectData) && !isset($objectData["id"])) {
-            $objectData["id"] = $objectId;
+        if (!empty($objectData) && !isset($objectData['id'])) {
+            $objectData['id'] = $objectId;
         }
 
         //====================================================================//
@@ -177,7 +175,7 @@ trait MultishopObjectTrait
             /** @var null|string $objectId */
             $multiShopObjectId = $this->coreSet($objectId, $multiShopData);
             if (empty($multiShopObjectId)) {
-                Splash::log()->errTrace(sprintf("Writing to Shop %d errored.", $shopId));
+                Splash::log()->errTrace(sprintf('Writing to Shop %d errored.', $shopId));
             };
             if (empty($objectId)) {
                 $objectId = $multiShopObjectId;

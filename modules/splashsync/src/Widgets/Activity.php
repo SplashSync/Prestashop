@@ -12,9 +12,7 @@
  *  file that was distributed with this source code.
  *
  * @author Splash Sync
- *
  * @copyright Splash Sync SAS
- *
  * @license MIT
  */
 
@@ -56,7 +54,7 @@ class Activity extends AbstractWidget
      * @var array
      */
     public static array $options = array(
-        "Width" => self::SIZE_XL
+        'Width' => self::SIZE_XL
     );
 
     //====================================================================//
@@ -68,21 +66,21 @@ class Activity extends AbstractWidget
      *
      * @var string
      */
-    protected static string $name = "Prestashop Activity Widget";
+    protected static string $name = 'Prestashop Activity Widget';
 
     /**
      * Widget Description (Translated by Module)
      *
      * @var string
      */
-    protected static string $description = "Display Main Activity of your E-Commerce";
+    protected static string $description = 'Display Main Activity of your E-Commerce';
 
     /**
      * Widget Icon (FontAwesome or Glyph ico tag)
      *
      * @var string
      */
-    protected static string $ico = "fa fa-map-signs";
+    protected static string $ico = 'fa fa-map-signs';
 
     /**
      * @var Currency
@@ -98,8 +96,8 @@ class Activity extends AbstractWidget
      * @var array
      */
     private array $sparkOptions = array(
-        "AllowHtml" => true,
-        "Width" => self::SIZE_XS
+        'AllowHtml' => true,
+        'Width' => self::SIZE_XS
     );
 
     //====================================================================//
@@ -154,8 +152,8 @@ class Activity extends AbstractWidget
     {
         //====================================================================//
         // Verify Inputs
-        if (!isset($inputs["DateStart"]) || !isset($inputs["DateEnd"])) {
-            $this->blocksFactory()->addNotificationsBlock(array("warning" => "No Date Range Defined!"));
+        if (!isset($inputs['DateStart']) || !isset($inputs['DateEnd'])) {
+            $this->blocksFactory()->addNotificationsBlock(array('warning' => 'No Date Range Defined!'));
 
             return;
         }
@@ -182,32 +180,32 @@ class Activity extends AbstractWidget
         // Build SparkInfo Options
         //====================================================================//
         $this->sparkOptions = array(
-            "AllowHtml" => true,
-            "Width" => self::SIZE_XS
+            'AllowHtml' => true,
+            'Width' => self::SIZE_XS
         );
 
         //====================================================================//
         // Add SparkInfo Blocks
         $this->blocksFactory()
             ->addSparkInfoBlock(array(
-                "title" => $this->spl->l('Sales'),
-                "fa_icon" => "line-chart",
-                "value" => \Tools::displayPrice($activityData["sales"], $this->currency),
+                'title' => $this->spl->l('Sales'),
+                'fa_icon' => 'line-chart',
+                'value' => \Tools::displayPrice($activityData['sales'], $this->currency),
             ), $this->sparkOptions)
             ->addSparkInfoBlock(array(
-                "title" => $this->spl->l('Orders'),
-                "fa_icon" => "shopping-cart ",
-                "value" => $activityData["orders"],
+                'title' => $this->spl->l('Orders'),
+                'fa_icon' => 'shopping-cart ',
+                'value' => $activityData['orders'],
             ), $this->sparkOptions)
             ->addSparkInfoBlock(array(
-                "title" => $this->spl->l('Average Cart Value'),
-                "fa_icon" => "shopping-cart ",
-                "value" => $activityData["average_cart_value"],
+                'title' => $this->spl->l('Average Cart Value'),
+                'fa_icon' => 'shopping-cart ',
+                'value' => $activityData['average_cart_value'],
             ), $this->sparkOptions)
             ->addSparkInfoBlock(array(
-                "title" => $this->spl->l('Net Profit'),
-                "fa_icon" => "money",
-                "value" => \Tools::displayPrice($activityData["net_profits"], $this->currency),
+                'title' => $this->spl->l('Net Profit'),
+                'fa_icon' => 'money',
+                'value' => \Tools::displayPrice($activityData['net_profits'], $this->currency),
             ), $this->sparkOptions)
         ;
     }

@@ -12,9 +12,7 @@
  *  file that was distributed with this source code.
  *
  * @author Splash Sync
- *
  * @copyright Splash Sync SAS
- *
  * @license MIT
  */
 
@@ -51,7 +49,7 @@ class CategoryManager
      *
      * @return array
      */
-    public static function getProductCategories(int $productId, int $langId = null, string $field = "link_rewrite")
+    public static function getProductCategories(int $productId, int $langId = null, string $field = 'link_rewrite')
     {
         //====================================================================//
         // Load Product Categories List
@@ -78,7 +76,7 @@ class CategoryManager
      *
      * @return void
      */
-    public static function setProductCategories(Product $prd, $data, int $lang = null, string $field = "link_rewrite")
+    public static function setProductCategories(Product $prd, $data, int $lang = null, string $field = 'link_rewrite')
     {
         //====================================================================//
         // Load Product Current Categories List
@@ -120,7 +118,7 @@ class CategoryManager
      *
      * @return array
      */
-    public static function getAllCategories(int $langId = null, string $field = "link_rewrite")
+    public static function getAllCategories(int $langId = null, string $field = 'link_rewrite')
     {
         //====================================================================//
         // Load All Categories List
@@ -146,7 +144,7 @@ class CategoryManager
      *
      * @return null|int
      */
-    public static function getCategoryId(string $value, int $langId = null, string $field = "link_rewrite")
+    public static function getCategoryId(string $value, int $langId = null, string $field = 'link_rewrite')
     {
         //====================================================================//
         // Load All Categories List
@@ -155,7 +153,7 @@ class CategoryManager
         // Map List to Requested Field
         foreach ($fullList as $item) {
             if (isset($item[$field]) && ($item[$field] == $value)) {
-                return $item["id_category"];
+                return $item['id_category'];
             }
         }
 
@@ -170,7 +168,7 @@ class CategoryManager
      *
      * @return array
      */
-    public static function getAllCategoriesChoices(int $langId = null, string $field = "link_rewrite")
+    public static function getAllCategoriesChoices(int $langId = null, string $field = 'link_rewrite')
     {
         //====================================================================//
         // Load All Categories List
@@ -180,7 +178,7 @@ class CategoryManager
         $result = array();
         foreach ($fullList as $item) {
             if (isset($item[$field])) {
-                $result[(string) $item[$field]] = (string) $item["name"];
+                $result[(string) $item[$field]] = (string) $item['name'];
             }
         }
 

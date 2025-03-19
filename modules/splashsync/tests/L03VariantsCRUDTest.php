@@ -12,9 +12,7 @@
  *  file that was distributed with this source code.
  *
  * @author Splash Sync
- *
  * @copyright Splash Sync SAS
- *
  * @license MIT
  */
 
@@ -35,6 +33,6 @@ class L03VariantsCRUDTest extends O06SetTest
      */
     public function testFeatureIsActive()
     {
-        $this->assertNotEmpty(Combination::isFeatureActive(), "Combination feature is Not Active");
+        $this->assertNotEmpty(Combination::isFeatureActive(), 'Combination feature is Not Active');
     }
 }

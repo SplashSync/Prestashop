@@ -12,9 +12,7 @@
  *  file that was distributed with this source code.
  *
  * @author Splash Sync
- *
  * @copyright Splash Sync SAS
- *
  * @license MIT
  */
 
@@ -53,31 +51,31 @@ trait CoreTrait
     {
         //====================================================================//
         // Customer Object
-        $this->fieldsFactory()->create((string) self::objects()->encode("ThirdParty", SPL_T_ID))
-            ->identifier("id_customer")
-            ->name(Translate::getAdminTranslation("Customer ID", "AdminCustomerThreads"))
+        $this->fieldsFactory()->create((string) self::objects()->encode('ThirdParty', SPL_T_ID))
+            ->identifier('id_customer')
+            ->name(Translate::getAdminTranslation('Customer ID', 'AdminCustomerThreads'))
             ->isRequired();
         if (!$this->isOrderObject()) {
-            $this->fieldsFactory()->microData("http://schema.org/Invoice", "customer");
+            $this->fieldsFactory()->microData('http://schema.org/Invoice', 'customer');
         } else {
-            $this->fieldsFactory()->microData("http://schema.org/Organization", "ID");
+            $this->fieldsFactory()->microData('http://schema.org/Organization', 'ID');
         }
         //====================================================================//
         // Customer Email
         $this->fieldsFactory()->create(SPL_T_EMAIL)
-            ->identifier("email")
-            ->name(Translate::getAdminTranslation("Email address", "AdminCustomers"))
-            ->microData("http://schema.org/ContactPoint", "email")
+            ->identifier('email')
+            ->name(Translate::getAdminTranslation('Email address', 'AdminCustomers'))
+            ->microData('http://schema.org/ContactPoint', 'email')
             ->isIndexed()
             ->isReadOnly()
         ;
         //====================================================================//
         // Reference
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
-            ->identifier("reference")
-            ->name(Translate::getAdminTranslation("Reference", "AdminOrders"))
-            ->microData("http://schema.org/Order", "orderNumber")
-            ->addOption("maxLength", "8")
+            ->identifier('reference')
+            ->name(Translate::getAdminTranslation('Reference', 'AdminOrders'))
+            ->microData('http://schema.org/Order', 'orderNumber')
+            ->addOption('maxLength', '8')
             ->isRequired()
             ->isPrimary($this->isOrderObject())
             ->isIndexed(!$this->isOrderObject())
@@ -86,9 +84,9 @@ trait CoreTrait
         //====================================================================//
         // Order Date
         $this->fieldsFactory()->create(SPL_T_DATE)
-            ->identifier("order_date")
-            ->name(Translate::getAdminTranslation("Date", "AdminProducts"))
-            ->microData("http://schema.org/Order", "orderDate")
+            ->identifier('order_date')
+            ->name(Translate::getAdminTranslation('Date', 'AdminProducts'))
+            ->microData('http://schema.org/Order', 'orderDate')
             ->isReadOnly()
             ->isListed()
         ;
@@ -111,7 +109,7 @@ trait CoreTrait
             // Direct Readings
             case 'reference':
                 if (!$this->isOrderObject()) {
-                    $this->getSimple($fieldName, "order");
+                    $this->getSimple($fieldName, 'order');
                 } else {
                     $this->getSimple($fieldName);
                 }
@@ -120,7 +118,7 @@ trait CoreTrait
                 //====================================================================//
                 // Customer Object Id Readings
             case 'id_customer':
-                $this->out[$fieldName] = self::objects()->encode("ThirdParty", $this->getOrder()->{$fieldName});
+                $this->out[$fieldName] = self::objects()->encode('ThirdParty', $this->getOrder()->{$fieldName});
 
                 break;
                 //====================================================================//
@@ -168,7 +166,7 @@ trait CoreTrait
             // Direct Writing
             case 'reference':
                 if (!$this->isOrderObject()) {
-                    $this->setSimple($fieldName, $fieldData, "order");
+                    $this->setSimple($fieldName, $fieldData, 'order');
                 } else {
                     $this->setSimple($fieldName, $fieldData);
                 }
@@ -181,7 +179,7 @@ trait CoreTrait
                     $this->setSimple(
                         $fieldName,
                         self::objects()->id((string) $fieldData),
-                        "order"
+                        'order'
                     );
                 } else {
                     $this->setSimple(

@@ -12,9 +12,7 @@
  *  file that was distributed with this source code.
  *
  * @author Splash Sync
- *
  * @copyright Splash Sync SAS
- *
  * @license MIT
  */
 
@@ -65,7 +63,7 @@ trait FileProviderTrait
         // Load Order Object
         $order = new Order($orderId);
         if ($order->id != $orderId) {
-            return Splash::log()->errTrace("Unable to load Order (".$orderId.").");
+            return Splash::log()->errTrace('Unable to load Order (' . $orderId . ').');
         }
         //====================================================================//
         // Load Pdf Type Name
@@ -76,11 +74,11 @@ trait FileProviderTrait
         //====================================================================//
         // Load Pdf Contents
         switch ($pdfType) {
-            case "OrderInvoice":
+            case 'OrderInvoice':
                 $file = OrderPdfManager::getOrderInvoicePdfInfos($order, true);
 
                 break;
-            case "OrderDelivery":
+            case 'OrderDelivery':
                 $file = OrderPdfManager::getOrderSlipPdfInfos($order, true);
 
                 break;
@@ -91,7 +89,7 @@ trait FileProviderTrait
         }
         //====================================================================//
         // Check Pdf Contents Md5
-        if (!is_array($file) || ($file["md5"] != $md5)) {
+        if (!is_array($file) || ($file['md5'] != $md5)) {
             return false;
         }
 
@@ -107,7 +105,7 @@ trait FileProviderTrait
     {
         //====================================================================//
         // Explode File Path Code
-        $exploded = explode("::", $file);
+        $exploded = explode('::', $file);
         if (2 != count($exploded)) {
             return null;
         }
@@ -129,7 +127,7 @@ trait FileProviderTrait
     {
         //====================================================================//
         // Explode File Path Code
-        $exploded = explode("::", $file);
+        $exploded = explode('::', $file);
         if (2 != count($exploded)) {
             return null;
         }
