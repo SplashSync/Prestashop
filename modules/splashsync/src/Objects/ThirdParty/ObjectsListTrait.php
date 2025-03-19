@@ -1,6 +1,5 @@
 <?php
-
-/*
+/**
  *  This file is part of SplashSync Project.
  *
  *  Copyright (C) Splash Sync  <www.splashsync.com>
@@ -11,17 +10,27 @@
  *
  *  For the full copyright and license information, please view the LICENSE
  *  file that was distributed with this source code.
+ *
+ * @author Splash Sync
+ *
+ * @copyright Splash Sync SAS
+ *
+ * @license MIT
  */
 
 namespace Splash\Local\Objects\ThirdParty;
 
-//====================================================================//
-// Prestashop Static Classes
 use DbQuery;
 use Splash\Core\SplashCore as Splash;
 
+// phpcs:disable PSR1.Files.SideEffects
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+// phpcs:enable PSR1.Files.SideEffects
+
 /**
- * Acces to ThirdParty Objects Lists
+ * Access to ThirdParty Objects Lists
  */
 trait ObjectsListTrait
 {

@@ -1,6 +1,5 @@
 <?php
-
-/*
+/**
  *  This file is part of SplashSync Project.
  *
  *  Copyright (C) Splash Sync  <www.splashsync.com>
@@ -11,6 +10,12 @@
  *
  *  For the full copyright and license information, please view the LICENSE
  *  file that was distributed with this source code.
+ *
+ * @author Splash Sync
+ *
+ * @copyright Splash Sync SAS
+ *
+ * @license MIT
  */
 
 namespace Splash\Local\Services;
@@ -20,6 +25,12 @@ use Db;
 use Module;
 use Shop;
 use Splash\Core\SplashCore as Splash;
+
+// phpcs:disable PSR1.Files.SideEffects
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+// phpcs:enable PSR1.Files.SideEffects
 
 /**
  * Bridge to Manage Compatibility with Webkul Prestashop Combination Activate/Deactivate
@@ -123,6 +134,7 @@ class WkCombination
         //====================================================================//
         // Detect Shop Id
         $idShop = Shop::getContextShopID(true);
+        $idShops = null;
         if (null == $idShop) {
             $idShops = Shop::getContextListShopID();
         }
