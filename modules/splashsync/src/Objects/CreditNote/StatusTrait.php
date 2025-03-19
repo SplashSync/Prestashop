@@ -12,9 +12,7 @@
  *  file that was distributed with this source code.
  *
  * @author Splash Sync
- *
  * @copyright Splash Sync SAS
- *
  * @license MIT
  */
 
@@ -43,9 +41,9 @@ trait StatusTrait
         //====================================================================//
         // Order Current Status
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
-            ->Identifier("status")
-            ->Name(Translate::getAdminTranslation("Status", "AdminOrders"))
-            ->MicroData("http://schema.org/Invoice", "paymentStatus")
+            ->Identifier('status')
+            ->Name(Translate::getAdminTranslation('Status', 'AdminOrders'))
+            ->MicroData('http://schema.org/Invoice', 'paymentStatus')
             ->isReadOnly()
             ->isNotTested();
 
@@ -56,10 +54,10 @@ trait StatusTrait
         //====================================================================//
         // Is Paid
         $this->fieldsFactory()->create(SPL_T_BOOL)
-            ->Identifier("isPaid")
-            ->Name("is Paid")
-            ->MicroData("http://schema.org/PaymentStatusType", "PaymentComplete")
-            ->Group(Translate::getAdminTranslation("Meta", "AdminThemes"))
+            ->Identifier('isPaid')
+            ->Name('is Paid')
+            ->MicroData('http://schema.org/PaymentStatusType', 'PaymentComplete')
+            ->Group(Translate::getAdminTranslation('Meta', 'AdminThemes'))
             ->isReadOnly()
             ->isNotTested();
     }
@@ -86,7 +84,7 @@ trait StatusTrait
             //====================================================================//
             case 'status':
                 $this->out[$fieldName] = $this->isPaidCreditNote()
-                    ? "PaymentComplete" : "PaymentDue";
+                    ? 'PaymentComplete' : 'PaymentDue';
 
                 break;
                 //====================================================================//

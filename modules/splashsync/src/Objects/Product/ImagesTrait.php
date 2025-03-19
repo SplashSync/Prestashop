@@ -12,9 +12,7 @@
  *  file that was distributed with this source code.
  *
  * @author Splash Sync
- *
  * @copyright Splash Sync SAS
- *
  * @license MIT
  */
 
@@ -90,7 +88,7 @@ trait ImagesTrait
      */
     protected function buildImagesFields(): void
     {
-        $groupName = Translate::getAdminTranslation("Images", "AdminProducts");
+        $groupName = Translate::getAdminTranslation('Images', 'AdminProducts');
         $this->fieldsFactory()->setDefaultLanguage(SLM::getDefaultLanguage());
 
         //====================================================================//
@@ -100,51 +98,51 @@ trait ImagesTrait
         //====================================================================//
         // Product Images List
         $this->fieldsFactory()->create(SPL_T_IMG)
-            ->identifier("image")
-            ->inList("images")
-            ->name(Translate::getAdminTranslation("Images", "AdminProducts"))
+            ->identifier('image')
+            ->inList('images')
+            ->name(Translate::getAdminTranslation('Images', 'AdminProducts'))
             ->group($groupName)
-            ->microData("http://schema.org/Product", "image")
+            ->microData('http://schema.org/Product', 'image')
             ->isReadOnly(self::isSourceCatalogMode())
-            ->addOption("shop", MSM::MODE_ALL)
+            ->addOption('shop', MSM::MODE_ALL)
         ;
 
         //====================================================================//
         // Product Images => Position
         $this->fieldsFactory()->create(SPL_T_INT)
-            ->identifier("position")
-            ->inList("images")
-            ->name(Translate::getAdminTranslation("Position", "AdminProducts"))
-            ->microData("http://schema.org/Product", "positionImage")
+            ->identifier('position')
+            ->inList('images')
+            ->name(Translate::getAdminTranslation('Position', 'AdminProducts'))
+            ->microData('http://schema.org/Product', 'positionImage')
             ->group($groupName)
             ->isReadOnly(self::isSourceCatalogMode())
-            ->addOption("shop", MSM::MODE_ALL)
+            ->addOption('shop', MSM::MODE_ALL)
             ->isNotTested()
         ;
 
         //====================================================================//
         // Product Images => Is Cover
         $this->fieldsFactory()->create(SPL_T_BOOL)
-            ->identifier("cover")
-            ->inList("images")
-            ->name(Translate::getAdminTranslation("Cover", "AdminProducts"))
-            ->microData("http://schema.org/Product", "isCover")
+            ->identifier('cover')
+            ->inList('images')
+            ->name(Translate::getAdminTranslation('Cover', 'AdminProducts'))
+            ->microData('http://schema.org/Product', 'isCover')
             ->group($groupName)
             ->isReadOnly(self::isSourceCatalogMode())
-            ->addOption("shop", MSM::MODE_ALL)
+            ->addOption('shop', MSM::MODE_ALL)
             ->isNotTested()
         ;
 
         //====================================================================//
         // Product Images => Is Visible Image
         $this->fieldsFactory()->create(SPL_T_BOOL)
-            ->identifier("visible")
-            ->inList("images")
-            ->name(Translate::getAdminTranslation("Visible", "AdminProducts"))
-            ->microData("http://schema.org/Product", "isVisibleImage")
+            ->identifier('visible')
+            ->inList('images')
+            ->name(Translate::getAdminTranslation('Visible', 'AdminProducts'))
+            ->microData('http://schema.org/Product', 'isVisibleImage')
             ->group($groupName)
             ->isReadOnly(self::isSourceCatalogMode())
-            ->addOption("shop", MSM::MODE_ALL)
+            ->addOption('shop', MSM::MODE_ALL)
             ->isNotTested()
         ;
 
@@ -152,14 +150,14 @@ trait ImagesTrait
         // Product Images => Legends
         foreach (SLM::getAvailableLanguages() as $isoLang) {
             $this->fieldsFactory()->create(SPL_T_VARCHAR)
-                ->identifier("legend")
-                ->name(Translate::getAdminTranslation("Legend", "AdminProducts"))
-                ->microData("http://schema.org/Product", "imageName")
+                ->identifier('legend')
+                ->name(Translate::getAdminTranslation('Legend', 'AdminProducts'))
+                ->microData('http://schema.org/Product', 'imageName')
                 ->group($groupName)
                 ->setMultilang($isoLang)
-                ->inList("images")
+                ->inList('images')
                 ->isReadOnly(self::isSourceCatalogMode())
-                ->addOption("shop", MSM::MODE_ALL)
+                ->addOption('shop', MSM::MODE_ALL)
                 ->isNotTested()
             ;
         }
@@ -177,7 +175,7 @@ trait ImagesTrait
     {
         //====================================================================//
         // Check if List field & Init List Array
-        $fieldId = self::lists()->initOutput($this->out, "images", $fieldName);
+        $fieldId = self::lists()->initOutput($this->out, 'images', $fieldName);
         if (!$fieldId) {
             return;
         }
@@ -192,7 +190,7 @@ trait ImagesTrait
             $value = $image[$fieldId];
             //====================================================================//
             // Insert Data in List
-            self::lists()->insert($this->out, "images", $fieldName, $index, $value);
+            self::lists()->insert($this->out, 'images', $fieldName, $index, $value);
         }
         unset($this->in[$key]);
     }
@@ -249,25 +247,25 @@ trait ImagesTrait
                 ? array_values($linkRewrite)[0]
                 : 'Image'
         ;
-        $filename = $objectImage->id.".".$objectImage->image_format;
+        $filename = $objectImage->id . '.' . $objectImage->image_format;
         //====================================================================//
         // Extract Image Legends
         $legends = array();
         $defaultLegend = $filename;
         foreach (SLM::getAvailableLanguages() as $langId => $isoCode) {
             if (SLM::isDefaultLanguage($isoCode)) {
-                $legends["legend"] = $objectImage->legend[$langId] ?? $filename ;
+                $legends['legend'] = $objectImage->legend[$langId] ?? $filename ;
                 $defaultLegend = $objectImage->legend[$langId] ?? $filename;
             } else {
-                $legends[sprintf("legend_%s", $isoCode)] = $objectImage->legend[$langId] ?? $filename ;
+                $legends[sprintf('legend_%s', $isoCode)] = $objectImage->legend[$langId] ?? $filename ;
             }
         }
         //====================================================================//
         // Encode Image in Splash Format
         $splashImage = self::images()->encode(
             $defaultLegend ?: $filename,
-            $objectImage->id.".".$objectImage->image_format,
-            _PS_PROD_IMG_DIR_.$objectImage->getImgFolder(),
+            $objectImage->id . '.' . $objectImage->image_format,
+            _PS_PROD_IMG_DIR_ . $objectImage->getImgFolder(),
             $publicUrl->getImageLink($imageName, (string) $imageId)
         );
 
@@ -276,11 +274,11 @@ trait ImagesTrait
         return new ArrayObject(
             array_merge(
                 array(
-                    "id" => $imageId,
-                    "image" => $splashImage,
-                    "position" => $objectImage->position,
-                    "cover" => $objectImage->cover,
-                    "visible" => $this->isVisibleImage($imageId),
+                    'id' => $imageId,
+                    'image' => $splashImage,
+                    'position' => $objectImage->position,
+                    'cover' => $objectImage->cover,
+                    'visible' => $this->isVisibleImage($imageId),
                 ),
                 $legends
             ),
@@ -318,7 +316,7 @@ trait ImagesTrait
         //====================================================================//
         // Search fro this Image in Variant Images
         foreach ($this->variantImages as $variantImage) {
-            if ($variantImage["id_image"] == $imageId) {
+            if ($variantImage['id_image'] == $imageId) {
                 return true;
             }
         }
@@ -341,7 +339,7 @@ trait ImagesTrait
         foreach ($this->imagesCache as $key => $imgArray) {
             //====================================================================//
             // If CheckSum are Different => Continue
-            $psImage = $this->isSearchedImage($imgArray["id_image"], $md5);
+            $psImage = $this->isSearchedImage($imgArray['id_image'], $md5);
             if (!$psImage) {
                 continue;
             }
@@ -372,9 +370,9 @@ trait ImagesTrait
         // Compute Md5 CheckSum for this Image
         $checkSum = md5_file(
             _PS_PROD_IMG_DIR_
-            .$psImage->getImgFolder()
-            .$psImage->id."."
-            .$psImage->image_format
+            . $psImage->getImgFolder()
+            . $psImage->id . '.'
+            . $psImage->image_format
         );
         //====================================================================//
         // If CheckSum are Different => Continue
@@ -405,8 +403,8 @@ trait ImagesTrait
         $position = null;
         //====================================================================//
         // Generic & Combination Mode => Update Only if Position Given
-        if (isset($imgArray["position"]) && is_numeric($imgArray["position"])) {
-            $position = (int) $imgArray["position"];
+        if (isset($imgArray['position']) && is_numeric($imgArray['position'])) {
+            $position = (int) $imgArray['position'];
             //====================================================================//
             // Generic Mode Only => Use List Index
         } elseif (!$this->AttributeId || (Splash::isDebugMode())) {
@@ -431,7 +429,7 @@ trait ImagesTrait
         // Update Image Position in List
         if (!is_null($position)) {
             $psImage->position = (int) $position;
-            $this->needUpdate("Image");
+            $this->needUpdate('Image');
         }
     }
 
@@ -446,11 +444,11 @@ trait ImagesTrait
     {
         //====================================================================//
         // Cover Flag is Available
-        if (!isset($imgArray["cover"])) {
+        if (!isset($imgArray['cover'])) {
             return null;
         }
 
-        return (bool) $imgArray["cover"];
+        return (bool) $imgArray['cover'];
     }
 
     /**
@@ -473,7 +471,7 @@ trait ImagesTrait
         // Update Image is Cover Flag
         if ($psImage->cover !== $isCover) {
             $psImage->cover = $isCover;
-            $this->needUpdate("Image");
+            $this->needUpdate('Image');
             //====================================================================//
             // Delete Cover Flag for Other Images
             if ($isCover) {
@@ -492,8 +490,8 @@ trait ImagesTrait
         foreach (SLM::getAvailableLanguages() as $langId => $isoCode) {
             // creating array key
             $arrayKey = SLM::isDefaultLanguage($isoCode)
-                ? "legend"
-                : sprintf("legend_%s", $isoCode)
+                ? 'legend'
+                : sprintf('legend_%s', $isoCode)
             ;
             //====================================================================//
             // Check if data was received
@@ -508,13 +506,13 @@ trait ImagesTrait
             }
             //====================================================================///
             // Verify Data Length
-            $maxLength = Image::$definition["fields"]["legend"]["size"] ?? 128;
+            $maxLength = Image::$definition['fields']['legend']['size'] ?? 128;
             if (Tools::strlen($newValue) > $maxLength) {
-                Splash::log()->warTrace("Legend is too long for image, value truncated...");
+                Splash::log()->warTrace('Legend is too long for image, value truncated...');
                 $newValue = substr($newValue, 0, $maxLength);
             }
             $psImage->legend[$langId] = $newValue;
-            $this->needUpdate("Image");
+            $this->needUpdate('Image');
         }
     }
 
@@ -527,13 +525,13 @@ trait ImagesTrait
      */
     private function updateImage(Image &$psImage)
     {
-        if ($this->isToUpdate("Image")) {
+        if ($this->isToUpdate('Image')) {
             try {
                 $psImage->update();
             } catch (\PrestaShopException $e) {
                 Splash::log()->report($e);
             }
-            $this->isUpdated("Image");
+            $this->isUpdated('Image');
         }
     }
 
@@ -548,11 +546,11 @@ trait ImagesTrait
     {
         //====================================================================//
         // Visible Flag is Available
-        if (!isset($imgArray["visible"])) {
+        if (!isset($imgArray['visible'])) {
             return true;
         }
 
-        return (bool) $imgArray["visible"];
+        return (bool) $imgArray['visible'];
     }
 
     /**
@@ -583,7 +581,7 @@ trait ImagesTrait
         if ($current != $psImageIds) {
             $this->attrImageIds = $psImageIds;
             $this->Attribute->setImages($psImageIds);
-            $this->needUpdate("Attribute");
+            $this->needUpdate('Attribute');
         }
     }
 
@@ -606,17 +604,17 @@ trait ImagesTrait
         // Walk on Object Images List
         foreach ($allImages as $image) {
             $imageObj = new Image($image['id_image']);
-            $imagePath = _PS_PROD_IMG_DIR_.$imageObj->getExistingImgPath();
-            if (!file_exists($imagePath.'.jpg')) {
+            $imagePath = _PS_PROD_IMG_DIR_ . $imageObj->getExistingImgPath();
+            if (!file_exists($imagePath . '.jpg')) {
                 continue;
             }
 
-            foreach (ImageType::getImagesTypes("products") as $imageType) {
-                $imgThumb = _PS_PROD_IMG_DIR_.$imageObj->getExistingImgPath();
-                $imgThumb .= '-'.Tools::stripslashes($imageType['name']).'.jpg';
+            foreach (ImageType::getImagesTypes('products') as $imageType) {
+                $imgThumb = _PS_PROD_IMG_DIR_ . $imageObj->getExistingImgPath();
+                $imgThumb .= '-' . Tools::stripslashes($imageType['name']) . '.jpg';
                 if (!file_exists($imgThumb)) {
                     ImageManager::resize(
-                        $imagePath.'.jpg',
+                        $imagePath . '.jpg',
                         $imgThumb,
                         (int)($imageType['width']),
                         (int)($imageType['height'])
@@ -668,7 +666,7 @@ trait ImagesTrait
         foreach ($productImages as $imgArray) {
             //====================================================================//
             // Add Image t o Cache
-            $this->imagesCache[] = $this->buildInfo($imgArray["id_image"]);
+            $this->imagesCache[] = $this->buildInfo($imgArray['id_image']);
         }
 
         return $this->imagesCache;
@@ -708,14 +706,14 @@ trait ImagesTrait
             $value = ($value instanceof ArrayObject) ? $value->getArrayCopy() : $value;
             //====================================================================//
             // Check Image Array is here
-            if (!isset($value["image"]) || empty($value["image"])) {
+            if (!isset($value['image']) || empty($value['image'])) {
                 continue;
             }
-            $inImage = ($value["image"] instanceof ArrayObject) ? $value["image"]->getArrayCopy() : $value["image"];
+            $inImage = ($value['image'] instanceof ArrayObject) ? $value['image']->getArrayCopy() : $value['image'];
             $this->imgPosition++;
             //====================================================================//
             // Search For Image In Current List
-            $psImage = $this->searchImage($value["image"]["md5"]);
+            $psImage = $this->searchImage($value['image']['md5']);
             if (!$psImage) {
                 //====================================================================//
                 // If Not found, Add this object to list
@@ -775,29 +773,29 @@ trait ImagesTrait
     {
         //====================================================================//
         // Read File from Splash Server
-        $newImageFile = Splash::file()->getFile($imgArray["file"], $imgArray["md5"]);
+        $newImageFile = Splash::file()->getFile($imgArray['file'], $imgArray['md5']);
         //====================================================================//
         // File Imported => Write it Here
         if (false == $newImageFile) {
-            return Splash::log()->err("Reading Raw Image from Server failed...");
+            return Splash::log()->err('Reading Raw Image from Server failed...');
         }
         $this->needUpdate();
         //====================================================================//
         // Create New Image Object
         $objectImage = new Image();
-        $objectImage->legend = $newImageFile["name"] ?? $newImageFile["filename"];
+        $objectImage->legend = $newImageFile['name'] ?? $newImageFile['filename'];
         $objectImage->id_product = $this->ProductId;
         $objectImage->position = $position;
         //====================================================================//
         // Write Image To Database
         if (!$objectImage->add()) {
-            return Splash::log()->err("Create PS Image failed...");
+            return Splash::log()->err('Create PS Image failed...');
         }
         //====================================================================//
         // Write Image On Folder
         $path = dirname((string) $objectImage->getPathForCreation());
-        $filename = "/".$objectImage->id.".".$objectImage->image_format;
-        Splash::file()->writeFile($path, $filename, $newImageFile["md5"], $newImageFile["raw"]);
+        $filename = '/' . $objectImage->id . '.' . $objectImage->image_format;
+        Splash::file()->writeFile($path, $filename, $newImageFile['md5'], $newImageFile['raw']);
 
         return $objectImage;
     }
@@ -821,7 +819,7 @@ trait ImagesTrait
         foreach ($objectImagesList as $imgArray) {
             //====================================================================//
             // Fetch Images Object
-            $psImage = new Image($imgArray["id_image"]);
+            $psImage = new Image($imgArray['id_image']);
             $psImage->deleteImage(true);
             $psImage->delete();
             $this->needUpdate();

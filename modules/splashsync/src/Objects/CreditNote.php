@@ -12,9 +12,7 @@
  *  file that was distributed with this source code.
  *
  * @author Splash Sync
- *
  * @copyright Splash Sync SAS
- *
  * @license MIT
  */
 
@@ -90,21 +88,21 @@ class CreditNote extends AbstractObject
      *
      * @var string
      */
-    protected static string $name = "Customer Credit Note";
+    protected static string $name = 'Customer Credit Note';
 
     /**
      * Object Description (Translated by Module)
      *
      * @var string
      */
-    protected static string $description = "Prestashop Customers Credit Notes Object";
+    protected static string $description = 'Prestashop Customers Credit Notes Object';
 
     /**
      * Object Icon (FontAwesome or Glyph ico tag)
      *
      * @var string
      */
-    protected static string $ico = "fa fa-eur";
+    protected static string $ico = 'fa fa-eur';
 
     //====================================================================//
     // Object Synchronization Limitations
@@ -209,7 +207,7 @@ class CreditNote extends AbstractObject
         }
         //====================================================================//
         //  Load Local Translation File
-        Splash::translator()->load("objects@local");
+        Splash::translator()->load('objects@local');
         //====================================================================//
         // Load Splash Module
         $this->spl = Local::getLocalModule();

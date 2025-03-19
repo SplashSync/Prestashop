@@ -12,9 +12,7 @@
  *  file that was distributed with this source code.
  *
  * @author Splash Sync
- *
  * @copyright Splash Sync SAS
- *
  * @license MIT
  */
 
@@ -45,7 +43,7 @@ trait MetaDataTrait
      */
     protected function buildMetaDataFields(): void
     {
-        $groupName = Translate::getAdminTranslation("Information", "AdminProducts");
+        $groupName = Translate::getAdminTranslation('Information', 'AdminProducts');
         $this->fieldsFactory()->setDefaultLanguage(LanguagesManager::getDefaultLanguage());
 
         //====================================================================//
@@ -56,33 +54,33 @@ trait MetaDataTrait
             //====================================================================//
             // Meta Description
             $this->fieldsFactory()->create(SPL_T_VARCHAR)
-                ->identifier("meta_description")
-                ->name(Translate::getAdminTranslation("Meta description", "AdminProducts"))
-                ->description($groupName." ".Translate::getAdminTranslation("Meta description", "AdminProducts"))
+                ->identifier('meta_description')
+                ->name(Translate::getAdminTranslation('Meta description', 'AdminProducts'))
+                ->description($groupName . ' ' . Translate::getAdminTranslation('Meta description', 'AdminProducts'))
                 ->group($groupName)
-                ->microData("http://schema.org/Article", "headline")
+                ->microData('http://schema.org/Article', 'headline')
                 ->isReadOnly(self::isSourceCatalogMode())
                 ->setMultilang($isoLang)
             ;
             //====================================================================//
             // Meta Title
             $this->fieldsFactory()->create(SPL_T_VARCHAR)
-                ->identifier("meta_title")
-                ->name(Translate::getAdminTranslation("Meta title", "AdminProducts"))
-                ->description($groupName." ".Translate::getAdminTranslation("Meta title", "AdminProducts"))
+                ->identifier('meta_title')
+                ->name(Translate::getAdminTranslation('Meta title', 'AdminProducts'))
+                ->description($groupName . ' ' . Translate::getAdminTranslation('Meta title', 'AdminProducts'))
                 ->group($groupName)
-                ->microData("http://schema.org/Article", "name")
+                ->microData('http://schema.org/Article', 'name')
                 ->isReadOnly(self::isSourceCatalogMode())
                 ->setMultilang($isoLang)
             ;
             //====================================================================//
             // Rewrite Url
             $this->fieldsFactory()->create(SPL_T_VARCHAR)
-                ->identifier("link_rewrite")
-                ->name(Translate::getAdminTranslation("Friendly URL", "AdminProducts"))
-                ->description($groupName." ".Translate::getAdminTranslation("Friendly URL", "AdminProducts"))
+                ->identifier('link_rewrite')
+                ->name(Translate::getAdminTranslation('Friendly URL', 'AdminProducts'))
+                ->description($groupName . ' ' . Translate::getAdminTranslation('Friendly URL', 'AdminProducts'))
                 ->group($groupName)
-                ->microData("http://schema.org/Product", "urlRewrite")
+                ->microData('http://schema.org/Product', 'urlRewrite')
                 ->isReadOnly(self::isSourceCatalogMode())
                 ->setMultilang($isoLang)
             ;
@@ -145,7 +143,7 @@ trait MetaDataTrait
                     // Source Catalog Mode => Write is Forbidden
                     if (!self::isSourceCatalogMode()) {
                         $this->setMultiLang($baseFieldName, $idLang, (string) $fieldData);
-                        $this->addMsfUpdateFields("Product", $baseFieldName, $idLang);
+                        $this->addMsfUpdateFields('Product', $baseFieldName, $idLang);
                     }
                     unset($this->in[$fieldName]);
 

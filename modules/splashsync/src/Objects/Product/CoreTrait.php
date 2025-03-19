@@ -12,9 +12,7 @@
  *  file that was distributed with this source code.
  *
  * @author Splash Sync
- *
  * @copyright Splash Sync SAS
- *
  * @license MIT
  */
 
@@ -46,14 +44,14 @@ trait CoreTrait
         //====================================================================//
         // Reference
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
-            ->identifier("ref")
-            ->name(Translate::getAdminTranslation("Reference", "AdminProducts"))
+            ->identifier('ref')
+            ->name(Translate::getAdminTranslation('Reference', 'AdminProducts'))
             ->description(Translate::getAdminTranslation(
                 'Your internal reference code for this product.',
-                "AdminProducts"
+                'AdminProducts'
             ))
-            ->microData("http://schema.org/Product", "model")
-            ->addOption("shop", MSM::MODE_ALL)
+            ->microData('http://schema.org/Product', 'model')
+            ->addOption('shop', MSM::MODE_ALL)
             ->isListed()
             ->isRequired()
             ->isPrimary()
@@ -62,12 +60,12 @@ trait CoreTrait
         //====================================================================//
         // Type
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
-            ->identifier("type")
-            ->name("Type")
+            ->identifier('type')
+            ->name('Type')
             ->description('Internal product Type')
-            ->group(Translate::getAdminTranslation("Meta", "AdminThemes"))
-            ->microData("http://schema.org/Product", "type")
-            ->addOption("shop", MSM::MODE_ALL)
+            ->group(Translate::getAdminTranslation('Meta', 'AdminThemes'))
+            ->microData('http://schema.org/Product', 'type')
+            ->addOption('shop', MSM::MODE_ALL)
             ->isReadOnly()
         ;
     }
@@ -121,13 +119,13 @@ trait CoreTrait
             //====================================================================//
             case 'ref':
                 if ($this->AttributeId) {
-                    $this->setSimple("reference", $fieldData, "Attribute");
+                    $this->setSimple('reference', $fieldData, 'Attribute');
                 } else {
-                    $this->setSimple("reference", $fieldData);
+                    $this->setSimple('reference', $fieldData);
                 }
                 //====================================================================//
                 // Register Field for Update
-                $this->addMsfUpdateFields($this->AttributeId ? "Attribute" : "Product", "reference");
+                $this->addMsfUpdateFields($this->AttributeId ? 'Attribute' : 'Product', 'reference');
 
                 break;
             default:
@@ -156,10 +154,10 @@ trait CoreTrait
         //====================================================================//
         // Product has Attribute but Ref is Defined at Parent level
         if (!empty($this->object->reference)) {
-            return  trim($this->object->reference."-".$this->AttributeId);
+            return  trim($this->object->reference . '-' . $this->AttributeId);
         }
 
-        return "";
+        return '';
     }
 
     /**
@@ -172,19 +170,19 @@ trait CoreTrait
         //====================================================================//
         // Compatibility with PM Advanced Pack Module
         if (PmAdvancedPack::isAdvancedPack((int) $this->object->id)) {
-            return "pack";
+            return 'pack';
         }
         //====================================================================//
         // Read Product Type
         switch ($this->object->getType()) {
             case Product::PTYPE_SIMPLE:
-                return $this->AttributeId ? "variant" : "simple";
+                return $this->AttributeId ? 'variant' : 'simple';
             case Product::PTYPE_PACK:
-                return "pack";
+                return 'pack';
             case Product::PTYPE_VIRTUAL:
-                return "virtual";
+                return 'virtual';
         }
 
-        return "simple";
+        return 'simple';
     }
 }

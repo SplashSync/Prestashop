@@ -12,9 +12,7 @@
  *  file that was distributed with this source code.
  *
  * @author Splash Sync
- *
  * @copyright Splash Sync SAS
- *
  * @license MIT
  */
 
@@ -55,9 +53,9 @@ trait AttributesTrait
      * @var array
      */
     private static array $requiredFields = array(
-        "code" => "Attribute Code",
-        "public_name" => "Attribute Group Public Name",
-        "name" => "Attribute Value Name",
+        'code' => 'Attribute Code',
+        'public_name' => 'Attribute Group Public Name',
+        'name' => 'Attribute Value Name',
     );
 
     //====================================================================//
@@ -75,7 +73,7 @@ trait AttributesTrait
             return;
         }
 
-        $groupName = Translate::getAdminTranslation("Combinations", "AdminProducts");
+        $groupName = Translate::getAdminTranslation('Combinations', 'AdminProducts');
         $this->fieldsFactory()->setDefaultLanguage(SLM::getDefaultLanguage());
 
         //====================================================================//
@@ -85,53 +83,53 @@ trait AttributesTrait
         //====================================================================//
         // Product Variation Attribute Code (Default Language Only)
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
-            ->identifier("code")
-            ->name(Translate::getAdminTranslation("Code", "AdminCatalogFeature"))
-            ->inList("attributes")
+            ->identifier('code')
+            ->name(Translate::getAdminTranslation('Code', 'AdminCatalogFeature'))
+            ->inList('attributes')
             ->group($groupName)
-            ->addOption("isLowerCase", true)
-            ->microData("http://schema.org/Product", "VariantAttributeCode")
+            ->addOption('isLowerCase', true)
+            ->microData('http://schema.org/Product', 'VariantAttributeCode')
             ->isNotTested()
         ;
         //====================================================================//
         // MSF Light Mode => Visible Only on ALL Sites
         if (MSM::isLightMode()) {
-            $this->fieldsFactory()->addOption("shop", MSM::MODE_ALL);
+            $this->fieldsFactory()->addOption('shop', MSM::MODE_ALL);
         }
 
         foreach (SLM::getAvailableLanguages() as $isoLang) {
             //====================================================================//
             // Product Variation Attribute Name
             $this->fieldsFactory()->create(SPL_T_VARCHAR)
-                ->identifier("public_name")
-                ->name(Translate::getAdminTranslation("Name", "AdminCatalogFeature"))
+                ->identifier('public_name')
+                ->name(Translate::getAdminTranslation('Name', 'AdminCatalogFeature'))
                 ->group($groupName)
-                ->microData("http://schema.org/Product", "VariantAttributeName")
+                ->microData('http://schema.org/Product', 'VariantAttributeName')
                 ->setMultilang($isoLang)
-                ->inList("attributes")
+                ->inList('attributes')
                 ->isNotTested()
             ;
             //====================================================================//
             // MSF Light Mode => Visible Only on ALL Sites
             if (MSM::isLightMode()) {
-                $this->fieldsFactory()->addOption("shop", MSM::MODE_ALL);
+                $this->fieldsFactory()->addOption('shop', MSM::MODE_ALL);
             }
 
             //====================================================================//
             // Product Variation Attribute Value
             $this->fieldsFactory()->create(SPL_T_VARCHAR)
-                ->identifier("name")
-                ->name(Translate::getAdminTranslation("Value", "AdminCatalogFeature"))
+                ->identifier('name')
+                ->name(Translate::getAdminTranslation('Value', 'AdminCatalogFeature'))
                 ->group($groupName)
-                ->microData("http://schema.org/Product", "VariantAttributeValue")
+                ->microData('http://schema.org/Product', 'VariantAttributeValue')
                 ->setMultilang($isoLang)
-                ->inList("attributes")
+                ->inList('attributes')
                 ->isNotTested()
             ;
             //====================================================================//
             // MSF Light Mode => Visible Only on ALL Sites
             if (MSM::isLightMode()) {
-                $this->fieldsFactory()->addOption("shop", MSM::MODE_ALL);
+                $this->fieldsFactory()->addOption('shop', MSM::MODE_ALL);
             }
         }
     }
@@ -152,7 +150,7 @@ trait AttributesTrait
     {
         //====================================================================//
         // Check if List field & Init List Array
-        $fieldId = self::lists()->initOutput($this->out, "attributes", $fieldName);
+        $fieldId = self::lists()->initOutput($this->out, 'attributes', $fieldName);
         if (!$fieldId) {
             return;
         }
@@ -237,12 +235,12 @@ trait AttributesTrait
         foreach ($product->getAttributeCombinations(SLM::getDefaultLangId()) as $attribute) {
             //====================================================================//
             // Filter on a Specific Product Attribute
-            if ($attribute["id_product_attribute"] != $attributeId) {
+            if ($attribute['id_product_attribute'] != $attributeId) {
                 continue;
             }
             //====================================================================//
             // Add Attribute Value to Definition Array
-            $result[$attribute["group_name"]] = $attribute["attribute_name"];
+            $result[$attribute['group_name']] = $attribute['attribute_name'];
         }
 
         return $result;
@@ -267,10 +265,10 @@ trait AttributesTrait
         // Check Required Attributes Data are Given
         foreach (self::$requiredFields as $key => $name) {
             if (!isset($fieldData[$key])) {
-                return Splash::log()->errTrace("Product ".$name." is Missing.");
+                return Splash::log()->errTrace('Product ' . $name . ' is Missing.');
             }
             if (empty($fieldData[$key]) || !is_scalar($fieldData[$key])) {
-                return Splash::log()->errTrace("Product ".$name." is Missing.");
+                return Splash::log()->errTrace('Product ' . $name . ' is Missing.');
             }
         }
 
@@ -305,22 +303,22 @@ trait AttributesTrait
             //====================================================================//
             // READ Product Combinations List
             foreach ($this->object->getAttributeCombinations(SLM::getDefaultLangId()) as $index => $attribute) {
-                if ($attribute["id_product_attribute"] != $this->AttributeId) {
+                if ($attribute['id_product_attribute'] != $this->AttributeId) {
                     continue;
                 }
                 //====================================================================//
                 // Load Attribute Group
-                $attributeGroup = Manager::getGroupById($attribute["id_attribute_group"]);
+                $attributeGroup = Manager::getGroupById($attribute['id_attribute_group']);
                 if (!$attributeGroup) {
                     continue;
                 }
                 //====================================================================//
                 // Load Attribute Value
                 $this->variants[$index] = $attribute;
-                $this->variants[$index]["group"] = $attributeGroup;
-                $this->variants[$index]["value"] = Manager::getAttributeById(
-                    $this->variants[$index]["group"],
-                    $attribute["id_attribute"]
+                $this->variants[$index]['group'] = $attributeGroup;
+                $this->variants[$index]['value'] = Manager::getAttributeById(
+                    $this->variants[$index]['group'],
+                    $attribute['id_attribute']
                 );
             }
         }
@@ -350,28 +348,28 @@ trait AttributesTrait
             // Read Attribute Data
             switch ($baseFieldName) {
                 case 'code':
-                    $value = $attribute["group_name"];
+                    $value = $attribute['group_name'];
 
                     break;
                 case 'public_name':
-                    $value = $attribute["group"]->public_name[$langId];
+                    $value = $attribute['group']->public_name[$langId];
 
                     break;
                 case 'name':
-                    $value = $attribute["value"]->name[$langId];
+                    $value = $attribute['value']->name[$langId];
 
                     break;
                 default:
                     return;
             }
 
-            self::lists()->insert($this->out, "attributes", $fieldId, $index, $value);
+            self::lists()->insert($this->out, 'attributes', $fieldId, $index, $value);
         }
         unset($this->in[$key]);
         //====================================================================//
         // Sort Attributes by Code
-        if (is_array($this->out["attributes"])) {
-            ksort($this->out["attributes"]);
+        if (is_array($this->out['attributes'])) {
+            ksort($this->out['attributes']);
         }
     }
 
@@ -390,7 +388,7 @@ trait AttributesTrait
     {
         //====================================================================//
         // Check is Attribute Field
-        if (("attributes" !== $fieldName)) {
+        if (('attributes' !== $fieldName)) {
             return false;
         }
         //====================================================================//
@@ -416,7 +414,7 @@ trait AttributesTrait
     {
         //====================================================================//
         // Load Product Attribute Group
-        $attributeGroup = Manager::touchGroup($attrItem["code"], $attrItem["public_name"]);
+        $attributeGroup = Manager::touchGroup($attrItem['code'], $attrItem['public_name']);
         if (!$attributeGroup) {
             return false;
         }
@@ -425,7 +423,7 @@ trait AttributesTrait
         foreach (SLM::getAvailableLanguages() as $isoCode) {
             //====================================================================//
             // Check if Name Exists
-            $key = SLM::isDefaultLanguage($isoCode) ? "public_name" : "public_name_".$isoCode;
+            $key = SLM::isDefaultLanguage($isoCode) ? 'public_name' : 'public_name_' . $isoCode;
             if (isset($attrItem[$key]) && is_scalar($attrItem[$key])) {
                 Manager::updateGroup($attributeGroup, (string) $attrItem[$key], $isoCode);
             }
@@ -446,7 +444,7 @@ trait AttributesTrait
     {
         //====================================================================//
         // Load Product Attribute Value
-        $attribute = Manager::touchAttribute($group, $attrItem["name"]);
+        $attribute = Manager::touchAttribute($group, $attrItem['name']);
         if (!$attribute) {
             return false;
         }
@@ -455,7 +453,7 @@ trait AttributesTrait
         foreach (SLM::getExtraLanguages() as $isoCode) {
             //====================================================================//
             // Check if Name Exists
-            $key = "name_".$isoCode;
+            $key = 'name_' . $isoCode;
             if (isset($attrItem[$key]) && is_scalar($attrItem[$key])) {
                 Manager::updateAttribute($attribute, (string) $attrItem[$key], $isoCode);
             }
@@ -479,7 +477,7 @@ trait AttributesTrait
         $oldAttributes = $this->Attribute ? $this->Attribute->getWsProductOptionValues() : array();
         if (is_array($oldAttributes)) {
             foreach ($oldAttributes as $attribute) {
-                $oldAttributesIds[] = $attribute["id"];
+                $oldAttributesIds[] = $attribute['id'];
             }
         }
         //====================================================================//

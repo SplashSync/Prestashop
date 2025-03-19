@@ -12,9 +12,7 @@
  *  file that was distributed with this source code.
  *
  * @author Splash Sync
- *
  * @copyright Splash Sync SAS
- *
  * @license MIT
  */
 
@@ -62,37 +60,37 @@ trait CoreTrait
         //====================================================================//
         // Is Default Product Variant
         $this->fieldsFactory()->create(SPL_T_BOOL)
-            ->identifier("default_on")
+            ->identifier('default_on')
             ->name('Is default variant')
-            ->group(Translate::getAdminTranslation("Meta", "AdminThemes"))
-            ->microData("http://schema.org/Product", "isDefaultVariation")
+            ->group(Translate::getAdminTranslation('Meta', 'AdminThemes'))
+            ->microData('http://schema.org/Product', 'isDefaultVariation')
             ->isReadOnly()
         ;
         //====================================================================//
         // Default Product Variant
-        $this->fieldsFactory()->create((string) self::objects()->encode("Product", SPL_T_ID))
-            ->identifier("default_id")
+        $this->fieldsFactory()->create((string) self::objects()->encode('Product', SPL_T_ID))
+            ->identifier('default_id')
             ->name('Default Variant')
-            ->group(Translate::getAdminTranslation("Meta", "AdminThemes"))
-            ->microData("http://schema.org/Product", "DefaultVariation")
+            ->group(Translate::getAdminTranslation('Meta', 'AdminThemes'))
+            ->microData('http://schema.org/Product', 'DefaultVariation')
             ->isNotTested()
         ;
         //====================================================================//
         // Product Variation Parent Link
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
-            ->identifier("parent_id")
-            ->name("Parent")
-            ->group(Translate::getAdminTranslation("Meta", "AdminThemes"))
-            ->microData("http://schema.org/Product", "isVariationOf")
+            ->identifier('parent_id')
+            ->name('Parent')
+            ->group(Translate::getAdminTranslation('Meta', 'AdminThemes'))
+            ->microData('http://schema.org/Product', 'isVariationOf')
             ->isReadOnly()
         ;
         //====================================================================//
         // Product Variation Parent Link
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
-            ->identifier("parent_ref")
-            ->name("Parent SKU")
-            ->group(Translate::getAdminTranslation("Meta", "AdminThemes"))
-            ->microData("http://schema.org/Product", "isVariationOfName")
+            ->identifier('parent_ref')
+            ->name('Parent SKU')
+            ->group(Translate::getAdminTranslation('Meta', 'AdminThemes'))
+            ->microData('http://schema.org/Product', 'isVariationOfName')
             ->isIndexed()
             ->isNotTested()
         ;
@@ -103,31 +101,31 @@ trait CoreTrait
 
         //====================================================================//
         // Product Variation List - Product Link
-        $this->fieldsFactory()->create((string) self::objects()->Encode("Product", SPL_T_ID))
-            ->identifier("id")
-            ->name("Variants")
-            ->inList("variants")
-            ->microData("http://schema.org/Product", "Variants")
+        $this->fieldsFactory()->create((string) self::objects()->Encode('Product', SPL_T_ID))
+            ->identifier('id')
+            ->name('Variants')
+            ->inList('variants')
+            ->microData('http://schema.org/Product', 'Variants')
             ->isNotTested()
         ;
         //====================================================================//
         // MSF Light Mode => Visible Only on ALL Sites
         if (MSM::isLightMode()) {
-            $this->fieldsFactory()->addOption("shop", MSM::MODE_ALL);
+            $this->fieldsFactory()->addOption('shop', MSM::MODE_ALL);
         }
         //====================================================================//
         // Product Variation List - Product SKU
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
-            ->identifier("sku")
-            ->name("Variant SKU")
-            ->inList("variants")
-            ->microData("http://schema.org/Product", "VariationName")
+            ->identifier('sku')
+            ->name('Variant SKU')
+            ->inList('variants')
+            ->microData('http://schema.org/Product', 'VariationName')
             ->isReadOnly()
         ;
         //====================================================================//
         // MSF Light Mode => Visible Only on ALL Sites
         if (MSM::isLightMode()) {
-            $this->fieldsFactory()->addOption("shop", MSM::MODE_ALL);
+            $this->fieldsFactory()->addOption('shop', MSM::MODE_ALL);
         }
     }
 
@@ -149,12 +147,12 @@ trait CoreTrait
         // READ Fields
         switch ($fieldName) {
             case 'parent_id':
-                $this->out[$fieldName] = $this->AttributeId ? (string) $this->ProductId : "";
+                $this->out[$fieldName] = $this->AttributeId ? (string) $this->ProductId : '';
 
                 break;
             case 'parent_ref':
                 if (empty($this->AttributeId) || empty($this->object->reference)) {
-                    $this->out[$fieldName] = "";
+                    $this->out[$fieldName] = '';
 
                     break;
                 }
@@ -183,7 +181,7 @@ trait CoreTrait
         switch ($fieldName) {
             case 'default_on':
                 if ($this->AttributeId) {
-                    $this->getSimple($fieldName, "Attribute");
+                    $this->getSimple($fieldName, 'Attribute');
                 } else {
                     $this->out[$fieldName] = false;
                 }
@@ -195,7 +193,7 @@ trait CoreTrait
                         $this->ProductId,
                         $this->object->getDefaultIdProductAttribute()
                     );
-                    $this->out[$fieldName] = self::objects()->encode("Product", $unikId);
+                    $this->out[$fieldName] = self::objects()->encode('Product', $unikId);
                 } else {
                     $this->out[$fieldName] = null;
                 }
@@ -220,7 +218,7 @@ trait CoreTrait
     {
         //====================================================================//
         // Check if List field & Init List Array
-        $fieldId = self::lists()->initOutput($this->out, "variants", $fieldName);
+        $fieldId = self::lists()->initOutput($this->out, 'variants', $fieldName);
         if (!$fieldId) {
             return;
         }
@@ -235,15 +233,15 @@ trait CoreTrait
             //====================================================================//
             // Add Variant Infos
             if (isset($attr[$fieldId])) {
-                self::lists()->insert($this->out, "variants", $fieldId, $index, $attr[$fieldId]);
+                self::lists()->insert($this->out, 'variants', $fieldId, $index, $attr[$fieldId]);
             }
         }
 
         unset($this->in[$key]);
         //====================================================================//
         // Sort Variants by Code
-        if (is_array($this->out["variants"])) {
-            ksort($this->out["variants"]);
+        if (is_array($this->out['variants'])) {
+            ksort($this->out['variants']);
         }
     }
 
@@ -332,7 +330,7 @@ trait CoreTrait
                 if (empty($this->AttributeId) || empty($fieldData)) {
                     break;
                 }
-                $this->setSimple("reference", $fieldData);
+                $this->setSimple('reference', $fieldData);
 
                 break;
             default:
@@ -362,10 +360,10 @@ trait CoreTrait
 
         //====================================================================//
         // Travis Mode => Skip Current Product Variant
-        if ($attribute["id_product"] != $this->ProductId) {
+        if ($attribute['id_product'] != $this->ProductId) {
             return true;
         }
-        if ($attribute["id_product_attribute"] != $this->AttributeId) {
+        if ($attribute['id_product_attribute'] != $this->AttributeId) {
             return true;
         }
 
@@ -392,7 +390,7 @@ trait CoreTrait
         foreach ($this->object->getAttributeCombinations(SLM::getDefaultLangId()) as $attr) {
             //====================================================================//
             // Extract Product Attribute Id
-            $attrId = $attr["id_product_attribute"];
+            $attrId = $attr['id_product_attribute'];
             //====================================================================//
             // Already Added
             if (isset($this->combinations[$attrId])) {
@@ -400,13 +398,13 @@ trait CoreTrait
             }
             //====================================================================//
             // Parse Simple Data
-            $this->combinations[$attrId]["id_product"] = $attr["id_product"];
-            $this->combinations[$attrId]["id_product_attribute"] = $attr["id_product_attribute"];
-            $this->combinations[$attrId]["sku"] = $attr["reference"];
+            $this->combinations[$attrId]['id_product'] = $attr['id_product'];
+            $this->combinations[$attrId]['id_product_attribute'] = $attr['id_product_attribute'];
+            $this->combinations[$attrId]['sku'] = $attr['reference'];
             //====================================================================//
             // Parse Computed Data
-            $unikId = self::getUnikIdStatic($attr["id_product"], $attr["id_product_attribute"]);
-            $this->combinations[$attrId]["id"] = self::objects()->encode("Product", $unikId);
+            $unikId = self::getUnikIdStatic($attr['id_product'], $attr['id_product_attribute']);
+            $this->combinations[$attrId]['id'] = self::objects()->encode('Product', $unikId);
         }
 
         return $this->combinations;

@@ -12,9 +12,7 @@
  *  file that was distributed with this source code.
  *
  * @author Splash Sync
- *
  * @copyright Splash Sync SAS
- *
  * @license MIT
  */
 
@@ -84,21 +82,21 @@ class Order extends AbstractObject implements PrimaryKeysAwareInterface
      *
      * @var string
      */
-    protected static string $name = "Customer Order";
+    protected static string $name = 'Customer Order';
 
     /**
      * Object Description (Translated by Module)
      *
      * @var string
      */
-    protected static string $description = "Prestashop Customers Order Object";
+    protected static string $description = 'Prestashop Customers Order Object';
 
     /**
      * Object Icon (FontAwesome or Glyph ico tag)
      *
      * @var string
      */
-    protected static string $ico = "fa fa-shopping-cart ";
+    protected static string $ico = 'fa fa-shopping-cart ';
 
     //====================================================================//
     // Object Synchronization Recommended Configuration
@@ -166,7 +164,7 @@ class Order extends AbstractObject implements PrimaryKeysAwareInterface
     {
         //====================================================================//
         //  Load Local Translation File
-        Splash::translator()->load("objects@local");
+        Splash::translator()->load('objects@local');
         //====================================================================//
         // Load Splash Module
         $this->spl = Local::getLocalModule();
@@ -191,28 +189,28 @@ class Order extends AbstractObject implements PrimaryKeysAwareInterface
             // General Object definition
             //====================================================================//
             // Object Type Name
-            "type" => $this->getType(),
+            'type' => $this->getType(),
             // Object Display Name
-            "name" => $this->getName(),
+            'name' => $this->getName(),
             // Object Description
-            "description" => $this->getDesc(),
+            'description' => $this->getDesc(),
             // Object Icon Class (Font Awesome or Glyph. ie "fa fa-user")
-            "icon" => $this->getIcon(),
+            'icon' => $this->getIcon(),
             // Is This Object Enabled or Not?
-            "disabled" => $this->isDisabled(),
+            'disabled' => $this->isDisabled(),
             //====================================================================//
             // Object Limitations
-            "allow_push_created" => Splash::isDebugMode(),
-            "allow_push_updated" => Splash::isDebugMode(),
-            "allow_push_deleted" => Splash::isDebugMode(),
+            'allow_push_created' => Splash::isDebugMode(),
+            'allow_push_updated' => Splash::isDebugMode(),
+            'allow_push_deleted' => Splash::isDebugMode(),
             //====================================================================//
             // Object Default Configuration
-            "enable_push_created" => (bool) static::$enablePushCreated,
-            "enable_push_updated" => (bool) static::$enablePushUpdated,
-            "enable_push_deleted" => (bool) static::$enablePushDeleted,
-            "enable_pull_created" => (bool) static::$enablePullCreated,
-            "enable_pull_updated" => (bool) static::$enablePullUpdated,
-            "enable_pull_deleted" => (bool) static::$enablePullDeleted
+            'enable_push_created' => (bool) static::$enablePushCreated,
+            'enable_push_updated' => (bool) static::$enablePushUpdated,
+            'enable_push_deleted' => (bool) static::$enablePushDeleted,
+            'enable_pull_created' => (bool) static::$enablePullCreated,
+            'enable_pull_updated' => (bool) static::$enablePullUpdated,
+            'enable_pull_deleted' => (bool) static::$enablePullDeleted
         );
 
         //====================================================================//

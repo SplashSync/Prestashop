@@ -12,9 +12,7 @@
  *  file that was distributed with this source code.
  *
  * @author Splash Sync
- *
  * @copyright Splash Sync SAS
- *
  * @license MIT
  */
 
@@ -74,21 +72,21 @@ trait ChecksumTrait
         //====================================================================//
         // Product CheckSum
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
-            ->identifier("md5")
-            ->name("Md5")
-            ->description("Unik Md5 Object Checksum")
-            ->group(Translate::getAdminTranslation("Meta", "AdminThemes"))
+            ->identifier('md5')
+            ->name('Md5')
+            ->description('Unik Md5 Object Checksum')
+            ->group(Translate::getAdminTranslation('Meta', 'AdminThemes'))
             ->isListed()
-            ->microData("http://schema.org/Thing", "identifier")
+            ->microData('http://schema.org/Thing', 'identifier')
             ->isReadOnly()
         ;
         //====================================================================//
         // Product CheckSum Debug String
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
-            ->identifier("md5-debug")
-            ->name("Md5 Debug")
-            ->description("Unik Checksum String fro Debug")
-            ->group(Translate::getAdminTranslation("Meta", "AdminThemes"))
+            ->identifier('md5-debug')
+            ->name('Md5 Debug')
+            ->description('Unik Checksum String fro Debug')
+            ->group(Translate::getAdminTranslation('Meta', 'AdminThemes'))
             ->isReadOnly()
         ;
     }
@@ -136,7 +134,7 @@ trait ChecksumTrait
         array $attributes = array()
     ): string {
         $md5Array = array_merge_recursive(
-            array("title" => $title, "sku" => $sku),
+            array('title' => $title, 'sku' => $sku),
             $attributes
         );
 
@@ -158,7 +156,7 @@ trait ChecksumTrait
         array $attributes = array()
     ): string {
         $md5Array = array_merge_recursive(
-            array("title" => $title, "sku" => $sku),
+            array('title' => $title, 'sku' => $sku),
             $attributes
         );
 

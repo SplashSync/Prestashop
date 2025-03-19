@@ -12,9 +12,7 @@
  *  file that was distributed with this source code.
  *
  * @author Splash Sync
- *
  * @copyright Splash Sync SAS
- *
  * @license MIT
  */
 
@@ -50,7 +48,7 @@ trait DescTrait
      */
     protected function buildDescFields(): void
     {
-        $groupName = Translate::getAdminTranslation("Information", "AdminProducts");
+        $groupName = Translate::getAdminTranslation('Information', 'AdminProducts');
         $this->fieldsFactory()->setDefaultLanguage(LanguagesManager::getDefaultLanguage());
 
         //====================================================================//
@@ -61,21 +59,21 @@ trait DescTrait
             //====================================================================//
             // Name without Options
             $this->fieldsFactory()->create(SPL_T_VARCHAR)
-                ->identifier("name")
-                ->name($this->spl->l("Product Name without Options"))
+                ->identifier('name')
+                ->name($this->spl->l('Product Name without Options'))
                 ->group($groupName)
-                ->microData("http://schema.org/Product", "alternateName")
+                ->microData('http://schema.org/Product', 'alternateName')
                 ->setMultilang($isoLang)
-                ->addOption("shop", MSM::MODE_ALL)
+                ->addOption('shop', MSM::MODE_ALL)
                 ->isRequired(LanguagesManager::isDefaultLanguage($isoLang))
                 ->isIndexed(LanguagesManager::isDefaultLanguage($isoLang))
             ;
             //====================================================================//
             // Name with Options
             $this->fieldsFactory()->create(SPL_T_VARCHAR)
-                ->identifier("fullname")
-                ->name($this->spl->l("Product Name with Options"))
-                ->microData("http://schema.org/Product", "name")
+                ->identifier('fullname')
+                ->name($this->spl->l('Product Name with Options'))
+                ->microData('http://schema.org/Product', 'name')
                 ->group($groupName)
                 ->setMultilang($isoLang)
                 ->isListed(LanguagesManager::isDefaultLanguage($isoLang))
@@ -85,9 +83,9 @@ trait DescTrait
             //====================================================================//
             // Long Description
             $this->fieldsFactory()->create(SPL_T_TEXT)
-                ->identifier("description")
-                ->name(Translate::getAdminTranslation("description", "AdminProducts"))
-                ->microData("http://schema.org/Article", "articleBody")
+                ->identifier('description')
+                ->name(Translate::getAdminTranslation('description', 'AdminProducts'))
+                ->microData('http://schema.org/Article', 'articleBody')
                 ->group($groupName)
                 ->setMultilang($isoLang)
                 ->isReadOnly(self::isSourceCatalogMode())
@@ -95,9 +93,9 @@ trait DescTrait
             //====================================================================//
             // Short Description
             $this->fieldsFactory()->create(SPL_T_VARCHAR)
-                ->identifier("description_short")
-                ->name(Translate::getAdminTranslation("Short Description", "AdminProducts"))
-                ->microData("http://schema.org/Product", "description")
+                ->identifier('description_short')
+                ->name(Translate::getAdminTranslation('Short Description', 'AdminProducts'))
+                ->microData('http://schema.org/Product', 'description')
                 ->group($groupName)
                 ->setMultilang($isoLang)
                 ->isReadOnly(self::isSourceCatalogMode())
@@ -176,14 +174,14 @@ trait DescTrait
                     // no break
                 case 'description':
                     $this->setMultiLang($baseFieldName, $idLang, (string) $fieldData);
-                    $this->addMsfUpdateFields("Product", $baseFieldName, $idLang);
+                    $this->addMsfUpdateFields('Product', $baseFieldName, $idLang);
                     unset($this->in[$fieldName]);
 
                     break;
                 case 'description_short':
                     $maxLength = (int) Configuration::get('PS_PRODUCT_SHORT_DESC_LIMIT');
                     $this->setMultiLang($baseFieldName, $idLang, (string) $fieldData, $maxLength ?: null);
-                    $this->addMsfUpdateFields("Product", $baseFieldName, $idLang);
+                    $this->addMsfUpdateFields('Product', $baseFieldName, $idLang);
                     unset($this->in[$fieldName]);
 
                     break;
@@ -216,8 +214,8 @@ trait DescTrait
         foreach ($languages as $lang) {
             //====================================================================//
             // Encode Language Code From Splash Format to Prestashop Format (fr_FR => fr-fr)
-            $langCode = LanguagesManager::langEncode($lang["language_code"]);
-            $langId = (int) $lang["id_lang"];
+            $langCode = LanguagesManager::langEncode($lang['language_code']);
+            $langId = (int) $lang['id_lang'];
             //====================================================================//
             // Product Specific - Read Meta Keywords
             $data[$langCode] = $object->getTags($langId);

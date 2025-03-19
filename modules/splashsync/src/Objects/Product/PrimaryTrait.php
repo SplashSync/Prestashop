@@ -12,9 +12,7 @@
  *  file that was distributed with this source code.
  *
  * @author Splash Sync
- *
  * @copyright Splash Sync SAS
- *
  * @license MIT
  */
 
@@ -61,25 +59,25 @@ trait PrimaryTrait
         $sql = new DbQuery();
         //====================================================================//
         // Build SELECT
-        $sql->select("p.`id_product`            as id");
-        $sql->select("pa.`id_product_attribute`  as id_attribute");
-        $sql->select("p.`reference` as ref");
-        $sql->select("pa.`reference` as ref_attribute");
+        $sql->select('p.`id_product`            as id');
+        $sql->select('pa.`id_product_attribute`  as id_attribute');
+        $sql->select('p.`reference` as ref');
+        $sql->select('pa.`reference` as ref_attribute');
         //====================================================================//
         // Build FROM
-        $sql->from("product", 'p');
+        $sql->from('product', 'p');
         $sql->limit(5);
         //====================================================================//
         // Build JOIN
-        $sql->leftJoin("product_attribute", 'pa', '(pa.id_product = p.id_product) ');
+        $sql->leftJoin('product_attribute', 'pa', '(pa.id_product = p.id_product) ');
         //====================================================================//
         // Setup filters
         // Add filters with names conversions. Added LOWER function to be NON case sensitive
         if (!empty($keys['ref']) && is_string($keys['ref'])) {
             //====================================================================//
             // Search in Customer Email
-            $where = " LOWER( p.reference ) = LOWER( '".pSQL($keys['ref'])."') ";
-            $where .= " OR LOWER( pa.reference ) = LOWER( '".pSQL($keys['ref'])."') ";
+            $where = ' LOWER( p.reference ) = LOWER( \'' . pSQL($keys['ref']) . '\') ';
+            $where .= ' OR LOWER( pa.reference ) = LOWER( \'' . pSQL($keys['ref']) . '\') ';
             $sql->where($where);
         }
         //====================================================================//

@@ -12,9 +12,7 @@
  *  file that was distributed with this source code.
  *
  * @author Splash Sync
- *
  * @copyright Splash Sync SAS
- *
  * @license MIT
  */
 
@@ -50,12 +48,12 @@ trait CRUDTrait
     {
         //====================================================================//
         // Check Product Attributes are given
-        if (empty($objectData["attributes"])) {
+        if (empty($objectData['attributes'])) {
             return false;
         }
         //====================================================================//
         // Check Product Attributes are Valid
-        foreach ($objectData["attributes"] as $attributeArray) {
+        foreach ($objectData['attributes'] as $attributeArray) {
             if (!$this->isValidAttributeDefinition($attributeArray)) {
                 return false;
             }
@@ -79,29 +77,29 @@ trait CRUDTrait
     {
         //====================================================================//
         // Safe Load Product Variants List
-        $variants = $objectData["variants"] ?? array();
+        $variants = $objectData['variants'] ?? array();
         //====================================================================//
         // Create or Load Base Product
         $baseProductId = $this->getBaseProduct($variants);
         if ($baseProductId) {
             //====================================================================//
             // USE LOCK to Allow Base Product Loading
-            $this->lock("onCombinationCreate");
+            $this->lock('onCombinationCreate');
             $product = $this->load($baseProductId);
-            $this->unLock("onCombinationCreate");
+            $this->unLock('onCombinationCreate');
         } else {
             //====================================================================//
             // LOCK PRODUCT HOOKS to prevent triggered Actions on Product
-            $this->lock("onCombinationLock");
+            $this->lock('onCombinationLock');
             //====================================================================//
             // Create New Simple Product
-            $parentRef = $this->in["parent_ref"] ?? null;
+            $parentRef = $this->in['parent_ref'] ?? null;
             $product = $this->createSimpleProduct(
                 (is_scalar($parentRef) && $parentRef) ? (string) $parentRef : null
             );
             //====================================================================//
             // UNLOCK PRODUCT HOOKS
-            $this->unLock("onCombinationLock");
+            $this->unLock('onCombinationLock');
         }
         //====================================================================//
         // Add Product Combination
@@ -132,7 +130,7 @@ trait CRUDTrait
         Splash::log()->trace();
         //====================================================================//
         // Check Name is Array
-        if ((!is_array($variants) && !is_a($variants, "ArrayObject")) || empty($variants)) {
+        if ((!is_array($variants) && !is_a($variants, 'ArrayObject')) || empty($variants)) {
             return null;
         }
         //====================================================================//
@@ -141,12 +139,12 @@ trait CRUDTrait
         foreach ($variants as $variant) {
             //====================================================================//
             // Check Product Id is here
-            if (!isset($variant["id"]) || !is_string($variant["id"])) {
+            if (!isset($variant['id']) || !is_string($variant['id'])) {
                 continue;
             }
             //====================================================================//
             // Extract Variable Product Id
-            $variantProductId = self::objects()->id($variant["id"]);
+            $variantProductId = self::objects()->id($variant['id']);
             if (!empty($variantProductId)) {
                 return $variantProductId;
             }

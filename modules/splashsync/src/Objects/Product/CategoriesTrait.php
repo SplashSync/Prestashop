@@ -12,9 +12,7 @@
  *  file that was distributed with this source code.
  *
  * @author Splash Sync
- *
  * @copyright Splash Sync SAS
- *
  * @license MIT
  */
 
@@ -49,7 +47,7 @@ trait CategoriesTrait
      */
     protected function buildCategoriesFields(): void
     {
-        $fieldName = Translate::getAdminTranslation("Categories", "AdminCatalogFeature");
+        $fieldName = Translate::getAdminTranslation('Categories', 'AdminCatalogFeature');
 
         //====================================================================//
         // PRODUCT CATEGORIES
@@ -58,17 +56,17 @@ trait CategoriesTrait
         //====================================================================//
         // Categories Slugs
         $this->fieldsFactory()->create(SPL_T_INLINE)
-            ->identifier("categories")
+            ->identifier('categories')
             ->name($fieldName)
-            ->description($fieldName." Rewrite Url")
-            ->microData("http://schema.org/Product", "category")
+            ->description($fieldName . ' Rewrite Url')
+            ->microData('http://schema.org/Product', 'category')
             ->addChoices(CategoryManager::getAllCategoriesChoices())
             ->setPreferNone()
         ;
         //====================================================================//
         // MSF Light Mode => Visible Only on ALL Sites
         if (MSM::isLightMode()) {
-            $this->fieldsFactory()->addOption("shop", MSM::MODE_ALL);
+            $this->fieldsFactory()->addOption('shop', MSM::MODE_ALL);
         }
         //====================================================================//
         // NO TEST in MSF Mode as Categories are Not Copied
@@ -81,10 +79,10 @@ trait CategoriesTrait
             //====================================================================//
             // Categories Names
             $this->fieldsFactory()->create(SPL_T_INLINE)
-                ->identifier("categories_names")
-                ->name($fieldName." Name")
-                ->description($fieldName." Names")
-                ->microData("http://schema.org/Product", "categoryName")
+                ->identifier('categories_names')
+                ->name($fieldName . ' Name')
+                ->description($fieldName . ' Names')
+                ->microData('http://schema.org/Product', 'categoryName')
                 ->setMultilang($isoLang)
                 ->addChoices(CategoryManager::getAllCategoriesChoices($langId))
                 ->setPreferNone()
@@ -93,7 +91,7 @@ trait CategoriesTrait
             //====================================================================//
             // MSF Light Mode => Visible Only on ALL Sites
             if (MSM::isLightMode()) {
-                $this->fieldsFactory()->addOption("shop", MSM::MODE_ALL);
+                $this->fieldsFactory()->addOption('shop', MSM::MODE_ALL);
             }
         }
     }
@@ -148,7 +146,7 @@ trait CategoriesTrait
             switch ($baseFieldName) {
                 case 'categories_names':
                     $this->out[$fieldName] = InlineHelper::fromArray(
-                        CategoryManager::getProductCategories($this->ProductId, $idLang, "name")
+                        CategoryManager::getProductCategories($this->ProductId, $idLang, 'name')
                     );
                     unset($this->in[$key]);
 

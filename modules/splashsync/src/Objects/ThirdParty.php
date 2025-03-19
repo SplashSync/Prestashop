@@ -12,9 +12,7 @@
  *  file that was distributed with this source code.
  *
  * @author Splash Sync
- *
  * @copyright Splash Sync SAS
- *
  * @license MIT
  */
 
@@ -82,21 +80,21 @@ class ThirdParty extends AbstractObject implements PrimaryKeysAwareInterface
      *
      * @var string
      */
-    protected static string $name = "ThirdParty";
+    protected static string $name = 'ThirdParty';
 
     /**
      * Object Description (Translated by Module)
      *
      * @var string
      */
-    protected static string $description = "Prestashop Customer Object";
+    protected static string $description = 'Prestashop Customer Object';
 
     /**
      * Object Icon (FontAwesome or Glyph ico tag)
      *
      * @var string
      */
-    protected static string $ico = "fa fa-user";
+    protected static string $ico = 'fa fa-user';
 
     //====================================================================//
     // Object Synchronization Recommended Configuration
@@ -120,7 +118,7 @@ class ThirdParty extends AbstractObject implements PrimaryKeysAwareInterface
     {
         //====================================================================//
         //  Load Local Translation File
-        Splash::translator()->load("objects@local");
+        Splash::translator()->load('objects@local');
         //====================================================================//
         // Load Splash Module
         $this->spl = Local::getLocalModule();

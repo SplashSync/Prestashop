@@ -12,9 +12,7 @@
  *  file that was distributed with this source code.
  *
  * @author Splash Sync
- *
  * @copyright Splash Sync SAS
- *
  * @license MIT
  */
 
@@ -44,24 +42,24 @@ trait MainTrait
         // PRICES INFORMATIONS
         //====================================================================//
 
-        $currencySuffix = " (".$this->currency->sign.")";
+        $currencySuffix = ' (' . $this->currency->sign . ')';
 
         //====================================================================//
         // Order Total Price HT
         $this->fieldsFactory()->create(SPL_T_DOUBLE)
-            ->Identifier("total_paid_tax_excl")
-            ->Name(Translate::getAdminTranslation("Total (Tax excl.)", "AdminOrders").$currencySuffix)
-            ->MicroData("http://schema.org/Invoice", "totalPaymentDue")
+            ->Identifier('total_paid_tax_excl')
+            ->Name(Translate::getAdminTranslation('Total (Tax excl.)', 'AdminOrders') . $currencySuffix)
+            ->MicroData('http://schema.org/Invoice', 'totalPaymentDue')
             ->isListed()
             ->isReadOnly();
 
         //====================================================================//
         // Order Total Price TTC
         $this->fieldsFactory()->create(SPL_T_DOUBLE)
-            ->Identifier("total_paid_tax_incl")
-            ->Name(Translate::getAdminTranslation("Total (Tax incl.)", "AdminOrders").$currencySuffix)
+            ->Identifier('total_paid_tax_incl')
+            ->Name(Translate::getAdminTranslation('Total (Tax incl.)', 'AdminOrders') . $currencySuffix)
             ->isListed()
-            ->MicroData("http://schema.org/Invoice", "totalPaymentDueTaxIncluded")
+            ->MicroData('http://schema.org/Invoice', 'totalPaymentDueTaxIncluded')
             ->isReadOnly();
     }
 

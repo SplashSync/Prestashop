@@ -12,9 +12,7 @@
  *  file that was distributed with this source code.
  *
  * @author Splash Sync
- *
  * @copyright Splash Sync SAS
- *
  * @license MIT
  */
 
@@ -22,8 +20,8 @@
 // Fix For PHP Memory Limit
 ini_set('memory_limit', '-1');
 
-require_once dirname(__DIR__)."/modules/splashsync/vendor/autoload.php";
-require_once dirname(__DIR__)."/vendor/autoload.php";
+require_once dirname(__DIR__) . '/modules/splashsync/vendor/autoload.php';
+require_once dirname(__DIR__) . '/vendor/autoload.php';
 
 //====================================================================//
 // Init Splash for Local Includes

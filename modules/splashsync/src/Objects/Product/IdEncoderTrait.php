@@ -12,9 +12,7 @@
  *  file that was distributed with this source code.
  *
  * @author Splash Sync
- *
  * @copyright Splash Sync SAS
- *
  * @license MIT
  */
 
@@ -69,7 +67,7 @@ trait IdEncoderTrait
         // 32 bits Platforms Compatibility
         if ((PHP_INT_SIZE == 4) || !empty(Splash::input('SPLASH_TRAVIS'))) {
             if (($productId > 0xFFFFF) || ($attributeId > 0x7FF)) {
-                return (string) $productId.'@@'.(string) $attributeId;
+                return (string) $productId . '@@' . (string) $attributeId;
             }
         }
 
