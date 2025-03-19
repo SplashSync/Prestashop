@@ -22,12 +22,17 @@
 # Register Toolkit as Symfony Container
 SF_CONTAINERS += prestashop_8_1
 
+# PhpUnit Test Sequence
+PHPUNIT_TEST = modules/splashsync/vendor/bin/phpunit -c ci/phpunit.xml.dist
+
+
 include modules/splashsync/vendor/badpixxel/php-sdk/make/sdk.mk
 
-#quality:
-#	bash ci/verify.sh
+module:
+	php modules/splashsync/vendor/bin/grumphp run --tasks=build-module
 
-#test: ## Execute Functional Test
-#	@$(DOCKER_COMPOSE) exec toolkit php vendor/bin/phpunit tests/Controller/S00MinimalObjectsTest.php --testdox
-#	@$(DOCKER_COMPOSE) exec toolkit php vendor/bin/phpunit --testdox
+test: ## Execute Functional Test
+	@$(DOCKER_COMPOSE) exec prestashop_8_1 pwd
+	@$(DOCKER_COMPOSE) exec prestashop_8_1 $(PHPUNIT_TEST) modules/splashsync/vendor/splash/phpcore/Tests/Core/
+	@$(DOCKER_COMPOSE) exec prestashop_8_1 $(PHPUNIT_TEST) --testsuite=Local --testdox
 
