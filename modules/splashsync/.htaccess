@@ -1,0 +1,22 @@
+############################################
+## By default deny all access
+Order allow,deny
+Deny from all
+###########################################
+## Allow access to soap server file only
+<Files soap.php>
+    order allow,deny
+    allow from all
+</Files>
+
+###########################################
+## MOD SECURITY
+###########################################
+<IfModule mod_security.c>
+	SecFilterSelective REQUEST_URI "soap.php$" "allow"
+</IfModule>
+###########################################
+# If this still doesn't work, try uncomment next line
+# Required for:
+# - Wordpress on OVH Shared Hosts with modSecurity
+#SecFilterSelective REQUEST_URI "soap.php$" "allow"
