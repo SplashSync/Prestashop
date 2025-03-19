@@ -39,7 +39,7 @@ include_once $sdkPath."cs.rules.php";
 
 $config->setRules(array_replace($config->getRules(), array(
     'header_comment' => array(
-        'header' => ($header."\n\n@author Splash Sync \n\n@copyright Splash Sync SAS \n\n@license MIT"),
+        'header' => ($header."\n\n@author Splash Sync \n@copyright Splash Sync SAS \n@license MIT"),
         'comment_type' => 'PHPDoc',
         'separate' => 'bottom'
     ),
