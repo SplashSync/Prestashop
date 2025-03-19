@@ -1,6 +1,5 @@
 <?php
-
-/*
+/**
  *  This file is part of SplashSync Project.
  *
  *  Copyright (C) Splash Sync  <www.splashsync.com>
@@ -11,9 +10,15 @@
  *
  *  For the full copyright and license information, please view the LICENSE
  *  file that was distributed with this source code.
+ *
+ * @author Splash Sync
+ *
+ * @copyright Splash Sync SAS
+ *
+ * @license MIT
  */
 
-global $config, $finder;
+global $header, $config, $finder;
 
 $sdkPath = $_SERVER['PWD']."/modules/splashsync/vendor/badpixxel/php-sdk/phpcs/";
 $dirs = array(
@@ -31,5 +36,13 @@ $finder = PhpCsFixer\Finder::create()
     ->exclude('var');
 
 include_once $sdkPath."cs.rules.php";
+
+$config->setRules(array_replace($config->getRules(), array(
+    'header_comment' => array(
+        'header' => ($header."\n\n@author Splash Sync \n\n@copyright Splash Sync SAS \n\n@license MIT"),
+        'comment_type' => 'PHPDoc',
+        'separate' => 'bottom'
+    ),
+)));
 
 return $config;
