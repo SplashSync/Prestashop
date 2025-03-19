@@ -69,7 +69,11 @@ class TaxManager
         $sql->from('tax_rule', 'g');
         //====================================================================//
         // Build JOIN
-        $sql->leftJoin('country_lang', 'cl', '(g.`id_country` = cl.`id_country` AND `id_lang` = ' . (int) $langId . ')');
+        $sql->leftJoin(
+            'country_lang',
+            'cl',
+            '(g.`id_country` = cl.`id_country` AND `id_lang` = ' . (int) $langId . ')'
+        );
         $sql->leftJoin('tax', 't', '(g.`id_tax` = t.`id_tax`)');
         $sql->leftJoin('tax_rules_group', 'tg', '(g.`id_tax_rules_group` = tg.`id_tax_rules_group`)');
         //====================================================================//

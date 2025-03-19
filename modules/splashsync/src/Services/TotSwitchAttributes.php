@@ -150,8 +150,10 @@ class TotSwitchAttributes
                 }
             } else {
                 // add row in table
-                $sql[] = 'REPLACE INTO `' . _DB_PREFIX_ . 'tot_switch_attribute_disabled`(`id_product_attribute`, `id_shop`)
-                VALUES (' . (int)$idProductAttribute . ', ' . (int)$idShop . ');';
+                $sql[] = 'REPLACE INTO `' . _DB_PREFIX_ .
+                    'tot_switch_attribute_disabled`(`id_product_attribute`, `id_shop`)
+                    VALUES (' . (int)$idProductAttribute . ', ' . (int)$idShop . ');'
+                ;
             }
         } else {
             if (is_array($idShops)) {

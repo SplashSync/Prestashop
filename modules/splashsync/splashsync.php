@@ -479,13 +479,17 @@ class SplashSync extends Module
         //====================================================================//
         // Safety Checks
         if (is_scalar($objectId)) {
-            Splash\Client\Splash::log()
-                ->deb('Splash Commit => ' . $objectType . ' Action = ' . $action . ' Id = ' . $objectId, ' : ' . $comment);
+            Splash\Client\Splash::log()->deb(
+                'Splash Commit => ' . $objectType . ' Action = ' . $action
+                . ' Id = ' . $objectId,
+                ' : ' . $comment
+            );
         } elseif (is_array($objectId) && empty($objectId)) {
             return true;
         } elseif (is_array($objectId)) {
             Splash\Client\Splash::log()->deb(
-                'Splash Commit => ' . $objectType . ' Action = ' . $action . ' Ids (x' . implode(', ', $objectId) . ') ' . $comment
+                'Splash Commit => ' . $objectType . ' Action = ' . $action
+                . ' Ids (x' . implode(', ', $objectId) . ') ' . $comment
             );
         } else {
             return Splash\Client\Splash::log()
