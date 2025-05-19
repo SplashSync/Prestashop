@@ -124,6 +124,13 @@ trait CoreTrait
                 //====================================================================//
                 // Customer Email
             case 'email':
+                //====================================================================//
+                // POS Order => No Email
+                if ($this->getOrder()->module == "kerawen") {
+                    $this->out[$fieldName] = null;
+
+                    break;
+                }
                 $customerId = $this->getOrder()->id_customer;
                 //====================================================================//
                 // Load Customer
