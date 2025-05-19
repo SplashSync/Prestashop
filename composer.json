@@ -15,7 +15,7 @@
 
     "require-dev": {
         "splash/console":                   "^2.0",
-        "badpixxel/php-sdk":                "~2.0",
+        "badpixxel/php-sdk":                "^2.0",
         "consolidation/robo":               "@stable"
     },
 

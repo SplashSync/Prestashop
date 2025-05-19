@@ -126,7 +126,7 @@ trait CoreTrait
             case 'email':
                 //====================================================================//
                 // POS Order => No Email
-                if ($this->getOrder()->module == "kerawen") {
+                if ('kerawen' == $this->getOrder()->module) {
                     $this->out[$fieldName] = null;
 
                     break;
