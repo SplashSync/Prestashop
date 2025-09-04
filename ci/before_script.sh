@@ -35,7 +35,7 @@ apt-get update && apt-get install -y zip unzip git
 ################################################################
 # Install Composer & Run Composer Update
 subtitle "INIT --> Run Composer"
-curl -s https://raw.githubusercontent.com/BadPixxel/Php-Sdk/main/ci/composer.sh | sh
+curl -s https://raw.githubusercontent.com/BadPixxel/Php-Sdk/3.0/ci/composer.sh | sh
 
 ################################################################
 # Setup PHP Configuration

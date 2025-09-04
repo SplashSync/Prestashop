@@ -157,7 +157,6 @@ F-Ps-1.7-Php-7.4:
 # Build Documentation
 ################################################################
 module:
-    image:      registry.gitlab.com/splashsync/php-console:pages
     stage:      Builds
     tags:       ['Dedicated']
     retry:      2

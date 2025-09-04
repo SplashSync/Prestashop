@@ -129,7 +129,6 @@ trait MultiShopTrait
         // Address has No Shop Information
         if ($this->object instanceof Address) {
             $customer = new \Customer((int) $this->object->id_customer);
-            ;
 
             return $customer->id_shop ?? 1;
         }
