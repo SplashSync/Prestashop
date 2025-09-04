@@ -18,8 +18,7 @@
 ################################################################
 # Include Pipeline Templates
 include:
-#  - remote: 'https://raw.githubusercontent.com/BadPixxel/Php-Sdk/main/gitlab/module.yaml'
-  - remote: 'https://raw.githubusercontent.com/BadPixxel/Php-Sdk/main/gitlab/pages.yaml'
+  - remote: 'https://raw.githubusercontent.com/BadPixxel/Php-Sdk/3.0/gitlab/pages.yaml'
 
 ################################################################
 # Define Default Image
@@ -45,9 +44,9 @@ variables:
 ################################################################
 # Defined Pipeline Stages
 stages:
+  - Builds
   - Quality
   - Functional
-  - Builds
 
 ################################################################
 # Code Quality Tests
@@ -168,7 +167,7 @@ module:
     # Run Test Script
     script:
         # Run Composer to Build deps
-        - curl -s https://raw.githubusercontent.com/BadPixxel/Php-Sdk/main/ci/composer.sh  | bash
+        - curl -s https://raw.githubusercontent.com/BadPixxel/Php-Sdk/3.0/ci/composer.sh  | bash
         # Build Documentation
         - php modules/splashsync/vendor/bin/grumphp run --tasks=build-module
     artifacts:
