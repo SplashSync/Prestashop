@@ -10,6 +10,9 @@ parameters:
     universalObjectCratesClasses:
             - ArrayObject
     ignoreErrors:
+            # Know Prestashop 9.0 Issues
+            - '#Instantiated class AppKernel is abstract.#'
+
             # Know Prestashop Issues
             - '#Parameter \#1 \$id of class [a-zA-Z0-9]+ constructor expects null\, string given.#'
             - '#Parameter \#1 \$id of class [a-zA-Z0-9]+ constructor expects null\, int given.#'
