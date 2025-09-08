@@ -35,6 +35,36 @@ splash:
                 WsPath:             /modules/splashsync/vendor/splash/phpcore/soap.php
 
         ########################################################################
+        # Prestashop 9.0
+        ps-9-0:
+            id:                 ThisIsPs90Key
+            key:                ThisTokenIsNotSoSecretChangeIt
+            name:               Prestashop 9.0
+            host:               false
+            connector:          soap
+            config:
+                Extended:           true
+                WsIdentifier:       ThisIsPs90Key
+                WsEncryptionKey:    ThisTokenIsNotSoSecretChangeIt
+                WsHost:             http://ps9-0.prestashop.local
+                WsPath:             /modules/splashsync/vendor/splash/phpcore/soap.php
+
+        ########################################################################
+        # Prestashop 8.2
+        ps-8-2:
+            id:                 ThisIsPs82Key
+            key:                ThisTokenIsNotSoSecretChangeIt
+            name:               Prestashop 8.2
+            host:               false
+            connector:          soap
+            config:
+                Extended:           true
+                WsIdentifier:       ThisIsPs82Key
+                WsEncryptionKey:    ThisTokenIsNotSoSecretChangeIt
+                WsHost:             http://ps8-2.prestashop.local
+                WsPath:             /modules/splashsync/vendor/splash/phpcore/soap.php
+
+        ########################################################################
         # Prestashop 8.1
         ps-8-1:
             id:                 ThisIsPs81Key

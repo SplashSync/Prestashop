@@ -1,0 +1,53 @@
+################################################################################
+#
+#  This file is part of SplashSync Project.
+# 
+#  Copyright (C) Splash Sync <www.splashsync.com>
+# 
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+# 
+#  For the full copyright and license information, please view the LICENSE
+#  file that was distributed with this source code.
+# 
+#  @author Bernard Paquier <contact@splashsync.com>
+#
+################################################################################
+
+services:
+
+    ################################################################################
+    # Prestashop 1.7
+    prestashop_1_7:
+        image:                prestashop/prestashop:1.7.8.11-7.4-apache
+        container_name:       ps1-7.prestashop.local
+        depends_on:
+            - mysql
+        volumes:
+            # Push Configuration Override
+            - ../../docker/config/splash.json:/var/www/html/config/splash.json:ro
+            # Module Sources
+            - ../../modules/splashsync:/var/www/html/modules/splashsync:ro
+            - ../../ci:/var/www/html/ci:ro
+            - ../../phpunit.xml.dist:/var/www/html/phpunit.xml.dist:ro
+            # Docker EntryPoint
+            - ../../docker/docker-entrypoint.sh:/var/www/html/modules/docker-entrypoint.sh:ro
+        environment:
+            - DB_SERVER=mysql
+            - DB_NAME=Prestashop__1p7
+            - DB_PREFIX=ps_1_7_
+            - PS_INSTALL_AUTO=1
+            - PS_DOMAIN=ps1-7.prestashop.local
+            - PS_FOLDER_ADMIN=_ad
+            - PS_FOLDER_INSTALL=installed
+            - ADMIN_MAIL=contact@splashsync.com
+            - ADMIN_PASSWD=splashsync
+            - SPLASH_WS_ID=ThisIsPs17Key
+            - SPLASH_WS_KEY=ThisTokenIsNotSoSecretChangeIt
+            - SPLASH_WS_HOST=http://toolkit.prestashop.local/ws/soap
+        command:          sh /var/www/html/modules/docker-entrypoint.sh
+        hostname:         ps1-7.prestashop.local
+        networks:
+          prestashop:     { ipv4_address: 172.102.0.17 }
+          splashsync:     { aliases: [ ps1-7.prestashop.local ] }
