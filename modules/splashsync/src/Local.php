@@ -571,13 +571,13 @@ class Local implements LocalClassInterface
         //====================================================================//
         // Execute Module is Uninstall
         if (self::$splashSyncModule->uninstall()) {
-            Splash::log()->msg('[SPLASH] Splash Module Unintall Done');
+            Splash::log()->msg('[SPLASH] Splash Module Uninstall Done');
         }
         //====================================================================//
         // Execute Module is Install
         self::$splashSyncModule->updateTranslationsAfterInstall(false);
         if (self::$splashSyncModule->install()) {
-            Splash::log()->msg('[SPLASH] Splash Module Intall Done');
+            Splash::log()->msg('[SPLASH] Splash Module Install Done');
             echo Splash::log()->getConsoleLog(true);
 
             return true;

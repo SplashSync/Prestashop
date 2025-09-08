@@ -19,7 +19,7 @@ services:
     
     ################################################################################
     # Prestashop 8.1
-    prestashop_8_1:
+    ps-8.1:
         image: prestashop/prestashop:8.1.6-8.1-apache
         container_name: ps8-1.prestashop.local
         depends_on:
@@ -31,8 +31,11 @@ services:
             - ../../modules/splashsync:/var/www/html/modules/splashsync:ro
             - ../../ci:/var/www/html/ci:ro
             - ../../phpunit.xml.dist:/var/www/html/phpunit.xml.dist:ro
+            - ../../composer.json:/var/www/html/composer.json:ro
             # Docker EntryPoint
             - ../../docker/docker-entrypoint.sh:/var/www/html/modules/docker-entrypoint.sh:ro
+            # Module vendor
+            - 8.1-vendor:/var/www/html/modules/splashsync/vendor
         environment:
             - DB_SERVER=mysql
             - DB_NAME=Prestashop__8p1
@@ -51,3 +54,6 @@ services:
         networks:
             prestashop:     { ipv4_address: 172.102.0.81 }
             splashsync:     { aliases: [ ps8-1.prestashop.local ] }
+
+volumes:
+    8.1-vendor:        ~

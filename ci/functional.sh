@@ -20,7 +20,7 @@
 set -e
 
 ################################################################
-# import Layout Functions
+# Import Layout Functions
 . /builds/SplashSync/Prestashop/ci/functions.sh
 
 ################################################################
@@ -43,6 +43,7 @@ composer install
  ################################################################################
  # Run PhpUnit Core Test Sequence (Will Enable the Module)
 subtitle "FUNCTIONAL --> Enable Module"
+
 modules/splashsync/vendor/bin/phpunit \
   modules/splashsync/vendor/splash/phpcore/Tests/Core/ \
   -c $WEB_DIR/ci/phpunit.xml.dist \

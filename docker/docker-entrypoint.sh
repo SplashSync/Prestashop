@@ -32,28 +32,37 @@ fi
 
 ################################################################################
 # Install Composer
-php /usr/local/bin/wall-e add:composer
+if [ ! -f /usr/local/bin/composer ]; then
+  echo "* Install Composer";
+  php /usr/local/bin/wall-e add:composer
+fi
+
+echo "* Composer Update NO DEV...";
+composer update --no-dev --no-scripts --no-plugins  -q || composer update --no-dev
+
+################################################################################
+# Install Phpunit
+if [ ! -f /usr/local/bin/phpunit ]; then
+  echo "* Install Phpunit";
+  php /usr/local/bin/wall-e add:phpunit
+fi
 
 ################################################################################
 # Install Prestashop Db & Assets
-php /usr/local/bin/wall-e prestashop:install:docker
+if [ ! -f /var/www/html/config/settings.inc.php ] && [ ! -f /var/www/html/app/config/parameters.yml ]; then
+  php /usr/local/bin/wall-e prestashop:install:docker
+else
+  echo "* PrestaShop Already Installed...";
+fi
 php /usr/local/bin/wall-e prestashop:configure
 
-echo "* Clear Cache...";
-rm -Rf /var/www/html/var
-
-if [ ! -z "$SPLASH_NGINX" ]; then
-    echo Install Nginx for Prestashop
-    apt update
-    apt install nano nginx systemd -y
-    rm -f /etc/nginx/sites-enabled/default
-    ln -s /etc/nginx/sites-available/prestashop.conf /etc/nginx/sites-enabled/prestashop
-    php-fpm -D
-    nginx -g 'daemon off;'
-fi
+################################################################################
+# Install Splash SYnc Module from CLI
+php bin/console prestashop:module install splashsync
 
 echo "* Clear Cache...";
-rm -Rf /var/www/html/var
+chmod 777 -Rf /var/www/html/var
+#rm -Rf /var/www/html/var
 
 if [ -z "$SPLASH_NO_APACHE" ]; then
     echo "* Almost ! Starting web server now";

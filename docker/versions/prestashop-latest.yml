@@ -3,7 +3,7 @@ services:
 
     ################################################################################
     # Prestashop Latest
-    prestashop:
+    ps-last:
         image:            prestashop/prestashop:latest
         container_name:   latest.prestashop.local
         depends_on:
@@ -19,8 +19,11 @@ services:
             - ../../ci:/var/www/html/ci:ro
             - ../../phpunit.xml.dist:/var/www/html/phpunit.xml.dist:ro
             - ../../grumphp.yml:/var/www/html/grumphp.yml:ro
+            - ../../composer.json:/var/www/html/composer.json:ro
             # Docker EntryPoint
             - ../../docker/docker-entrypoint.sh:/var/www/html/modules/docker-entrypoint.sh:ro
+            # Module vendor
+            - last-vendor:/var/www/html/modules/splashsync/vendor
         environment:
             - DB_SERVER=mysql
             - DB_PREFIX=ps_latest_
@@ -40,3 +43,6 @@ services:
         networks:
           prestashop: { ipv4_address: 172.102.0.10 }
           splashsync: { aliases: [ latest.prestashop.local ] }
+
+volumes:
+    last-vendor:        ~
