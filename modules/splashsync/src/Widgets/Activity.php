@@ -30,6 +30,7 @@ use AdminStatsController;
 use Configuration;
 use Currency;
 use Splash\Core\SplashCore as Splash;
+use Splash\Local\Services\LanguagesManager as SLM;
 use Splash\Local\Local;
 use Splash\Models\AbstractWidget;
 use SplashSync;
@@ -153,9 +154,12 @@ class Activity extends AbstractWidget
         //====================================================================//
         // Verify Inputs
         if (!isset($inputs['DateStart']) || !isset($inputs['DateEnd'])) {
-            $this->blocksFactory()->addNotificationsBlock(array('warning' => 'No Date Range Defined!'));
+            $this->blocksFactory()
+                ->addNotificationsBlock(array('warning' => 'No Date Range Defined ! Using default.'))
+            ;
 
-            return;
+            $inputs['DateStart'] = date('Y-m-d', strtotime('-1 year'));
+            $inputs['DateEnd'] = date('Y-m-d');;
         }
 
         //====================================================================//
@@ -190,7 +194,7 @@ class Activity extends AbstractWidget
             ->addSparkInfoBlock(array(
                 'title' => $this->spl->l('Sales'),
                 'fa_icon' => 'line-chart',
-                'value' => \Tools::displayPrice($activityData['sales'], $this->currency),
+                'value' => SLM::getContextLocale()->formatPrice($activityData['sales'], $this->currency->iso_code),
             ), $this->sparkOptions)
             ->addSparkInfoBlock(array(
                 'title' => $this->spl->l('Orders'),
@@ -205,7 +209,7 @@ class Activity extends AbstractWidget
             ->addSparkInfoBlock(array(
                 'title' => $this->spl->l('Net Profit'),
                 'fa_icon' => 'money',
-                'value' => \Tools::displayPrice($activityData['net_profits'], $this->currency),
+                'value' => SLM::getContextLocale()->formatPrice($activityData['net_profits'], $this->currency->iso_code),
             ), $this->sparkOptions)
         ;
     }
