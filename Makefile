@@ -32,7 +32,7 @@ module:
 	php modules/splashsync/vendor/bin/grumphp run --tasks=build-module
 
 phpstan: ## Execute PhpStan
-	@$(DOCKER_COMPOSE) exec prestashop php modules/splashsync/vendor/bin/phpstan analyze -c grumphp/phpstan.neon --level=9 modules/splashsync/src/
+	@$(DOCKER_COMPOSE) exec prestashop php modules/splashsync/vendor/bin/phpstan analyze -c grumphp/phpstan.neon --level=9 modules/splashsync/src/ modules/splashsync/tests/
 
 test: ## Execute Functional Test
 	@$(DOCKER_COMPOSE) exec prestashop_8_1 pwd
