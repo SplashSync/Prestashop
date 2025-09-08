@@ -264,7 +264,7 @@ trait ImagesTrait
         $splashImage = self::images()->encode(
             $defaultLegend ?: $filename,
             $objectImage->id . '.' . $objectImage->image_format,
-            _PS_PRODUCT_IMG_DIR_ . $objectImage->getImgFolder(),
+            self::getImgDir() . $objectImage->getImgFolder(),
             $publicUrl->getImageLink($imageName, (string) $imageId)
         );
 
@@ -368,7 +368,7 @@ trait ImagesTrait
         //====================================================================//
         // Compute Md5 CheckSum for this Image
         $checkSum = md5_file(
-            _PS_PRODUCT_IMG_DIR_
+            self::getImgDir()
             . $psImage->getImgFolder()
             . $psImage->id . '.'
             . $psImage->image_format
@@ -603,14 +603,14 @@ trait ImagesTrait
         // Walk on Object Images List
         foreach ($allImages as $image) {
             $imageObj = new Image($image['id_image']);
-            $imagePath = _PS_PRODUCT_IMG_DIR_ . $imageObj->getExistingImgPath();
+            $imagePath = self::getImgDir() . $imageObj->getExistingImgPath();
             if (!file_exists($imagePath . '.jpg')) {
                 continue;
             }
 
             foreach (ImageType::getImagesTypes('products') as $imageType) {
-                $imgThumb = _PS_PRODUCT_IMG_DIR_ . $imageObj->getExistingImgPath();
-                $imgThumb .= '-' . Tools::stripslashes($imageType['name']) . '.jpg';
+                $imgThumb = self::getImgDir() . $imageObj->getExistingImgPath();
+                $imgThumb .= '-' . stripslashes($imageType['name']) . '.jpg';
                 if (!file_exists($imgThumb)) {
                     ImageManager::resize(
                         $imagePath . '.jpg',
@@ -823,5 +823,19 @@ trait ImagesTrait
             $psImage->delete();
             $this->needUpdate();
         }
+    }
+
+    /**
+     * Get Product Images Directory
+     */
+    private function getImgDir(): string
+    {
+        static $dir = null;
+
+        $dir ??= defined('_PS_PRODUCT_IMG_DIR_') ? _PS_PRODUCT_IMG_DIR_ : null;
+        $dir ??= defined('_PS_PROD_IMG_DIR_') ? _PS_PROD_IMG_DIR_ : null;
+
+        return $dir;
+
     }
 }

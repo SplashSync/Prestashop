@@ -21,6 +21,7 @@ namespace Splash\Local\Services;
 use Context;
 use Currency;
 use Language;
+use PrestaShop\PrestaShop\Core\Localization\LocaleInterface;
 use Splash\Client\Splash;
 use Tools;
 
@@ -63,12 +64,8 @@ class LanguagesManager
 
     /**
      * Get Default Local Language ISO Code
-     *
-     * @param mixed $class
-     *
-     * @return string
      */
-    public static function translate(string $string, $class = 'AdminTab'): string
+    public static function translate(string $string, string $class = 'AdminTab'): string
     {
         /** @var Context $context */
         $context = Context::getContext();
@@ -266,7 +263,7 @@ class LanguagesManager
     public static function langEncode($psCode)
     {
         //====================================================================//
-        // PreSetuped Install => Know Languages Code
+        // Pre-setup Install => Know Languages Code
         if (array_key_exists($psCode, self::KNOW_LANGS)) {
             return self::KNOW_LANGS[$psCode];
         }
@@ -280,5 +277,16 @@ class LanguagesManager
         }
 
         return $out;
+    }
+
+    /**
+     * Get Current Context Locale
+     */
+    public static function getContextLocale(): LocaleInterface
+    {
+        /** @var Context $context */
+        $context = Context::getContext();
+
+        return \Tools::getContextLocale($context);
     }
 }

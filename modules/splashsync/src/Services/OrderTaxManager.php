@@ -38,7 +38,7 @@ class OrderTaxManager
     /**
      * Order Tax Calculators Cache
      *
-     * @var TaxCalculator[]
+     * @var array<null|TaxCalculator>
      */
     private static array $taxCalculators = array();
 
@@ -67,7 +67,7 @@ class OrderTaxManager
         // Try to Detect VAT from Value & Country
         $taxRule = TaxManager::getBestTaxForCountry($order->carrier_tax_rate, $countryId);
 
-        return $taxRule ? $taxRule->name : null;
+        return $taxRule ? (is_string($taxRule->name) ? $taxRule->name : null) : null;
     }
 
     /**

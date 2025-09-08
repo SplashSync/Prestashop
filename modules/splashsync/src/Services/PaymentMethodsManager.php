@@ -172,8 +172,6 @@ class PaymentMethodsManager
 
     /**
      * Get Generic Code from Known Methods
-     *
-     * @return null|string
      */
     public static function toFieldName(string $code): string
     {
@@ -236,14 +234,16 @@ class PaymentMethodsManager
     public static function getTranslationsFromConfig(): array
     {
         try {
-            return json_decode(
-                Configuration::get('SPLASH_PAYMENT_NAMES'),
+            $result = json_decode(
+                (string) Configuration::get('SPLASH_PAYMENT_NAMES'),
                 true,
                 JSON_THROW_ON_ERROR
             );
         } catch (\Throwable $ex) {
             return array();
         }
+
+        return is_array($result) ? $result : array();
     }
 
     /**

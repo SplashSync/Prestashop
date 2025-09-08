@@ -82,7 +82,7 @@ class OrderStatusManager
         if (!isset(self::$definition)) {
             self::$definition = Splash::object('Order')->description();
         }
-        if (is_array(self::$definition) && !empty(self::$definition['allow_push_updated'])) {
+        if (!empty(self::$definition['allow_push_updated'])) {
             return true;
         }
 

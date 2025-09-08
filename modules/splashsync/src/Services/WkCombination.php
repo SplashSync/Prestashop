@@ -88,7 +88,7 @@ class WkCombination
     /**
      * Update Product Combination Status if Possible
      *
-     * @param null|int         $productId   Ps Product ID
+     * @param int         $productId   Ps Product ID
      * @param null|int         $attributeId Ps Product Attribute ID
      * @param null|Combination $attribute   Ps Product Attribute Class
      * @param bool             $value       New Product Attribute Status
@@ -167,7 +167,7 @@ class WkCombination
     /**
      * Get Disable Product Attribute SQL
      */
-    private static function getDisableSql(int $idProduct, int $idAttribute, int $idShop): string
+    private static function getDisableSql(int $idProduct, ?int $idAttribute, int $idShop): string
     {
         return 'REPLACE INTO `'
             . _DB_PREFIX_ . 'wk_combination_status`(`id_ps_product`, `id_ps_product_attribute`, `id_shop`)'
@@ -178,7 +178,7 @@ class WkCombination
     /**
      * Get Enable Product Attribute SQL
      */
-    private static function getEnableSql(int $idProduct, int $idAttribute, int $idShop): string
+    private static function getEnableSql(int $idProduct, ?int $idAttribute, int $idShop): string
     {
         return 'DELETE FROM `' . _DB_PREFIX_ . 'wk_combination_status`'
             . ' WHERE `id_ps_product` = ' . $idProduct

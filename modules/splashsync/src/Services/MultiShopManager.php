@@ -83,12 +83,8 @@ class MultiShopManager
 
     /**
      * Check if Splash MultiShop Feature is Active
-     *
-     * @param bool $force
-     *
-     * @return bool
      */
-    public static function isFeatureActive($force = false): bool
+    public static function isFeatureActive(bool $force = false): bool
     {
         //====================================================================//
         // Check if Multi-Shop Feature is Active
@@ -185,7 +181,7 @@ class MultiShopManager
      *
      * @return bool
      */
-    public static function setContext(int $shopId = null, bool $force = false): bool
+    public static function setContext(?int $shopId = null, bool $force = false): bool
     {
         //====================================================================//
         // Check if Multi-Shop Feature is Active
@@ -260,13 +256,9 @@ class MultiShopManager
     /**
      * Get Shop Object with caching
      *
-     * @param null|int $shopId
-     *
      * @throws Exception
-     *
-     * @return Shop
      */
-    public static function getCachedShop(int $shopId = null): Shop
+    public static function getCachedShop(?int $shopId = null): Shop
     {
         $shopId = $shopId ?? (int) Configuration::get('PS_SHOP_DEFAULT');
         if (!isset(self::$shopsCache[$shopId])) {

@@ -46,7 +46,7 @@ class TaxManager
      *
      * @return null|int Tax Rate Group ID
      */
-    public static function getTaxRateGroupId(float $taxRate, int $countryId = null): ?int
+    public static function getTaxRateGroupId(float $taxRate, ?int $countryId = null): ?int
     {
         $langId = LanguagesManager::getDefaultLangId();
         if (is_null($countryId)) {
@@ -145,6 +145,9 @@ class TaxManager
                 AND tr.`id_state` = 0
                 AND 0 between `zipcode_from` AND `zipcode_to`'
             );
+            if (!is_array($taxRulesRates)) {
+                return null;
+            }
         } catch (Exception $e) {
             return null;
         }

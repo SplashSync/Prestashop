@@ -22,6 +22,7 @@ use CategoryCore as PsCategory;
 use Context;
 use Link;
 use Product;
+use Splash\Client\Splash;
 
 // phpcs:disable PSR1.Files.SideEffects
 if (!defined('_PS_VERSION_')) {
@@ -45,6 +46,9 @@ class PublicUrlBuilder
 {
     /**
      * Get Image Public Url for an Object Image
+     *
+     * @param PsCategory|Product $object  Object to get Image Url for
+     * @param int    $imageId Image Id
      */
     public static function getPublicUrl(object $object, ?int $imageId = null): ?string
     {
@@ -65,7 +69,7 @@ class PublicUrlBuilder
         //====================================================================//
         // For Categories
         if ($object instanceof PsCategory) {
-            return $publicUrl->getCatImageLink($imageName, $object->id);
+            return $publicUrl->getCatImageLink($imageName, (int) $object->id);
         }
         //====================================================================//
         // For Products

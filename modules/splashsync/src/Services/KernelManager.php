@@ -49,13 +49,15 @@ class KernelManager
             require_once $autoload;
         }
         //====================================================================//
-        // Only for PrestaShop > 9.0 => Load Vendor Dir
+        // Only for PrestaShop > 9.0 => Boot Admin Kernel
         if (class_exists('AdminKernel') && empty($kernel)) {
             $kernel = new AdminKernel('prod', false);
             $kernel->boot();
+
+            return;
         }
         //====================================================================//
-        // Only for PrestaShop > 1.7 => Load Vendor Dir
+        // Only for PrestaShop > 1.7 => Boot App Kernel
         if (class_exists('AppKernel') && empty($kernel)) {
             $kernel = new AppKernel('prod', false);
             $kernel->boot();
