@@ -31,6 +31,11 @@ splashscreen "QUALITY TESTS"
 # Install Module
 subtitle "QUALITY --> Install Module"
 bash $CI_PROJECT_DIR/ci/module/install.sh
+
+################################################################################
+# Fix for V9.0 => now check if parameters are here
+[ ! -f app/config/parameters.yml ] && cp app/config/parameters.yml.dist app/config/parameters.yml
+
 ################################################################################
 # Run Grumphp Quality Tests Suites
 subtitle "QUALITY --> Grumphp Verifications"

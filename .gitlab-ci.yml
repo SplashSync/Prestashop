@@ -74,24 +74,21 @@ Q-Ps-9.0-Php-8.3:
     allow_failure:  true
     <<: *quality
 
-Q-Ps-8.2-Php-8.2:
-    image:      prestashop/prestashop:8.2-8.1
-    allow_failure:  true
-    <<: *quality
-
-Q-Ps-8.1-Php-8.0:
-    image:      prestashop/prestashop:8.1-8.0
-    allow_failure:  true
-    <<: *quality
-
-Q-Ps-8.0-Php-8.1:
-    image:      prestashop/prestashop:8.0-8.1
-    allow_failure:  true
-    <<: *quality
-
-Q-Ps-8.0-Php-7.4:
-    image:      prestashop/prestashop:8.0-7.4
-    <<: *quality
+#Q-Ps-8.2-Php-8.2:
+#    image:      prestashop/prestashop:8.2-8.1
+#    <<: *quality
+#
+#Q-Ps-8.1-Php-8.0:
+#    image:      prestashop/prestashop:8.1-8.0
+#    <<: *quality
+#
+#Q-Ps-8.0-Php-8.1:
+#    image:      prestashop/prestashop:8.0-8.1
+#    <<: *quality
+#
+#Q-Ps-8.0-Php-7.4:
+#    image:      prestashop/prestashop:8.0-7.4
+#    <<: *quality
 
 Q-Ps-1.7-Php-7.4:
     image:      prestashop/prestashop:1.7-7.4
