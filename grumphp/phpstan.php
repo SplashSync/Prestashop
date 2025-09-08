@@ -27,3 +27,12 @@ require_once dirname(__DIR__) . '/vendor/autoload.php';
 // Init Splash for Local Includes
 Splash\Client\Splash::core();
 Splash\Client\Splash::local()->includes();
+
+//====================================================================//
+// Fix for PS v9.0
+if (!defined('__PS_BASE_URI__')) {
+    define('__PS_BASE_URI__', dirname(__DIR__));
+}
+if (!defined('_DB_PREFIX_')) {
+    define('_DB_PREFIX_', "ps_");
+}

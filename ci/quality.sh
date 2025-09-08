@@ -33,11 +33,6 @@ subtitle "QUALITY --> Install Module"
 bash $CI_PROJECT_DIR/ci/module/install.sh
 
 ################################################################################
-# Fix for V9.0 => now check if parameters are here
-cd $WEB_DIR
-[ -f app/config/parameters.yml.dist ] && cp app/config/parameters.yml.dist app/config/parameters.yml
-
-################################################################################
 # Run Grumphp Quality Tests Suites
 subtitle "QUALITY --> Grumphp Verifications"
 cd  $CI_PROJECT_DIR
