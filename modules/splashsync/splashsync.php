@@ -80,7 +80,7 @@ class SplashSync extends Module
         $this->version = '2.8.12';
         $this->author = 'SplashSync';
         $this->need_instance = 0;
-        $this->ps_versions_compliancy = array('min' => '1.7', 'max' => '8.99.99');
+        $this->ps_versions_compliancy = array('min' => '1.7', 'max' => '9.99.99');
         $this->module_key = '48032a9ff6cc3a4a43a0ea2acf7ccf10';
 
         //====================================================================//
