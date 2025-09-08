@@ -22,6 +22,7 @@ use PrestaShopException;
 use Splash\Local\Services\LanguagesManager as SLM;
 use Splash\Local\Services\TotSwitchAttributes;
 use Splash\Local\Services\WkCombination;
+use Tools;
 
 // phpcs:disable PSR1.Files.SideEffects
 if (!defined('_PS_VERSION_')) {
@@ -69,11 +70,13 @@ trait MetaTrait
         ;
         //====================================================================//
         // Display Price
-        $this->fieldsFactory()->create(SPL_T_BOOL)
-            ->identifier('show_price')
-            ->name($this->spl->l('Show Price'))
-            ->microData('http://schema.org/Product', 'showPrice')
-        ;
+        if (Tools::version_compare(_PS_VERSION_, '8.0', '>=')) {
+            $this->fieldsFactory()->create(SPL_T_BOOL)
+                ->identifier('show_price')
+                ->name($this->spl->l('Show Price'))
+                ->microData('http://schema.org/Product', 'showPrice')
+            ;
+        }
         //====================================================================//
         // Online Only
         $this->fieldsFactory()->create(SPL_T_BOOL)
