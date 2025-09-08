@@ -5,8 +5,16 @@ Deny from all
 ###########################################
 ## Allow access to soap server file only
 <Files soap.php>
-    order allow,deny
-    allow from all
+    # Apache 2.2
+    <IfModule !mod_authz_core.c>
+        Order allow,deny
+        Allow from all
+    </IfModule>
+
+    # Apache 2.4
+    <IfModule mod_authz_core.c>
+        Require all granted
+    </IfModule>
 </Files>
 
 ###########################################
