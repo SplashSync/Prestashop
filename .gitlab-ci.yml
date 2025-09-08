@@ -71,7 +71,7 @@ stages:
 
 Q-Ps-9.0-Php-8.3:
     image:      prestashop/prestashop:9.0-8.3
-    allow_failure:  true
+#    allow_failure:  true
     <<: *quality
 
 #Q-Ps-8.2-Php-8.2:
