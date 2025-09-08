@@ -170,7 +170,7 @@ trait PaymentsTrait
             case 'rawMode@payments':
                 return sprintf(
                     '[%s] %s',
-                    $this->PaymentMethod ?? '??',
+                    $this->paymentMethod ?: '??',
                     $orderPayment->payment_method
                 );
                 //====================================================================//
@@ -294,7 +294,7 @@ trait PaymentsTrait
         }
         //====================================================================//
         // Order Item Detect Payment Method from "known" or "custom" codes
-        if ($method = PaymentMethodsManager::fromKnownOrCustom($this->PaymentMethod)) {
+        if ($method = PaymentMethodsManager::fromKnownOrCustom($this->paymentMethod)) {
             return $method;
         }
         //====================================================================//

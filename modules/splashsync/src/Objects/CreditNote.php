@@ -177,7 +177,7 @@ class CreditNote extends AbstractObject
      *
      * @var string
      */
-    protected $PaymentMethod;
+    protected $paymentMethod;
 
     /**
      * @var OrderSlip

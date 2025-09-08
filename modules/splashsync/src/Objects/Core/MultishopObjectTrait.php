@@ -235,7 +235,7 @@ trait MultishopObjectTrait
      *
      * @return void
      */
-    public function addMsfUpdateFields(string $type, string $name, string $langId = null): void
+    public function addMsfUpdateFields(string $type, string $name, ?string $langId = null): void
     {
         //====================================================================//
         // Ensure List Exits

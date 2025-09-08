@@ -79,7 +79,7 @@ trait MultiShopTrait
     }
 
     /**
-     * Read requested Field
+     * Read the requested fields
      *
      * @param string $key       Input List Key
      * @param string $fieldName Field Identifier / Name
@@ -125,14 +125,6 @@ trait MultiShopTrait
      */
     protected function getObjectShopId(): int
     {
-        //====================================================================//
-        // Address has No Shop Information
-        if ($this->object instanceof Address) {
-            $customer = new \Customer((int) $this->object->id_customer);
-
-            return $customer->id_shop ?? 1;
-        }
-
         return (int) $this->object->id_shop;
     }
 }

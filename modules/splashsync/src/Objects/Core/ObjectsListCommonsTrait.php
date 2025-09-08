@@ -69,7 +69,7 @@ trait ObjectsListCommonsTrait
      *
      * @return array|false
      */
-    protected function getObjectsListRawData(DbQuery $sql, string $sortField, array $params = null)
+    protected function getObjectsListRawData(DbQuery $sql, string $sortField, ?array $params = null)
     {
         //====================================================================//
         // Stack Trace
@@ -106,7 +106,7 @@ trait ObjectsListCommonsTrait
      *
      * @return array
      */
-    protected function getObjectsListGenericData(DbQuery $sql, string $sortField, array $params = null)
+    protected function getObjectsListGenericData(DbQuery $sql, string $sortField, ?array $params = null)
     {
         //====================================================================//
         // Stack Trace

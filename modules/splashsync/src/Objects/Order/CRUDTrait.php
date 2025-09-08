@@ -70,7 +70,7 @@ trait CRUDTrait
         // Load Order Products
         $this->Products = $object->getProductsDetail();
         $this->Payments = $object->getOrderPaymentCollection();
-        $this->PaymentMethod = $object->module;
+        $this->paymentMethod = $object->module;
 
         //====================================================================//
         // Load Order Carrier

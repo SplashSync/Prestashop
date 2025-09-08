@@ -42,7 +42,7 @@ class Check extends Command
     /**
      * @inerhitDoc
      */
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setName('splash:discount-collector:check')
@@ -96,7 +96,7 @@ class Check extends Command
         // Check if Order has Cache
         $this->displayResult(
             $output,
-            DiscountsManager::hasOrderDiscountsDetails($orderId, $currency),
+            DiscountsManager::hasOrderDiscountsDetails((int) $orderId, $currency),
             sprintf('Order %s has Discount Details', $orderId)
         );
         //====================================================================//
@@ -104,7 +104,7 @@ class Check extends Command
         if ($input->getOption('flush')) {
             $this->displayResult(
                 $output,
-                DiscountsManager::deleteOrderDiscountsDetails($orderId),
+                DiscountsManager::deleteOrderDiscountsDetails((int) $orderId),
                 sprintf('Order %s Discount Details now Deleted', $orderId)
             );
         }

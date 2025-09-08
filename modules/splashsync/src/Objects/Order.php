@@ -140,7 +140,7 @@ class Order extends AbstractObject implements PrimaryKeysAwareInterface
     /**
      * @var string
      */
-    protected $PaymentMethod;
+    protected $paymentMethod;
 
     /**
      * @var psOrder

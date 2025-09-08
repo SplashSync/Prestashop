@@ -169,7 +169,7 @@ class Invoice extends AbstractObject
      *
      * @var string
      */
-    protected $PaymentMethod;
+    protected string $paymentMethod;
 
     /**
      * @var OrderInvoice

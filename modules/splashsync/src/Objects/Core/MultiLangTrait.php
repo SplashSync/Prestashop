@@ -62,7 +62,7 @@ trait MultiLangTrait
      *
      * @return void
      */
-    protected function setMultiLang(string $fieldName, $langId, string $data, int $maxLength = null)
+    protected function setMultiLang(string $fieldName, $langId, string $data, ?int $maxLength = null): void
     {
         //====================================================================//
         // Extract Contents

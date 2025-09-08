@@ -38,7 +38,7 @@ class Install extends Command
     /**
      * @inerhitDoc
      */
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setName('splash:discount-collector:install')
@@ -90,7 +90,7 @@ class Install extends Command
     /**
      * @inerhitDoc
      */
-    protected function displayResult(OutputInterface $output, ?bool $result, string $message)
+    protected function displayResult(OutputInterface $output, ?bool $result, string $message): void
     {
         if ($result) {
             $output->writeln(sprintf('[<info> OK </info>] %s', $message));

@@ -307,10 +307,8 @@ trait ItemsTrait
 
     /**
      * Get Order Shipping Price
-     *
-     * @return array|string
      */
-    private function getShippingPrice()
+    private function getShippingPrice(): ?array
     {
         //====================================================================//
         // Compute Tax Rate Using Tax Calculator

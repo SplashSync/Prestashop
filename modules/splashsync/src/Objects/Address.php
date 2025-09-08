@@ -124,4 +124,18 @@ class Address extends AbstractObject
         // Load Splash Module
         $this->spl = Local::getLocalModule();
     }
+
+    /**
+     * Get Current Object Shop Id
+     *
+     * @return int
+     */
+    protected function getObjectShopId(): int
+    {
+        //====================================================================//
+        // Address has No Shop Information
+        $customer = new \Customer((int) $this->object->id_customer);
+
+        return $customer->id_shop ?: 1;
+    }
 }

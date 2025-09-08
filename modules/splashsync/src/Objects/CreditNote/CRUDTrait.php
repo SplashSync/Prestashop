@@ -70,7 +70,7 @@ trait CRUDTrait
         // Load Credit Note Products
         $this->Products = $this->object->getOrdersSlipProducts((int) $objectId, $this->order);
         $this->Payments = $this->order->getOrderPaymentCollection();
-        $this->PaymentMethod = $this->order->module;
+        $this->paymentMethod = $this->order->module;
         //====================================================================//
         // Identify if a Customer Cart Rule Exists for this Credit Note
         $this->checkCustomerCartRule();
