@@ -24,10 +24,10 @@ use OrderDetail;
 use Splash\Core\SplashCore as Splash;
 use Splash\Local\Objects\Product;
 use Splash\Local\Services\LanguagesManager;
+use Splash\Local\Services\LanguagesManager as SLM;
 use Splash\Models\Objects\ListsTrait;
 use Splash\Models\Objects\PricesTrait;
 use Tools;
-use Translate;
 
 // phpcs:disable PSR1.Files.SideEffects
 if (!defined('_PS_VERSION_')) {
@@ -65,9 +65,9 @@ trait ItemsTrait
         $this->fieldsFactory()->create((string) self::objects()->Encode('Product', SPL_T_ID))
             ->identifier('product_id')
             ->inList('lines')
-            ->name(Translate::getAdminTranslation('Product ID', 'AdminImport'))
+            ->name(SLM::translate('Product ID', 'AdminAdvparametersFeature'))
             ->microData('http://schema.org/Product', 'productID')
-            ->group(Translate::getAdminTranslation('Products', 'AdminOrders'))
+            ->group(SLM::translate('Products', 'AdminCatalogFeature'))
             ->association('product_name@lines', 'product_quantity@lines', 'product_id@lines', 'unit_price@lines')
         ;
         //====================================================================//
@@ -75,9 +75,9 @@ trait ItemsTrait
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
             ->identifier('product_name')
             ->inList('lines')
-            ->name(Translate::getAdminTranslation('Short description', 'AdminProducts'))
+            ->name(SLM::translate('Short description', 'AdminCatalogFeature'))
             ->microData('http://schema.org/partOfInvoice', 'description')
-            ->group(Translate::getAdminTranslation('Products', 'AdminOrders'))
+            ->group(SLM::translate('Products', 'AdminCatalogFeature'))
             ->association('product_name@lines', 'product_quantity@lines', 'product_id@lines', 'unit_price@lines')
         ;
         //====================================================================//
@@ -85,9 +85,9 @@ trait ItemsTrait
         $this->fieldsFactory()->create(SPL_T_INT)
             ->identifier('product_quantity')
             ->inList('lines')
-            ->name(Translate::getAdminTranslation('Quantity', 'AdminOrders'))
+            ->name(SLM::translate('Quantity', 'AdminGlobal'))
             ->microData('http://schema.org/QuantitativeValue', 'value')
-            ->group(Translate::getAdminTranslation('Products', 'AdminOrders'))
+            ->group(SLM::translate('Products', 'AdminCatalogFeature'))
             ->association('product_name@lines', 'product_quantity@lines', 'product_id@lines', 'unit_price@lines')
         ;
         //====================================================================//
@@ -95,9 +95,9 @@ trait ItemsTrait
         $this->fieldsFactory()->create(SPL_T_PRICE)
             ->identifier('unit_price')
             ->inList('lines')
-            ->name(Translate::getAdminTranslation('Price', 'AdminOrders'))
+            ->name(SLM::translate('Price', 'AdminGlobal'))
             ->microData('http://schema.org/PriceSpecification', 'price')
-            ->group(Translate::getAdminTranslation('Products', 'AdminOrders'))
+            ->group(SLM::translate('Products', 'AdminCatalogFeature'))
             ->association('product_name@lines', 'product_quantity@lines', 'product_id@lines', 'unit_price@lines')
         ;
 
@@ -106,10 +106,10 @@ trait ItemsTrait
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
             ->identifier('tax_name')
             ->inList('lines')
-            ->name(Translate::getAdminTranslation('Tax Name', 'AdminOrders'))
+            ->name(SLM::translate('Tax', 'AdminGlobal'))
             ->microData('http://schema.org/PriceSpecification', 'valueAddedTaxName')
             ->association('product_name@lines', 'product_quantity@lines', 'unit_price@lines')
-            ->group(Translate::getAdminTranslation('Products', 'AdminOrders'))
+            ->group(SLM::translate('Products', 'AdminCatalogFeature'))
             ->isReadOnly()
         ;
 
@@ -118,9 +118,9 @@ trait ItemsTrait
         $this->fieldsFactory()->create(SPL_T_DOUBLE)
             ->identifier('reduction_percent')
             ->inList('lines')
-            ->name(Translate::getAdminTranslation('Discount (%)', 'AdminGroups'))
+            ->name(SLM::translate('Discount (%)', 'AdminShopparametersFeature'))
             ->microData('http://schema.org/Order', 'discount')
-            ->group(Translate::getAdminTranslation('Products', 'AdminOrders'))
+            ->group(SLM::translate('Products', 'AdminCatalogFeature'))
             ->association('product_name@lines', 'product_quantity@lines', 'unit_price@lines')
             ->isReadOnly()
         ;

@@ -18,7 +18,7 @@
 
 namespace Splash\Local\Objects\CreditNote;
 
-use Translate;
+use Splash\Local\Services\LanguagesManager as SLM;
 
 // phpcs:disable PSR1.Files.SideEffects
 if (!defined('_PS_VERSION_')) {
@@ -48,7 +48,7 @@ trait MainTrait
         // Order Total Price HT
         $this->fieldsFactory()->create(SPL_T_DOUBLE)
             ->Identifier('total_paid_tax_excl')
-            ->Name(Translate::getAdminTranslation('Total (Tax excl.)', 'AdminOrders') . $currencySuffix)
+            ->Name(SLM::translate('Total (Tax excl.)', 'AdminOrderscustomersFeature') . $currencySuffix)
             ->MicroData('http://schema.org/Invoice', 'totalPaymentDue')
             ->isListed()
             ->isReadOnly();
@@ -57,7 +57,7 @@ trait MainTrait
         // Order Total Price TTC
         $this->fieldsFactory()->create(SPL_T_DOUBLE)
             ->Identifier('total_paid_tax_incl')
-            ->Name(Translate::getAdminTranslation('Total (Tax incl.)', 'AdminOrders') . $currencySuffix)
+            ->Name(SLM::translate('Total (Tax incl.)', 'AdminOrderscustomersFeature') . $currencySuffix)
             ->isListed()
             ->MicroData('http://schema.org/Invoice', 'totalPaymentDueTaxIncluded')
             ->isReadOnly();

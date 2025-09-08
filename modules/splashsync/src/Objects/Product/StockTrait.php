@@ -22,10 +22,10 @@ use Pack;
 use PrestaShopException;
 use Shop;
 use Splash\Core\SplashCore as Splash;
+use Splash\Local\Services\LanguagesManager as SLM;
 use Splash\Local\Services\MultiShopManager as MSM;
 use StockAvailable;
 use Tools;
-use Translate;
 use Validate;
 
 // phpcs:disable PSR1.Files.SideEffects
@@ -59,7 +59,7 @@ trait StockTrait
         // Stock Reel
         $this->fieldsFactory()->create(SPL_T_INT)
             ->identifier('stock')
-            ->name(Translate::getAdminTranslation('Stock', 'AdminProducts'))
+            ->name(SLM::translate('Stock', 'AdminGlobal'))
             ->microData('http://schema.org/Offer', 'inventoryLevel')
             ->isListed()
         ;
@@ -67,7 +67,7 @@ trait StockTrait
         // Out of Stock Flag
         $this->fieldsFactory()->create(SPL_T_BOOL)
             ->identifier('outofstock')
-            ->name(Translate::getAdminTranslation('This product is out of stock', 'AdminOrders'))
+            ->name('This product is out of stock')
             ->microData('http://schema.org/ItemAvailability', 'OutOfStock')
             ->isReadOnly()
         ;
@@ -75,13 +75,7 @@ trait StockTrait
         // Minimum Order Quantity
         $this->fieldsFactory()->create(SPL_T_INT)
             ->identifier('minimal_quantity')
-            ->name(Translate::getAdminTranslation('Minimum quantity', 'AdminProducts'))
-            ->description(
-                Translate::getAdminTranslation(
-                    'The minimum quantity to buy this product (set to 1 to disable this feature).',
-                    'AdminProducts'
-                )
-            )
+            ->name(SLM::translate('Minimum quantity for sale', 'AdminCatalogFeature'))
             ->microData('http://schema.org/Offer', 'eligibleTransactionVolume')
         ;
         //====================================================================//
@@ -89,7 +83,7 @@ trait StockTrait
         if (Tools::version_compare(_PS_VERSION_, '1.7', '>=')) {
             $this->fieldsFactory()->create(SPL_T_VARCHAR)
                 ->identifier('stock_location')
-                ->name(Translate::getAdminTranslation('Stock location', 'AdminCatalogFeature'))
+                ->name(SLM::translate('Stock location', 'AdminCatalogFeature'))
                 ->addOption('shop', MSM::MODE_ALL)
                 ->microData('http://schema.org/Offer', 'inventoryLocation');
         }

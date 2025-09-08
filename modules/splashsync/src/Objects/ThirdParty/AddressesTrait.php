@@ -19,7 +19,8 @@
 namespace Splash\Local\Objects\ThirdParty;
 
 use Db;
-use Translate;
+use PrestaShopDatabaseException;
+use Splash\Local\Services\LanguagesManager as SLM;
 
 // phpcs:disable PSR1.Files.SideEffects
 if (!defined('_PS_VERSION_')) {
@@ -44,9 +45,9 @@ trait AddressesTrait
         $this->fieldsFactory()->create((string) self::objects()->Encode('Address', SPL_T_ID))
             ->identifier('address')
             ->inList('contacts')
-            ->name(Translate::getAdminTranslation('Address', 'AdminCustomers'))
+            ->name(SLM::translate('Address', 'AdminGlobal'))
             ->microData('http://schema.org/Organization', 'address')
-            ->group(Translate::getAdminTranslation('Addresses', 'AdminCustomers'))
+            ->group(SLM::translate('Addresses', 'AdminCatalogFeature'))
             ->isReadOnly()
         ;
     }

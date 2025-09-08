@@ -18,7 +18,7 @@
 
 namespace Splash\Local\Objects\Address;
 
-use Translate;
+use Splash\Local\Services\LanguagesManager as SLM;
 
 // phpcs:disable PSR1.Files.SideEffects
 if (!defined('_PS_VERSION_')) {
@@ -42,14 +42,14 @@ trait OptionalTrait
         // Phone
         $this->fieldsFactory()->create(SPL_T_PHONE)
             ->identifier('phone')
-            ->name(Translate::getAdminTranslation('Home phone', 'AdminAddresses'))
+            ->name(SLM::translate('Home phone', 'AdminGlobal'))
             ->microData('http://schema.org/PostalAddress', 'telephone')
         ;
         //====================================================================//
         // Mobile Phone
         $this->fieldsFactory()->create(SPL_T_PHONE)
             ->identifier('phone_mobile')
-            ->name(Translate::getAdminTranslation('Mobile phone', 'AdminAddresses'))
+            ->name(SLM::translate('Mobile phone', 'AdminGlobal'))
             ->microData('http://schema.org/Person', 'telephone')
         ;
         //====================================================================//

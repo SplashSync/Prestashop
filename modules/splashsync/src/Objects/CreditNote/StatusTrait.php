@@ -18,7 +18,7 @@
 
 namespace Splash\Local\Objects\CreditNote;
 
-use Translate;
+use Splash\Local\Services\LanguagesManager as SLM;
 
 // phpcs:disable PSR1.Files.SideEffects
 if (!defined('_PS_VERSION_')) {
@@ -42,7 +42,7 @@ trait StatusTrait
         // Order Current Status
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
             ->Identifier('status')
-            ->Name(Translate::getAdminTranslation('Status', 'AdminOrders'))
+            ->Name(SLM::translate('Status', 'AdminGlobal'))
             ->MicroData('http://schema.org/Invoice', 'paymentStatus')
             ->isReadOnly()
             ->isNotTested();
@@ -57,7 +57,7 @@ trait StatusTrait
             ->Identifier('isPaid')
             ->Name('is Paid')
             ->MicroData('http://schema.org/PaymentStatusType', 'PaymentComplete')
-            ->Group(Translate::getAdminTranslation('Meta', 'AdminThemes'))
+            ->Group('Meta')
             ->isReadOnly()
             ->isNotTested();
     }

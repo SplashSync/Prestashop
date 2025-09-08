@@ -20,7 +20,6 @@ namespace Splash\Local\Objects\Core;
 
 use PrestaShopDatabaseException;
 use Splash\Local\Services\MultiShopManager as MSM;
-use Translate;
 
 // phpcs:disable PSR1.Files.SideEffects
 if (!defined('_PS_VERSION_')) {
@@ -50,7 +49,7 @@ trait SplashMetaTrait
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
             ->identifier('splash_id')
             ->name('Splash Id')
-            ->group(Translate::getAdminTranslation('Meta', 'AdminThemes'))
+            ->group('Meta')
             ->addOption('shop', MSM::MODE_ALL)
             ->microData('http://splashync.com/schemas', 'ObjectId')
         ;

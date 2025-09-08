@@ -21,8 +21,8 @@ namespace Splash\Local\Objects\Order;
 use Context;
 use Exception;
 use Splash\Local\Services\KernelManager;
+use Splash\Local\Services\LanguagesManager as SLM;
 use Splash\Local\Services\OrderStatusManager as StatusManager;
-use Translate;
 
 // phpcs:disable PSR1.Files.SideEffects
 if (!defined('_PS_VERSION_')) {
@@ -50,8 +50,8 @@ trait StatusTrait
         // Order Current Status
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
             ->identifier('status')
-            ->name(Translate::getAdminTranslation('Order status', 'AdminStatuses'))
-            ->description(Translate::getAdminTranslation('Status of the order', 'AdminSupplyOrdersChangeState'))
+            ->name(SLM::translate('Order status', 'AdminOrderscustomersFeature'))
+            ->description('Status of the order')
             ->microData('http://schema.org/Order', 'orderStatus')
             ->addChoices(StatusManager::getOrderStatusChoices())
             ->isReadOnly()
@@ -61,7 +61,7 @@ trait StatusTrait
         // ORDER STATUS FLAGS
         //====================================================================//
 
-        $prefix = Translate::getAdminTranslation('Order status', 'AdminOrders') . ' ';
+        $prefix = SLM::translate('Order status', 'AdminOrderscustomersFeature') . ' ';
 
         //====================================================================//
         // Is Canceled
@@ -71,7 +71,7 @@ trait StatusTrait
             ->identifier('isCanceled')
             ->name($prefix . $this->spl->l('Canceled'))
             ->microData('http://schema.org/OrderStatus', 'OrderCancelled')
-            ->group(Translate::getAdminTranslation('Meta', 'AdminThemes'))
+            ->group('Meta')
             ->association('isCanceled', 'isValidated', 'isClosed')
             ->isReadOnly()
         ;
@@ -80,7 +80,7 @@ trait StatusTrait
         $this->fieldsFactory()->create(SPL_T_BOOL)
             ->identifier('isCancelState')
             ->name($prefix . $this->spl->l('Canceled') . ' State')
-            ->group(Translate::getAdminTranslation('Meta', 'AdminThemes'))
+            ->group('Meta')
             ->association('isCanceled', 'isValidated', 'isClosed')
             ->isReadOnly()
         ;
@@ -88,9 +88,9 @@ trait StatusTrait
         // Is Validated
         $this->fieldsFactory()->create(SPL_T_BOOL)
             ->identifier('isValidated')
-            ->name($prefix . Translate::getAdminTranslation('Valid', 'AdminCartRules'))
+            ->name($prefix . 'Validated')
             ->microData('http://schema.org/OrderStatus', 'OrderPaymentDone')
-            ->group(Translate::getAdminTranslation('Meta', 'AdminThemes'))
+            ->group('Meta')
             ->association('isCanceled', 'isValidated', 'isClosed')
             ->isReadOnly()
         ;
@@ -100,16 +100,16 @@ trait StatusTrait
             ->identifier('isProcessing')
             ->name($prefix . 'Processing')
             ->microData('http://schema.org/OrderStatus', 'OrderProcessing')
-            ->group(Translate::getAdminTranslation('Meta', 'AdminThemes'))
+            ->group('Meta')
             ->isReadOnly()
         ;
         //====================================================================//
         // Is Closed
         $this->fieldsFactory()->create(SPL_T_BOOL)
             ->identifier('isClosed')
-            ->name($prefix . Translate::getAdminTranslation('Closed', 'AdminCustomers'))
+            ->name($prefix . SLM::translate('Closed', 'AdminOrderscustomersFeature'))
             ->microData('http://schema.org/OrderStatus', 'OrderDelivered')
-            ->group(Translate::getAdminTranslation('Meta', 'AdminThemes'))
+            ->group('Meta')
             ->association('isCanceled', 'isValidated', 'isClosed')
             ->isReadOnly()
         ;
@@ -118,7 +118,7 @@ trait StatusTrait
         $this->fieldsFactory()->create(SPL_T_BOOL)
             ->identifier('isPaid')
             ->name($prefix . $this->spl->l('Paid'))
-            ->group(Translate::getAdminTranslation('Meta', 'AdminThemes'))
+            ->group('Meta')
             ->microData('http://schema.org/OrderStatus', 'OrderPaid')
             ->isReadOnly()
         ;

@@ -19,9 +19,9 @@
 namespace Splash\Local\Objects\Product;
 
 use Product;
+use Splash\Local\Services\LanguagesManager as SLM;
 use Splash\Local\Services\MultiShopManager as MSM;
 use Splash\Local\Services\PmAdvancedPack;
-use Translate;
 
 // phpcs:disable PSR1.Files.SideEffects
 if (!defined('_PS_VERSION_')) {
@@ -45,11 +45,7 @@ trait CoreTrait
         // Reference
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
             ->identifier('ref')
-            ->name(Translate::getAdminTranslation('Reference', 'AdminProducts'))
-            ->description(Translate::getAdminTranslation(
-                'Your internal reference code for this product.',
-                'AdminProducts'
-            ))
+            ->name(SLM::translate('Reference', 'AdminCatalogFeature'))
             ->microData('http://schema.org/Product', 'model')
             ->addOption('shop', MSM::MODE_ALL)
             ->isListed()
@@ -63,7 +59,7 @@ trait CoreTrait
             ->identifier('type')
             ->name('Type')
             ->description('Internal product Type')
-            ->group(Translate::getAdminTranslation('Meta', 'AdminThemes'))
+            ->group('Meta')
             ->microData('http://schema.org/Product', 'type')
             ->addOption('shop', MSM::MODE_ALL)
             ->isReadOnly()

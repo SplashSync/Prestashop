@@ -22,9 +22,9 @@ use OrderPayment;
 use PrestaShopCollection;
 use Splash\Core\SplashCore as Splash;
 use Splash\Local\Objects\Invoice;
+use Splash\Local\Services\LanguagesManager as SLM;
 use Splash\Local\Services\PaymentMethodsManager;
 use Splash\Models\Objects\Invoice\PaymentMethods;
-use Translate;
 
 // phpcs:disable PSR1.Files.SideEffects
 if (!defined('_PS_VERSION_')) {
@@ -56,9 +56,9 @@ trait PaymentsTrait
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
             ->identifier('mode')
             ->inList('payments')
-            ->name(Translate::getAdminTranslation('Payment method', 'AdminOrders'))
+            ->name(SLM::translate('Payment method', 'AdminOrderscustomersFeature'))
             ->microData('http://schema.org/Invoice', 'PaymentMethod')
-            ->group(Translate::getAdminTranslation('Payment', 'AdminPayment'))
+            ->group(SLM::translate('Payment', 'AdminGlobal'))
             ->association('mode@payments', 'amount@payments')
             ->addChoices(array_flip(PaymentMethodsManager::KNOWN))
         ;
@@ -67,8 +67,8 @@ trait PaymentsTrait
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
             ->identifier('rawMode')
             ->inList('payments')
-            ->name(Translate::getAdminTranslation('Payment method', 'AdminOrders') . ' Raw')
-            ->group(Translate::getAdminTranslation('Payment', 'AdminPayment'))
+            ->name(SLM::translate('Payment method', 'AdminOrderscustomersFeature') . ' Raw')
+            ->group(SLM::translate('Payment', 'AdminGlobal'))
             ->isReadOnly()
         ;
         //====================================================================//
@@ -76,9 +76,9 @@ trait PaymentsTrait
         $this->fieldsFactory()->create(SPL_T_DATE)
             ->identifier('date')
             ->inList('payments')
-            ->name(Translate::getAdminTranslation('Date', 'AdminProducts'))
+            ->name(SLM::translate('Date', 'AdminGlobal'))
             ->microData('http://schema.org/PaymentChargeSpecification', 'validFrom')
-            ->group(Translate::getAdminTranslation('Payment', 'AdminPayment'))
+            ->group(SLM::translate('Payment', 'AdminGlobal'))
             ->isReadOnly()
         ;
         //====================================================================//
@@ -86,9 +86,9 @@ trait PaymentsTrait
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
             ->identifier('number')
             ->inList('payments')
-            ->name(Translate::getAdminTranslation('Transaction ID', 'AdminOrders'))
+            ->name(SLM::translate('Transaction ID', 'AdminOrderscustomersFeature'))
             ->microData('http://schema.org/Invoice', 'paymentMethodId')
-            ->group(Translate::getAdminTranslation('Payment', 'AdminPayment'))
+            ->group(SLM::translate('Payment', 'AdminGlobal'))
             ->association('mode@payments', 'amount@payments')
         ;
         //====================================================================//
@@ -96,9 +96,9 @@ trait PaymentsTrait
         $this->fieldsFactory()->create(SPL_T_DOUBLE)
             ->identifier('amount')
             ->inList('payments')
-            ->name(Translate::getAdminTranslation('Amount', 'AdminOrders'))
+            ->name(SLM::translate('Amount', 'AdminGlobal'))
             ->microData('http://schema.org/PaymentChargeSpecification', 'price')
-            ->group(Translate::getAdminTranslation('Payment', 'AdminPayment'))
+            ->group(SLM::translate('Payment', 'AdminGlobal'))
             ->association('mode@payments', 'amount@payments')
         ;
     }

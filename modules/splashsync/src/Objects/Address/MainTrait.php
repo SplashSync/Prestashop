@@ -20,8 +20,8 @@ namespace Splash\Local\Objects\Address;
 
 use Country;
 use PrestaShopException;
+use Splash\Local\Services\LanguagesManager as SLM;
 use State;
-use Translate;
 
 // phpcs:disable PSR1.Files.SideEffects
 if (!defined('_PS_VERSION_')) {
@@ -41,7 +41,7 @@ trait MainTrait
      */
     private function buildMainFields(): void
     {
-        $groupName = Translate::getAdminTranslation('Address', 'AdminCustomers');
+        $groupName = SLM::translate('Address', 'AdminGlobal');
 
         //====================================================================//
         // Address
@@ -64,7 +64,7 @@ trait MainTrait
         // Zip Code
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
             ->identifier('postcode')
-            ->name(Translate::getAdminTranslation('Zip/Postal Code', 'AdminAddresses'))
+            ->name(SLM::translate('Zip/Postal code', 'AdminGlobal'))
             ->microData('http://schema.org/PostalAddress', 'postalCode')
             ->group($groupName)
             ->addOption('maxLength', '12')
@@ -74,7 +74,7 @@ trait MainTrait
         // City Name
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
             ->identifier('city')
-            ->name(Translate::getAdminTranslation('City', 'AdminAddresses'))
+            ->name(SLM::translate('City', 'AdminGlobal'))
             ->microData('http://schema.org/PostalAddress', 'addressLocality')
             ->group($groupName)
             ->isRequired()
@@ -84,7 +84,7 @@ trait MainTrait
         // State Name
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
             ->identifier('state')
-            ->name(Translate::getAdminTranslation('State', 'AdminAddresses'))
+            ->name(SLM::translate('State', 'AdminGlobal'))
             ->group($groupName)
             ->isReadOnly()
         ;
@@ -92,7 +92,7 @@ trait MainTrait
         // State code
         $this->fieldsFactory()->create(SPL_T_STATE)
             ->identifier('id_state')
-            ->name(Translate::getAdminTranslation('State', 'AdminAddresses') . ' (Code)')
+            ->name(SLM::translate('State', 'AdminGlobal') . ' (Code)')
             ->group($groupName)
             ->microData('http://schema.org/PostalAddress', 'addressRegion')
         ;
@@ -100,7 +100,7 @@ trait MainTrait
         // Country Name
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
             ->identifier('country')
-            ->name(Translate::getAdminTranslation('Country', 'AdminAddresses'))
+            ->name(SLM::translate('Country', 'AdminGlobal'))
             ->group($groupName)
             ->isReadOnly()
             ->isListed()
@@ -109,7 +109,7 @@ trait MainTrait
         // Country ISO Code
         $this->fieldsFactory()->create(SPL_T_COUNTRY)
             ->identifier('id_country')
-            ->name(Translate::getAdminTranslation('Country', 'AdminAddresses') . ' (Code)')
+            ->name(SLM::translate('Country', 'AdminGlobal') . ' (Code)')
             ->microData('http://schema.org/PostalAddress', 'addressCountry')
             ->group($groupName)
             ->isRequired()

@@ -21,9 +21,9 @@ namespace Splash\Local\Objects\Product;
 use Configuration;
 use Splash\Client\Splash;
 use Splash\Components\UnitConverter as Units;
+use Splash\Local\Services\LanguagesManager as SLM;
 use Splash\Local\Services\MultiShopManager as MSM;
 use Tools;
-use Translate;
 use Validate;
 
 // phpcs:disable PSR1.Files.SideEffects
@@ -59,12 +59,12 @@ trait MainTrait
      */
     protected function buildMainFields(): void
     {
-        $groupName = Translate::getAdminTranslation('Shipping', 'AdminProducts');
+        $groupName = SLM::translate('Shipping', 'AdminCatalogFeature');
         //====================================================================//
         // Weight
         $this->fieldsFactory()->create(SPL_T_DOUBLE)
             ->identifier('weight')
-            ->name(Translate::getAdminTranslation('Package weight', 'AdminProducts'))
+            ->name(SLM::translate('Weight', 'AdminCatalogFeature'))
             ->microData('http://schema.org/Product', 'weight')
             ->group($groupName)
             ->addOption('shop', MSM::MODE_ALL)
@@ -73,7 +73,7 @@ trait MainTrait
         // Height
         $this->fieldsFactory()->create(SPL_T_DOUBLE)
             ->identifier('height')
-            ->name(Translate::getAdminTranslation('Package height', 'AdminProducts'))
+            ->name(SLM::translate('Height', 'AdminCatalogFeature'))
             ->microData('http://schema.org/Product', 'height')
             ->group($groupName)
             ->addOption('shop', MSM::MODE_ALL)
@@ -82,7 +82,7 @@ trait MainTrait
         // Depth
         $this->fieldsFactory()->create(SPL_T_DOUBLE)
             ->identifier('depth')
-            ->name(Translate::getAdminTranslation('Package depth', 'AdminProducts'))
+            ->name(SLM::translate('Depth', 'AdminCatalogFeature'))
             ->microData('http://schema.org/Product', 'depth')
             ->group($groupName)
             ->addOption('shop', MSM::MODE_ALL)
@@ -91,7 +91,7 @@ trait MainTrait
         // Width
         $this->fieldsFactory()->create(SPL_T_DOUBLE)
             ->identifier('width')
-            ->name(Translate::getAdminTranslation('Package width', 'AdminProducts'))
+            ->name(SLM::translate('Width', 'AdminCatalogFeature'))
             ->microData('http://schema.org/Product', 'width')
             ->group($groupName)
             ->addOption('shop', MSM::MODE_ALL)
@@ -129,7 +129,7 @@ trait MainTrait
         // Supplier Reference
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
             ->identifier('supplier_reference')
-            ->name(Translate::getAdminTranslation('Supplier reference', 'AdminProducts'))
+            ->name(SLM::translate('Supplier reference', 'AdminCatalogFeature'))
             ->microData('http://schema.org/Product', 'mpn')
             ->addOption('shop', MSM::MODE_ALL)
             ->isListed()
@@ -139,7 +139,7 @@ trait MainTrait
         // UPC
         $this->fieldsFactory()->create(SPL_T_INT)
             ->identifier('upc')
-            ->name(Translate::getAdminTranslation('UPC Code', 'AdminProducts'))
+            ->name(SLM::translate('UPC barcode', 'AdminCatalogFeature'))
             ->microData('http://schema.org/Product', 'gtin12')
             ->group($groupName)
             ->addOption('shop', MSM::MODE_ALL)
@@ -149,7 +149,7 @@ trait MainTrait
         // EAN
         $this->fieldsFactory()->create(SPL_T_INT)
             ->identifier('ean13')
-            ->name(Translate::getAdminTranslation('EAN Code', 'AdminProducts'))
+            ->name(SLM::translate('EAN-13 or JAN barcode', 'AdminCatalogFeature'))
             ->microData('http://schema.org/Product', 'gtin13')
             ->group($groupName)
             ->addOption('shop', MSM::MODE_ALL)
@@ -160,7 +160,7 @@ trait MainTrait
         if (Tools::version_compare(_PS_VERSION_, '1.7', '>=')) {
             $this->fieldsFactory()->create(Splash::isTravisMode() ? SPL_T_VARCHAR : SPL_T_INT)
                 ->identifier('isbn')
-                ->name(Translate::getAdminTranslation('ISBN Code', 'AdminProducts'))
+                ->name(SLM::translate('ISBN', 'AdminCatalogFeature'))
                 ->microData('http://schema.org/Product', 'gtin14')
                 ->group($groupName)
                 ->addOption('shop', MSM::MODE_ALL)

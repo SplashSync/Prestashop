@@ -21,8 +21,7 @@ namespace Splash\Local\Objects\ThirdParty;
 use Gender;
 use PrestaShopException;
 use Splash\Core\SplashCore as Splash;
-use Splash\Local\Services\LanguagesManager;
-use Translate;
+use Splash\Local\Services\LanguagesManager as SLM;
 use Validate;
 
 // phpcs:disable PSR1.Files.SideEffects
@@ -47,7 +46,7 @@ trait MainTrait
         // Firstname
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
             ->identifier('firstname')
-            ->name(Translate::getAdminTranslation('First name', 'AdminCustomers'))
+            ->name(SLM::translate('First name', 'AdminGlobal'))
             ->microData('http://schema.org/Person', 'familyName')
             ->association('firstname', 'lastname')
             ->isReadOnly(isset(Splash::configuration()->PsUseFullCompanyNames))
@@ -58,7 +57,7 @@ trait MainTrait
         // Lastname
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
             ->identifier('lastname')
-            ->name(Translate::getAdminTranslation('Last name', 'AdminCustomers'))
+            ->name(SLM::translate('Last name', 'AdminGlobal'))
             ->microData('http://schema.org/Person', 'givenName')
             ->association('firstname', 'lastname')
             ->isReadOnly(isset(Splash::configuration()->PsUseFullCompanyNames))
@@ -69,7 +68,7 @@ trait MainTrait
         // Company
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
             ->identifier('company')
-            ->name(Translate::getAdminTranslation('Company', 'AdminCustomers'))
+            ->name(SLM::translate('Company', 'AdminGlobal'))
             ->microData('http://schema.org/Organization', 'legalName')
             ->isReadOnly(isset(Splash::configuration()->PsUseFullCompanyNames))
             ->isIndexed()
@@ -88,7 +87,7 @@ trait MainTrait
         // SIRET
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
             ->identifier('siret')
-            ->name(Translate::getAdminTranslation('SIRET', 'AdminCustomers'))
+            ->name(SLM::translate('SIRET', 'AdminOrderscustomersFeature'))
             ->microData('http://schema.org/Organization', 'taxID')
             ->group('ID')
             ->isNotTested()
@@ -97,7 +96,7 @@ trait MainTrait
         // APE
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
             ->identifier('ape')
-            ->name(Translate::getAdminTranslation('APE', 'AdminCustomers'))
+            ->name(SLM::translate('APE', 'AdminOrderscustomersFeature'))
             ->microData('http://schema.org/Organization', 'naics')
             ->group('ID')
             ->isNotTested()
@@ -106,7 +105,7 @@ trait MainTrait
         // WebSite
         $this->fieldsFactory()->create(SPL_T_URL)
             ->identifier('website')
-            ->name(Translate::getAdminTranslation('Website', 'AdminCustomers'))
+            ->name(SLM::translate('Website', 'AdminOrderscustomersFeature'))
             ->microData('http://schema.org/Organization', 'url')
         ;
     }
@@ -122,20 +121,20 @@ trait MainTrait
         // Gender Name
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
             ->identifier('gender_name')
-            ->name(Translate::getAdminTranslation('Social title', 'AdminCustomers'))
+            ->name(SLM::translate('Social title', 'AdminGlobal'))
             ->microData('http://schema.org/Person', 'honorificPrefix')
             ->isReadOnly()
         ;
         //====================================================================//
         // Gender Type
-        $desc = Translate::getAdminTranslation('Social title', 'AdminCustomers');
+        $desc = SLM::translate('Social title', 'AdminGlobal');
         $desc .= ' ; 0 => Male // 1 => Female // 2 => Neutral';
         $this->fieldsFactory()->create(SPL_T_INT)
             ->identifier('gender_type')
-            ->name(Translate::getAdminTranslation('Social title', 'AdminCustomers') . ' (ID)')
+            ->name(SLM::translate('Social title', 'AdminGlobal') . ' (ID)')
             ->microData('http://schema.org/Person', 'gender')
             ->description($desc)
-            ->group(Translate::getAdminTranslation('Meta', 'AdminThemes'))
+            ->group('Meta')
             ->addChoices(array('0' => 'Male', '1' => 'female'))
             ->isNotTested()
         ;
@@ -237,7 +236,7 @@ trait MainTrait
 
                     break;
                 }
-                $gender = new Gender($this->object->id_gender, LanguagesManager::getDefaultLangId());
+                $gender = new Gender($this->object->id_gender, SLM::getDefaultLangId());
                 if (0 == $gender->type) {
                     $this->out[$fieldName] = $this->spl->l('Male');
                 } elseif (1 == $gender->type) {
@@ -361,14 +360,14 @@ trait MainTrait
             case 'gender_type':
                 //====================================================================//
                 // Identify Gender Type
-                $genders = Gender::getGenders(LanguagesManager::getDefaultLangId());
+                $genders = Gender::getGenders(SLM::getDefaultLangId());
                 $genders->where('type', '=', $fieldData);
                 /** @var false|Gender */
                 $gendertype = $genders->getFirst();
                 //====================================================================//
                 // Unknown Gender Type => Take First Available Gender
                 if (!$gendertype) {
-                    $genders = Gender::getGenders(LanguagesManager::getDefaultLangId());
+                    $genders = Gender::getGenders(SLM::getDefaultLangId());
                     /** @var false|Gender */
                     $gendertype = $genders->getFirst();
                     Splash::log()->warTrace('This Gender Type doesn\'t exist.');

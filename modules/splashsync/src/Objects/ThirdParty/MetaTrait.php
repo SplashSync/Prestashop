@@ -18,7 +18,7 @@
 
 namespace Splash\Local\Objects\ThirdParty;
 
-use Translate;
+use Splash\Local\Services\LanguagesManager as SLM;
 
 // phpcs:disable PSR1.Files.SideEffects
 if (!defined('_PS_VERSION_')) {
@@ -42,7 +42,7 @@ trait MetaTrait
         // Active
         $this->fieldsFactory()->create(SPL_T_BOOL)
             ->identifier('active')
-            ->name(Translate::getAdminTranslation('Enabled', 'AdminCustomers'))
+            ->name(SLM::translate('Enabled', 'AdminGlobal'))
             ->microData('http://schema.org/Organization', 'active')
             ->isListed()
         ;
@@ -50,16 +50,16 @@ trait MetaTrait
         // Newsletter
         $this->fieldsFactory()->create(SPL_T_BOOL)
             ->identifier('newsletter')
-            ->name(Translate::getAdminTranslation('Newsletter', 'AdminCustomers'))
-            ->group(Translate::getAdminTranslation('Meta', 'AdminThemes'))
+            ->name(SLM::translate('Newsletter', 'AdminGlobal'))
+            ->group('Meta')
             ->microData('http://schema.org/Organization', 'newsletter')
         ;
         //====================================================================//
         // Advertising
         $this->fieldsFactory()->create(SPL_T_BOOL)
             ->identifier('optin')
-            ->name(Translate::getAdminTranslation('Opt-in', 'AdminCustomers'))
-            ->group(Translate::getAdminTranslation('Meta', 'AdminThemes'))
+            ->name(SLM::translate('Partner offers', 'AdminOrderscustomersFeature'))
+            ->group('Meta')
             ->microData('http://schema.org/Organization', 'advertising')
         ;
     }

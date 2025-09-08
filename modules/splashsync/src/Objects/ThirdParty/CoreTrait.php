@@ -18,7 +18,7 @@
 
 namespace Splash\Local\Objects\ThirdParty;
 
-use Translate;
+use Splash\Local\Services\LanguagesManager as SLM;
 
 // phpcs:disable PSR1.Files.SideEffects
 if (!defined('_PS_VERSION_')) {
@@ -42,7 +42,7 @@ trait CoreTrait
         // Email
         $this->fieldsFactory()->create(SPL_T_EMAIL)
             ->identifier('email')
-            ->name(Translate::getAdminTranslation('Email address', 'AdminCustomers'))
+            ->name(SLM::translate('Email address', 'AdminGlobal'))
             ->microData('http://schema.org/ContactPoint', 'email')
             ->association('firstname', 'lastname')
             ->isRequired()

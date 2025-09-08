@@ -20,11 +20,10 @@ namespace Splash\Local\Objects\Product;
 
 use Combination;
 use Splash\Core\SplashCore as Splash;
-use Splash\Local\Services\LanguagesManager;
+use Splash\Local\Services\LanguagesManager as SLM;
 use Splash\Local\Services\TaxManager;
 use Splash\Models\Objects\PricesTrait as SplashPricesTrait;
 use Tools;
-use Translate;
 
 // phpcs:disable PSR1.Files.SideEffects
 if (!defined('_PS_VERSION_')) {
@@ -51,7 +50,7 @@ trait PricesTrait
      */
     protected function buildPricesFields(): void
     {
-        $symbol = LanguagesManager::getCurrencySymbol($this->currency);
+        $symbol = SLM::getCurrencySymbol($this->currency);
         //====================================================================//
         // PRICES INFORMATIONS
         //====================================================================//
@@ -61,9 +60,9 @@ trait PricesTrait
         $this->fieldsFactory()->create(SPL_T_PRICE)
             ->identifier('price')
             ->name(
-                Translate::getAdminTranslation(
-                    'Price (tax excl.)',
-                    'AdminProducts'
+                SLM::translate(
+                    'Retail price (tax excl.)',
+                    'AdminCatalogFeature'
                 ) . ' (' . $symbol . ')'
             )
             ->microData('http://schema.org/Product', 'price')
@@ -73,9 +72,9 @@ trait PricesTrait
         $this->fieldsFactory()->create(SPL_T_PRICE)
             ->identifier('price-base')
             ->name(
-                Translate::getAdminTranslation(
-                    'Price (tax excl.)',
-                    'AdminProducts'
+                SLM::translate(
+                    'Retail price (tax excl.)',
+                    'AdminCatalogFeature'
                 ) . ' Base (' . $symbol . ')'
             )
             ->microData('http://schema.org/Product', 'basePrice')
@@ -85,9 +84,9 @@ trait PricesTrait
         $this->fieldsFactory()->create(SPL_T_PRICE)
             ->identifier('price-wholesale')
             ->name(
-                Translate::getAdminTranslation(
-                    'Wholesale price',
-                    'AdminProducts'
+                SLM::translate(
+                    'Cost price',
+                    'AdminCatalogFeature'
                 ) . ' Base (' . $symbol . ')'
             )
             ->microData('http://schema.org/Product', 'wholesalePrice')
@@ -97,9 +96,9 @@ trait PricesTrait
         $this->fieldsFactory()->create(SPL_T_PRICE)
             ->identifier('price-reduced')
             ->name(
-                Translate::getAdminTranslation(
-                    'Sale price',
-                    'AdminProducts'
+                SLM::translate(
+                    'Final price (tax excl.)',
+                    'AdminCatalogFeature'
                 ) . ' (' . $symbol . ')'
             )
             ->microData('http://schema.org/Product', 'reducedPrice')
@@ -139,8 +138,8 @@ trait PricesTrait
                     $taxPercent,
                     null,
                     $this->currency->iso_code,
-                    LanguagesManager::getCurrencySymbol($this->currency),
-                    LanguagesManager::getCurrencyName($this->currency)
+                    SLM::getCurrencySymbol($this->currency),
+                    SLM::getCurrencyName($this->currency)
                 );
 
                 break;
@@ -156,8 +155,8 @@ trait PricesTrait
                     $taxPercent,
                     null,
                     $this->currency->iso_code,
-                    LanguagesManager::getCurrencySymbol($this->currency),
-                    LanguagesManager::getCurrencyName($this->currency)
+                    SLM::getCurrencySymbol($this->currency),
+                    SLM::getCurrencyName($this->currency)
                 );
 
                 break;
@@ -177,8 +176,8 @@ trait PricesTrait
                     $taxPercent,
                     null,
                     $this->currency->iso_code,
-                    LanguagesManager::getCurrencySymbol($this->currency),
-                    LanguagesManager::getCurrencyName($this->currency)
+                    SLM::getCurrencySymbol($this->currency),
+                    SLM::getCurrencyName($this->currency)
                 );
 
                 break;
@@ -219,8 +218,8 @@ trait PricesTrait
                     $taxPercent,
                     null,
                     $this->currency->iso_code,
-                    LanguagesManager::getCurrencySymbol($this->currency),
-                    LanguagesManager::getCurrencyName($this->currency)
+                    SLM::getCurrencySymbol($this->currency),
+                    SLM::getCurrencyName($this->currency)
                 );
 
                 break;

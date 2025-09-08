@@ -19,7 +19,6 @@
 namespace Splash\Local\Objects\Product;
 
 use Splash\Local\Services\LanguagesManager as SLM;
-use Translate;
 
 // phpcs:disable PSR1.Files.SideEffects
 if (!defined('_PS_VERSION_')) {
@@ -75,7 +74,7 @@ trait ChecksumTrait
             ->identifier('md5')
             ->name('Md5')
             ->description('Unik Md5 Object Checksum')
-            ->group(Translate::getAdminTranslation('Meta', 'AdminThemes'))
+            ->group('Meta')
             ->isListed()
             ->microData('http://schema.org/Thing', 'identifier')
             ->isReadOnly()
@@ -86,7 +85,7 @@ trait ChecksumTrait
             ->identifier('md5-debug')
             ->name('Md5 Debug')
             ->description('Unik Checksum String fro Debug')
-            ->group(Translate::getAdminTranslation('Meta', 'AdminThemes'))
+            ->group('Meta')
             ->isReadOnly()
         ;
     }

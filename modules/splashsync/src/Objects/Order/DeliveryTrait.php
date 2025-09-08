@@ -20,8 +20,8 @@ namespace Splash\Local\Objects\Order;
 
 use Address;
 use Country;
+use Splash\Local\Services\LanguagesManager as SLM;
 use State;
-use Translate;
 
 // phpcs:disable PSR1.Files.SideEffects
 if (!defined('_PS_VERSION_')) {
@@ -46,13 +46,13 @@ trait DeliveryTrait
      */
     protected function buildDeliveryFields(): void
     {
-        $groupName = Translate::getAdminTranslation('Address', 'AdminCustomers');
+        $groupName = SLM::translate('Address', 'AdminGlobal');
 
         //====================================================================//
         // Company
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
             ->identifier('company')
-            ->name(Translate::getAdminTranslation('Company', 'AdminCustomers'))
+            ->name(SLM::translate('Company', 'AdminGlobal'))
             ->microData('http://schema.org/Organization', 'legalName')
             ->group($groupName)
             ->isReadOnly()
@@ -88,7 +88,7 @@ trait DeliveryTrait
         // Zip Code
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
             ->identifier('postcode')
-            ->name(Translate::getAdminTranslation('Zip/Postal Code', 'AdminAddresses'))
+            ->name(SLM::translate('Zip/Postal code', 'AdminGlobal'))
             ->microData('http://schema.org/PostalAddress', 'postalCode')
             ->group($groupName)
             ->isReadOnly()
@@ -97,7 +97,7 @@ trait DeliveryTrait
         // City Name
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
             ->identifier('city')
-            ->name(Translate::getAdminTranslation('City', 'AdminAddresses'))
+            ->name(SLM::translate('City', 'AdminGlobal'))
             ->microData('http://schema.org/PostalAddress', 'addressLocality')
             ->group($groupName)
             ->isReadOnly()
@@ -106,7 +106,7 @@ trait DeliveryTrait
         // State Name
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
             ->identifier('state')
-            ->name(Translate::getAdminTranslation('State', 'AdminAddresses'))
+            ->name(SLM::translate('State', 'AdminGlobal'))
             ->group($groupName)
             ->isReadOnly()
         ;
@@ -114,7 +114,7 @@ trait DeliveryTrait
         // State code
         $this->fieldsFactory()->create(SPL_T_STATE)
             ->identifier('id_state')
-            ->name(Translate::getAdminTranslation('State', 'AdminAddresses') . ' (Code)')
+            ->name(SLM::translate('State', 'AdminGlobal') . ' (Code)')
             ->group($groupName)
             ->microData('http://schema.org/PostalAddress', 'addressRegion')
             ->isReadOnly()
@@ -138,13 +138,13 @@ trait DeliveryTrait
      */
     protected function buildDeliveryPart2Fields()
     {
-        $groupName = Translate::getAdminTranslation('Address', 'AdminCustomers');
+        $groupName = SLM::translate('Address', 'AdminGlobal');
 
         //====================================================================//
         // Country Name
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
             ->identifier('country')
-            ->name(Translate::getAdminTranslation('Country', 'AdminAddresses'))
+            ->name(SLM::translate('Country', 'AdminGlobal'))
             ->group($groupName)
             ->isReadOnly()
         ;
@@ -152,7 +152,7 @@ trait DeliveryTrait
         // Country ISO Code
         $this->fieldsFactory()->create(SPL_T_COUNTRY)
             ->identifier('id_country')
-            ->name(Translate::getAdminTranslation('Country', 'AdminAddresses') . ' (Code)')
+            ->name(SLM::translate('Country', 'AdminGlobal') . ' (Code)')
             ->microData('http://schema.org/PostalAddress', 'addressCountry')
             ->group($groupName)
             ->isReadOnly()
@@ -162,7 +162,7 @@ trait DeliveryTrait
         $this->fieldsFactory()->create(SPL_T_PHONE)
             ->identifier('phone')
             ->group($groupName)
-            ->name(Translate::getAdminTranslation('Home phone', 'AdminAddresses'))
+            ->name(SLM::translate('Home phone', 'AdminGlobal'))
             ->microData('http://schema.org/PostalAddress', 'telephone')
             ->isIndexed()
             ->isReadOnly()
@@ -172,7 +172,7 @@ trait DeliveryTrait
         $this->fieldsFactory()->create(SPL_T_PHONE)
             ->identifier('phone_mobile')
             ->group($groupName)
-            ->name(Translate::getAdminTranslation('Mobile phone', 'AdminAddresses'))
+            ->name(SLM::translate('Mobile phone', 'AdminGlobal'))
             ->microData('http://schema.org/Person', 'telephone')
             ->isIndexed()
             ->isReadOnly()

@@ -19,6 +19,7 @@
 namespace Splash\Local\Objects\ThirdParty;
 
 use Splash\Local\Services\CustomerGroupsManager as GroupsManager;
+use Splash\Local\Services\LanguagesManager as SLM;
 use Splash\Models\Helpers\InlineHelper;
 
 // phpcs:disable PSR1.Files.SideEffects
@@ -38,7 +39,7 @@ trait GroupsTrait
         // Firstname
         $this->fieldsFactory()->create(SPL_T_INLINE)
             ->identifier('groups')
-            ->name('Groups')
+            ->name(SLM::translate('Groups', 'AdminGlobal'))
             ->group('Meta')
             ->microData('http://schema.org/Organization', 'category')
             ->addChoices(GroupsManager::getAllGroupNames())

@@ -27,7 +27,6 @@ use Splash\Local\ClassAlias\PsProductAttribute as Attribute;
 use Splash\Local\Services\AttributesManager as Manager;
 use Splash\Local\Services\LanguagesManager as SLM;
 use Splash\Local\Services\MultiShopManager as MSM;
-use Translate;
 
 // phpcs:disable PSR1.Files.SideEffects
 if (!defined('_PS_VERSION_')) {
@@ -73,7 +72,7 @@ trait AttributesTrait
             return;
         }
 
-        $groupName = Translate::getAdminTranslation('Combinations', 'AdminProducts');
+        $groupName = SLM::translate('Combinations', 'AdminCatalogFeature');
         $this->fieldsFactory()->setDefaultLanguage(SLM::getDefaultLanguage());
 
         //====================================================================//
@@ -84,7 +83,7 @@ trait AttributesTrait
         // Product Variation Attribute Code (Default Language Only)
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
             ->identifier('code')
-            ->name(Translate::getAdminTranslation('Code', 'AdminCatalogFeature'))
+            ->name(SLM::translate('Code', 'AdminGlobal'))
             ->inList('attributes')
             ->group($groupName)
             ->addOption('isLowerCase', true)
@@ -102,7 +101,7 @@ trait AttributesTrait
             // Product Variation Attribute Name
             $this->fieldsFactory()->create(SPL_T_VARCHAR)
                 ->identifier('public_name')
-                ->name(Translate::getAdminTranslation('Name', 'AdminCatalogFeature'))
+                ->name(SLM::translate('Name', 'AdminGlobal'))
                 ->group($groupName)
                 ->microData('http://schema.org/Product', 'VariantAttributeName')
                 ->setMultilang($isoLang)
@@ -119,7 +118,7 @@ trait AttributesTrait
             // Product Variation Attribute Value
             $this->fieldsFactory()->create(SPL_T_VARCHAR)
                 ->identifier('name')
-                ->name(Translate::getAdminTranslation('Value', 'AdminCatalogFeature'))
+                ->name(SLM::translate('Value', 'AdminGlobal'))
                 ->group($groupName)
                 ->microData('http://schema.org/Product', 'VariantAttributeValue')
                 ->setMultilang($isoLang)

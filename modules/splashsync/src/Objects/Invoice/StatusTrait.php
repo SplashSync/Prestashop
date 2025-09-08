@@ -18,7 +18,7 @@
 
 namespace Splash\Local\Objects\Invoice;
 
-use Translate;
+use Splash\Local\Services\LanguagesManager as SLM;
 
 // phpcs:disable PSR1.Files.SideEffects
 if (!defined('_PS_VERSION_')) {
@@ -42,7 +42,7 @@ trait StatusTrait
         // Order Current Status
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
             ->Identifier('status')
-            ->Name(Translate::getAdminTranslation('Status', 'AdminOrders'))
+            ->Name(SLM::translate('Status', 'AdminGlobal'))
             ->MicroData('http://schema.org/Invoice', 'paymentStatus')
             ->isReadOnly()
             ->isNotTested();
@@ -51,7 +51,7 @@ trait StatusTrait
         // INVOICE STATUS FLAGS
         //====================================================================//
 
-        $prefix = Translate::getAdminTranslation('Status', 'AdminOrders') . ' ';
+        $prefix = SLM::translate('Status', 'AdminGlobal') . ' ';
 
         //====================================================================//
         // Is Canceled
@@ -62,17 +62,17 @@ trait StatusTrait
             ->Name($prefix . $this->spl->l('Canceled'))
             ->MicroData('http://schema.org/PaymentStatusType', 'PaymentDeclined')
             ->Association('isCanceled', 'isValidated')
-            ->Group(Translate::getAdminTranslation('Meta', 'AdminThemes'))
+            ->Group('Meta')
             ->isReadOnly();
 
         //====================================================================//
         // Is Validated
         $this->fieldsFactory()->create(SPL_T_BOOL)
             ->Identifier('isValidated')
-            ->Name($prefix . Translate::getAdminTranslation('Valid', 'AdminCartRules'))
+            ->Name($prefix . SLM::translate('Valid', 'AdminCatalogFeature'))
             ->MicroData('http://schema.org/PaymentStatusType', 'PaymentDue')
             ->Association('isCanceled', 'isValidated')
-            ->Group(Translate::getAdminTranslation('Meta', 'AdminThemes'))
+            ->Group('Meta')
             ->isReadOnly();
 
         //====================================================================//
@@ -82,7 +82,7 @@ trait StatusTrait
             ->Name($prefix . $this->spl->l('Paid'))
             ->MicroData('http://schema.org/PaymentStatusType', 'PaymentComplete')
             ->isReadOnly()
-            ->Group(Translate::getAdminTranslation('Meta', 'AdminThemes'))
+            ->Group('Meta')
             ->isNotTested();
     }
 

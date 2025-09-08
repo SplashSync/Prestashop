@@ -20,7 +20,7 @@ namespace Splash\Local\Objects\Core;
 
 use Address;
 use Shop;
-use Translate;
+use Splash\Local\Services\LanguagesManager as SLM;
 
 // phpcs:disable PSR1.Files.SideEffects
 if (!defined('_PS_VERSION_')) {
@@ -44,8 +44,8 @@ trait MultiShopTrait
         // Prestashop Shop ID
         $this->fieldsFactory()->create(SPL_T_INT)
             ->identifier('id_shop')
-            ->name('Shop ID')
-            ->group(Translate::getAdminTranslation('Meta', 'AdminThemes'))
+            ->name(SLM::translate('Shop ID', 'AdminShopparametersFeature'))
+            ->group('Meta')
             ->microData('http://schema.org/Author', 'identifier')
             ->isReadOnly()
         ;
@@ -54,7 +54,7 @@ trait MultiShopTrait
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
             ->identifier('shop_code')
             ->name('Shop Code')
-            ->group(Translate::getAdminTranslation('Meta', 'AdminThemes'))
+            ->group('Meta')
             ->microData('http://schema.org/Author', 'alternateName')
             ->isReadOnly()
         ;
@@ -62,8 +62,8 @@ trait MultiShopTrait
         // Prestashop Shop Name
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
             ->identifier('shop_name')
-            ->name('Shop Name')
-            ->group(Translate::getAdminTranslation('Meta', 'AdminThemes'))
+            ->name(SLM::translate('Shop name', 'AdminShopparametersFeature'))
+            ->group('Meta')
             ->microData('http://schema.org/Author', 'name')
             ->isReadOnly()
         ;
@@ -71,8 +71,8 @@ trait MultiShopTrait
         // Prestashop Shop Url
         $this->fieldsFactory()->create(SPL_T_URL)
             ->identifier('shop_url')
-            ->name('Shop Url')
-            ->group(Translate::getAdminTranslation('Meta', 'AdminThemes'))
+            ->name(SLM::translate('Shop domain', 'AdminShopparametersFeature'))
+            ->group('Meta')
             ->microData('http://schema.org/Author', 'url')
             ->isReadOnly()
         ;

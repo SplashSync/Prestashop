@@ -19,8 +19,8 @@
 namespace Splash\Local\Objects\Order;
 
 use Splash\Core\SplashCore as Splash;
+use Splash\Local\Services\LanguagesManager as SLM;
 use Splash\Local\Services\OrderPdfManager;
-use Translate;
 
 // phpcs:disable PSR1.Files.SideEffects
 if (!defined('_PS_VERSION_')) {
@@ -50,7 +50,7 @@ trait PdfTrait
         // Invoice PDF
         $this->fieldsFactory()->create(SPL_T_STREAM)
             ->Identifier('pdf_invoice')
-            ->Name(Translate::getAdminTranslation('Invoices', 'AdminNavigationMenu'))
+            ->Name(SLM::translate('Invoices', 'AdminGlobal'))
             ->MicroData('http://schema.org/Order', 'invoicePdf')
             ->isReadOnly();
 
@@ -58,7 +58,7 @@ trait PdfTrait
         // Delivery PDF
         $this->fieldsFactory()->create(SPL_T_STREAM)
             ->Identifier('pdf_delivery')
-            ->Name(Translate::getAdminTranslation('Delivery', 'AdminNavigationMenu'))
+            ->Name(SLM::translate('Delivery', 'AdminGlobal'))
             ->MicroData('http://schema.org/Order', 'deliveryPdf')
             ->isReadOnly();
     }

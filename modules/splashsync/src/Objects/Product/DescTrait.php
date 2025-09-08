@@ -21,10 +21,8 @@ namespace Splash\Local\Objects\Product;
 use Configuration;
 use Language;
 use Product;
-use Splash\Core\SplashCore as Splash;
-use Splash\Local\Services\LanguagesManager;
+use Splash\Local\Services\LanguagesManager as SLM;
 use Splash\Local\Services\MultiShopManager as MSM;
-use Translate;
 
 // phpcs:disable PSR1.Files.SideEffects
 if (!defined('_PS_VERSION_')) {
@@ -48,14 +46,14 @@ trait DescTrait
      */
     protected function buildDescFields(): void
     {
-        $groupName = Translate::getAdminTranslation('Information', 'AdminProducts');
-        $this->fieldsFactory()->setDefaultLanguage(LanguagesManager::getDefaultLanguage());
+        $groupName = SLM::translate('Information', 'AdminCatalogFeature');
+        $this->fieldsFactory()->setDefaultLanguage(SLM::getDefaultLanguage());
 
         //====================================================================//
         // PRODUCT DESCRIPTIONS
         //====================================================================//
 
-        foreach (LanguagesManager::getAvailableLanguages() as $isoLang) {
+        foreach (SLM::getAvailableLanguages() as $isoLang) {
             //====================================================================//
             // Name without Options
             $this->fieldsFactory()->create(SPL_T_VARCHAR)
@@ -65,8 +63,8 @@ trait DescTrait
                 ->microData('http://schema.org/Product', 'alternateName')
                 ->setMultilang($isoLang)
                 ->addOption('shop', MSM::MODE_ALL)
-                ->isRequired(LanguagesManager::isDefaultLanguage($isoLang))
-                ->isIndexed(LanguagesManager::isDefaultLanguage($isoLang))
+                ->isRequired(SLM::isDefaultLanguage($isoLang))
+                ->isIndexed(SLM::isDefaultLanguage($isoLang))
             ;
             //====================================================================//
             // Name with Options
@@ -76,7 +74,7 @@ trait DescTrait
                 ->microData('http://schema.org/Product', 'name')
                 ->group($groupName)
                 ->setMultilang($isoLang)
-                ->isListed(LanguagesManager::isDefaultLanguage($isoLang))
+                ->isListed(SLM::isDefaultLanguage($isoLang))
                 ->isReadOnly(self::isSourceCatalogMode())
                 ->isReadOnly()
             ;
@@ -84,7 +82,7 @@ trait DescTrait
             // Long Description
             $this->fieldsFactory()->create(SPL_T_TEXT)
                 ->identifier('description')
-                ->name(Translate::getAdminTranslation('description', 'AdminProducts'))
+                ->name(SLM::translate('Description', 'AdminGlobal'))
                 ->microData('http://schema.org/Article', 'articleBody')
                 ->group($groupName)
                 ->setMultilang($isoLang)
@@ -94,7 +92,7 @@ trait DescTrait
             // Short Description
             $this->fieldsFactory()->create(SPL_T_VARCHAR)
                 ->identifier('description_short')
-                ->name(Translate::getAdminTranslation('Short Description', 'AdminProducts'))
+                ->name(SLM::translate('Short description', 'AdminCatalogFeature'))
                 ->microData('http://schema.org/Product', 'description')
                 ->group($groupName)
                 ->setMultilang($isoLang)
@@ -115,10 +113,10 @@ trait DescTrait
     {
         //====================================================================//
         // Walk on Available Languages
-        foreach (LanguagesManager::getAvailableLanguages() as $idLang => $isoLang) {
+        foreach (SLM::getAvailableLanguages() as $idLang => $isoLang) {
             //====================================================================//
             // Decode Multi-lang Field Name
-            $baseFieldName = LanguagesManager::fieldNameDecode($fieldName, $isoLang);
+            $baseFieldName = SLM::fieldNameDecode($fieldName, $isoLang);
             //====================================================================//
             // READ Fields
             switch ($baseFieldName) {
@@ -156,10 +154,10 @@ trait DescTrait
     {
         //====================================================================//
         // Walk on Available Languages
-        foreach (LanguagesManager::getAvailableLanguages() as $idLang => $isoLang) {
+        foreach (SLM::getAvailableLanguages() as $idLang => $isoLang) {
             //====================================================================//
             // Decode Multi-lang Field Name
-            $baseFieldName = LanguagesManager::fieldNameDecode($fieldName, $isoLang);
+            $baseFieldName = SLM::fieldNameDecode($fieldName, $isoLang);
             //====================================================================//
             // WRITE Field
             switch ($baseFieldName) {
@@ -214,7 +212,7 @@ trait DescTrait
         foreach ($languages as $lang) {
             //====================================================================//
             // Encode Language Code From Splash Format to Prestashop Format (fr_FR => fr-fr)
-            $langCode = LanguagesManager::langEncode($lang['language_code']);
+            $langCode = SLM::langEncode($lang['language_code']);
             $langId = (int) $lang['id_lang'];
             //====================================================================//
             // Product Specific - Read Meta Keywords

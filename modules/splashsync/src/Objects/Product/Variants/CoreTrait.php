@@ -22,7 +22,6 @@ use Combination;
 use Splash\Core\SplashCore as Splash;
 use Splash\Local\Services\LanguagesManager as SLM;
 use Splash\Local\Services\MultiShopManager as MSM;
-use Translate;
 
 // phpcs:disable PSR1.Files.SideEffects
 if (!defined('_PS_VERSION_')) {
@@ -62,7 +61,7 @@ trait CoreTrait
         $this->fieldsFactory()->create(SPL_T_BOOL)
             ->identifier('default_on')
             ->name('Is default variant')
-            ->group(Translate::getAdminTranslation('Meta', 'AdminThemes'))
+            ->group('Meta')
             ->microData('http://schema.org/Product', 'isDefaultVariation')
             ->isReadOnly()
         ;
@@ -71,7 +70,7 @@ trait CoreTrait
         $this->fieldsFactory()->create((string) self::objects()->encode('Product', SPL_T_ID))
             ->identifier('default_id')
             ->name('Default Variant')
-            ->group(Translate::getAdminTranslation('Meta', 'AdminThemes'))
+            ->group('Meta')
             ->microData('http://schema.org/Product', 'DefaultVariation')
             ->isNotTested()
         ;
@@ -80,7 +79,7 @@ trait CoreTrait
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
             ->identifier('parent_id')
             ->name('Parent')
-            ->group(Translate::getAdminTranslation('Meta', 'AdminThemes'))
+            ->group('Meta')
             ->microData('http://schema.org/Product', 'isVariationOf')
             ->isReadOnly()
         ;
@@ -89,7 +88,7 @@ trait CoreTrait
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
             ->identifier('parent_ref')
             ->name('Parent SKU')
-            ->group(Translate::getAdminTranslation('Meta', 'AdminThemes'))
+            ->group('Meta')
             ->microData('http://schema.org/Product', 'isVariationOfName')
             ->isIndexed()
             ->isNotTested()

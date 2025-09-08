@@ -18,12 +18,10 @@
 
 namespace Splash\Local\Objects\Product;
 
-use Category;
 use Splash\Local\Services\CategoryManager;
-use Splash\Local\Services\LanguagesManager;
+use Splash\Local\Services\LanguagesManager as SLM;
 use Splash\Local\Services\MultiShopManager as MSM;
 use Splash\Models\Helpers\InlineHelper;
-use Translate;
 
 // phpcs:disable PSR1.Files.SideEffects
 if (!defined('_PS_VERSION_')) {
@@ -47,7 +45,7 @@ trait CategoriesTrait
      */
     protected function buildCategoriesFields(): void
     {
-        $fieldName = Translate::getAdminTranslation('Categories', 'AdminCatalogFeature');
+        $fieldName = SLM::translate('Categories', 'AdminCatalogFeature');
 
         //====================================================================//
         // PRODUCT CATEGORIES
@@ -74,8 +72,8 @@ trait CategoriesTrait
             $this->fieldsFactory()->isNotTested();
         }
 
-        $this->fieldsFactory()->setDefaultLanguage(LanguagesManager::getDefaultLanguage());
-        foreach (LanguagesManager::getAvailableLanguages() as $langId => $isoLang) {
+        $this->fieldsFactory()->setDefaultLanguage(SLM::getDefaultLanguage());
+        foreach (SLM::getAvailableLanguages() as $langId => $isoLang) {
             //====================================================================//
             // Categories Names
             $this->fieldsFactory()->create(SPL_T_INLINE)
@@ -137,10 +135,10 @@ trait CategoriesTrait
     {
         //====================================================================//
         // Walk on Available Languages
-        foreach (LanguagesManager::getAvailableLanguages() as $idLang => $isoLang) {
+        foreach (SLM::getAvailableLanguages() as $idLang => $isoLang) {
             //====================================================================//
             // Decode Multi-lang Field Name
-            $baseFieldName = LanguagesManager::fieldNameDecode($fieldName, $isoLang);
+            $baseFieldName = SLM::fieldNameDecode($fieldName, $isoLang);
             //====================================================================//
             // READ Fields
             switch ($baseFieldName) {

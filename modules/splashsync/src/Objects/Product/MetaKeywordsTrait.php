@@ -18,10 +18,9 @@
 
 namespace Splash\Local\Objects\Product;
 
-use Splash\Local\Services\LanguagesManager;
+use Splash\Local\Services\LanguagesManager as SLM;
 use Splash\Local\Services\MultiShopManager as MSM;
 use Tag;
-use Translate;
 
 // phpcs:disable PSR1.Files.SideEffects
 if (!defined('_PS_VERSION_')) {
@@ -41,20 +40,20 @@ trait MetaKeywordsTrait
      */
     protected function buildMetaKeywordsFields(): void
     {
-        $groupName = Translate::getAdminTranslation('Information', 'AdminProducts');
-        $this->fieldsFactory()->setDefaultLanguage(LanguagesManager::getDefaultLanguage());
+        $groupName = SLM::translate('Information', 'AdminCatalogFeature');
+        $this->fieldsFactory()->setDefaultLanguage(SLM::getDefaultLanguage());
 
         //====================================================================//
         // PRODUCT METADATA
         //====================================================================//
 
-        foreach (LanguagesManager::getAvailableLanguages() as $isoLang) {
+        foreach (SLM::getAvailableLanguages() as $isoLang) {
             //====================================================================//
             // Meta KeyWords
             $this->fieldsFactory()->create(SPL_T_VARCHAR)
                 ->identifier('meta_keywords')
-                ->name(Translate::getAdminTranslation('Meta keywords', 'AdminProducts'))
-                ->description($groupName . ' ' . Translate::getAdminTranslation('Meta keywords', 'AdminProducts'))
+                ->name(SLM::translate('Keywords', 'AdminGlobal'))
+                ->description($groupName . ' ' . SLM::translate('Keywords', 'AdminGlobal'))
                 ->group($groupName)
                 ->microData('http://schema.org/Article', 'keywords')
                 ->setMultilang($isoLang)
@@ -76,10 +75,10 @@ trait MetaKeywordsTrait
     {
         //====================================================================//
         // Walk on Available Languages
-        foreach (LanguagesManager::getAvailableLanguages() as $idLang => $isoLang) {
+        foreach (SLM::getAvailableLanguages() as $idLang => $isoLang) {
             //====================================================================//
             // Decode Multi-lang Field Name
-            $baseFieldName = LanguagesManager::fieldNameDecode($fieldName, $isoLang);
+            $baseFieldName = SLM::fieldNameDecode($fieldName, $isoLang);
             //====================================================================//
             // Product Specific - Read Meta Keywords
             if ('meta_keywords' == $baseFieldName) {
@@ -101,10 +100,10 @@ trait MetaKeywordsTrait
     {
         //====================================================================//
         // Walk on Available Languages
-        foreach (LanguagesManager::getAvailableLanguages() as $idLang => $isoLang) {
+        foreach (SLM::getAvailableLanguages() as $idLang => $isoLang) {
             //====================================================================//
             // Decode Multi-lang Field Name
-            $baseFieldName = LanguagesManager::fieldNameDecode($fieldName, $isoLang);
+            $baseFieldName = SLM::fieldNameDecode($fieldName, $isoLang);
             //====================================================================//
             // Safety Checks
             if (('meta_keywords' != $baseFieldName) || self::isSourceCatalogMode()) {

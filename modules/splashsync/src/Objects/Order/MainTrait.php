@@ -18,8 +18,7 @@
 
 namespace Splash\Local\Objects\Order;
 
-use Splash\Local\Services\LanguagesManager;
-use Translate;
+use Splash\Local\Services\LanguagesManager as SLM;
 
 // phpcs:disable PSR1.Files.SideEffects
 if (!defined('_PS_VERSION_')) {
@@ -43,13 +42,13 @@ trait MainTrait
         // PRICES INFORMATIONS
         //====================================================================//
 
-        $currencySuffix = ' (' . LanguagesManager::getCurrencySymbol($this->currency) . ')';
+        $currencySuffix = ' (' . SLM::getCurrencySymbol($this->currency) . ')';
 
         //====================================================================//
         // Order Total Price HT
         $this->fieldsFactory()->create(SPL_T_DOUBLE)
             ->identifier('total_paid_tax_excl')
-            ->name(Translate::getAdminTranslation('Total (Tax excl.)', 'AdminOrders') . $currencySuffix)
+            ->name(SLM::translate('Total (Tax excl.)', 'AdminOrderscustomersFeature') . $currencySuffix)
             ->microData('http://schema.org/Invoice', 'totalPaymentDue')
             ->isListed()
             ->isReadOnly()
@@ -58,7 +57,7 @@ trait MainTrait
         // Order Total Price TTC
         $this->fieldsFactory()->create(SPL_T_DOUBLE)
             ->identifier('total_paid_tax_incl')
-            ->name(Translate::getAdminTranslation('Total (Tax incl.)', 'AdminOrders') . $currencySuffix)
+            ->name(SLM::translate('Total (Tax incl.)', 'AdminOrderscustomersFeature') . $currencySuffix)
             ->microData('http://schema.org/Invoice', 'totalPaymentDueTaxIncluded')
             ->isListed()
             ->isReadOnly()

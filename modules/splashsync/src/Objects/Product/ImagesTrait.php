@@ -30,7 +30,6 @@ use Splash\Local\Services\LanguagesManager as SLM;
 use Splash\Local\Services\MultiShopManager as MSM;
 use Splash\Models\Objects\ImagesTrait as SplashImagesTrait;
 use Tools;
-use Translate;
 
 // phpcs:disable PSR1.Files.SideEffects
 if (!defined('_PS_VERSION_')) {
@@ -88,7 +87,7 @@ trait ImagesTrait
      */
     protected function buildImagesFields(): void
     {
-        $groupName = Translate::getAdminTranslation('Images', 'AdminProducts');
+        $groupName = SLM::translate('Images', 'AdminGlobal');
         $this->fieldsFactory()->setDefaultLanguage(SLM::getDefaultLanguage());
 
         //====================================================================//
@@ -100,7 +99,7 @@ trait ImagesTrait
         $this->fieldsFactory()->create(SPL_T_IMG)
             ->identifier('image')
             ->inList('images')
-            ->name(Translate::getAdminTranslation('Images', 'AdminProducts'))
+            ->name(SLM::translate('Images', 'AdminGlobal'))
             ->group($groupName)
             ->microData('http://schema.org/Product', 'image')
             ->isReadOnly(self::isSourceCatalogMode())
@@ -112,7 +111,7 @@ trait ImagesTrait
         $this->fieldsFactory()->create(SPL_T_INT)
             ->identifier('position')
             ->inList('images')
-            ->name(Translate::getAdminTranslation('Position', 'AdminProducts'))
+            ->name(SLM::translate('Position', 'AdminGlobal'))
             ->microData('http://schema.org/Product', 'positionImage')
             ->group($groupName)
             ->isReadOnly(self::isSourceCatalogMode())
@@ -125,7 +124,7 @@ trait ImagesTrait
         $this->fieldsFactory()->create(SPL_T_BOOL)
             ->identifier('cover')
             ->inList('images')
-            ->name(Translate::getAdminTranslation('Cover', 'AdminProducts'))
+            ->name(SLM::translate('Cover', 'AdminCatalogFeature'))
             ->microData('http://schema.org/Product', 'isCover')
             ->group($groupName)
             ->isReadOnly(self::isSourceCatalogMode())
@@ -138,7 +137,7 @@ trait ImagesTrait
         $this->fieldsFactory()->create(SPL_T_BOOL)
             ->identifier('visible')
             ->inList('images')
-            ->name(Translate::getAdminTranslation('Visible', 'AdminProducts'))
+            ->name('Visible')
             ->microData('http://schema.org/Product', 'isVisibleImage')
             ->group($groupName)
             ->isReadOnly(self::isSourceCatalogMode())
@@ -151,7 +150,7 @@ trait ImagesTrait
         foreach (SLM::getAvailableLanguages() as $isoLang) {
             $this->fieldsFactory()->create(SPL_T_VARCHAR)
                 ->identifier('legend')
-                ->name(Translate::getAdminTranslation('Legend', 'AdminProducts'))
+                ->name(SLM::translate('Caption', 'AdminCatalogFeature'))
                 ->microData('http://schema.org/Product', 'imageName')
                 ->group($groupName)
                 ->setMultilang($isoLang)
@@ -265,7 +264,7 @@ trait ImagesTrait
         $splashImage = self::images()->encode(
             $defaultLegend ?: $filename,
             $objectImage->id . '.' . $objectImage->image_format,
-            _PS_PROD_IMG_DIR_ . $objectImage->getImgFolder(),
+            _PS_PRODUCT_IMG_DIR_ . $objectImage->getImgFolder(),
             $publicUrl->getImageLink($imageName, (string) $imageId)
         );
 
@@ -369,7 +368,7 @@ trait ImagesTrait
         //====================================================================//
         // Compute Md5 CheckSum for this Image
         $checkSum = md5_file(
-            _PS_PROD_IMG_DIR_
+            _PS_PRODUCT_IMG_DIR_
             . $psImage->getImgFolder()
             . $psImage->id . '.'
             . $psImage->image_format
@@ -604,13 +603,13 @@ trait ImagesTrait
         // Walk on Object Images List
         foreach ($allImages as $image) {
             $imageObj = new Image($image['id_image']);
-            $imagePath = _PS_PROD_IMG_DIR_ . $imageObj->getExistingImgPath();
+            $imagePath = _PS_PRODUCT_IMG_DIR_ . $imageObj->getExistingImgPath();
             if (!file_exists($imagePath . '.jpg')) {
                 continue;
             }
 
             foreach (ImageType::getImagesTypes('products') as $imageType) {
-                $imgThumb = _PS_PROD_IMG_DIR_ . $imageObj->getExistingImgPath();
+                $imgThumb = _PS_PRODUCT_IMG_DIR_ . $imageObj->getExistingImgPath();
                 $imgThumb .= '-' . Tools::stripslashes($imageType['name']) . '.jpg';
                 if (!file_exists($imgThumb)) {
                     ImageManager::resize(

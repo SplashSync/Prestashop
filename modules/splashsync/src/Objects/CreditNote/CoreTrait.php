@@ -20,7 +20,6 @@ namespace Splash\Local\Objects\CreditNote;
 
 use Configuration;
 use Splash\Local\Services\LanguagesManager as SLM;
-use Translate;
 
 // phpcs:disable PSR1.Files.SideEffects
 if (!defined('_PS_VERSION_')) {
@@ -53,7 +52,7 @@ trait CoreTrait
         // Invoice Reference
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
             ->Identifier('number')
-            ->Name(Translate::getAdminTranslation('Invoice number', 'AdminInvoices'))
+            ->Name(SLM::translate('Invoice number', 'AdminOrderscustomersFeature'))
             ->MicroData('http://schema.org/Invoice', 'confirmationNumber')
             ->isReadOnly()
             ->isListed()

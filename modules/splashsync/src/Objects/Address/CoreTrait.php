@@ -20,7 +20,7 @@ namespace Splash\Local\Objects\Address;
 
 use Customer;
 use Splash\Core\SplashCore as Splash;
-use Translate;
+use Splash\Local\Services\LanguagesManager as SLM;
 
 // phpcs:disable PSR1.Files.SideEffects
 if (!defined('_PS_VERSION_')) {
@@ -45,14 +45,14 @@ trait CoreTrait
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
             ->identifier('alias')
             ->name($this->spl->l('Address alias'))
-            ->description(Translate::getAdminTranslation('Address alias', 'AdminAddresses'))
+            ->description(SLM::translate('Address alias', 'AdminOrderscustomersFeature'))
             ->microData('http://schema.org/PostalAddress', 'name')
         ;
         //====================================================================//
         // Customer
         $this->fieldsFactory()->create((string) self::objects()->encode('ThirdParty', SPL_T_ID))
             ->identifier('id_customer')
-            ->name(Translate::getAdminTranslation('Customer ID', 'AdminCustomerThreads'))
+            ->name(SLM::translate('Customer ID', 'AdminAdvparametersFeature'))
             ->microData('http://schema.org/Organization', 'ID')
             ->isRequired()
         ;
@@ -60,7 +60,7 @@ trait CoreTrait
         // Company
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
             ->identifier('company')
-            ->name(Translate::getAdminTranslation('Company', 'AdminCustomers'))
+            ->name(SLM::translate('Company', 'AdminGlobal'))
             ->microData('http://schema.org/Organization', 'legalName')
             ->isListed()
         ;
@@ -68,7 +68,7 @@ trait CoreTrait
         // Firstname
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
             ->identifier('firstname')
-            ->name(Translate::getAdminTranslation('First name', 'AdminCustomers'))
+            ->name(SLM::translate('First name', 'AdminGlobal'))
             ->microData('http://schema.org/Person', 'familyName')
             ->association('firstname', 'lastname')
             ->isRequired()
@@ -78,7 +78,7 @@ trait CoreTrait
         // Lastname
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
             ->identifier('lastname')
-            ->name(Translate::getAdminTranslation('Last name', 'AdminCustomers'))
+            ->name(SLM::translate('Last name', 'AdminGlobal'))
             ->microData('http://schema.org/Person', 'givenName')
             ->association('firstname', 'lastname')
             ->isRequired()

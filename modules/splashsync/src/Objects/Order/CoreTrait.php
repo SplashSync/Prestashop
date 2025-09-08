@@ -20,7 +20,7 @@ namespace Splash\Local\Objects\Order;
 
 use Customer;
 use Splash\Local\Objects\Order;
-use Translate;
+use Splash\Local\Services\LanguagesManager as SLM;
 
 // phpcs:disable PSR1.Files.SideEffects
 if (!defined('_PS_VERSION_')) {
@@ -53,7 +53,7 @@ trait CoreTrait
         // Customer Object
         $this->fieldsFactory()->create((string) self::objects()->encode('ThirdParty', SPL_T_ID))
             ->identifier('id_customer')
-            ->name(Translate::getAdminTranslation('Customer ID', 'AdminCustomerThreads'))
+            ->name(SLM::translate('Customer ID', 'AdminAdvparametersFeature'))
             ->isRequired();
         if (!$this->isOrderObject()) {
             $this->fieldsFactory()->microData('http://schema.org/Invoice', 'customer');
@@ -64,7 +64,7 @@ trait CoreTrait
         // Customer Email
         $this->fieldsFactory()->create(SPL_T_EMAIL)
             ->identifier('email')
-            ->name(Translate::getAdminTranslation('Email address', 'AdminCustomers'))
+            ->name(SLM::translate('Email address', 'AdminGlobal'))
             ->microData('http://schema.org/ContactPoint', 'email')
             ->isIndexed()
             ->isReadOnly()
@@ -73,7 +73,7 @@ trait CoreTrait
         // Reference
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
             ->identifier('reference')
-            ->name(Translate::getAdminTranslation('Reference', 'AdminOrders'))
+            ->name(SLM::translate('Reference', 'AdminGlobal'))
             ->microData('http://schema.org/Order', 'orderNumber')
             ->addOption('maxLength', '8')
             ->isRequired()
@@ -85,7 +85,7 @@ trait CoreTrait
         // Order Date
         $this->fieldsFactory()->create(SPL_T_DATE)
             ->identifier('order_date')
-            ->name(Translate::getAdminTranslation('Date', 'AdminProducts'))
+            ->name(SLM::translate('Date', 'AdminGlobal'))
             ->microData('http://schema.org/Order', 'orderDate')
             ->isReadOnly()
             ->isListed()

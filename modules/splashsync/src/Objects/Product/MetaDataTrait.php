@@ -18,8 +18,7 @@
 
 namespace Splash\Local\Objects\Product;
 
-use Splash\Local\Services\LanguagesManager;
-use Translate;
+use Splash\Local\Services\LanguagesManager as SLM;
 
 // phpcs:disable PSR1.Files.SideEffects
 if (!defined('_PS_VERSION_')) {
@@ -43,20 +42,20 @@ trait MetaDataTrait
      */
     protected function buildMetaDataFields(): void
     {
-        $groupName = Translate::getAdminTranslation('Information', 'AdminProducts');
-        $this->fieldsFactory()->setDefaultLanguage(LanguagesManager::getDefaultLanguage());
+        $groupName = SLM::translate('Information', 'AdminCatalogFeature');
+        $this->fieldsFactory()->setDefaultLanguage(SLM::getDefaultLanguage());
 
         //====================================================================//
         // PRODUCT METADATA
         //====================================================================//
 
-        foreach (LanguagesManager::getAvailableLanguages() as $isoLang) {
+        foreach (SLM::getAvailableLanguages() as $isoLang) {
             //====================================================================//
             // Meta Description
             $this->fieldsFactory()->create(SPL_T_VARCHAR)
                 ->identifier('meta_description')
-                ->name(Translate::getAdminTranslation('Meta description', 'AdminProducts'))
-                ->description($groupName . ' ' . Translate::getAdminTranslation('Meta description', 'AdminProducts'))
+                ->name(SLM::translate('Meta description', 'AdminGlobal'))
+                ->description($groupName . ' ' . SLM::translate('Meta description', 'AdminCatalogFeature'))
                 ->group($groupName)
                 ->microData('http://schema.org/Article', 'headline')
                 ->isReadOnly(self::isSourceCatalogMode())
@@ -66,8 +65,8 @@ trait MetaDataTrait
             // Meta Title
             $this->fieldsFactory()->create(SPL_T_VARCHAR)
                 ->identifier('meta_title')
-                ->name(Translate::getAdminTranslation('Meta title', 'AdminProducts'))
-                ->description($groupName . ' ' . Translate::getAdminTranslation('Meta title', 'AdminProducts'))
+                ->name(SLM::translate('Meta title', 'AdminGlobal'))
+                ->description($groupName . ' ' . SLM::translate('Meta title', 'AdminCatalogFeature'))
                 ->group($groupName)
                 ->microData('http://schema.org/Article', 'name')
                 ->isReadOnly(self::isSourceCatalogMode())
@@ -77,8 +76,8 @@ trait MetaDataTrait
             // Rewrite Url
             $this->fieldsFactory()->create(SPL_T_VARCHAR)
                 ->identifier('link_rewrite')
-                ->name(Translate::getAdminTranslation('Friendly URL', 'AdminProducts'))
-                ->description($groupName . ' ' . Translate::getAdminTranslation('Friendly URL', 'AdminProducts'))
+                ->name(SLM::translate('Friendly URL', 'AdminGlobal'))
+                ->description($groupName . ' ' . SLM::translate('Friendly URL', 'AdminGlobal'))
                 ->group($groupName)
                 ->microData('http://schema.org/Product', 'urlRewrite')
                 ->isReadOnly(self::isSourceCatalogMode())
@@ -99,10 +98,10 @@ trait MetaDataTrait
     {
         //====================================================================//
         // Walk on Available Languages
-        foreach (LanguagesManager::getAvailableLanguages() as $idLang => $isoLang) {
+        foreach (SLM::getAvailableLanguages() as $idLang => $isoLang) {
             //====================================================================//
             // Decode Multi-lang Field Name
-            $baseFieldName = LanguagesManager::fieldNameDecode($fieldName, $isoLang);
+            $baseFieldName = SLM::fieldNameDecode($fieldName, $isoLang);
             //====================================================================//
             // READ Fields
             switch ($baseFieldName) {
@@ -129,10 +128,10 @@ trait MetaDataTrait
     {
         //====================================================================//
         // Walk on Available Languages
-        foreach (LanguagesManager::getAvailableLanguages() as $idLang => $isoLang) {
+        foreach (SLM::getAvailableLanguages() as $idLang => $isoLang) {
             //====================================================================//
             // Decode Multi-lang Field Name
-            $baseFieldName = LanguagesManager::fieldNameDecode($fieldName, $isoLang);
+            $baseFieldName = SLM::fieldNameDecode($fieldName, $isoLang);
             //====================================================================//
             // WRITE Field
             switch ($baseFieldName) {

@@ -24,12 +24,11 @@ use Splash\Core\SplashCore as Splash;
 use Splash\Local\Objects\Invoice;
 use Splash\Local\Objects\Product;
 use Splash\Local\Services\DiscountsManager;
-use Splash\Local\Services\LanguagesManager;
+use Splash\Local\Services\LanguagesManager as SLM;
 use Splash\Local\Services\OrderTaxManager;
 use Splash\Models\Objects\ListsTrait;
 use Splash\Models\Objects\PricesTrait;
 use Tools;
-use Translate;
 
 // phpcs:disable PSR1.Files.SideEffects
 if (!defined('_PS_VERSION_')) {
@@ -57,9 +56,9 @@ trait ItemsTrait
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
             ->identifier('product_name')
             ->inList('lines')
-            ->name('[L] ' . Translate::getAdminTranslation('Short description', 'AdminProducts'))
+            ->name('[L] ' . SLM::translate('Short description', 'AdminCatalogFeature'))
             ->microData('http://schema.org/partOfInvoice', 'description')
-            ->group(Translate::getAdminTranslation('Products', 'AdminOrders'))
+            ->group(SLM::translate('Products', 'AdminCatalogFeature'))
             ->association('product_name@lines', 'product_quantity@lines', 'product_id@lines', 'unit_price@lines')
         ;
         //====================================================================//
@@ -67,9 +66,9 @@ trait ItemsTrait
         $this->fieldsFactory()->create((string) self::objects()->Encode('Product', SPL_T_ID))
             ->identifier('product_id')
             ->inList('lines')
-            ->name('[L] ' . Translate::getAdminTranslation('Product ID', 'AdminImport'))
+            ->name('[L] ' . SLM::translate('Product ID', 'AdminAdvparametersFeature'))
             ->microData('http://schema.org/Product', 'productID')
-            ->group(Translate::getAdminTranslation('Products', 'AdminOrders'))
+            ->group(SLM::translate('Products', 'AdminCatalogFeature'))
             ->association('product_name@lines', 'product_quantity@lines', 'product_id@lines', 'unit_price@lines')
         ;
         //====================================================================//
@@ -77,9 +76,9 @@ trait ItemsTrait
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
             ->identifier('product_reference')
             ->inList('lines')
-            ->name('[L] ' . Translate::getAdminTranslation('Reference', 'AdminProducts'))
+            ->name('[L] ' . SLM::translate('Reference', 'AdminGlobal'))
             ->microData('http://schema.org/Product', 'sku')
-            ->group(Translate::getAdminTranslation('Products', 'AdminOrders'))
+            ->group(SLM::translate('Products', 'AdminCatalogFeature'))
             ->isReadOnly()
         ;
         //====================================================================//
@@ -87,9 +86,9 @@ trait ItemsTrait
         $this->fieldsFactory()->create(SPL_T_INT)
             ->identifier('product_quantity')
             ->inList('lines')
-            ->name('[L] ' . Translate::getAdminTranslation('Quantity', 'AdminOrders'))
+            ->name('[L] ' . SLM::translate('Quantity', 'AdminGlobal'))
             ->microData('http://schema.org/QuantitativeValue', 'value')
-            ->group(Translate::getAdminTranslation('Products', 'AdminOrders'))
+            ->group(SLM::translate('Products', 'AdminCatalogFeature'))
             ->association('product_name@lines', 'product_quantity@lines', 'product_id@lines', 'unit_price@lines')
         ;
         //====================================================================//
@@ -97,9 +96,9 @@ trait ItemsTrait
         $this->fieldsFactory()->create(SPL_T_DOUBLE)
             ->identifier('reduction_percent')
             ->inList('lines')
-            ->name('[L] ' . Translate::getAdminTranslation('Discount (%)', 'AdminGroups'))
+            ->name('[L] ' . SLM::translate('Discount (%)', 'AdminShopparametersFeature'))
             ->microData('http://schema.org/Order', 'discount')
-            ->group(Translate::getAdminTranslation('Products', 'AdminOrders'))
+            ->group(SLM::translate('Products', 'AdminCatalogFeature'))
             ->association('product_name@lines', 'product_quantity@lines', 'unit_price@lines')
             ->isReadOnly()
         ;
@@ -108,9 +107,9 @@ trait ItemsTrait
         $this->fieldsFactory()->create(SPL_T_PRICE)
             ->identifier('unit_price')
             ->inList('lines')
-            ->name('[L] ' . Translate::getAdminTranslation('Price', 'AdminOrders'))
+            ->name('[L] ' . SLM::translate('Price', 'AdminGlobal'))
             ->microData('http://schema.org/PriceSpecification', 'price')
-            ->group(Translate::getAdminTranslation('Products', 'AdminOrders'))
+            ->group(SLM::translate('Products', 'AdminCatalogFeature'))
             ->association('product_name@lines', 'product_quantity@lines', 'product_id@lines', 'unit_price@lines')
         ;
         //====================================================================//
@@ -118,9 +117,9 @@ trait ItemsTrait
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
             ->identifier('tax_name')
             ->inList('lines')
-            ->name('[L] ' . Translate::getAdminTranslation('Tax Name', 'AdminOrders'))
+            ->name('[L] ' . SLM::translate('Tax', 'AdminGlobal'))
             ->microData('http://schema.org/PriceSpecification', 'valueAddedTaxName')
-            ->group(Translate::getAdminTranslation('Products', 'AdminOrders'))
+            ->group(SLM::translate('Products', 'AdminCatalogFeature'))
             ->association('product_name@lines', 'product_quantity@lines', 'unit_price@lines')
             ->isReadOnly()
         ;
@@ -184,8 +183,8 @@ trait ItemsTrait
                         (double)    OrderDetail::getTaxCalculatorStatic($product['id_order_detail'])->getTotalRate(),
                         null,
                         $this->currency->iso_code,
-                        LanguagesManager::getCurrencySymbol($this->currency),
-                        LanguagesManager::getCurrencyName($this->currency)
+                        SLM::getCurrencySymbol($this->currency),
+                        SLM::getCurrencyName($this->currency)
                     );
 
                     break;
@@ -462,8 +461,8 @@ trait ItemsTrait
             (double)    $this->getOrder()->carrier_tax_rate,
             null,
             $this->currency->iso_code,
-            LanguagesManager::getCurrencySymbol($this->currency),
-            LanguagesManager::getCurrencyName($this->currency)
+            SLM::getCurrencySymbol($this->currency),
+            SLM::getCurrencyName($this->currency)
         );
     }
 

@@ -22,7 +22,6 @@ use PrestaShopException;
 use Splash\Local\Services\LanguagesManager as SLM;
 use Splash\Local\Services\TotSwitchAttributes;
 use Splash\Local\Services\WkCombination;
-use Translate;
 
 // phpcs:disable PSR1.Files.SideEffects
 if (!defined('_PS_VERSION_')) {
@@ -50,14 +49,14 @@ trait MetaTrait
         // Active => Product Is Enables & Visible
         $this->fieldsFactory()->create(SPL_T_BOOL)
             ->identifier('active')
-            ->name(Translate::getAdminTranslation('Enabled', 'AdminProducts'))
+            ->name(SLM::translate('Enabled', 'AdminGlobal'))
             ->microData('http://schema.org/Product', 'active')
         ;
         //====================================================================//
         // Active => Product Is available_for_order
         $this->fieldsFactory()->create(SPL_T_BOOL)
             ->identifier('available_for_order')
-            ->name(Translate::getAdminTranslation('Available for order', 'AdminProducts'))
+            ->name(SLM::translate('Available for order', 'AdminCatalogFeature'))
             ->microData('http://schema.org/Product', 'offered')
             ->isListed()
         ;
