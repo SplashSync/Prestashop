@@ -18,6 +18,7 @@
 
 namespace Splash\Local\Services;
 
+use AdminKernel;
 use AppKernel;
 
 // phpcs:disable PSR1.Files.SideEffects
@@ -46,6 +47,12 @@ class KernelManager
         $autoload = __DIR__ . '/../../../../vendor/autoload.php';
         if (file_exists($autoload)) {
             require_once $autoload;
+        }
+        //====================================================================//
+        // Only for PrestaShop > 9.0 => Load Vendor Dir
+        if (class_exists('AdminKernel') && empty($kernel)) {
+            $kernel = new AdminKernel('prod', false);
+            $kernel->boot();
         }
         //====================================================================//
         // Only for PrestaShop > 1.7 => Load Vendor Dir
