@@ -21,6 +21,7 @@ namespace Splash\Local\Services;
 use Context;
 use Currency;
 use Language;
+use Splash\Client\Splash;
 use Tools;
 
 // phpcs:disable PSR1.Files.SideEffects
@@ -59,6 +60,29 @@ class LanguagesManager
      * @var null|array
      */
     private static ?array $extra;
+
+    /**
+     * Get Default Local Language ISO Code
+     *
+     * @param mixed $class
+     *
+     * @return string
+     */
+    public static function translate(string $string, $class = 'AdminTab'): string
+    {
+        /** @var Context $context */
+        $context = Context::getContext();
+        //====================================================================//
+        // Translate String
+        $str = $context->getTranslator()->trans($string, array(), $class);
+        if (Splash::isDebugMode() && !Splash::isTravisMode() && ($str === $string)) {
+            if (!$context->getTranslator()->getCatalogue()->has($string, $class)) {
+                Splash::log()->war('Missing Translation for: ' . $string);
+            }
+        }
+
+        return $context->getTranslator()->trans($string, array(), $class);
+    }
 
     /**
      * Get Default Local Language ISO Code
