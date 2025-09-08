@@ -49,8 +49,11 @@ class CategoryManager
      *
      * @return array
      */
-    public static function getProductCategories(int $productId, ?int $langId = null, string $field = 'link_rewrite'): array
-    {
+    public static function getProductCategories(
+        int $productId,
+        ?int $langId = null,
+        string $field = 'link_rewrite'
+    ): array {
         //====================================================================//
         // Load Product Categories List
         $fullList = Product::getProductCategoriesFull($productId, $langId);

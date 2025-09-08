@@ -88,7 +88,7 @@ class WkCombination
     /**
      * Update Product Combination Status if Possible
      *
-     * @param int         $productId   Ps Product ID
+     * @param int              $productId   Ps Product ID
      * @param null|int         $attributeId Ps Product Attribute ID
      * @param null|Combination $attribute   Ps Product Attribute Class
      * @param bool             $value       New Product Attribute Status

@@ -293,9 +293,9 @@ class DiscountsManager
      * Get Order / Invoice Core Discount Price
      *
      * @param Order|OrderInvoice $object
-     * @param Currency $currency
+     * @param Currency           $currency
      *
-     * @return array|null
+     * @return null|array
      */
     private static function getCoreDiscountPrice($object, Currency $currency): ?array
     {

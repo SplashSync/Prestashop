@@ -836,6 +836,5 @@ trait ImagesTrait
         $dir ??= defined('_PS_PROD_IMG_DIR_') ? _PS_PROD_IMG_DIR_ : null;
 
         return $dir;
-
     }
 }

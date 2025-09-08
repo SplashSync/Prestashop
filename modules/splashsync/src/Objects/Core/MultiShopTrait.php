@@ -18,7 +18,6 @@
 
 namespace Splash\Local\Objects\Core;
 
-use Address;
 use Shop;
 use Splash\Local\Services\LanguagesManager as SLM;
 

@@ -287,6 +287,6 @@ class LanguagesManager
         /** @var Context $context */
         $context = Context::getContext();
 
-        return \Tools::getContextLocale($context);
+        return Tools::getContextLocale($context);
     }
 }
