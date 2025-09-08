@@ -59,7 +59,7 @@ trait PrimaryTrait
         //====================================================================//
         // Setup filters
         // Add filters with names conversions. Added LOWER function to be NON case sensitive
-        if (!empty($keys['reference']) && is_string($keys['reference'])) {
+        if (!empty($keys['reference'])) {
             //====================================================================//
             // Search in Customer Email
             $where = ' LOWER( o.`reference` ) = LOWER( \'' . pSQL($keys['reference']) . '\') ';

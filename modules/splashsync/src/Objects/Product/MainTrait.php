@@ -284,12 +284,12 @@ trait MainTrait
     /**
      * Write Given Fields
      *
-     * @param string      $fieldName Field Identifier / Name
-     * @param null|scalar $fieldData Field Data
+     * @param string        $fieldName Field Identifier / Name
+     * @param null|float    $fieldData Field Data
      *
      * @return void
      */
-    protected function setMainFields(string $fieldName, $fieldData): void
+    protected function setMainFields(string $fieldName, ?float $fieldData): void
     {
         //====================================================================//
         // WRITE Field

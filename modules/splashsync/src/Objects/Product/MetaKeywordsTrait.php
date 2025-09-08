@@ -129,12 +129,12 @@ trait MetaKeywordsTrait
         $currentKeywords = array_map('trim', array_filter(explode(',', $this->object->getTags($idLang))));
         //====================================================================//
         // Compare Keywords
-        if ($newKeywords == $currentKeywords) {
+        if (($newKeywords == $currentKeywords) || empty($this->object->id)) {
             return;
         }
         //====================================================================//
         // Update Keywords
         Tag::deleteProductTagsInLang($this->object->id, $idLang);
-        Tag::addTags($idLang, $this->object->id, $fieldData);
+        Tag::addTags($idLang, $this->object->id, (string) $fieldData);
     }
 }

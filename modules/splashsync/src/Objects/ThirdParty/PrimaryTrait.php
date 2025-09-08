@@ -59,7 +59,7 @@ trait PrimaryTrait
         //====================================================================//
         // Setup filters
         // Add filters with names conversions. Added LOWER function to be NON case sensitive
-        if (!empty($keys['email']) && is_string($keys['email'])) {
+        if (!empty($keys['email'])) {
             //====================================================================//
             // Search in Customer Email
             $where = ' LOWER( c.`email` ) = LOWER( \'' . pSQL($keys['email']) . '\') ';

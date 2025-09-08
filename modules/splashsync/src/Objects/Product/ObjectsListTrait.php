@@ -40,7 +40,7 @@ trait ObjectsListTrait
     /**
      * {@inheritdoc}
      */
-    public function objectsList(string $filter = null, array $params = array()): array
+    public function objectsList(?string $filter = null, array $params = array()): array
     {
         Splash::log()->deb('MsgLocalFuncTrace', __CLASS__, __FUNCTION__);
 

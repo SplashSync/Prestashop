@@ -171,7 +171,7 @@ class DiscountsManager
         $orderId = ($object instanceof OrderInvoice) ? $object->id_order : $object->id;
         //====================================================================//
         // Check if Discounts Details Available
-        if (self::hasOrderDiscountsDetails((int) $orderId, $currency)) {
+        if (self::hasOrderDiscountsDetails((int) $orderId, $currency) && !empty(self::$cache)) {
             return self::$cache;
         }
         //====================================================================//
@@ -293,11 +293,11 @@ class DiscountsManager
      * Get Order / Invoice Core Discount Price
      *
      * @param Order|OrderInvoice $object
-     * @param Currency           $currency
+     * @param Currency $currency
      *
-     * @return array|string
+     * @return array|null
      */
-    private static function getCoreDiscountPrice($object, Currency $currency)
+    private static function getCoreDiscountPrice($object, Currency $currency): ?array
     {
         //====================================================================//
         // Get Total Discount Tax Excluded

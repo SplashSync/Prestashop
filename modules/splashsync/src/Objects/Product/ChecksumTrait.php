@@ -36,7 +36,7 @@ trait ChecksumTrait
     /**
      * Compute Md5 CheckSum from Product & Attributes Objects
      *
-     * @return string $Md5              Unik Checksum
+     * @return string Unique Checksum
      */
     public function getMd5Checksum(): string
     {
@@ -50,7 +50,7 @@ trait ChecksumTrait
     /**
      * Compute Md5 String from Product & Attributes Objects
      *
-     * @return string $Md5              Unik Checksum
+     * @return string Unique Checksum
      */
     public function getMd5String(): string
     {
@@ -91,7 +91,7 @@ trait ChecksumTrait
     }
 
     /**
-     * Read requested Field
+     * Read the requested Field
      *
      * @param string $key       Input List Key
      * @param string $fieldName Field Identifier / Name
@@ -125,11 +125,11 @@ trait ChecksumTrait
      * @param null|string $sku        Product Reference
      * @param array       $attributes Array of Product Attributes ($Code => $Value)
      *
-     * @return string $Md5              Unik Checksum
+     * @return string Unique Checksum
      */
     private static function getMd5ChecksumFromValues(
         ?string $title,
-        string $sku = null,
+        ?string $sku = null,
         array $attributes = array()
     ): string {
         $md5Array = array_merge_recursive(
@@ -147,11 +147,11 @@ trait ChecksumTrait
      * @param null|string $sku        Product Reference
      * @param array       $attributes Array of Product Attributes ($Code => $Value)
      *
-     * @return string $Md5              Unik Checksum
+     * @return string Unique Checksum
      */
     private static function getMd5StringFromValues(
         ?string $title,
-        string $sku = null,
+        ?string $sku = null,
         array $attributes = array()
     ): string {
         $md5Array = array_merge_recursive(

@@ -189,7 +189,7 @@ class AttributesManager
      *
      * @return Attribute[]
      */
-    public static function getAllAttributes(AttributeGroup $group, bool $reload = null): array
+    public static function getAllAttributes(AttributeGroup $group, ?bool $reload = null): array
     {
         //====================================================================//
         // If Not Already in Cache
@@ -208,7 +208,7 @@ class AttributesManager
                 }
                 //====================================================================//
                 // Add Attribute to Group Values
-                self::$attributes[$group->id][$attrId] = new Attribute((int) $attrId);
+                self::$attributes[$group->id][(int) $attrId] = new Attribute((int) $attrId);
             }
         }
 
@@ -391,7 +391,7 @@ class AttributesManager
     //====================================================================//
 
     /**
-     * Identify Attribute Value Using Multilang Codes
+     * Identify Attribute Value Using Multi-lang Codes
      *
      * @param null|AttributeGroup $group   Attribute Group Object
      * @param null|string         $name    Attribute Value Names in Default Language
@@ -402,7 +402,7 @@ class AttributesManager
     private static function getAttributeByName(
         ?AttributeGroup $group,
         ?string $name,
-        string $isoCode = null
+        ?string $isoCode = null
     ): ?Attribute {
         //====================================================================//
         // Ensure Group Id is Valid

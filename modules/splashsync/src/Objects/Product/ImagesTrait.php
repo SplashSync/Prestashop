@@ -309,7 +309,7 @@ trait ImagesTrait
         }
         //====================================================================//
         // Images List is Empty
-        if (is_null($this->variantImages) || empty($this->variantImages)) {
+        if (empty($this->variantImages)) {
             return true;
         }
         //====================================================================//
@@ -508,9 +508,9 @@ trait ImagesTrait
             $maxLength = Image::$definition['fields']['legend']['size'] ?? 128;
             if (Tools::strlen($newValue) > $maxLength) {
                 Splash::log()->warTrace('Legend is too long for image, value truncated...');
-                $newValue = substr($newValue, 0, $maxLength);
+                $newValue = substr((string) $newValue, 0, $maxLength);
             }
-            $psImage->legend[$langId] = $newValue;
+            $psImage->legend[$langId] = (string) $newValue;
             $this->needUpdate('Image');
         }
     }

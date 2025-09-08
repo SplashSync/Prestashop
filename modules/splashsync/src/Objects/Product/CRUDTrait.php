@@ -267,7 +267,7 @@ trait CRUDTrait
             // Default language
             if (SLM::isDefaultLanguage($isoCode)) {
                 if (empty($this->in['link_rewrite'])) {
-                    $this->in['link_rewrite'] = Tools::link_rewrite($this->in['name']);
+                    $this->in['link_rewrite'] = Tools::str2url($this->in['name']);
                 }
 
                 continue;
@@ -281,7 +281,7 @@ trait CRUDTrait
                 $value = $this->in['name_' . $isoCode] ?? $this->in['name'];
                 //====================================================================//
                 // Setup Multi-lang Url Rewrite
-                $this->in['link_rewrite_' . $isoCode] = Tools::link_rewrite($value);
+                $this->in['link_rewrite_' . $isoCode] = Tools::str2url($value);
             }
         }
 

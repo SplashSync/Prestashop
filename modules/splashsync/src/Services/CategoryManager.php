@@ -49,7 +49,7 @@ class CategoryManager
      *
      * @return array
      */
-    public static function getProductCategories(int $productId, int $langId = null, string $field = 'link_rewrite')
+    public static function getProductCategories(int $productId, ?int $langId = null, string $field = 'link_rewrite'): array
     {
         //====================================================================//
         // Load Product Categories List
@@ -76,7 +76,7 @@ class CategoryManager
      *
      * @return void
      */
-    public static function setProductCategories(Product $prd, $data, int $lang = null, string $field = 'link_rewrite')
+    public static function setProductCategories(Product $prd, $data, ?int $lang = null, string $field = 'link_rewrite')
     {
         //====================================================================//
         // Load Product Current Categories List
@@ -118,7 +118,7 @@ class CategoryManager
      *
      * @return array
      */
-    public static function getAllCategories(int $langId = null, string $field = 'link_rewrite')
+    public static function getAllCategories(?int $langId = null, string $field = 'link_rewrite'): array
     {
         //====================================================================//
         // Load All Categories List
@@ -144,7 +144,7 @@ class CategoryManager
      *
      * @return null|int
      */
-    public static function getCategoryId(string $value, int $langId = null, string $field = 'link_rewrite')
+    public static function getCategoryId(string $value, ?int $langId = null, string $field = 'link_rewrite'): ?int
     {
         //====================================================================//
         // Load All Categories List
@@ -168,7 +168,7 @@ class CategoryManager
      *
      * @return array
      */
-    public static function getAllCategoriesChoices(int $langId = null, string $field = 'link_rewrite')
+    public static function getAllCategoriesChoices(?int $langId = null, string $field = 'link_rewrite'): array
     {
         //====================================================================//
         // Load All Categories List
@@ -187,10 +187,8 @@ class CategoryManager
 
     /**
      * Get Categories List From Db or Cache for Language
-     *
-     * @return array
      */
-    public static function getAllCategoriesList(int $langId = null): array
+    public static function getAllCategoriesList(?int $langId = null): array
     {
         $index = (int) $langId;
         if (!isset(self::$cache[$index])) {

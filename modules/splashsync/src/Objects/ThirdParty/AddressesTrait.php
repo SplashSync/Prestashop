@@ -135,7 +135,7 @@ trait AddressesTrait
         //====================================================================//
         // Run Through Address List
         foreach ($addressList as $address) {
-            if ($addressId = (int) $address['id_address'] ?? null) {
+            if ($addressId = (int) ($address['id_address'] ?? null)) {
                 $addressIds[$addressId] = $addressId;
             }
         }
@@ -170,10 +170,10 @@ trait AddressesTrait
         //====================================================================//
         // Run Through Address List
         foreach ($addressList as $address) {
-            if ($addressId = (int) $address['id_address_delivery'] ?? null) {
+            if ($addressId = (int) ($address['id_address_delivery'] ?? null)) {
                 $addressIds[$addressId] = $addressId;
             }
-            if ($addressId = (int) $address['id_address_invoice'] ?? null) {
+            if ($addressId = (int) ($address['id_address_invoice'] ?? null)) {
                 $addressIds[$addressId] = $addressId;
             }
         }

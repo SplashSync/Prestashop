@@ -59,9 +59,11 @@ class CustomerGroupsManager
     public static function getGroupNames(\Customer $customer): array
     {
         $groupNames = array();
-        foreach ($customer->getGroups() as $groupId) {
+        /** @var array<int> $groups */
+        $groups = $customer->getGroups();
+        foreach ($groups as $groupId) {
             $group = new Group($groupId, SLM::getDefaultLangId());
-            if ($group->id && $group->name) {
+            if ($group->id && $group->name && is_string($group->name)) {
                 $groupNames[] = $group->name;
             }
         }
