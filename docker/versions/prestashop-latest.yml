@@ -26,6 +26,7 @@ services:
             - DB_PREFIX=ps_latest_
             - DB_NAME=Prestashop__Latest
             - PS_INSTALL_AUTO=1
+            - PS_DEMO_MODE=1
             - PS_DOMAIN=latest.prestashop.local
             - PS_FOLDER_ADMIN=_ad
             - PS_FOLDER_INSTALL=installed

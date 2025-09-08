@@ -31,6 +31,9 @@ include modules/splashsync/vendor/badpixxel/php-sdk/make/sdk.mk
 module:
 	php modules/splashsync/vendor/bin/grumphp run --tasks=build-module
 
+phpstan: ## Execute PhpStan
+	@$(DOCKER_COMPOSE) exec prestashop php modules/splashsync/vendor/bin/phpstan analyze -c grumphp/phpstan.neon --level=9 modules/splashsync/src/
+
 test: ## Execute Functional Test
 	@$(DOCKER_COMPOSE) exec prestashop_8_1 pwd
 	@$(DOCKER_COMPOSE) exec prestashop_8_1 $(PHPUNIT_TEST) modules/splashsync/vendor/splash/phpcore/Tests/Core/
