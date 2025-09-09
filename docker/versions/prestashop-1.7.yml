@@ -27,28 +27,17 @@ services:
         volumes:
             # Push Configuration Override
             - ../../docker/config/splash.json:/var/www/html/config/splash.json:ro
-            # Module Sources
+            # PrestaShop Module
             - ../../modules/splashsync:/var/www/html/modules/splashsync:ro
-            - ../../ci:/var/www/html/ci:ro
+            - ../../grumphp:/var/www/html/grumphp:ro
             - ../../phpunit.xml.dist:/var/www/html/phpunit.xml.dist:ro
             - ../../composer.json:/var/www/html/composer.json:ro
-            # Docker EntryPoint
+#            # Docker EntryPoint
             - ../../docker/docker-entrypoint.sh:/var/www/html/modules/docker-entrypoint.sh:ro
           # Module vendor
-            - 1.7-vendor:/var/www/html/modules/splashsync/vendor
+            - 1.7-vendor:/var/www/html/modules/splashsync/vendor:Z
         environment:
-            - DB_SERVER=mysql
-            - DB_NAME=Prestashop__1p7
-            - DB_PREFIX=ps_1_7_
-            - PS_INSTALL_AUTO=1
-            - PS_DOMAIN=ps1-7.prestashop.local
-            - PS_FOLDER_ADMIN=_ad
-            - PS_FOLDER_INSTALL=installed
-            - ADMIN_MAIL=contact@splashsync.com
-            - ADMIN_PASSWD=splashsync
-            - SPLASH_WS_ID=ThisIsPs17Key
-            - SPLASH_WS_KEY=ThisTokenIsNotSoSecretChangeIt
-            - SPLASH_WS_HOST=http://toolkit.prestashop.local/ws/soap
+            - PS_VERSION=1.7
         command:          sh /var/www/html/modules/docker-entrypoint.sh
         hostname:         ps1-7.prestashop.local
         networks:

@@ -20,8 +20,8 @@ services:
     ################################################################################
     # Prestashop 8.2
     ps-8.2:
-        image: prestashop/prestashop:8.2.3-8.1-apache
-        container_name: ps8-2.prestashop.local
+        image:            prestashop/prestashop:8.2.3-8.1-apache
+        container_name:   ps8-2.prestashop.local
         depends_on:
             - mysql
         volumes:
@@ -29,29 +29,18 @@ services:
             - ../../docker/config/splash.json:/var/www/html/config/splash.json:ro
             # Module Sources
             - ../../modules/splashsync:/var/www/html/modules/splashsync:ro
-            - ../../ci:/var/www/html/ci:ro
+            - ../../grumphp:/var/www/html/grumphp:ro
             - ../../phpunit.xml.dist:/var/www/html/phpunit.xml.dist:ro
             - ../../composer.json:/var/www/html/composer.json:ro
             # Docker EntryPoint
             - ../../docker/docker-entrypoint.sh:/var/www/html/modules/docker-entrypoint.sh:ro
             # Module vendor
-            - 8.2-vendor:/var/www/html/modules/splashsync/vendor
+            - 8.2-vendor:/var/www/html/modules/splashsync/vendor:Z
 
         environment:
-            - DB_SERVER=mysql
-            - DB_NAME=Prestashop__8p2
-            - DB_PREFIX=ps_8_2_
-            - PS_INSTALL_AUTO=1
-            - PS_DOMAIN=ps8-2.prestashop.local
-            - PS_FOLDER_ADMIN=_ad
-            - PS_FOLDER_INSTALL=installed
-            - ADMIN_MAIL=contact@splashsync.com
-            - ADMIN_PASSWD=splashsync
-            - SPLASH_WS_ID=ThisIsPs82Key
-            - SPLASH_WS_KEY=ThisTokenIsNotSoSecretChangeIt
-            - SPLASH_WS_HOST=http://toolkit.prestashop.local/ws/soap
-        command: sh /var/www/html/modules/docker-entrypoint.sh
-        hostname: ps8-2.prestashop.local
+            - PS_VERSION=8.2
+        command:            sh /var/www/html/modules/docker-entrypoint.sh
+        hostname:           ps8-2.prestashop.local
         networks:
             prestashop:     { ipv4_address: 172.102.0.82 }
             splashsync:     { aliases: [ ps8-2.prestashop.local ] }

@@ -29,27 +29,15 @@ services:
             - ../../docker/config/splash.json:/var/www/html/config/splash.json:ro
             # Module Sources
             - ../../modules/splashsync:/var/www/html/modules/splashsync:ro
-            - ../../ci:/var/www/html/ci:ro
+            - ../../grumphp:/var/www/html/grumphp:ro
             - ../../phpunit.xml.dist:/var/www/html/phpunit.xml.dist:ro
             - ../../composer.json:/var/www/html/composer.json:ro
             # Docker EntryPoint
             - ../../docker/docker-entrypoint.sh:/var/www/html/modules/docker-entrypoint.sh:ro
             # Module vendor
-            - 9.0-vendor:/var/www/html/modules/splashsync/vendor
+            - 9.0-vendor:/var/www/html/modules/splashsync/vendor:Z
         environment:
-            - DB_SERVER=mysql
-            - DB_NAME=Prestashop__9p0
-            - DB_PREFIX=ps_9_0_
-            - PS_INSTALL_AUTO=1
-            - PS_DEMO_MODE=1
-            - PS_DOMAIN=ps9-0.prestashop.local
-            - PS_FOLDER_ADMIN=_ad
-            - PS_FOLDER_INSTALL=installed
-            - ADMIN_MAIL=contact@splashsync.com
-            - ADMIN_PASSWD=splashsync
-            - SPLASH_WS_ID=ThisIsPs90Key
-            - SPLASH_WS_KEY=ThisTokenIsNotSoSecretChangeIt
-            - SPLASH_WS_HOST=http://toolkit.prestashop.local/ws/soap
+            - PS_VERSION=9.0
         command:            sh /var/www/html/modules/docker-entrypoint.sh
         hostname:           ps9-0.prestashop.local
         networks:
