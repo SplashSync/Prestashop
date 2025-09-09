@@ -4,11 +4,12 @@ includes:
 parameters:
     bootstrapFiles:
         - "%currentWorkingDirectory%/grumphp/phpstan.php"
-    checkMissingIterableValueType: false
-    checkGenericClassInNonGenericObjectType: false
-    inferPrivatePropertyTypeFromConstructor: true 
+    treatPhpDocTypesAsCertain: false
+    reportUnmatchedIgnoredErrors: false
+    inferPrivatePropertyTypeFromConstructor: true
     universalObjectCratesClasses:
             - ArrayObject
+            - HelperList
     ignoreErrors:
             # Know Prestashop 9.0 Issues
             - '#Instantiated class AppKernel is abstract.#'
@@ -30,6 +31,7 @@ parameters:
             - '#Access to an undefined property ObjectModel::[a-zA-Z0-9$\\_]#'
             - '#Access to an undefined property Context::[a-zA-Z0-9$\\_]#'
             - "#Casting to float something that's already float#"
+            - "#Property ProductAttributeCore::\\$name \\(string\\) does not accept array#"
             - "#Property AttributeGroupCore::\\$name \\(string\\) does not accept array#"
             - "#Property AttributeGroupCore::\\$public_name \\(string\\) does not accept array#"
             - "#Property AttributeCore::\\$name \\(string\\) does not accept array#"
@@ -37,6 +39,13 @@ parameters:
 
             # PN Advanced Packs
             - '#Call to static method getIdsPacks\(\) on an unknown class AdvancedPack.#'
+
+            # Phpstan Core Ignores
+            -
+                identifier: missingType.generics
+            -
+                identifier: missingType.iterableValue
+
     excludePaths:
             - '%currentWorkingDirectory%/modules/splashsync/vendor/*'
             - '%currentWorkingDirectory%/modules/splashsync/src/ClassAlias/*'
