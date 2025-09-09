@@ -41,13 +41,12 @@ cat $CI_PROJECT_DIR/docker/docker-entrypoint.sh | bash
 
 #################################################################################
 ## Install Module
-#subtitle "FUNCTIONAL --> Install Module"
-#bash $CI_PROJECT_DIR/ci/module/install.sh
-#cd  $WEB_DIR
-#composer install
+subtitle "FUNCTIONAL --> Install Module"
+bash $CI_PROJECT_DIR/ci/module/install.sh
+cd  $WEB_DIR
 
- ################################################################################
- # Run PhpUnit Core Test Sequence (Will Enable the Module)
+################################################################################
+# Run PhpUnit Core Test Sequence (Will Enable the Module)
 subtitle "FUNCTIONAL --> Enable Module"
 
 phpunit \
