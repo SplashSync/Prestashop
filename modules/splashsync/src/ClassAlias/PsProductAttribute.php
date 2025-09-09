@@ -31,6 +31,14 @@ if (!defined('_PS_VERSION_')) {
 if (class_exists('ProductAttribute')) {
     /**
      * PS 8.0+ Products Attributes are Managed by ProductAttribute Class
+     *
+     * @property int             $id
+     * @property int             $id_attribute_group
+     * @property string|string[] $name
+     * @property string          $color
+     *
+     * @method bool add(bool $autoDate = true, bool $nullValues = false)
+     * @method bool update(bool $nullValues = false)
      */
     class PsProductAttribute extends \ProductAttribute
     {
@@ -38,6 +46,11 @@ if (class_exists('ProductAttribute')) {
 } elseif (\PHP_VERSION_ID < 80000 && class_exists('Attribute')) {
     /**
      * PS 1.6|1.7 Products Attributes are Managed by Attribute Class
+     *
+     * @property int    $id
+     * @property int    $id_attribute_group
+     * @property string $name
+     * @property string $color
      */
     class PsProductAttribute extends \Attribute
     {
