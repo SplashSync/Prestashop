@@ -174,12 +174,12 @@ class Local implements LocalClassInterface
         //====================================================================//
         //  Verify - Server Identifier Given
         if (empty(Configuration::get('SPLASH_WS_ID'))) {
-            return Splash::log()->err('ErrSelfTestNoWsId');
+            return Splash::log()->err('ErrWsNoId');
         }
         //====================================================================//
         //  Verify - Server Encrypt Key Given
         if (empty(Configuration::get('SPLASH_WS_KEY'))) {
-            return Splash::log()->err('ErrSelfTestNoWsKey');
+            return Splash::log()->err('ErrWsNoKey');
         }
         //====================================================================//
         //  Verify - User Selected
