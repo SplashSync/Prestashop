@@ -39,7 +39,7 @@ class CustomerGroupsManager
      */
     public static function getAllGroupNames(): array
     {
-        static $groups = array();
+        static $groups = null;
 
         if (!isset($groups)) {
             foreach (Group::getGroups(SLM::getDefaultLangId()) as $definition) {
@@ -69,5 +69,36 @@ class CustomerGroupsManager
         }
 
         return $groupNames;
+    }
+
+    /**
+     * Get Customer Group by ID
+     */
+    public static function getGroup(int $groupId): ?Group
+    {
+        $group = new Group($groupId, SLM::getDefaultLangId());
+        if ($group->id) {
+            return $group;
+        }
+
+        return null;
+    }
+
+    /**
+     * Get Customer Group by Name
+     */
+    public static function getGroupByName(?string $groupName): ?Group
+    {
+        if (empty($groupName)) {
+            return null;
+        }
+
+        foreach (Group::getGroups(SLM::getDefaultLangId()) as $group) {
+            if (strtolower($group['name'] ?? $group['id_group']) == strtolower($groupName)) {
+                return self::getGroup((int) $group['id_group']);
+            }
+        }
+
+        return null;
     }
 }
