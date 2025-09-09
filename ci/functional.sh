@@ -28,6 +28,12 @@ set -e
 splashscreen "FUNCTIONAL TESTS"
 
 ################################################################################
+# Move Module Contents to Install Folder
+echo "Move Module Contents to Prestashop Modules Directory"
+mkdir     $WEB_DIR/modules/splashsync
+cp -Rf    $CI_PROJECT_DIR/modules/splashsync/*              $WEB_DIR/modules/splashsync/
+
+################################################################################
 # Install Prestashop + WebServer (Apache & PHP-Fpm)
 subtitle "FUNCTIONAL --> Install Prestashop"
 cd  $WEB_DIR
