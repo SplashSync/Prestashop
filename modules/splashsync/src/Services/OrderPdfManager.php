@@ -188,13 +188,8 @@ class OrderPdfManager
     /**
      * Get Pdf Cache Storage Path for this File
      * Encode for safety but... Unique for a each Order
-     *
-     * @param Order  $order
-     * @param string $template
-     *
-     * @return string
      */
-    private static function getPdfPath(Order $order, $template)
+    private static function getPdfPath(Order $order, string $template): string
     {
         //====================================================================//
         // Generate Unique File Name
@@ -206,8 +201,8 @@ class OrderPdfManager
         $basePath = _PS_ROOT_DIR_ . self::PDF_PATH . strtolower($template) . '/';
         $path = '';
         for ($i = 0; $i < 3; ++$i) {
-            $path .= substr($encoded, 0, 2) . '/';
-            $encoded = substr($encoded, 2);
+            $path .= substr((string) $encoded, 0, 2) . '/';
+            $encoded = substr((string) $encoded, 2);
         }
 
         //==============================================================================
