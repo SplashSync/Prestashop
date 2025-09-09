@@ -160,21 +160,6 @@ class SplashSync extends Module
             return false;
         }
         //====================================================================//
-        // Register Module Admin Panel Hooks
-        if (!$this->registerHook('displayBackOfficeHeader')) {
-            return false;
-        }
-        // Ps 1.6 => Notify on Footer
-        if (Tools::version_compare(_PS_VERSION_, '1.7', '<')
-                && !$this->registerHook('displayBackOfficeFooter')) {
-            return false;
-        }
-        // Ps 1.7 => Notify on Admin End Contents
-        if (!Tools::version_compare(_PS_VERSION_, '1.7', '<')
-                && !$this->registerHook('displayAdminEndContent')) {
-            return false;
-        }
-        //====================================================================//
         // Register Module Products Hooks
         if (!$this->registerHook('actionProductUpdate') ||
             !$this->registerHook('actionUpdateQuantity') ||
@@ -262,7 +247,7 @@ class SplashSync extends Module
     /**
      * @return string
      */
-    public function displayForm()
+    public function displayForm(): string
     {
         $fieldsForm = array();
 
@@ -343,46 +328,6 @@ class SplashSync extends Module
         return $helper->generateForm($fieldsForm);
     }
 
-    /**
-     * Read all log messages posted by OsWs and post it
-     *
-     * @return void
-     */
-    public function importMessages()
-    {
-        //====================================================================//
-        // When Library is called in TRAVIS CI mode ONLY
-        //====================================================================//
-        if (Splash\Client\Splash::isTravisMode() || Splash\Client\Splash::isServerMode()) {
-            return;
-        }
-
-        $bufferFile = $this->getMessageBufferPath();
-        //====================================================================//
-        // Read Current Notifications
-        $notifications = array();
-        if (is_file($bufferFile) && function_exists('json_decode')) {
-            /** @var null|array $notifications */
-            $notifications = json_decode((string) file_get_contents($bufferFile), true);
-        }
-        //====================================================================//
-        // Merge Cookie With Log
-        Splash\Client\Splash::log()->merge($notifications ?? array());
-        //====================================================================//
-        //  Smart Notifications => Filter Messages, Only Warnings & Errors
-        if (Splash\Client\Splash::configuration()->SmartNotify) {
-            Splash\Client\Splash::log()->smartFilter();
-        }
-        //====================================================================//
-        // Limit Log Buffer Size
-        Splash\Client\Splash::log()->slice();
-        //====================================================================//
-        // Save Changes to File
-        if (function_exists('json_encode')) {
-            file_put_contents($bufferFile, json_encode(Splash\Client\Splash::log()));
-        }
-    }
-
     //====================================================================//
     // *******************************************************************//
     //  MODULE BACK OFFICE (ADMIN) HOOKS
@@ -390,70 +335,36 @@ class SplashSync extends Module
     //====================================================================//
 
     /**
-     * Back Office Header Hook
-     *
-     * Add Needed CSS & JS Code for Notifications
-     *
-     * @return void
+     * Read all log messages and post them as Notifications
      */
-    public function hookDisplayBackOfficeHeader()
+    public function displaySplashLogs(bool $errorOnly = false): string
     {
-        /** @var AdminController $controller */
-        $controller = $this->context->controller;
-        //====================================================================//
-        // Register Not Js & Css
-        $controller->addCss($this->_path . 'views/css/noty.css');
-        $controller->addJS($this->_path . 'views/js/noty.min.js');
-        //====================================================================//
-        // Register Splash Js
-        $controller->addJS($this->_path . 'views/js/splash.js');
-    }
+        $html = '';
+        $types = $errorOnly ? array('err') : array('err', 'war', 'msg');
+        $rawLog = $this->getSplashLogs();
+        foreach ($types as $type) {
+            foreach ($rawLog[$type] ?? null as $log) {
+                if (!is_string($log) || empty($log)) {
+                    continue;
+                }
+                switch ($type) {
+                    case 'err':
+                        $html .= $this->displayError($log);
 
-    /**
-     * Back Office End Contents Hook
-     *
-     * Notifications contents moved here due to repeated
-     * rendering of footer on PS subrequests.
-     *
-     * @return null|string
-     *
-     * @since 1.7.0
-     */
-    public function hookDisplayAdminEndContent()
-    {
-        return $this->hookDisplayBackOfficeFooter();
-    }
+                        break;
+                    case 'war':
+                        $html .= $this->displayWarning($log);
 
-    /**
-     * Back Office End Contents Hook
-     *
-     * Render contents to show user notifications
-     *
-     * @return null|string
-     */
-    public function hookDisplayBackOfficeFooter()
-    {
-        $bufferFile = $this->getMessageBufferPath();
-        //====================================================================//
-        // Read Current Notifications
-        $notifications = array();
-        if (is_file($bufferFile) && function_exists('json_decode')) {
-            $notifications = json_decode((string) file_get_contents($bufferFile), true);
-        }
-        //====================================================================//
-        // Assign Smarty Variables
-        if ($this->context->smarty) {
-            $this->context->smarty->assign('notifications', $notifications);
-        }
-        //====================================================================//
-        // Clear Notifications Logs in Cookie
-        if (is_file($bufferFile) && function_exists('json_encode')) {
-            file_put_contents($bufferFile, json_encode(array()));
+                        break;
+                    case 'msg':
+                        $html .= $this->displayConfirmation($log);
+
+                        break;
+                }
+            }
         }
 
-        //====================================================================//
-        // Render Footer
-        return $this->display(__FILE__, 'footer.tpl');
+        return $html;
     }
 
     //====================================================================//
@@ -513,14 +424,10 @@ class SplashSync extends Module
         if (!isset($userName)) {
             $userName = $this->l('Unknown') . $this->l('Employee');
         }
+
         //====================================================================//
         // Commit Action on remotes nodes (Master & Slaves)
-        $result = Splash\Client\Splash::commit($objectType, $objectId, $action, $userName, $comment);
-        //====================================================================//
-        // Post Splash Messages
-        $this->importMessages();
-
-        return $result;
+        return Splash\Client\Splash::commit($objectType, $objectId, $action, $userName, $comment);
     }
 
     /**
@@ -531,10 +438,8 @@ class SplashSync extends Module
      * @param string     $name
      * @param string     $objectId
      * @param null|mixed $other
-     *
-     * @return bool
      */
-    protected function debugHook($name, $objectId, $other = null)
+    protected function debugHook($name, $objectId, $other = null): bool
     {
         /** @phpstan-ignore-next-line  */
         if (_PS_MODE_DEV_ == true) {
@@ -1031,15 +936,15 @@ class SplashSync extends Module
      * Execute Server SelfTests
      *
      * @throws Exception
-     *
-     * @return bool|string
      */
-    private function displayTest()
+    private function displayTest(): string
     {
         $this->displayTestHead();
         $this->displayTestSelfTests();
+        $logs = $this->displaySplashLogs();
         $this->displayTestObjectList();
         $this->displayTestPingAndConnect();
+        $logs .= $this->displaySplashLogs(true);
 
         //====================================================================//
         // Build Html Results List
@@ -1057,7 +962,7 @@ class SplashSync extends Module
         $helper->token = Tools::getAdminTokenLite('AdminModules');
         $helper->currentIndex = AdminController::$currentIndex . '&configure=' . $this->name;
 
-        return $helper->generateList($this->dataList, $this->fieldsList);
+        return $logs . $helper->generateList($this->dataList, $this->fieldsList);
     }
 
     /**
@@ -1068,7 +973,7 @@ class SplashSync extends Module
     private function displayTestHead()
     {
         //====================================================================//
-        // Built List Culumns Definition
+        // Built List Columns Definition
         $this->fieldsList = array(
             'id' => array(
                 'title' => $this->l('Id'),
@@ -1108,9 +1013,6 @@ class SplashSync extends Module
         // Execute Module SelfTests
         //====================================================================//
         Splash\Client\Splash::selfTest();
-        //====================================================================//
-        // Post Splash Messages
-        $this->importMessages();
     }
 
     /**
@@ -1135,9 +1037,6 @@ class SplashSync extends Module
             'desc' => $this->l('List of all Available objects on this server.'),
             'result' => $objectsList,
         );
-        //====================================================================//
-        // Post Splash Messages
-        $this->importMessages();
     }
 
     /**
@@ -1165,10 +1064,6 @@ class SplashSync extends Module
             'result' => $result,
         );
         //====================================================================//
-        // Post Splash Messages
-        $this->importMessages();
-
-        //====================================================================//
         // Splash Server Connect
         //====================================================================//
         if ($ping && Splash\Client\Splash::connect()) {
@@ -1183,32 +1078,33 @@ class SplashSync extends Module
             'desc' => $this->l('Test to Connect to Splash Server.'),
             'result' => $result,
         );
-        //====================================================================//
-        // Post Splash Messages
-        $this->importMessages();
     }
 
-    //====================================================================//
-    // *******************************************************************//
-    //  MODULE VARIOUS DISPLAYS
-    // *******************************************************************//
-    //====================================================================//
-
     /**
-     * Get Full Path of User Notifications buffer File
+     * Read all log messages
      *
-     * @return string
+     * @return array
      */
-    private function getMessageBufferPath(): string
+    private function getSplashLogs(): array
     {
-        /** @var Context $context */
-        $context = Context::getContext();
-        /** @var Cookie $cookie */
-        $cookie = $context->cookie;
+        //====================================================================//
+        // When Library is called in TRAVIS CI mode ONLY
+        //====================================================================//
+        if (Splash\Client\Splash::isTravisMode() || Splash\Client\Splash::isServerMode()) {
+            return array();
+        }
 
-        return sys_get_temp_dir()
-            . '/splashPsNotifications-'
-            . ($cookie->__get('session_token') ?: 'admin')
-            . '.json';
+        //====================================================================//
+        //  Smart Notifications => Filter Messages, Only Warnings & Errors
+        if (Splash\Client\Splash::configuration()->SmartNotify) {
+            Splash\Client\Splash::log()->smartFilter();
+        }
+        //====================================================================//
+        // Limit Log Buffer Size
+        Splash\Client\Splash::log()->slice();
+
+        //====================================================================//
+        // Render Notifications
+        return Splash\Client\Splash::log()->getRawLog(true);
     }
 }
