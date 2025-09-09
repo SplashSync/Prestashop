@@ -136,6 +136,8 @@ F-Ps-9.0-Php-8.3:
     image:      prestashop/prestashop:9.0-8.3
     allow_failure:  true
     retry:          0
+    variables:
+      PS_VERSION:   9.0
     <<: *functional
 
 ################################################################
