@@ -39,16 +39,21 @@ subtitle "FUNCTIONAL --> Install Prestashop"
 cd  $WEB_DIR
 cat $CI_PROJECT_DIR/docker/docker-entrypoint.sh | bash
 
-################################################################################
-# Install Module
-subtitle "FUNCTIONAL --> Install Module"
-bash $CI_PROJECT_DIR/ci/module/install.sh
-cd  $WEB_DIR
-composer install
+#################################################################################
+## Install Module
+#subtitle "FUNCTIONAL --> Install Module"
+#bash $CI_PROJECT_DIR/ci/module/install.sh
+#cd  $WEB_DIR
+#composer install
 
  ################################################################################
  # Run PhpUnit Core Test Sequence (Will Enable the Module)
 subtitle "FUNCTIONAL --> Enable Module"
+
+phpunit \
+  modules/splashsync/vendor/splash/phpcore/Tests/Core/ \
+  -c $WEB_DIR/ci/phpunit.xml.dist \
+  --log-junit $CI_PROJECT_DIR/core-report.xml
 
 modules/splashsync/vendor/bin/phpunit \
   modules/splashsync/vendor/splash/phpcore/Tests/Core/ \
