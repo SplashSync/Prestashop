@@ -42,7 +42,6 @@ name: "splash-prestashop"
 ################################################################################
 # App Containers
 include:
-  - docker/versions/prestashop-latest.yml
   - docker/versions/prestashop-9.0.yml
   - docker/versions/prestashop-8.2.yml
   - docker/versions/prestashop-8.1.yml
