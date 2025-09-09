@@ -117,9 +117,6 @@ class ThirdParty extends AbstractObject implements PrimaryKeysAwareInterface
     public function __construct()
     {
         //====================================================================//
-        //  Load Local Translation File
-        Splash::translator()->load('objects@local');
-        //====================================================================//
         // Load Splash Module
         $this->spl = Local::getLocalModule();
     }
