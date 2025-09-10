@@ -31,6 +31,7 @@ export PS_INSTALL_AUTO=${PS_INSTALL_AUTO:="1"}
 export PS_DOMAIN="ps$(echo $PS_VERSION | tr '.' '-').prestashop.local"
 export PS_FOLDER_ADMIN="_ad"
 export PS_FOLDER_INSTALL="installed"
+export PS_DEV_MODE="0"
 export ADMIN_MAIL="contact@splashsync.com"
 export env ADMIN_PASSWD="splashsync"
 export SPLASH_WS_ID=${SPLASH_WS_ID:="ThisIsPs$(echo $PS_VERSION | tr -cd '[:digit:]')Key"}

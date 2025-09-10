@@ -20,6 +20,7 @@ namespace Splash\Local\Services;
 
 use AdminKernel;
 use AppKernel;
+use Splash\Client\Splash;
 
 // phpcs:disable PSR1.Files.SideEffects
 if (!defined('_PS_VERSION_')) {
@@ -51,7 +52,7 @@ class KernelManager
         //====================================================================//
         // Only for PrestaShop > 9.0 => Boot Admin Kernel
         if (class_exists('AdminKernel') && empty($kernel)) {
-            $kernel = new AdminKernel('prod', false);
+            $kernel = new AdminKernel(Splash::isTravisMode() ? 'dev' : 'prod', false);
             $kernel->boot();
 
             return;

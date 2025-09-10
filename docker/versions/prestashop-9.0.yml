@@ -20,7 +20,7 @@ services:
     ################################################################################
     # Prestashop 9.0
     ps-9.0:
-        image:              prestashop/prestashop:9.0.0-apache
+        image:              prestashop/prestashop:9.0.x-8.3-apache
         container_name:     ps9-0.prestashop.local
         depends_on:
             - mysql
