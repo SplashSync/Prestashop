@@ -22,7 +22,7 @@ use Db;
 use PrestaShopDatabaseException;
 
 /**
- * Prestashop Splash Id Storage Trait
+ * Prestashop Splash ID Storage Trait
  */
 trait SplashIdTrait
 {
