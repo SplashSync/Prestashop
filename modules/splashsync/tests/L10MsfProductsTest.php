@@ -1,6 +1,5 @@
 <?php
-
-/*
+/**
  *  This file is part of SplashSync Project.
  *
  *  Copyright (C) Splash Sync  <www.splashsync.com>
@@ -11,6 +10,10 @@
  *
  *  For the full copyright and license information, please view the LICENSE
  *  file that was distributed with this source code.
+ *
+ * @author Splash Sync
+ * @copyright Splash Sync SAS
+ * @license MIT
  */
 
 namespace Splash\Tests;
@@ -76,9 +79,9 @@ class L10MsfProductsTest extends ObjectsCase
         }
         if ($variant) {
             $allShopsOriginData['attributes'] = array(array(
-                "code" => "SIZE",
-                "public_name" => "SIZE",
-                "name" => "XXL",
+                'code' => 'SIZE',
+                'public_name' => 'SIZE',
+                'name' => 'XXL',
             ));
         }
         $objectId = $this->setObjectFromModule($objectType, $allShopsOriginData);
@@ -123,9 +126,9 @@ class L10MsfProductsTest extends ObjectsCase
             // Add Msf Fields to List
             $shopField = $field;
             if ($list = FieldsManager::isListField($field['id'])) {
-                $shopField['id'] = $list['fieldname']."@".MSF::MSF_PREFIX.$shopId."_".$list['listname'];
+                $shopField['id'] = $list['fieldname'] . '@' . MSF::MSF_PREFIX . $shopId . '_' . $list['listname'];
             } else {
-                $shopField['id'] = MSF::MSF_PREFIX.$shopId."_".$field['id'];
+                $shopField['id'] = MSF::MSF_PREFIX . $shopId . '_' . $field['id'];
             }
             $this->fields[$shopField['id']] = $shopField;
         }
@@ -156,13 +159,13 @@ class L10MsfProductsTest extends ObjectsCase
             //====================================================================//
             // Add Test Sequence fro Simple & Variable Products
             $sequences[$index] = $sequence;
-            $sequences["[V]".$index] = $sequence;
-            $sequences["[V]".$index]["3"] = true;
+            $sequences['[V]' . $index] = $sequence;
+            $sequences['[V]' . $index]['3'] = true;
         }
 
         return !empty($sequences)
             ? $sequences
-            : array("Skip" => array("None", "Product", null));
+            : array('Skip' => array('None', 'Product', null));
     }
 
     /**
@@ -209,18 +212,18 @@ class L10MsfProductsTest extends ObjectsCase
     {
         //====================================================================//
         // Ensure We Are in All Shops Test Sequence
-        if ("All Shops" != $sequence["0"]) {
+        if ('All Shops' != $sequence['0']) {
             return false;
         }
         //====================================================================//
         // Ensure We Are in Products Tests
-        if ("Product" != $sequence["1"]) {
+        if ('Product' != $sequence['1']) {
             return false;
         }
 
         //====================================================================//
         //   Ensure Field is R/W Field
-        return $this->isAllowedFieldForTesting($sequence["2"]);
+        return $this->isAllowedFieldForTesting($sequence['2']);
     }
 
     /**
@@ -239,12 +242,12 @@ class L10MsfProductsTest extends ObjectsCase
         }
         //====================================================================//
         //   Ensure Field is Msf Field
-        if (is_array($field['options']) && array_key_exists("shop", $field['options'])) {
-            if (MSM::MODE_ALL == $field['options']["shop"]) {
+        if (is_array($field['options']) && array_key_exists('shop', $field['options'])) {
+            if (MSM::MODE_ALL == $field['options']['shop']) {
                 return false;
             }
         }
-        if (!isset($field['id']) || (false !== strpos($field['id'], "_shop_"))) {
+        if (!isset($field['id']) || (false !== strpos($field['id'], '_shop_'))) {
             return false;
         }
 

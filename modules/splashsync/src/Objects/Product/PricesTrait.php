@@ -1,6 +1,5 @@
 <?php
-
-/*
+/**
  *  This file is part of SplashSync Project.
  *
  *  Copyright (C) Splash Sync  <www.splashsync.com>
@@ -11,17 +10,26 @@
  *
  *  For the full copyright and license information, please view the LICENSE
  *  file that was distributed with this source code.
+ *
+ * @author Splash Sync
+ * @copyright Splash Sync SAS
+ * @license MIT
  */
 
 namespace Splash\Local\Objects\Product;
 
 use Combination;
 use Splash\Core\SplashCore as Splash;
-use Splash\Local\Services\LanguagesManager;
+use Splash\Local\Services\LanguagesManager as SLM;
 use Splash\Local\Services\TaxManager;
 use Splash\Models\Objects\PricesTrait as SplashPricesTrait;
 use Tools;
-use Translate;
+
+// phpcs:disable PSR1.Files.SideEffects
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+// phpcs:enable PSR1.Files.SideEffects
 
 /**
  * Access to Product Prices Fields
@@ -42,7 +50,7 @@ trait PricesTrait
      */
     protected function buildPricesFields(): void
     {
-        $symbol = LanguagesManager::getCurrencySymbol($this->currency);
+        $symbol = SLM::getCurrencySymbol($this->currency);
         //====================================================================//
         // PRICES INFORMATIONS
         //====================================================================//
@@ -50,50 +58,50 @@ trait PricesTrait
         //====================================================================//
         // Product Selling Price
         $this->fieldsFactory()->create(SPL_T_PRICE)
-            ->identifier("price")
+            ->identifier('price')
             ->name(
-                Translate::getAdminTranslation(
-                    "Price (tax excl.)",
-                    "AdminProducts"
-                )." (".$symbol.")"
+                SLM::translate(
+                    'Retail price (tax excl.)',
+                    'AdminCatalogFeature'
+                ) . ' (' . $symbol . ')'
             )
-            ->microData("http://schema.org/Product", "price")
+            ->microData('http://schema.org/Product', 'price')
         ;
         //====================================================================//
         // Product Selling Base Price
         $this->fieldsFactory()->create(SPL_T_PRICE)
-            ->identifier("price-base")
+            ->identifier('price-base')
             ->name(
-                Translate::getAdminTranslation(
-                    "Price (tax excl.)",
-                    "AdminProducts"
-                )." Base (".$symbol.")"
+                SLM::translate(
+                    'Retail price (tax excl.)',
+                    'AdminCatalogFeature'
+                ) . ' Base (' . $symbol . ')'
             )
-            ->microData("http://schema.org/Product", "basePrice")
+            ->microData('http://schema.org/Product', 'basePrice')
         ;
         //====================================================================//
         // WholeSale Price
         $this->fieldsFactory()->create(SPL_T_PRICE)
-            ->identifier("price-wholesale")
+            ->identifier('price-wholesale')
             ->name(
-                Translate::getAdminTranslation(
-                    "Wholesale price",
-                    "AdminProducts"
-                )." Base (".$symbol.")"
+                SLM::translate(
+                    'Cost price',
+                    'AdminCatalogFeature'
+                ) . ' Base (' . $symbol . ')'
             )
-            ->microData("http://schema.org/Product", "wholesalePrice")
+            ->microData('http://schema.org/Product', 'wholesalePrice')
         ;
         //====================================================================//
         // Reduced Price
         $this->fieldsFactory()->create(SPL_T_PRICE)
-            ->identifier("price-reduced")
+            ->identifier('price-reduced')
             ->name(
-                Translate::getAdminTranslation(
-                    "Sale price",
-                    "AdminProducts"
-                )." (".$symbol.")"
+                SLM::translate(
+                    'Final price (tax excl.)',
+                    'AdminCatalogFeature'
+                ) . ' (' . $symbol . ')'
             )
-            ->microData("http://schema.org/Product", "reducedPrice")
+            ->microData('http://schema.org/Product', 'reducedPrice')
             ->isReadOnly()
         ;
     }
@@ -130,8 +138,8 @@ trait PricesTrait
                     $taxPercent,
                     null,
                     $this->currency->iso_code,
-                    LanguagesManager::getCurrencySymbol($this->currency),
-                    LanguagesManager::getCurrencyName($this->currency)
+                    SLM::getCurrencySymbol($this->currency),
+                    SLM::getCurrencyName($this->currency)
                 );
 
                 break;
@@ -147,8 +155,8 @@ trait PricesTrait
                     $taxPercent,
                     null,
                     $this->currency->iso_code,
-                    LanguagesManager::getCurrencySymbol($this->currency),
-                    LanguagesManager::getCurrencyName($this->currency)
+                    SLM::getCurrencySymbol($this->currency),
+                    SLM::getCurrencyName($this->currency)
                 );
 
                 break;
@@ -168,8 +176,8 @@ trait PricesTrait
                     $taxPercent,
                     null,
                     $this->currency->iso_code,
-                    LanguagesManager::getCurrencySymbol($this->currency),
-                    LanguagesManager::getCurrencyName($this->currency)
+                    SLM::getCurrencySymbol($this->currency),
+                    SLM::getCurrencyName($this->currency)
                 );
 
                 break;
@@ -210,8 +218,8 @@ trait PricesTrait
                     $taxPercent,
                     null,
                     $this->currency->iso_code,
-                    LanguagesManager::getCurrencySymbol($this->currency),
-                    LanguagesManager::getCurrencyName($this->currency)
+                    SLM::getCurrencySymbol($this->currency),
+                    SLM::getCurrencyName($this->currency)
                 );
 
                 break;
@@ -249,16 +257,16 @@ trait PricesTrait
             case 'price-base':
                 //====================================================================//
                 // Read Current Product Price (Via Out Buffer)
-                $this->getPricesFields(null, "price-base");
+                $this->getPricesFields(null, 'price-base');
 
                 //====================================================================//
                 // Compare Prices
-                if (!is_array($this->out["price-base"])
-                    || !self::prices()->compare($this->out["price-base"], $fieldData)
+                if (!is_array($this->out['price-base'])
+                    || !self::prices()->compare($this->out['price-base'], $fieldData)
                 ) {
-                    $this->object->price = $fieldData["ht"];
-                    $this->object->base_price = $fieldData["ht"];
-                    $this->addMsfUpdateFields("Product", "price");
+                    $this->object->price = $fieldData['ht'];
+                    $this->object->base_price = $fieldData['ht'];
+                    $this->addMsfUpdateFields('Product', 'price');
                     $this->needUpdate();
                     //====================================================================//
                     // Clear Cache
@@ -269,12 +277,12 @@ trait PricesTrait
             case 'price-wholesale':
                 //====================================================================//
                 // Read Current Product Price (Via Out Buffer)
-                $this->getPricesFields(null, "price-wholesale");
+                $this->getPricesFields(null, 'price-wholesale');
 
                 //====================================================================//
                 // Compare Prices
-                if (is_array($this->out["price-wholesale"])
-                    && self::prices()->compare($this->out["price-wholesale"], $fieldData)
+                if (is_array($this->out['price-wholesale'])
+                    && self::prices()->compare($this->out['price-wholesale'], $fieldData)
                 ) {
                     break;
                 }
@@ -282,14 +290,14 @@ trait PricesTrait
                 //====================================================================//
                 // Update product Wholesale Price with Attribute
                 if ($this->Attribute) {
-                    $this->Attribute->wholesale_price = $fieldData["ht"];
-                    $this->addMsfUpdateFields("Attribute", "wholesale_price");
-                    $this->needUpdate("Attribute");
+                    $this->Attribute->wholesale_price = $fieldData['ht'];
+                    $this->addMsfUpdateFields('Attribute', 'wholesale_price');
+                    $this->needUpdate('Attribute');
                     //====================================================================//
                     // Update product Price without Attribute
                 } else {
-                    $this->object->wholesale_price = $fieldData["ht"];
-                    $this->addMsfUpdateFields("Product", "wholesale_price");
+                    $this->object->wholesale_price = $fieldData['ht'];
+                    $this->addMsfUpdateFields('Product', 'wholesale_price');
                     $this->needUpdate();
                 }
 
@@ -316,11 +324,11 @@ trait PricesTrait
     {
         //====================================================================//
         // Read Current Product Price (Via Out Buffer)
-        $this->getPricesFields(null, "price");
+        $this->getPricesFields(null, 'price');
         //====================================================================//
         // Verify Price Need to be Updated
-        if (is_array($this->out["price"])
-            && self::prices()->compare($this->out["price"], $newPrice)
+        if (is_array($this->out['price'])
+            && self::prices()->compare($this->out['price'], $newPrice)
         ) {
             return;
         }
@@ -331,31 +339,31 @@ trait PricesTrait
             //====================================================================//
             // Update product Price without Attribute
         } else {
-            if (abs($newPrice["ht"] - $this->object->price) > 1E-6) {
-                $this->object->price = (float) number_format(round($newPrice["ht"], 9), 9, ".", "");
-                $this->addMsfUpdateFields("Product", "price");
+            if (abs($newPrice['ht'] - $this->object->price) > 1E-6) {
+                $this->object->price = (float) number_format(round($newPrice['ht'], 9), 9, '.', '');
+                $this->addMsfUpdateFields('Product', 'price');
                 $this->needUpdate();
             }
         }
 
         //====================================================================//
         // Update Price VAT Rate
-        $vatRateDelta = abs($newPrice["vat"] - $this->object->tax_rate);
-        $needVatRate = ($newPrice["vat"] > 0) && empty($this->object->id_tax_rules_group);
+        $vatRateDelta = abs($newPrice['vat'] - $this->object->tax_rate);
+        $needVatRate = ($newPrice['vat'] > 0) && empty($this->object->id_tax_rules_group);
         if (($vatRateDelta > 1E-6) || $needVatRate) {
             //====================================================================//
             // Search For Tax Id Group with Given Tax Rate and Country
-            $newTaxRateGroupId = TaxManager::getTaxRateGroupId($newPrice["vat"]);
+            $newTaxRateGroupId = TaxManager::getTaxRateGroupId($newPrice['vat']);
             //====================================================================//
             // If Tax Group Found, Update Product
             if (($newTaxRateGroupId >= 0) && ($newTaxRateGroupId != $this->object->id_tax_rules_group)) {
                 $this->object->id_tax_rules_group = (int) $newTaxRateGroupId;
-                $this->object->tax_rate = $newPrice["vat"];
-                $this->addMsfUpdateFields("Product", "id_tax_rules_group");
+                $this->object->tax_rate = $newPrice['vat'];
+                $this->addMsfUpdateFields('Product', 'id_tax_rules_group');
                 $this->needUpdate();
             } else {
                 Splash::log()->war(
-                    "VAT Rate Update : Unable to find this tax rate localy (".$newPrice["vat"].")"
+                    'VAT Rate Update : Unable to find this tax rate localy (' . $newPrice['vat'] . ')'
                 );
             }
         }
@@ -376,8 +384,8 @@ trait PricesTrait
     {
         //====================================================================//
         // Detect New Base Price
-        if (isset($this->in['price-base']["ht"])) {
-            $basePrice = $this->in['price-base']["ht"];
+        if (isset($this->in['price-base']['ht'])) {
+            $basePrice = $this->in['price-base']['ht'];
         } else {
             $basePrice = $this->object->base_price;
         }
@@ -388,13 +396,13 @@ trait PricesTrait
         }
         //====================================================================//
         // Evaluate Attribute Price
-        $priceHT = $newPrice["ht"] - $basePrice;
+        $priceHT = $newPrice['ht'] - $basePrice;
         //====================================================================//
         // Update Attribute Price if Required
         if (abs($priceHT - $this->Attribute->price) > 1E-6) {
-            $this->Attribute->price = number_format(round($priceHT, 9), 9, ".", "");
-            $this->needUpdate("Attribute");
-            $this->addMsfUpdateFields("Attribute", "price");
+            $this->Attribute->price = number_format(round($priceHT, 9), 9, '.', '');
+            $this->needUpdate('Attribute');
+            $this->addMsfUpdateFields('Attribute', 'price');
         }
     }
 

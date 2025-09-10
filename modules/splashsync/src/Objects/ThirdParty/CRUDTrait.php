@@ -1,6 +1,5 @@
 <?php
-
-/*
+/**
  *  This file is part of SplashSync Project.
  *
  *  Copyright (C) Splash Sync  <www.splashsync.com>
@@ -11,6 +10,10 @@
  *
  *  For the full copyright and license information, please view the LICENSE
  *  file that was distributed with this source code.
+ *
+ * @author Splash Sync
+ * @copyright Splash Sync SAS
+ * @license MIT
  */
 
 namespace Splash\Local\Objects\ThirdParty;
@@ -19,6 +22,12 @@ use Customer;
 use PrestaShopException;
 use Splash\Core\SplashCore as Splash;
 use Tools;
+
+// phpcs:disable PSR1.Files.SideEffects
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+// phpcs:enable PSR1.Files.SideEffects
 
 /**
  * Prestashop ThirdParty CRUD Functions
@@ -42,10 +51,10 @@ trait CRUDTrait
         $object = new Customer((int) $objectId);
         if ($object->id != $objectId) {
             return Splash::log()->errNull(
-                "ErrLocalTpl",
+                'ErrLocalTpl',
                 __CLASS__,
                 __FUNCTION__,
-                " Unable to load Customer (".$objectId.")."
+                ' Unable to load Customer (' . $objectId . ').'
             );
         }
 
@@ -64,14 +73,14 @@ trait CRUDTrait
         Splash::log()->trace();
         //====================================================================//
         // Check Customer Name is given
-        if (empty($this->in["firstname"])) {
-            return Splash::log()->errNull("ErrLocalFieldMissing", __CLASS__, __FUNCTION__, "firstname");
+        if (empty($this->in['firstname'])) {
+            return Splash::log()->errNull('ErrLocalFieldMissing', __CLASS__, __FUNCTION__, 'firstname');
         }
-        if (empty($this->in["lastname"])) {
-            return Splash::log()->errNull("ErrLocalFieldMissing", __CLASS__, __FUNCTION__, "lastname");
+        if (empty($this->in['lastname'])) {
+            return Splash::log()->errNull('ErrLocalFieldMissing', __CLASS__, __FUNCTION__, 'lastname');
         }
-        if (empty($this->in["email"])) {
-            return Splash::log()->errNull("ErrLocalFieldMissing", __CLASS__, __FUNCTION__, "email");
+        if (empty($this->in['email'])) {
+            return Splash::log()->errNull('ErrLocalFieldMissing', __CLASS__, __FUNCTION__, 'email');
         }
 
         //====================================================================//
@@ -100,12 +109,12 @@ trait CRUDTrait
         if (!empty($this->object->id)) {
             try {
                 if (!$this->object->update()) {
-                    return Splash::log()->errNull("Unable to update (".$this->object->id.").");
+                    return Splash::log()->errNull('Unable to update (' . $this->object->id . ').');
                 }
             } catch (PrestaShopException $e) {
                 Splash::log()->report($e);
 
-                return Splash::log()->errNull("Unable to update (".$this->object->id.").");
+                return Splash::log()->errNull('Unable to update (' . $this->object->id . ').');
             }
 
             return $this->getObjectIdentifier();
@@ -118,21 +127,21 @@ trait CRUDTrait
         //====================================================================//
         // If NO Password Given = > Create Random Password
         if (empty($this->object->passwd)) {
-            $plainPassword = "#".Tools::passwdGen(12);
+            $plainPassword = '#' . Tools::passwdGen(12);
             $this->object->setWsPasswd($plainPassword);
-            Splash::log()->war("New Customer Password Generated - ".$plainPassword);
+            Splash::log()->war('New Customer Password Generated - ' . $plainPassword);
         }
 
         //====================================================================//
         // Create Object In Database
         try {
             if (!$this->object->add(true, true)) {
-                return Splash::log()->errNull("Unable to create Customer. ");
+                return Splash::log()->errNull('Unable to create Customer. ');
             }
         } catch (PrestaShopException $e) {
             Splash::log()->report($e);
 
-            return Splash::log()->errNull("Unable to update (".$this->object->id.").");
+            return Splash::log()->errNull('Unable to update (' . $this->object->id . ').');
         }
 
         //====================================================================//
@@ -158,7 +167,7 @@ trait CRUDTrait
         //====================================================================//
         // Safety Checks
         if (empty($objectId)) {
-            return Splash::log()->err("ErrSchNoObjectId", __CLASS__."::".__FUNCTION__);
+            return Splash::log()->err('ErrSchNoObjectId', __CLASS__ . '::' . __FUNCTION__);
         }
 
         //====================================================================//
@@ -166,13 +175,13 @@ trait CRUDTrait
         //====================================================================//
         $object = new Customer((int) $objectId);
         if ($object->id != $objectId) {
-            return Splash::log()->war("ErrLocalTpl", __CLASS__, __FUNCTION__, "Unable to load (".$objectId.").");
+            return Splash::log()->war('ErrLocalTpl', __CLASS__, __FUNCTION__, 'Unable to load (' . $objectId . ').');
         }
         //====================================================================//
         // Delete Object From DataBase
         //====================================================================//
         if (true != $object->delete()) {
-            return Splash::log()->err("ErrLocalTpl", __CLASS__, __FUNCTION__, "Unable to delete (".$objectId.").");
+            return Splash::log()->err('ErrLocalTpl', __CLASS__, __FUNCTION__, 'Unable to delete (' . $objectId . ').');
         }
 
         return true;

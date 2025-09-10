@@ -1,6 +1,5 @@
 <?php
-
-/*
+/**
  *  This file is part of SplashSync Project.
  *
  *  Copyright (C) Splash Sync  <www.splashsync.com>
@@ -11,6 +10,10 @@
  *
  *  For the full copyright and license information, please view the LICENSE
  *  file that was distributed with this source code.
+ *
+ * @author Splash Sync
+ * @copyright Splash Sync SAS
+ * @license MIT
  */
 
 namespace Splash\Local\Objects\CreditNote;
@@ -21,6 +24,12 @@ use Order;
 use OrderSlip;
 use Splash\Core\SplashCore as Splash;
 use TaxCalculator;
+
+// phpcs:disable PSR1.Files.SideEffects
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+// phpcs:enable PSR1.Files.SideEffects
 
 /**
  * Prestashop Invoices CRUD Functions
@@ -50,18 +59,18 @@ trait CRUDTrait
         // Load Object
         $this->object = new OrderSlip((int) $objectId);
         if ($this->object->id != $objectId) {
-            return Splash::log()->errNull("Unable to load Credit Note (".$objectId.").");
+            return Splash::log()->errNull('Unable to load Credit Note (' . $objectId . ').');
         }
         $this->order = new Order($this->object->id_order);
         if ($this->order->id != $this->object->id_order) {
-            return Splash::log()->errNull("Unable to load Credity Note Order (".$this->object->id_order.").");
+            return Splash::log()->errNull('Unable to load Credity Note Order (' . $this->object->id_order . ').');
         }
 
         //====================================================================//
         // Load Credit Note Products
         $this->Products = $this->object->getOrdersSlipProducts((int) $objectId, $this->order);
         $this->Payments = $this->order->getOrderPaymentCollection();
-        $this->PaymentMethod = $this->order->module;
+        $this->paymentMethod = $this->order->module;
         //====================================================================//
         // Identify if a Customer Cart Rule Exists for this Credit Note
         $this->checkCustomerCartRule();
@@ -90,7 +99,7 @@ trait CRUDTrait
         Splash::log()->trace();
         //====================================================================//
         // An Invoice Cannot Get deleted
-        Splash::log()->errTrace("You Cannot Create Prestashop Credit Notes");
+        Splash::log()->errTrace('You Cannot Create Prestashop Credit Notes');
 
         return null;
     }
@@ -113,7 +122,7 @@ trait CRUDTrait
 
         //====================================================================//
         // An Invoice Cannot Get deleted
-        Splash::log()->errTrace("You Cannot Update Prestashop Credit Notes");
+        Splash::log()->errTrace('You Cannot Update Prestashop Credit Notes');
 
         return (string) $this->object->id;
     }
@@ -131,7 +140,7 @@ trait CRUDTrait
 
         //====================================================================//
         // An Invoice Cannot Get deleted
-        Splash::log()->errTrace("You Cannot Delete Prestashop Credit Notes");
+        Splash::log()->errTrace('You Cannot Delete Prestashop Credit Notes');
 
         return true;
     }

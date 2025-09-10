@@ -1,6 +1,5 @@
 <?php
-
-/*
+/**
  *  This file is part of SplashSync Project.
  *
  *  Copyright (C) Splash Sync  <www.splashsync.com>
@@ -11,6 +10,10 @@
  *
  *  For the full copyright and license information, please view the LICENSE
  *  file that was distributed with this source code.
+ *
+ * @author Splash Sync
+ * @copyright Splash Sync SAS
+ * @license MIT
  */
 
 namespace Splash\Local\Services;
@@ -18,7 +21,15 @@ namespace Splash\Local\Services;
 use Context;
 use Currency;
 use Language;
+use PrestaShop\PrestaShop\Core\Localization\LocaleInterface;
+use Splash\Client\Splash;
 use Tools;
+
+// phpcs:disable PSR1.Files.SideEffects
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+// phpcs:enable PSR1.Files.SideEffects
 
 /**
  * Splash Languages Manager - Prestashop Languages Management
@@ -31,10 +42,10 @@ class LanguagesManager
      * @var array
      */
     const KNOW_LANGS = array(
-        "en" => "en_US",
-        "fr" => "fr_FR",
-        "es" => "es_ES",
-        "it" => "it_IT",
+        'en' => 'en_US',
+        'fr' => 'fr_FR',
+        'es' => 'es_ES',
+        'it' => 'it_IT',
     );
 
     /**
@@ -50,6 +61,25 @@ class LanguagesManager
      * @var null|array
      */
     private static ?array $extra;
+
+    /**
+     * Get Default Local Language ISO Code
+     */
+    public static function translate(string $string, string $class = 'AdminTab'): string
+    {
+        /** @var Context $context */
+        $context = Context::getContext();
+        //====================================================================//
+        // Translate String
+        $str = $context->getTranslator()->trans($string, array(), $class);
+        if (Splash::isDebugMode() && !Splash::isTravisMode() && ($str === $string)) {
+            if (!$context->getTranslator()->getCatalogue()->has($string, $class)) {
+                Splash::log()->war('Missing Translation for: ' . $string);
+            }
+        }
+
+        return $context->getTranslator()->trans($string, array(), $class);
+    }
 
     /**
      * Get Default Local Language ISO Code
@@ -133,7 +163,7 @@ class LanguagesManager
         // For Each Available Language
         /** @var array $psLanguage */
         foreach (Language::getLanguages() as $psLanguage) {
-            self::$languages[$psLanguage["id_lang"]] = self::langEncode($psLanguage["language_code"]);
+            self::$languages[$psLanguage['id_lang']] = self::langEncode($psLanguage['language_code']);
         }
 
         return self::$languages;
@@ -177,7 +207,7 @@ class LanguagesManager
             return $currency->symbol[self::getDefaultLangId()];
         }
 
-        return array_values($currency->symbol)[0] ?? "";
+        return array_values($currency->symbol)[0] ?? '';
     }
 
     /**
@@ -196,7 +226,7 @@ class LanguagesManager
             return $currency->name[self::getDefaultLangId()];
         }
 
-        return array_values($currency->name)[0] ?? "";
+        return array_values($currency->name)[0] ?? '';
     }
 
     /**
@@ -217,7 +247,7 @@ class LanguagesManager
         //====================================================================//
         // Other Languages => Check if Code is in FieldName
         if (false === strpos($fieldName, $isoCode)) {
-            return "";
+            return '';
         }
 
         return substr($fieldName, 0, strlen($fieldName) - strlen($isoCode) - 1);
@@ -233,19 +263,30 @@ class LanguagesManager
     public static function langEncode($psCode)
     {
         //====================================================================//
-        // PreSetuped Install => Know Languages Code
+        // Pre-setup Install => Know Languages Code
         if (array_key_exists($psCode, self::KNOW_LANGS)) {
             return self::KNOW_LANGS[$psCode];
         }
         //====================================================================//
         // Split Language Code
-        $tmp = explode("-", $psCode);
+        $tmp = explode('-', $psCode);
         if (2 != count($tmp)) {
             $out = $psCode;
         } else {
-            $out = $tmp[0]."_".Tools::strtoupper($tmp[1]);
+            $out = $tmp[0] . '_' . Tools::strtoupper($tmp[1]);
         }
 
         return $out;
+    }
+
+    /**
+     * Get Current Context Locale
+     */
+    public static function getContextLocale(): LocaleInterface
+    {
+        /** @var Context $context */
+        $context = Context::getContext();
+
+        return Tools::getContextLocale($context);
     }
 }

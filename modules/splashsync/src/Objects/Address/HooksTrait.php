@@ -1,6 +1,5 @@
 <?php
-
-/*
+/**
  *  This file is part of SplashSync Project.
  *
  *  Copyright (C) Splash Sync  <www.splashsync.com>
@@ -11,12 +10,22 @@
  *
  *  For the full copyright and license information, please view the LICENSE
  *  file that was distributed with this source code.
+ *
+ * @author Splash Sync
+ * @copyright Splash Sync SAS
+ * @license MIT
  */
 
 namespace Splash\Local\Objects\Address;
 
 use Address;
 use Splash\Client\Splash;
+
+// phpcs:disable PSR1.Files.SideEffects
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+// phpcs:enable PSR1.Files.SideEffects
 
 /**
  * Prestashop Hooks for Address
@@ -36,10 +45,10 @@ trait HooksTrait
      *
      * @return bool
      */
-    public function hookactionObjectAddressAddAfter(array $params): bool
+    public function hookActionObjectAddressAddAfter(array $params): bool
     {
-        return $this->hookactionAddress(
-            $params["object"],
+        return $this->hookActionAddress(
+            $params['object'],
             SPL_A_CREATE,
             $this->l('Customer Address Created on Prestashop')
         );
@@ -52,10 +61,10 @@ trait HooksTrait
      *
      * @return bool
      */
-    public function hookactionObjectAddressUpdateAfter(array $params): bool
+    public function hookActionObjectAddressUpdateAfter(array $params): bool
     {
-        return $this->hookactionAddress(
-            $params["object"],
+        return $this->hookActionAddress(
+            $params['object'],
             SPL_A_UPDATE,
             $this->l('Customer Address Updated on Prestashop')
         );
@@ -67,10 +76,10 @@ trait HooksTrait
      *
      * @return bool
      */
-    public function hookactionObjectAddressDeleteAfter(array $params): bool
+    public function hookActionObjectAddressDeleteAfter(array $params): bool
     {
-        return $this->hookactionAddress(
-            $params["object"],
+        return $this->hookActionAddress(
+            $params['object'],
             SPL_A_DELETE,
             $this->l('Customer Address Deleted on Prestashop')
         );
@@ -85,23 +94,23 @@ trait HooksTrait
      *
      * @return bool
      */
-    private function hookactionAddress(Address $address, string $action, string $comment): bool
+    private function hookActionAddress(Address $address, string $action, string $comment): bool
     {
         //====================================================================//
         // Safety Check
         $addressId = $address->id;
         if (empty($addressId)) {
-            Splash::log()->err("ErrLocalTpl", __CLASS__, __FUNCTION__, "Unable to Read Address Id.");
+            Splash::log()->err('ErrLocalTpl', __CLASS__, __FUNCTION__, 'Unable to Read Address Id.');
         }
         //====================================================================//
         // Commit Update For Product
-        $result = $this->doCommit("Address", (string) $addressId, $action, $comment);
+        $result = $this->doCommit('Address', (string) $addressId, $action, $comment);
         //====================================================================//
         // Also Commit Update For Customer
         if (!empty($address->id_customer) && !Splash::isDebugMode()) {
             //====================================================================//
             // Commit Update For Customer
-            $this->doCommit("ThirdParty", (string) $address->id_customer, SPL_A_UPDATE, $comment);
+            $this->doCommit('ThirdParty', (string) $address->id_customer, SPL_A_UPDATE, $comment);
         }
 
         return $result;

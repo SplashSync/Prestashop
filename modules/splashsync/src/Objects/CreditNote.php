@@ -1,6 +1,5 @@
 <?php
-
-/*
+/**
  *  This file is part of SplashSync Project.
  *
  *  Copyright (C) Splash Sync  <www.splashsync.com>
@@ -11,6 +10,10 @@
  *
  *  For the full copyright and license information, please view the LICENSE
  *  file that was distributed with this source code.
+ *
+ * @author Splash Sync
+ * @copyright Splash Sync SAS
+ * @license MIT
  */
 
 namespace Splash\Local\Objects;
@@ -28,6 +31,12 @@ use Splash\Models\Objects\IntelParserTrait;
 use Splash\Models\Objects\ObjectsTrait;
 use Splash\Models\Objects\SimpleFieldsTrait;
 use SplashSync;
+
+// phpcs:disable PSR1.Files.SideEffects
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+// phpcs:enable PSR1.Files.SideEffects
 
 /**
  * Splash Local Object Class - Customer CreditNotes Local Integration
@@ -79,21 +88,21 @@ class CreditNote extends AbstractObject
      *
      * @var string
      */
-    protected static string $name = "Customer Credit Note";
+    protected static string $name = 'Customer Credit Note';
 
     /**
      * Object Description (Translated by Module)
      *
      * @var string
      */
-    protected static string $description = "Prestashop Customers Credit Notes Object";
+    protected static string $description = 'Prestashop Customers Credit Notes Object';
 
     /**
      * Object Icon (FontAwesome or Glyph ico tag)
      *
      * @var string
      */
-    protected static string $ico = "fa fa-eur";
+    protected static string $ico = 'fa fa-eur';
 
     //====================================================================//
     // Object Synchronization Limitations
@@ -168,7 +177,7 @@ class CreditNote extends AbstractObject
      *
      * @var string
      */
-    protected $PaymentMethod;
+    protected $paymentMethod;
 
     /**
      * @var OrderSlip
@@ -196,9 +205,6 @@ class CreditNote extends AbstractObject
         if (Shop::isFeatureActive()) {
             Shop::setContext(Shop::CONTEXT_ALL);
         }
-        //====================================================================//
-        //  Load Local Translation File
-        Splash::translator()->load("objects@local");
         //====================================================================//
         // Load Splash Module
         $this->spl = Local::getLocalModule();

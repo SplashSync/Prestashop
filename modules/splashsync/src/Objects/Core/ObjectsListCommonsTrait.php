@@ -1,6 +1,5 @@
 <?php
-
-/*
+/**
  *  This file is part of SplashSync Project.
  *
  *  Copyright (C) Splash Sync  <www.splashsync.com>
@@ -11,6 +10,10 @@
  *
  *  For the full copyright and license information, please view the LICENSE
  *  file that was distributed with this source code.
+ *
+ * @author Splash Sync
+ * @copyright Splash Sync SAS
+ * @license MIT
  */
 
 namespace Splash\Local\Objects\Core;
@@ -19,6 +22,12 @@ use Db;
 use DbQuery;
 use PrestaShopDatabaseException;
 use Splash\Core\SplashCore as Splash;
+
+// phpcs:disable PSR1.Files.SideEffects
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+// phpcs:enable PSR1.Files.SideEffects
 
 /**
  * Common Acces to Objects Lists Functions
@@ -60,21 +69,21 @@ trait ObjectsListCommonsTrait
      *
      * @return array|false
      */
-    protected function getObjectsListRawData(DbQuery $sql, string $sortField, array $params = null)
+    protected function getObjectsListRawData(DbQuery $sql, string $sortField, ?array $params = null)
     {
         //====================================================================//
         // Stack Trace
         Splash::log()->trace();
         //====================================================================//
         // Setup sortorder
-        $sqlSortField = empty($params["sortfield"])    ?   $sortField  :   pSQL($params["sortfield"]);
-        $sqlSortOrder = empty($params["sortorder"])    ?   "ASC"       :   pSQL($params["sortorder"]);
+        $sqlSortField = empty($params['sortfield'])    ?   $sortField  :   pSQL($params['sortfield']);
+        $sqlSortOrder = empty($params['sortorder'])    ?   'ASC'       :   pSQL($params['sortorder']);
         // Build ORDER BY
-        $sql->orderBy('`'.pSQL($sqlSortField).'` '.pSQL($sqlSortOrder));
+        $sql->orderBy('`' . pSQL($sqlSortField) . '` ' . pSQL($sqlSortOrder));
         //====================================================================//
         // Build LIMIT
-        $sqlLimitMax = empty($params["max"])        ?   50  :   pSQL($params["max"]);
-        $sqlLimitOff = empty($params["offset"])     ?   0   :   pSQL($params["offset"]);
+        $sqlLimitMax = empty($params['max'])        ?   50  :   pSQL($params['max']);
+        $sqlLimitOff = empty($params['offset'])     ?   0   :   pSQL($params['offset']);
         $sql->limit((int) $sqlLimitMax, (int)  $sqlLimitOff);
         //====================================================================//
         // Execute final request
@@ -97,7 +106,7 @@ trait ObjectsListCommonsTrait
      *
      * @return array
      */
-    protected function getObjectsListGenericData(DbQuery $sql, string $sortField, array $params = null)
+    protected function getObjectsListGenericData(DbQuery $sql, string $sortField, ?array $params = null)
     {
         //====================================================================//
         // Stack Trace
@@ -121,9 +130,9 @@ trait ObjectsListCommonsTrait
         }
         //====================================================================//
         // Prepare List result meta infos
-        $data["meta"]["current"] = count($data);   // Store Current Number of results
-        $data["meta"]["total"] = $total;         // Store Total Number of results
-        Splash::log()->deb("MsgLocalTpl", __CLASS__, __FUNCTION__, (count($data) - 1)." Objects Found.");
+        $data['meta']['current'] = count($data);   // Store Current Number of results
+        $data['meta']['total'] = $total;         // Store Total Number of results
+        Splash::log()->deb('MsgLocalTpl', __CLASS__, __FUNCTION__, (count($data) - 1) . ' Objects Found.');
 
         return $data;
     }

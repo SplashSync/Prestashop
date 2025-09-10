@@ -1,6 +1,5 @@
 <?php
-
-/*
+/**
  *  This file is part of SplashSync Project.
  *
  *  Copyright (C) Splash Sync  <www.splashsync.com>
@@ -11,9 +10,19 @@
  *
  *  For the full copyright and license information, please view the LICENSE
  *  file that was distributed with this source code.
+ *
+ * @author Splash Sync
+ * @copyright Splash Sync SAS
+ * @license MIT
  */
 
 namespace Splash\Local\Objects\Order;
+
+// phpcs:disable PSR1.Files.SideEffects
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+// phpcs:enable PSR1.Files.SideEffects
 
 /**
  * Prestashop Orders Tracking Fields Access
@@ -30,37 +39,37 @@ trait TrackingTrait
         //====================================================================//
         // Order Shipping Method
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
-            ->identifier("carrier_name")
-            ->name("Shipping Method")
-            ->microData("http://schema.org/ParcelDelivery", "provider")
-            ->group("Tracking")
+            ->identifier('carrier_name')
+            ->name('Shipping Method')
+            ->microData('http://schema.org/ParcelDelivery', 'provider')
+            ->group('Tracking')
             ->isReadOnly()
         ;
         //====================================================================//
         // Order Shipping Method Description
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
-            ->identifier("carrier_code")
-            ->name("Carrier Code")
-            ->microData("http://schema.org/ParcelDelivery", "identifier")
-            ->group("Tracking")
+            ->identifier('carrier_code')
+            ->name('Carrier Code')
+            ->microData('http://schema.org/ParcelDelivery', 'identifier')
+            ->group('Tracking')
             ->isReadOnly()
         ;
         //====================================================================//
         // Order Tracking Number
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
-            ->identifier("track_number")
-            ->name("Tracking Number")
-            ->microData("http://schema.org/ParcelDelivery", "trackingNumber")
-            ->group("Tracking")
+            ->identifier('track_number')
+            ->name('Tracking Number')
+            ->microData('http://schema.org/ParcelDelivery', 'trackingNumber')
+            ->group('Tracking')
             ->isIndexed()
         ;
         //====================================================================//
         // Order Tracking Url
         $this->fieldsFactory()->create(SPL_T_URL)
-            ->identifier("track_url")
-            ->name("Tracking Url")
-            ->microData("http://schema.org/ParcelDelivery", "trackingUrl")
-            ->group("Tracking")
+            ->identifier('track_url')
+            ->name('Tracking Url')
+            ->microData('http://schema.org/ParcelDelivery', 'trackingUrl')
+            ->group('Tracking')
             ->isReadOnly()
         ;
     }
@@ -83,13 +92,13 @@ trait TrackingTrait
             case 'carrier_name':
                 //====================================================================//
                 // Get Carrier Description
-                $this->out[$fieldName] = empty($this->carrier) ? "" : $this->carrier->delay;
+                $this->out[$fieldName] = empty($this->carrier) ? '' : $this->carrier->delay;
 
                 break;
             case 'carrier_code':
                 //====================================================================//
                 // Get Carrier Name
-                $this->out[$fieldName] = empty($this->carrier) ? "" : $this->carrier->name;
+                $this->out[$fieldName] = empty($this->carrier) ? '' : $this->carrier->name;
 
                 break;
             case 'track_number':
@@ -152,17 +161,17 @@ trait TrackingTrait
         //====================================================================//
         // Check Carrier has Url
         if (empty($this->carrier) || empty($this->carrier->url)) {
-            return "";
+            return '';
         }
         //====================================================================//
         // Order has Tracking Number
         $trackingNumber = $this->object->getWsShippingNumber();
         if (empty($trackingNumber)) {
-            return "";
+            return '';
         }
 
         //====================================================================//
         // Return Carrier Tracking Url
-        return str_replace("@", $trackingNumber, $this->carrier->url);
+        return str_replace('@', $trackingNumber, $this->carrier->url);
     }
 }

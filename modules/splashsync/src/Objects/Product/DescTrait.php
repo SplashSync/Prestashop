@@ -1,6 +1,5 @@
 <?php
-
-/*
+/**
  *  This file is part of SplashSync Project.
  *
  *  Copyright (C) Splash Sync  <www.splashsync.com>
@@ -11,6 +10,10 @@
  *
  *  For the full copyright and license information, please view the LICENSE
  *  file that was distributed with this source code.
+ *
+ * @author Splash Sync
+ * @copyright Splash Sync SAS
+ * @license MIT
  */
 
 namespace Splash\Local\Objects\Product;
@@ -18,10 +21,14 @@ namespace Splash\Local\Objects\Product;
 use Configuration;
 use Language;
 use Product;
-use Splash\Core\SplashCore as Splash;
-use Splash\Local\Services\LanguagesManager;
+use Splash\Local\Services\LanguagesManager as SLM;
 use Splash\Local\Services\MultiShopManager as MSM;
-use Translate;
+
+// phpcs:disable PSR1.Files.SideEffects
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+// phpcs:enable PSR1.Files.SideEffects
 
 /**
  * Access to Product Descriptions Fields
@@ -39,44 +46,44 @@ trait DescTrait
      */
     protected function buildDescFields(): void
     {
-        $groupName = Translate::getAdminTranslation("Information", "AdminProducts");
-        $this->fieldsFactory()->setDefaultLanguage(LanguagesManager::getDefaultLanguage());
+        $groupName = SLM::translate('Information', 'AdminCatalogFeature');
+        $this->fieldsFactory()->setDefaultLanguage(SLM::getDefaultLanguage());
 
         //====================================================================//
         // PRODUCT DESCRIPTIONS
         //====================================================================//
 
-        foreach (LanguagesManager::getAvailableLanguages() as $isoLang) {
+        foreach (SLM::getAvailableLanguages() as $isoLang) {
             //====================================================================//
             // Name without Options
             $this->fieldsFactory()->create(SPL_T_VARCHAR)
-                ->identifier("name")
-                ->name($this->spl->l("Product Name without Options"))
+                ->identifier('name')
+                ->name($this->spl->l('Product Name without Options'))
                 ->group($groupName)
-                ->microData("http://schema.org/Product", "alternateName")
+                ->microData('http://schema.org/Product', 'alternateName')
                 ->setMultilang($isoLang)
-                ->addOption("shop", MSM::MODE_ALL)
-                ->isRequired(LanguagesManager::isDefaultLanguage($isoLang))
-                ->isIndexed(LanguagesManager::isDefaultLanguage($isoLang))
+                ->addOption('shop', MSM::MODE_ALL)
+                ->isRequired(SLM::isDefaultLanguage($isoLang))
+                ->isIndexed(SLM::isDefaultLanguage($isoLang))
             ;
             //====================================================================//
             // Name with Options
             $this->fieldsFactory()->create(SPL_T_VARCHAR)
-                ->identifier("fullname")
-                ->name($this->spl->l("Product Name with Options"))
-                ->microData("http://schema.org/Product", "name")
+                ->identifier('fullname')
+                ->name($this->spl->l('Product Name with Options'))
+                ->microData('http://schema.org/Product', 'name')
                 ->group($groupName)
                 ->setMultilang($isoLang)
-                ->isListed(LanguagesManager::isDefaultLanguage($isoLang))
+                ->isListed(SLM::isDefaultLanguage($isoLang))
                 ->isReadOnly(self::isSourceCatalogMode())
                 ->isReadOnly()
             ;
             //====================================================================//
             // Long Description
             $this->fieldsFactory()->create(SPL_T_TEXT)
-                ->identifier("description")
-                ->name(Translate::getAdminTranslation("description", "AdminProducts"))
-                ->microData("http://schema.org/Article", "articleBody")
+                ->identifier('description')
+                ->name(SLM::translate('Description', 'AdminGlobal'))
+                ->microData('http://schema.org/Article', 'articleBody')
                 ->group($groupName)
                 ->setMultilang($isoLang)
                 ->isReadOnly(self::isSourceCatalogMode())
@@ -84,9 +91,9 @@ trait DescTrait
             //====================================================================//
             // Short Description
             $this->fieldsFactory()->create(SPL_T_VARCHAR)
-                ->identifier("description_short")
-                ->name(Translate::getAdminTranslation("Short Description", "AdminProducts"))
-                ->microData("http://schema.org/Product", "description")
+                ->identifier('description_short')
+                ->name(SLM::translate('Short description', 'AdminCatalogFeature'))
+                ->microData('http://schema.org/Product', 'description')
                 ->group($groupName)
                 ->setMultilang($isoLang)
                 ->isReadOnly(self::isSourceCatalogMode())
@@ -106,10 +113,10 @@ trait DescTrait
     {
         //====================================================================//
         // Walk on Available Languages
-        foreach (LanguagesManager::getAvailableLanguages() as $idLang => $isoLang) {
+        foreach (SLM::getAvailableLanguages() as $idLang => $isoLang) {
             //====================================================================//
             // Decode Multi-lang Field Name
-            $baseFieldName = LanguagesManager::fieldNameDecode($fieldName, $isoLang);
+            $baseFieldName = SLM::fieldNameDecode($fieldName, $isoLang);
             //====================================================================//
             // READ Fields
             switch ($baseFieldName) {
@@ -147,10 +154,10 @@ trait DescTrait
     {
         //====================================================================//
         // Walk on Available Languages
-        foreach (LanguagesManager::getAvailableLanguages() as $idLang => $isoLang) {
+        foreach (SLM::getAvailableLanguages() as $idLang => $isoLang) {
             //====================================================================//
             // Decode Multi-lang Field Name
-            $baseFieldName = LanguagesManager::fieldNameDecode($fieldName, $isoLang);
+            $baseFieldName = SLM::fieldNameDecode($fieldName, $isoLang);
             //====================================================================//
             // WRITE Field
             switch ($baseFieldName) {
@@ -165,14 +172,14 @@ trait DescTrait
                     // no break
                 case 'description':
                     $this->setMultiLang($baseFieldName, $idLang, (string) $fieldData);
-                    $this->addMsfUpdateFields("Product", $baseFieldName, $idLang);
+                    $this->addMsfUpdateFields('Product', $baseFieldName, $idLang);
                     unset($this->in[$fieldName]);
 
                     break;
                 case 'description_short':
                     $maxLength = (int) Configuration::get('PS_PRODUCT_SHORT_DESC_LIMIT');
                     $this->setMultiLang($baseFieldName, $idLang, (string) $fieldData, $maxLength ?: null);
-                    $this->addMsfUpdateFields("Product", $baseFieldName, $idLang);
+                    $this->addMsfUpdateFields('Product', $baseFieldName, $idLang);
                     unset($this->in[$fieldName]);
 
                     break;
@@ -205,8 +212,8 @@ trait DescTrait
         foreach ($languages as $lang) {
             //====================================================================//
             // Encode Language Code From Splash Format to Prestashop Format (fr_FR => fr-fr)
-            $langCode = LanguagesManager::langEncode($lang["language_code"]);
-            $langId = (int) $lang["id_lang"];
+            $langCode = SLM::langEncode($lang['language_code']);
+            $langId = (int) $lang['id_lang'];
             //====================================================================//
             // Product Specific - Read Meta Keywords
             $data[$langCode] = $object->getTags($langId);

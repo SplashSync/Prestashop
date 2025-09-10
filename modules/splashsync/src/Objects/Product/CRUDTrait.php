@@ -1,6 +1,5 @@
 <?php
-
-/*
+/**
  *  This file is part of SplashSync Project.
  *
  *  Copyright (C) Splash Sync  <www.splashsync.com>
@@ -11,6 +10,10 @@
  *
  *  For the full copyright and license information, please view the LICENSE
  *  file that was distributed with this source code.
+ *
+ * @author Splash Sync
+ * @copyright Splash Sync SAS
+ * @license MIT
  */
 
 namespace Splash\Local\Objects\Product;
@@ -25,6 +28,12 @@ use Splash\Core\SplashCore as Splash;
 use Splash\Local\Services\LanguagesManager as SLM;
 use Splash\Local\Services\MultiShopManager as MSM;
 use Tools;
+
+// phpcs:disable PSR1.Files.SideEffects
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+// phpcs:enable PSR1.Files.SideEffects
 
 /**
  * Prestashop Product CRUD Functions
@@ -49,7 +58,7 @@ trait CRUDTrait
         //====================================================================//
         // Safety Checks
         if (empty($uniqueId) || empty($this->ProductId)) {
-            return Splash::log()->errNull("Product Unique Id is Missing.");
+            return Splash::log()->errNull('Product Unique Id is Missing.');
         }
         //====================================================================//
         // Clear Price Cache
@@ -61,7 +70,7 @@ trait CRUDTrait
 
         $this->object = new Product($this->ProductId, true, null, Shop::getContextShopID(true));
         if ($this->object->id != $this->ProductId) {
-            return Splash::log()->errNull("Unable to fetch Product (".$this->ProductId.")");
+            return Splash::log()->errNull('Unable to fetch Product (' . $this->ProductId . ')');
         }
         //====================================================================//
         // Verify if Product is Allowed Sync
@@ -138,7 +147,7 @@ trait CRUDTrait
 
         //====================================================================//
         // Verify Update Is required
-        if (!$needed && !$this->isToUpdate("Attribute")) {
+        if (!$needed && !$this->isToUpdate('Attribute')) {
             return $this->getObjectIdentifier();
         }
 
@@ -149,18 +158,18 @@ trait CRUDTrait
             if ($this->ProductId && $needed) {
                 //====================================================================//
                 // FORCE MSF FIELDS WRITING
-                $updateFields = $this->getMsfUpdateFields("Product");
+                $updateFields = $this->getMsfUpdateFields('Product');
                 if (is_array($updateFields)) {
                     $this->object->setFieldsToUpdate($updateFields);
                 }
                 if (!$this->object->update()) {
-                    return Splash::log()->errNull("Unable to update Product.");
+                    return Splash::log()->errNull('Unable to update Product.');
                 }
             }
             //====================================================================//
             // UPDATE ATTRIBUTE INFORMATIONS
             if (!$this->updateAttribute()) {
-                return Splash::log()->errNull("Unable to update Product Attribute.");
+                return Splash::log()->errNull('Unable to update Product Attribute.');
             }
         } catch (\PrestaShopException $e) {
             Splash::log()->report($e);
@@ -183,7 +192,7 @@ trait CRUDTrait
         //====================================================================//
         // Safety Checks
         if (empty($objectId)) {
-            return Splash::log()->err("ErrSchNoObjectId", __CLASS__."::".__FUNCTION__);
+            return Splash::log()->err('ErrSchNoObjectId', __CLASS__ . '::' . __FUNCTION__);
         }
 
         //====================================================================//
@@ -202,7 +211,7 @@ trait CRUDTrait
         //====================================================================//
         $this->object = new Product($this->ProductId, true);
         if ($this->object->id != $this->ProductId) {
-            return Splash::log()->warTrace("Unable to load Product (".$this->ProductId.").");
+            return Splash::log()->warTrace('Unable to load Product (' . $this->ProductId . ').');
         }
 
         try {
@@ -243,13 +252,13 @@ trait CRUDTrait
     {
         //====================================================================//
         // Check Product Ref is given
-        if (empty($this->in["ref"])) {
-            return Splash::log()->err("ErrLocalFieldMissing", __CLASS__, __FUNCTION__, "ref");
+        if (empty($this->in['ref'])) {
+            return Splash::log()->err('ErrLocalFieldMissing', __CLASS__, __FUNCTION__, 'ref');
         }
         //====================================================================//
         // Check Product Name is given
-        if (empty($this->in["name"]) || !is_string($this->in["name"])) {
-            return Splash::log()->err("ErrLocalFieldMissing", __CLASS__, __FUNCTION__, "name");
+        if (empty($this->in['name']) || !is_string($this->in['name'])) {
+            return Splash::log()->err('ErrLocalFieldMissing', __CLASS__, __FUNCTION__, 'name');
         }
         //====================================================================//
         // Init Product Link Rewrite Url if Empty
@@ -257,22 +266,22 @@ trait CRUDTrait
             //====================================================================//
             // Default language
             if (SLM::isDefaultLanguage($isoCode)) {
-                if (empty($this->in["link_rewrite"])) {
-                    $this->in["link_rewrite"] = Tools::link_rewrite($this->in["name"]);
+                if (empty($this->in['link_rewrite'])) {
+                    $this->in['link_rewrite'] = Tools::str2url($this->in['name']);
                 }
 
                 continue;
             }
             //====================================================================//
             // Extra Languages
-            if (empty($this->in["link_rewrite_".$isoCode])) {
+            if (empty($this->in['link_rewrite_' . $isoCode])) {
                 //====================================================================//
                 // Detect Multi-lang Name or Fallback to Default
                 /** @var string $value */
-                $value = $this->in["name_".$isoCode] ?? $this->in["name"];
+                $value = $this->in['name_' . $isoCode] ?? $this->in['name'];
                 //====================================================================//
                 // Setup Multi-lang Url Rewrite
-                $this->in["link_rewrite_".$isoCode] = Tools::link_rewrite($value);
+                $this->in['link_rewrite_' . $isoCode] = Tools::str2url($value);
             }
         }
 
@@ -297,20 +306,20 @@ trait CRUDTrait
         $this->object = new Product();
         //====================================================================//
         // Setup Product Minimal Data
-        $this->setSimple("reference", $reference ?? $this->in["ref"]);
+        $this->setSimple('reference', $reference ?? $this->in['ref']);
         /** @phpstan-ignore-next-line  */
-        $this->setMultiLang("name", SLM::getDefaultLangId(), $this->in["name"]);
+        $this->setMultiLang('name', SLM::getDefaultLangId(), $this->in['name']);
         /** @phpstan-ignore-next-line  */
-        $this->setMultiLang("link_rewrite", SLM::getDefaultLangId(), $this->in["link_rewrite"]);
+        $this->setMultiLang('link_rewrite', SLM::getDefaultLangId(), $this->in['link_rewrite']);
         //====================================================================//
         // Pre-Setup Product Status
         if (isset(Splash::configuration()->PsNewProductStatus)) {
-            $this->setSimple("active", (bool) Splash::configuration()->PsNewProductIsActive);
+            $this->setSimple('active', (bool) Splash::configuration()->PsNewProductIsActive);
         }
         //====================================================================//
         // CREATE PRODUCT
         if (!$this->object->add()) {
-            return Splash::log()->errNull(" Unable to create Simple Product.");
+            return Splash::log()->errNull(' Unable to create Simple Product.');
         }
         //====================================================================//
         // Store New Id on SplashObject Class
@@ -332,12 +341,12 @@ trait CRUDTrait
         $productType = $this->getProductType();
         //====================================================================//
         // Filter Virtual Products
-        if (empty(Configuration::get("SPLASH_SYNC_VIRTUAL")) && ("virtual" == $productType)) {
+        if (empty(Configuration::get('SPLASH_SYNC_VIRTUAL')) && ('virtual' == $productType)) {
             return false;
         }
         //====================================================================//
         // Setup Pack Products Filters
-        if (empty(Configuration::get("SPLASH_SYNC_PACKS")) && ("pack" == $productType)) {
+        if (empty(Configuration::get('SPLASH_SYNC_PACKS')) && ('pack' == $productType)) {
             return false;
         }
 
@@ -356,13 +365,13 @@ trait CRUDTrait
         //====================================================================//
         // If Self Delete Unsynk Products is Disabled
         if (!isset(Splash::configuration()->PsDeleteUnlinkedProducts)) {
-            return Splash::log()->err("Unsynk Product: Loading not allowed.");
+            return Splash::log()->err('Unsynk Product: Loading not allowed.');
         }
 
         //====================================================================//
         // Send Delete Commit
-        SplashClient::commit("Product", $uniqueId, SPL_A_DELETE, "Delete of an Unsynk Product");
+        SplashClient::commit('Product', $uniqueId, SPL_A_DELETE, 'Delete of an Unsynk Product');
 
-        return Splash::log()->err("Unsynk Product: Will be deleted.");
+        return Splash::log()->err('Unsynk Product: Will be deleted.');
     }
 }

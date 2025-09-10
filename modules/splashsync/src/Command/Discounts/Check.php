@@ -1,6 +1,5 @@
 <?php
-
-/*
+/**
  *  This file is part of SplashSync Project.
  *
  *  Copyright (C) Splash Sync  <www.splashsync.com>
@@ -11,6 +10,10 @@
  *
  *  For the full copyright and license information, please view the LICENSE
  *  file that was distributed with this source code.
+ *
+ * @author Splash Sync
+ * @copyright Splash Sync SAS
+ * @license MIT
  */
 
 namespace Splash\Local\Command\Discounts;
@@ -25,6 +28,12 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
+// phpcs:disable PSR1.Files.SideEffects
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+// phpcs:enable PSR1.Files.SideEffects
+
 /**
  * Check Order Discounts Details
  */
@@ -33,11 +42,11 @@ class Check extends Command
     /**
      * @inerhitDoc
      */
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setName('splash:discount-collector:check')
-            ->setDescription("Check Order cache on Advanced Discounts Collector")
+            ->setDescription('Check Order cache on Advanced Discounts Collector')
             ->addArgument(
                 'orderId',
                 InputArgument::REQUIRED,
@@ -61,13 +70,13 @@ class Check extends Command
     {
         //====================================================================//
         // Splash Module Class Includes
-        require_once(_PS_ROOT_DIR_.'/modules/splashsync/splashsync.php');
+        require_once(_PS_ROOT_DIR_ . '/modules/splashsync/splashsync.php');
         //====================================================================//
         // Check if Parser is Enabled
         $this->displayResult(
             $output,
             DiscountsManager::isFeatureActive(),
-            "Discount Parser is Enabled"
+            'Discount Parser is Enabled'
         );
         if (!DiscountsManager::isFeatureActive()) {
             return 1;
@@ -77,9 +86,9 @@ class Check extends Command
         $currency = new Currency((int) Configuration::get('PS_CURRENCY_DEFAULT'));
         //====================================================================//
         // Safety Check
-        $orderId = $input->getArgument("orderId");
+        $orderId = $input->getArgument('orderId');
         if (!$orderId || !is_string($orderId)) {
-            $this->displayResult($output, false, "No Order ID provided");
+            $this->displayResult($output, false, 'No Order ID provided');
 
             return 0;
         }
@@ -87,16 +96,16 @@ class Check extends Command
         // Check if Order has Cache
         $this->displayResult(
             $output,
-            DiscountsManager::hasOrderDiscountsDetails($orderId, $currency),
-            sprintf("Order %s has Discount Details", $orderId)
+            DiscountsManager::hasOrderDiscountsDetails((int) $orderId, $currency),
+            sprintf('Order %s has Discount Details', $orderId)
         );
         //====================================================================//
         // If Clear Details Requested
         if ($input->getOption('flush')) {
             $this->displayResult(
                 $output,
-                DiscountsManager::deleteOrderDiscountsDetails($orderId),
-                sprintf("Order %s Discount Details now Deleted", $orderId)
+                DiscountsManager::deleteOrderDiscountsDetails((int) $orderId),
+                sprintf('Order %s Discount Details now Deleted', $orderId)
             );
         }
 

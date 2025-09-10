@@ -1,6 +1,5 @@
 <?php
-
-/*
+/**
  *  This file is part of SplashSync Project.
  *
  *  Copyright (C) Splash Sync  <www.splashsync.com>
@@ -11,6 +10,10 @@
  *
  *  For the full copyright and license information, please view the LICENSE
  *  file that was distributed with this source code.
+ *
+ * @author Splash Sync
+ * @copyright Splash Sync SAS
+ * @license MIT
  */
 
 namespace Splash\Local\Objects\Product;
@@ -19,6 +22,12 @@ use Combination;
 use PrestaShopException;
 use Splash\Client\Splash as Splash;
 use Splash\Local\Services\LanguagesManager as SLM;
+
+// phpcs:disable PSR1.Files.SideEffects
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+// phpcs:enable PSR1.Files.SideEffects
 
 /**
  * Prestashop Product Attribute Data Access
@@ -64,16 +73,16 @@ trait AttributeTrait
         $this->AttributeId = self::getAttribute($uniqueId);
         //====================================================================//
         // Safety Checks
-        if (!$this->isLocked("onCombinationCreate") && empty($this->AttributeId)) {
+        if (!$this->isLocked('onCombinationCreate') && empty($this->AttributeId)) {
             //====================================================================//
             // Read Product Combinations
             $attrList = $this->object->getAttributesResume(SLM::getDefaultLangId());
             //====================================================================//
             // If Product has Combinations => Cannot Read Variant Product Without AttributeId
             if (is_array($attrList) && !empty($attrList)) {
-                Splash::commit("Product", $this->ProductId, SPL_A_DELETE);
+                Splash::commit('Product', $this->ProductId, SPL_A_DELETE);
 
-                return Splash::log()->err("Trying to fetch a Base Product, this is now forbidden.");
+                return Splash::log()->err('Trying to fetch a Base Product, this is now forbidden.');
             }
 
             return true;
@@ -83,7 +92,7 @@ trait AttributeTrait
         //====================================================================//
         $this->Attribute = new Combination($this->AttributeId, null, \Shop::getContextShopID(true));
         if ($this->Attribute->id != $this->AttributeId) {
-            return Splash::log()->errTrace("Unable to fetch Product Attribute (".$this->AttributeId.")");
+            return Splash::log()->errTrace('Unable to fetch Product Attribute (' . $this->AttributeId . ')');
         }
 
         //====================================================================//
@@ -116,12 +125,12 @@ trait AttributeTrait
         $this->Attribute = new Combination();
         //====================================================================//
         // Setup Combination Minimal Data
-        $this->setSimple("id_product", $this->ProductId, "Attribute");
-        $this->setSimple("reference", $this->in["ref"], "Attribute");
+        $this->setSimple('id_product', $this->ProductId, 'Attribute');
+        $this->setSimple('reference', $this->in['ref'], 'Attribute');
         //====================================================================//
         // CREATE PRODUCT ATTRIBUTE IF NEW
         if (!$this->Attribute->add()) {
-            return Splash::log()->errTrace("Unable to create Product Combination.");
+            return Splash::log()->errTrace('Unable to create Product Combination.');
         }
         //====================================================================//
         // Store New Id on SplashObject Class
@@ -145,19 +154,19 @@ trait AttributeTrait
         Splash::log()->trace();
         //====================================================================//
         // Verify Update Is required
-        if (!$this->isToUpdate("Attribute")) {
-            Splash::log()->deb("MsgLocalNoUpdateReq", __CLASS__, __FUNCTION__);
+        if (!$this->isToUpdate('Attribute')) {
+            Splash::log()->deb('MsgLocalNoUpdateReq', __CLASS__, __FUNCTION__);
 
             return true;
         }
         //====================================================================//
         // Verify Attribute Already Exists
         if (!$this->Attribute) {
-            return Splash::log()->errTrace("Unable to update Product Attribute that doesn't Exists.");
+            return Splash::log()->errTrace('Unable to update Product Attribute that doesn\'t Exists.');
         }
         //====================================================================//
         // FORCE MSF FIELDS WRITING
-        $updateFields = $this->getMsfUpdateFields("Attribute");
+        $updateFields = $this->getMsfUpdateFields('Attribute');
         if (is_array($updateFields)) {
             $this->Attribute->setFieldsToUpdate($updateFields);
         }
@@ -166,14 +175,14 @@ trait AttributeTrait
             //====================================================================//
             // UPDATE ATTRIBUTE INFORMATIONS
             if (!$this->Attribute->update()) {
-                return Splash::log()->errTrace("Unable to update Product Attribute.");
+                return Splash::log()->errTrace('Unable to update Product Attribute.');
             }
             //====================================================================//
             // UPDATE ATTRIBUTE IMAGES
             if (isset($this->attrImageIds)) {
                 $this->Attribute->setImages($this->attrImageIds);
             }
-            $this->isUpdated("Attribute");
+            $this->isUpdated('Attribute');
         } catch (PrestaShopException $e) {
             Splash::log()->report($e);
         }
@@ -195,7 +204,7 @@ trait AttributeTrait
         // Try Loading Product Attribute Combinaisons From DataBase
         $attribute = new Combination($this->AttributeId);
         if ($attribute->id != $this->AttributeId) {
-            return Splash::log()->warTrace("Unable to fetch Product Attribute (".$this->AttributeId.")");
+            return Splash::log()->warTrace('Unable to fetch Product Attribute (' . $this->AttributeId . ')');
         }
         //====================================================================//
         // Delete Attribute

@@ -1,6 +1,5 @@
 <?php
-
-/*
+/**
  *  This file is part of SplashSync Project.
  *
  *  Copyright (C) Splash Sync  <www.splashsync.com>
@@ -11,12 +10,22 @@
  *
  *  For the full copyright and license information, please view the LICENSE
  *  file that was distributed with this source code.
+ *
+ * @author Splash Sync
+ * @copyright Splash Sync SAS
+ * @license MIT
  */
 
 namespace Splash\Local\Configurators;
 
 use Splash\Configurator\StaticConfigurator;
 use Splash\Core\SplashCore as Splash;
+
+// phpcs:disable PSR1.Files.SideEffects
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+// phpcs:enable PSR1.Files.SideEffects
 
 class StockOnlyConfigurator extends StaticConfigurator
 {
@@ -25,14 +34,14 @@ class StockOnlyConfigurator extends StaticConfigurator
      *
      * @var array
      */
-    protected static $writableFields = array("ref", "stock");
+    protected static $writableFields = array('ref', 'stock');
 
     /**
      * {@inheritdoc}
      */
     public static function getName(): string
     {
-        return "Stock Only: @Products, Only Skus & Stocks are Writable";
+        return 'Stock Only: @Products, Only Skus & Stocks are Writable';
     }
 
     /**
@@ -43,7 +52,7 @@ class StockOnlyConfigurator extends StaticConfigurator
         Splash::log()->trace();
         //====================================================================//
         // Check if Configuration is Empty
-        if ("Product" != $objectType) {
+        if ('Product' != $objectType) {
             return $fields;
         }
         //====================================================================//
@@ -51,12 +60,12 @@ class StockOnlyConfigurator extends StaticConfigurator
         foreach ($fields as $index => $field) {
             //====================================================================//
             // Check if Field Shall be Written
-            if (in_array($field["id"], self::$writableFields, true)) {
+            if (in_array($field['id'], self::$writableFields, true)) {
                 continue;
             }
             //====================================================================//
             // Update Field Definition
-            $fields[$index] = self::updateField($field, array("write" => "0"));
+            $fields[$index] = self::updateField($field, array('write' => '0'));
         }
 
         return $fields;

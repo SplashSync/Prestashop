@@ -1,6 +1,5 @@
 <?php
-
-/*
+/**
  *  This file is part of SplashSync Project.
  *
  *  Copyright (C) Splash Sync  <www.splashsync.com>
@@ -11,6 +10,10 @@
  *
  *  For the full copyright and license information, please view the LICENSE
  *  file that was distributed with this source code.
+ *
+ * @author Splash Sync
+ * @copyright Splash Sync SAS
+ * @license MIT
  */
 
 namespace Splash\Local\Services;
@@ -24,6 +27,12 @@ use Splash\Client\Splash as Splash;
 use Splash\Local\Services\LanguagesManager as SLM;
 use Splash\Models\Helpers\FilesHelper;
 
+// phpcs:disable PSR1.Files.SideEffects
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+// phpcs:enable PSR1.Files.SideEffects
+
 /**
  * Splash Order Pdf Manager - Reading of Order Attached Pdfs
  */
@@ -33,7 +42,7 @@ class OrderPdfManager
     const PDF_TTL = 10;
 
     /** @var string */
-    const PDF_PATH = "/var/splash/";
+    const PDF_PATH = '/var/splash/';
 
     /**
      * Get Order Invoice Pdf Informations
@@ -61,7 +70,7 @@ class OrderPdfManager
         //====================================================================//
         // Ensure Pdf Exist or Create it
         if (!self::createPdf($invoice, PDF::TEMPLATE_INVOICE, $fullPath)) {
-            Splash::log()->errTrace("Unable to Create Pdf (".$fullPath.").");
+            Splash::log()->errTrace('Unable to Create Pdf (' . $fullPath . ').');
 
             return null;
         }
@@ -69,7 +78,7 @@ class OrderPdfManager
         $infos = FilesHelper::stream(
             self::getInvoiceNumber($invoice),
             pathinfo($fullPath, PATHINFO_BASENAME),
-            pathinfo($fullPath, PATHINFO_DIRNAME)."/",
+            pathinfo($fullPath, PATHINFO_DIRNAME) . '/',
             self::PDF_TTL
         );
 
@@ -102,7 +111,7 @@ class OrderPdfManager
         //====================================================================//
         // Ensure Pdf Exist or Create it
         if (!self::createPdf($invoice, PDF::TEMPLATE_DELIVERY_SLIP, $fullPath)) {
-            Splash::log()->errTrace("Unable to Create Pdf (".$fullPath.").");
+            Splash::log()->errTrace('Unable to Create Pdf (' . $fullPath . ').');
 
             return null;
         }
@@ -110,7 +119,7 @@ class OrderPdfManager
         $infos = FilesHelper::stream(
             self::getDeliveryNumber($order),
             pathinfo($fullPath, PATHINFO_BASENAME),
-            pathinfo($fullPath, PATHINFO_DIRNAME)."/",
+            pathinfo($fullPath, PATHINFO_DIRNAME) . '/',
             self::PDF_TTL
         );
 
@@ -140,7 +149,7 @@ class OrderPdfManager
         //====================================================================//
         // Store to Disk using File Manager
         return Splash::file()->writeFile(
-            pathinfo($fullPath, PATHINFO_DIRNAME)."/",
+            pathinfo($fullPath, PATHINFO_DIRNAME) . '/',
             pathinfo($fullPath, PATHINFO_BASENAME),
             md5($rawPdf),
             base64_encode($rawPdf)
@@ -163,7 +172,7 @@ class OrderPdfManager
         /** @var Context $context */
         $context = Context::getContext();
         if (!$context->smarty) {
-            return "Smarty not Found";
+            return 'Smarty not Found';
         }
         //====================================================================//
         // Generate Pdf
@@ -179,13 +188,8 @@ class OrderPdfManager
     /**
      * Get Pdf Cache Storage Path for this File
      * Encode for safety but... Unique for a each Order
-     *
-     * @param Order  $order
-     * @param string $template
-     *
-     * @return string
      */
-    private static function getPdfPath(Order $order, $template)
+    private static function getPdfPath(Order $order, string $template): string
     {
         //====================================================================//
         // Generate Unique File Name
@@ -194,16 +198,16 @@ class OrderPdfManager
 
         //==============================================================================
         // Encode Multilevel File Path
-        $basePath = _PS_ROOT_DIR_.self::PDF_PATH.strtolower($template)."/";
+        $basePath = _PS_ROOT_DIR_ . self::PDF_PATH . strtolower($template) . '/';
         $path = '';
         for ($i = 0; $i < 3; ++$i) {
-            $path .= substr($encoded, 0, 2).'/';
-            $encoded = substr($encoded, 2);
+            $path .= substr((string) $encoded, 0, 2) . '/';
+            $encoded = substr((string) $encoded, 2);
         }
 
         //==============================================================================
         // Concat File Path
-        return $basePath.$path.$encoded.'.pdf';
+        return $basePath . $path . $encoded . '.pdf';
     }
 
     /**
@@ -219,7 +223,7 @@ class OrderPdfManager
         // Load Invoice Object
         $invoice = OrderInvoice::getInvoiceByNumber($order->invoice_number);
         if (!$invoice || ($invoice->number != $order->invoice_number)) {
-            Splash::log()->errTrace("Unable to load Invoice by Number (".$order->invoice_number.").");
+            Splash::log()->errTrace('Unable to load Invoice by Number (' . $order->invoice_number . ').');
 
             return null;
         }
@@ -251,7 +255,7 @@ class OrderPdfManager
         //====================================================================//
         // GET COMPUTED INFOS
         $slipNumber = Configuration::get('PS_DELIVERY_PREFIX', SLM::getDefaultLangId(), null, $order->id_shop);
-        $slipNumber .= sprintf("%06d", $order->delivery_number);
+        $slipNumber .= sprintf('%06d', $order->delivery_number);
 
         return $slipNumber;
     }

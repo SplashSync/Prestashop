@@ -1,6 +1,5 @@
 <?php
-
-/*
+/**
  *  This file is part of SplashSync Project.
  *
  *  Copyright (C) Splash Sync  <www.splashsync.com>
@@ -11,16 +10,24 @@
  *
  *  For the full copyright and license information, please view the LICENSE
  *  file that was distributed with this source code.
+ *
+ * @author Splash Sync
+ * @copyright Splash Sync SAS
+ * @license MIT
  */
 
 namespace Splash\Local\Objects\Product;
 
-use Category;
 use Splash\Local\Services\CategoryManager;
-use Splash\Local\Services\LanguagesManager;
+use Splash\Local\Services\LanguagesManager as SLM;
 use Splash\Local\Services\MultiShopManager as MSM;
 use Splash\Models\Helpers\InlineHelper;
-use Translate;
+
+// phpcs:disable PSR1.Files.SideEffects
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+// phpcs:enable PSR1.Files.SideEffects
 
 /**
  * Access to Product Category Fields
@@ -38,7 +45,7 @@ trait CategoriesTrait
      */
     protected function buildCategoriesFields(): void
     {
-        $fieldName = Translate::getAdminTranslation("Categories", "AdminCatalogFeature");
+        $fieldName = SLM::translate('Categories', 'AdminCatalogFeature');
 
         //====================================================================//
         // PRODUCT CATEGORIES
@@ -47,17 +54,17 @@ trait CategoriesTrait
         //====================================================================//
         // Categories Slugs
         $this->fieldsFactory()->create(SPL_T_INLINE)
-            ->identifier("categories")
+            ->identifier('categories')
             ->name($fieldName)
-            ->description($fieldName." Rewrite Url")
-            ->microData("http://schema.org/Product", "category")
+            ->description($fieldName . ' Rewrite Url')
+            ->microData('http://schema.org/Product', 'category')
             ->addChoices(CategoryManager::getAllCategoriesChoices())
             ->setPreferNone()
         ;
         //====================================================================//
         // MSF Light Mode => Visible Only on ALL Sites
         if (MSM::isLightMode()) {
-            $this->fieldsFactory()->addOption("shop", MSM::MODE_ALL);
+            $this->fieldsFactory()->addOption('shop', MSM::MODE_ALL);
         }
         //====================================================================//
         // NO TEST in MSF Mode as Categories are Not Copied
@@ -65,15 +72,15 @@ trait CategoriesTrait
             $this->fieldsFactory()->isNotTested();
         }
 
-        $this->fieldsFactory()->setDefaultLanguage(LanguagesManager::getDefaultLanguage());
-        foreach (LanguagesManager::getAvailableLanguages() as $langId => $isoLang) {
+        $this->fieldsFactory()->setDefaultLanguage(SLM::getDefaultLanguage());
+        foreach (SLM::getAvailableLanguages() as $langId => $isoLang) {
             //====================================================================//
             // Categories Names
             $this->fieldsFactory()->create(SPL_T_INLINE)
-                ->identifier("categories_names")
-                ->name($fieldName." Name")
-                ->description($fieldName." Names")
-                ->microData("http://schema.org/Product", "categoryName")
+                ->identifier('categories_names')
+                ->name($fieldName . ' Name')
+                ->description($fieldName . ' Names')
+                ->microData('http://schema.org/Product', 'categoryName')
                 ->setMultilang($isoLang)
                 ->addChoices(CategoryManager::getAllCategoriesChoices($langId))
                 ->setPreferNone()
@@ -82,7 +89,7 @@ trait CategoriesTrait
             //====================================================================//
             // MSF Light Mode => Visible Only on ALL Sites
             if (MSM::isLightMode()) {
-                $this->fieldsFactory()->addOption("shop", MSM::MODE_ALL);
+                $this->fieldsFactory()->addOption('shop', MSM::MODE_ALL);
             }
         }
     }
@@ -128,16 +135,16 @@ trait CategoriesTrait
     {
         //====================================================================//
         // Walk on Available Languages
-        foreach (LanguagesManager::getAvailableLanguages() as $idLang => $isoLang) {
+        foreach (SLM::getAvailableLanguages() as $idLang => $isoLang) {
             //====================================================================//
             // Decode Multi-lang Field Name
-            $baseFieldName = LanguagesManager::fieldNameDecode($fieldName, $isoLang);
+            $baseFieldName = SLM::fieldNameDecode($fieldName, $isoLang);
             //====================================================================//
             // READ Fields
             switch ($baseFieldName) {
                 case 'categories_names':
                     $this->out[$fieldName] = InlineHelper::fromArray(
-                        CategoryManager::getProductCategories($this->ProductId, $idLang, "name")
+                        CategoryManager::getProductCategories($this->ProductId, $idLang, 'name')
                     );
                     unset($this->in[$key]);
 

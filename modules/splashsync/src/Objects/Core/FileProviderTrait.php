@@ -1,6 +1,5 @@
 <?php
-
-/*
+/**
  *  This file is part of SplashSync Project.
  *
  *  Copyright (C) Splash Sync  <www.splashsync.com>
@@ -11,6 +10,10 @@
  *
  *  For the full copyright and license information, please view the LICENSE
  *  file that was distributed with this source code.
+ *
+ * @author Splash Sync
+ * @copyright Splash Sync SAS
+ * @license MIT
  */
 
 namespace Splash\Local\Objects\Core;
@@ -18,6 +21,12 @@ namespace Splash\Local\Objects\Core;
 use Order;
 use Splash\Client\Splash as Splash;
 use Splash\Local\Services\OrderPdfManager;
+
+// phpcs:disable PSR1.Files.SideEffects
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+// phpcs:enable PSR1.Files.SideEffects
 
 /**
  * Access to Objects Raw Files
@@ -54,7 +63,7 @@ trait FileProviderTrait
         // Load Order Object
         $order = new Order($orderId);
         if ($order->id != $orderId) {
-            return Splash::log()->errTrace("Unable to load Order (".$orderId.").");
+            return Splash::log()->errTrace('Unable to load Order (' . $orderId . ').');
         }
         //====================================================================//
         // Load Pdf Type Name
@@ -65,11 +74,11 @@ trait FileProviderTrait
         //====================================================================//
         // Load Pdf Contents
         switch ($pdfType) {
-            case "OrderInvoice":
+            case 'OrderInvoice':
                 $file = OrderPdfManager::getOrderInvoicePdfInfos($order, true);
 
                 break;
-            case "OrderDelivery":
+            case 'OrderDelivery':
                 $file = OrderPdfManager::getOrderSlipPdfInfos($order, true);
 
                 break;
@@ -80,7 +89,7 @@ trait FileProviderTrait
         }
         //====================================================================//
         // Check Pdf Contents Md5
-        if (!is_array($file) || ($file["md5"] != $md5)) {
+        if (!is_array($file) || ($file['md5'] != $md5)) {
             return false;
         }
 
@@ -96,7 +105,7 @@ trait FileProviderTrait
     {
         //====================================================================//
         // Explode File Path Code
-        $exploded = explode("::", $file);
+        $exploded = explode('::', $file);
         if (2 != count($exploded)) {
             return null;
         }
@@ -118,7 +127,7 @@ trait FileProviderTrait
     {
         //====================================================================//
         // Explode File Path Code
-        $exploded = explode("::", $file);
+        $exploded = explode('::', $file);
         if (2 != count($exploded)) {
             return null;
         }

@@ -1,6 +1,5 @@
 <?php
-
-/*
+/**
  *  This file is part of SplashSync Project.
  *
  *  Copyright (C) Splash Sync  <www.splashsync.com>
@@ -11,6 +10,10 @@
  *
  *  For the full copyright and license information, please view the LICENSE
  *  file that was distributed with this source code.
+ *
+ * @author Splash Sync
+ * @copyright Splash Sync SAS
+ * @license MIT
  */
 
 namespace Splash\Local\Objects;
@@ -27,6 +30,12 @@ use Splash\Models\Objects\IntelParserTrait;
 use Splash\Models\Objects\ObjectsTrait;
 use Splash\Models\Objects\SimpleFieldsTrait;
 use SplashSync;
+
+// phpcs:disable PSR1.Files.SideEffects
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+// phpcs:enable PSR1.Files.SideEffects
 
 /**
  * Splash Local Object Class - Customer Invoices Local Integration
@@ -71,21 +80,21 @@ class Invoice extends AbstractObject
      *
      * @var string
      */
-    protected static string $name = "Customer Invoice";
+    protected static string $name = 'Customer Invoice';
 
     /**
      * Object Description (Translated by Module)
      *
      * @var string
      */
-    protected static string $description = "Prestashop Customers Invoice Object";
+    protected static string $description = 'Prestashop Customers Invoice Object';
 
     /**
      * Object Icon (FontAwesome or Glyph ico tag)
      *
      * @var string
      */
-    protected static string $ico = "fa fa-money";
+    protected static string $ico = 'fa fa-money';
 
     //====================================================================//
     // Object Synchronization Limitations
@@ -160,7 +169,7 @@ class Invoice extends AbstractObject
      *
      * @var string
      */
-    protected $PaymentMethod;
+    protected string $paymentMethod;
 
     /**
      * @var OrderInvoice
@@ -191,9 +200,6 @@ class Invoice extends AbstractObject
         if (Shop::isFeatureActive()) {
             Shop::setContext(Shop::CONTEXT_ALL);
         }
-        //====================================================================//
-        //  Load Local Translation File
-        Splash::translator()->load("objects@local");
         //====================================================================//
         // Load Splash Module
         $this->spl = Local::getLocalModule();

@@ -1,6 +1,5 @@
 <?php
-
-/*
+/**
  *  This file is part of SplashSync Project.
  *
  *  Copyright (C) Splash Sync  <www.splashsync.com>
@@ -11,12 +10,22 @@
  *
  *  For the full copyright and license information, please view the LICENSE
  *  file that was distributed with this source code.
+ *
+ * @author Splash Sync
+ * @copyright Splash Sync SAS
+ * @license MIT
  */
 
 namespace Splash\Local\Objects\Product;
 
 use Image;
 use Splash\Local\Services\MultiShopManager as MSM;
+
+// phpcs:disable PSR1.Files.SideEffects
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+// phpcs:enable PSR1.Files.SideEffects
 
 /**
  * Access to Product Cover Image Fields
@@ -32,18 +41,18 @@ trait CoverImageTrait
     {
         //====================================================================//
         // Cover Image
-        $this->fieldsFactory()->create(SPL_T_IMG, "cover_image")
-            ->name("Cover Image")
-            ->microData("http://schema.org/Product", "coverImage")
-            ->addOption("shop", MSM::MODE_ALL)
+        $this->fieldsFactory()->create(SPL_T_IMG, 'cover_image')
+            ->name('Cover Image')
+            ->microData('http://schema.org/Product', 'coverImage')
+            ->addOption('shop', MSM::MODE_ALL)
             ->isReadOnly()
         ;
         //====================================================================//
         // Cover Image Url
-        $this->fieldsFactory()->create(SPL_T_URL, "cover_image_url")
-            ->name("Cover Image Url")
-            ->microData("http://schema.org/Product", "coverImageUrl")
-            ->addOption("shop", MSM::MODE_ALL)
+        $this->fieldsFactory()->create(SPL_T_URL, 'cover_image_url')
+            ->name('Cover Image Url')
+            ->microData('http://schema.org/Product', 'coverImageUrl')
+            ->addOption('shop', MSM::MODE_ALL)
             ->isReadOnly()
         ;
     }
@@ -86,11 +95,11 @@ trait CoverImageTrait
     {
         /** @var array|bool $imgResult */
         $imgResult = Image::getGlobalCover($this->ProductId);
-        if (!is_array($imgResult) || empty($imgResult["id_image"])) {
+        if (!is_array($imgResult) || empty($imgResult['id_image'])) {
             return null;
         }
-        $imgInfos = $this->buildInfo((int) $imgResult["id_image"]);
+        $imgInfos = $this->buildInfo((int) $imgResult['id_image']);
 
-        return is_array($imgInfos["image"] ?? null) ? $imgInfos["image"] : null;
+        return is_array($imgInfos['image'] ?? null) ? $imgInfos['image'] : null;
     }
 }

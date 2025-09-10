@@ -1,6 +1,5 @@
 <?php
-
-/*
+/**
  *  This file is part of SplashSync Project.
  *
  *  Copyright (C) Splash Sync  <www.splashsync.com>
@@ -11,15 +10,23 @@
  *
  *  For the full copyright and license information, please view the LICENSE
  *  file that was distributed with this source code.
+ *
+ * @author Splash Sync
+ * @copyright Splash Sync SAS
+ * @license MIT
  */
 
 namespace Splash\Local\Objects\Order;
 
-//====================================================================//
-// Prestashop Static Classes
 use Db;
 use DbQuery;
 use Splash\Core\SplashCore as Splash;
+
+// phpcs:disable PSR1.Files.SideEffects
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+// phpcs:enable PSR1.Files.SideEffects
 
 /**
  * Search Order by Primary Keys
@@ -44,18 +51,18 @@ trait PrimaryTrait
         $sql = new DbQuery();
         //====================================================================//
         // Build SELECT
-        $sql->select("o.`id_order`      as id");            // Order Id
-        $sql->select("o.`reference`     as reference");     // Order Internal Reference
+        $sql->select('o.`id_order`      as id');            // Order Id
+        $sql->select('o.`reference`     as reference');     // Order Internal Reference
         //====================================================================//
         // Build FROM
-        $sql->from("orders", 'o');
+        $sql->from('orders', 'o');
         //====================================================================//
         // Setup filters
         // Add filters with names conversions. Added LOWER function to be NON case sensitive
-        if (!empty($keys['reference']) && is_string($keys['reference'])) {
+        if (!empty($keys['reference'])) {
             //====================================================================//
             // Search in Customer Email
-            $where = " LOWER( o.`reference` ) = LOWER( '".pSQL($keys['reference'])."') ";
+            $where = ' LOWER( o.`reference` ) = LOWER( \'' . pSQL($keys['reference']) . '\') ';
             $sql->where($where);
         }
         //====================================================================//

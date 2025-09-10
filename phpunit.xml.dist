@@ -38,7 +38,7 @@
     </testsuites>
 
     <php>
-        <server name="SERVER_NAME" value="http://localhost/PrestaShop/Ps-Last"/>
+        <server name="SERVER_NAME" value="http://localhost"/>
         <const name="SPLASH_DEBUG" value="true"/>
         <server name="SPLASH_TRAVIS" value="true"/>
     </php>

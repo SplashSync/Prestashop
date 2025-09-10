@@ -1,6 +1,5 @@
 <?php
-
-/*
+/**
  *  This file is part of SplashSync Project.
  *
  *  Copyright (C) Splash Sync  <www.splashsync.com>
@@ -11,6 +10,10 @@
  *
  *  For the full copyright and license information, please view the LICENSE
  *  file that was distributed with this source code.
+ *
+ * @author Splash Sync
+ * @copyright Splash Sync SAS
+ * @license MIT
  */
 
 namespace Splash\Local\Objects\Product;
@@ -23,6 +26,12 @@ use Splash\Client\Splash;
 use Splash\Local\Objects\Product;
 use Splash\Local\Services\LanguagesManager;
 use Splash\Local\Services\PmAdvancedPack;
+
+// phpcs:disable PSR1.Files.SideEffects
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+// phpcs:enable PSR1.Files.SideEffects
 
 /**
  * Prestashop Hooks for Products
@@ -38,7 +47,7 @@ trait HooksTrait
      */
     public function hookActionObjectProductAddAfter(array $params): bool
     {
-        return $this->hookactionProduct($params["object"], SPL_A_CREATE, $this->l('Product Created on Prestashop'));
+        return $this->hookactionProduct($params['object'], SPL_A_CREATE, $this->l('Product Created on Prestashop'));
     }
 
     /**
@@ -60,12 +69,12 @@ trait HooksTrait
         }
         //====================================================================//
         // Safety Check
-        if (!isset($params["product"]) || !($params["product"] instanceof PsProduct)) {
+        if (!isset($params['product']) || !($params['product'] instanceof PsProduct)) {
             return false;
         }
 
         return $this->hookactionProduct(
-            $params["product"],
+            $params['product'],
             SPL_A_UPDATE,
             $this->l('Product Updated on PS Database Module')
         );
@@ -80,7 +89,7 @@ trait HooksTrait
      */
     public function hookActionObjectProductUpdateAfter(array $params): bool
     {
-        return $this->hookactionProduct($params["object"], SPL_A_UPDATE, $this->l('Product Updated on Prestashop'));
+        return $this->hookactionProduct($params['object'], SPL_A_UPDATE, $this->l('Product Updated on Prestashop'));
     }
 
     /**
@@ -92,7 +101,7 @@ trait HooksTrait
      */
     public function hookActionObjectProductDeleteAfter(array $params): bool
     {
-        return $this->hookactionProduct($params["object"], SPL_A_DELETE, $this->l('Product Deleted on Prestashop'));
+        return $this->hookactionProduct($params['object'], SPL_A_DELETE, $this->l('Product Deleted on Prestashop'));
     }
 
     /**
@@ -105,7 +114,7 @@ trait HooksTrait
     public function hookActionObjectCombinationAddAfter(array $params): bool
     {
         return $this->hookactionCombination(
-            $params["object"],
+            $params['object'],
             SPL_A_CREATE,
             $this->l('Product Variant Created on Prestashop')
         );
@@ -121,7 +130,7 @@ trait HooksTrait
     public function hookActionObjectCombinationUpdateAfter(array $params): bool
     {
         return $this->hookactionCombination(
-            $params["object"],
+            $params['object'],
             SPL_A_UPDATE,
             $this->l('Product Variant Updated on Prestashop')
         );
@@ -137,7 +146,7 @@ trait HooksTrait
     public function hookActionObjectCombinationDeleteAfter(array $params): bool
     {
         return $this->hookactionCombination(
-            $params["object"],
+            $params['object'],
             SPL_A_DELETE,
             $this->l('Product Variant Deleted on Prestashop')
         );
@@ -161,11 +170,11 @@ trait HooksTrait
         $this->debugHook(__FUNCTION__, 'Product Stock Updated on Prestashop');
         //====================================================================//
         // On Product Admin Page stock Update
-        if (!isset($params["cart"])) {
+        if (!isset($params['cart'])) {
             //====================================================================//
             // Commit Update For Product
             return $this->doCommit(
-                "Product",
+                'Product',
                 $this->getActionProductIds($params),
                 SPL_A_UPDATE,
                 $this->l('Product Stock Updated on Prestashop')
@@ -173,7 +182,7 @@ trait HooksTrait
         }
         //====================================================================//
         // Get Products from Cart
-        $products = $params["cart"]->getProducts();
+        $products = $params['cart']->getProducts();
         //====================================================================//
         // Init Products Id Array
         $unikId = array();
@@ -187,7 +196,7 @@ trait HooksTrait
 
         //====================================================================//
         // Commit Update For Product
-        return $this->doCommit("Product", $unikId, SPL_A_UPDATE, $this->l('Product Stock Updated on Prestashop'));
+        return $this->doCommit('Product', $unikId, SPL_A_UPDATE, $this->l('Product Stock Updated on Prestashop'));
     }
 
     /**
@@ -202,7 +211,7 @@ trait HooksTrait
         //====================================================================//
         // Ensure Input is Product Class
         if (!($product instanceof PsProduct)) {
-            $product = new PsProduct($product["id_product"]);
+            $product = new PsProduct($product['id_product']);
         }
         //====================================================================//
         // Ensure Commit is Allowed for this Product
@@ -221,12 +230,12 @@ trait HooksTrait
 
         //====================================================================//
         // JUST FOR TRAVIS => Only Commit Id of Curent Impacted Combination
-        if (defined("SPLASH_DEBUG")) {
-            if (isset(Splash::object("Product")->AttributeId) && !empty(Splash::object("Product")->AttributeId)) {
+        if (defined('SPLASH_DEBUG')) {
+            if (isset(Splash::object('Product')->AttributeId) && !empty(Splash::object('Product')->AttributeId)) {
                 //====================================================================//
                 // Add Current Product Combinations to Commit Update List
                 return array(
-                    Product::getUnikIdStatic((int) $product->id, Splash::object("Product")->AttributeId)
+                    Product::getUnikIdStatic((int) $product->id, Splash::object('Product')->AttributeId)
                 );
             }
         }
@@ -234,7 +243,7 @@ trait HooksTrait
         // Add Product Combinations to Commit Update List
         $productIds = array();
         foreach ($attrList as $attr) {
-            $productIds[] = Product::getUnikIdStatic((int) $product->id, $attr["id_product_attribute"]);
+            $productIds[] = Product::getUnikIdStatic((int) $product->id, $attr['id_product_attribute']);
         }
 
         return  $productIds;
@@ -254,14 +263,14 @@ trait HooksTrait
         //====================================================================//
         // Safety Check
         if (!isset($product->id) || empty($product->id)) {
-            return Splash::log()->err("ErrLocalTpl", "Product", __FUNCTION__, "Unable to Read Product Id.");
+            return Splash::log()->err('ErrLocalTpl', 'Product', __FUNCTION__, 'Unable to Read Product Id.');
         }
         //====================================================================//
         // Log
-        $this->debugHook(__FUNCTION__, $product->id." >> ".$comment);
+        $this->debugHook(__FUNCTION__, $product->id . ' >> ' . $comment);
         //====================================================================//
         // Combination Lock Mode => Splash is Creating a Variant Product
-        if (Splash::object("Product")->isLocked("onCombinationLock")) {
+        if (Splash::object('Product')->isLocked('onCombinationLock')) {
             return true;
         }
         //====================================================================//
@@ -273,7 +282,7 @@ trait HooksTrait
 
         //====================================================================//
         // Commit Update For Product
-        return $this->doCommit("Product", $idList, $action, $comment);
+        return $this->doCommit('Product', $idList, $action, $comment);
     }
 
     /**
@@ -297,14 +306,14 @@ trait HooksTrait
         }
         //====================================================================//
         // Log
-        $this->debugHook(__FUNCTION__, $combinationId." >> ".$comment);
+        $this->debugHook(__FUNCTION__, $combinationId . ' >> ' . $comment);
         //====================================================================//
         // Safety Check
         if (empty($combinationId)) {
-            return Splash::log()->errTrace("Unable to Read Product Attribute Id.");
+            return Splash::log()->errTrace('Unable to Read Product Attribute Id.');
         }
         if (empty($combination->id_product)) {
-            return Splash::log()->errTrace("Unable to Read Product Id.");
+            return Splash::log()->errTrace('Unable to Read Product Id.');
         }
         //====================================================================//
         // Ensure Commit is Allowed for this Product
@@ -317,11 +326,11 @@ trait HooksTrait
         $unikId = Product::getUnikIdStatic($combination->id_product, $combinationId);
         //====================================================================//
         // Commit Update For Product Attribute
-        $this->doCommit("Product", $unikId, $action, $comment);
+        $this->doCommit('Product', $unikId, $action, $comment);
         if (SPL_A_CREATE == $action) {
             //====================================================================//
             // Commit Update For Product Attribute
-            $this->doCommit("Product", (string) $combination->id_product, SPL_A_DELETE, $comment);
+            $this->doCommit('Product', (string) $combination->id_product, SPL_A_DELETE, $comment);
         }
 
         return true;
@@ -339,33 +348,33 @@ trait HooksTrait
         //====================================================================//
         // Ensure Input is Product Class
         if (!($product instanceof PsProduct)) {
-            Splash::log()->errTrace("Input is not a Product.");
+            Splash::log()->errTrace('Input is not a Product.');
 
             return false;
         }
         //====================================================================//
         // Filter Virtual Products
-        if (empty(Configuration::get("SPLASH_SYNC_VIRTUAL"))) {
+        if (empty(Configuration::get('SPLASH_SYNC_VIRTUAL'))) {
             if (!empty($product->is_virtual)) {
-                Splash::log()->war("Virtual Product: Commit Skipped.");
+                Splash::log()->war('Virtual Product: Commit Skipped.');
 
                 return false;
             }
         }
         //====================================================================//
         // Setup Pack Products Filters
-        if (empty(Configuration::get("SPLASH_SYNC_PACKS"))) {
+        if (empty(Configuration::get('SPLASH_SYNC_PACKS'))) {
             //====================================================================//
             // Check if Product is a Pack
             if (Pack::isPack((int) $product->id)) {
-                Splash::log()->war("Products Pack: Commit Skipped.");
+                Splash::log()->war('Products Pack: Commit Skipped.');
 
                 return false;
             }
             //====================================================================//
             // Compatibility with Pm Advanced Packs Module
             if (PmAdvancedPack::isAdvancedPack((int)  $product->id)) {
-                Splash::log()->war("Advanced Products Pack: Commit Skipped.");
+                Splash::log()->war('Advanced Products Pack: Commit Skipped.');
 
                 return false;
             }
@@ -392,7 +401,7 @@ trait HooksTrait
         // IS STORE COMMANDER
         /** @var string $requestUri */
         $requestUri = filter_input(INPUT_SERVER, 'REQUEST_URI');
-        if (false !== strpos($requestUri, "/modules/storecommander/")) {
+        if (false !== strpos($requestUri, '/modules/storecommander/')) {
             return true;
         }
 

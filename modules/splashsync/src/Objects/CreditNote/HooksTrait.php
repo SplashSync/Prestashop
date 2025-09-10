@@ -1,6 +1,5 @@
 <?php
-
-/*
+/**
  *  This file is part of SplashSync Project.
  *
  *  Copyright (C) Splash Sync  <www.splashsync.com>
@@ -11,6 +10,10 @@
  *
  *  For the full copyright and license information, please view the LICENSE
  *  file that was distributed with this source code.
+ *
+ * @author Splash Sync
+ * @copyright Splash Sync SAS
+ * @license MIT
  */
 
 namespace Splash\Local\Objects\CreditNote;
@@ -18,6 +21,12 @@ namespace Splash\Local\Objects\CreditNote;
 use Exception;
 use OrderSlip;
 use Splash\Core\SplashCore as Splash;
+
+// phpcs:disable PSR1.Files.SideEffects
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+// phpcs:enable PSR1.Files.SideEffects
 
 /**
  * Prestashop Hooks for Credit Notes
@@ -42,7 +51,7 @@ trait HooksTrait
     public function hookactionObjectOrderSlipAddAfter(array $params): bool
     {
         return $this->hookactionCreditNote(
-            $params["object"],
+            $params['object'],
             SPL_A_CREATE,
             $this->l('Credit Note Created on Prestashop')
         );
@@ -60,7 +69,7 @@ trait HooksTrait
     public function hookactionObjectOrderSlipUpdateAfter(array $params): bool
     {
         return $this->hookactionCreditNote(
-            $params["object"],
+            $params['object'],
             SPL_A_UPDATE,
             $this->l('Credit Note Updated on Prestashop')
         );
@@ -78,7 +87,7 @@ trait HooksTrait
     public function hookactionObjectOrderSlipDeleteAfter(array $params): bool
     {
         return $this->hookactionCreditNote(
-            $params["object"],
+            $params['object'],
             SPL_A_DELETE,
             $this->l('Credit Note Deleted on Prestashop')
         );
@@ -99,7 +108,7 @@ trait HooksTrait
     {
         //====================================================================//
         // Safety Check - Credit Notes are Enabled
-        if (!in_array("CreditNote", Splash::objects(), true)) {
+        if (!in_array('CreditNote', Splash::objects(), true)) {
             return true;
         }
         //====================================================================//
@@ -110,15 +119,15 @@ trait HooksTrait
         }
         //====================================================================//
         // Log
-        $this->debugHook(__FUNCTION__, $objectId." >> ".$comment);
+        $this->debugHook(__FUNCTION__, $objectId . ' >> ' . $comment);
         //====================================================================//
         // Safety Check
         if (empty($objectId)) {
-            return Splash::log()->err("ErrLocalTpl", "CreditNote", __FUNCTION__, "Unable to Read Order Slip Id.");
+            return Splash::log()->err('ErrLocalTpl', 'CreditNote', __FUNCTION__, 'Unable to Read Order Slip Id.');
         }
 
         //====================================================================//
         // Commit Update For Invoice
-        return $this->doCommit("CreditNote", (string) $objectId, $action, $comment);
+        return $this->doCommit('CreditNote', (string) $objectId, $action, $comment);
     }
 }

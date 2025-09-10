@@ -1,6 +1,5 @@
 <?php
-
-/*
+/**
  *  This file is part of SplashSync Project.
  *
  *  Copyright (C) Splash Sync  <www.splashsync.com>
@@ -11,13 +10,22 @@
  *
  *  For the full copyright and license information, please view the LICENSE
  *  file that was distributed with this source code.
+ *
+ * @author Splash Sync
+ * @copyright Splash Sync SAS
+ * @license MIT
  */
 
 namespace Splash\Local\Objects\CreditNote;
 
 use Configuration;
 use Splash\Local\Services\LanguagesManager as SLM;
-use Translate;
+
+// phpcs:disable PSR1.Files.SideEffects
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+// phpcs:enable PSR1.Files.SideEffects
 
 /**
  * Access to CreditNotes Core Fields
@@ -33,19 +41,19 @@ trait CoreTrait
     {
         //====================================================================//
         // Order Object
-        $this->fieldsFactory()->create((string) self::objects()->encode("Order", SPL_T_ID))
-            ->Identifier("id_order")
+        $this->fieldsFactory()->create((string) self::objects()->encode('Order', SPL_T_ID))
+            ->Identifier('id_order')
             ->Name($this->spl->l('Order'))
-            ->MicroData("http://schema.org/Invoice", "referencesOrder")
+            ->MicroData('http://schema.org/Invoice', 'referencesOrder')
             ->isReadOnly()
         ;
 
         //====================================================================//
         // Invoice Reference
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
-            ->Identifier("number")
-            ->Name(Translate::getAdminTranslation("Invoice number", "AdminInvoices"))
-            ->MicroData("http://schema.org/Invoice", "confirmationNumber")
+            ->Identifier('number')
+            ->Name(SLM::translate('Invoice number', 'AdminOrderscustomersFeature'))
+            ->MicroData('http://schema.org/Invoice', 'confirmationNumber')
             ->isReadOnly()
             ->isListed()
         ;
@@ -69,7 +77,7 @@ trait CoreTrait
 
                 break;
             case 'id_order':
-                $this->out[$fieldName] = self::objects()->encode("Order", $this->object->{$fieldName});
+                $this->out[$fieldName] = self::objects()->encode('Order', $this->object->{$fieldName});
 
                 break;
             default:

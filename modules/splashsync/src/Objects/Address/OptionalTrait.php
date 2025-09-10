@@ -1,6 +1,5 @@
 <?php
-
-/*
+/**
  *  This file is part of SplashSync Project.
  *
  *  Copyright (C) Splash Sync  <www.splashsync.com>
@@ -11,11 +10,21 @@
  *
  *  For the full copyright and license information, please view the LICENSE
  *  file that was distributed with this source code.
+ *
+ * @author Splash Sync
+ * @copyright Splash Sync SAS
+ * @license MIT
  */
 
 namespace Splash\Local\Objects\Address;
 
-use Translate;
+use Splash\Local\Services\LanguagesManager as SLM;
+
+// phpcs:disable PSR1.Files.SideEffects
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+// phpcs:enable PSR1.Files.SideEffects
 
 /**
  * Access to Address Optional Fields
@@ -32,42 +41,42 @@ trait OptionalTrait
         //====================================================================//
         // Phone
         $this->fieldsFactory()->create(SPL_T_PHONE)
-            ->identifier("phone")
-            ->name(Translate::getAdminTranslation("Home phone", "AdminAddresses"))
-            ->microData("http://schema.org/PostalAddress", "telephone")
+            ->identifier('phone')
+            ->name(SLM::translate('Home phone', 'AdminGlobal'))
+            ->microData('http://schema.org/PostalAddress', 'telephone')
         ;
         //====================================================================//
         // Mobile Phone
         $this->fieldsFactory()->create(SPL_T_PHONE)
-            ->identifier("phone_mobile")
-            ->name(Translate::getAdminTranslation("Mobile phone", "AdminAddresses"))
-            ->microData("http://schema.org/Person", "telephone")
+            ->identifier('phone_mobile')
+            ->name(SLM::translate('Mobile phone', 'AdminGlobal'))
+            ->microData('http://schema.org/Person', 'telephone')
         ;
         //====================================================================//
         // SIRET
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
-            ->identifier("dni")
-            ->name($this->spl->l("Company ID Number"))
-            ->microData("http://schema.org/Organization", "taxID")
-            ->group("ID")
+            ->identifier('dni')
+            ->name($this->spl->l('Company ID Number'))
+            ->microData('http://schema.org/Organization', 'taxID')
+            ->group('ID')
             ->isNotTested()
         ;
         //====================================================================//
         // VAT Number
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
-            ->identifier("vat_number")
-            ->name($this->spl->l("VAT number"))
-            ->microData("http://schema.org/Organization", "vatID")
-            ->group("ID")
+            ->identifier('vat_number')
+            ->name($this->spl->l('VAT number'))
+            ->microData('http://schema.org/Organization', 'vatID')
+            ->group('ID')
             ->isNotTested()
         ;
         //====================================================================//
         // Note
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
-            ->identifier("other")
-            ->name($this->spl->l("Note"))
-            ->microData("http://schema.org/PostalAddress", "description")
-            ->group("Notes")
+            ->identifier('other')
+            ->name($this->spl->l('Note'))
+            ->microData('http://schema.org/PostalAddress', 'description')
+            ->group('Notes')
         ;
     }
 

@@ -1,6 +1,5 @@
 <?php
-
-/*
+/**
  *  This file is part of SplashSync Project.
  *
  *  Copyright (C) Splash Sync  <www.splashsync.com>
@@ -11,6 +10,10 @@
  *
  *  For the full copyright and license information, please view the LICENSE
  *  file that was distributed with this source code.
+ *
+ * @author Splash Sync
+ * @copyright Splash Sync SAS
+ * @license MIT
  */
 
 namespace Splash\Local\Objects;
@@ -30,6 +33,12 @@ use Splash\Models\Objects\PrimaryKeysAwareInterface;
 use Splash\Models\Objects\SimpleFieldsTrait;
 use SplashSync;
 use Tools;
+
+// phpcs:disable PSR1.Files.SideEffects
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+// phpcs:enable PSR1.Files.SideEffects
 
 /**
  * Splash Local Object Class - Products Local Integration
@@ -87,21 +96,21 @@ class Product extends AbstractObject implements PrimaryKeysAwareInterface
      *
      * @var string
      */
-    protected static string $name = "Product";
+    protected static string $name = 'Product';
 
     /**
      * Object Description (Translated by Module)
      *
      * @var string
      */
-    protected static string $description = "Prestashop Product Object";
+    protected static string $description = 'Prestashop Product Object';
 
     /**
      * Object Icon (FontAwesome or Glyph ico tag)
      *
      * @var string
      */
-    protected static string $ico = "fa fa-product-hunt";
+    protected static string $ico = 'fa fa-product-hunt';
 
     //====================================================================//
     // Object Synchronization Recommended Configuration
@@ -150,9 +159,6 @@ class Product extends AbstractObject implements PrimaryKeysAwareInterface
             Shop::setContext(Shop::CONTEXT_ALL);
         }
         //====================================================================//
-        //  Load Local Translation File
-        Splash::translator()->load("objects@local");
-        //====================================================================//
         // Load Splash Module
         $this->spl = Local::getLocalModule();
         //====================================================================//
@@ -192,26 +198,26 @@ class Product extends AbstractObject implements PrimaryKeysAwareInterface
     {
         //====================================================================//
         // Only On MultiShop Mode on PS 1.7.X
-        if (!Shop::isFeatureActive() || Tools::version_compare(_PS_VERSION_, "1.7", '<')) {
+        if (!Shop::isFeatureActive() || Tools::version_compare(_PS_VERSION_, '1.7', '<')) {
             return;
         }
 
         //====================================================================//
         // Fix Product Definition
-        psProduct::$definition['fields']["id_category_default"]['shop'] = '1';
-        psProduct::$definition['fields']["minimal_quantity"]['shop'] = '1';
-        psProduct::$definition['fields']["price"]['shop'] = '1';
-        psProduct::$definition['fields']["wholesale_price"]['shop'] = '1';
-        psProduct::$definition['fields']["active"]['shop'] = '1';
-        psProduct::$definition['fields']["available_for_order"]['shop'] = '1';
-        psProduct::$definition['fields']["on_sale"]['shop'] = '1';
-        psProduct::$definition['fields']["online_only"]['shop'] = '1';
+        psProduct::$definition['fields']['id_category_default']['shop'] = '1';
+        psProduct::$definition['fields']['minimal_quantity']['shop'] = '1';
+        psProduct::$definition['fields']['price']['shop'] = '1';
+        psProduct::$definition['fields']['wholesale_price']['shop'] = '1';
+        psProduct::$definition['fields']['active']['shop'] = '1';
+        psProduct::$definition['fields']['available_for_order']['shop'] = '1';
+        psProduct::$definition['fields']['on_sale']['shop'] = '1';
+        psProduct::$definition['fields']['online_only']['shop'] = '1';
 
         //====================================================================//
         // Fix Product Attributes Definition
-        Combination::$definition['fields']["price"]['shop'] = '1';
-        Combination::$definition['fields']["wholesale_price"]['shop'] = '1';
-        Combination::$definition['fields']["minimal_quantity"]['shop'] = '1';
-        Combination::$definition['fields']["default_on"]['shop'] = '1';
+        Combination::$definition['fields']['price']['shop'] = '1';
+        Combination::$definition['fields']['wholesale_price']['shop'] = '1';
+        Combination::$definition['fields']['minimal_quantity']['shop'] = '1';
+        Combination::$definition['fields']['default_on']['shop'] = '1';
     }
 }

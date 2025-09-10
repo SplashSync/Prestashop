@@ -1,6 +1,5 @@
 <?php
-
-/*
+/**
  *  This file is part of SplashSync Project.
  *
  *  Copyright (C) Splash Sync  <www.splashsync.com>
@@ -11,12 +10,21 @@
  *
  *  For the full copyright and license information, please view the LICENSE
  *  file that was distributed with this source code.
+ *
+ * @author Splash Sync
+ * @copyright Splash Sync SAS
+ * @license MIT
  */
 
 namespace Splash\Local\Objects\Invoice;
 
 use Splash\Local\Services\LanguagesManager as SLM;
-use Translate;
+
+// phpcs:disable PSR1.Files.SideEffects
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+// phpcs:enable PSR1.Files.SideEffects
 
 /**
  * Access to Orders Core Fields
@@ -32,18 +40,18 @@ trait CoreTrait
     {
         //====================================================================//
         // Order Object
-        $this->fieldsFactory()->create((string) self::objects()->encode("Order", SPL_T_ID))
-            ->identifier("id_order")
+        $this->fieldsFactory()->create((string) self::objects()->encode('Order', SPL_T_ID))
+            ->identifier('id_order')
             ->name($this->spl->l('Order'))
-            ->microData("http://schema.org/Invoice", "referencesOrder")
+            ->microData('http://schema.org/Invoice', 'referencesOrder')
             ->isReadOnly()
         ;
         //====================================================================//
         // Invoice Reference
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
-            ->identifier("number")
-            ->name(Translate::getAdminTranslation("Invoice number", "AdminInvoices"))
-            ->microData("http://schema.org/Invoice", "confirmationNumber")
+            ->identifier('number')
+            ->name(SLM::translate('Invoice number', 'AdminOrderscustomersFeature'))
+            ->microData('http://schema.org/Invoice', 'confirmationNumber')
             ->isReadOnly()
             ->isIndexed()
             ->isListed()
@@ -66,12 +74,12 @@ trait CoreTrait
             case 'number':
                 $this->out[$fieldName] = ($this->object->number)
                     ? $this->object->getInvoiceNumberFormatted(SLM::getDefaultLangId())
-                    : "DRAFT#".$this->object->id
+                    : 'DRAFT#' . $this->object->id
                 ;
 
                 break;
             case 'id_order':
-                $this->out[$fieldName] = self::objects()->encode("Order", $this->object->{$fieldName});
+                $this->out[$fieldName] = self::objects()->encode('Order', $this->object->{$fieldName});
 
                 break;
             default:

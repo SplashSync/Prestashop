@@ -1,6 +1,5 @@
 <?php
-
-/*
+/**
  *  This file is part of SplashSync Project.
  *
  *  Copyright (C) Splash Sync  <www.splashsync.com>
@@ -11,11 +10,21 @@
  *
  *  For the full copyright and license information, please view the LICENSE
  *  file that was distributed with this source code.
+ *
+ * @author Splash Sync
+ * @copyright Splash Sync SAS
+ * @license MIT
  */
 
 namespace Splash\Local\Objects\CreditNote;
 
-use Translate;
+use Splash\Local\Services\LanguagesManager as SLM;
+
+// phpcs:disable PSR1.Files.SideEffects
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+// phpcs:enable PSR1.Files.SideEffects
 
 /**
  * Access to CreditNote Main Fields
@@ -33,24 +42,24 @@ trait MainTrait
         // PRICES INFORMATIONS
         //====================================================================//
 
-        $currencySuffix = " (".$this->currency->sign.")";
+        $currencySuffix = ' (' . $this->currency->sign . ')';
 
         //====================================================================//
         // Order Total Price HT
         $this->fieldsFactory()->create(SPL_T_DOUBLE)
-            ->Identifier("total_paid_tax_excl")
-            ->Name(Translate::getAdminTranslation("Total (Tax excl.)", "AdminOrders").$currencySuffix)
-            ->MicroData("http://schema.org/Invoice", "totalPaymentDue")
+            ->Identifier('total_paid_tax_excl')
+            ->Name(SLM::translate('Total (Tax excl.)', 'AdminOrderscustomersFeature') . $currencySuffix)
+            ->MicroData('http://schema.org/Invoice', 'totalPaymentDue')
             ->isListed()
             ->isReadOnly();
 
         //====================================================================//
         // Order Total Price TTC
         $this->fieldsFactory()->create(SPL_T_DOUBLE)
-            ->Identifier("total_paid_tax_incl")
-            ->Name(Translate::getAdminTranslation("Total (Tax incl.)", "AdminOrders").$currencySuffix)
+            ->Identifier('total_paid_tax_incl')
+            ->Name(SLM::translate('Total (Tax incl.)', 'AdminOrderscustomersFeature') . $currencySuffix)
             ->isListed()
-            ->MicroData("http://schema.org/Invoice", "totalPaymentDueTaxIncluded")
+            ->MicroData('http://schema.org/Invoice', 'totalPaymentDueTaxIncluded')
             ->isReadOnly();
     }
 

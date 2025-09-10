@@ -1,6 +1,5 @@
 <?php
-
-/*
+/**
  *  This file is part of SplashSync Project.
  *
  *  Copyright (C) Splash Sync  <www.splashsync.com>
@@ -11,11 +10,21 @@
  *
  *  For the full copyright and license information, please view the LICENSE
  *  file that was distributed with this source code.
+ *
+ * @author Splash Sync
+ * @copyright Splash Sync SAS
+ * @license MIT
  */
 
 namespace Splash\Local\Objects\CreditNote;
 
-use Translate;
+use Splash\Local\Services\LanguagesManager as SLM;
+
+// phpcs:disable PSR1.Files.SideEffects
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+// phpcs:enable PSR1.Files.SideEffects
 
 /**
  * Access to CreditNote Status Fields
@@ -32,9 +41,9 @@ trait StatusTrait
         //====================================================================//
         // Order Current Status
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
-            ->Identifier("status")
-            ->Name(Translate::getAdminTranslation("Status", "AdminOrders"))
-            ->MicroData("http://schema.org/Invoice", "paymentStatus")
+            ->Identifier('status')
+            ->Name(SLM::translate('Status', 'AdminGlobal'))
+            ->MicroData('http://schema.org/Invoice', 'paymentStatus')
             ->isReadOnly()
             ->isNotTested();
 
@@ -45,10 +54,10 @@ trait StatusTrait
         //====================================================================//
         // Is Paid
         $this->fieldsFactory()->create(SPL_T_BOOL)
-            ->Identifier("isPaid")
-            ->Name("is Paid")
-            ->MicroData("http://schema.org/PaymentStatusType", "PaymentComplete")
-            ->Group(Translate::getAdminTranslation("Meta", "AdminThemes"))
+            ->Identifier('isPaid')
+            ->Name('is Paid')
+            ->MicroData('http://schema.org/PaymentStatusType', 'PaymentComplete')
+            ->Group('Meta')
             ->isReadOnly()
             ->isNotTested();
     }
@@ -75,7 +84,7 @@ trait StatusTrait
             //====================================================================//
             case 'status':
                 $this->out[$fieldName] = $this->isPaidCreditNote()
-                    ? "PaymentComplete" : "PaymentDue";
+                    ? 'PaymentComplete' : 'PaymentDue';
 
                 break;
                 //====================================================================//

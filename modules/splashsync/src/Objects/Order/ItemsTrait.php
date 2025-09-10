@@ -1,6 +1,5 @@
 <?php
-
-/*
+/**
  *  This file is part of SplashSync Project.
  *
  *  Copyright (C) Splash Sync  <www.splashsync.com>
@@ -11,6 +10,10 @@
  *
  *  For the full copyright and license information, please view the LICENSE
  *  file that was distributed with this source code.
+ *
+ * @author Splash Sync
+ * @copyright Splash Sync SAS
+ * @license MIT
  */
 
 namespace Splash\Local\Objects\Order;
@@ -21,12 +24,17 @@ use Splash\Core\SplashCore as Splash;
 use Splash\Local\Objects\Invoice;
 use Splash\Local\Objects\Product;
 use Splash\Local\Services\DiscountsManager;
-use Splash\Local\Services\LanguagesManager;
+use Splash\Local\Services\LanguagesManager as SLM;
 use Splash\Local\Services\OrderTaxManager;
 use Splash\Models\Objects\ListsTrait;
 use Splash\Models\Objects\PricesTrait;
 use Tools;
-use Translate;
+
+// phpcs:disable PSR1.Files.SideEffects
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+// phpcs:enable PSR1.Files.SideEffects
 
 /**
  * Access to Orders Items Fields
@@ -46,73 +54,73 @@ trait ItemsTrait
         //====================================================================//
         // Order Line Description
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
-            ->identifier("product_name")
-            ->inList("lines")
-            ->name("[L] ".Translate::getAdminTranslation("Short description", "AdminProducts"))
-            ->microData("http://schema.org/partOfInvoice", "description")
-            ->group(Translate::getAdminTranslation("Products", "AdminOrders"))
-            ->association("product_name@lines", "product_quantity@lines", "product_id@lines", "unit_price@lines")
+            ->identifier('product_name')
+            ->inList('lines')
+            ->name('[L] ' . SLM::translate('Short description', 'AdminCatalogFeature'))
+            ->microData('http://schema.org/partOfInvoice', 'description')
+            ->group(SLM::translate('Products', 'AdminCatalogFeature'))
+            ->association('product_name@lines', 'product_quantity@lines', 'product_id@lines', 'unit_price@lines')
         ;
         //====================================================================//
         // Order Line Product Identifier
-        $this->fieldsFactory()->create((string) self::objects()->Encode("Product", SPL_T_ID))
-            ->identifier("product_id")
-            ->inList("lines")
-            ->name("[L] ".Translate::getAdminTranslation("Product ID", "AdminImport"))
-            ->microData("http://schema.org/Product", "productID")
-            ->group(Translate::getAdminTranslation("Products", "AdminOrders"))
-            ->association("product_name@lines", "product_quantity@lines", "product_id@lines", "unit_price@lines")
+        $this->fieldsFactory()->create((string) self::objects()->Encode('Product', SPL_T_ID))
+            ->identifier('product_id')
+            ->inList('lines')
+            ->name('[L] ' . SLM::translate('Product ID', 'AdminAdvparametersFeature'))
+            ->microData('http://schema.org/Product', 'productID')
+            ->group(SLM::translate('Products', 'AdminCatalogFeature'))
+            ->association('product_name@lines', 'product_quantity@lines', 'product_id@lines', 'unit_price@lines')
         ;
         //====================================================================//
         // Order Line Product SKU
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
-            ->identifier("product_reference")
-            ->inList("lines")
-            ->name("[L] ".Translate::getAdminTranslation("Reference", "AdminProducts"))
-            ->microData("http://schema.org/Product", "sku")
-            ->group(Translate::getAdminTranslation("Products", "AdminOrders"))
+            ->identifier('product_reference')
+            ->inList('lines')
+            ->name('[L] ' . SLM::translate('Reference', 'AdminGlobal'))
+            ->microData('http://schema.org/Product', 'sku')
+            ->group(SLM::translate('Products', 'AdminCatalogFeature'))
             ->isReadOnly()
         ;
         //====================================================================//
         // Order Line Quantity
         $this->fieldsFactory()->create(SPL_T_INT)
-            ->identifier("product_quantity")
-            ->inList("lines")
-            ->name("[L] ".Translate::getAdminTranslation("Quantity", "AdminOrders"))
-            ->microData("http://schema.org/QuantitativeValue", "value")
-            ->group(Translate::getAdminTranslation("Products", "AdminOrders"))
-            ->association("product_name@lines", "product_quantity@lines", "product_id@lines", "unit_price@lines")
+            ->identifier('product_quantity')
+            ->inList('lines')
+            ->name('[L] ' . SLM::translate('Quantity', 'AdminGlobal'))
+            ->microData('http://schema.org/QuantitativeValue', 'value')
+            ->group(SLM::translate('Products', 'AdminCatalogFeature'))
+            ->association('product_name@lines', 'product_quantity@lines', 'product_id@lines', 'unit_price@lines')
         ;
         //====================================================================//
         // Order Line Discount
         $this->fieldsFactory()->create(SPL_T_DOUBLE)
-            ->identifier("reduction_percent")
-            ->inList("lines")
-            ->name("[L] ".Translate::getAdminTranslation("Discount (%)", "AdminGroups"))
-            ->microData("http://schema.org/Order", "discount")
-            ->group(Translate::getAdminTranslation("Products", "AdminOrders"))
-            ->association("product_name@lines", "product_quantity@lines", "unit_price@lines")
+            ->identifier('reduction_percent')
+            ->inList('lines')
+            ->name('[L] ' . SLM::translate('Discount (%)', 'AdminShopparametersFeature'))
+            ->microData('http://schema.org/Order', 'discount')
+            ->group(SLM::translate('Products', 'AdminCatalogFeature'))
+            ->association('product_name@lines', 'product_quantity@lines', 'unit_price@lines')
             ->isReadOnly()
         ;
         //====================================================================//
         // Order Line Unit Price
         $this->fieldsFactory()->create(SPL_T_PRICE)
-            ->identifier("unit_price")
-            ->inList("lines")
-            ->name("[L] ".Translate::getAdminTranslation("Price", "AdminOrders"))
-            ->microData("http://schema.org/PriceSpecification", "price")
-            ->group(Translate::getAdminTranslation("Products", "AdminOrders"))
-            ->association("product_name@lines", "product_quantity@lines", "product_id@lines", "unit_price@lines")
+            ->identifier('unit_price')
+            ->inList('lines')
+            ->name('[L] ' . SLM::translate('Price', 'AdminGlobal'))
+            ->microData('http://schema.org/PriceSpecification', 'price')
+            ->group(SLM::translate('Products', 'AdminCatalogFeature'))
+            ->association('product_name@lines', 'product_quantity@lines', 'product_id@lines', 'unit_price@lines')
         ;
         //====================================================================//
         // Order Line Tax Name
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
-            ->identifier("tax_name")
-            ->inList("lines")
-            ->name("[L] ".Translate::getAdminTranslation("Tax Name", "AdminOrders"))
-            ->microData("http://schema.org/PriceSpecification", "valueAddedTaxName")
-            ->group(Translate::getAdminTranslation("Products", "AdminOrders"))
-            ->association("product_name@lines", "product_quantity@lines", "unit_price@lines")
+            ->identifier('tax_name')
+            ->inList('lines')
+            ->name('[L] ' . SLM::translate('Tax', 'AdminGlobal'))
+            ->microData('http://schema.org/PriceSpecification', 'valueAddedTaxName')
+            ->group(SLM::translate('Products', 'AdminCatalogFeature'))
+            ->association('product_name@lines', 'product_quantity@lines', 'unit_price@lines')
             ->isReadOnly()
         ;
     }
@@ -131,7 +139,7 @@ trait ItemsTrait
     {
         //====================================================================//
         // Check if List field & Init List Array
-        $fieldId = self::lists()->InitOutput($this->out, "lines", $fieldName);
+        $fieldId = self::lists()->InitOutput($this->out, 'lines', $fieldName);
         if (!$fieldId) {
             return;
         }
@@ -161,8 +169,8 @@ trait ItemsTrait
                     //====================================================================//
                     // Order Line Product Id
                 case 'product_id':
-                    $uniqueId = Product::getUnikIdStatic($product["product_id"], $product["product_attribute_id"]);
-                    $value = self::objects()->encode("Product", $uniqueId);
+                    $uniqueId = Product::getUnikIdStatic($product['product_id'], $product['product_attribute_id']);
+                    $value = self::objects()->encode('Product', $uniqueId);
 
                     break;
                     //====================================================================//
@@ -171,19 +179,19 @@ trait ItemsTrait
                     //====================================================================//
                     // Build Price Array
                     $value = self::prices()->Encode(
-                        (double)    Tools::convertPrice($product["unit_price_tax_excl"], $this->currency),
-                        (double)    OrderDetail::getTaxCalculatorStatic($product["id_order_detail"])->getTotalRate(),
+                        (double)    Tools::convertPrice($product['unit_price_tax_excl'], $this->currency),
+                        (double)    OrderDetail::getTaxCalculatorStatic($product['id_order_detail'])->getTotalRate(),
                         null,
                         $this->currency->iso_code,
-                        LanguagesManager::getCurrencySymbol($this->currency),
-                        LanguagesManager::getCurrencyName($this->currency)
+                        SLM::getCurrencySymbol($this->currency),
+                        SLM::getCurrencyName($this->currency)
                     );
 
                     break;
                     //====================================================================//
                     // Order Line Tax Name
                 case 'tax_name':
-                    $value = OrderDetail::getTaxCalculatorStatic($product["id_order_detail"])->getTaxesName();
+                    $value = OrderDetail::getTaxCalculatorStatic($product['id_order_detail'])->getTaxesName();
 
                     break;
                 default:
@@ -191,7 +199,7 @@ trait ItemsTrait
             }
             //====================================================================//
             // Insert Data in List
-            self::lists()->Insert($this->out, "lines", $fieldName, $index, $value);
+            self::lists()->Insert($this->out, 'lines', $fieldName, $index, $value);
         }
 
         unset($this->in[$key]);
@@ -211,7 +219,7 @@ trait ItemsTrait
     {
         //====================================================================//
         // Safety Check
-        if (("lines" !== $fieldName) || ($this instanceof Invoice)) {
+        if (('lines' !== $fieldName) || ($this instanceof Invoice)) {
             return;
         }
         //====================================================================//
@@ -225,8 +233,8 @@ trait ItemsTrait
         //====================================================================//
         // Delete Remaining Lines
         foreach ($this->Products as $productItem) {
-            $orderDetail = new OrderDetail($productItem["id_order_detail"]);
-            $this->object->deleteProduct($this->object, $orderDetail, $productItem["product_quantity"]);
+            $orderDetail = new OrderDetail($productItem['id_order_detail']);
+            $this->object->deleteProduct($this->object, $orderDetail, $productItem['product_quantity']);
         }
 
         unset($this->in[$fieldName]);
@@ -247,7 +255,7 @@ trait ItemsTrait
     {
         //====================================================================//
         // Check if List field & Init List Array
-        $fieldId = self::lists()->initOutput($this->out, "lines", $fieldName);
+        $fieldId = self::lists()->initOutput($this->out, 'lines', $fieldName);
         //====================================================================//
         // Check if List field
         // Check If Order has Discounts
@@ -296,7 +304,7 @@ trait ItemsTrait
 
         //====================================================================//
         // Insert Data in List
-        self::lists()->insert($this->out, "lines", $fieldName, count($this->Products), $value);
+        self::lists()->insert($this->out, 'lines', $fieldName, count($this->Products), $value);
     }
 
     /**
@@ -313,7 +321,7 @@ trait ItemsTrait
     {
         //====================================================================//
         // Check if List field & Init List Array
-        $fieldId = self::lists()->initOutput($this->out, "lines", $fieldName);
+        $fieldId = self::lists()->initOutput($this->out, 'lines', $fieldName);
         if (!$fieldId) {
             return;
         }
@@ -329,7 +337,7 @@ trait ItemsTrait
         // Insert Data in List
         $discountItems = DiscountsManager::getDiscountItems($this->object, $this->currency);
         foreach ($discountItems as $discountItem) {
-            self::lists()->insert($this->out, "lines", $fieldName, $index, $discountItem[$fieldId]);
+            self::lists()->insert($this->out, 'lines', $fieldName, $index, $discountItem[$fieldId]);
             $index++;
         }
     }
@@ -351,12 +359,12 @@ trait ItemsTrait
     {
         //====================================================================//
         // Not A Product Line => Skipped
-        if (empty($productItem["product_id"]) || ($this instanceof Invoice)) {
+        if (empty($productItem['product_id']) || ($this instanceof Invoice)) {
             return ;
         }
         //====================================================================//
         // New Line ? => Create One
-        if (is_null($currentProduct) || empty($currentProduct["id_order_detail"])) {
+        if (is_null($currentProduct) || empty($currentProduct['id_order_detail'])) {
             //====================================================================//
             // Create New OrderDetail Item
             $orderDetail = new OrderDetail();
@@ -364,32 +372,32 @@ trait ItemsTrait
             $orderDetail->id_shop = (int) $this->object->id_shop;
             $orderDetail->id_warehouse = 0;
         } else {
-            $orderDetail = new OrderDetail($currentProduct["id_order_detail"]);
+            $orderDetail = new OrderDetail($currentProduct['id_order_detail']);
         }
         $update = false;
 
         //====================================================================//
         // Update Line Description
-        if ($orderDetail->product_name != $productItem["product_name"]) {
-            $orderDetail->product_name = $productItem["product_name"];
+        if ($orderDetail->product_name != $productItem['product_name']) {
+            $orderDetail->product_name = $productItem['product_name'];
             $update = true;
         }
 
         //====================================================================//
         // Update Quantity
-        if ($orderDetail->product_quantity != $productItem["product_quantity"]) {
-            $orderDetail->product_quantity = $productItem["product_quantity"];
+        if ($orderDetail->product_quantity != $productItem['product_quantity']) {
+            $orderDetail->product_quantity = $productItem['product_quantity'];
             $update = true;
         }
 
         //====================================================================//
         // Update Price
-        $ttcPrice = (float) self::prices()->taxIncluded($productItem["unit_price"]);
+        $ttcPrice = (float) self::prices()->taxIncluded($productItem['unit_price']);
         if ($orderDetail->unit_price_tax_incl != $ttcPrice) {
             $orderDetail->unit_price_tax_incl = $ttcPrice;
             $update = true;
         }
-        $htPrice = (float) self::prices()->taxExcluded($productItem["unit_price"]);
+        $htPrice = (float) self::prices()->taxExcluded($productItem['unit_price']);
         if ($orderDetail->unit_price_tax_excl != $htPrice) {
             $orderDetail->unit_price_tax_excl = $htPrice;
             $orderDetail->product_price = $htPrice;
@@ -398,7 +406,7 @@ trait ItemsTrait
 
         //====================================================================//
         // Update Product Link
-        $uniqueId = (string) self::objects()->id($productItem["product_id"]);
+        $uniqueId = (string) self::objects()->id($productItem['product_id']);
         $productId = Product::getId($uniqueId);
         $attributeId = Product::getAttribute($uniqueId);
         if ($orderDetail->product_id != $productId) {
@@ -418,11 +426,11 @@ trait ItemsTrait
 
         if (!$orderDetail->id) {
             if (!$orderDetail->add()) {
-                Splash::log()->err("ErrLocalTpl", __CLASS__, __FUNCTION__, "Unable to Create new Order Line.");
+                Splash::log()->err('ErrLocalTpl', __CLASS__, __FUNCTION__, 'Unable to Create new Order Line.');
             }
         } else {
             if (!$orderDetail->update()) {
-                Splash::log()->err("ErrLocalTpl", __CLASS__, __FUNCTION__, "Unable to Update Order Line.");
+                Splash::log()->err('ErrLocalTpl', __CLASS__, __FUNCTION__, 'Unable to Update Order Line.');
             }
         }
     }
@@ -453,8 +461,8 @@ trait ItemsTrait
             (double)    $this->getOrder()->carrier_tax_rate,
             null,
             $this->currency->iso_code,
-            LanguagesManager::getCurrencySymbol($this->currency),
-            LanguagesManager::getCurrencyName($this->currency)
+            SLM::getCurrencySymbol($this->currency),
+            SLM::getCurrencyName($this->currency)
         );
     }
 
@@ -468,7 +476,7 @@ trait ItemsTrait
         //====================================================================//
         // Get Carrier by Id
         if (!isset($this->carrier) || empty($this->carrier->name)) {
-            return $this->spl->l("Delivery");
+            return $this->spl->l('Delivery');
         }
 
         //====================================================================//

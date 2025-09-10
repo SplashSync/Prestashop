@@ -31,6 +31,7 @@ splashscreen "QUALITY TESTS"
 # Install Module
 subtitle "QUALITY --> Install Module"
 bash $CI_PROJECT_DIR/ci/module/install.sh
+
 ################################################################################
 # Run Grumphp Quality Tests Suites
 subtitle "QUALITY --> Grumphp Verifications"

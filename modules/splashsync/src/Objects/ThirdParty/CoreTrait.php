@@ -1,6 +1,5 @@
 <?php
-
-/*
+/**
  *  This file is part of SplashSync Project.
  *
  *  Copyright (C) Splash Sync  <www.splashsync.com>
@@ -11,13 +10,21 @@
  *
  *  For the full copyright and license information, please view the LICENSE
  *  file that was distributed with this source code.
+ *
+ * @author Splash Sync
+ * @copyright Splash Sync SAS
+ * @license MIT
  */
 
 namespace Splash\Local\Objects\ThirdParty;
 
-//====================================================================//
-// Prestashop Static Classes
-use Translate;
+use Splash\Local\Services\LanguagesManager as SLM;
+
+// phpcs:disable PSR1.Files.SideEffects
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+// phpcs:enable PSR1.Files.SideEffects
 
 /**
  * Access to ThirdParty Core Fields
@@ -34,10 +41,10 @@ trait CoreTrait
         //====================================================================//
         // Email
         $this->fieldsFactory()->create(SPL_T_EMAIL)
-            ->identifier("email")
-            ->name(Translate::getAdminTranslation("Email address", "AdminCustomers"))
-            ->microData("http://schema.org/ContactPoint", "email")
-            ->association("firstname", "lastname")
+            ->identifier('email')
+            ->name(SLM::translate('Email address', 'AdminGlobal'))
+            ->microData('http://schema.org/ContactPoint', 'email')
+            ->association('firstname', 'lastname')
             ->isRequired()
             ->isPrimary()
             ->isListed()

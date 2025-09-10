@@ -1,6 +1,5 @@
 <?php
-
-/*
+/**
  *  This file is part of SplashSync Project.
  *
  *  Copyright (C) Splash Sync  <www.splashsync.com>
@@ -11,6 +10,10 @@
  *
  *  For the full copyright and license information, please view the LICENSE
  *  file that was distributed with this source code.
+ *
+ * @author Splash Sync
+ * @copyright Splash Sync SAS
+ * @license MIT
  */
 
 namespace Splash\Local\Objects\Product;
@@ -19,11 +22,17 @@ use Pack;
 use PrestaShopException;
 use Shop;
 use Splash\Core\SplashCore as Splash;
+use Splash\Local\Services\LanguagesManager as SLM;
 use Splash\Local\Services\MultiShopManager as MSM;
 use StockAvailable;
 use Tools;
-use Translate;
 use Validate;
+
+// phpcs:disable PSR1.Files.SideEffects
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+// phpcs:enable PSR1.Files.SideEffects
 
 /**
  * Access to Product Stock Fields
@@ -49,40 +58,34 @@ trait StockTrait
         //====================================================================//
         // Stock Reel
         $this->fieldsFactory()->create(SPL_T_INT)
-            ->identifier("stock")
-            ->name(Translate::getAdminTranslation("Stock", "AdminProducts"))
-            ->microData("http://schema.org/Offer", "inventoryLevel")
+            ->identifier('stock')
+            ->name(SLM::translate('Stock', 'AdminGlobal'))
+            ->microData('http://schema.org/Offer', 'inventoryLevel')
             ->isListed()
         ;
         //====================================================================//
         // Out of Stock Flag
         $this->fieldsFactory()->create(SPL_T_BOOL)
-            ->identifier("outofstock")
-            ->name(Translate::getAdminTranslation("This product is out of stock", "AdminOrders"))
-            ->microData("http://schema.org/ItemAvailability", "OutOfStock")
+            ->identifier('outofstock')
+            ->name('This product is out of stock')
+            ->microData('http://schema.org/ItemAvailability', 'OutOfStock')
             ->isReadOnly()
         ;
         //====================================================================//
         // Minimum Order Quantity
         $this->fieldsFactory()->create(SPL_T_INT)
-            ->identifier("minimal_quantity")
-            ->name(Translate::getAdminTranslation("Minimum quantity", "AdminProducts"))
-            ->description(
-                Translate::getAdminTranslation(
-                    "The minimum quantity to buy this product (set to 1 to disable this feature).",
-                    "AdminProducts"
-                )
-            )
-            ->microData("http://schema.org/Offer", "eligibleTransactionVolume")
+            ->identifier('minimal_quantity')
+            ->name(SLM::translate('Minimum quantity for sale', 'AdminCatalogFeature'))
+            ->microData('http://schema.org/Offer', 'eligibleTransactionVolume')
         ;
         //====================================================================//
         // Stock Location
-        if (Tools::version_compare(_PS_VERSION_, "1.7", '>=')) {
+        if (Tools::version_compare(_PS_VERSION_, '1.7', '>=')) {
             $this->fieldsFactory()->create(SPL_T_VARCHAR)
-                ->identifier("stock_location")
-                ->name(Translate::getAdminTranslation("Stock location", "AdminCatalogFeature"))
-                ->addOption("shop", MSM::MODE_ALL)
-                ->microData("http://schema.org/Offer", "inventoryLocation");
+                ->identifier('stock_location')
+                ->name(SLM::translate('Stock location', 'AdminCatalogFeature'))
+                ->addOption('shop', MSM::MODE_ALL)
+                ->microData('http://schema.org/Offer', 'inventoryLocation');
         }
     }
 
@@ -198,7 +201,7 @@ trait StockTrait
                         Shop::getContextShopID(true),
                         (bool) Shop::getContextShopID(true)
                     );
-                    $this->needUpdate($this->AttributeId ? "Attribute" : "object");
+                    $this->needUpdate($this->AttributeId ? 'Attribute' : 'object');
                 }
 
                 break;
@@ -207,11 +210,11 @@ trait StockTrait
             case 'minimal_quantity':
                 if (Validate::isUnsignedInt((int) $fieldData)) {
                     if ($this->AttributeId) {
-                        $this->setSimple($fieldName, (int) $fieldData, "Attribute");
-                        $this->addMsfUpdateFields("Attribute", "minimal_quantity");
+                        $this->setSimple($fieldName, (int) $fieldData, 'Attribute');
+                        $this->addMsfUpdateFields('Attribute', 'minimal_quantity');
                     } else {
                         $this->setSimple($fieldName, (int) $fieldData);
-                        $this->addMsfUpdateFields("Product", "minimal_quantity");
+                        $this->addMsfUpdateFields('Product', 'minimal_quantity');
                     }
                 }
 
@@ -250,7 +253,7 @@ trait StockTrait
                         Shop::getContextShopID(true),
                         (int) $this->AttributeId
                     );
-                    $this->needUpdate($this->AttributeId ? "Attribute" : "object");
+                    $this->needUpdate($this->AttributeId ? 'Attribute' : 'object');
                 }
 
                 break;

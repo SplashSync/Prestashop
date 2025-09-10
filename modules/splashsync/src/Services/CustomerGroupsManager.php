@@ -1,6 +1,5 @@
 <?php
-
-/*
+/**
  *  This file is part of SplashSync Project.
  *
  *  Copyright (C) Splash Sync  <www.splashsync.com>
@@ -11,12 +10,22 @@
  *
  *  For the full copyright and license information, please view the LICENSE
  *  file that was distributed with this source code.
+ *
+ * @author Splash Sync
+ * @copyright Splash Sync SAS
+ * @license MIT
  */
 
 namespace Splash\Local\Services;
 
 use Group;
 use Splash\Local\Services\LanguagesManager as SLM;
+
+// phpcs:disable PSR1.Files.SideEffects
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+// phpcs:enable PSR1.Files.SideEffects
 
 /**
  * Manage access to Customers Groups
@@ -30,11 +39,11 @@ class CustomerGroupsManager
      */
     public static function getAllGroupNames(): array
     {
-        static $groups = array();
+        static $groups = null;
 
         if (!isset($groups)) {
             foreach (Group::getGroups(SLM::getDefaultLangId()) as $definition) {
-                $name = $definition["name"] ?? $definition["id_group"];
+                $name = $definition['name'] ?? $definition['id_group'];
                 $groups[strtolower($name)] = $name;
             }
         }
@@ -50,13 +59,46 @@ class CustomerGroupsManager
     public static function getGroupNames(\Customer $customer): array
     {
         $groupNames = array();
-        foreach ($customer->getGroups() as $groupId) {
+        /** @var array<int> $groups */
+        $groups = $customer->getGroups();
+        foreach ($groups as $groupId) {
             $group = new Group($groupId, SLM::getDefaultLangId());
-            if ($group->id && $group->name) {
+            if ($group->id && $group->name && is_string($group->name)) {
                 $groupNames[] = $group->name;
             }
         }
 
         return $groupNames;
+    }
+
+    /**
+     * Get Customer Group by ID
+     */
+    public static function getGroup(int $groupId): ?Group
+    {
+        $group = new Group($groupId, SLM::getDefaultLangId());
+        if ($group->id) {
+            return $group;
+        }
+
+        return null;
+    }
+
+    /**
+     * Get Customer Group by Name
+     */
+    public static function getGroupByName(?string $groupName): ?Group
+    {
+        if (empty($groupName)) {
+            return null;
+        }
+
+        foreach (Group::getGroups(SLM::getDefaultLangId()) as $group) {
+            if (strtolower($group['name'] ?? $group['id_group']) == strtolower($groupName)) {
+                return self::getGroup((int) $group['id_group']);
+            }
+        }
+
+        return null;
     }
 }

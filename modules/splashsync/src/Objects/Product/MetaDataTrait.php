@@ -1,6 +1,5 @@
 <?php
-
-/*
+/**
  *  This file is part of SplashSync Project.
  *
  *  Copyright (C) Splash Sync  <www.splashsync.com>
@@ -11,12 +10,21 @@
  *
  *  For the full copyright and license information, please view the LICENSE
  *  file that was distributed with this source code.
+ *
+ * @author Splash Sync
+ * @copyright Splash Sync SAS
+ * @license MIT
  */
 
 namespace Splash\Local\Objects\Product;
 
-use Splash\Local\Services\LanguagesManager;
-use Translate;
+use Splash\Local\Services\LanguagesManager as SLM;
+
+// phpcs:disable PSR1.Files.SideEffects
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+// phpcs:enable PSR1.Files.SideEffects
 
 /**
  * Access to Product Metadata Fields
@@ -34,44 +42,44 @@ trait MetaDataTrait
      */
     protected function buildMetaDataFields(): void
     {
-        $groupName = Translate::getAdminTranslation("Information", "AdminProducts");
-        $this->fieldsFactory()->setDefaultLanguage(LanguagesManager::getDefaultLanguage());
+        $groupName = SLM::translate('Information', 'AdminCatalogFeature');
+        $this->fieldsFactory()->setDefaultLanguage(SLM::getDefaultLanguage());
 
         //====================================================================//
         // PRODUCT METADATA
         //====================================================================//
 
-        foreach (LanguagesManager::getAvailableLanguages() as $isoLang) {
+        foreach (SLM::getAvailableLanguages() as $isoLang) {
             //====================================================================//
             // Meta Description
             $this->fieldsFactory()->create(SPL_T_VARCHAR)
-                ->identifier("meta_description")
-                ->name(Translate::getAdminTranslation("Meta description", "AdminProducts"))
-                ->description($groupName." ".Translate::getAdminTranslation("Meta description", "AdminProducts"))
+                ->identifier('meta_description')
+                ->name(SLM::translate('Meta description', 'AdminGlobal'))
+                ->description($groupName . ' ' . SLM::translate('Meta description', 'AdminCatalogFeature'))
                 ->group($groupName)
-                ->microData("http://schema.org/Article", "headline")
+                ->microData('http://schema.org/Article', 'headline')
                 ->isReadOnly(self::isSourceCatalogMode())
                 ->setMultilang($isoLang)
             ;
             //====================================================================//
             // Meta Title
             $this->fieldsFactory()->create(SPL_T_VARCHAR)
-                ->identifier("meta_title")
-                ->name(Translate::getAdminTranslation("Meta title", "AdminProducts"))
-                ->description($groupName." ".Translate::getAdminTranslation("Meta title", "AdminProducts"))
+                ->identifier('meta_title')
+                ->name(SLM::translate('Meta title', 'AdminGlobal'))
+                ->description($groupName . ' ' . SLM::translate('Meta title', 'AdminCatalogFeature'))
                 ->group($groupName)
-                ->microData("http://schema.org/Article", "name")
+                ->microData('http://schema.org/Article', 'name')
                 ->isReadOnly(self::isSourceCatalogMode())
                 ->setMultilang($isoLang)
             ;
             //====================================================================//
             // Rewrite Url
             $this->fieldsFactory()->create(SPL_T_VARCHAR)
-                ->identifier("link_rewrite")
-                ->name(Translate::getAdminTranslation("Friendly URL", "AdminProducts"))
-                ->description($groupName." ".Translate::getAdminTranslation("Friendly URL", "AdminProducts"))
+                ->identifier('link_rewrite')
+                ->name(SLM::translate('Friendly URL', 'AdminGlobal'))
+                ->description($groupName . ' ' . SLM::translate('Friendly URL', 'AdminGlobal'))
                 ->group($groupName)
-                ->microData("http://schema.org/Product", "urlRewrite")
+                ->microData('http://schema.org/Product', 'urlRewrite')
                 ->isReadOnly(self::isSourceCatalogMode())
                 ->setMultilang($isoLang)
             ;
@@ -90,10 +98,10 @@ trait MetaDataTrait
     {
         //====================================================================//
         // Walk on Available Languages
-        foreach (LanguagesManager::getAvailableLanguages() as $idLang => $isoLang) {
+        foreach (SLM::getAvailableLanguages() as $idLang => $isoLang) {
             //====================================================================//
             // Decode Multi-lang Field Name
-            $baseFieldName = LanguagesManager::fieldNameDecode($fieldName, $isoLang);
+            $baseFieldName = SLM::fieldNameDecode($fieldName, $isoLang);
             //====================================================================//
             // READ Fields
             switch ($baseFieldName) {
@@ -120,10 +128,10 @@ trait MetaDataTrait
     {
         //====================================================================//
         // Walk on Available Languages
-        foreach (LanguagesManager::getAvailableLanguages() as $idLang => $isoLang) {
+        foreach (SLM::getAvailableLanguages() as $idLang => $isoLang) {
             //====================================================================//
             // Decode Multi-lang Field Name
-            $baseFieldName = LanguagesManager::fieldNameDecode($fieldName, $isoLang);
+            $baseFieldName = SLM::fieldNameDecode($fieldName, $isoLang);
             //====================================================================//
             // WRITE Field
             switch ($baseFieldName) {
@@ -134,7 +142,7 @@ trait MetaDataTrait
                     // Source Catalog Mode => Write is Forbidden
                     if (!self::isSourceCatalogMode()) {
                         $this->setMultiLang($baseFieldName, $idLang, (string) $fieldData);
-                        $this->addMsfUpdateFields("Product", $baseFieldName, $idLang);
+                        $this->addMsfUpdateFields('Product', $baseFieldName, $idLang);
                     }
                     unset($this->in[$fieldName]);
 

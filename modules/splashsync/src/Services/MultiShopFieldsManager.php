@@ -1,6 +1,5 @@
 <?php
-
-/*
+/**
  *  This file is part of SplashSync Project.
  *
  *  Copyright (C) Splash Sync  <www.splashsync.com>
@@ -11,6 +10,10 @@
  *
  *  For the full copyright and license information, please view the LICENSE
  *  file that was distributed with this source code.
+ *
+ * @author Splash Sync
+ * @copyright Splash Sync SAS
+ * @license MIT
  */
 
 namespace Splash\Local\Services;
@@ -20,6 +23,12 @@ use Shop;
 use Splash\Local\Services\MultiShopManager as MSM;
 use Splash\Models\Fields\FieldsManagerTrait;
 
+// phpcs:disable PSR1.Files.SideEffects
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+// phpcs:enable PSR1.Files.SideEffects
+
 class MultiShopFieldsManager
 {
     use FieldsManagerTrait;
@@ -27,7 +36,7 @@ class MultiShopFieldsManager
     /**
      * Prefix Form MultiShop Fields
      */
-    const MSF_PREFIX = "_shop_";
+    const MSF_PREFIX = '_shop_';
 
     /**
      * Expanded Fields List
@@ -88,7 +97,7 @@ class MultiShopFieldsManager
             foreach (Shop::getShops(false) as $shop) {
                 //====================================================================//
                 // Build Multi-Shop Field
-                self::addToMsfFields($coreField, (int) $shop["id_shop"], (string) $shop["name"]);
+                self::addToMsfFields($coreField, (int) $shop['id_shop'], (string) $shop['name']);
             }
         }
 
@@ -106,8 +115,8 @@ class MultiShopFieldsManager
     {
         //====================================================================//
         // Field is Set for All Shops
-        if (isset($coreField["options"]["shop"])) {
-            if (MSM::MODE_ALL == $coreField["options"]["shop"]) {
+        if (isset($coreField['options']['shop'])) {
+            if (MSM::MODE_ALL == $coreField['options']['shop']) {
                 return true;
             }
         }
@@ -127,7 +136,7 @@ class MultiShopFieldsManager
         //====================================================================//
         // Safety Check
         if (!isset(self::$allShopsFields)) {
-            throw new Exception("You ask for Shop Ids without Loading Fields");
+            throw new Exception('You ask for Shop Ids without Loading Fields');
         }
 
         return self::$allShopsFields;
@@ -145,7 +154,7 @@ class MultiShopFieldsManager
         //====================================================================//
         // Safety Check
         if (!isset(self::$multiShopsFields)) {
-            throw new Exception("You ask for Shop Ids without Loading Fields");
+            throw new Exception('You ask for Shop Ids without Loading Fields');
         }
 
         return self::$multiShopsFields;
@@ -165,12 +174,12 @@ class MultiShopFieldsManager
         //====================================================================//
         // Safety Check
         if (!isset(self::$singleShopsFields)) {
-            throw new Exception("You ask for Shop Ids without Loading Fields");
+            throw new Exception('You ask for Shop Ids without Loading Fields');
         }
         //====================================================================//
         // Safety Check
         if (!isset(self::$singleShopsFields[$shopId])) {
-            throw new Exception("Unknown Shop Id");
+            throw new Exception('Unknown Shop Id');
         }
 
         return self::$singleShopsFields[$shopId];
@@ -188,7 +197,7 @@ class MultiShopFieldsManager
     {
         $result = array();
         foreach ($fieldIds as $fieldId) {
-            $result[] = str_replace(self::MSF_PREFIX.$shopId."_", "", $fieldId);
+            $result[] = str_replace(self::MSF_PREFIX . $shopId . '_', '', $fieldId);
         }
 
         return $result;
@@ -206,10 +215,10 @@ class MultiShopFieldsManager
     {
         $result = array();
         foreach ($rawData as $fieldId => $fieldData) {
-            if (in_array($fieldId, array("id"), true)) {
+            if (in_array($fieldId, array('id'), true)) {
                 continue;
             }
-            $result[self::MSF_PREFIX.$shopId."_".$fieldId] = $fieldData;
+            $result[self::MSF_PREFIX . $shopId . '_' . $fieldId] = $fieldData;
         }
 
         return $result;
@@ -238,10 +247,10 @@ class MultiShopFieldsManager
             }
             //====================================================================//
             // Extract Multi-Shops Data
-            if (false === strpos($fieldId, self::MSF_PREFIX.$shopId."_")) {
+            if (false === strpos($fieldId, self::MSF_PREFIX . $shopId . '_')) {
                 continue;
             }
-            $result[str_replace(self::MSF_PREFIX.$shopId."_", "", $fieldId)] = $fieldData;
+            $result[str_replace(self::MSF_PREFIX . $shopId . '_', '', $fieldId)] = $fieldData;
         }
 
         return $result;
@@ -269,8 +278,8 @@ class MultiShopFieldsManager
         $shopField = array_merge($coreField);
         //====================================================================//
         // Setup as All-Shops Field
-        $shopField['name'] = "[ALL] ".$coreField['name'];
-        $shopField['desc'] = "[ALL] ".$coreField['desc'];
+        $shopField['name'] = '[ALL] ' . $coreField['name'];
+        $shopField['desc'] = '[ALL] ' . $coreField['desc'];
         //====================================================================//
         // Add to Fields Caches
         self::$expandedFields[] = $shopField;
@@ -312,18 +321,18 @@ class MultiShopFieldsManager
         // Encode Metadata
         $shopField['inlist'] = false;
         if (!empty($coreField['itemtype']) && !MSM::isFocused()) {
-            $shopField['itemtype'] = $coreField['itemtype']."/Shop".$shopId;
-            $shopField['tag'] = md5($shopField['itemprop']."::".$shopField['itemtype']);
+            $shopField['itemtype'] = $coreField['itemtype'] . '/Shop' . $shopId;
+            $shopField['tag'] = md5($shopField['itemprop'] . '::' . $shopField['itemtype']);
         }
         //====================================================================//
         // Encode Description
-        $shopField['name'] = "[".$shopName."] ".$coreField['name'];
-        $shopField['desc'] = "[".$shopName."] ".$coreField['desc'];
+        $shopField['name'] = '[' . $shopName . '] ' . $coreField['name'];
+        $shopField['desc'] = '[' . $shopName . '] ' . $coreField['desc'];
         //====================================================================//
         // Add Test Associations
         if (!MSM::isFocused() && !self::isAllShopsFields($coreField)) {
             foreach (Shop::getShops(false) as $shop) {
-                $shopField['asso'][] = self::getMsfFieldId($coreField, $shop["id_shop"]);
+                $shopField['asso'][] = self::getMsfFieldId($coreField, $shop['id_shop']);
             }
         }
         //====================================================================//
@@ -345,13 +354,13 @@ class MultiShopFieldsManager
         //====================================================================//
         // This is a Simple Field
         if (!self::isListField($coreField['type'])) {
-            return self::MSF_PREFIX.$shopId."_".$coreField['id'];
+            return self::MSF_PREFIX . $shopId . '_' . $coreField['id'];
         }
 
         //====================================================================//
         // This is a List Field
         return self::fieldName($coreField['id'])
-            .LISTSPLIT.self::MSF_PREFIX.$shopId
-            ."_".self::listName($coreField['id']);
+            . LISTSPLIT . self::MSF_PREFIX . $shopId
+            . '_' . self::listName($coreField['id']);
     }
 }

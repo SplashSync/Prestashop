@@ -1,6 +1,5 @@
 <?php
-
-/*
+/**
  *  This file is part of SplashSync Project.
  *
  *  Copyright (C) Splash Sync  <www.splashsync.com>
@@ -11,6 +10,10 @@
  *
  *  For the full copyright and license information, please view the LICENSE
  *  file that was distributed with this source code.
+ *
+ * @author Splash Sync
+ * @copyright Splash Sync SAS
+ * @license MIT
  */
 
 namespace Splash\Local\Traits;
@@ -19,7 +22,7 @@ use Db;
 use PrestaShopDatabaseException;
 
 /**
- * Prestashop Splash Id Storage Trait
+ * Prestashop Splash ID Storage Trait
  */
 trait SplashIdTrait
 {
@@ -34,7 +37,7 @@ trait SplashIdTrait
     {
         // List Tables
         Db::getInstance()
-            ->execute("SHOW TABLES LIKE '"._DB_PREFIX_."splash_links'");
+            ->execute('SHOW TABLES LIKE \'' . _DB_PREFIX_ . 'splash_links\'');
         // Check Count
         if (1 == Db::getInstance()->numRows()) {
             return true;
@@ -50,13 +53,13 @@ trait SplashIdTrait
      */
     public static function createSplashIdTable()
     {
-        $sql = "CREATE TABLE IF NOT EXISTS `"._DB_PREFIX_."splash_links`(";
-        $sql .= "`rowid`        INT(11)         NOT NULL AUTO_INCREMENT PRIMARY KEY ,";
-        $sql .= "`id`           VARCHAR(256)    NOT NULL ,";
-        $sql .= "`type`         VARCHAR(256)    NOT NULL ,";
-        $sql .= "`spl_id`       VARCHAR(256)    DEFAULT NULL ,";
-        $sql .= "`spl_origin`   VARCHAR(256)    DEFAULT NULL ,";
-        $sql .= "`extra`        TEXT            DEFAULT NULL )";
+        $sql = 'CREATE TABLE IF NOT EXISTS `' . _DB_PREFIX_ . 'splash_links`(';
+        $sql .= '`rowid`        INT(11)         NOT NULL AUTO_INCREMENT PRIMARY KEY ,';
+        $sql .= '`id`           VARCHAR(256)    NOT NULL ,';
+        $sql .= '`type`         VARCHAR(256)    NOT NULL ,';
+        $sql .= '`spl_id`       VARCHAR(256)    DEFAULT NULL ,';
+        $sql .= '`spl_origin`   VARCHAR(256)    DEFAULT NULL ,';
+        $sql .= '`extra`        TEXT            DEFAULT NULL )';
 
         return Db::getInstance()->execute($sql);
     }
@@ -71,8 +74,8 @@ trait SplashIdTrait
      */
     public static function getSplashId($objectType, $objectId)
     {
-        $sql = "SELECT spl_id FROM `"._DB_PREFIX_."splash_links`";
-        $sql .= " WHERE type='".pSQL($objectType)."' AND id='".pSQL((string) $objectId)."' ";
+        $sql = 'SELECT spl_id FROM `' . _DB_PREFIX_ . 'splash_links`';
+        $sql .= ' WHERE type=\'' . pSQL($objectType) . '\' AND id=\'' . pSQL((string) $objectId) . '\' ';
         $splashId = Db::getInstance()->getValue($sql, false);
 
         return is_string($splashId) ? $splashId : false;
@@ -99,20 +102,20 @@ trait SplashIdTrait
         $current = self::getSplashId($objectType, $objectId);
         // Object is Unknown
         if (!$current) {
-            return Db::getInstance()->insert("splash_links", array(
-                "id" => pSQL((string) $objectId),
-                "type" => pSQL($objectType),
-                "spl_id" => pSQL($splashId),
+            return Db::getInstance()->insert('splash_links', array(
+                'id' => pSQL((string) $objectId),
+                'type' => pSQL($objectType),
+                'spl_id' => pSQL($splashId),
             ));
         }
         // Splash ID Changed
         if ($current !== $splashId) {
             return Db::getInstance()->update(
-                "splash_links",
+                'splash_links',
                 array(
-                    "spl_id" => pSQL($splashId),
+                    'spl_id' => pSQL($splashId),
                 ),
-                "type='".pSQL($objectType)."' AND id='".pSQL((string) $objectId)."' "
+                'type=\'' . pSQL($objectType) . '\' AND id=\'' . pSQL((string) $objectId) . '\' '
             );
         }
 

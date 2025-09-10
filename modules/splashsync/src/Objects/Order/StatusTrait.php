@@ -1,6 +1,5 @@
 <?php
-
-/*
+/**
  *  This file is part of SplashSync Project.
  *
  *  Copyright (C) Splash Sync  <www.splashsync.com>
@@ -11,6 +10,10 @@
  *
  *  For the full copyright and license information, please view the LICENSE
  *  file that was distributed with this source code.
+ *
+ * @author Splash Sync
+ * @copyright Splash Sync SAS
+ * @license MIT
  */
 
 namespace Splash\Local\Objects\Order;
@@ -18,8 +21,14 @@ namespace Splash\Local\Objects\Order;
 use Context;
 use Exception;
 use Splash\Local\Services\KernelManager;
+use Splash\Local\Services\LanguagesManager as SLM;
 use Splash\Local\Services\OrderStatusManager as StatusManager;
-use Translate;
+
+// phpcs:disable PSR1.Files.SideEffects
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+// phpcs:enable PSR1.Files.SideEffects
 
 /**
  * Access to Orders Status Fields
@@ -40,10 +49,10 @@ trait StatusTrait
         //====================================================================//
         // Order Current Status
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
-            ->identifier("status")
-            ->name(Translate::getAdminTranslation("Order status", "AdminStatuses"))
-            ->description(Translate::getAdminTranslation("Status of the order", "AdminSupplyOrdersChangeState"))
-            ->microData("http://schema.org/Order", "orderStatus")
+            ->identifier('status')
+            ->name(SLM::translate('Order status', 'AdminOrderscustomersFeature'))
+            ->description('Status of the order')
+            ->microData('http://schema.org/Order', 'orderStatus')
             ->addChoices(StatusManager::getOrderStatusChoices())
             ->isReadOnly()
         ;
@@ -52,65 +61,65 @@ trait StatusTrait
         // ORDER STATUS FLAGS
         //====================================================================//
 
-        $prefix = Translate::getAdminTranslation("Order status", "AdminOrders")." ";
+        $prefix = SLM::translate('Order status', 'AdminOrderscustomersFeature') . ' ';
 
         //====================================================================//
         // Is Canceled
         // => There is no Difference Between a Draft & Canceled Order on Prestashop.
         //      Any Non Validated Order is considered as Canceled
         $this->fieldsFactory()->create(SPL_T_BOOL)
-            ->identifier("isCanceled")
-            ->name($prefix.$this->spl->l("Canceled"))
-            ->microData("http://schema.org/OrderStatus", "OrderCancelled")
-            ->group(Translate::getAdminTranslation("Meta", "AdminThemes"))
-            ->association("isCanceled", "isValidated", "isClosed")
+            ->identifier('isCanceled')
+            ->name($prefix . $this->spl->l('Canceled'))
+            ->microData('http://schema.org/OrderStatus', 'OrderCancelled')
+            ->group('Meta')
+            ->association('isCanceled', 'isValidated', 'isClosed')
             ->isReadOnly()
         ;
         //====================================================================//
         // Is Cancel State
         $this->fieldsFactory()->create(SPL_T_BOOL)
-            ->identifier("isCancelState")
-            ->name($prefix.$this->spl->l("Canceled")." State")
-            ->group(Translate::getAdminTranslation("Meta", "AdminThemes"))
-            ->association("isCanceled", "isValidated", "isClosed")
+            ->identifier('isCancelState')
+            ->name($prefix . $this->spl->l('Canceled') . ' State')
+            ->group('Meta')
+            ->association('isCanceled', 'isValidated', 'isClosed')
             ->isReadOnly()
         ;
         //====================================================================//
         // Is Validated
         $this->fieldsFactory()->create(SPL_T_BOOL)
-            ->identifier("isValidated")
-            ->name($prefix.Translate::getAdminTranslation("Valid", "AdminCartRules"))
-            ->microData("http://schema.org/OrderStatus", "OrderPaymentDone")
-            ->group(Translate::getAdminTranslation("Meta", "AdminThemes"))
-            ->association("isCanceled", "isValidated", "isClosed")
+            ->identifier('isValidated')
+            ->name($prefix . 'Validated')
+            ->microData('http://schema.org/OrderStatus', 'OrderPaymentDone')
+            ->group('Meta')
+            ->association('isCanceled', 'isValidated', 'isClosed')
             ->isReadOnly()
         ;
         //====================================================================//
         // Is Processing
         $this->fieldsFactory()->create(SPL_T_BOOL)
-            ->identifier("isProcessing")
-            ->name($prefix."Processing")
-            ->microData("http://schema.org/OrderStatus", "OrderProcessing")
-            ->group(Translate::getAdminTranslation("Meta", "AdminThemes"))
+            ->identifier('isProcessing')
+            ->name($prefix . 'Processing')
+            ->microData('http://schema.org/OrderStatus', 'OrderProcessing')
+            ->group('Meta')
             ->isReadOnly()
         ;
         //====================================================================//
         // Is Closed
         $this->fieldsFactory()->create(SPL_T_BOOL)
-            ->identifier("isClosed")
-            ->name($prefix.Translate::getAdminTranslation("Closed", "AdminCustomers"))
-            ->microData("http://schema.org/OrderStatus", "OrderDelivered")
-            ->group(Translate::getAdminTranslation("Meta", "AdminThemes"))
-            ->association("isCanceled", "isValidated", "isClosed")
+            ->identifier('isClosed')
+            ->name($prefix . SLM::translate('Closed', 'AdminOrderscustomersFeature'))
+            ->microData('http://schema.org/OrderStatus', 'OrderDelivered')
+            ->group('Meta')
+            ->association('isCanceled', 'isValidated', 'isClosed')
             ->isReadOnly()
         ;
         //====================================================================//
         // Is Paid
         $this->fieldsFactory()->create(SPL_T_BOOL)
-            ->identifier("isPaid")
-            ->name($prefix.$this->spl->l("Paid"))
-            ->group(Translate::getAdminTranslation("Meta", "AdminThemes"))
-            ->microData("http://schema.org/OrderStatus", "OrderPaid")
+            ->identifier('isPaid')
+            ->name($prefix . $this->spl->l('Paid'))
+            ->group('Meta')
+            ->microData('http://schema.org/OrderStatus', 'OrderPaid')
             ->isReadOnly()
         ;
     }
@@ -235,21 +244,21 @@ trait StatusTrait
         //====================================================================//
         // If order is invalid => Canceled
         if (!$this->object->valid) {
-            return "OrderCanceled";
+            return 'OrderCanceled';
         }
         //====================================================================//
         // Other Status => Use Status Flag to Detect Current Order Status
         //====================================================================//
         if ($this->object->isPaidAndShipped()) {
-            return "OrderDelivered";
+            return 'OrderDelivered';
         }
         if ($this->object->hasBeenPaid()) {
-            return "OrderProcessing";
+            return 'OrderProcessing';
         }
 
         //====================================================================//
         // Default Status => Order is Closed & Delivered
         // Used for Orders imported to Prestashop that do not have Prestashop Status
-        return "OrderDelivered";
+        return 'OrderDelivered';
     }
 }

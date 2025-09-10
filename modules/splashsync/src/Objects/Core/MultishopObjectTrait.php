@@ -1,6 +1,5 @@
 <?php
-
-/*
+/**
  *  This file is part of SplashSync Project.
  *
  *  Copyright (C) Splash Sync  <www.splashsync.com>
@@ -11,6 +10,10 @@
  *
  *  For the full copyright and license information, please view the LICENSE
  *  file that was distributed with this source code.
+ *
+ * @author Splash Sync
+ * @copyright Splash Sync SAS
+ * @license MIT
  */
 
 namespace Splash\Local\Objects\Core;
@@ -21,6 +24,12 @@ use Splash\Core\SplashCore as Splash;
 use Splash\Local\Services\MultiShopFieldsManager as MSF;
 use Splash\Local\Services\MultiShopManager as MSM;
 use Splash\Models\Objects\IntelParserTrait;
+
+// phpcs:disable PSR1.Files.SideEffects
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+// phpcs:enable PSR1.Files.SideEffects
 
 trait MultishopObjectTrait
 {
@@ -112,8 +121,8 @@ trait MultishopObjectTrait
         $objectData = array_merge($allShopData, $multiShopData);
         //====================================================================//
         // Ensure Object Id is Here
-        if (!empty($objectData) && !isset($objectData["id"])) {
-            $objectData["id"] = $objectId;
+        if (!empty($objectData) && !isset($objectData['id'])) {
+            $objectData['id'] = $objectId;
         }
 
         //====================================================================//
@@ -166,7 +175,7 @@ trait MultishopObjectTrait
             /** @var null|string $objectId */
             $multiShopObjectId = $this->coreSet($objectId, $multiShopData);
             if (empty($multiShopObjectId)) {
-                Splash::log()->errTrace(sprintf("Writing to Shop %d errored.", $shopId));
+                Splash::log()->errTrace(sprintf('Writing to Shop %d errored.', $shopId));
             };
             if (empty($objectId)) {
                 $objectId = $multiShopObjectId;
@@ -226,7 +235,7 @@ trait MultishopObjectTrait
      *
      * @return void
      */
-    public function addMsfUpdateFields(string $type, string $name, string $langId = null): void
+    public function addMsfUpdateFields(string $type, string $name, ?string $langId = null): void
     {
         //====================================================================//
         // Ensure List Exits

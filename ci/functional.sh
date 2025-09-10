@@ -20,12 +20,24 @@
 set -e
 
 ################################################################
-# import Layout Functions
+# Import Layout Functions
 . /builds/SplashSync/Prestashop/ci/functions.sh
 
 ################################################################
 # Render Splash Screen
 splashscreen "FUNCTIONAL TESTS"
+
+#################################################################################
+## Move Module Contents to Install Folder
+#echo "Move Module Contents to Prestashop Modules Directory"
+#mkdir     $WEB_DIR/modules/splashsync
+#cp -Rf    $CI_PROJECT_DIR/modules/splashsync/*              $WEB_DIR/modules/splashsync/
+
+#################################################################################
+## Install Module
+subtitle "FUNCTIONAL --> Install Module"
+bash $CI_PROJECT_DIR/ci/module/install.sh
+cd  $WEB_DIR
 
 ################################################################################
 # Install Prestashop + WebServer (Apache & PHP-Fpm)
@@ -33,34 +45,39 @@ subtitle "FUNCTIONAL --> Install Prestashop"
 cd  $WEB_DIR
 cat $CI_PROJECT_DIR/docker/docker-entrypoint.sh | bash
 
-################################################################################
-# Install Module
-subtitle "FUNCTIONAL --> Install Module"
-bash $CI_PROJECT_DIR/ci/module/install.sh
-cd  $WEB_DIR
-composer install
+#################################################################################
+## Install Module
+#subtitle "FUNCTIONAL --> Install Module"
+#bash $CI_PROJECT_DIR/ci/module/install.sh
+#cd  $WEB_DIR
 
- ################################################################################
- # Run PhpUnit Core Test Sequence (Will Enable the Module)
-subtitle "FUNCTIONAL --> Enable Module"
-modules/splashsync/vendor/bin/phpunit \
-  modules/splashsync/vendor/splash/phpcore/Tests/Core/ \
-  -c $WEB_DIR/ci/phpunit.xml.dist \
-  --log-junit $CI_PROJECT_DIR/core-report.xml
+################################################################################
+# Run PhpUnit Core Test Sequence (Will Enable the Module)
+#subtitle "FUNCTIONAL --> Enable Module"
+#
+#phpunit \
+#  modules/splashsync/vendor/splash/phpcore/Tests/Core/ \
+#  -c $WEB_DIR/ci/phpunit.xml.dist \
+#  --log-junit $CI_PROJECT_DIR/core-report.xml
+#
+#phpunit \
+#  modules/splashsync/vendor/splash/phpcore/Tests/Core/ \
+#  -c $WEB_DIR/ci/phpunit.xml.dist \
+#  --log-junit $CI_PROJECT_DIR/core-report.xml
 
 ################################################################################
 # Run PhpUnit Local Sequence with No Data Inside
 subtitle "FUNCTIONAL --> Local Test Sequence"
-modules/splashsync/vendor/bin/phpunit \
+phpunit \
   --testsuite=Local \
-  -c $WEB_DIR/ci/phpunit.xml.dist \
+  -c ci/phpunit.xml.dist \
   --log-junit $CI_PROJECT_DIR/local-report.xml
 
 ################################################################################
 # Run PhpUnit Test Sequence
 subtitle "FUNCTIONAL --> Full Test Sequence"
-modules/splashsync/vendor/bin/phpunit \
- -c $WEB_DIR/ci/phpunit.xml.dist \
+phpunit \
+ -c ci/phpunit.xml.dist \
  --log-junit $CI_PROJECT_DIR/standard-report.xml
 
 ################################################################################
@@ -69,13 +86,14 @@ subtitle "FUNCTIONAL --> Enable MSF Mode"
 php $WEB_DIR/ci/setup_shops.php && php $WEB_DIR/ci/setup_shops.php
 
 subtitle "FUNCTIONAL --> Msf Products Test Sequence"
-modules/splashsync/vendor/bin/phpunit \
- -c $WEB_DIR/ci/phpunit.products.xml \
+phpunit \
+ -c ci/phpunit.products.xml \
  --log-junit $CI_PROJECT_DIR/msf-report.xml
 
 ################################################################################
 # Run Grumphp Splash Manifest Sequence
 subtitle "FUNCTIONAL --> Build Module Manifest"
+composer update --no-scripts --no-plugins --no-progress -n
 php modules/splashsync/vendor/bin/grumphp run -n --tasks=build-manifest
 
 

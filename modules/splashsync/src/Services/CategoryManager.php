@@ -1,6 +1,5 @@
 <?php
-
-/*
+/**
  *  This file is part of SplashSync Project.
  *
  *  Copyright (C) Splash Sync  <www.splashsync.com>
@@ -11,6 +10,10 @@
  *
  *  For the full copyright and license information, please view the LICENSE
  *  file that was distributed with this source code.
+ *
+ * @author Splash Sync
+ * @copyright Splash Sync SAS
+ * @license MIT
  */
 
 namespace Splash\Local\Services;
@@ -18,6 +21,12 @@ namespace Splash\Local\Services;
 use ArrayObject;
 use Category;
 use Product;
+
+// phpcs:disable PSR1.Files.SideEffects
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+// phpcs:enable PSR1.Files.SideEffects
 
 /**
  * Product Categories Manager
@@ -40,8 +49,11 @@ class CategoryManager
      *
      * @return array
      */
-    public static function getProductCategories(int $productId, int $langId = null, string $field = "link_rewrite")
-    {
+    public static function getProductCategories(
+        int $productId,
+        ?int $langId = null,
+        string $field = 'link_rewrite'
+    ): array {
         //====================================================================//
         // Load Product Categories List
         $fullList = Product::getProductCategoriesFull($productId, $langId);
@@ -67,7 +79,7 @@ class CategoryManager
      *
      * @return void
      */
-    public static function setProductCategories(Product $prd, $data, int $lang = null, string $field = "link_rewrite")
+    public static function setProductCategories(Product $prd, $data, ?int $lang = null, string $field = 'link_rewrite')
     {
         //====================================================================//
         // Load Product Current Categories List
@@ -109,7 +121,7 @@ class CategoryManager
      *
      * @return array
      */
-    public static function getAllCategories(int $langId = null, string $field = "link_rewrite")
+    public static function getAllCategories(?int $langId = null, string $field = 'link_rewrite'): array
     {
         //====================================================================//
         // Load All Categories List
@@ -135,7 +147,7 @@ class CategoryManager
      *
      * @return null|int
      */
-    public static function getCategoryId(string $value, int $langId = null, string $field = "link_rewrite")
+    public static function getCategoryId(string $value, ?int $langId = null, string $field = 'link_rewrite'): ?int
     {
         //====================================================================//
         // Load All Categories List
@@ -144,7 +156,7 @@ class CategoryManager
         // Map List to Requested Field
         foreach ($fullList as $item) {
             if (isset($item[$field]) && ($item[$field] == $value)) {
-                return $item["id_category"];
+                return $item['id_category'];
             }
         }
 
@@ -159,7 +171,7 @@ class CategoryManager
      *
      * @return array
      */
-    public static function getAllCategoriesChoices(int $langId = null, string $field = "link_rewrite")
+    public static function getAllCategoriesChoices(?int $langId = null, string $field = 'link_rewrite'): array
     {
         //====================================================================//
         // Load All Categories List
@@ -169,7 +181,7 @@ class CategoryManager
         $result = array();
         foreach ($fullList as $item) {
             if (isset($item[$field])) {
-                $result[(string) $item[$field]] = (string) $item["name"];
+                $result[(string) $item[$field]] = (string) $item['name'];
             }
         }
 
@@ -178,10 +190,8 @@ class CategoryManager
 
     /**
      * Get Categories List From Db or Cache for Language
-     *
-     * @return array
      */
-    public static function getAllCategoriesList(int $langId = null): array
+    public static function getAllCategoriesList(?int $langId = null): array
     {
         $index = (int) $langId;
         if (!isset(self::$cache[$index])) {

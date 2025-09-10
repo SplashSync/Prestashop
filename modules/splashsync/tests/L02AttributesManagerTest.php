@@ -1,6 +1,5 @@
 <?php
-
-/*
+/**
  *  This file is part of SplashSync Project.
  *
  *  Copyright (C) Splash Sync  <www.splashsync.com>
@@ -11,6 +10,10 @@
  *
  *  For the full copyright and license information, please view the LICENSE
  *  file that was distributed with this source code.
+ *
+ * @author Splash Sync
+ * @copyright Splash Sync SAS
+ * @license MIT
  */
 
 namespace Splash\Tests;
@@ -36,11 +39,11 @@ class L02AttributesManagerTest extends ObjectsCase
      */
     public function testFeatureIsActive()
     {
-        $this->assertNotEmpty(Combination::isFeatureActive(), "Combination feature is Not Active");
+        $this->assertNotEmpty(Combination::isFeatureActive(), 'Combination feature is Not Active');
         $this->assertEquals(
             SLM::getDefaultLanguage(),
-            "en_US",
-            "This test rely on Fact that Default language is en_US"
+            'en_US',
+            'This test rely on Fact that Default language is en_US'
         );
     }
 
@@ -53,12 +56,11 @@ class L02AttributesManagerTest extends ObjectsCase
     {
         //====================================================================//
         //   Load Known Attribute Group
-        $attributeGroup = Manager::touchGroup("Size", null);
+        $attributeGroup = Manager::touchGroup('Size', null);
         $this->assertNotEmpty($attributeGroup);
         $this->assertInstanceOf(AttributeGroup::class, $attributeGroup);
-        // @phpstan-ignore-next-line
         $this->assertIsIterable($attributeGroup->name);
-        $this->assertContains("Size", $attributeGroup->name);
+        $this->assertContains('Size', $attributeGroup->name);
 
         //====================================================================//
         //   Load UnKnown Attribute Group
@@ -78,10 +80,10 @@ class L02AttributesManagerTest extends ObjectsCase
     {
         //====================================================================//
         //   Generate Random Attribute Group Infos
-        $code = "tstVariant".rand(100, 999);
+        $code = 'tstVariant' . rand(100, 999);
         $names = array();
         foreach (SLM::getAvailableLanguages() as $isoCode) {
-            $names[$isoCode] = implode("-", array($code, SLM::getPsLangId($isoCode), rand(100, 999)));
+            $names[$isoCode] = implode('-', array($code, SLM::getPsLangId($isoCode), rand(100, 999)));
         }
         $dfName = $names[SLM::getDefaultLanguage()];
 
@@ -152,7 +154,7 @@ class L02AttributesManagerTest extends ObjectsCase
         //   Create a New Attribute Values Names
         $values = array();
         foreach (SLM::getAvailableLanguages() as $isoCode) {
-            $values[$isoCode] = implode("-", array($code, SLM::getPsLangId($isoCode), rand(100, 999)));
+            $values[$isoCode] = implode('-', array($code, SLM::getPsLangId($isoCode), rand(100, 999)));
         }
         $dfValue = $values[SLM::getDefaultLanguage()];
 
@@ -164,13 +166,10 @@ class L02AttributesManagerTest extends ObjectsCase
         //   Verify New Attribute
         $this->assertNotEmpty($attribute);
         $this->assertInstanceOf(Attribute::class, $attribute);
-        // @phpstan-ignore-next-line
         $this->assertNotEmpty($attribute->id);
-        // @phpstan-ignore-next-line
         $this->assertEquals($group->id, $attribute->id_attribute_group);
         foreach (SLM::getAvailableLanguages() as $langId => $isoCode) {
             // Values are All Same (Default Language)
-            /** @phpstan-ignore-next-line  */
             $this->assertEquals($dfValue, $attribute->name[$langId]);
         }
 
@@ -178,7 +177,6 @@ class L02AttributesManagerTest extends ObjectsCase
         //   Verify Attributes Value Identification
         foreach (SLM::getAvailableLanguages() as $langId => $isoCode) {
             // Values are All Same (Default Language)
-            /** @phpstan-ignore-next-line  */
             $this->assertSame($attribute, Manager::touchAttribute($group, $dfValue));
         }
 
@@ -189,15 +187,14 @@ class L02AttributesManagerTest extends ObjectsCase
         $this->assertInstanceOf(Attribute::class, $reloadAttr);
 
         //====================================================================//
-        //   Setup Multilang Attribute Names
+        //   Setup Multi-lang Attribute Names
         foreach (SLM::getAvailableLanguages() as $langId => $isoCode) {
             // Update Group Name
             $updatedAttribute = Manager::updateAttribute($reloadAttr, $values[$isoCode], $isoCode);
             // VERIFY
             $this->assertInstanceOf(Attribute::class, $updatedAttribute);
             $this->assertSame($reloadAttr, $updatedAttribute);
-            // Names Now Multilang
-            // @phpstan-ignore-next-line
+            // Names Now Multi-lang
             $this->assertEquals($values[$isoCode], $updatedAttribute->name[$langId]);
         }
     }

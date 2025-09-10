@@ -1,6 +1,5 @@
 <?php
-
-/*
+/**
  *  This file is part of SplashSync Project.
  *
  *  Copyright (C) Splash Sync  <www.splashsync.com>
@@ -11,6 +10,10 @@
  *
  *  For the full copyright and license information, please view the LICENSE
  *  file that was distributed with this source code.
+ *
+ * @author Splash Sync
+ * @copyright Splash Sync SAS
+ * @license MIT
  */
 
 namespace Splash\Local\Services;
@@ -21,6 +24,12 @@ use Order;
 use Splash\Local\Services\LanguagesManager as SLM;
 use TaxCalculator;
 
+// phpcs:disable PSR1.Files.SideEffects
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+// phpcs:enable PSR1.Files.SideEffects
+
 /**
  * Tooling Services dedicated to Order Tax Identifications
  */
@@ -29,7 +38,7 @@ class OrderTaxManager
     /**
      * Order Tax Calculators Cache
      *
-     * @var TaxCalculator[]
+     * @var array<null|TaxCalculator>
      */
     private static array $taxCalculators = array();
 
@@ -58,7 +67,7 @@ class OrderTaxManager
         // Try to Detect VAT from Value & Country
         $taxRule = TaxManager::getBestTaxForCountry($order->carrier_tax_rate, $countryId);
 
-        return $taxRule ? $taxRule->name : null;
+        return $taxRule ? (is_string($taxRule->name) ? $taxRule->name : null) : null;
     }
 
     /**
@@ -81,7 +90,7 @@ class OrderTaxManager
      */
     private static function getShippingTaxCalculator(Order $order): ?TaxCalculator
     {
-        $cacheKey = md5(sprintf("%s-%s", $order->id_carrier, $order->id_address_delivery));
+        $cacheKey = md5(sprintf('%s-%s', $order->id_carrier, $order->id_address_delivery));
 
         if (!array_key_exists($cacheKey, self::$taxCalculators)) {
             //====================================================================//

@@ -1,0 +1,49 @@
+################################################################################
+#
+#  This file is part of SplashSync Project.
+# 
+#  Copyright (C) Splash Sync <www.splashsync.com>
+# 
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+# 
+#  For the full copyright and license information, please view the LICENSE
+#  file that was distributed with this source code.
+# 
+#  @author Bernard Paquier <contact@splashsync.com>
+#
+################################################################################
+
+services:
+    
+    ################################################################################
+    # Prestashop 8.2
+    ps-8.2:
+        image:            prestashop/prestashop:8.2.3-8.1-apache
+        container_name:   ps8-2.prestashop.local
+        depends_on:
+            - mysql
+        volumes:
+            # Push Configuration Override
+            - ../../docker/config/splash.json:/var/www/html/config/splash.json:ro
+            # Module Sources
+            - ../../modules/splashsync:/var/www/html/modules/splashsync:ro
+            - ../../grumphp:/var/www/html/grumphp:ro
+            - ../../phpunit.xml.dist:/var/www/html/phpunit.xml.dist:ro
+            - ../../composer.json:/var/www/html/composer.json:ro
+            # Docker EntryPoint
+            - ../../docker/docker-entrypoint.sh:/var/www/html/modules/docker-entrypoint.sh:ro
+            # Module vendor
+            - 8.2-vendor:/var/www/html/modules/splashsync/vendor:Z
+
+        environment:
+            - PS_VERSION=8.2
+        command:            sh /var/www/html/modules/docker-entrypoint.sh
+        hostname:           ps8-2.prestashop.local
+        networks:
+            prestashop:     { ipv4_address: 172.102.0.82 }
+            splashsync:     { aliases: [ ps8-2.prestashop.local ] }
+
+volumes:
+    8.2-vendor:        ~

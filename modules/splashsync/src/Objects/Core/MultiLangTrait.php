@@ -1,6 +1,5 @@
 <?php
-
-/*
+/**
  *  This file is part of SplashSync Project.
  *
  *  Copyright (C) Splash Sync  <www.splashsync.com>
@@ -11,6 +10,10 @@
  *
  *  For the full copyright and license information, please view the LICENSE
  *  file that was distributed with this source code.
+ *
+ * @author Splash Sync
+ * @copyright Splash Sync SAS
+ * @license MIT
  */
 
 namespace Splash\Local\Objects\Core;
@@ -18,6 +21,12 @@ namespace Splash\Local\Objects\Core;
 use Product;
 use Splash\Core\SplashCore as Splash;
 use Tools;
+
+// phpcs:disable PSR1.Files.SideEffects
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+// phpcs:enable PSR1.Files.SideEffects
 
 /**
  * Access to Objects Multi-langual Data
@@ -53,7 +62,7 @@ trait MultiLangTrait
      *
      * @return void
      */
-    protected function setMultiLang(string $fieldName, $langId, string $data, int $maxLength = null)
+    protected function setMultiLang(string $fieldName, $langId, string $data, ?int $maxLength = null): void
     {
         //====================================================================//
         // Extract Contents
@@ -70,13 +79,13 @@ trait MultiLangTrait
         }
         //====================================================================//
         // Load Data Length from Product Class
-        if (is_null($maxLength) && isset(Product::$definition["fields"][$fieldName]["size"])) {
-            $maxLength = Product::$definition["fields"][$fieldName]["size"];
+        if (is_null($maxLength) && isset(Product::$definition['fields'][$fieldName]['size'])) {
+            $maxLength = Product::$definition['fields'][$fieldName]['size'];
         }
         //====================================================================//
         // Verify Data Length
         if (!is_null($maxLength) && (Tools::strlen($data) > $maxLength)) {
-            Splash::log()->warTrace("Text is too long for field ".$fieldName.", modification skipped.");
+            Splash::log()->warTrace('Text is too long for field ' . $fieldName . ', modification skipped.');
 
             return;
         }

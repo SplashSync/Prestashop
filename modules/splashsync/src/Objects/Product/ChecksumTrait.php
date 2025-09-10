@@ -1,6 +1,5 @@
 <?php
-
-/*
+/**
  *  This file is part of SplashSync Project.
  *
  *  Copyright (C) Splash Sync  <www.splashsync.com>
@@ -11,12 +10,21 @@
  *
  *  For the full copyright and license information, please view the LICENSE
  *  file that was distributed with this source code.
+ *
+ * @author Splash Sync
+ * @copyright Splash Sync SAS
+ * @license MIT
  */
 
 namespace Splash\Local\Objects\Product;
 
 use Splash\Local\Services\LanguagesManager as SLM;
-use Translate;
+
+// phpcs:disable PSR1.Files.SideEffects
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+// phpcs:enable PSR1.Files.SideEffects
 
 /**
  * Access to Product Identification CheckSum
@@ -28,7 +36,7 @@ trait ChecksumTrait
     /**
      * Compute Md5 CheckSum from Product & Attributes Objects
      *
-     * @return string $Md5              Unik Checksum
+     * @return string Unique Checksum
      */
     public function getMd5Checksum(): string
     {
@@ -42,7 +50,7 @@ trait ChecksumTrait
     /**
      * Compute Md5 String from Product & Attributes Objects
      *
-     * @return string $Md5              Unik Checksum
+     * @return string Unique Checksum
      */
     public function getMd5String(): string
     {
@@ -63,27 +71,27 @@ trait ChecksumTrait
         //====================================================================//
         // Product CheckSum
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
-            ->identifier("md5")
-            ->name("Md5")
-            ->description("Unik Md5 Object Checksum")
-            ->group(Translate::getAdminTranslation("Meta", "AdminThemes"))
+            ->identifier('md5')
+            ->name('Md5')
+            ->description('Unik Md5 Object Checksum')
+            ->group('Meta')
             ->isListed()
-            ->microData("http://schema.org/Thing", "identifier")
+            ->microData('http://schema.org/Thing', 'identifier')
             ->isReadOnly()
         ;
         //====================================================================//
         // Product CheckSum Debug String
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
-            ->identifier("md5-debug")
-            ->name("Md5 Debug")
-            ->description("Unik Checksum String fro Debug")
-            ->group(Translate::getAdminTranslation("Meta", "AdminThemes"))
+            ->identifier('md5-debug')
+            ->name('Md5 Debug')
+            ->description('Unik Checksum String fro Debug')
+            ->group('Meta')
             ->isReadOnly()
         ;
     }
 
     /**
-     * Read requested Field
+     * Read the requested Field
      *
      * @param string $key       Input List Key
      * @param string $fieldName Field Identifier / Name
@@ -117,15 +125,15 @@ trait ChecksumTrait
      * @param null|string $sku        Product Reference
      * @param array       $attributes Array of Product Attributes ($Code => $Value)
      *
-     * @return string $Md5              Unik Checksum
+     * @return string Unique Checksum
      */
     private static function getMd5ChecksumFromValues(
         ?string $title,
-        string $sku = null,
+        ?string $sku = null,
         array $attributes = array()
     ): string {
         $md5Array = array_merge_recursive(
-            array("title" => $title, "sku" => $sku),
+            array('title' => $title, 'sku' => $sku),
             $attributes
         );
 
@@ -139,15 +147,15 @@ trait ChecksumTrait
      * @param null|string $sku        Product Reference
      * @param array       $attributes Array of Product Attributes ($Code => $Value)
      *
-     * @return string $Md5              Unik Checksum
+     * @return string Unique Checksum
      */
     private static function getMd5StringFromValues(
         ?string $title,
-        string $sku = null,
+        ?string $sku = null,
         array $attributes = array()
     ): string {
         $md5Array = array_merge_recursive(
-            array("title" => $title, "sku" => $sku),
+            array('title' => $title, 'sku' => $sku),
             $attributes
         );
 

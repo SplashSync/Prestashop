@@ -1,6 +1,5 @@
 <?php
-
-/*
+/**
  *  This file is part of SplashSync Project.
  *
  *  Copyright (C) Splash Sync  <www.splashsync.com>
@@ -11,13 +10,22 @@
  *
  *  For the full copyright and license information, please view the LICENSE
  *  file that was distributed with this source code.
+ *
+ * @author Splash Sync
+ * @copyright Splash Sync SAS
+ * @license MIT
  */
 
 namespace Splash\Local\Objects\Core;
 
 use PrestaShopDatabaseException;
 use Splash\Local\Services\MultiShopManager as MSM;
-use Translate;
+
+// phpcs:disable PSR1.Files.SideEffects
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+// phpcs:enable PSR1.Files.SideEffects
 
 /**
  * Access to Objects Splash Meta Fields
@@ -39,11 +47,11 @@ trait SplashMetaTrait
         //====================================================================//
         // Splash Unique Object Id
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
-            ->identifier("splash_id")
-            ->name("Splash Id")
-            ->group(Translate::getAdminTranslation("Meta", "AdminThemes"))
-            ->addOption("shop", MSM::MODE_ALL)
-            ->microData("http://splashync.com/schemas", "ObjectId")
+            ->identifier('splash_id')
+            ->name('Splash Id')
+            ->group('Meta')
+            ->addOption('shop', MSM::MODE_ALL)
+            ->microData('http://splashync.com/schemas', 'ObjectId')
         ;
     }
 

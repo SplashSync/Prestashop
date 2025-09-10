@@ -1,6 +1,5 @@
 <?php
-
-/*
+/**
  *  This file is part of SplashSync Project.
  *
  *  Copyright (C) Splash Sync  <www.splashsync.com>
@@ -11,6 +10,10 @@
  *
  *  For the full copyright and license information, please view the LICENSE
  *  file that was distributed with this source code.
+ *
+ * @author Splash Sync
+ * @copyright Splash Sync SAS
+ * @license MIT
  */
 
 namespace Splash\Tests;
@@ -45,17 +48,17 @@ class L01InvoicesTest extends ObjectsCase
 
         //====================================================================//
         //   Create Fake Order Data
-        $this->fields = $this->fakeFieldsList("Order", array("product_id@lines"), true);
+        $this->fields = $this->fakeFieldsList('Order', array('product_id@lines'), true);
         $fakeData = $this->fakeObjectData($this->fields);
 
         //====================================================================//
         //   Execute Action Directly on Module
-        $objectId = Splash::object("Order")->set(null, $fakeData);
+        $objectId = Splash::object('Order')->set(null, $fakeData);
         $this->assertIsString($objectId);
 
         //====================================================================//
         //   Load Order Object
-        $splashOrder = Splash::object("Order");
+        $splashOrder = Splash::object('Order');
         $this->assertInstanceOf(Order::class, $splashOrder);
         $order = $splashOrder->load($objectId);
         $this->assertIsObject($order);

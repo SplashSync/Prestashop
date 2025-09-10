@@ -1,6 +1,5 @@
 <?php
-
-/*
+/**
  *  This file is part of SplashSync Project.
  *
  *  Copyright (C) Splash Sync  <www.splashsync.com>
@@ -11,6 +10,10 @@
  *
  *  For the full copyright and license information, please view the LICENSE
  *  file that was distributed with this source code.
+ *
+ * @author Splash Sync
+ * @copyright Splash Sync SAS
+ * @license MIT
  */
 
 namespace Splash\Local\Services\Images;
@@ -20,10 +23,31 @@ use Context;
 use Link;
 use Product;
 
+// phpcs:disable PSR1.Files.SideEffects
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+// phpcs:enable PSR1.Files.SideEffects
+
+/**
+ * Handles the construction of public URLs for object images.
+ *
+ * Provides static methods to generate publicly accessible URLs for images
+ * associated with specific object types, such as categories and products.
+ * The URLs are generated using the e-commerce platform's context and link utilities.
+ *
+ * This class aims to facilitate the retrieval of public image URLs
+ * based on the provided object type and image identifier.
+ *
+ * Usage focuses on objects compatible with the platform's category or product models.
+ */
 class PublicUrlBuilder
 {
     /**
      * Get Image Public Url for an Object Image
+     *
+     * @param Product|PsCategory $object  Object to get Image Url for
+     * @param int                $imageId Image Id
      */
     public static function getPublicUrl(object $object, ?int $imageId = null): ?string
     {
@@ -44,7 +68,7 @@ class PublicUrlBuilder
         //====================================================================//
         // For Categories
         if ($object instanceof PsCategory) {
-            return $publicUrl->getCatImageLink($imageName, $object->id);
+            return $publicUrl->getCatImageLink($imageName, (int) $object->id);
         }
         //====================================================================//
         // For Products

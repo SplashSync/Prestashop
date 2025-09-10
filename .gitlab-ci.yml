@@ -18,8 +18,7 @@
 ################################################################
 # Include Pipeline Templates
 include:
-#  - remote: 'https://raw.githubusercontent.com/BadPixxel/Php-Sdk/main/gitlab/module.yaml'
-  - remote: 'https://raw.githubusercontent.com/BadPixxel/Php-Sdk/main/gitlab/pages.yaml'
+  - remote: 'https://raw.githubusercontent.com/BadPixxel/Php-Sdk/3.0/gitlab/pages.yaml'
 
 ################################################################
 # Define Default Image
@@ -70,30 +69,36 @@ stages:
         - cd $CI_PROJECT_DIR
         - curl -s https://raw.githubusercontent.com/BadPixxel/Php-Sdk/main/ci/after.sh | sh
 
-Q-Ps-8.1-Php-8.1:
-    image:      prestashop/prestashop:8.1-8.1
-    allow_failure:  true
+################################################################
+# PrestaShop 9.0
+Q-Ps-9.0-Php-8.3:
+    image:      prestashop/prestashop:9.0-8.3
     <<: *quality
 
+################################################################
+# PrestaShop 8.2
+Q-Ps-8.2-Php-8.1:
+    image:      prestashop/prestashop:8.2-8.1
+    <<: *quality
+
+################################################################
+# PrestaShop 8.1
 Q-Ps-8.1-Php-8.0:
     image:      prestashop/prestashop:8.1-8.0
-    allow_failure:  true
     <<: *quality
 
+################################################################
+# PrestaShop 8.0
 Q-Ps-8.0-Php-8.1:
     image:      prestashop/prestashop:8.0-8.1
-    allow_failure:  true
-    <<: *quality
-
-Q-Ps-8.0-Php-8.0:
-    image:      prestashop/prestashop:8.0-8.0
-    allow_failure:  true
     <<: *quality
 
 Q-Ps-8.0-Php-7.4:
     image:      prestashop/prestashop:8.0-7.4
     <<: *quality
 
+################################################################
+# PrestaShop 1.7
 Q-Ps-1.7-Php-7.4:
     image:      prestashop/prestashop:1.7-7.4
     <<: *quality
@@ -124,32 +129,40 @@ Q-Ps-1.7-Php-7.4:
     script:
         - sh $CI_PROJECT_DIR/ci/functional.sh
 
-F-Ps-8.1-Php-8.1:
-    image:      prestashop/prestashop:8.1-8.1
+################################################################
+# PrestaShop 9.0
+F-Ps-9.0-Php-8.3:
+    image:      prestashop/prestashop:9.0-8.3
     allow_failure:  true
     retry:          0
+    variables:
+        PS_VERSION:   9.0
     <<: *functional
 
+################################################################
+# PrestaShop 8.2
+F-Ps-8.2-Php-8.1:
+    image:      prestashop/prestashop:8.2-8.1
+    <<: *functional
+
+################################################################
+# PrestaShop 8.1
 F-Ps-8.1-Php-8.0:
     image:      prestashop/prestashop:8.1-8.0
-    allow_failure:  true
-    retry:          0
     <<: *functional
 
+################################################################
+# PrestaShop 8.0
 F-Ps-8.0-Php-8.1:
     image:      prestashop/prestashop:8.0-8.1
-    retry:          0
-    <<: *functional
-
-F-Ps-8.0-Php-8.0:
-    image:      prestashop/prestashop:8.0-8.0
-    retry:          0
     <<: *functional
 
 F-Ps-8.0-Php-7.4:
     image:      prestashop/prestashop:8.0-7.4
     <<: *functional
 
+################################################################
+# PrestaShop 1.7
 F-Ps-1.7-Php-7.4:
     image:      prestashop/prestashop:1.7-7.4
     <<: *functional
@@ -158,7 +171,6 @@ F-Ps-1.7-Php-7.4:
 # Build Documentation
 ################################################################
 module:
-    image:      registry.gitlab.com/splashsync/php-console:pages
     stage:      Builds
     tags:       ['Dedicated']
     retry:      2
@@ -168,7 +180,7 @@ module:
     # Run Test Script
     script:
         # Run Composer to Build deps
-        - curl -s https://raw.githubusercontent.com/BadPixxel/Php-Sdk/main/ci/composer.sh  | bash
+        - curl -s https://raw.githubusercontent.com/BadPixxel/Php-Sdk/3.0/ci/composer.sh  | bash
         # Build Documentation
         - php modules/splashsync/vendor/bin/grumphp run --tasks=build-module
     artifacts:

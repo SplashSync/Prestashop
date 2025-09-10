@@ -1,6 +1,5 @@
 <?php
-
-/*
+/**
  *  This file is part of SplashSync Project.
  *
  *  Copyright (C) Splash Sync  <www.splashsync.com>
@@ -11,14 +10,24 @@
  *
  *  For the full copyright and license information, please view the LICENSE
  *  file that was distributed with this source code.
+ *
+ * @author Splash Sync
+ * @copyright Splash Sync SAS
+ * @license MIT
  */
 
 namespace Splash\Local\Objects\ThirdParty;
 
-use Translate;
+use Splash\Local\Services\LanguagesManager as SLM;
+
+// phpcs:disable PSR1.Files.SideEffects
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+// phpcs:enable PSR1.Files.SideEffects
 
 /**
- * Access to thirdparty Meta Fields
+ * Access to Third Party Meta Fields
  */
 trait MetaTrait
 {
@@ -32,26 +41,26 @@ trait MetaTrait
         //====================================================================//
         // Active
         $this->fieldsFactory()->create(SPL_T_BOOL)
-            ->identifier("active")
-            ->name(Translate::getAdminTranslation("Enabled", "AdminCustomers"))
-            ->microData("http://schema.org/Organization", "active")
+            ->identifier('active')
+            ->name(SLM::translate('Enabled', 'AdminGlobal'))
+            ->microData('http://schema.org/Organization', 'active')
             ->isListed()
         ;
         //====================================================================//
         // Newsletter
         $this->fieldsFactory()->create(SPL_T_BOOL)
-            ->identifier("newsletter")
-            ->name(Translate::getAdminTranslation("Newsletter", "AdminCustomers"))
-            ->group(Translate::getAdminTranslation("Meta", "AdminThemes"))
-            ->microData("http://schema.org/Organization", "newsletter")
+            ->identifier('newsletter')
+            ->name(SLM::translate('Newsletter', 'AdminGlobal'))
+            ->group('Meta')
+            ->microData('http://schema.org/Organization', 'newsletter')
         ;
         //====================================================================//
         // Advertising
         $this->fieldsFactory()->create(SPL_T_BOOL)
-            ->identifier("optin")
-            ->name(Translate::getAdminTranslation("Opt-in", "AdminCustomers"))
-            ->group(Translate::getAdminTranslation("Meta", "AdminThemes"))
-            ->microData("http://schema.org/Organization", "advertising")
+            ->identifier('optin')
+            ->name(SLM::translate('Partner offers', 'AdminOrderscustomersFeature'))
+            ->group('Meta')
+            ->microData('http://schema.org/Organization', 'advertising')
         ;
     }
 

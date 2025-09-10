@@ -1,6 +1,5 @@
 <?php
-
-/*
+/**
  *  This file is part of SplashSync Project.
  *
  *  Copyright (C) Splash Sync  <www.splashsync.com>
@@ -11,6 +10,10 @@
  *
  *  For the full copyright and license information, please view the LICENSE
  *  file that was distributed with this source code.
+ *
+ * @author Splash Sync
+ * @copyright Splash Sync SAS
+ * @license MIT
  */
 
 namespace Splash\Local\Services;
@@ -21,25 +24,31 @@ use DbQuery;
 use Splash\Client\Splash as Splash;
 use Splash\Models\Objects\Invoice\PaymentMethods;
 
+// phpcs:disable PSR1.Files.SideEffects
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+// phpcs:enable PSR1.Files.SideEffects
+
 class PaymentMethodsManager
 {
     /**
      * Known Prestashop Payment Methods
      */
     const KNOWN = array(
-        "bankwire" => PaymentMethods::BANK,
-        "ps_wirepayment" => PaymentMethods::BANK,
+        'bankwire' => PaymentMethods::BANK,
+        'ps_wirepayment' => PaymentMethods::BANK,
 
-        "cheque" => PaymentMethods::CHECK,
-        "ps_checkpayment" => PaymentMethods::CHECK,
+        'cheque' => PaymentMethods::CHECK,
+        'ps_checkpayment' => PaymentMethods::CHECK,
 
-        "paypal" => PaymentMethods::PAYPAL,
+        'paypal' => PaymentMethods::PAYPAL,
 
-        "amzpayments" => PaymentMethods::AMAZON,
+        'amzpayments' => PaymentMethods::AMAZON,
 
-        "cashondelivery" => PaymentMethods::COD,
+        'cashondelivery' => PaymentMethods::COD,
 
-        "credit card" => PaymentMethods::CREDIT_CARD,
+        'credit card' => PaymentMethods::CREDIT_CARD,
     );
 
     /**
@@ -56,10 +65,10 @@ class PaymentMethodsManager
         // Build query
         $sql = new DbQuery();
         $sql
-            ->select("o.module as module")          // Order Payment Module
-            ->select("o.payment as name")           // Order Payment Method Name
-            ->from("orders", 'o')
-            ->groupBy("o.module")
+            ->select('o.module as module')          // Order Payment Module
+            ->select('o.payment as name')           // Order Payment Method Name
+            ->from('orders', 'o')
+            ->groupBy('o.module')
         ;
 
         //====================================================================//
@@ -78,11 +87,11 @@ class PaymentMethodsManager
         // Parse Results
         $methods = array();
         foreach ($results as $result) {
-            if (!empty($result["module"]) && is_string($result["module"])) {
-                $methods[$result["module"]] = sprintf(
-                    "[%s] %s",
-                    $result["module"],
-                    $result["name"] ?? $result["module"]
+            if (!empty($result['module']) && is_string($result['module'])) {
+                $methods[$result['module']] = sprintf(
+                    '[%s] %s',
+                    $result['module'],
+                    $result['name'] ?? $result['module']
                 );
             }
         }
@@ -104,10 +113,10 @@ class PaymentMethodsManager
         // Build query
         $sql = new DbQuery();
         $sql
-            ->select("o.module as module")          // Order Payment Module
-            ->select("o.payment as name")           // Order Payment Method Name
-            ->from("orders", 'o')
-            ->groupBy("o.payment")
+            ->select('o.module as module')          // Order Payment Module
+            ->select('o.payment as name')           // Order Payment Method Name
+            ->from('orders', 'o')
+            ->groupBy('o.payment')
         ;
 
         //====================================================================//
@@ -126,8 +135,8 @@ class PaymentMethodsManager
         // Parse Results
         $methods = array();
         foreach ($results as $result) {
-            if (!empty($result["name"]) && is_string($result["name"])) {
-                $methods[$result["name"]] = $result["module"] ?? null;
+            if (!empty($result['name']) && is_string($result['name'])) {
+                $methods[$result['name']] = $result['module'] ?? null;
             }
         }
 
@@ -163,13 +172,11 @@ class PaymentMethodsManager
 
     /**
      * Get Generic Code from Known Methods
-     *
-     * @return null|string
      */
     public static function toFieldName(string $code): string
     {
         return 'SPLASH_PAYMENT_METHOD_'
-            .strtoupper(str_replace(" ", "", $code))
+            . strtoupper(str_replace(' ', '', $code))
         ;
     }
 
@@ -205,7 +212,7 @@ class PaymentMethodsManager
         static $translations;
         //====================================================================//
         // Safety Check - Feature is Enabled
-        $enabled ??= Configuration::get("SPLASH_PAYMENT_TRANSLATIONS");
+        $enabled ??= Configuration::get('SPLASH_PAYMENT_TRANSLATIONS');
         if (empty($enabled)) {
             return null;
         }
@@ -227,14 +234,16 @@ class PaymentMethodsManager
     public static function getTranslationsFromConfig(): array
     {
         try {
-            return json_decode(
-                Configuration::get("SPLASH_PAYMENT_NAMES"),
+            $result = json_decode(
+                (string) Configuration::get('SPLASH_PAYMENT_NAMES'),
                 true,
                 JSON_THROW_ON_ERROR
             );
         } catch (\Throwable $ex) {
             return array();
         }
+
+        return is_array($result) ? $result : array();
     }
 
     /**

@@ -1,6 +1,5 @@
 <?php
-
-/*
+/**
  *  This file is part of SplashSync Project.
  *
  *  Copyright (C) Splash Sync  <www.splashsync.com>
@@ -11,14 +10,21 @@
  *
  *  For the full copyright and license information, please view the LICENSE
  *  file that was distributed with this source code.
+ *
+ * @author Splash Sync
+ * @copyright Splash Sync SAS
+ * @license MIT
  */
 
 namespace Splash\Local\Objects\Order;
 
-//====================================================================//
-// Prestashop Static Classes
-use Splash\Local\Services\LanguagesManager;
-use Translate;
+use Splash\Local\Services\LanguagesManager as SLM;
+
+// phpcs:disable PSR1.Files.SideEffects
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+// phpcs:enable PSR1.Files.SideEffects
 
 /**
  * Access to Orders Main Fields
@@ -36,23 +42,23 @@ trait MainTrait
         // PRICES INFORMATIONS
         //====================================================================//
 
-        $currencySuffix = " (".LanguagesManager::getCurrencySymbol($this->currency).")";
+        $currencySuffix = ' (' . SLM::getCurrencySymbol($this->currency) . ')';
 
         //====================================================================//
         // Order Total Price HT
         $this->fieldsFactory()->create(SPL_T_DOUBLE)
-            ->identifier("total_paid_tax_excl")
-            ->name(Translate::getAdminTranslation("Total (Tax excl.)", "AdminOrders").$currencySuffix)
-            ->microData("http://schema.org/Invoice", "totalPaymentDue")
+            ->identifier('total_paid_tax_excl')
+            ->name(SLM::translate('Total (Tax excl.)', 'AdminOrderscustomersFeature') . $currencySuffix)
+            ->microData('http://schema.org/Invoice', 'totalPaymentDue')
             ->isListed()
             ->isReadOnly()
         ;
         //====================================================================//
         // Order Total Price TTC
         $this->fieldsFactory()->create(SPL_T_DOUBLE)
-            ->identifier("total_paid_tax_incl")
-            ->name(Translate::getAdminTranslation("Total (Tax incl.)", "AdminOrders").$currencySuffix)
-            ->microData("http://schema.org/Invoice", "totalPaymentDueTaxIncluded")
+            ->identifier('total_paid_tax_incl')
+            ->name(SLM::translate('Total (Tax incl.)', 'AdminOrderscustomersFeature') . $currencySuffix)
+            ->microData('http://schema.org/Invoice', 'totalPaymentDueTaxIncluded')
             ->isListed()
             ->isReadOnly()
         ;

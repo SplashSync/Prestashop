@@ -1,6 +1,5 @@
 <?php
-
-/*
+/**
  *  This file is part of SplashSync Project.
  *
  *  Copyright (C) Splash Sync  <www.splashsync.com>
@@ -11,6 +10,10 @@
  *
  *  For the full copyright and license information, please view the LICENSE
  *  file that was distributed with this source code.
+ *
+ * @author Splash Sync
+ * @copyright Splash Sync SAS
+ * @license MIT
  */
 
 namespace Splash\Local\Objects\Product;
@@ -19,7 +22,13 @@ use PrestaShopException;
 use Splash\Local\Services\LanguagesManager as SLM;
 use Splash\Local\Services\TotSwitchAttributes;
 use Splash\Local\Services\WkCombination;
-use Translate;
+use Tools;
+
+// phpcs:disable PSR1.Files.SideEffects
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+// phpcs:enable PSR1.Files.SideEffects
 
 /**
  * Access to Product Meta Fields
@@ -40,53 +49,55 @@ trait MetaTrait
         //====================================================================//
         // Active => Product Is Enables & Visible
         $this->fieldsFactory()->create(SPL_T_BOOL)
-            ->identifier("active")
-            ->name(Translate::getAdminTranslation("Enabled", "AdminProducts"))
-            ->microData("http://schema.org/Product", "active")
+            ->identifier('active')
+            ->name(SLM::translate('Enabled', 'AdminGlobal'))
+            ->microData('http://schema.org/Product', 'active')
         ;
         //====================================================================//
         // Active => Product Is available_for_order
         $this->fieldsFactory()->create(SPL_T_BOOL)
-            ->identifier("available_for_order")
-            ->name(Translate::getAdminTranslation("Available for order", "AdminProducts"))
-            ->microData("http://schema.org/Product", "offered")
+            ->identifier('available_for_order')
+            ->name(SLM::translate('Available for order', 'AdminCatalogFeature'))
+            ->microData('http://schema.org/Product', 'offered')
             ->isListed()
         ;
         //====================================================================//
         // On Sale
         $this->fieldsFactory()->create(SPL_T_BOOL)
-            ->identifier("on_sale")
-            ->name($this->spl->l("On Sale"))
-            ->microData("http://schema.org/Product", "onsale")
+            ->identifier('on_sale')
+            ->name($this->spl->l('On Sale'))
+            ->microData('http://schema.org/Product', 'onsale')
         ;
         //====================================================================//
         // Display Price
-        $this->fieldsFactory()->create(SPL_T_BOOL)
-            ->identifier("show_price")
-            ->name($this->spl->l("Show Price"))
-            ->microData("http://schema.org/Product", "showPrice")
-        ;
+        if (Tools::version_compare(_PS_VERSION_, '8.0', '>=')) {
+            $this->fieldsFactory()->create(SPL_T_BOOL)
+                ->identifier('show_price')
+                ->name($this->spl->l('Show Price'))
+                ->microData('http://schema.org/Product', 'showPrice')
+            ;
+        }
         //====================================================================//
         // Online Only
         $this->fieldsFactory()->create(SPL_T_BOOL)
-            ->identifier("online_only")
-            ->name($this->spl->l("Online Only"))
-            ->microData("http://schema.org/Product", "onlineOnly")
+            ->identifier('online_only')
+            ->name($this->spl->l('Online Only'))
+            ->microData('http://schema.org/Product', 'onlineOnly')
         ;
         //====================================================================//
         // Online Only Ref.
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
-            ->identifier("online_ref")
-            ->name($this->spl->l("Online Only Ref."))
-            ->microData("http://schema.org/Product", "onlineOnlyRef")
+            ->identifier('online_ref')
+            ->name($this->spl->l('Online Only Ref.'))
+            ->microData('http://schema.org/Product', 'onlineOnlyRef')
             ->isReadOnly()
         ;
         //====================================================================//
         // Online Only Title
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
-            ->identifier("online_name")
-            ->name($this->spl->l("Online Only Title."))
-            ->microData("http://schema.org/Product", "onlineOnlyTitle")
+            ->identifier('online_name')
+            ->name($this->spl->l('Online Only Title.'))
+            ->microData('http://schema.org/Product', 'onlineOnlyTitle')
             ->isReadOnly()
         ;
     }
@@ -166,7 +177,7 @@ trait MetaTrait
                 break;
             case 'online_name':
                 if (empty($this->object->online_only)) {
-                    $this->out[$fieldName] = $this->getMultiLang("name", SLM::getDefaultLangId());
+                    $this->out[$fieldName] = $this->getMultiLang('name', SLM::getDefaultLangId());
 
                     break;
                 }
@@ -200,7 +211,7 @@ trait MetaTrait
             case 'on_sale':
             case 'online_only':
                 $this->setSimple($fieldName, $fieldData);
-                $this->addMsfUpdateFields("Product", $fieldName);
+                $this->addMsfUpdateFields('Product', $fieldName);
 
                 break;
             case 'available_for_order':
@@ -221,7 +232,7 @@ trait MetaTrait
                 }
 
                 $this->setSimple($fieldName, $fieldData);
-                $this->addMsfUpdateFields("Product", $fieldName);
+                $this->addMsfUpdateFields('Product', $fieldName);
 
                 break;
             default:

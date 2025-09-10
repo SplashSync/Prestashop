@@ -1,6 +1,5 @@
 <?php
-
-/*
+/**
  *  This file is part of SplashSync Project.
  *
  *  Copyright (C) Splash Sync  <www.splashsync.com>
@@ -11,6 +10,10 @@
  *
  *  For the full copyright and license information, please view the LICENSE
  *  file that was distributed with this source code.
+ *
+ * @author Splash Sync
+ * @copyright Splash Sync SAS
+ * @license MIT
  */
 
 namespace Splash\Local\Services;
@@ -26,6 +29,12 @@ use Splash\Local\Local;
 use Splash\Models\Objects\PricesTrait;
 use Tools;
 
+// phpcs:disable PSR1.Files.SideEffects
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+// phpcs:enable PSR1.Files.SideEffects
+
 /**
  * Advanced Discounts Manager
  * Reading of Discounts Details for Orders and Invoices
@@ -37,7 +46,7 @@ class DiscountsManager
     /**
      * @var string
      */
-    const TABLE = "order_discount_tax";
+    const TABLE = 'order_discount_tax';
 
     /**
      * @var null|array
@@ -74,7 +83,7 @@ class DiscountsManager
     {
         // List Tables
         Db::getInstance()->execute(
-            "SHOW TABLES LIKE '"._DB_PREFIX_.self::TABLE."'"
+            'SHOW TABLES LIKE \'' . _DB_PREFIX_ . self::TABLE . '\''
         );
         // Check Count
         if (1 == Db::getInstance()->numRows()) {
@@ -91,15 +100,15 @@ class DiscountsManager
      */
     public static function createStorageTable(): bool
     {
-        $sql = "CREATE TABLE IF NOT EXISTS `"._DB_PREFIX_.self::TABLE."`(";
-        $sql .= "`id_order_discount_tax`        INT(11)         NOT NULL AUTO_INCREMENT PRIMARY KEY ,";
-        $sql .= "`id_order`                     INT(11)         NOT NULL ,";
-        $sql .= "`cart_rule_name`               VARCHAR(255)    NOT NULL ,";
-        $sql .= "`cart_rule_description`        VARCHAR(512)    NOT NULL ,";
-        $sql .= "`tax_name`                     VARCHAR(32)     NOT NULL ,";
-        $sql .= "`tax_rate`                     DECIMAL(10,3),";
-        $sql .= "`amount`                       DECIMAL(10,6),";
-        $sql .= "`amount_wt`                    DECIMAL(10,6) )";
+        $sql = 'CREATE TABLE IF NOT EXISTS `' . _DB_PREFIX_ . self::TABLE . '`(';
+        $sql .= '`id_order_discount_tax`        INT(11)         NOT NULL AUTO_INCREMENT PRIMARY KEY ,';
+        $sql .= '`id_order`                     INT(11)         NOT NULL ,';
+        $sql .= '`cart_rule_name`               VARCHAR(255)    NOT NULL ,';
+        $sql .= '`cart_rule_description`        VARCHAR(512)    NOT NULL ,';
+        $sql .= '`tax_name`                     VARCHAR(32)     NOT NULL ,';
+        $sql .= '`tax_rate`                     DECIMAL(10,3),';
+        $sql .= '`amount`                       DECIMAL(10,6),';
+        $sql .= '`amount_wt`                    DECIMAL(10,6) )';
 
         return Db::getInstance()->execute($sql);
     }
@@ -162,7 +171,7 @@ class DiscountsManager
         $orderId = ($object instanceof OrderInvoice) ? $object->id_order : $object->id;
         //====================================================================//
         // Check if Discounts Details Available
-        if (self::hasOrderDiscountsDetails((int) $orderId, $currency) && is_array(self::$cache)) {
+        if (self::hasOrderDiscountsDetails((int) $orderId, $currency) && !empty(self::$cache)) {
             return self::$cache;
         }
         //====================================================================//
@@ -182,7 +191,7 @@ class DiscountsManager
         //====================================================================//
         // Execute request
         Db::getInstance()->execute(
-            "DELETE FROM "._DB_PREFIX_.self::TABLE." WHERE id_order = ".$orderId
+            'DELETE FROM ' . _DB_PREFIX_ . self::TABLE . ' WHERE id_order = ' . $orderId
         );
         if (Db::getInstance()->getNumberError()) {
             Splash::log()->errTrace(Db::getInstance()->getMsgError());
@@ -204,7 +213,7 @@ class DiscountsManager
     private static function getCoreDiscounts($object, Currency $currency): array
     {
         $values = array(
-            'product_name' => Local::getLocalModule()->l("Discount"),
+            'product_name' => Local::getLocalModule()->l('Discount'),
             'product_quantity' => 1,
             'reduction_percent' => 0,
             'product_reference' => null,
@@ -231,15 +240,15 @@ class DiscountsManager
         //====================================================================//
         // Build query
         $sql = new DbQuery();
-        $sql->select("ot.`id_order`");              // Order Id
-        $sql->select("ot.`cart_rule_name`");        // Cart Rule Name
-        $sql->select("ot.`cart_rule_description`"); // Cart Rule Description
-        $sql->select("ot.`tax_name`");              // Tax Name
-        $sql->select("ot.`tax_rate`");              // Tax Rate
-        $sql->select("ot.`amount`");                // Discount Amount HT
-        $sql->select("ot.`amount_wt`");             // Discount Amount TTC
+        $sql->select('ot.`id_order`');              // Order Id
+        $sql->select('ot.`cart_rule_name`');        // Cart Rule Name
+        $sql->select('ot.`cart_rule_description`'); // Cart Rule Description
+        $sql->select('ot.`tax_name`');              // Tax Name
+        $sql->select('ot.`tax_rate`');              // Tax Rate
+        $sql->select('ot.`amount`');                // Discount Amount HT
+        $sql->select('ot.`amount_wt`');             // Discount Amount TTC
         $sql->from(self::TABLE, 'ot');
-        $sql->where("ot.`id_order` = ".$orderId);
+        $sql->where('ot.`id_order` = ' . $orderId);
         //====================================================================//
         // Execute request
         $results = Db::getInstance()->executeS($sql);
@@ -255,8 +264,8 @@ class DiscountsManager
             //====================================================================//
             // Compute Item Price
             $itemPrice = self::prices()->encode(
-                (double)    (-1) * Tools::convertPrice($result["amount"], $currency),
-                (double)    $result["tax_rate"],
+                (double)    (-1) * Tools::convertPrice($result['amount'], $currency),
+                (double)    $result['tax_rate'],
                 null,
                 $currency->iso_code,
                 LanguagesManager::getCurrencySymbol($currency),
@@ -267,13 +276,13 @@ class DiscountsManager
             $items[] = array(
                 'product_name' => !empty(Splash::configuration()->PsUseDiscountsRulesNames)
                     ? $result['cart_rule_name']
-                    : Local::getLocalModule()->l("Discount"),
+                    : Local::getLocalModule()->l('Discount'),
                 'product_quantity' => 1,
                 'reduction_percent' => 0,
                 'product_reference' => null,
                 'product_id' => null,
                 'unit_price' => $itemPrice,
-                'tax_name' => $result["tax_name"],
+                'tax_name' => $result['tax_name'],
             );
         }
 
@@ -286,9 +295,9 @@ class DiscountsManager
      * @param Order|OrderInvoice $object
      * @param Currency           $currency
      *
-     * @return array|string
+     * @return null|array
      */
-    private static function getCoreDiscountPrice($object, Currency $currency)
+    private static function getCoreDiscountPrice($object, Currency $currency): ?array
     {
         //====================================================================//
         // Get Total Discount Tax Excluded

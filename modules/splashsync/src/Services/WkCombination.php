@@ -1,6 +1,5 @@
 <?php
-
-/*
+/**
  *  This file is part of SplashSync Project.
  *
  *  Copyright (C) Splash Sync  <www.splashsync.com>
@@ -11,6 +10,10 @@
  *
  *  For the full copyright and license information, please view the LICENSE
  *  file that was distributed with this source code.
+ *
+ * @author Splash Sync
+ * @copyright Splash Sync SAS
+ * @license MIT
  */
 
 namespace Splash\Local\Services;
@@ -20,6 +23,12 @@ use Db;
 use Module;
 use Shop;
 use Splash\Core\SplashCore as Splash;
+
+// phpcs:disable PSR1.Files.SideEffects
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+// phpcs:enable PSR1.Files.SideEffects
 
 /**
  * Bridge to Manage Compatibility with Webkul Prestashop Combination Activate/Deactivate
@@ -35,7 +44,7 @@ class WkCombination
     {
         //====================================================================//
         // Check if Module is Active
-        if (!Module::isEnabled("wkcombinationcustomize")) {
+        if (!Module::isEnabled('wkcombinationcustomize')) {
             return false;
         }
 
@@ -64,9 +73,9 @@ class WkCombination
         }
         //====================================================================//
         // Check if Product Attribute Id is Disabled
-        $sql = 'SELECT * FROM `'._DB_PREFIX_.'wk_combination_status`'
-            .' WHERE `id_ps_product_attribute` = '.(int) $attributeId
-            .' AND `id_shop` = '.(int) Shop::getContextShopID()
+        $sql = 'SELECT * FROM `' . _DB_PREFIX_ . 'wk_combination_status`'
+            . ' WHERE `id_ps_product_attribute` = ' . (int) $attributeId
+            . ' AND `id_shop` = ' . (int) Shop::getContextShopID()
         ;
 
         try {
@@ -79,7 +88,7 @@ class WkCombination
     /**
      * Update Product Combination Status if Possible
      *
-     * @param null|int         $productId   Ps Product ID
+     * @param int              $productId   Ps Product ID
      * @param null|int         $attributeId Ps Product Attribute ID
      * @param null|Combination $attribute   Ps Product Attribute Class
      * @param bool             $value       New Product Attribute Status
@@ -123,6 +132,7 @@ class WkCombination
         //====================================================================//
         // Detect Shop Id
         $idShop = Shop::getContextShopID(true);
+        $idShops = null;
         if (null == $idShop) {
             $idShops = Shop::getContextListShopID();
         }
@@ -149,7 +159,7 @@ class WkCombination
         // Execute Updates
         foreach ($sql as $request) {
             if (!Db::getInstance()->execute($request)) {
-                Splash::log()->errNull("Fail to update Product Attribute Webkul Status.");
+                Splash::log()->errNull('Fail to update Product Attribute Webkul Status.');
             }
         }
     }
@@ -157,24 +167,24 @@ class WkCombination
     /**
      * Get Disable Product Attribute SQL
      */
-    private static function getDisableSql(int $idProduct, int $idAttribute, int $idShop): string
+    private static function getDisableSql(int $idProduct, ?int $idAttribute, int $idShop): string
     {
         return 'REPLACE INTO `'
-            ._DB_PREFIX_.'wk_combination_status`(`id_ps_product`, `id_ps_product_attribute`, `id_shop`)'
-            .' VALUES ('.$idProduct.', '.$idAttribute.', '.$idShop.');'
+            . _DB_PREFIX_ . 'wk_combination_status`(`id_ps_product`, `id_ps_product_attribute`, `id_shop`)'
+            . ' VALUES (' . $idProduct . ', ' . $idAttribute . ', ' . $idShop . ');'
         ;
     }
 
     /**
      * Get Enable Product Attribute SQL
      */
-    private static function getEnableSql(int $idProduct, int $idAttribute, int $idShop): string
+    private static function getEnableSql(int $idProduct, ?int $idAttribute, int $idShop): string
     {
-        return 'DELETE FROM `'._DB_PREFIX_.'wk_combination_status`'
-            .' WHERE `id_ps_product` = '.$idProduct
-            .' AND `id_ps_product_attribute` = '.$idAttribute
-            .' AND `id_shop` = '.$idShop
-            .';'
+        return 'DELETE FROM `' . _DB_PREFIX_ . 'wk_combination_status`'
+            . ' WHERE `id_ps_product` = ' . $idProduct
+            . ' AND `id_ps_product_attribute` = ' . $idAttribute
+            . ' AND `id_shop` = ' . $idShop
+            . ';'
         ;
     }
 }

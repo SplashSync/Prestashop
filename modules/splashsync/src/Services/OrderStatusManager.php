@@ -1,6 +1,5 @@
 <?php
-
-/*
+/**
  *  This file is part of SplashSync Project.
  *
  *  Copyright (C) Splash Sync  <www.splashsync.com>
@@ -11,6 +10,10 @@
  *
  *  For the full copyright and license information, please view the LICENSE
  *  file that was distributed with this source code.
+ *
+ * @author Splash Sync
+ * @copyright Splash Sync SAS
+ * @license MIT
  */
 
 namespace Splash\Local\Services;
@@ -21,6 +24,12 @@ use OrderState;
 use Splash\Client\Splash as Splash;
 use Splash\Local\Services\LanguagesManager as SLM;
 use Splash\Models\Objects\Order\Status as SplashStatus;
+
+// phpcs:disable PSR1.Files.SideEffects
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+// phpcs:enable PSR1.Files.SideEffects
 
 /**
  * Splash Order Status Manager - Manage Order Status Writing
@@ -33,18 +42,18 @@ class OrderStatusManager
      * @var array
      */
     private static $psOrderStatus = array(
-        1 => "OrderPaymentDue",
-        2 => "OrderProcessing",
-        3 => "OrderProcessing",
-        4 => "OrderInTransit",
-        5 => "OrderDelivered",
-        6 => "OrderCanceled",
-        7 => "OrderCanceled",
-        8 => "OrderPaymentDue",
-        9 => "OrderProcessing",
-        10 => "OrderPaymentDue",
-        11 => "OrderPaymentDue",
-        12 => "OrderProcessing",
+        1 => 'OrderPaymentDue',
+        2 => 'OrderProcessing',
+        3 => 'OrderProcessing',
+        4 => 'OrderInTransit',
+        5 => 'OrderDelivered',
+        6 => 'OrderCanceled',
+        7 => 'OrderCanceled',
+        8 => 'OrderPaymentDue',
+        9 => 'OrderProcessing',
+        10 => 'OrderPaymentDue',
+        11 => 'OrderPaymentDue',
+        12 => 'OrderProcessing',
     );
 
     /**
@@ -71,9 +80,9 @@ class OrderStatusManager
     public static function isAllowedWrite(): bool
     {
         if (!isset(self::$definition)) {
-            self::$definition = Splash::object("Order")->description();
+            self::$definition = Splash::object('Order')->description();
         }
-        if (is_array(self::$definition) && !empty(self::$definition["allow_push_updated"])) {
+        if (!empty(self::$definition['allow_push_updated'])) {
             return true;
         }
 
@@ -96,16 +105,16 @@ class OrderStatusManager
         foreach ($psStates as $psState) {
             //====================================================================//
             // If State is Know
-            if (!self::isKnown($psState["id_order_state"])) {
+            if (!self::isKnown($psState['id_order_state'])) {
                 continue;
             }
             //====================================================================//
             // Detect Splash State Code
-            $code = self::getSplashCode($psState["id_order_state"]);
+            $code = self::getSplashCode($psState['id_order_state']);
             if (isset($choices[$code])) {
                 continue;
             }
-            $choices[$code] = $psState["name"];
+            $choices[$code] = $psState['name'];
         }
 
         return $choices;
@@ -122,8 +131,8 @@ class OrderStatusManager
         // Load Prestashop Status List
         return array_merge_recursive(
             array(array(
-                "id_order_state" => 0,
-                "name" => "Use Generic Status",
+                'id_order_state' => 0,
+                'name' => 'Use Generic Status',
             )),
             OrderState::getOrderStates(SLM::getDefaultLangId())
         );
@@ -142,9 +151,9 @@ class OrderStatusManager
         foreach (SplashStatus::getAll() as $status) {
             $statuses[] = array(
                 'code' => $status,
-                'field' => 'SPLASH_ORDER_'.strtoupper($status),
-                'name' => str_replace("Order", "Status ", $status),
-                'desc' => 'Order Status for '.str_replace("Order", "", $status)
+                'field' => 'SPLASH_ORDER_' . strtoupper($status),
+                'name' => str_replace('Order', 'Status ', $status),
+                'desc' => 'Order Status for ' . str_replace('Order', '', $status)
             );
         }
 
@@ -248,7 +257,7 @@ class OrderStatusManager
         foreach (SplashStatus::getAll() as $status) {
             //====================================================================//
             // Load Target Status from Settings
-            $psStateId = Configuration::get('SPLASH_ORDER_'.strtoupper($status));
+            $psStateId = Configuration::get('SPLASH_ORDER_' . strtoupper($status));
             if ($psStateId > 0) {
                 self::$psKnownStatus[$psStateId] = $status;
             }

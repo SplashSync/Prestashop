@@ -1,6 +1,5 @@
 <?php
-
-/*
+/**
  *  This file is part of SplashSync Project.
  *
  *  Copyright (C) Splash Sync  <www.splashsync.com>
@@ -11,6 +10,10 @@
  *
  *  For the full copyright and license information, please view the LICENSE
  *  file that was distributed with this source code.
+ *
+ * @author Splash Sync
+ * @copyright Splash Sync SAS
+ * @license MIT
  */
 
 namespace Splash\Local\Services;
@@ -25,6 +28,12 @@ use Splash\Core\SplashCore as Splash;
 use Splash\Models\Objects\PricesTrait;
 use Tools;
 use Validate;
+
+// phpcs:disable PSR1.Files.SideEffects
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+// phpcs:enable PSR1.Files.SideEffects
 
 class DiscountCollector
 {
@@ -109,7 +118,7 @@ class DiscountCollector
         );
         if (abs($totalTaxIncl - $order->total_discounts_tax_incl) > 0.001) {
             Splash::log()->err(sprintf(
-                "Collected Discounts amounts are different: %.5f vs %.5f",
+                'Collected Discounts amounts are different: %.5f vs %.5f',
                 $totalTaxIncl,
                 $order->total_discounts_tax_incl
             ));
@@ -244,7 +253,7 @@ class DiscountCollector
             }
 
             $productsDiscounted[$rule['id_cart_rule']] = array_map(static function ($product) {
-                return $product['id_product'].'-'.($product['product_attribute_id'] ?? 0);
+                return $product['id_product'] . '-' . ($product['product_attribute_id'] ?? 0);
             }, $productsDetail);
             $totalDiscounts[$rule['id_cart_rule']] = array(
                 'without_taxes' => $rule['value_tax_excl'] ?? 0,
@@ -258,7 +267,7 @@ class DiscountCollector
             $totalProductsDiscountedTaxIncl = 0;
 
             $filteredProductsDetail = array_filter($productsDetail, static function ($product) use ($products) {
-                $productId = $product['id_product'].'-'.($product['product_attribute_id'] ?? 0);
+                $productId = $product['id_product'] . '-' . ($product['product_attribute_id'] ?? 0);
 
                 return in_array($productId, $products, true);
             });
