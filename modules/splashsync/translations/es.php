@@ -1,6 +1,25 @@
 <?php
+/**
+ *  This file is part of SplashSync Project.
+ *
+ *  Copyright (C) Splash Sync  <www.splashsync.com>
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ *
+ *  For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
+ *
+ * @author Splash Sync
+ * @copyright Splash Sync SAS
+ * @license MIT
+ */
 
 global $_MODULE;
+
+// phpcs:disable Generic.Files.LineLength
+
 $_MODULE = array();
 $_MODULE['<{splashsync}prestashop>splashsync_7ef3f5a714c04db178150ffb6105855f'] = 'Conector Splash Sync';
 $_MODULE['<{splashsync}prestashop>splashsync_876f23178c29dc2552c0b48bf23cd9bd'] = '¿Está seguro de que desea desinstalar?';
