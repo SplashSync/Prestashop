@@ -89,7 +89,12 @@ trait HooksTrait
     private function hookactionCreditNote($order, $action, $comment)
     {
         //====================================================================//
-        // Retrieve Customer Id
+        // Safety Check - Credit Notes are Enabled
+        if (!in_array('CreditNote', Splash::objects(), true)) {
+            return true;
+        }
+        //====================================================================//
+        // Retrieve Order ID
         $objectId = null;
         if (isset($order->id)) {
             $objectId = $order->id;
