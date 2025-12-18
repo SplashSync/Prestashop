@@ -220,24 +220,32 @@ trait HooksTrait
         if (defined('SPLASH_SERVER_MODE') && !empty(SPLASH_SERVER_MODE)) {
             return true;
         }
-        //====================================================================//
-        // Check if feature is Enabled & NOT Server Mode
-        if (empty(Splash::configuration()->PsCommitOrderToAddresses)) {
-            return true;
-        }
         $errors = 0;
         //====================================================================//
-        // Commit Update For Order Shipping Address
-        if (!empty($order->id_address_delivery)) {
-            $errors += !$this->doCommit('Address', (string)$order->id_address_delivery, SPL_A_UPDATE, $comment);
+        // Check if feature is Enabled
+        if (!empty(Splash::configuration()->PsCommitOrderToThirdParty)) {
+            //====================================================================//
+            // Commit Update For Customer
+            if (!empty($order->id_customer)) {
+                $errors += !$this->doCommit("ThirdParty", (string)$order->id_customer, SPL_A_UPDATE, $comment);
+            }
         }
         //====================================================================//
-        // Commit Update For Order Billing Address
-        if (!empty($order->id_address_invoice)) {
-            $errors += !$this->doCommit('Address', (string)$order->id_address_invoice, SPL_A_UPDATE, $comment);
+        // Check if feature is Enabled
+        if (!empty(Splash::configuration()->PsCommitOrderToAddresses)) {
+            //====================================================================//
+            // Commit Update For Order Shipping Address
+            if (!empty($order->id_address_delivery)) {
+                $errors += !$this->doCommit("Address", (string)$order->id_address_delivery, SPL_A_UPDATE, $comment);
+            }
+            //====================================================================//
+            // Commit Update For Order Billing Address
+            if (!empty($order->id_address_invoice)) {
+                $errors += !$this->doCommit("Address", (string)$order->id_address_invoice, SPL_A_UPDATE, $comment);
+            }
         }
 
-        return !$errors;
+        return empty($errors);
     }
 
     /**
