@@ -227,7 +227,7 @@ trait HooksTrait
             //====================================================================//
             // Commit Update For Customer
             if (!empty($order->id_customer)) {
-                $errors += !$this->doCommit("ThirdParty", (string)$order->id_customer, SPL_A_UPDATE, $comment);
+                $errors += !$this->doCommit('ThirdParty', (string)$order->id_customer, SPL_A_UPDATE, $comment);
             }
         }
         //====================================================================//
@@ -236,12 +236,12 @@ trait HooksTrait
             //====================================================================//
             // Commit Update For Order Shipping Address
             if (!empty($order->id_address_delivery)) {
-                $errors += !$this->doCommit("Address", (string)$order->id_address_delivery, SPL_A_UPDATE, $comment);
+                $errors += !$this->doCommit('Address', (string)$order->id_address_delivery, SPL_A_UPDATE, $comment);
             }
             //====================================================================//
             // Commit Update For Order Billing Address
             if (!empty($order->id_address_invoice)) {
-                $errors += !$this->doCommit("Address", (string)$order->id_address_invoice, SPL_A_UPDATE, $comment);
+                $errors += !$this->doCommit('Address', (string)$order->id_address_invoice, SPL_A_UPDATE, $comment);
             }
         }
 
