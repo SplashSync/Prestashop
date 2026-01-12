@@ -188,9 +188,14 @@ class DiscountCollector
                 $freeShippingRules[$rule['id_cart_rule'] ?? 0] = $rule;
             }
         }
+
+        //====================================================================//
+        // Consume Free Shipping Discounts
+        $freeShippingRules = self::consumeFreeShippingRawDiscounts($order, $freeShippingRules);
+
         //====================================================================//
         // Collect Free Shipping Discounts
-        foreach ($freeShippingRules as $freeShippingRule) {
+        foreach ($freeShippingRules as &$freeShippingRule) {
             foreach ($productsDetail as $product) {
                 //====================================================================//
                 // Detect Tax Name & Rate
@@ -223,6 +228,50 @@ class DiscountCollector
                 );
             }
         }
+    }
+
+    /**
+     * Consume Free Shipping Discount Lines
+     * Use Free Shipping Rules pay Shipment Lines
+     *
+     * @param Order   $order
+     * @param array[] $freeShippingRules
+     *
+     * @return array[]
+     */
+    private static function consumeFreeShippingRawDiscounts(
+        Order $order,
+        array $freeShippingRules
+    ): array {
+        //====================================================================//
+        // Fetch Order Shipping Amounts
+        $shippingAmount = $order->total_shipping_tax_incl;
+        $shippingAmountWt = $order->total_shipping_tax_excl;
+        //====================================================================//
+        // Consume Free Shipping Discounts
+        foreach ($freeShippingRules as &$freeShippingRule) {
+            //====================================================================//
+            // Ensure Remaining Shipping Amount is Positive
+            if ($shippingAmount <= 0 || $shippingAmount > ($freeShippingRule['value'] ?? 0)) {
+                continue;
+            }
+            //====================================================================//
+            // Add Shipping Amount to Discounts
+            self::addRawDiscountValue(
+                (int)$freeShippingRule['id_cart_rule'],
+                $order->carrier_tax_rate,
+                OrderTaxManager::getShippingTaxName($order),
+                $shippingAmountWt,
+                $shippingAmount
+            );
+            //====================================================================//
+            // Remove from Free Shipping Discount Amount
+            $freeShippingRule['value'] -= $shippingAmount;
+            $freeShippingRule['value_tax_excl'] -= $shippingAmountWt;
+            $shippingAmount = $shippingAmountWt = 0;
+        }
+
+        return $freeShippingRules;
     }
 
     /**
@@ -323,6 +372,7 @@ class DiscountCollector
         float $amontTaxExcl,
         float $amontTaxIncl
     ): void {
+        $taxRate = (string) $taxRate;
         //====================================================================//
         // Detect Tax Name & Rate
         if (!isset(self::$rawDiscounts[$cartRuleId][$taxRate][$taxName])) {
@@ -333,6 +383,8 @@ class DiscountCollector
         }
         self::$rawDiscounts[$cartRuleId][$taxRate][$taxName]['without_taxes'] += $amontTaxExcl;
         self::$rawDiscounts[$cartRuleId][$taxRate][$taxName]['with_taxes'] += $amontTaxIncl;
+
+        Splash::log()->dump($taxRate);
     }
 
     /**
