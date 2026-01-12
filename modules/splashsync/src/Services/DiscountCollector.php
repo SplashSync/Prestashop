@@ -258,9 +258,9 @@ class DiscountCollector
             //====================================================================//
             // Add Shipping Amount to Discounts
             self::addRawDiscountValue(
-                (int)$freeShippingRule['id_cart_rule'],
+                (int) $freeShippingRule['id_cart_rule'],
                 $order->carrier_tax_rate,
-                OrderTaxManager::getShippingTaxName($order),
+                (string) OrderTaxManager::getShippingTaxName($order),
                 $shippingAmountWt,
                 $shippingAmount
             );
@@ -383,8 +383,6 @@ class DiscountCollector
         }
         self::$rawDiscounts[$cartRuleId][$taxRate][$taxName]['without_taxes'] += $amontTaxExcl;
         self::$rawDiscounts[$cartRuleId][$taxRate][$taxName]['with_taxes'] += $amontTaxIncl;
-
-        Splash::log()->dump($taxRate);
     }
 
     /**
