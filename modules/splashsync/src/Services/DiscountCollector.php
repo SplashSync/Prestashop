@@ -400,6 +400,8 @@ class DiscountCollector
         foreach ($rawDiscounts as $cartRuleId => $discount) {
             $cartRule = self::getCartRule($cartRuleId);
             if (!$cartRule) {
+                Splash::log()->war(sprintf('Order Cart Rule %s was not found...', $cartRuleId));
+
                 continue;
             }
             $cartRuleName = $cartRule->name[$langId]
@@ -440,6 +442,8 @@ class DiscountCollector
                 foreach ($tax as $taxName => $amounts) {
                     $cartRule = self::getCartRule($cartRuleId);
                     if (!$cartRule) {
+                        Splash::log()->war(sprintf('Order Cart Rule %s was not found...', $cartRuleId));
+
                         continue;
                     }
                     $cartRuleName = $cartRule->name[$langId]
