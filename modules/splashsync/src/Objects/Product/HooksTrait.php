@@ -401,7 +401,7 @@ trait HooksTrait
         // IS STORE COMMANDER
         /** @var string $requestUri */
         $requestUri = filter_input(INPUT_SERVER, 'REQUEST_URI');
-        if (false !== strpos($requestUri, '/modules/storecommander/')) {
+        if (false !== strpos((string) $requestUri, '/modules/storecommander/')) {
             return true;
         }
 
