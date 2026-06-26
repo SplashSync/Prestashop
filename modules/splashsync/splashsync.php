@@ -22,7 +22,6 @@
 /**
  * Splash Sync PrestaShop Module - Noty Notifications
  */
-
 if (!defined('_PS_VERSION_')) {
     exit;
 }

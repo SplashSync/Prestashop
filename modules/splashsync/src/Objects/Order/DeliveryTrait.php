@@ -42,7 +42,7 @@ trait DeliveryTrait
     /**
      * Build Fields using FieldFactory
      *
-     * @return void
+     * @SuppressWarnings(ExcessiveMethodLength)
      */
     protected function buildDeliveryFields(): void
     {
@@ -53,7 +53,7 @@ trait DeliveryTrait
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
             ->identifier('firstname')
             ->name('First Name')
-            ->microData("http://schema.org/Person", "familyName")
+            ->microData('http://schema.org/Person', 'familyName')
             ->group($groupName)
             ->isReadOnly()
         ;
@@ -62,7 +62,7 @@ trait DeliveryTrait
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
             ->identifier('lastname')
             ->name('Last Name')
-            ->microData("http://schema.org/Person", "givenName")
+            ->microData('http://schema.org/Person', 'givenName')
             ->group($groupName)
             ->isReadOnly()
         ;
@@ -258,6 +258,8 @@ trait DeliveryTrait
      * @param string $fieldName Field Identifier / Name
      *
      * @return void
+     *
+     * @SuppressWarnings(CyclomaticComplexity)
      */
     protected function getDeliverySimpleFields(string $key, string $fieldName): void
     {
