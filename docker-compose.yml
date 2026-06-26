@@ -65,7 +65,7 @@ services:
     ################################################################################
     # Splash Toolkit Container   
     toolkit:
-        image: 'splashsync/toolkit:alpine'
+        image: 'splashsync/toolkit:3.0'
         container_name: toolkit.prestashop.local
         volumes:
             # Specify Local Configuration File
