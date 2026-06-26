@@ -157,7 +157,9 @@ trait StatusTrait
 
                 break;
             case 'isProcessing':
-                $this->out[$fieldName] = (3 == $this->object->current_state);
+                $this->out[$fieldName] = (3 == $this->object->current_state)
+                    || (9 == $this->object->current_state)
+                ;
 
                 break;
             case 'isClosed':

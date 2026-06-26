@@ -49,6 +49,24 @@ trait DeliveryTrait
         $groupName = SLM::translate('Address', 'AdminGlobal');
 
         //====================================================================//
+        // Contact First Name
+        $this->fieldsFactory()->create(SPL_T_VARCHAR)
+            ->identifier('firstname')
+            ->name('First Name')
+            ->microData("http://schema.org/Person", "familyName")
+            ->group($groupName)
+            ->isReadOnly()
+        ;
+        //====================================================================//
+        // Contact Last Name
+        $this->fieldsFactory()->create(SPL_T_VARCHAR)
+            ->identifier('lastname')
+            ->name('Last Name')
+            ->microData("http://schema.org/Person", "givenName")
+            ->group($groupName)
+            ->isReadOnly()
+        ;
+        //====================================================================//
         // Company
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
             ->identifier('company')
@@ -251,6 +269,8 @@ trait DeliveryTrait
         switch ($fieldName) {
             //====================================================================//
             // Direct Readings
+            case 'firstname':
+            case 'lastname':
             case 'address1':
             case 'address2':
             case 'postcode':
