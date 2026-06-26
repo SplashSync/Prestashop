@@ -41,6 +41,7 @@ $config->setRules(array_replace($config->getRules(), array(
         'comment_type' => 'PHPDoc',
         'separate' => 'bottom',
     ),
+    'no_blank_lines_after_phpdoc' => true,
     'concat_space' => array('spacing' => 'one'),
     'single_quote' => array('strings_containing_single_quote_chars' => true)
 )));
