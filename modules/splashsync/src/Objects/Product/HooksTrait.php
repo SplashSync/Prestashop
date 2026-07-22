@@ -153,6 +153,36 @@ trait HooksTrait
     }
 
     /**
+     * This hook is called when a Product Combination is updated through the legacy
+     * Product::updateAttribute() path (used by StoreCommander and other bulk catalog
+     * tools), which does NOT trigger actionObjectCombinationUpdateAfter. We rebuild
+     * the Combination object and forward it to the standard combination commit.
+     *
+     * @param array $params
+     *
+     * @return bool
+     */
+    public function hookActionProductAttributeUpdate(array $params): bool
+    {
+        $idProductAttribute = isset($params['id_product_attribute'])
+            ? (int) $params['id_product_attribute']
+            : 0;
+        if ($idProductAttribute <= 0) {
+            return true;
+        }
+        $combination = new Combination($idProductAttribute);
+        if (!\Validate::isLoadedObject($combination) || empty($combination->id_product)) {
+            return true;
+        }
+
+        return $this->hookactionCombination(
+            $combination,
+            SPL_A_UPDATE,
+            $this->l('Product Variant Updated on Prestashop')
+        );
+    }
+
+    /**
      * This hook is called after a customer effectively places their order
      *
      * or
