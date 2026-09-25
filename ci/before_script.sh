@@ -30,7 +30,38 @@ splashscreen "BEFORE SCRIPT"
 ################################################################
 # Packages Install
 subtitle "INIT --> Install Additional Packages"
-apt-get update && apt-get install -y zip unzip git
+################################################################
+# Only install packages not already available on the image
+MISSING=""
+for PACKAGE in zip unzip git; do
+    command -v "$PACKAGE" > /dev/null 2>&1 || MISSING="$MISSING $PACKAGE"
+done
+if [ -z "$MISSING" ]; then
+    echo "All packages already installed, skipped."
+else
+    echo "Missing packages:$MISSING"
+    ################################################################
+    # Outdated Debian releases (buster...) are moved to archive.debian.org
+    # If default repositories fail, switch all apt sources to archive
+    if ! apt-get update; then
+        echo "Debian repositories unavailable, switching to archive.debian.org..."
+        for SOURCES in /etc/apt/sources.list /etc/apt/sources.list.d/*.list /etc/apt/sources.list.d/*.sources; do
+            [ -f "$SOURCES" ] || continue
+            sed -i \
+                -e 's|http://deb.debian.org/debian-security|http://archive.debian.org/debian-security|g' \
+                -e 's|http://security.debian.org/debian-security|http://archive.debian.org/debian-security|g' \
+                -e 's|http://deb.debian.org/debian|http://archive.debian.org/debian|g' \
+                "$SOURCES"
+            # "-updates" suites are not archived: drop them
+            case "$SOURCES" in
+                *.sources) sed -i -E 's/ [a-z]+-updates//g' "$SOURCES" ;;
+                *)         sed -i '/-updates/d' "$SOURCES" ;;
+            esac
+        done
+        apt-get -o Acquire::Check-Valid-Until=false update
+    fi
+    apt-get install -y $MISSING
+fi
 
 ################################################################
 # Install Composer & Run Composer Update
