@@ -16,11 +16,6 @@
 ################################################################################
 
 ################################################################
-# Include Pipeline Templates
-include:
-  - remote: 'https://raw.githubusercontent.com/BadPixxel/Php-Sdk/3.0/gitlab/pages.yaml'
-
-################################################################
 # Define Default Image
 image: registry.gitlab.com/badpixxel-projects/php-sdk:php-8.0
 

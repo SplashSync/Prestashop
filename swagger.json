@@ -1,0 +1,3718 @@
+{
+    "openapi": "3.0.3",
+    "info": {
+        "title": "Splash for Prestashop 9.0.1",
+        "description": "Splash Connector Module for Prestashop Open Source e-commerce solution.",
+        "version": "2.9.3",
+        "x-splash-server": {
+            "shortdesc": "Splash for Prestashop 9.0.1",
+            "longdesc": "Splash Connector Module for Prestashop Open Source e-commerce solution.",
+            "logourl": "http://ps9-0.prestashop.local/img/logo.png",
+            "scopes": [],
+            "servertype": "Prestashop 9.0.1",
+            "serverurl": "ps9-0.prestashop.local/",
+            "moduleauthor": "Splash Official <www.splashsync.com>",
+            "moduleversion": "2.9.3"
+        }
+    },
+    "tags": [
+        {
+            "name": "ThirdParty",
+            "description": "- **Type:** `ThirdParty`\n- **Icon:** `fa fa-user`\n\nPrestashop Customer Object\n\n### Configuration\n\n| Action | Allowed | Push | Pull |\n|--------|:-------:|:----:|:----:|\n| Create | \u2705 | \ud83d\udeab | \u2705 |\n| Update | \u2705 | \u2705 | \u2705 |\n| Delete | \u2705 | \ud83d\udeab | \u2705 |\n\n<SchemaDefinition schemaRef=\"#/components/schemas/ThirdParty\" />"
+        },
+        {
+            "name": "Product",
+            "description": "- **Type:** `Product`\n- **Icon:** `fa fa-product-hunt`\n\nPrestashop Product Object\n\n### Configuration\n\n| Action | Allowed | Push | Pull |\n|--------|:-------:|:----:|:----:|\n| Create | \u2705 | \ud83d\udeab | \u2705 |\n| Update | \u2705 | \u2705 | \u2705 |\n| Delete | \u2705 | \ud83d\udeab | \u2705 |\n\n<SchemaDefinition schemaRef=\"#/components/schemas/Product\" />"
+        },
+        {
+            "name": "Customer Order",
+            "description": "- **Type:** `Order`\n- **Icon:** `fa fa-shopping-cart `\n\nPrestashop Customers Order Object\n\n### Configuration\n\n| Action | Allowed | Push | Pull |\n|--------|:-------:|:----:|:----:|\n| Create | \u2705 | \ud83d\udeab | \u2705 |\n| Update | \u2705 | \ud83d\udeab | \u2705 |\n| Delete | \u2705 | \ud83d\udeab | \u2705 |\n\n<SchemaDefinition schemaRef=\"#/components/schemas/Order\" />"
+        },
+        {
+            "name": "Customer Invoice",
+            "description": "- **Type:** `Invoice`\n- **Icon:** `fa fa-money`\n\nPrestashop Customers Invoice Object\n\n### Configuration\n\n| Action | Allowed | Push | Pull |\n|--------|:-------:|:----:|:----:|\n| Create | \ud83d\udeab | \ud83d\udeab | \u2705 |\n| Update | \ud83d\udeab | \ud83d\udeab | \u2705 |\n| Delete | \ud83d\udeab | \ud83d\udeab | \u2705 |\n\n<SchemaDefinition schemaRef=\"#/components/schemas/Invoice\" />"
+        },
+        {
+            "name": "Address",
+            "description": "- **Type:** `Address`\n- **Icon:** `fa fa-envelope-o`\n\nPrestashop Customers Address Object\n\n### Configuration\n\n| Action | Allowed | Push | Pull |\n|--------|:-------:|:----:|:----:|\n| Create | \u2705 | \ud83d\udeab | \u2705 |\n| Update | \u2705 | \u2705 | \u2705 |\n| Delete | \u2705 | \ud83d\udeab | \u2705 |\n\n<SchemaDefinition schemaRef=\"#/components/schemas/Address\" />"
+        }
+    ],
+    "paths": {
+        "/thirdparty/list": {
+            "post": {
+                "tags": [
+                    "ThirdParty"
+                ],
+                "summary": "List ThirdParty",
+                "operationId": "listThirdParty",
+                "description": "Read objects list \u2014 rows only carry fields flagged `In List`.\n\nThe server appends a `meta` entry to the result: `{ total, current }` counters.",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "filters": {
+                                        "type": "string",
+                                        "nullable": true,
+                                        "description": "Text filter applied on searchable fields"
+                                    },
+                                    "params": {
+                                        "type": "object",
+                                        "properties": {
+                                            "max": {
+                                                "type": "integer",
+                                                "description": "Maximum number of results"
+                                            },
+                                            "offset": {
+                                                "type": "integer",
+                                                "description": "List start offset"
+                                            },
+                                            "sortfield": {
+                                                "type": "string",
+                                                "description": "Field id used to sort the list"
+                                            },
+                                            "sortorder": {
+                                                "type": "string",
+                                                "enum": [
+                                                    "ASC",
+                                                    "DESC"
+                                                ]
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Task data payload",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/ThirdPartyListItem"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/thirdparty/get": {
+            "post": {
+                "tags": [
+                    "ThirdParty"
+                ],
+                "summary": "Read ThirdParty",
+                "operationId": "getThirdParty",
+                "description": "Read object data \u2014 only requested fields are returned.",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "required": [
+                                    "id"
+                                ],
+                                "properties": {
+                                    "id": {
+                                        "type": "string",
+                                        "description": "Object identifier"
+                                    },
+                                    "fields": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string"
+                                        },
+                                        "description": "Ids of the fields to read"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Task data payload",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ThirdParty"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/thirdparty/set": {
+            "post": {
+                "tags": [
+                    "ThirdParty"
+                ],
+                "summary": "Write ThirdParty",
+                "operationId": "setThirdParty",
+                "description": "Create or update object data \u2014 read-only fields are not writable and hidden from this request.",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "required": [
+                                    "fields"
+                                ],
+                                "properties": {
+                                    "id": {
+                                        "type": "string",
+                                        "nullable": true,
+                                        "description": "Object identifier \u2014 `null` to create a new object"
+                                    },
+                                    "fields": {
+                                        "$ref": "#/components/schemas/ThirdParty"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Task data payload",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "string",
+                                    "description": "Identifier of the created or updated object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Write failure \u2014 the server answers `null`. Check `Splash::log()` messages for error details.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "nullable": true,
+                                    "description": "Always `null` on write failure"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/thirdparty/delete": {
+            "post": {
+                "tags": [
+                    "ThirdParty"
+                ],
+                "summary": "Delete ThirdParty",
+                "operationId": "deleteThirdParty",
+                "description": "Delete an object.",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "required": [
+                                    "id"
+                                ],
+                                "properties": {
+                                    "id": {
+                                        "type": "string",
+                                        "description": "Object identifier"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Task data payload",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "boolean",
+                                    "description": "True when the object was deleted"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/product/list": {
+            "post": {
+                "tags": [
+                    "Product"
+                ],
+                "summary": "List Product",
+                "operationId": "listProduct",
+                "description": "Read objects list \u2014 rows only carry fields flagged `In List`.\n\nThe server appends a `meta` entry to the result: `{ total, current }` counters.",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "filters": {
+                                        "type": "string",
+                                        "nullable": true,
+                                        "description": "Text filter applied on searchable fields"
+                                    },
+                                    "params": {
+                                        "type": "object",
+                                        "properties": {
+                                            "max": {
+                                                "type": "integer",
+                                                "description": "Maximum number of results"
+                                            },
+                                            "offset": {
+                                                "type": "integer",
+                                                "description": "List start offset"
+                                            },
+                                            "sortfield": {
+                                                "type": "string",
+                                                "description": "Field id used to sort the list"
+                                            },
+                                            "sortorder": {
+                                                "type": "string",
+                                                "enum": [
+                                                    "ASC",
+                                                    "DESC"
+                                                ]
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Task data payload",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/ProductListItem"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/product/get": {
+            "post": {
+                "tags": [
+                    "Product"
+                ],
+                "summary": "Read Product",
+                "operationId": "getProduct",
+                "description": "Read object data \u2014 only requested fields are returned.",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "required": [
+                                    "id"
+                                ],
+                                "properties": {
+                                    "id": {
+                                        "type": "string",
+                                        "description": "Object identifier"
+                                    },
+                                    "fields": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string"
+                                        },
+                                        "description": "Ids of the fields to read"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Task data payload",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Product"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/product/set": {
+            "post": {
+                "tags": [
+                    "Product"
+                ],
+                "summary": "Write Product",
+                "operationId": "setProduct",
+                "description": "Create or update object data \u2014 read-only fields are not writable and hidden from this request.",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "required": [
+                                    "fields"
+                                ],
+                                "properties": {
+                                    "id": {
+                                        "type": "string",
+                                        "nullable": true,
+                                        "description": "Object identifier \u2014 `null` to create a new object"
+                                    },
+                                    "fields": {
+                                        "$ref": "#/components/schemas/Product"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Task data payload",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "string",
+                                    "description": "Identifier of the created or updated object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Write failure \u2014 the server answers `null`. Check `Splash::log()` messages for error details.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "nullable": true,
+                                    "description": "Always `null` on write failure"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/product/delete": {
+            "post": {
+                "tags": [
+                    "Product"
+                ],
+                "summary": "Delete Product",
+                "operationId": "deleteProduct",
+                "description": "Delete an object.",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "required": [
+                                    "id"
+                                ],
+                                "properties": {
+                                    "id": {
+                                        "type": "string",
+                                        "description": "Object identifier"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Task data payload",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "boolean",
+                                    "description": "True when the object was deleted"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/order/list": {
+            "post": {
+                "tags": [
+                    "Customer Order"
+                ],
+                "summary": "List Customer Order",
+                "operationId": "listOrder",
+                "description": "Read objects list \u2014 rows only carry fields flagged `In List`.\n\nThe server appends a `meta` entry to the result: `{ total, current }` counters.",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "filters": {
+                                        "type": "string",
+                                        "nullable": true,
+                                        "description": "Text filter applied on searchable fields"
+                                    },
+                                    "params": {
+                                        "type": "object",
+                                        "properties": {
+                                            "max": {
+                                                "type": "integer",
+                                                "description": "Maximum number of results"
+                                            },
+                                            "offset": {
+                                                "type": "integer",
+                                                "description": "List start offset"
+                                            },
+                                            "sortfield": {
+                                                "type": "string",
+                                                "description": "Field id used to sort the list"
+                                            },
+                                            "sortorder": {
+                                                "type": "string",
+                                                "enum": [
+                                                    "ASC",
+                                                    "DESC"
+                                                ]
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Task data payload",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/OrderListItem"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/order/get": {
+            "post": {
+                "tags": [
+                    "Customer Order"
+                ],
+                "summary": "Read Customer Order",
+                "operationId": "getOrder",
+                "description": "Read object data \u2014 only requested fields are returned.",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "required": [
+                                    "id"
+                                ],
+                                "properties": {
+                                    "id": {
+                                        "type": "string",
+                                        "description": "Object identifier"
+                                    },
+                                    "fields": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string"
+                                        },
+                                        "description": "Ids of the fields to read"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Task data payload",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Order"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/order/set": {
+            "post": {
+                "tags": [
+                    "Customer Order"
+                ],
+                "summary": "Write Customer Order",
+                "operationId": "setOrder",
+                "description": "Create or update object data \u2014 read-only fields are not writable and hidden from this request.",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "required": [
+                                    "fields"
+                                ],
+                                "properties": {
+                                    "id": {
+                                        "type": "string",
+                                        "nullable": true,
+                                        "description": "Object identifier \u2014 `null` to create a new object"
+                                    },
+                                    "fields": {
+                                        "$ref": "#/components/schemas/Order"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Task data payload",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "string",
+                                    "description": "Identifier of the created or updated object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Write failure \u2014 the server answers `null`. Check `Splash::log()` messages for error details.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "nullable": true,
+                                    "description": "Always `null` on write failure"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/order/delete": {
+            "post": {
+                "tags": [
+                    "Customer Order"
+                ],
+                "summary": "Delete Customer Order",
+                "operationId": "deleteOrder",
+                "description": "Delete an object.",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "required": [
+                                    "id"
+                                ],
+                                "properties": {
+                                    "id": {
+                                        "type": "string",
+                                        "description": "Object identifier"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Task data payload",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "boolean",
+                                    "description": "True when the object was deleted"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/invoice/list": {
+            "post": {
+                "tags": [
+                    "Customer Invoice"
+                ],
+                "summary": "List Customer Invoice",
+                "operationId": "listInvoice",
+                "description": "Read objects list \u2014 rows only carry fields flagged `In List`.\n\nThe server appends a `meta` entry to the result: `{ total, current }` counters.",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "filters": {
+                                        "type": "string",
+                                        "nullable": true,
+                                        "description": "Text filter applied on searchable fields"
+                                    },
+                                    "params": {
+                                        "type": "object",
+                                        "properties": {
+                                            "max": {
+                                                "type": "integer",
+                                                "description": "Maximum number of results"
+                                            },
+                                            "offset": {
+                                                "type": "integer",
+                                                "description": "List start offset"
+                                            },
+                                            "sortfield": {
+                                                "type": "string",
+                                                "description": "Field id used to sort the list"
+                                            },
+                                            "sortorder": {
+                                                "type": "string",
+                                                "enum": [
+                                                    "ASC",
+                                                    "DESC"
+                                                ]
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Task data payload",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/InvoiceListItem"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/invoice/get": {
+            "post": {
+                "tags": [
+                    "Customer Invoice"
+                ],
+                "summary": "Read Customer Invoice",
+                "operationId": "getInvoice",
+                "description": "Read object data \u2014 only requested fields are returned.",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "required": [
+                                    "id"
+                                ],
+                                "properties": {
+                                    "id": {
+                                        "type": "string",
+                                        "description": "Object identifier"
+                                    },
+                                    "fields": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string"
+                                        },
+                                        "description": "Ids of the fields to read"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Task data payload",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Invoice"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/invoice/set": {
+            "post": {
+                "tags": [
+                    "Customer Invoice"
+                ],
+                "summary": "Write Customer Invoice",
+                "operationId": "setInvoice",
+                "description": "Create or update object data \u2014 read-only fields are not writable and hidden from this request.",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "required": [
+                                    "fields"
+                                ],
+                                "properties": {
+                                    "id": {
+                                        "type": "string",
+                                        "nullable": true,
+                                        "description": "Object identifier \u2014 `null` to create a new object"
+                                    },
+                                    "fields": {
+                                        "$ref": "#/components/schemas/Invoice"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Task data payload",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "string",
+                                    "description": "Identifier of the created or updated object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Write failure \u2014 the server answers `null`. Check `Splash::log()` messages for error details.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "nullable": true,
+                                    "description": "Always `null` on write failure"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/invoice/delete": {
+            "post": {
+                "tags": [
+                    "Customer Invoice"
+                ],
+                "summary": "Delete Customer Invoice",
+                "operationId": "deleteInvoice",
+                "description": "Delete an object.",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "required": [
+                                    "id"
+                                ],
+                                "properties": {
+                                    "id": {
+                                        "type": "string",
+                                        "description": "Object identifier"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Task data payload",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "boolean",
+                                    "description": "True when the object was deleted"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/address/list": {
+            "post": {
+                "tags": [
+                    "Address"
+                ],
+                "summary": "List Address",
+                "operationId": "listAddress",
+                "description": "Read objects list \u2014 rows only carry fields flagged `In List`.\n\nThe server appends a `meta` entry to the result: `{ total, current }` counters.",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "filters": {
+                                        "type": "string",
+                                        "nullable": true,
+                                        "description": "Text filter applied on searchable fields"
+                                    },
+                                    "params": {
+                                        "type": "object",
+                                        "properties": {
+                                            "max": {
+                                                "type": "integer",
+                                                "description": "Maximum number of results"
+                                            },
+                                            "offset": {
+                                                "type": "integer",
+                                                "description": "List start offset"
+                                            },
+                                            "sortfield": {
+                                                "type": "string",
+                                                "description": "Field id used to sort the list"
+                                            },
+                                            "sortorder": {
+                                                "type": "string",
+                                                "enum": [
+                                                    "ASC",
+                                                    "DESC"
+                                                ]
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Task data payload",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/AddressListItem"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/address/get": {
+            "post": {
+                "tags": [
+                    "Address"
+                ],
+                "summary": "Read Address",
+                "operationId": "getAddress",
+                "description": "Read object data \u2014 only requested fields are returned.",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "required": [
+                                    "id"
+                                ],
+                                "properties": {
+                                    "id": {
+                                        "type": "string",
+                                        "description": "Object identifier"
+                                    },
+                                    "fields": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string"
+                                        },
+                                        "description": "Ids of the fields to read"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Task data payload",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Address"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/address/set": {
+            "post": {
+                "tags": [
+                    "Address"
+                ],
+                "summary": "Write Address",
+                "operationId": "setAddress",
+                "description": "Create or update object data \u2014 read-only fields are not writable and hidden from this request.",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "required": [
+                                    "fields"
+                                ],
+                                "properties": {
+                                    "id": {
+                                        "type": "string",
+                                        "nullable": true,
+                                        "description": "Object identifier \u2014 `null` to create a new object"
+                                    },
+                                    "fields": {
+                                        "$ref": "#/components/schemas/Address"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Task data payload",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "string",
+                                    "description": "Identifier of the created or updated object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Write failure \u2014 the server answers `null`. Check `Splash::log()` messages for error details.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "nullable": true,
+                                    "description": "Always `null` on write failure"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/address/delete": {
+            "post": {
+                "tags": [
+                    "Address"
+                ],
+                "summary": "Delete Address",
+                "operationId": "deleteAddress",
+                "description": "Delete an object.",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "required": [
+                                    "id"
+                                ],
+                                "properties": {
+                                    "id": {
+                                        "type": "string",
+                                        "description": "Object identifier"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Task data payload",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "boolean",
+                                    "description": "True when the object was deleted"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "SplashPrice": {
+                "type": "object",
+                "title": "Splash Price",
+                "description": "Price structure with tax details and currency",
+                "properties": {
+                    "ht": {
+                        "type": "number",
+                        "description": "Tax excluded amount"
+                    },
+                    "ttc": {
+                        "type": "number",
+                        "description": "Tax included amount"
+                    },
+                    "tax": {
+                        "type": "number",
+                        "description": "Tax amount"
+                    },
+                    "vat": {
+                        "type": "number",
+                        "description": "VAT rate (percent)"
+                    },
+                    "base": {
+                        "type": "integer",
+                        "enum": [
+                            0,
+                            1
+                        ],
+                        "description": "Price base: 0 = tax excluded, 1 = tax included"
+                    },
+                    "code": {
+                        "type": "string",
+                        "description": "Currency ISO code"
+                    },
+                    "symbol": {
+                        "type": "string",
+                        "description": "Currency symbol"
+                    },
+                    "name": {
+                        "type": "string",
+                        "description": "Currency name"
+                    }
+                }
+            },
+            "SplashFile": {
+                "type": "object",
+                "title": "Splash File",
+                "description": "File structure with checksum for synchronization",
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "description": "Human readable file name"
+                    },
+                    "filename": {
+                        "type": "string",
+                        "description": "File name with extension"
+                    },
+                    "path": {
+                        "type": "string",
+                        "description": "File path or identifier on server"
+                    },
+                    "url": {
+                        "type": "string",
+                        "format": "uri",
+                        "description": "Public url, if available"
+                    },
+                    "md5": {
+                        "type": "string",
+                        "description": "File contents checksum"
+                    },
+                    "size": {
+                        "type": "integer",
+                        "description": "File size in bytes"
+                    }
+                }
+            },
+            "SplashImage": {
+                "title": "Splash Image",
+                "description": "Image structure: a Splash File with dimensions",
+                "allOf": [
+                    {
+                        "$ref": "#/components/schemas/SplashFile"
+                    },
+                    {
+                        "type": "object",
+                        "properties": {
+                            "width": {
+                                "type": "integer",
+                                "description": "Image width in pixels"
+                            },
+                            "height": {
+                                "type": "integer",
+                                "description": "Image height in pixels"
+                            }
+                        }
+                    }
+                ]
+            },
+            "ThirdParty": {
+                "type": "object",
+                "title": "ThirdParty",
+                "description": "Prestashop Customer Object",
+                "x-splash-type": "ThirdParty",
+                "properties": {
+                    "date_add": {
+                        "type": "string",
+                        "format": "datetime",
+                        "title": "Creation date",
+                        "description": "Creation date\n\n- **Microdata:** `http://schema.org/DataFeedItem` \u2192 `dateCreated`",
+                        "x-splash-type": "datetime",
+                        "readOnly": true,
+                        "x-schema-org-itemtype": "http://schema.org/DataFeedItem",
+                        "x-schema-org-itemprop": "dateCreated",
+                        "example": "2026-09-25 11:07:55"
+                    },
+                    "date_upd": {
+                        "type": "string",
+                        "format": "datetime",
+                        "title": "Edited",
+                        "description": "Edited\n\n- **Microdata:** `http://schema.org/DataFeedItem` \u2192 `dateModified`",
+                        "x-splash-type": "datetime",
+                        "readOnly": true,
+                        "x-schema-org-itemtype": "http://schema.org/DataFeedItem",
+                        "x-schema-org-itemprop": "dateModified",
+                        "example": "2026-09-25 11:07:55"
+                    },
+                    "splash_id": {
+                        "type": "string",
+                        "title": "Splash Id",
+                        "description": "Splash Id\n\n- **Microdata:** `http://splashync.com/schemas` \u2192 `ObjectId`\n- **Options:**\n    - **shop** => all",
+                        "x-splash-type": "varchar",
+                        "format": "varchar",
+                        "x-schema-org-itemtype": "http://splashync.com/schemas",
+                        "x-schema-org-itemprop": "ObjectId"
+                    },
+                    "id_shop": {
+                        "type": "integer",
+                        "title": "Shop ID",
+                        "description": "Shop ID\n\n- **Microdata:** `http://schema.org/Author` \u2192 `identifier`",
+                        "x-splash-type": "int",
+                        "format": "int",
+                        "readOnly": true,
+                        "x-schema-org-itemtype": "http://schema.org/Author",
+                        "x-schema-org-itemprop": "identifier"
+                    },
+                    "shop_code": {
+                        "type": "string",
+                        "title": "Shop Code",
+                        "description": "Shop Code\n\n- **Microdata:** `http://schema.org/Author` \u2192 `alternateName`",
+                        "x-splash-type": "varchar",
+                        "format": "varchar",
+                        "readOnly": true,
+                        "x-schema-org-itemtype": "http://schema.org/Author",
+                        "x-schema-org-itemprop": "alternateName"
+                    },
+                    "shop_name": {
+                        "type": "string",
+                        "title": "Store name",
+                        "description": "Store name\n\n- **Microdata:** `http://schema.org/Author` \u2192 `name`",
+                        "x-splash-type": "varchar",
+                        "format": "varchar",
+                        "readOnly": true,
+                        "x-schema-org-itemtype": "http://schema.org/Author",
+                        "x-schema-org-itemprop": "name"
+                    },
+                    "shop_url": {
+                        "type": "string",
+                        "format": "url",
+                        "title": "Shop domain",
+                        "description": "Shop domain\n\n- **Microdata:** `http://schema.org/Author` \u2192 `url`",
+                        "x-splash-type": "url",
+                        "readOnly": true,
+                        "x-schema-org-itemtype": "http://schema.org/Author",
+                        "x-schema-org-itemprop": "url"
+                    },
+                    "email": {
+                        "type": "string",
+                        "format": "email",
+                        "title": "Email address",
+                        "description": "Email address\n\n- **Microdata:** `http://schema.org/ContactPoint` \u2192 `email`\n- `\ud83d\udd11 Primary` `\ud83d\udccb In List`",
+                        "x-splash-type": "email",
+                        "x-schema-org-itemtype": "http://schema.org/ContactPoint",
+                        "x-schema-org-itemprop": "email"
+                    },
+                    "firstname": {
+                        "type": "string",
+                        "title": "First name",
+                        "description": "First name\n\n- **Microdata:** `http://schema.org/Person` \u2192 `familyName`\n- `\ud83d\udccb In List`",
+                        "x-splash-type": "varchar",
+                        "format": "varchar",
+                        "x-schema-org-itemtype": "http://schema.org/Person",
+                        "x-schema-org-itemprop": "familyName"
+                    },
+                    "lastname": {
+                        "type": "string",
+                        "title": "Last name",
+                        "description": "Last name\n\n- **Microdata:** `http://schema.org/Person` \u2192 `givenName`\n- `\ud83d\udccb In List`",
+                        "x-splash-type": "varchar",
+                        "format": "varchar",
+                        "x-schema-org-itemtype": "http://schema.org/Person",
+                        "x-schema-org-itemprop": "givenName"
+                    },
+                    "company": {
+                        "type": "string",
+                        "title": "Company",
+                        "description": "Company\n\n- **Microdata:** `http://schema.org/Organization` \u2192 `legalName`\n- `\ud83d\udd0e Indexed` `\ud83d\udccb In List`",
+                        "x-splash-type": "varchar",
+                        "format": "varchar",
+                        "x-schema-org-itemtype": "http://schema.org/Organization",
+                        "x-schema-org-itemprop": "legalName"
+                    },
+                    "full_name": {
+                        "type": "string",
+                        "title": "[C] Full Name",
+                        "description": "Company | Firstname + Lastname\n\n- **Microdata:** `http://schema.org/Organization` \u2192 `alternateName`",
+                        "x-splash-type": "varchar",
+                        "format": "varchar",
+                        "readOnly": true,
+                        "x-schema-org-itemtype": "http://schema.org/Organization",
+                        "x-schema-org-itemprop": "alternateName"
+                    },
+                    "siret": {
+                        "type": "string",
+                        "title": "SIRET",
+                        "description": "SIRET\n\n- **Microdata:** `http://schema.org/Organization` \u2192 `taxID`\n- `\ud83e\uddea No Tests`",
+                        "x-splash-type": "varchar",
+                        "format": "varchar",
+                        "x-schema-org-itemtype": "http://schema.org/Organization",
+                        "x-schema-org-itemprop": "taxID"
+                    },
+                    "ape": {
+                        "type": "string",
+                        "title": "APE",
+                        "description": "APE\n\n- **Microdata:** `http://schema.org/Organization` \u2192 `naics`\n- `\ud83e\uddea No Tests`",
+                        "x-splash-type": "varchar",
+                        "format": "varchar",
+                        "x-schema-org-itemtype": "http://schema.org/Organization",
+                        "x-schema-org-itemprop": "naics"
+                    },
+                    "website": {
+                        "type": "string",
+                        "format": "url",
+                        "title": "Website",
+                        "description": "Website\n\n- **Microdata:** `http://schema.org/Organization` \u2192 `url`",
+                        "x-splash-type": "url",
+                        "x-schema-org-itemtype": "http://schema.org/Organization",
+                        "x-schema-org-itemprop": "url"
+                    },
+                    "gender_name": {
+                        "type": "string",
+                        "title": "Social title",
+                        "description": "Social title\n\n- **Microdata:** `http://schema.org/Person` \u2192 `honorificPrefix`",
+                        "x-splash-type": "varchar",
+                        "format": "varchar",
+                        "readOnly": true,
+                        "x-schema-org-itemtype": "http://schema.org/Person",
+                        "x-schema-org-itemprop": "honorificPrefix"
+                    },
+                    "gender_type": {
+                        "type": "integer",
+                        "title": "Social title (ID)",
+                        "description": "Social title ; 0 => Male // 1 => Female // 2 => Neutral\n\n- **Microdata:** `http://schema.org/Person` \u2192 `gender`\n- `\ud83e\uddea No Tests`",
+                        "x-splash-type": "int",
+                        "format": "int",
+                        "x-schema-org-itemtype": "http://schema.org/Person",
+                        "x-schema-org-itemprop": "gender",
+                        "enum": [
+                            "0",
+                            "1"
+                        ]
+                    },
+                    "groups": {
+                        "type": "string",
+                        "title": "Groups",
+                        "description": "Groups\n\n- **Microdata:** `http://schema.org/Organization` \u2192 `category`",
+                        "x-splash-type": "inline",
+                        "format": "inline",
+                        "readOnly": true,
+                        "x-schema-org-itemtype": "http://schema.org/Organization",
+                        "x-schema-org-itemprop": "category",
+                        "enum": [
+                            "visitor",
+                            "guest",
+                            "customer"
+                        ]
+                    },
+                    "group": {
+                        "type": "string",
+                        "title": "Group",
+                        "description": "Group\n\n- **Microdata:** `http://schema.org/Organization` \u2192 `category`",
+                        "x-splash-type": "varchar",
+                        "format": "varchar",
+                        "x-schema-org-itemtype": "http://schema.org/Organization",
+                        "x-schema-org-itemprop": "category",
+                        "enum": [
+                            "visitor",
+                            "guest",
+                            "customer"
+                        ]
+                    },
+                    "address1": {
+                        "type": "string",
+                        "title": "Address",
+                        "description": "Address\n\n- **Microdata:** `http://schema.org/PostalAddress` \u2192 `streetAddress`",
+                        "x-splash-type": "varchar",
+                        "format": "varchar",
+                        "readOnly": true,
+                        "x-schema-org-itemtype": "http://schema.org/PostalAddress",
+                        "x-schema-org-itemprop": "streetAddress"
+                    },
+                    "address2": {
+                        "type": "string",
+                        "title": "Address (2)",
+                        "description": "Address (2)\n\n- **Microdata:** `http://schema.org/PostalAddress` \u2192 `postOfficeBoxNumber`",
+                        "x-splash-type": "varchar",
+                        "format": "varchar",
+                        "readOnly": true,
+                        "x-schema-org-itemtype": "http://schema.org/PostalAddress",
+                        "x-schema-org-itemprop": "postOfficeBoxNumber"
+                    },
+                    "postcode": {
+                        "type": "string",
+                        "title": "Zip/Postal code",
+                        "description": "Zip/Postal code\n\n- **Microdata:** `http://schema.org/PostalAddress` \u2192 `postalCode`",
+                        "x-splash-type": "varchar",
+                        "format": "varchar",
+                        "readOnly": true,
+                        "x-schema-org-itemtype": "http://schema.org/PostalAddress",
+                        "x-schema-org-itemprop": "postalCode"
+                    },
+                    "city": {
+                        "type": "string",
+                        "title": "City",
+                        "description": "City\n\n- **Microdata:** `http://schema.org/PostalAddress` \u2192 `addressLocality`",
+                        "x-splash-type": "varchar",
+                        "format": "varchar",
+                        "readOnly": true,
+                        "x-schema-org-itemtype": "http://schema.org/PostalAddress",
+                        "x-schema-org-itemprop": "addressLocality"
+                    },
+                    "state": {
+                        "type": "string",
+                        "title": "State",
+                        "description": "State\n\n- **Microdata:** `http://schema.org/PostalAddress` \u2192 `addressRegion`",
+                        "x-splash-type": "varchar",
+                        "format": "varchar",
+                        "readOnly": true,
+                        "x-schema-org-itemtype": "http://schema.org/PostalAddress",
+                        "x-schema-org-itemprop": "addressRegion"
+                    },
+                    "id_state": {
+                        "type": "string",
+                        "format": "state",
+                        "title": "State (Code)",
+                        "description": "State (Code)\n\n- **Microdata:** `http://schema.org/PostalAddress` \u2192 `addressRegion`",
+                        "x-splash-type": "state",
+                        "readOnly": true,
+                        "x-schema-org-itemtype": "http://schema.org/PostalAddress",
+                        "x-schema-org-itemprop": "addressRegion"
+                    },
+                    "country": {
+                        "type": "string",
+                        "title": "Country",
+                        "description": "Country\n\n- **Microdata:** `http://schema.org/PostalAddress` \u2192 `addressCountry`",
+                        "x-splash-type": "varchar",
+                        "format": "varchar",
+                        "readOnly": true,
+                        "x-schema-org-itemtype": "http://schema.org/PostalAddress",
+                        "x-schema-org-itemprop": "addressCountry"
+                    },
+                    "id_country": {
+                        "type": "string",
+                        "format": "country",
+                        "title": "Country (Code)",
+                        "description": "Country (Code)\n\n- **Microdata:** `http://schema.org/PostalAddress` \u2192 `addressCountry`",
+                        "x-splash-type": "country",
+                        "readOnly": true,
+                        "x-schema-org-itemtype": "http://schema.org/PostalAddress",
+                        "x-schema-org-itemprop": "addressCountry"
+                    },
+                    "phone": {
+                        "type": "string",
+                        "format": "phone",
+                        "title": "Home phone",
+                        "description": "Home phone\n\n- **Microdata:** `http://schema.org/PostalAddress` \u2192 `telephone`\n- `\ud83d\udd0e Indexed`",
+                        "x-splash-type": "phone",
+                        "readOnly": true,
+                        "x-schema-org-itemtype": "http://schema.org/PostalAddress",
+                        "x-schema-org-itemprop": "telephone",
+                        "example": "+33612345678"
+                    },
+                    "phone_mobile": {
+                        "type": "string",
+                        "format": "phone",
+                        "title": "Mobile phone",
+                        "description": "Mobile phone\n\n- **Microdata:** `http://schema.org/Person` \u2192 `telephone`\n- `\ud83d\udd0e Indexed`",
+                        "x-splash-type": "phone",
+                        "readOnly": true,
+                        "x-schema-org-itemtype": "http://schema.org/Person",
+                        "x-schema-org-itemprop": "telephone",
+                        "example": "+33612345678"
+                    },
+                    "vat_number": {
+                        "type": "string",
+                        "title": "VAT number",
+                        "description": "VAT number\n\n- **Microdata:** `http://schema.org/Organization` \u2192 `vatID`",
+                        "x-splash-type": "varchar",
+                        "format": "varchar",
+                        "readOnly": true,
+                        "x-schema-org-itemtype": "http://schema.org/Organization",
+                        "x-schema-org-itemprop": "vatID"
+                    },
+                    "active": {
+                        "type": "boolean",
+                        "title": "Enabled",
+                        "description": "Enabled\n\n- **Microdata:** `http://schema.org/Organization` \u2192 `active`\n- `\ud83d\udccb In List`",
+                        "x-splash-type": "bool",
+                        "format": "bool",
+                        "x-schema-org-itemtype": "http://schema.org/Organization",
+                        "x-schema-org-itemprop": "active"
+                    },
+                    "newsletter": {
+                        "type": "boolean",
+                        "title": "Newsletter",
+                        "description": "Newsletter\n\n- **Microdata:** `http://schema.org/Organization` \u2192 `newsletter`",
+                        "x-splash-type": "bool",
+                        "format": "bool",
+                        "x-schema-org-itemtype": "http://schema.org/Organization",
+                        "x-schema-org-itemprop": "newsletter"
+                    },
+                    "optin": {
+                        "type": "boolean",
+                        "title": "Partner offers",
+                        "description": "Partner offers\n\n- **Microdata:** `http://schema.org/Organization` \u2192 `advertising`",
+                        "x-splash-type": "bool",
+                        "format": "bool",
+                        "x-schema-org-itemtype": "http://schema.org/Organization",
+                        "x-schema-org-itemprop": "advertising"
+                    },
+                    "contacts": {
+                        "type": "array",
+                        "title": "Contacts",
+                        "x-splash-list": "contacts",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "address": {
+                                    "type": "string",
+                                    "format": "objectid::Address@list",
+                                    "title": "Address",
+                                    "description": "Address\n\n- **Microdata:** `http://schema.org/Organization` \u2192 `address`",
+                                    "x-splash-type": "objectid::Address@list",
+                                    "readOnly": true,
+                                    "x-schema-org-itemtype": "http://schema.org/Organization",
+                                    "x-schema-org-itemprop": "address",
+                                    "example": "26::Address"
+                                }
+                            }
+                        }
+                    }
+                },
+                "required": [
+                    "email",
+                    "firstname",
+                    "lastname"
+                ]
+            },
+            "ThirdPartyListItem": {
+                "type": "object",
+                "title": "ThirdParty (List Item)",
+                "description": "Fields returned by objects list requests \u2014 fields flagged `In List` only.",
+                "properties": {
+                    "email": {
+                        "type": "string",
+                        "format": "email",
+                        "title": "Email address"
+                    },
+                    "firstname": {
+                        "type": "string",
+                        "title": "First name"
+                    },
+                    "lastname": {
+                        "type": "string",
+                        "title": "Last name"
+                    },
+                    "company": {
+                        "type": "string",
+                        "title": "Company"
+                    },
+                    "active": {
+                        "type": "boolean",
+                        "title": "Enabled"
+                    }
+                }
+            },
+            "Product": {
+                "type": "object",
+                "title": "Product",
+                "description": "Prestashop Product Object",
+                "x-splash-type": "Product",
+                "properties": {
+                    "date_add": {
+                        "type": "string",
+                        "format": "datetime",
+                        "title": "Creation date",
+                        "description": "Creation date\n\n- **Microdata:** `http://schema.org/DataFeedItem` \u2192 `dateCreated`",
+                        "x-splash-type": "datetime",
+                        "readOnly": true,
+                        "x-schema-org-itemtype": "http://schema.org/DataFeedItem",
+                        "x-schema-org-itemprop": "dateCreated",
+                        "example": "2026-09-25 11:07:55"
+                    },
+                    "date_upd": {
+                        "type": "string",
+                        "format": "datetime",
+                        "title": "Edited",
+                        "description": "Edited\n\n- **Microdata:** `http://schema.org/DataFeedItem` \u2192 `dateModified`",
+                        "x-splash-type": "datetime",
+                        "readOnly": true,
+                        "x-schema-org-itemtype": "http://schema.org/DataFeedItem",
+                        "x-schema-org-itemprop": "dateModified",
+                        "example": "2026-09-25 11:07:55"
+                    },
+                    "splash_id": {
+                        "type": "string",
+                        "title": "Splash Id",
+                        "description": "Splash Id\n\n- **Microdata:** `http://splashync.com/schemas` \u2192 `ObjectId`\n- **Options:**\n    - **shop** => all",
+                        "x-splash-type": "varchar",
+                        "format": "varchar",
+                        "x-schema-org-itemtype": "http://splashync.com/schemas",
+                        "x-schema-org-itemprop": "ObjectId"
+                    },
+                    "ref": {
+                        "type": "string",
+                        "title": "Reference",
+                        "description": "Reference\n\n- **Microdata:** `http://schema.org/Product` \u2192 `model`\n- **Options:**\n    - **shop** => all\n- `\ud83d\udd11 Primary` `\ud83d\udccb In List`",
+                        "x-splash-type": "varchar",
+                        "format": "varchar",
+                        "x-schema-org-itemtype": "http://schema.org/Product",
+                        "x-schema-org-itemprop": "model"
+                    },
+                    "type": {
+                        "type": "string",
+                        "title": "Type",
+                        "description": "Internal product Type\n\n- **Microdata:** `http://schema.org/Product` \u2192 `type`\n- **Options:**\n    - **shop** => all",
+                        "x-splash-type": "varchar",
+                        "format": "varchar",
+                        "readOnly": true,
+                        "x-schema-org-itemtype": "http://schema.org/Product",
+                        "x-schema-org-itemprop": "type"
+                    },
+                    "cover_image": {
+                        "type": "string",
+                        "title": "Cover Image",
+                        "description": "Cover Image\n\n- **Microdata:** `http://schema.org/Product` \u2192 `coverImage`\n- **Options:**\n    - **shop** => all",
+                        "x-splash-type": "image",
+                        "format": "image",
+                        "readOnly": true,
+                        "x-schema-org-itemtype": "http://schema.org/Product",
+                        "x-schema-org-itemprop": "coverImage"
+                    },
+                    "cover_image_url": {
+                        "type": "string",
+                        "format": "url",
+                        "title": "Cover Image Url",
+                        "description": "Cover Image Url\n\n- **Microdata:** `http://schema.org/Product` \u2192 `coverImageUrl`\n- **Options:**\n    - **shop** => all",
+                        "x-splash-type": "url",
+                        "readOnly": true,
+                        "x-schema-org-itemtype": "http://schema.org/Product",
+                        "x-schema-org-itemprop": "coverImageUrl"
+                    },
+                    "weight": {
+                        "type": "number",
+                        "title": "Weight",
+                        "description": "Weight\n\n- **Microdata:** `http://schema.org/Product` \u2192 `weight`\n- **Options:**\n    - **shop** => all",
+                        "x-splash-type": "double",
+                        "format": "double",
+                        "x-schema-org-itemtype": "http://schema.org/Product",
+                        "x-schema-org-itemprop": "weight"
+                    },
+                    "height": {
+                        "type": "number",
+                        "title": "Height",
+                        "description": "Height\n\n- **Microdata:** `http://schema.org/Product` \u2192 `height`\n- **Options:**\n    - **shop** => all",
+                        "x-splash-type": "double",
+                        "format": "double",
+                        "x-schema-org-itemtype": "http://schema.org/Product",
+                        "x-schema-org-itemprop": "height"
+                    },
+                    "depth": {
+                        "type": "number",
+                        "title": "Depth",
+                        "description": "Depth\n\n- **Microdata:** `http://schema.org/Product` \u2192 `depth`\n- **Options:**\n    - **shop** => all",
+                        "x-splash-type": "double",
+                        "format": "double",
+                        "x-schema-org-itemtype": "http://schema.org/Product",
+                        "x-schema-org-itemprop": "depth"
+                    },
+                    "width": {
+                        "type": "number",
+                        "title": "Width",
+                        "description": "Width\n\n- **Microdata:** `http://schema.org/Product` \u2192 `width`\n- **Options:**\n    - **shop** => all",
+                        "x-splash-type": "double",
+                        "format": "double",
+                        "x-schema-org-itemtype": "http://schema.org/Product",
+                        "x-schema-org-itemprop": "width"
+                    },
+                    "surface": {
+                        "type": "number",
+                        "title": "Surface",
+                        "description": "Surface\n\n- **Microdata:** `http://schema.org/Product` \u2192 `surface`",
+                        "x-splash-type": "double",
+                        "format": "double",
+                        "readOnly": true,
+                        "x-schema-org-itemtype": "http://schema.org/Product",
+                        "x-schema-org-itemprop": "surface"
+                    },
+                    "volume": {
+                        "type": "number",
+                        "title": "Volume",
+                        "description": "Volume\n\n- **Microdata:** `http://schema.org/Product` \u2192 `volume`\n- **Options:**\n    - **shop** => all",
+                        "x-splash-type": "double",
+                        "format": "double",
+                        "readOnly": true,
+                        "x-schema-org-itemtype": "http://schema.org/Product",
+                        "x-schema-org-itemprop": "volume"
+                    },
+                    "supplier_reference": {
+                        "type": "string",
+                        "title": "Supplier reference",
+                        "description": "Supplier reference\n\n- **Microdata:** `http://schema.org/Product` \u2192 `mpn`\n- **Options:**\n    - **shop** => all\n- `\ud83d\udd0e Indexed` `\ud83d\udccb In List`",
+                        "x-splash-type": "varchar",
+                        "format": "varchar",
+                        "x-schema-org-itemtype": "http://schema.org/Product",
+                        "x-schema-org-itemprop": "mpn"
+                    },
+                    "upc": {
+                        "type": "integer",
+                        "title": "UPC barcode",
+                        "description": "UPC barcode\n\n- **Microdata:** `http://schema.org/Product` \u2192 `gtin12`\n- **Options:**\n    - **shop** => all\n- `\ud83d\udd0e Indexed`",
+                        "x-splash-type": "int",
+                        "format": "int",
+                        "x-schema-org-itemtype": "http://schema.org/Product",
+                        "x-schema-org-itemprop": "gtin12"
+                    },
+                    "ean13": {
+                        "type": "integer",
+                        "title": "EAN-13 or JAN barcode",
+                        "description": "EAN-13 or JAN barcode\n\n- **Microdata:** `http://schema.org/Product` \u2192 `gtin13`\n- **Options:**\n    - **shop** => all\n- `\ud83d\udd0e Indexed`",
+                        "x-splash-type": "int",
+                        "format": "int",
+                        "x-schema-org-itemtype": "http://schema.org/Product",
+                        "x-schema-org-itemprop": "gtin13"
+                    },
+                    "isbn": {
+                        "type": "integer",
+                        "title": "ISBN",
+                        "description": "ISBN\n\n- **Microdata:** `http://schema.org/Product` \u2192 `gtin14`\n- **Options:**\n    - **shop** => all\n- `\ud83d\udd0e Indexed`",
+                        "x-splash-type": "int",
+                        "format": "int",
+                        "x-schema-org-itemtype": "http://schema.org/Product",
+                        "x-schema-org-itemprop": "gtin14"
+                    },
+                    "name": {
+                        "type": "string",
+                        "title": "Product Name without Options",
+                        "description": "Product Name without Options\n\n- **Microdata:** `http://schema.org/Product` \u2192 `alternateName`\n- **Options:**\n    - **language** => en_US\n    - **shop** => all\n- `\ud83d\udd0e Indexed`",
+                        "x-splash-type": "varchar",
+                        "format": "varchar",
+                        "x-schema-org-itemtype": "http://schema.org/Product",
+                        "x-schema-org-itemprop": "alternateName"
+                    },
+                    "fullname": {
+                        "type": "string",
+                        "title": "Product Name with Options",
+                        "description": "Product Name with Options\n\n- **Microdata:** `http://schema.org/Product` \u2192 `name`\n- **Options:**\n    - **language** => en_US\n- `\ud83d\udccb In List`",
+                        "x-splash-type": "varchar",
+                        "format": "varchar",
+                        "readOnly": true,
+                        "x-schema-org-itemtype": "http://schema.org/Product",
+                        "x-schema-org-itemprop": "name"
+                    },
+                    "description": {
+                        "type": "string",
+                        "title": "Description",
+                        "description": "Description\n\n- **Microdata:** `http://schema.org/Article` \u2192 `articleBody`\n- **Options:**\n    - **language** => en_US",
+                        "x-splash-type": "text",
+                        "format": "text",
+                        "x-schema-org-itemtype": "http://schema.org/Article",
+                        "x-schema-org-itemprop": "articleBody"
+                    },
+                    "description_short": {
+                        "type": "string",
+                        "title": "Short description",
+                        "description": "Short description\n\n- **Microdata:** `http://schema.org/Product` \u2192 `description`\n- **Options:**\n    - **language** => en_US",
+                        "x-splash-type": "varchar",
+                        "format": "varchar",
+                        "x-schema-org-itemtype": "http://schema.org/Product",
+                        "x-schema-org-itemprop": "description"
+                    },
+                    "stock": {
+                        "type": "integer",
+                        "title": "Stock",
+                        "description": "Stock\n\n- **Microdata:** `http://schema.org/Offer` \u2192 `inventoryLevel`\n- `\ud83d\udccb In List`",
+                        "x-splash-type": "int",
+                        "format": "int",
+                        "x-schema-org-itemtype": "http://schema.org/Offer",
+                        "x-schema-org-itemprop": "inventoryLevel"
+                    },
+                    "outofstock": {
+                        "type": "boolean",
+                        "title": "This product is out of stock",
+                        "description": "This product is out of stock\n\n- **Microdata:** `http://schema.org/ItemAvailability` \u2192 `OutOfStock`",
+                        "x-splash-type": "bool",
+                        "format": "bool",
+                        "readOnly": true,
+                        "x-schema-org-itemtype": "http://schema.org/ItemAvailability",
+                        "x-schema-org-itemprop": "OutOfStock"
+                    },
+                    "minimal_quantity": {
+                        "type": "integer",
+                        "title": "Minimum quantity for sale",
+                        "description": "Minimum quantity for sale\n\n- **Microdata:** `http://schema.org/Offer` \u2192 `eligibleTransactionVolume`",
+                        "x-splash-type": "int",
+                        "format": "int",
+                        "x-schema-org-itemtype": "http://schema.org/Offer",
+                        "x-schema-org-itemprop": "eligibleTransactionVolume"
+                    },
+                    "stock_location": {
+                        "type": "string",
+                        "title": "Stock location",
+                        "description": "Stock location\n\n- **Microdata:** `http://schema.org/Offer` \u2192 `inventoryLocation`\n- **Options:**\n    - **shop** => all",
+                        "x-splash-type": "varchar",
+                        "format": "varchar",
+                        "x-schema-org-itemtype": "http://schema.org/Offer",
+                        "x-schema-org-itemprop": "inventoryLocation"
+                    },
+                    "price": {
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/SplashPrice"
+                            }
+                        ],
+                        "title": "Retail price (tax excl.) (?)",
+                        "description": "Retail price (tax excl.) (?)\n\n- **Microdata:** `http://schema.org/Product` \u2192 `price`",
+                        "x-splash-type": "price",
+                        "format": "price",
+                        "x-schema-org-itemtype": "http://schema.org/Product",
+                        "x-schema-org-itemprop": "price",
+                        "example": {
+                            "base": 0,
+                            "ht": 176.99,
+                            "vat": 20,
+                            "tax": 35.4,
+                            "ttc": 212.39,
+                            "code": "EUR",
+                            "symbol": "\u20ac",
+                            "name": "Euro"
+                        }
+                    },
+                    "price-base": {
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/SplashPrice"
+                            }
+                        ],
+                        "title": "Retail price (tax excl.) Base (?)",
+                        "description": "Retail price (tax excl.) Base (?)\n\n- **Microdata:** `http://schema.org/Product` \u2192 `basePrice`",
+                        "x-splash-type": "price",
+                        "format": "price",
+                        "x-schema-org-itemtype": "http://schema.org/Product",
+                        "x-schema-org-itemprop": "basePrice",
+                        "example": {
+                            "base": 0,
+                            "ht": 89.1,
+                            "vat": 20,
+                            "tax": 17.82,
+                            "ttc": 106.92,
+                            "code": "EUR",
+                            "symbol": "\u20ac",
+                            "name": "Euro"
+                        }
+                    },
+                    "price-wholesale": {
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/SplashPrice"
+                            }
+                        ],
+                        "title": "Cost price Base (?)",
+                        "description": "Cost price Base (?)\n\n- **Microdata:** `http://schema.org/Product` \u2192 `wholesalePrice`",
+                        "x-splash-type": "price",
+                        "format": "price",
+                        "x-schema-org-itemtype": "http://schema.org/Product",
+                        "x-schema-org-itemprop": "wholesalePrice",
+                        "example": {
+                            "base": 0,
+                            "ht": 132.54,
+                            "vat": 20,
+                            "tax": 26.51,
+                            "ttc": 159.05,
+                            "code": "EUR",
+                            "symbol": "\u20ac",
+                            "name": "Euro"
+                        }
+                    },
+                    "price-reduced": {
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/SplashPrice"
+                            }
+                        ],
+                        "title": "Final price (tax excl.) (?)",
+                        "description": "Final price (tax excl.) (?)\n\n- **Microdata:** `http://schema.org/Product` \u2192 `reducedPrice`",
+                        "x-splash-type": "price",
+                        "format": "price",
+                        "readOnly": true,
+                        "x-schema-org-itemtype": "http://schema.org/Product",
+                        "x-schema-org-itemprop": "reducedPrice",
+                        "example": {
+                            "base": 0,
+                            "ht": 183.81,
+                            "vat": 20,
+                            "tax": 36.76,
+                            "ttc": 220.57,
+                            "code": "EUR",
+                            "symbol": "\u20ac",
+                            "name": "Euro"
+                        }
+                    },
+                    "active": {
+                        "type": "boolean",
+                        "title": "Enabled",
+                        "description": "Enabled\n\n- **Microdata:** `http://schema.org/Product` \u2192 `active`",
+                        "x-splash-type": "bool",
+                        "format": "bool",
+                        "x-schema-org-itemtype": "http://schema.org/Product",
+                        "x-schema-org-itemprop": "active"
+                    },
+                    "available_for_order": {
+                        "type": "boolean",
+                        "title": "Available for order",
+                        "description": "Available for order\n\n- **Microdata:** `http://schema.org/Product` \u2192 `offered`\n- `\ud83d\udccb In List`",
+                        "x-splash-type": "bool",
+                        "format": "bool",
+                        "x-schema-org-itemtype": "http://schema.org/Product",
+                        "x-schema-org-itemprop": "offered"
+                    },
+                    "on_sale": {
+                        "type": "boolean",
+                        "title": "On Sale",
+                        "description": "On Sale\n\n- **Microdata:** `http://schema.org/Product` \u2192 `onsale`",
+                        "x-splash-type": "bool",
+                        "format": "bool",
+                        "x-schema-org-itemtype": "http://schema.org/Product",
+                        "x-schema-org-itemprop": "onsale"
+                    },
+                    "show_price": {
+                        "type": "boolean",
+                        "title": "Show Price",
+                        "description": "Show Price\n\n- **Microdata:** `http://schema.org/Product` \u2192 `showPrice`",
+                        "x-splash-type": "bool",
+                        "format": "bool",
+                        "x-schema-org-itemtype": "http://schema.org/Product",
+                        "x-schema-org-itemprop": "showPrice"
+                    },
+                    "online_only": {
+                        "type": "boolean",
+                        "title": "Online Only",
+                        "description": "Online Only\n\n- **Microdata:** `http://schema.org/Product` \u2192 `onlineOnly`",
+                        "x-splash-type": "bool",
+                        "format": "bool",
+                        "x-schema-org-itemtype": "http://schema.org/Product",
+                        "x-schema-org-itemprop": "onlineOnly"
+                    },
+                    "online_ref": {
+                        "type": "string",
+                        "title": "Online Only Ref.",
+                        "description": "Online Only Ref.\n\n- **Microdata:** `http://schema.org/Product` \u2192 `onlineOnlyRef`",
+                        "x-splash-type": "varchar",
+                        "format": "varchar",
+                        "readOnly": true,
+                        "x-schema-org-itemtype": "http://schema.org/Product",
+                        "x-schema-org-itemprop": "onlineOnlyRef"
+                    },
+                    "online_name": {
+                        "type": "string",
+                        "title": "Online Only Title.",
+                        "description": "Online Only Title.\n\n- **Microdata:** `http://schema.org/Product` \u2192 `onlineOnlyTitle`",
+                        "x-splash-type": "varchar",
+                        "format": "varchar",
+                        "readOnly": true,
+                        "x-schema-org-itemtype": "http://schema.org/Product",
+                        "x-schema-org-itemprop": "onlineOnlyTitle"
+                    },
+                    "default_on": {
+                        "type": "boolean",
+                        "title": "Is default variant",
+                        "description": "Is default variant\n\n- **Microdata:** `http://schema.org/Product` \u2192 `isDefaultVariation`",
+                        "x-splash-type": "bool",
+                        "format": "bool",
+                        "readOnly": true,
+                        "x-schema-org-itemtype": "http://schema.org/Product",
+                        "x-schema-org-itemprop": "isDefaultVariation"
+                    },
+                    "default_id": {
+                        "type": "string",
+                        "format": "objectid::Product",
+                        "title": "Default Variant",
+                        "description": "Default Variant\n\n- **Microdata:** `http://schema.org/Product` \u2192 `DefaultVariation`\n- `\ud83e\uddea No Tests`",
+                        "x-splash-type": "objectid::Product",
+                        "x-schema-org-itemtype": "http://schema.org/Product",
+                        "x-schema-org-itemprop": "DefaultVariation",
+                        "example": "267::Product"
+                    },
+                    "parent_id": {
+                        "type": "string",
+                        "title": "Parent",
+                        "description": "Parent\n\n- **Microdata:** `http://schema.org/Product` \u2192 `isVariationOf`",
+                        "x-splash-type": "varchar",
+                        "format": "varchar",
+                        "readOnly": true,
+                        "x-schema-org-itemtype": "http://schema.org/Product",
+                        "x-schema-org-itemprop": "isVariationOf"
+                    },
+                    "parent_ref": {
+                        "type": "string",
+                        "title": "Parent SKU",
+                        "description": "Parent SKU\n\n- **Microdata:** `http://schema.org/Product` \u2192 `isVariationOfName`\n- `\ud83d\udd0e Indexed` `\ud83e\uddea No Tests`",
+                        "x-splash-type": "varchar",
+                        "format": "varchar",
+                        "x-schema-org-itemtype": "http://schema.org/Product",
+                        "x-schema-org-itemprop": "isVariationOfName"
+                    },
+                    "md5": {
+                        "type": "string",
+                        "title": "Md5",
+                        "description": "Unik Md5 Object Checksum\n\n- **Microdata:** `http://schema.org/Thing` \u2192 `identifier`\n- `\ud83d\udccb In List`",
+                        "x-splash-type": "varchar",
+                        "format": "varchar",
+                        "readOnly": true,
+                        "x-schema-org-itemtype": "http://schema.org/Thing",
+                        "x-schema-org-itemprop": "identifier"
+                    },
+                    "md5-debug": {
+                        "type": "string",
+                        "title": "Md5 Debug",
+                        "description": "Unik Checksum String fro Debug",
+                        "x-splash-type": "varchar",
+                        "format": "varchar",
+                        "readOnly": true
+                    },
+                    "meta_description": {
+                        "type": "string",
+                        "title": "Meta description",
+                        "description": "Information Meta description\n\n- **Microdata:** `http://schema.org/Article` \u2192 `headline`\n- **Options:**\n    - **language** => en_US",
+                        "x-splash-type": "varchar",
+                        "format": "varchar",
+                        "x-schema-org-itemtype": "http://schema.org/Article",
+                        "x-schema-org-itemprop": "headline"
+                    },
+                    "meta_title": {
+                        "type": "string",
+                        "title": "Meta title",
+                        "description": "Information Meta title\n\n- **Microdata:** `http://schema.org/Article` \u2192 `name`\n- **Options:**\n    - **language** => en_US",
+                        "x-splash-type": "varchar",
+                        "format": "varchar",
+                        "x-schema-org-itemtype": "http://schema.org/Article",
+                        "x-schema-org-itemprop": "name"
+                    },
+                    "link_rewrite": {
+                        "type": "string",
+                        "title": "Friendly URL",
+                        "description": "Information Friendly URL\n\n- **Microdata:** `http://schema.org/Product` \u2192 `urlRewrite`\n- **Options:**\n    - **language** => en_US",
+                        "x-splash-type": "varchar",
+                        "format": "varchar",
+                        "x-schema-org-itemtype": "http://schema.org/Product",
+                        "x-schema-org-itemprop": "urlRewrite"
+                    },
+                    "meta_keywords": {
+                        "type": "string",
+                        "title": "Keywords",
+                        "description": "Information Keywords\n\n- **Microdata:** `http://schema.org/Article` \u2192 `keywords`\n- **Options:**\n    - **language** => en_US\n    - **shop** => all",
+                        "x-splash-type": "varchar",
+                        "format": "varchar",
+                        "x-schema-org-itemtype": "http://schema.org/Article",
+                        "x-schema-org-itemprop": "keywords"
+                    },
+                    "categories": {
+                        "type": "string",
+                        "title": "Categories",
+                        "description": "Categories Rewrite Url\n\n- **No Sync** \u2014 field prefers being left unchanged, without any synchronization\n- **Microdata:** `http://schema.org/Product` \u2192 `category`",
+                        "x-splash-type": "inline",
+                        "format": "inline",
+                        "x-schema-org-itemtype": "http://schema.org/Product",
+                        "x-schema-org-itemprop": "category",
+                        "enum": [
+                            "root",
+                            "home",
+                            "clothes",
+                            "accessories",
+                            "art",
+                            "men",
+                            "stationery",
+                            "women",
+                            "home-accessories"
+                        ]
+                    },
+                    "categories_names": {
+                        "type": "string",
+                        "title": "Categories Name",
+                        "description": "Categories Names\n\n- **No Sync** \u2014 field prefers being left unchanged, without any synchronization\n- **Microdata:** `http://schema.org/Product` \u2192 `categoryName`\n- **Options:**\n    - **language** => en_US",
+                        "x-splash-type": "inline",
+                        "format": "inline",
+                        "readOnly": true,
+                        "x-schema-org-itemtype": "http://schema.org/Product",
+                        "x-schema-org-itemprop": "categoryName",
+                        "enum": [
+                            "root",
+                            "home",
+                            "clothes",
+                            "accessories",
+                            "art",
+                            "men",
+                            "stationery",
+                            "women",
+                            "home-accessories"
+                        ]
+                    },
+                    "images": {
+                        "type": "array",
+                        "title": "Images",
+                        "x-splash-list": "images",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "image": {
+                                    "type": "string",
+                                    "title": "Images",
+                                    "description": "Images\n\n- **Microdata:** `http://schema.org/Product` \u2192 `image`\n- **Options:**\n    - **shop** => all",
+                                    "x-splash-type": "image@list",
+                                    "format": "image@list",
+                                    "x-schema-org-itemtype": "http://schema.org/Product",
+                                    "x-schema-org-itemprop": "image"
+                                },
+                                "position": {
+                                    "type": "integer",
+                                    "title": "Position",
+                                    "description": "Position\n\n- **Microdata:** `http://schema.org/Product` \u2192 `positionImage`\n- **Options:**\n    - **shop** => all\n- `\ud83e\uddea No Tests`",
+                                    "x-splash-type": "int@list",
+                                    "format": "int@list",
+                                    "x-schema-org-itemtype": "http://schema.org/Product",
+                                    "x-schema-org-itemprop": "positionImage"
+                                },
+                                "cover": {
+                                    "type": "boolean",
+                                    "title": "Cover",
+                                    "description": "Cover\n\n- **Microdata:** `http://schema.org/Product` \u2192 `isCover`\n- **Options:**\n    - **shop** => all\n- `\ud83e\uddea No Tests`",
+                                    "x-splash-type": "bool@list",
+                                    "format": "bool@list",
+                                    "x-schema-org-itemtype": "http://schema.org/Product",
+                                    "x-schema-org-itemprop": "isCover"
+                                },
+                                "visible": {
+                                    "type": "boolean",
+                                    "title": "Visible",
+                                    "description": "Visible\n\n- **Microdata:** `http://schema.org/Product` \u2192 `isVisibleImage`\n- **Options:**\n    - **shop** => all\n- `\ud83e\uddea No Tests`",
+                                    "x-splash-type": "bool@list",
+                                    "format": "bool@list",
+                                    "x-schema-org-itemtype": "http://schema.org/Product",
+                                    "x-schema-org-itemprop": "isVisibleImage"
+                                },
+                                "legend": {
+                                    "type": "string",
+                                    "title": "Caption",
+                                    "description": "Caption\n\n- **Microdata:** `http://schema.org/Product` \u2192 `imageName`\n- **Options:**\n    - **language** => en_US\n    - **shop** => all\n- `\ud83e\uddea No Tests`",
+                                    "x-splash-type": "varchar@list",
+                                    "format": "varchar@list",
+                                    "x-schema-org-itemtype": "http://schema.org/Product",
+                                    "x-schema-org-itemprop": "imageName"
+                                }
+                            }
+                        }
+                    },
+                    "variants": {
+                        "type": "array",
+                        "title": "Variants",
+                        "x-splash-list": "variants",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "id": {
+                                    "type": "string",
+                                    "format": "objectid::Product@list",
+                                    "title": "Variants",
+                                    "description": "Variants\n\n- **Microdata:** `http://schema.org/Product` \u2192 `Variants`\n- `\ud83e\uddea No Tests`",
+                                    "x-splash-type": "objectid::Product@list",
+                                    "x-schema-org-itemtype": "http://schema.org/Product",
+                                    "x-schema-org-itemprop": "Variants",
+                                    "example": "736::Product"
+                                },
+                                "sku": {
+                                    "type": "string",
+                                    "title": "Variant SKU",
+                                    "description": "Variant SKU\n\n- **Microdata:** `http://schema.org/Product` \u2192 `VariationName`",
+                                    "x-splash-type": "varchar@list",
+                                    "format": "varchar@list",
+                                    "readOnly": true,
+                                    "x-schema-org-itemtype": "http://schema.org/Product",
+                                    "x-schema-org-itemprop": "VariationName"
+                                }
+                            }
+                        }
+                    },
+                    "attributes": {
+                        "type": "array",
+                        "title": "Attributes",
+                        "x-splash-list": "attributes",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "code": {
+                                    "type": "string",
+                                    "title": "Code",
+                                    "description": "Code\n\n- **Microdata:** `http://schema.org/Product` \u2192 `VariantAttributeCode`\n- **Options:**\n    - **isLowerCase** => 1\n- `\ud83e\uddea No Tests`",
+                                    "x-splash-type": "varchar@list",
+                                    "format": "varchar@list",
+                                    "x-schema-org-itemtype": "http://schema.org/Product",
+                                    "x-schema-org-itemprop": "VariantAttributeCode"
+                                },
+                                "public_name": {
+                                    "type": "string",
+                                    "title": "Name",
+                                    "description": "Name\n\n- **Microdata:** `http://schema.org/Product` \u2192 `VariantAttributeName`\n- **Options:**\n    - **language** => en_US\n- `\ud83e\uddea No Tests`",
+                                    "x-splash-type": "varchar@list",
+                                    "format": "varchar@list",
+                                    "x-schema-org-itemtype": "http://schema.org/Product",
+                                    "x-schema-org-itemprop": "VariantAttributeName"
+                                },
+                                "name": {
+                                    "type": "string",
+                                    "title": "Value",
+                                    "description": "Value\n\n- **Microdata:** `http://schema.org/Product` \u2192 `VariantAttributeValue`\n- **Options:**\n    - **language** => en_US\n- `\ud83e\uddea No Tests`",
+                                    "x-splash-type": "varchar@list",
+                                    "format": "varchar@list",
+                                    "x-schema-org-itemtype": "http://schema.org/Product",
+                                    "x-schema-org-itemprop": "VariantAttributeValue"
+                                }
+                            }
+                        }
+                    }
+                },
+                "required": [
+                    "ref",
+                    "name"
+                ]
+            },
+            "ProductListItem": {
+                "type": "object",
+                "title": "Product (List Item)",
+                "description": "Fields returned by objects list requests \u2014 fields flagged `In List` only.",
+                "properties": {
+                    "ref": {
+                        "type": "string",
+                        "title": "Reference"
+                    },
+                    "supplier_reference": {
+                        "type": "string",
+                        "title": "Supplier reference"
+                    },
+                    "fullname": {
+                        "type": "string",
+                        "title": "Product Name with Options"
+                    },
+                    "stock": {
+                        "type": "integer",
+                        "title": "Stock"
+                    },
+                    "available_for_order": {
+                        "type": "boolean",
+                        "title": "Available for order"
+                    },
+                    "md5": {
+                        "type": "string",
+                        "title": "Md5"
+                    }
+                }
+            },
+            "Order": {
+                "type": "object",
+                "title": "Customer Order",
+                "description": "Prestashop Customers Order Object",
+                "x-splash-type": "Order",
+                "properties": {
+                    "date_add": {
+                        "type": "string",
+                        "format": "datetime",
+                        "title": "Creation date",
+                        "description": "Creation date\n\n- **Microdata:** `http://schema.org/DataFeedItem` \u2192 `dateCreated`",
+                        "x-splash-type": "datetime",
+                        "readOnly": true,
+                        "x-schema-org-itemtype": "http://schema.org/DataFeedItem",
+                        "x-schema-org-itemprop": "dateCreated",
+                        "example": "2026-09-25 11:07:55"
+                    },
+                    "date_upd": {
+                        "type": "string",
+                        "format": "datetime",
+                        "title": "Edited",
+                        "description": "Edited\n\n- **Microdata:** `http://schema.org/DataFeedItem` \u2192 `dateModified`",
+                        "x-splash-type": "datetime",
+                        "readOnly": true,
+                        "x-schema-org-itemtype": "http://schema.org/DataFeedItem",
+                        "x-schema-org-itemprop": "dateModified",
+                        "example": "2026-09-25 11:07:55"
+                    },
+                    "splash_id": {
+                        "type": "string",
+                        "title": "Splash Id",
+                        "description": "Splash Id\n\n- **Microdata:** `http://splashync.com/schemas` \u2192 `ObjectId`\n- **Options:**\n    - **shop** => all",
+                        "x-splash-type": "varchar",
+                        "format": "varchar",
+                        "x-schema-org-itemtype": "http://splashync.com/schemas",
+                        "x-schema-org-itemprop": "ObjectId"
+                    },
+                    "id_shop": {
+                        "type": "integer",
+                        "title": "Shop ID",
+                        "description": "Shop ID\n\n- **Microdata:** `http://schema.org/Author` \u2192 `identifier`",
+                        "x-splash-type": "int",
+                        "format": "int",
+                        "readOnly": true,
+                        "x-schema-org-itemtype": "http://schema.org/Author",
+                        "x-schema-org-itemprop": "identifier"
+                    },
+                    "shop_code": {
+                        "type": "string",
+                        "title": "Shop Code",
+                        "description": "Shop Code\n\n- **Microdata:** `http://schema.org/Author` \u2192 `alternateName`",
+                        "x-splash-type": "varchar",
+                        "format": "varchar",
+                        "readOnly": true,
+                        "x-schema-org-itemtype": "http://schema.org/Author",
+                        "x-schema-org-itemprop": "alternateName"
+                    },
+                    "shop_name": {
+                        "type": "string",
+                        "title": "Store name",
+                        "description": "Store name\n\n- **Microdata:** `http://schema.org/Author` \u2192 `name`",
+                        "x-splash-type": "varchar",
+                        "format": "varchar",
+                        "readOnly": true,
+                        "x-schema-org-itemtype": "http://schema.org/Author",
+                        "x-schema-org-itemprop": "name"
+                    },
+                    "shop_url": {
+                        "type": "string",
+                        "format": "url",
+                        "title": "Shop domain",
+                        "description": "Shop domain\n\n- **Microdata:** `http://schema.org/Author` \u2192 `url`",
+                        "x-splash-type": "url",
+                        "readOnly": true,
+                        "x-schema-org-itemtype": "http://schema.org/Author",
+                        "x-schema-org-itemprop": "url"
+                    },
+                    "id_customer": {
+                        "type": "string",
+                        "format": "objectid::ThirdParty",
+                        "title": "Customer ID",
+                        "description": "Customer ID\n\n- **Microdata:** `http://schema.org/Organization` \u2192 `ID`",
+                        "x-splash-type": "objectid::ThirdParty",
+                        "x-schema-org-itemtype": "http://schema.org/Organization",
+                        "x-schema-org-itemprop": "ID",
+                        "example": "723::ThirdParty"
+                    },
+                    "email": {
+                        "type": "string",
+                        "format": "email",
+                        "title": "Email address",
+                        "description": "Email address\n\n- **Microdata:** `http://schema.org/ContactPoint` \u2192 `email`\n- `\ud83d\udd0e Indexed`",
+                        "x-splash-type": "email",
+                        "readOnly": true,
+                        "x-schema-org-itemtype": "http://schema.org/ContactPoint",
+                        "x-schema-org-itemprop": "email"
+                    },
+                    "reference": {
+                        "type": "string",
+                        "title": "Reference",
+                        "description": "Reference\n\n- **Microdata:** `http://schema.org/Order` \u2192 `orderNumber`\n- **Options:**\n    - **maxLength** => 8\n- `\ud83d\udd11 Primary` `\ud83d\udccb In List`",
+                        "x-splash-type": "varchar",
+                        "format": "varchar",
+                        "x-schema-org-itemtype": "http://schema.org/Order",
+                        "x-schema-org-itemprop": "orderNumber"
+                    },
+                    "order_date": {
+                        "type": "string",
+                        "format": "date",
+                        "title": "Date",
+                        "description": "Date\n\n- **Microdata:** `http://schema.org/Order` \u2192 `orderDate`\n- `\ud83d\udccb In List`",
+                        "x-splash-type": "date",
+                        "readOnly": true,
+                        "x-schema-org-itemtype": "http://schema.org/Order",
+                        "x-schema-org-itemprop": "orderDate",
+                        "example": "2026-09-25"
+                    },
+                    "total_paid_tax_excl": {
+                        "type": "number",
+                        "title": "Total (Tax excl.) (?)",
+                        "description": "Total (Tax excl.) (?)\n\n- **Microdata:** `http://schema.org/Invoice` \u2192 `totalPaymentDue`\n- `\ud83d\udccb In List`",
+                        "x-splash-type": "double",
+                        "format": "double",
+                        "readOnly": true,
+                        "x-schema-org-itemtype": "http://schema.org/Invoice",
+                        "x-schema-org-itemprop": "totalPaymentDue"
+                    },
+                    "total_paid_tax_incl": {
+                        "type": "number",
+                        "title": "Total (Tax incl.) (?)",
+                        "description": "Total (Tax incl.) (?)\n\n- **Microdata:** `http://schema.org/Invoice` \u2192 `totalPaymentDueTaxIncluded`\n- `\ud83d\udccb In List`",
+                        "x-splash-type": "double",
+                        "format": "double",
+                        "readOnly": true,
+                        "x-schema-org-itemtype": "http://schema.org/Invoice",
+                        "x-schema-org-itemprop": "totalPaymentDueTaxIncluded"
+                    },
+                    "id_address_invoice": {
+                        "type": "string",
+                        "format": "objectid::Address",
+                        "title": "Billing Address ID",
+                        "description": "Billing Address ID\n\n- **Microdata:** `http://schema.org/Order` \u2192 `billingAddress`",
+                        "x-splash-type": "objectid::Address",
+                        "x-schema-org-itemtype": "http://schema.org/Order",
+                        "x-schema-org-itemprop": "billingAddress",
+                        "example": "587::Address"
+                    },
+                    "id_address_delivery": {
+                        "type": "string",
+                        "format": "objectid::Address",
+                        "title": "Shipping Address ID",
+                        "description": "Shipping Address ID\n\n- **Microdata:** `http://schema.org/Order` \u2192 `orderDelivery`",
+                        "x-splash-type": "objectid::Address",
+                        "x-schema-org-itemtype": "http://schema.org/Order",
+                        "x-schema-org-itemprop": "orderDelivery",
+                        "example": "471::Address"
+                    },
+                    "firstname": {
+                        "type": "string",
+                        "title": "First Name",
+                        "description": "First Name\n\n- **Microdata:** `http://schema.org/Person` \u2192 `familyName`",
+                        "x-splash-type": "varchar",
+                        "format": "varchar",
+                        "readOnly": true,
+                        "x-schema-org-itemtype": "http://schema.org/Person",
+                        "x-schema-org-itemprop": "familyName"
+                    },
+                    "lastname": {
+                        "type": "string",
+                        "title": "Last Name",
+                        "description": "Last Name\n\n- **Microdata:** `http://schema.org/Person` \u2192 `givenName`",
+                        "x-splash-type": "varchar",
+                        "format": "varchar",
+                        "readOnly": true,
+                        "x-schema-org-itemtype": "http://schema.org/Person",
+                        "x-schema-org-itemprop": "givenName"
+                    },
+                    "company": {
+                        "type": "string",
+                        "title": "Company",
+                        "description": "Company\n\n- **Microdata:** `http://schema.org/Organization` \u2192 `legalName`",
+                        "x-splash-type": "varchar",
+                        "format": "varchar",
+                        "readOnly": true,
+                        "x-schema-org-itemtype": "http://schema.org/Organization",
+                        "x-schema-org-itemprop": "legalName"
+                    },
+                    "fullname": {
+                        "type": "string",
+                        "title": "Contact Name",
+                        "description": "Contact Name\n\n- **Microdata:** `http://schema.org/PostalAddress` \u2192 `alternateName`",
+                        "x-splash-type": "varchar",
+                        "format": "varchar",
+                        "readOnly": true,
+                        "x-schema-org-itemtype": "http://schema.org/PostalAddress",
+                        "x-schema-org-itemprop": "alternateName"
+                    },
+                    "address1": {
+                        "type": "string",
+                        "title": "Address",
+                        "description": "Address\n\n- **Microdata:** `http://schema.org/PostalAddress` \u2192 `streetAddress`",
+                        "x-splash-type": "varchar",
+                        "format": "varchar",
+                        "readOnly": true,
+                        "x-schema-org-itemtype": "http://schema.org/PostalAddress",
+                        "x-schema-org-itemprop": "streetAddress"
+                    },
+                    "address2": {
+                        "type": "string",
+                        "title": "Address (2)",
+                        "description": "Address (2)\n\n- **Microdata:** `http://schema.org/PostalAddress` \u2192 `postOfficeBoxNumber`",
+                        "x-splash-type": "varchar",
+                        "format": "varchar",
+                        "readOnly": true,
+                        "x-schema-org-itemtype": "http://schema.org/PostalAddress",
+                        "x-schema-org-itemprop": "postOfficeBoxNumber"
+                    },
+                    "postcode": {
+                        "type": "string",
+                        "title": "Zip/Postal code",
+                        "description": "Zip/Postal code\n\n- **Microdata:** `http://schema.org/PostalAddress` \u2192 `postalCode`",
+                        "x-splash-type": "varchar",
+                        "format": "varchar",
+                        "readOnly": true,
+                        "x-schema-org-itemtype": "http://schema.org/PostalAddress",
+                        "x-schema-org-itemprop": "postalCode"
+                    },
+                    "city": {
+                        "type": "string",
+                        "title": "City",
+                        "description": "City\n\n- **Microdata:** `http://schema.org/PostalAddress` \u2192 `addressLocality`",
+                        "x-splash-type": "varchar",
+                        "format": "varchar",
+                        "readOnly": true,
+                        "x-schema-org-itemtype": "http://schema.org/PostalAddress",
+                        "x-schema-org-itemprop": "addressLocality"
+                    },
+                    "state": {
+                        "type": "string",
+                        "title": "State",
+                        "description": "State",
+                        "x-splash-type": "varchar",
+                        "format": "varchar",
+                        "readOnly": true
+                    },
+                    "id_state": {
+                        "type": "string",
+                        "format": "state",
+                        "title": "State (Code)",
+                        "description": "State (Code)\n\n- **Microdata:** `http://schema.org/PostalAddress` \u2192 `addressRegion`",
+                        "x-splash-type": "state",
+                        "readOnly": true,
+                        "x-schema-org-itemtype": "http://schema.org/PostalAddress",
+                        "x-schema-org-itemprop": "addressRegion"
+                    },
+                    "other": {
+                        "type": "string",
+                        "title": "Other",
+                        "description": "Other: Remarks, Relay Point Code, more...\n\n- **Microdata:** `http://schema.org/PostalAddress` \u2192 `description`",
+                        "x-splash-type": "varchar",
+                        "format": "varchar",
+                        "readOnly": true,
+                        "x-schema-org-itemtype": "http://schema.org/PostalAddress",
+                        "x-schema-org-itemprop": "description"
+                    },
+                    "country": {
+                        "type": "string",
+                        "title": "Country",
+                        "description": "Country",
+                        "x-splash-type": "varchar",
+                        "format": "varchar",
+                        "readOnly": true
+                    },
+                    "id_country": {
+                        "type": "string",
+                        "format": "country",
+                        "title": "Country (Code)",
+                        "description": "Country (Code)\n\n- **Microdata:** `http://schema.org/PostalAddress` \u2192 `addressCountry`",
+                        "x-splash-type": "country",
+                        "readOnly": true,
+                        "x-schema-org-itemtype": "http://schema.org/PostalAddress",
+                        "x-schema-org-itemprop": "addressCountry"
+                    },
+                    "phone": {
+                        "type": "string",
+                        "format": "phone",
+                        "title": "Home phone",
+                        "description": "Home phone\n\n- **Microdata:** `http://schema.org/PostalAddress` \u2192 `telephone`\n- `\ud83d\udd0e Indexed`",
+                        "x-splash-type": "phone",
+                        "readOnly": true,
+                        "x-schema-org-itemtype": "http://schema.org/PostalAddress",
+                        "x-schema-org-itemprop": "telephone",
+                        "example": "+33612345678"
+                    },
+                    "phone_mobile": {
+                        "type": "string",
+                        "format": "phone",
+                        "title": "Mobile phone",
+                        "description": "Mobile phone\n\n- **Microdata:** `http://schema.org/Person` \u2192 `telephone`\n- `\ud83d\udd0e Indexed`",
+                        "x-splash-type": "phone",
+                        "readOnly": true,
+                        "x-schema-org-itemtype": "http://schema.org/Person",
+                        "x-schema-org-itemprop": "telephone",
+                        "example": "+33612345678"
+                    },
+                    "carrier_name": {
+                        "type": "string",
+                        "title": "Shipping Method",
+                        "description": "Shipping Method\n\n- **Microdata:** `http://schema.org/ParcelDelivery` \u2192 `provider`",
+                        "x-splash-type": "varchar",
+                        "format": "varchar",
+                        "readOnly": true,
+                        "x-schema-org-itemtype": "http://schema.org/ParcelDelivery",
+                        "x-schema-org-itemprop": "provider"
+                    },
+                    "carrier_code": {
+                        "type": "string",
+                        "title": "Carrier Code",
+                        "description": "Carrier Code\n\n- **Microdata:** `http://schema.org/ParcelDelivery` \u2192 `identifier`",
+                        "x-splash-type": "varchar",
+                        "format": "varchar",
+                        "readOnly": true,
+                        "x-schema-org-itemtype": "http://schema.org/ParcelDelivery",
+                        "x-schema-org-itemprop": "identifier"
+                    },
+                    "track_number": {
+                        "type": "string",
+                        "title": "Tracking Number",
+                        "description": "Tracking Number\n\n- **Microdata:** `http://schema.org/ParcelDelivery` \u2192 `trackingNumber`\n- `\ud83d\udd0e Indexed`",
+                        "x-splash-type": "varchar",
+                        "format": "varchar",
+                        "x-schema-org-itemtype": "http://schema.org/ParcelDelivery",
+                        "x-schema-org-itemprop": "trackingNumber"
+                    },
+                    "track_url": {
+                        "type": "string",
+                        "format": "url",
+                        "title": "Tracking Url",
+                        "description": "Tracking Url\n\n- **Microdata:** `http://schema.org/ParcelDelivery` \u2192 `trackingUrl`",
+                        "x-splash-type": "url",
+                        "readOnly": true,
+                        "x-schema-org-itemtype": "http://schema.org/ParcelDelivery",
+                        "x-schema-org-itemprop": "trackingUrl"
+                    },
+                    "status": {
+                        "type": "string",
+                        "title": "Order status",
+                        "description": "Status of the order\n\n- **Microdata:** `http://schema.org/Order` \u2192 `orderStatus`",
+                        "x-splash-type": "varchar",
+                        "format": "varchar",
+                        "x-schema-org-itemtype": "http://schema.org/Order",
+                        "x-schema-org-itemprop": "orderStatus",
+                        "enum": [
+                            "OrderPaymentDue",
+                            "OrderCanceled",
+                            "OrderDelivered",
+                            "OrderProcessing",
+                            "OrderInTransit"
+                        ]
+                    },
+                    "isCanceled": {
+                        "type": "boolean",
+                        "title": "Order status Canceled",
+                        "description": "Order status Canceled\n\n- **Microdata:** `http://schema.org/OrderStatus` \u2192 `OrderCancelled`",
+                        "x-splash-type": "bool",
+                        "format": "bool",
+                        "readOnly": true,
+                        "x-schema-org-itemtype": "http://schema.org/OrderStatus",
+                        "x-schema-org-itemprop": "OrderCancelled"
+                    },
+                    "isCancelState": {
+                        "type": "boolean",
+                        "title": "Order status Canceled State",
+                        "description": "Order status Canceled State",
+                        "x-splash-type": "bool",
+                        "format": "bool",
+                        "readOnly": true
+                    },
+                    "isValidated": {
+                        "type": "boolean",
+                        "title": "Order status Validated",
+                        "description": "Order status Validated\n\n- **Microdata:** `http://schema.org/OrderStatus` \u2192 `OrderPaymentDone`",
+                        "x-splash-type": "bool",
+                        "format": "bool",
+                        "readOnly": true,
+                        "x-schema-org-itemtype": "http://schema.org/OrderStatus",
+                        "x-schema-org-itemprop": "OrderPaymentDone"
+                    },
+                    "isProcessing": {
+                        "type": "boolean",
+                        "title": "Order status Processing",
+                        "description": "Order status Processing\n\n- **Microdata:** `http://schema.org/OrderStatus` \u2192 `OrderProcessing`",
+                        "x-splash-type": "bool",
+                        "format": "bool",
+                        "readOnly": true,
+                        "x-schema-org-itemtype": "http://schema.org/OrderStatus",
+                        "x-schema-org-itemprop": "OrderProcessing"
+                    },
+                    "isClosed": {
+                        "type": "boolean",
+                        "title": "Order status Closed",
+                        "description": "Order status Closed\n\n- **Microdata:** `http://schema.org/OrderStatus` \u2192 `OrderDelivered`",
+                        "x-splash-type": "bool",
+                        "format": "bool",
+                        "readOnly": true,
+                        "x-schema-org-itemtype": "http://schema.org/OrderStatus",
+                        "x-schema-org-itemprop": "OrderDelivered"
+                    },
+                    "isPaid": {
+                        "type": "boolean",
+                        "title": "Order status Paid",
+                        "description": "Order status Paid\n\n- **Microdata:** `http://schema.org/OrderStatus` \u2192 `OrderPaid`",
+                        "x-splash-type": "bool",
+                        "format": "bool",
+                        "readOnly": true,
+                        "x-schema-org-itemtype": "http://schema.org/OrderStatus",
+                        "x-schema-org-itemprop": "OrderPaid"
+                    },
+                    "pdf_invoice": {
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/SplashFile"
+                            }
+                        ],
+                        "title": "Invoices",
+                        "description": "Invoices\n\n- **Microdata:** `http://schema.org/Order` \u2192 `invoicePdf`",
+                        "x-splash-type": "stream",
+                        "format": "stream",
+                        "readOnly": true,
+                        "x-schema-org-itemtype": "http://schema.org/Order",
+                        "x-schema-org-itemprop": "invoicePdf"
+                    },
+                    "pdf_delivery": {
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/SplashFile"
+                            }
+                        ],
+                        "title": "Delivery",
+                        "description": "Delivery\n\n- **Microdata:** `http://schema.org/Order` \u2192 `deliveryPdf`",
+                        "x-splash-type": "stream",
+                        "format": "stream",
+                        "readOnly": true,
+                        "x-schema-org-itemtype": "http://schema.org/Order",
+                        "x-schema-org-itemprop": "deliveryPdf"
+                    },
+                    "price_total": {
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/SplashPrice"
+                            }
+                        ],
+                        "title": "Order Total (?)",
+                        "description": "Order Total (?)\n\n- **Microdata:** `http://schema.org/Invoice` \u2192 `total`",
+                        "x-splash-type": "price",
+                        "format": "price",
+                        "readOnly": true,
+                        "x-schema-org-itemtype": "http://schema.org/Invoice",
+                        "x-schema-org-itemprop": "total",
+                        "example": {
+                            "base": 0,
+                            "ht": 40.93,
+                            "vat": 20,
+                            "tax": 8.19,
+                            "ttc": 49.12,
+                            "code": "EUR",
+                            "symbol": "\u20ac",
+                            "name": "Euro"
+                        }
+                    },
+                    "price_shipping": {
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/SplashPrice"
+                            }
+                        ],
+                        "title": "Order Shipping (?)",
+                        "description": "Order Shipping (?)\n\n- **Microdata:** `http://schema.org/Invoice` \u2192 `totalShipping`",
+                        "x-splash-type": "price",
+                        "format": "price",
+                        "readOnly": true,
+                        "x-schema-org-itemtype": "http://schema.org/Invoice",
+                        "x-schema-org-itemprop": "totalShipping",
+                        "example": {
+                            "base": 0,
+                            "ht": 183.66,
+                            "vat": 20,
+                            "tax": 36.73,
+                            "ttc": 220.39,
+                            "code": "EUR",
+                            "symbol": "\u20ac",
+                            "name": "Euro"
+                        }
+                    },
+                    "price_discount": {
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/SplashPrice"
+                            }
+                        ],
+                        "title": "Order Discounts (?)",
+                        "description": "Order Discounts (?)\n\n- **Microdata:** `http://schema.org/Invoice` \u2192 `totalDiscount`",
+                        "x-splash-type": "price",
+                        "format": "price",
+                        "readOnly": true,
+                        "x-schema-org-itemtype": "http://schema.org/Invoice",
+                        "x-schema-org-itemprop": "totalDiscount",
+                        "example": {
+                            "base": 0,
+                            "ht": 142.68,
+                            "vat": 20,
+                            "tax": 28.54,
+                            "ttc": 171.22,
+                            "code": "EUR",
+                            "symbol": "\u20ac",
+                            "name": "Euro"
+                        }
+                    },
+                    "lines": {
+                        "type": "array",
+                        "title": "Lines",
+                        "x-splash-list": "lines",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "product_name": {
+                                    "type": "string",
+                                    "title": "[L] Short description",
+                                    "description": "[L] Short description\n\n- **Microdata:** `http://schema.org/partOfInvoice` \u2192 `description`",
+                                    "x-splash-type": "varchar@list",
+                                    "format": "varchar@list",
+                                    "x-schema-org-itemtype": "http://schema.org/partOfInvoice",
+                                    "x-schema-org-itemprop": "description"
+                                },
+                                "product_id": {
+                                    "type": "string",
+                                    "format": "objectid::Product@list",
+                                    "title": "[L] Product ID",
+                                    "description": "[L] Product ID\n\n- **Microdata:** `http://schema.org/Product` \u2192 `productID`",
+                                    "x-splash-type": "objectid::Product@list",
+                                    "x-schema-org-itemtype": "http://schema.org/Product",
+                                    "x-schema-org-itemprop": "productID",
+                                    "example": "518::Product"
+                                },
+                                "product_reference": {
+                                    "type": "string",
+                                    "title": "[L] Reference",
+                                    "description": "[L] Reference\n\n- **Microdata:** `http://schema.org/Product` \u2192 `sku`",
+                                    "x-splash-type": "varchar@list",
+                                    "format": "varchar@list",
+                                    "readOnly": true,
+                                    "x-schema-org-itemtype": "http://schema.org/Product",
+                                    "x-schema-org-itemprop": "sku"
+                                },
+                                "product_quantity": {
+                                    "type": "integer",
+                                    "title": "[L] Quantity",
+                                    "description": "[L] Quantity\n\n- **Microdata:** `http://schema.org/QuantitativeValue` \u2192 `value`",
+                                    "x-splash-type": "int@list",
+                                    "format": "int@list",
+                                    "x-schema-org-itemtype": "http://schema.org/QuantitativeValue",
+                                    "x-schema-org-itemprop": "value"
+                                },
+                                "reduction_percent": {
+                                    "type": "number",
+                                    "title": "[L] Discount (%)",
+                                    "description": "[L] Discount (%)\n\n- **Microdata:** `http://schema.org/Order` \u2192 `discount`",
+                                    "x-splash-type": "double@list",
+                                    "format": "double@list",
+                                    "readOnly": true,
+                                    "x-schema-org-itemtype": "http://schema.org/Order",
+                                    "x-schema-org-itemprop": "discount"
+                                },
+                                "unit_price": {
+                                    "allOf": [
+                                        {
+                                            "$ref": "#/components/schemas/SplashPrice"
+                                        }
+                                    ],
+                                    "title": "[L] Price",
+                                    "description": "[L] Price\n\n- **Microdata:** `http://schema.org/PriceSpecification` \u2192 `price`",
+                                    "x-splash-type": "price@list",
+                                    "format": "price@list",
+                                    "x-schema-org-itemtype": "http://schema.org/PriceSpecification",
+                                    "x-schema-org-itemprop": "price",
+                                    "example": {
+                                        "base": 0,
+                                        "ht": 25.9,
+                                        "vat": 20,
+                                        "tax": 5.18,
+                                        "ttc": 31.08,
+                                        "code": "EUR",
+                                        "symbol": "\u20ac",
+                                        "name": "Euro"
+                                    }
+                                },
+                                "tax_name": {
+                                    "type": "string",
+                                    "title": "[L] Tax",
+                                    "description": "[L] Tax\n\n- **Microdata:** `http://schema.org/PriceSpecification` \u2192 `valueAddedTaxName`",
+                                    "x-splash-type": "varchar@list",
+                                    "format": "varchar@list",
+                                    "readOnly": true,
+                                    "x-schema-org-itemtype": "http://schema.org/PriceSpecification",
+                                    "x-schema-org-itemprop": "valueAddedTaxName"
+                                }
+                            }
+                        }
+                    },
+                    "payments": {
+                        "type": "array",
+                        "title": "Payments",
+                        "x-splash-list": "payments",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "mode": {
+                                    "type": "string",
+                                    "title": "Payment method",
+                                    "description": "Payment method\n\n- **Microdata:** `http://schema.org/Invoice` \u2192 `PaymentMethod`",
+                                    "x-splash-type": "varchar@list",
+                                    "format": "varchar@list",
+                                    "x-schema-org-itemtype": "http://schema.org/Invoice",
+                                    "x-schema-org-itemprop": "PaymentMethod",
+                                    "enum": [
+                                        "ByBankTransferInAdvance",
+                                        "CheckInAdvance",
+                                        "PayPal",
+                                        "AmazonPay",
+                                        "COD",
+                                        "CreditCard"
+                                    ]
+                                },
+                                "rawMode": {
+                                    "type": "string",
+                                    "title": "Payment method Raw",
+                                    "description": "Payment method Raw",
+                                    "x-splash-type": "varchar@list",
+                                    "format": "varchar@list",
+                                    "readOnly": true
+                                },
+                                "date": {
+                                    "type": "string",
+                                    "format": "date@list",
+                                    "title": "Date",
+                                    "description": "Date\n\n- **Microdata:** `http://schema.org/PaymentChargeSpecification` \u2192 `validFrom`",
+                                    "x-splash-type": "date@list",
+                                    "readOnly": true,
+                                    "x-schema-org-itemtype": "http://schema.org/PaymentChargeSpecification",
+                                    "x-schema-org-itemprop": "validFrom",
+                                    "example": "2026-09-25"
+                                },
+                                "number": {
+                                    "type": "string",
+                                    "title": "Transaction ID",
+                                    "description": "Transaction ID\n\n- **Microdata:** `http://schema.org/Invoice` \u2192 `paymentMethodId`",
+                                    "x-splash-type": "varchar@list",
+                                    "format": "varchar@list",
+                                    "x-schema-org-itemtype": "http://schema.org/Invoice",
+                                    "x-schema-org-itemprop": "paymentMethodId"
+                                },
+                                "amount": {
+                                    "type": "number",
+                                    "title": "Amount",
+                                    "description": "Amount\n\n- **Microdata:** `http://schema.org/PaymentChargeSpecification` \u2192 `price`",
+                                    "x-splash-type": "double@list",
+                                    "format": "double@list",
+                                    "x-schema-org-itemtype": "http://schema.org/PaymentChargeSpecification",
+                                    "x-schema-org-itemprop": "price"
+                                }
+                            }
+                        }
+                    }
+                },
+                "required": [
+                    "id_customer",
+                    "reference",
+                    "id_address_invoice",
+                    "id_address_delivery"
+                ]
+            },
+            "OrderListItem": {
+                "type": "object",
+                "title": "Customer Order (List Item)",
+                "description": "Fields returned by objects list requests \u2014 fields flagged `In List` only.",
+                "properties": {
+                    "reference": {
+                        "type": "string",
+                        "title": "Reference"
+                    },
+                    "order_date": {
+                        "type": "string",
+                        "format": "date",
+                        "title": "Date"
+                    },
+                    "total_paid_tax_excl": {
+                        "type": "number",
+                        "title": "Total (Tax excl.) (?)"
+                    },
+                    "total_paid_tax_incl": {
+                        "type": "number",
+                        "title": "Total (Tax incl.) (?)"
+                    }
+                }
+            },
+            "Invoice": {
+                "type": "object",
+                "title": "Customer Invoice",
+                "description": "Prestashop Customers Invoice Object",
+                "x-splash-type": "Invoice",
+                "properties": {
+                    "date_add": {
+                        "type": "string",
+                        "format": "datetime",
+                        "title": "Creation date",
+                        "description": "Creation date\n\n- **Microdata:** `http://schema.org/DataFeedItem` \u2192 `dateCreated`",
+                        "x-splash-type": "datetime",
+                        "readOnly": true,
+                        "x-schema-org-itemtype": "http://schema.org/DataFeedItem",
+                        "x-schema-org-itemprop": "dateCreated",
+                        "example": "2026-09-25 11:07:55"
+                    },
+                    "date_upd": {
+                        "type": "string",
+                        "format": "datetime",
+                        "title": "Edited",
+                        "description": "Edited\n\n- **Microdata:** `http://schema.org/DataFeedItem` \u2192 `dateModified`",
+                        "x-splash-type": "datetime",
+                        "readOnly": true,
+                        "x-schema-org-itemtype": "http://schema.org/DataFeedItem",
+                        "x-schema-org-itemprop": "dateModified",
+                        "example": "2026-09-25 11:07:55"
+                    },
+                    "splash_id": {
+                        "type": "string",
+                        "title": "Splash Id",
+                        "description": "Splash Id\n\n- **Microdata:** `http://splashync.com/schemas` \u2192 `ObjectId`\n- **Options:**\n    - **shop** => all",
+                        "x-splash-type": "varchar",
+                        "format": "varchar",
+                        "x-schema-org-itemtype": "http://splashync.com/schemas",
+                        "x-schema-org-itemprop": "ObjectId"
+                    },
+                    "id_shop": {
+                        "type": "integer",
+                        "title": "Shop ID",
+                        "description": "Shop ID\n\n- **Microdata:** `http://schema.org/Author` \u2192 `identifier`",
+                        "x-splash-type": "int",
+                        "format": "int",
+                        "readOnly": true,
+                        "x-schema-org-itemtype": "http://schema.org/Author",
+                        "x-schema-org-itemprop": "identifier"
+                    },
+                    "shop_code": {
+                        "type": "string",
+                        "title": "Shop Code",
+                        "description": "Shop Code\n\n- **Microdata:** `http://schema.org/Author` \u2192 `alternateName`",
+                        "x-splash-type": "varchar",
+                        "format": "varchar",
+                        "readOnly": true,
+                        "x-schema-org-itemtype": "http://schema.org/Author",
+                        "x-schema-org-itemprop": "alternateName"
+                    },
+                    "shop_name": {
+                        "type": "string",
+                        "title": "Store name",
+                        "description": "Store name\n\n- **Microdata:** `http://schema.org/Author` \u2192 `name`",
+                        "x-splash-type": "varchar",
+                        "format": "varchar",
+                        "readOnly": true,
+                        "x-schema-org-itemtype": "http://schema.org/Author",
+                        "x-schema-org-itemprop": "name"
+                    },
+                    "shop_url": {
+                        "type": "string",
+                        "format": "url",
+                        "title": "Shop domain",
+                        "description": "Shop domain\n\n- **Microdata:** `http://schema.org/Author` \u2192 `url`",
+                        "x-splash-type": "url",
+                        "readOnly": true,
+                        "x-schema-org-itemtype": "http://schema.org/Author",
+                        "x-schema-org-itemprop": "url"
+                    },
+                    "id_customer": {
+                        "type": "string",
+                        "format": "objectid::ThirdParty",
+                        "title": "Customer ID",
+                        "description": "Customer ID\n\n- **Microdata:** `http://schema.org/Invoice` \u2192 `customer`",
+                        "x-splash-type": "objectid::ThirdParty",
+                        "x-schema-org-itemtype": "http://schema.org/Invoice",
+                        "x-schema-org-itemprop": "customer",
+                        "example": "59::ThirdParty"
+                    },
+                    "email": {
+                        "type": "string",
+                        "format": "email",
+                        "title": "Email address",
+                        "description": "Email address\n\n- **Microdata:** `http://schema.org/ContactPoint` \u2192 `email`\n- `\ud83d\udd0e Indexed`",
+                        "x-splash-type": "email",
+                        "readOnly": true,
+                        "x-schema-org-itemtype": "http://schema.org/ContactPoint",
+                        "x-schema-org-itemprop": "email"
+                    },
+                    "reference": {
+                        "type": "string",
+                        "title": "Reference",
+                        "description": "Reference\n\n- **Microdata:** `http://schema.org/Order` \u2192 `orderNumber`\n- **Options:**\n    - **maxLength** => 8\n- `\ud83d\udd0e Indexed` `\ud83d\udccb In List`",
+                        "x-splash-type": "varchar",
+                        "format": "varchar",
+                        "x-schema-org-itemtype": "http://schema.org/Order",
+                        "x-schema-org-itemprop": "orderNumber"
+                    },
+                    "order_date": {
+                        "type": "string",
+                        "format": "date",
+                        "title": "Date",
+                        "description": "Date\n\n- **Microdata:** `http://schema.org/Order` \u2192 `orderDate`\n- `\ud83d\udccb In List`",
+                        "x-splash-type": "date",
+                        "readOnly": true,
+                        "x-schema-org-itemtype": "http://schema.org/Order",
+                        "x-schema-org-itemprop": "orderDate",
+                        "example": "2026-09-25"
+                    },
+                    "total_paid_tax_excl": {
+                        "type": "number",
+                        "title": "Total (Tax excl.) (?)",
+                        "description": "Total (Tax excl.) (?)\n\n- **Microdata:** `http://schema.org/Invoice` \u2192 `totalPaymentDue`\n- `\ud83d\udccb In List`",
+                        "x-splash-type": "double",
+                        "format": "double",
+                        "readOnly": true,
+                        "x-schema-org-itemtype": "http://schema.org/Invoice",
+                        "x-schema-org-itemprop": "totalPaymentDue"
+                    },
+                    "total_paid_tax_incl": {
+                        "type": "number",
+                        "title": "Total (Tax incl.) (?)",
+                        "description": "Total (Tax incl.) (?)\n\n- **Microdata:** `http://schema.org/Invoice` \u2192 `totalPaymentDueTaxIncluded`\n- `\ud83d\udccb In List`",
+                        "x-splash-type": "double",
+                        "format": "double",
+                        "readOnly": true,
+                        "x-schema-org-itemtype": "http://schema.org/Invoice",
+                        "x-schema-org-itemprop": "totalPaymentDueTaxIncluded"
+                    },
+                    "id_address_invoice": {
+                        "type": "string",
+                        "format": "objectid::Address",
+                        "title": "Billing Address ID",
+                        "description": "Billing Address ID\n\n- **Microdata:** `http://schema.org/Order` \u2192 `billingAddress`",
+                        "x-splash-type": "objectid::Address",
+                        "x-schema-org-itemtype": "http://schema.org/Order",
+                        "x-schema-org-itemprop": "billingAddress",
+                        "example": "75::Address"
+                    },
+                    "id_address_delivery": {
+                        "type": "string",
+                        "format": "objectid::Address",
+                        "title": "Shipping Address ID",
+                        "description": "Shipping Address ID\n\n- **Microdata:** `http://schema.org/Order` \u2192 `orderDelivery`",
+                        "x-splash-type": "objectid::Address",
+                        "x-schema-org-itemtype": "http://schema.org/Order",
+                        "x-schema-org-itemprop": "orderDelivery",
+                        "example": "396::Address"
+                    },
+                    "id_order": {
+                        "type": "string",
+                        "format": "objectid::Order",
+                        "title": "Order",
+                        "description": "Order\n\n- **Microdata:** `http://schema.org/Invoice` \u2192 `referencesOrder`",
+                        "x-splash-type": "objectid::Order",
+                        "readOnly": true,
+                        "x-schema-org-itemtype": "http://schema.org/Invoice",
+                        "x-schema-org-itemprop": "referencesOrder",
+                        "example": "732::Order"
+                    },
+                    "number": {
+                        "type": "string",
+                        "title": "Invoice number",
+                        "description": "Invoice number\n\n- **Microdata:** `http://schema.org/Invoice` \u2192 `confirmationNumber`\n- `\ud83d\udd0e Indexed` `\ud83d\udccb In List`",
+                        "x-splash-type": "varchar",
+                        "format": "varchar",
+                        "readOnly": true,
+                        "x-schema-org-itemtype": "http://schema.org/Invoice",
+                        "x-schema-org-itemprop": "confirmationNumber"
+                    },
+                    "status": {
+                        "type": "string",
+                        "title": "Status",
+                        "description": "Status\n\n- **Microdata:** `http://schema.org/Invoice` \u2192 `paymentStatus`\n- `\ud83e\uddea No Tests`",
+                        "x-splash-type": "varchar",
+                        "format": "varchar",
+                        "readOnly": true,
+                        "x-schema-org-itemtype": "http://schema.org/Invoice",
+                        "x-schema-org-itemprop": "paymentStatus"
+                    },
+                    "isCanceled": {
+                        "type": "boolean",
+                        "title": "Status Canceled",
+                        "description": "Status Canceled\n\n- **Microdata:** `http://schema.org/PaymentStatusType` \u2192 `PaymentDeclined`",
+                        "x-splash-type": "bool",
+                        "format": "bool",
+                        "readOnly": true,
+                        "x-schema-org-itemtype": "http://schema.org/PaymentStatusType",
+                        "x-schema-org-itemprop": "PaymentDeclined"
+                    },
+                    "isValidated": {
+                        "type": "boolean",
+                        "title": "Status Valid",
+                        "description": "Status Valid\n\n- **Microdata:** `http://schema.org/PaymentStatusType` \u2192 `PaymentDue`",
+                        "x-splash-type": "bool",
+                        "format": "bool",
+                        "readOnly": true,
+                        "x-schema-org-itemtype": "http://schema.org/PaymentStatusType",
+                        "x-schema-org-itemprop": "PaymentDue"
+                    },
+                    "isPaid": {
+                        "type": "boolean",
+                        "title": "Status Paid",
+                        "description": "Status Paid\n\n- **Microdata:** `http://schema.org/PaymentStatusType` \u2192 `PaymentComplete`\n- `\ud83e\uddea No Tests`",
+                        "x-splash-type": "bool",
+                        "format": "bool",
+                        "readOnly": true,
+                        "x-schema-org-itemtype": "http://schema.org/PaymentStatusType",
+                        "x-schema-org-itemprop": "PaymentComplete"
+                    },
+                    "lines": {
+                        "type": "array",
+                        "title": "Lines",
+                        "x-splash-list": "lines",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "product_name": {
+                                    "type": "string",
+                                    "title": "[L] Short description",
+                                    "description": "[L] Short description\n\n- **Microdata:** `http://schema.org/partOfInvoice` \u2192 `description`",
+                                    "x-splash-type": "varchar@list",
+                                    "format": "varchar@list",
+                                    "x-schema-org-itemtype": "http://schema.org/partOfInvoice",
+                                    "x-schema-org-itemprop": "description"
+                                },
+                                "product_id": {
+                                    "type": "string",
+                                    "format": "objectid::Product@list",
+                                    "title": "[L] Product ID",
+                                    "description": "[L] Product ID\n\n- **Microdata:** `http://schema.org/Product` \u2192 `productID`",
+                                    "x-splash-type": "objectid::Product@list",
+                                    "x-schema-org-itemtype": "http://schema.org/Product",
+                                    "x-schema-org-itemprop": "productID",
+                                    "example": "397::Product"
+                                },
+                                "product_reference": {
+                                    "type": "string",
+                                    "title": "[L] Reference",
+                                    "description": "[L] Reference\n\n- **Microdata:** `http://schema.org/Product` \u2192 `sku`",
+                                    "x-splash-type": "varchar@list",
+                                    "format": "varchar@list",
+                                    "readOnly": true,
+                                    "x-schema-org-itemtype": "http://schema.org/Product",
+                                    "x-schema-org-itemprop": "sku"
+                                },
+                                "product_quantity": {
+                                    "type": "integer",
+                                    "title": "[L] Quantity",
+                                    "description": "[L] Quantity\n\n- **Microdata:** `http://schema.org/QuantitativeValue` \u2192 `value`",
+                                    "x-splash-type": "int@list",
+                                    "format": "int@list",
+                                    "x-schema-org-itemtype": "http://schema.org/QuantitativeValue",
+                                    "x-schema-org-itemprop": "value"
+                                },
+                                "reduction_percent": {
+                                    "type": "number",
+                                    "title": "[L] Discount (%)",
+                                    "description": "[L] Discount (%)\n\n- **Microdata:** `http://schema.org/Order` \u2192 `discount`",
+                                    "x-splash-type": "double@list",
+                                    "format": "double@list",
+                                    "readOnly": true,
+                                    "x-schema-org-itemtype": "http://schema.org/Order",
+                                    "x-schema-org-itemprop": "discount"
+                                },
+                                "unit_price": {
+                                    "allOf": [
+                                        {
+                                            "$ref": "#/components/schemas/SplashPrice"
+                                        }
+                                    ],
+                                    "title": "[L] Price",
+                                    "description": "[L] Price\n\n- **Microdata:** `http://schema.org/PriceSpecification` \u2192 `price`",
+                                    "x-splash-type": "price@list",
+                                    "format": "price@list",
+                                    "x-schema-org-itemtype": "http://schema.org/PriceSpecification",
+                                    "x-schema-org-itemprop": "price",
+                                    "example": {
+                                        "base": 0,
+                                        "ht": 104.77,
+                                        "vat": 20,
+                                        "tax": 20.95,
+                                        "ttc": 125.72,
+                                        "code": "EUR",
+                                        "symbol": "\u20ac",
+                                        "name": "Euro"
+                                    }
+                                },
+                                "tax_name": {
+                                    "type": "string",
+                                    "title": "[L] Tax",
+                                    "description": "[L] Tax\n\n- **Microdata:** `http://schema.org/PriceSpecification` \u2192 `valueAddedTaxName`",
+                                    "x-splash-type": "varchar@list",
+                                    "format": "varchar@list",
+                                    "readOnly": true,
+                                    "x-schema-org-itemtype": "http://schema.org/PriceSpecification",
+                                    "x-schema-org-itemprop": "valueAddedTaxName"
+                                }
+                            }
+                        }
+                    },
+                    "payments": {
+                        "type": "array",
+                        "title": "Payments",
+                        "x-splash-list": "payments",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "mode": {
+                                    "type": "string",
+                                    "title": "Payment method",
+                                    "description": "Payment method\n\n- **Microdata:** `http://schema.org/Invoice` \u2192 `PaymentMethod`",
+                                    "x-splash-type": "varchar@list",
+                                    "format": "varchar@list",
+                                    "x-schema-org-itemtype": "http://schema.org/Invoice",
+                                    "x-schema-org-itemprop": "PaymentMethod",
+                                    "enum": [
+                                        "ByBankTransferInAdvance",
+                                        "CheckInAdvance",
+                                        "PayPal",
+                                        "AmazonPay",
+                                        "COD",
+                                        "CreditCard"
+                                    ]
+                                },
+                                "rawMode": {
+                                    "type": "string",
+                                    "title": "Payment method Raw",
+                                    "description": "Payment method Raw",
+                                    "x-splash-type": "varchar@list",
+                                    "format": "varchar@list",
+                                    "readOnly": true
+                                },
+                                "date": {
+                                    "type": "string",
+                                    "format": "date@list",
+                                    "title": "Date",
+                                    "description": "Date\n\n- **Microdata:** `http://schema.org/PaymentChargeSpecification` \u2192 `validFrom`",
+                                    "x-splash-type": "date@list",
+                                    "readOnly": true,
+                                    "x-schema-org-itemtype": "http://schema.org/PaymentChargeSpecification",
+                                    "x-schema-org-itemprop": "validFrom",
+                                    "example": "2026-09-25"
+                                },
+                                "number": {
+                                    "type": "string",
+                                    "title": "Transaction ID",
+                                    "description": "Transaction ID\n\n- **Microdata:** `http://schema.org/Invoice` \u2192 `paymentMethodId`",
+                                    "x-splash-type": "varchar@list",
+                                    "format": "varchar@list",
+                                    "x-schema-org-itemtype": "http://schema.org/Invoice",
+                                    "x-schema-org-itemprop": "paymentMethodId"
+                                },
+                                "amount": {
+                                    "type": "number",
+                                    "title": "Amount",
+                                    "description": "Amount\n\n- **Microdata:** `http://schema.org/PaymentChargeSpecification` \u2192 `price`",
+                                    "x-splash-type": "double@list",
+                                    "format": "double@list",
+                                    "x-schema-org-itemtype": "http://schema.org/PaymentChargeSpecification",
+                                    "x-schema-org-itemprop": "price"
+                                }
+                            }
+                        }
+                    }
+                },
+                "required": [
+                    "id_customer",
+                    "reference",
+                    "id_address_invoice",
+                    "id_address_delivery"
+                ]
+            },
+            "InvoiceListItem": {
+                "type": "object",
+                "title": "Customer Invoice (List Item)",
+                "description": "Fields returned by objects list requests \u2014 fields flagged `In List` only.",
+                "properties": {
+                    "reference": {
+                        "type": "string",
+                        "title": "Reference"
+                    },
+                    "order_date": {
+                        "type": "string",
+                        "format": "date",
+                        "title": "Date"
+                    },
+                    "total_paid_tax_excl": {
+                        "type": "number",
+                        "title": "Total (Tax excl.) (?)"
+                    },
+                    "total_paid_tax_incl": {
+                        "type": "number",
+                        "title": "Total (Tax incl.) (?)"
+                    },
+                    "number": {
+                        "type": "string",
+                        "title": "Invoice number"
+                    }
+                }
+            },
+            "Address": {
+                "type": "object",
+                "title": "Address",
+                "description": "Prestashop Customers Address Object",
+                "x-splash-type": "Address",
+                "properties": {
+                    "date_add": {
+                        "type": "string",
+                        "format": "datetime",
+                        "title": "Creation date",
+                        "description": "Creation date\n\n- **Microdata:** `http://schema.org/DataFeedItem` \u2192 `dateCreated`",
+                        "x-splash-type": "datetime",
+                        "readOnly": true,
+                        "x-schema-org-itemtype": "http://schema.org/DataFeedItem",
+                        "x-schema-org-itemprop": "dateCreated",
+                        "example": "2026-09-25 11:07:55"
+                    },
+                    "date_upd": {
+                        "type": "string",
+                        "format": "datetime",
+                        "title": "Edited",
+                        "description": "Edited\n\n- **Microdata:** `http://schema.org/DataFeedItem` \u2192 `dateModified`",
+                        "x-splash-type": "datetime",
+                        "readOnly": true,
+                        "x-schema-org-itemtype": "http://schema.org/DataFeedItem",
+                        "x-schema-org-itemprop": "dateModified",
+                        "example": "2026-09-25 11:07:55"
+                    },
+                    "splash_id": {
+                        "type": "string",
+                        "title": "Splash Id",
+                        "description": "Splash Id\n\n- **Microdata:** `http://splashync.com/schemas` \u2192 `ObjectId`\n- **Options:**\n    - **shop** => all",
+                        "x-splash-type": "varchar",
+                        "format": "varchar",
+                        "x-schema-org-itemtype": "http://splashync.com/schemas",
+                        "x-schema-org-itemprop": "ObjectId"
+                    },
+                    "id_shop": {
+                        "type": "integer",
+                        "title": "Shop ID",
+                        "description": "Shop ID\n\n- **Microdata:** `http://schema.org/Author` \u2192 `identifier`",
+                        "x-splash-type": "int",
+                        "format": "int",
+                        "readOnly": true,
+                        "x-schema-org-itemtype": "http://schema.org/Author",
+                        "x-schema-org-itemprop": "identifier"
+                    },
+                    "shop_code": {
+                        "type": "string",
+                        "title": "Shop Code",
+                        "description": "Shop Code\n\n- **Microdata:** `http://schema.org/Author` \u2192 `alternateName`",
+                        "x-splash-type": "varchar",
+                        "format": "varchar",
+                        "readOnly": true,
+                        "x-schema-org-itemtype": "http://schema.org/Author",
+                        "x-schema-org-itemprop": "alternateName"
+                    },
+                    "shop_name": {
+                        "type": "string",
+                        "title": "Store name",
+                        "description": "Store name\n\n- **Microdata:** `http://schema.org/Author` \u2192 `name`",
+                        "x-splash-type": "varchar",
+                        "format": "varchar",
+                        "readOnly": true,
+                        "x-schema-org-itemtype": "http://schema.org/Author",
+                        "x-schema-org-itemprop": "name"
+                    },
+                    "shop_url": {
+                        "type": "string",
+                        "format": "url",
+                        "title": "Shop domain",
+                        "description": "Shop domain\n\n- **Microdata:** `http://schema.org/Author` \u2192 `url`",
+                        "x-splash-type": "url",
+                        "readOnly": true,
+                        "x-schema-org-itemtype": "http://schema.org/Author",
+                        "x-schema-org-itemprop": "url"
+                    },
+                    "alias": {
+                        "type": "string",
+                        "title": "Address alias",
+                        "description": "Address alias\n\n- **Microdata:** `http://schema.org/PostalAddress` \u2192 `name`",
+                        "x-splash-type": "varchar",
+                        "format": "varchar",
+                        "x-schema-org-itemtype": "http://schema.org/PostalAddress",
+                        "x-schema-org-itemprop": "name"
+                    },
+                    "id_customer": {
+                        "type": "string",
+                        "format": "objectid::ThirdParty",
+                        "title": "Customer ID",
+                        "description": "Customer ID\n\n- **Microdata:** `http://schema.org/Organization` \u2192 `ID`",
+                        "x-splash-type": "objectid::ThirdParty",
+                        "x-schema-org-itemtype": "http://schema.org/Organization",
+                        "x-schema-org-itemprop": "ID",
+                        "example": "694::ThirdParty"
+                    },
+                    "company": {
+                        "type": "string",
+                        "title": "Company",
+                        "description": "Company\n\n- **Microdata:** `http://schema.org/Organization` \u2192 `legalName`\n- `\ud83d\udccb In List`",
+                        "x-splash-type": "varchar",
+                        "format": "varchar",
+                        "x-schema-org-itemtype": "http://schema.org/Organization",
+                        "x-schema-org-itemprop": "legalName"
+                    },
+                    "firstname": {
+                        "type": "string",
+                        "title": "First name",
+                        "description": "First name\n\n- **Microdata:** `http://schema.org/Person` \u2192 `familyName`\n- `\ud83d\udccb In List`",
+                        "x-splash-type": "varchar",
+                        "format": "varchar",
+                        "x-schema-org-itemtype": "http://schema.org/Person",
+                        "x-schema-org-itemprop": "familyName"
+                    },
+                    "lastname": {
+                        "type": "string",
+                        "title": "Last name",
+                        "description": "Last name\n\n- **Microdata:** `http://schema.org/Person` \u2192 `givenName`\n- `\ud83d\udccb In List`",
+                        "x-splash-type": "varchar",
+                        "format": "varchar",
+                        "x-schema-org-itemtype": "http://schema.org/Person",
+                        "x-schema-org-itemprop": "givenName"
+                    },
+                    "active": {
+                        "type": "boolean",
+                        "title": "Is Active",
+                        "description": "This Address is not hidden for Customer\n\n- **Microdata:** `http://schema.org/Person` \u2192 `active`",
+                        "x-splash-type": "bool",
+                        "format": "bool",
+                        "readOnly": true,
+                        "x-schema-org-itemtype": "http://schema.org/Person",
+                        "x-schema-org-itemprop": "active"
+                    },
+                    "deleted": {
+                        "type": "boolean",
+                        "title": "Is Deleted",
+                        "description": "This Address is use and Deleted. Hidden to Customer",
+                        "x-splash-type": "bool",
+                        "format": "bool",
+                        "readOnly": true
+                    },
+                    "address1": {
+                        "type": "string",
+                        "title": "Address",
+                        "description": "Address\n\n- **Microdata:** `http://schema.org/PostalAddress` \u2192 `streetAddress`",
+                        "x-splash-type": "varchar",
+                        "format": "varchar",
+                        "x-schema-org-itemtype": "http://schema.org/PostalAddress",
+                        "x-schema-org-itemprop": "streetAddress"
+                    },
+                    "address2": {
+                        "type": "string",
+                        "title": "Address (2)",
+                        "description": "Address (2)\n\n- **Microdata:** `http://schema.org/PostalAddress` \u2192 `postOfficeBoxNumber`",
+                        "x-splash-type": "varchar",
+                        "format": "varchar",
+                        "x-schema-org-itemtype": "http://schema.org/PostalAddress",
+                        "x-schema-org-itemprop": "postOfficeBoxNumber"
+                    },
+                    "postcode": {
+                        "type": "string",
+                        "title": "Zip/Postal code",
+                        "description": "Zip/Postal code\n\n- **Microdata:** `http://schema.org/PostalAddress` \u2192 `postalCode`\n- **Options:**\n    - **maxLength** => 12",
+                        "x-splash-type": "varchar",
+                        "format": "varchar",
+                        "x-schema-org-itemtype": "http://schema.org/PostalAddress",
+                        "x-schema-org-itemprop": "postalCode"
+                    },
+                    "city": {
+                        "type": "string",
+                        "title": "City",
+                        "description": "City\n\n- **Microdata:** `http://schema.org/PostalAddress` \u2192 `addressLocality`\n- `\ud83d\udccb In List`",
+                        "x-splash-type": "varchar",
+                        "format": "varchar",
+                        "x-schema-org-itemtype": "http://schema.org/PostalAddress",
+                        "x-schema-org-itemprop": "addressLocality"
+                    },
+                    "state": {
+                        "type": "string",
+                        "title": "State",
+                        "description": "State",
+                        "x-splash-type": "varchar",
+                        "format": "varchar",
+                        "readOnly": true
+                    },
+                    "id_state": {
+                        "type": "string",
+                        "format": "state",
+                        "title": "State (Code)",
+                        "description": "State (Code)\n\n- **Microdata:** `http://schema.org/PostalAddress` \u2192 `addressRegion`",
+                        "x-splash-type": "state",
+                        "x-schema-org-itemtype": "http://schema.org/PostalAddress",
+                        "x-schema-org-itemprop": "addressRegion"
+                    },
+                    "country": {
+                        "type": "string",
+                        "title": "Country",
+                        "description": "Country\n\n- `\ud83d\udccb In List`",
+                        "x-splash-type": "varchar",
+                        "format": "varchar",
+                        "readOnly": true
+                    },
+                    "id_country": {
+                        "type": "string",
+                        "format": "country",
+                        "title": "Country (Code)",
+                        "description": "Country (Code)\n\n- **Microdata:** `http://schema.org/PostalAddress` \u2192 `addressCountry`",
+                        "x-splash-type": "country",
+                        "x-schema-org-itemtype": "http://schema.org/PostalAddress",
+                        "x-schema-org-itemprop": "addressCountry"
+                    },
+                    "phone": {
+                        "type": "string",
+                        "format": "phone",
+                        "title": "Home phone",
+                        "description": "Home phone\n\n- **Microdata:** `http://schema.org/PostalAddress` \u2192 `telephone`",
+                        "x-splash-type": "phone",
+                        "x-schema-org-itemtype": "http://schema.org/PostalAddress",
+                        "x-schema-org-itemprop": "telephone",
+                        "example": "+33612345678"
+                    },
+                    "phone_mobile": {
+                        "type": "string",
+                        "format": "phone",
+                        "title": "Mobile phone",
+                        "description": "Mobile phone\n\n- **Microdata:** `http://schema.org/Person` \u2192 `telephone`",
+                        "x-splash-type": "phone",
+                        "x-schema-org-itemtype": "http://schema.org/Person",
+                        "x-schema-org-itemprop": "telephone",
+                        "example": "+33612345678"
+                    },
+                    "dni": {
+                        "type": "string",
+                        "title": "Company ID Number",
+                        "description": "Company ID Number\n\n- **Microdata:** `http://schema.org/Organization` \u2192 `taxID`\n- `\ud83e\uddea No Tests`",
+                        "x-splash-type": "varchar",
+                        "format": "varchar",
+                        "x-schema-org-itemtype": "http://schema.org/Organization",
+                        "x-schema-org-itemprop": "taxID"
+                    },
+                    "vat_number": {
+                        "type": "string",
+                        "title": "VAT number",
+                        "description": "VAT number\n\n- **Microdata:** `http://schema.org/Organization` \u2192 `vatID`\n- `\ud83e\uddea No Tests`",
+                        "x-splash-type": "varchar",
+                        "format": "varchar",
+                        "x-schema-org-itemtype": "http://schema.org/Organization",
+                        "x-schema-org-itemprop": "vatID"
+                    },
+                    "other": {
+                        "type": "string",
+                        "title": "Note",
+                        "description": "Note\n\n- **Microdata:** `http://schema.org/PostalAddress` \u2192 `description`",
+                        "x-splash-type": "varchar",
+                        "format": "varchar",
+                        "x-schema-org-itemtype": "http://schema.org/PostalAddress",
+                        "x-schema-org-itemprop": "description"
+                    },
+                    "relay_point_code": {
+                        "type": "string",
+                        "title": "Estimated Relay Point Code",
+                        "description": "Estimated Relay Point Code\n\n- **Microdata:** `http://schema.org/PostalAddress` \u2192 `identifier`",
+                        "x-splash-type": "varchar",
+                        "format": "varchar",
+                        "readOnly": true,
+                        "x-schema-org-itemtype": "http://schema.org/PostalAddress",
+                        "x-schema-org-itemprop": "identifier"
+                    }
+                },
+                "required": [
+                    "id_customer",
+                    "firstname",
+                    "lastname",
+                    "address1",
+                    "postcode",
+                    "city",
+                    "id_country"
+                ]
+            },
+            "AddressListItem": {
+                "type": "object",
+                "title": "Address (List Item)",
+                "description": "Fields returned by objects list requests \u2014 fields flagged `In List` only.",
+                "properties": {
+                    "company": {
+                        "type": "string",
+                        "title": "Company"
+                    },
+                    "firstname": {
+                        "type": "string",
+                        "title": "First name"
+                    },
+                    "lastname": {
+                        "type": "string",
+                        "title": "Last name"
+                    },
+                    "city": {
+                        "type": "string",
+                        "title": "City"
+                    },
+                    "country": {
+                        "type": "string",
+                        "title": "Country"
+                    }
+                }
+            }
+        }
+    }
+}
