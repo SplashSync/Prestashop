@@ -500,7 +500,7 @@ trait ImagesTrait
             $current = $psImage->legend[$langId] ?? null;
             /** @var null|string $newValue */
             $newValue = $imgArray[$arrayKey];
-            if ($current === $newValue) {
+            if (($current === $newValue) || empty($newValue)) {
                 continue;
             }
             //====================================================================///
