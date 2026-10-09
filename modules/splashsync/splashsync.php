@@ -172,7 +172,8 @@ class SplashSync extends Module
         // Register Module Products Attributes Hooks
         if (!$this->registerHook('actionObjectCombinationAddAfter') ||
             !$this->registerHook('actionObjectCombinationUpdateAfter') ||
-            !$this->registerHook('actionObjectCombinationDeleteAfter')
+            !$this->registerHook('actionObjectCombinationDeleteAfter') ||
+            !$this->registerHook('actionProductAttributeUpdate')
         ) {
             return false;
         }
