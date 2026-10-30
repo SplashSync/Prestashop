@@ -169,6 +169,14 @@ trait HooksTrait
         // Log
         $this->debugHook(__FUNCTION__, 'Product Stock Updated on Prestashop');
         //====================================================================//
+        // Forced Update without any Real Stock Change (PS 8.1+)
+        if (array_key_exists('delta_quantity', $params)
+            && (null !== $params['delta_quantity'])
+            && (0 === (int) $params['delta_quantity'])
+        ) {
+            return true;
+        }
+        //====================================================================//
         // On Product Admin Page stock Update
         if (!isset($params['cart'])) {
             //====================================================================//
