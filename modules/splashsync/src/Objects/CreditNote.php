@@ -61,6 +61,7 @@ class CreditNote extends AbstractObject
 
     // Prestashop Order Traits
     use Order\CoreTrait;
+    use Order\ReferenceTrait;
     use Order\AddressTrait;
     use Order\PaymentsTrait;
 

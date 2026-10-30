@@ -60,6 +60,7 @@ class Invoice extends AbstractObject
 
     // Prestashop Order Traits
     use Order\CoreTrait;
+    use Order\ReferenceTrait;
     use Order\MainTrait;
     use Order\AddressTrait;
     use Order\ItemsTrait;

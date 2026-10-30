@@ -70,18 +70,6 @@ trait CoreTrait
             ->isReadOnly()
         ;
         //====================================================================//
-        // Reference
-        $this->fieldsFactory()->create(SPL_T_VARCHAR)
-            ->identifier('reference')
-            ->name(SLM::translate('Reference', 'AdminGlobal'))
-            ->microData('http://schema.org/Order', 'orderNumber')
-            ->addOption('maxLength', '8')
-            ->isRequired()
-            ->isPrimary($this->isOrderObject())
-            ->isIndexed(!$this->isOrderObject())
-            ->isListed()
-        ;
-        //====================================================================//
         // Order Date
         $this->fieldsFactory()->create(SPL_T_DATE)
             ->identifier('order_date')
@@ -106,17 +94,7 @@ trait CoreTrait
         // READ Fields
         switch ($fieldName) {
             //====================================================================//
-            // Direct Readings
-            case 'reference':
-                if (!$this->isOrderObject()) {
-                    $this->getSimple($fieldName, 'order');
-                } else {
-                    $this->getSimple($fieldName);
-                }
-
-                break;
-                //====================================================================//
-                // Customer Object Id Readings
+            // Customer Object Id Readings
             case 'id_customer':
                 $this->out[$fieldName] = self::objects()->encode('ThirdParty', $this->getOrder()->{$fieldName});
 
@@ -170,17 +148,7 @@ trait CoreTrait
         // WRITE Field
         switch ($fieldName) {
             //====================================================================//
-            // Direct Writing
-            case 'reference':
-                if (!$this->isOrderObject()) {
-                    $this->setSimple($fieldName, $fieldData, 'order');
-                } else {
-                    $this->setSimple($fieldName, $fieldData);
-                }
-
-                break;
-                //====================================================================//
-                // Customer Object Id
+            // Customer Object Id
             case 'id_customer':
                 if (!$this->isOrderObject()) {
                     $this->setSimple(

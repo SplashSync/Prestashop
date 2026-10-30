@@ -63,6 +63,7 @@ class Order extends AbstractObject implements PrimaryKeysAwareInterface
     use Order\CRUDTrait;
     use Order\PrimaryTrait;
     use Order\CoreTrait;
+    use Order\ReferenceTrait;
     use Order\MainTrait;
     use Order\AddressTrait;
     use Order\DeliveryTrait;
