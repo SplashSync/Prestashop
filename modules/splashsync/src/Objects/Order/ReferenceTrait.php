@@ -158,4 +158,24 @@ trait ReferenceTrait
 
         return $this->getOrderUniqReference() === (string) $this->getOrder()->reference;
     }
+
+    /**
+     * Get SQL Expression of Order Unique Reference, for Objects Lists
+     *
+     * Same rule as getOrderUniqReference(): main order (lowest id of its cart)
+     * keeps the raw reference, split orders get suffixed (i.e. ABCDEFGHI#2).
+     *
+     * @param string $alias SQL Alias of Orders Table
+     *
+     * @return string
+     */
+    protected function getOrderUniqReferenceSql(string $alias): string
+    {
+        $mainId = '(SELECT MIN(so.`id_order`) FROM `' . _DB_PREFIX_ . 'orders` so'
+            . ' WHERE so.`id_cart` = ' . $alias . '.`id_cart`)';
+
+        return 'IF(' . $alias . '.`id_order` = ' . $mainId . ', '
+            . $alias . '.`reference`, '
+            . 'CONCAT(' . $alias . '.`reference`, \'#\', ' . $alias . '.`id_order` - ' . $mainId . ' + 1))';
+    }
 }

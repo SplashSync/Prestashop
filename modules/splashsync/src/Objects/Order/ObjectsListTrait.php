@@ -48,7 +48,7 @@ trait ObjectsListTrait
         // Build SELECT
         $sql->select('o.`id_order`      as id');            // Order Id
         $sql->select('o.`id_customer`   as id_customer');   // Customer Id
-        $sql->select('o.`reference`     as reference');     // Order Internal Reference
+        $sql->select($this->getOrderUniqReferenceSql('o') . ' as reference'); // Order Unique Reference
         $sql->select('c.`firstname`     as firstname');     // Customer Firstname
         $sql->select('c.`lastname`      as lastname');      // Customer Lastname
         $sql->select('o.`date_add`      as order_date');     // Order Date
