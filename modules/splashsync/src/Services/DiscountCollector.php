@@ -409,11 +409,13 @@ class DiscountCollector
 
             foreach ($discount as $taxRate => $tax) {
                 foreach ($tax as $taxName => $amounts) {
+                    //====================================================================//
+                    // Db::insert() does NOT escape values: ALL strings MUST be escaped here
                     $data[] = array(
                         'id_order' => $order->id,
-                        'cart_rule_name' => $cartRuleName,
-                        'cart_rule_description' => Db::getInstance()->_escape($cartRule->description),
-                        'tax_name' => $taxName,
+                        'cart_rule_name' => pSQL((string) $cartRuleName, true),
+                        'cart_rule_description' => pSQL((string) $cartRule->description, true),
+                        'tax_name' => pSQL((string) $taxName, true),
                         'tax_rate' => $taxRate,
                         'amount' => $amounts['without_taxes'] ?? 0,
                         'amount_wt' => $amounts['with_taxes'] ?? 0

@@ -8,7 +8,7 @@ server:
     servertype: 'Prestashop 9.0.1'
     serverurl: ps9-0.prestashop.local/
     moduleauthor: 'Splash Official <www.splashsync.com>'
-    moduleversion: 2.9.4
+    moduleversion: 2.9.5
 objectTypes:
     - ThirdParty
     - Product
