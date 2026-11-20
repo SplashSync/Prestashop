@@ -1218,7 +1218,7 @@
                         "readOnly": true,
                         "x-schema-org-itemtype": "http://schema.org/DataFeedItem",
                         "x-schema-org-itemprop": "dateCreated",
-                        "example": "2026-10-30 11:54:53"
+                        "example": "2026-11-20 14:06:22"
                     },
                     "date_upd": {
                         "type": "string",
@@ -1229,7 +1229,7 @@
                         "readOnly": true,
                         "x-schema-org-itemtype": "http://schema.org/DataFeedItem",
                         "x-schema-org-itemprop": "dateModified",
-                        "example": "2026-10-30 11:54:53"
+                        "example": "2026-11-20 14:06:22"
                     },
                     "splash_id": {
                         "type": "string",
@@ -1560,7 +1560,7 @@
                                     "readOnly": true,
                                     "x-schema-org-itemtype": "http://schema.org/Organization",
                                     "x-schema-org-itemprop": "address",
-                                    "example": "961::Address"
+                                    "example": "218::Address"
                                 }
                             }
                         }
@@ -1615,7 +1615,7 @@
                         "readOnly": true,
                         "x-schema-org-itemtype": "http://schema.org/DataFeedItem",
                         "x-schema-org-itemprop": "dateCreated",
-                        "example": "2026-10-30 11:54:53"
+                        "example": "2026-11-20 14:06:22"
                     },
                     "date_upd": {
                         "type": "string",
@@ -1626,7 +1626,7 @@
                         "readOnly": true,
                         "x-schema-org-itemtype": "http://schema.org/DataFeedItem",
                         "x-schema-org-itemprop": "dateModified",
-                        "example": "2026-10-30 11:54:53"
+                        "example": "2026-11-20 14:06:22"
                     },
                     "splash_id": {
                         "type": "string",
@@ -1856,10 +1856,10 @@
                         "x-schema-org-itemprop": "price",
                         "example": {
                             "base": 0,
-                            "ht": 63.89,
+                            "ht": 121.33,
                             "vat": 20,
-                            "tax": 12.78,
-                            "ttc": 76.67,
+                            "tax": 24.27,
+                            "ttc": 145.6,
                             "code": "EUR",
                             "symbol": "\u20ac",
                             "name": "Euro"
@@ -1879,10 +1879,10 @@
                         "x-schema-org-itemprop": "basePrice",
                         "example": {
                             "base": 0,
-                            "ht": 93.1,
+                            "ht": 145.2,
                             "vat": 20,
-                            "tax": 18.62,
-                            "ttc": 111.72,
+                            "tax": 29.04,
+                            "ttc": 174.24,
                             "code": "EUR",
                             "symbol": "\u20ac",
                             "name": "Euro"
@@ -1902,10 +1902,10 @@
                         "x-schema-org-itemprop": "wholesalePrice",
                         "example": {
                             "base": 0,
-                            "ht": 30.27,
+                            "ht": 149.49,
                             "vat": 20,
-                            "tax": 6.05,
-                            "ttc": 36.32,
+                            "tax": 29.9,
+                            "ttc": 179.39,
                             "code": "EUR",
                             "symbol": "\u20ac",
                             "name": "Euro"
@@ -1926,10 +1926,10 @@
                         "x-schema-org-itemprop": "reducedPrice",
                         "example": {
                             "base": 0,
-                            "ht": 113.78,
+                            "ht": 45.11,
                             "vat": 20,
-                            "tax": 22.76,
-                            "ttc": 136.54,
+                            "tax": 9.02,
+                            "ttc": 54.13,
                             "code": "EUR",
                             "symbol": "\u20ac",
                             "name": "Euro"
@@ -2018,7 +2018,7 @@
                         "x-splash-type": "objectid::Product",
                         "x-schema-org-itemtype": "http://schema.org/Product",
                         "x-schema-org-itemprop": "DefaultVariation",
-                        "example": "777::Product"
+                        "example": "360::Product"
                     },
                     "parent_id": {
                         "type": "string",
@@ -2204,7 +2204,7 @@
                                     "x-splash-type": "objectid::Product@list",
                                     "x-schema-org-itemtype": "http://schema.org/Product",
                                     "x-schema-org-itemprop": "Variants",
-                                    "example": "854::Product"
+                                    "example": "391::Product"
                                 },
                                 "sku": {
                                     "type": "string",
@@ -2308,7 +2308,7 @@
                         "readOnly": true,
                         "x-schema-org-itemtype": "http://schema.org/DataFeedItem",
                         "x-schema-org-itemprop": "dateCreated",
-                        "example": "2026-10-30 11:54:54"
+                        "example": "2026-11-20 14:06:22"
                     },
                     "date_upd": {
                         "type": "string",
@@ -2319,7 +2319,7 @@
                         "readOnly": true,
                         "x-schema-org-itemtype": "http://schema.org/DataFeedItem",
                         "x-schema-org-itemprop": "dateModified",
-                        "example": "2026-10-30 11:54:54"
+                        "example": "2026-11-20 14:06:22"
                     },
                     "splash_id": {
                         "type": "string",
@@ -2378,7 +2378,7 @@
                         "x-splash-type": "objectid::ThirdParty",
                         "x-schema-org-itemtype": "http://schema.org/Organization",
                         "x-schema-org-itemprop": "ID",
-                        "example": "806::ThirdParty"
+                        "example": "734::ThirdParty"
                     },
                     "email": {
                         "type": "string",
@@ -2399,7 +2399,7 @@
                         "readOnly": true,
                         "x-schema-org-itemtype": "http://schema.org/Order",
                         "x-schema-org-itemprop": "orderDate",
-                        "example": "2026-10-30"
+                        "example": "2026-11-20"
                     },
                     "reference": {
                         "type": "string",
@@ -2446,7 +2446,7 @@
                         "x-splash-type": "objectid::Address",
                         "x-schema-org-itemtype": "http://schema.org/Order",
                         "x-schema-org-itemprop": "billingAddress",
-                        "example": "242::Address"
+                        "example": "105::Address"
                     },
                     "id_address_delivery": {
                         "type": "string",
@@ -2456,7 +2456,7 @@
                         "x-splash-type": "objectid::Address",
                         "x-schema-org-itemtype": "http://schema.org/Order",
                         "x-schema-org-itemprop": "orderDelivery",
-                        "example": "286::Address"
+                        "example": "675::Address"
                     },
                     "firstname": {
                         "type": "string",
@@ -2665,20 +2665,20 @@
                     "isCanceled": {
                         "type": "boolean",
                         "title": "Order status Canceled",
-                        "description": "Order status Canceled\n\n- **Microdata:** `http://schema.org/OrderStatus` \u2192 `OrderCancelled`",
+                        "description": "Order status Canceled",
+                        "x-splash-type": "bool",
+                        "format": "bool",
+                        "readOnly": true
+                    },
+                    "isCancelState": {
+                        "type": "boolean",
+                        "title": "Order status Canceled State",
+                        "description": "Order status Canceled State\n\n- **Microdata:** `http://schema.org/OrderStatus` \u2192 `OrderCancelled`",
                         "x-splash-type": "bool",
                         "format": "bool",
                         "readOnly": true,
                         "x-schema-org-itemtype": "http://schema.org/OrderStatus",
                         "x-schema-org-itemprop": "OrderCancelled"
-                    },
-                    "isCancelState": {
-                        "type": "boolean",
-                        "title": "Order status Canceled State",
-                        "description": "Order status Canceled State",
-                        "x-splash-type": "bool",
-                        "format": "bool",
-                        "readOnly": true
                     },
                     "isValidated": {
                         "type": "boolean",
@@ -2735,10 +2735,10 @@
                         "x-schema-org-itemprop": "total",
                         "example": {
                             "base": 0,
-                            "ht": 124.14,
+                            "ht": 79.41,
                             "vat": 20,
-                            "tax": 24.83,
-                            "ttc": 148.97,
+                            "tax": 15.88,
+                            "ttc": 95.29,
                             "code": "EUR",
                             "symbol": "\u20ac",
                             "name": "Euro"
@@ -2759,10 +2759,10 @@
                         "x-schema-org-itemprop": "totalShipping",
                         "example": {
                             "base": 0,
-                            "ht": 44.79,
+                            "ht": 169.69,
                             "vat": 20,
-                            "tax": 8.96,
-                            "ttc": 53.75,
+                            "tax": 33.94,
+                            "ttc": 203.63,
                             "code": "EUR",
                             "symbol": "\u20ac",
                             "name": "Euro"
@@ -2783,10 +2783,10 @@
                         "x-schema-org-itemprop": "totalDiscount",
                         "example": {
                             "base": 0,
-                            "ht": 111.16,
+                            "ht": 143.58,
                             "vat": 20,
-                            "tax": 22.23,
-                            "ttc": 133.39,
+                            "tax": 28.72,
+                            "ttc": 172.3,
                             "code": "EUR",
                             "symbol": "\u20ac",
                             "name": "Euro"
@@ -2816,7 +2816,7 @@
                                     "x-splash-type": "objectid::Product@list",
                                     "x-schema-org-itemtype": "http://schema.org/Product",
                                     "x-schema-org-itemprop": "productID",
-                                    "example": "972::Product"
+                                    "example": "97::Product"
                                 },
                                 "product_reference": {
                                     "type": "string",
@@ -2861,10 +2861,10 @@
                                     "x-schema-org-itemprop": "price",
                                     "example": {
                                         "base": 0,
-                                        "ht": 92.08,
+                                        "ht": 119.89,
                                         "vat": 20,
-                                        "tax": 18.42,
-                                        "ttc": 110.5,
+                                        "tax": 23.98,
+                                        "ttc": 143.87,
                                         "code": "EUR",
                                         "symbol": "\u20ac",
                                         "name": "Euro"
@@ -2924,7 +2924,7 @@
                                     "readOnly": true,
                                     "x-schema-org-itemtype": "http://schema.org/PaymentChargeSpecification",
                                     "x-schema-org-itemprop": "validFrom",
-                                    "example": "2026-10-30"
+                                    "example": "2026-11-20"
                                 },
                                 "number": {
                                     "type": "string",
@@ -2994,7 +2994,7 @@
                         "readOnly": true,
                         "x-schema-org-itemtype": "http://schema.org/DataFeedItem",
                         "x-schema-org-itemprop": "dateCreated",
-                        "example": "2026-10-30 11:54:54"
+                        "example": "2026-11-20 14:06:22"
                     },
                     "date_upd": {
                         "type": "string",
@@ -3005,7 +3005,7 @@
                         "readOnly": true,
                         "x-schema-org-itemtype": "http://schema.org/DataFeedItem",
                         "x-schema-org-itemprop": "dateModified",
-                        "example": "2026-10-30 11:54:54"
+                        "example": "2026-11-20 14:06:22"
                     },
                     "splash_id": {
                         "type": "string",
@@ -3064,7 +3064,7 @@
                         "x-splash-type": "objectid::ThirdParty",
                         "x-schema-org-itemtype": "http://schema.org/Invoice",
                         "x-schema-org-itemprop": "customer",
-                        "example": "250::ThirdParty"
+                        "example": "592::ThirdParty"
                     },
                     "email": {
                         "type": "string",
@@ -3085,7 +3085,7 @@
                         "readOnly": true,
                         "x-schema-org-itemtype": "http://schema.org/Order",
                         "x-schema-org-itemprop": "orderDate",
-                        "example": "2026-10-30"
+                        "example": "2026-11-20"
                     },
                     "reference": {
                         "type": "string",
@@ -3132,7 +3132,7 @@
                         "x-splash-type": "objectid::Address",
                         "x-schema-org-itemtype": "http://schema.org/Order",
                         "x-schema-org-itemprop": "billingAddress",
-                        "example": "298::Address"
+                        "example": "91::Address"
                     },
                     "id_address_delivery": {
                         "type": "string",
@@ -3142,7 +3142,7 @@
                         "x-splash-type": "objectid::Address",
                         "x-schema-org-itemtype": "http://schema.org/Order",
                         "x-schema-org-itemprop": "orderDelivery",
-                        "example": "728::Address"
+                        "example": "964::Address"
                     },
                     "id_order": {
                         "type": "string",
@@ -3153,7 +3153,7 @@
                         "readOnly": true,
                         "x-schema-org-itemtype": "http://schema.org/Invoice",
                         "x-schema-org-itemprop": "referencesOrder",
-                        "example": "344::Order"
+                        "example": "420::Order"
                     },
                     "number": {
                         "type": "string",
@@ -3229,7 +3229,7 @@
                                     "x-splash-type": "objectid::Product@list",
                                     "x-schema-org-itemtype": "http://schema.org/Product",
                                     "x-schema-org-itemprop": "productID",
-                                    "example": "623::Product"
+                                    "example": "456::Product"
                                 },
                                 "product_reference": {
                                     "type": "string",
@@ -3274,10 +3274,10 @@
                                     "x-schema-org-itemprop": "price",
                                     "example": {
                                         "base": 0,
-                                        "ht": 107.08,
+                                        "ht": 147.2,
                                         "vat": 20,
-                                        "tax": 21.42,
-                                        "ttc": 128.5,
+                                        "tax": 29.44,
+                                        "ttc": 176.64,
                                         "code": "EUR",
                                         "symbol": "\u20ac",
                                         "name": "Euro"
@@ -3337,7 +3337,7 @@
                                     "readOnly": true,
                                     "x-schema-org-itemtype": "http://schema.org/PaymentChargeSpecification",
                                     "x-schema-org-itemprop": "validFrom",
-                                    "example": "2026-10-30"
+                                    "example": "2026-11-20"
                                 },
                                 "number": {
                                     "type": "string",
@@ -3411,7 +3411,7 @@
                         "readOnly": true,
                         "x-schema-org-itemtype": "http://schema.org/DataFeedItem",
                         "x-schema-org-itemprop": "dateCreated",
-                        "example": "2026-10-30 11:54:54"
+                        "example": "2026-11-20 14:06:22"
                     },
                     "date_upd": {
                         "type": "string",
@@ -3422,7 +3422,7 @@
                         "readOnly": true,
                         "x-schema-org-itemtype": "http://schema.org/DataFeedItem",
                         "x-schema-org-itemprop": "dateModified",
-                        "example": "2026-10-30 11:54:54"
+                        "example": "2026-11-20 14:06:22"
                     },
                     "splash_id": {
                         "type": "string",
@@ -3490,7 +3490,7 @@
                         "x-splash-type": "objectid::ThirdParty",
                         "x-schema-org-itemtype": "http://schema.org/Organization",
                         "x-schema-org-itemprop": "ID",
-                        "example": "585::ThirdParty"
+                        "example": "193::ThirdParty"
                     },
                     "company": {
                         "type": "string",

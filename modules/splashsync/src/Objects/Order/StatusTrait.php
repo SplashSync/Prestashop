@@ -70,16 +70,18 @@ trait StatusTrait
         $this->fieldsFactory()->create(SPL_T_BOOL)
             ->identifier('isCanceled')
             ->name($prefix . $this->spl->l('Canceled'))
-            ->microData('http://schema.org/OrderStatus', 'OrderCancelled')
             ->group('Meta')
             ->association('isCanceled', 'isValidated', 'isClosed')
             ->isReadOnly()
         ;
         //====================================================================//
         // Is Cancel State
+        // => Order is Really Canceled on Prestashop (Canceled State).
+        //      Draft, Awaiting Payment... Orders are NOT Canceled
         $this->fieldsFactory()->create(SPL_T_BOOL)
             ->identifier('isCancelState')
             ->name($prefix . $this->spl->l('Canceled') . ' State')
+            ->microData('http://schema.org/OrderStatus', 'OrderCancelled')
             ->group('Meta')
             ->association('isCanceled', 'isValidated', 'isClosed')
             ->isReadOnly()
